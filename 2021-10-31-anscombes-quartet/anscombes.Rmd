@@ -1,0 +1,40 @@
+---
+title: "Untitled"
+author: "Evangeline Reynolds"
+date: "10/31/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r anscombe}
+datasets::anscombe %>%
+  pivot_longer(cols = 1:8) %>%
+  mutate(group = str_extract(name, "\\d")) %>%
+  mutate(var = str_extract(name, "\\w")) %>% 
+  select(-name) %>% 
+  pivot_wider(names_from = var, 
+              values_from = value) %>% 
+  unnest() %>% 
+  ggplot() + 
+  aes(x = x, y = y) + 
+  geom_point() + 
+  aes(color = group) + 
+  facet_wrap(facets = vars(group)) + 
+  # mean of x
+  ggxmean::geom_x_mean() + 
+  ggxmean::geom_y_mean() + 
+  # mean of y
+  ggxmean:::geom_x1sd(linetype = "dashed") + 
+  ggxmean:::geom_y1sd(linetype = "dashed") + 
+  # linear model
+  ggxmean::geom_lm() + 
+  ggxmean::geom_lm_formula() + 
+  # Pearson correlation
+  ggxmean:::geom_corrlabel()
+```
+

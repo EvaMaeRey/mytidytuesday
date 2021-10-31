@@ -1,0 +1,84 @@
+---
+title: "What I did to get here"
+subtitle: "my interactive session history for #tidytuesday"
+author: "me"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+---
+
+
+```{r, include = TRUE}
+# This is the recommended set up for this {memory} package
+# you might reset include = F for your book if you arent wanting to communicate about knitr settings
+
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE,
+                      comment = "", cache = F, error = T)
+library(flipbookr)
+library(tidyverse)
+library(ggmemory)
+```
+
+```{r, include = FALSE}
+
+my_executions <- r_code_extract_code_list(script_path ="great_pumpkin_history.r")
+
+my_executions
+
+```
+
+---
+  class: inverse, middle, center
+
+
+# Reviewing code
+
+--
+
+  ## inline code is used to deliver each element of code sequence to a slide w/ associated output:
+
+  --
+
+  ## `flipbookr::chunk_reveal(code_seq = my_executions)`
+
+
+  ---
+
+
+  `r flipbookr::chunk_reveal(code_seq = my_executions)`
+
+
+---
+
+  ```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 75%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+
+
