@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Exploded code</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Me" />
+    <script src="libs/header-attrs-2.6/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Exploded code
+## Using flipbookr and xaringan
+### Me
+
+---
+
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 80%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+&lt;/style&gt;
+
+
+---
+
+# existing ggplot2
+
+plotting observations and linear model is fairly easy with existing ggplot2 code.
+
+---
+
+
+count: false
+ 
+
+.panel1-start-auto[
+
+```r
+*library(tidyverse)
+```
+]
+ 
+.panel2-start-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-start-auto[
+
+```r
+library(tidyverse)
+*anscombe
+```
+]
+ 
+.panel2-start-auto[
+
+```
+   x1 x2 x3 x4    y1   y2    y3    y4
+1  10 10 10  8  8.04 9.14  7.46  6.58
+2   8  8  8  8  6.95 8.14  6.77  5.76
+3  13 13 13  8  7.58 8.74 12.74  7.71
+4   9  9  9  8  8.81 8.77  7.11  8.84
+5  11 11 11  8  8.33 9.26  7.81  8.47
+6  14 14 14  8  9.96 8.10  8.84  7.04
+7   6  6  6  8  7.24 6.13  6.08  5.25
+8   4  4  4 19  4.26 3.10  5.39 12.50
+9  12 12 12  8 10.84 9.13  8.15  5.56
+10  7  7  7  8  4.82 7.26  6.42  7.91
+11  5  5  5  8  5.68 4.74  5.73  6.89
+```
+]
+
+---
+count: false
+ 
+
+.panel1-start-auto[
+
+```r
+library(tidyverse)
+anscombe %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-start-auto[
+![](geom_text_lm_fitted_exploded_files/figure-html/start_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-start-auto[
+
+```r
+library(tidyverse)
+anscombe %&gt;%
+  ggplot() +
+* aes(x = x3, y = y3)
+```
+]
+ 
+.panel2-start-auto[
+![](geom_text_lm_fitted_exploded_files/figure-html/start_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-start-auto[
+
+```r
+library(tidyverse)
+anscombe %&gt;%
+  ggplot() +
+  aes(x = x3, y = y3) +
+* geom_point()
+```
+]
+ 
+.panel2-start-auto[
+![](geom_text_lm_fitted_exploded_files/figure-html/start_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-start-auto[
+
+```r
+library(tidyverse)
+anscombe %&gt;%
+  ggplot() +
+  aes(x = x3, y = y3) +
+  geom_point() +
+* geom_smooth(method = lm,
+*             se = F)
+```
+]
+ 
+.panel2-start-auto[
+![](geom_text_lm_fitted_exploded_files/figure-html/start_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-start-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-start-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-start-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+# plotting predictions
+
+plotting the predicted values of the observations is a bit harder, but we can do it with pre calculation. 
+
+---
+
+
+count: false
+ 
+
+.panel1-lm-auto[
+
+```r
+# calc fitted and add points at fitted
+*lm(formula = anscombe$y3 ~ anscombe$x3)
+```
+]
+ 
+.panel2-lm-auto[
+
+```
+
+Call:
+lm(formula = anscombe$y3 ~ anscombe$x3)
+
+Coefficients:
+(Intercept)  anscombe$x3  
+     3.0025       0.4997  
+```
+]
+
+---
+count: false
+ 
+
+.panel1-lm-auto[
+
+```r
+# calc fitted and add points at fitted
+lm(formula = anscombe$y3 ~ anscombe$x3) -&gt;
+* my_model
+```
+]
+ 
+.panel2-lm-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-lm-auto[
+
+```r
+# calc fitted and add points at fitted
+lm(formula = anscombe$y3 ~ anscombe$x3) -&gt;
+  my_model
+
+*data.frame(x3 = anscombe$x3,
+*          predicted_y3 = my_model$fitted.values)
+```
+]
+ 
+.panel2-lm-auto[
+
+```
+   x3 predicted_y3
+1  10     7.999727
+2   8     7.000273
+3  13     9.498909
+4   9     7.500000
+5  11     8.499455
+6  14     9.998636
+7   6     6.000818
+8   4     5.001364
+9  12     8.999182
+10  7     6.500545
+11  5     5.501091
+```
+]
+
+---
+count: false
+ 
+
+.panel1-lm-auto[
+
+```r
+# calc fitted and add points at fitted
+lm(formula = anscombe$y3 ~ anscombe$x3) -&gt;
+  my_model
+
+data.frame(x3 = anscombe$x3,
+           predicted_y3 = my_model$fitted.values) -&gt;
+* fitted_data
+```
+]
+ 
+.panel2-lm-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-lm-auto[
+
+```r
+# calc fitted and add points at fitted
+lm(formula = anscombe$y3 ~ anscombe$x3) -&gt;
+  my_model
+
+data.frame(x3 = anscombe$x3,
+           predicted_y3 = my_model$fitted.values) -&gt;
+  fitted_data
+
+*anscombe
+```
+]
+ 
+.panel2-lm-auto[
+
+```
+   x1 x2 x3 x4    y1   y2    y3    y4
+1  10 10 10  8  8.04 9.14  7.46  6.58
+2   8  8  8  8  6.95 8.14  6.77  5.76
+3  13 13 13  8  7.58 8.74 12.74  7.71
+4   9  9  9  8  8.81 8.77  7.11  8.84
+5  11 11 11  8  8.33 9.26  7.81  8.47
+6  14 14 14  8  9.96 8.10  8.84  7.04
+7   6  6  6  8  7.24 6.13  6.08  5.25
+8   4  4  4 19  4.26 3.10  5.39 12.50
+9  12 12 12  8 10.84 9.13  8.15  5.56
+10  7  7  7  8  4.82 7.26  6.42  7.91
+11  5  5  5  8  5.68 4.74  5.73  6.89
+```
+]
+
+---
+count: false
+ 
+
+.panel1-lm-auto[
+
+```r
+# calc fitted and add points at fitted
+lm(formula = anscombe$y3 ~ anscombe$x3) -&gt;
+  my_model
+
+data.frame(x3 = anscombe$x3,
+           predicted_y3 = my_model$fitted.values) -&gt;
+  fitted_data
+
+anscombe %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-lm-auto[
+![](geom_text_lm_fitted_exploded_files/figure-html/lm_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-lm-auto[
+
+```r
+# calc fitted and add points at fitted
+lm(formula = anscombe$y3 ~ anscombe$x3) -&gt;
+  my_model
+
+data.frame(x3 = anscombe$x3,
+           predicted_y3 = my_model$fitted.values) -&gt;
+  fitted_data
+
+anscombe %&gt;%
+  ggplot() +
+* aes(x = x3, y = y3)
+```
+]
+ 
+.panel2-lm-auto[
+![](geom_text_lm_fitted_exploded_files/figure-html/lm_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-lm-auto[
+
+```r
+# calc fitted and add points at fitted
+lm(formula = anscombe$y3 ~ anscombe$x3) -&gt;
+  my_model
+
+data.frame(x3 = anscombe$x3,
+           predicted_y3 = my_model$fitted.values) -&gt;
+  fitted_data
+
+anscombe %&gt;%
+  ggplot() +
+  aes(x = x3, y = y3) +
+* geom_point()
+```
+]
+ 
+.panel2-lm-auto[
+![](geom_text_lm_fitted_exploded_files/figure-html/lm_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-lm-auto[
+
+```r
+# calc fitted and add points at fitted
+lm(formula = anscombe$y3 ~ anscombe$x3) -&gt;
+  my_model
+
+data.frame(x3 = anscombe$x3,
+           predicted_y3 = my_model$fitted.values) -&gt;
+  fitted_data
+
+anscombe %&gt;%
+  ggplot() +
+  aes(x = x3, y = y3) +
+  geom_point() +
+* geom_smooth(method = lm,
+*             se = F)
+```
+]
+ 
+.panel2-lm-auto[
+![](geom_text_lm_fitted_exploded_files/figure-html/lm_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-lm-auto[
+
+```r
+# calc fitted and add points at fitted
+lm(formula = anscombe$y3 ~ anscombe$x3) -&gt;
+  my_model
+
+data.frame(x3 = anscombe$x3,
+           predicted_y3 = my_model$fitted.values) -&gt;
+  fitted_data
+
+anscombe %&gt;%
+  ggplot() +
+  aes(x = x3, y = y3) +
+  geom_point() +
+  geom_smooth(method = lm,
+              se = F) +
+* geom_point(data = fitted_data,
+*            aes(x = x3,
+*                y = predicted_y3),
+*            color = "blue")
+```
+]
+ 
+.panel2-lm-auto[
+![](geom_text_lm_fitted_exploded_files/figure-html/lm_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-lm-auto[
+
+```r
+# calc fitted and add points at fitted
+lm(formula = anscombe$y3 ~ anscombe$x3) -&gt;
+  my_model
+
+data.frame(x3 = anscombe$x3,
+           predicted_y3 = my_model$fitted.values) -&gt;
+  fitted_data
+
+anscombe %&gt;%
+  ggplot() +
+  aes(x = x3, y = y3) +
+  geom_point() +
+  geom_smooth(method = lm,
+              se = F) +
+  geom_point(data = fitted_data,
+             aes(x = x3,
+                 y = predicted_y3),
+             color = "blue") +
+* geom_text(data = fitted_data,
+*            aes(x = x3,
+*                y = predicted_y3,
+*                label = round(predicted_y3,
+*                              digits = 1)
+*                ),
+*            color = "midnightblue")
+```
+]
+ 
+.panel2-lm-auto[
+![](geom_text_lm_fitted_exploded_files/figure-html/lm_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-lm-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-lm-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-lm-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+# Or extend ggplot2
+
+
+---
+
+
+count: false
+ 
+
+.panel1-extend-auto[
+
+```r
+*StatOlsfittedpoint &lt;- ggplot2::ggproto(`_class` = "StatOlsfittedpoint",
+*                                 `_inherit` = ggplot2::Stat,
+*                                 required_aes = c("x", "y"),
+*                                 compute_group = function(data, scales) {
+
+*                                   model &lt;- lm(formula = data$y ~ data$x)
+
+*                                   data.frame(x = data$x,
+*                                              y = model$fitted.values)
+*                                 }
+
+*) 
+```
+]
+ 
+.panel2-extend-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-extend-auto[
+
+```r
+StatOlsfittedpoint &lt;- ggplot2::ggproto(`_class` = "StatOlsfittedpoint",
+                                  `_inherit` = ggplot2::Stat,
+                                  required_aes = c("x", "y"),
+                                  compute_group = function(data, scales) {
+
+                                    model &lt;- lm(formula = data$y ~ data$x)
+
+                                    data.frame(x = data$x,
+                                               y = model$fitted.values)
+                                  }
+
+)
+
+
+*geom_point_lm_fitted &lt;- function(mapping = NULL, data = NULL,
+*                          position = "identity", na.rm = FALSE,
+*                          show.legend = NA,
+*                          inherit.aes = TRUE, ...) {
+* ggplot2::layer(
+*   stat = StatOlsfittedpoint,
+*   geom = ggplot2::GeomPoint,
+*   data = data,
+*   mapping = mapping,
+*   position = position,
+*   show.legend = show.legend,
+*   inherit.aes = inherit.aes,
+*   params = list(na.rm = na.rm, ...)
+* )
+*} 
+```
+]
+ 
+.panel2-extend-auto[
+
+]
+
+&lt;style&gt;
+.panel1-extend-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-extend-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-extend-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-use-auto[
+
+```r
+*library(ggplot2)
+```
+]
+ 
+.panel2-use-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-use-auto[
+
+```r
+library(ggplot2)
+*ggplot(cars)
+```
+]
+ 
+.panel2-use-auto[
+![](geom_text_lm_fitted_exploded_files/figure-html/use_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use-auto[
+
+```r
+library(ggplot2)
+ggplot(cars) +
+* aes(x = speed, y = dist)
+```
+]
+ 
+.panel2-use-auto[
+![](geom_text_lm_fitted_exploded_files/figure-html/use_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use-auto[
+
+```r
+library(ggplot2)
+ggplot(cars) +
+  aes(x = speed, y = dist) +
+* geom_point()
+```
+]
+ 
+.panel2-use-auto[
+![](geom_text_lm_fitted_exploded_files/figure-html/use_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use-auto[
+
+```r
+library(ggplot2)
+ggplot(cars) +
+  aes(x = speed, y = dist) +
+  geom_point() +
+* geom_smooth(method = lm)
+```
+]
+ 
+.panel2-use-auto[
+![](geom_text_lm_fitted_exploded_files/figure-html/use_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use-auto[
+
+```r
+library(ggplot2)
+ggplot(cars) +
+  aes(x = speed, y = dist) +
+  geom_point() +
+  geom_smooth(method = lm) +
+* geom_point_lm_fitted(color = "plum4")
+```
+]
+ 
+.panel2-use-auto[
+![](geom_text_lm_fitted_exploded_files/figure-html/use_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-use-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-use-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-use-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-extend2-auto[
+
+```r
+*StatOlsfitted &lt;- ggplot2::ggproto(`_class` = "StatOlsfitted",
+*                                 `_inherit` = ggplot2::Stat,
+*                                 required_aes = c("x", "y"),
+*                                 compute_group = function(data, scales) {
+
+*                                   model &lt;- lm(formula = data$y ~ data$x)
+
+*                                   data.frame(x = data$x,
+*                                              y = model$fitted.values,
+*                                              label =
+*                                                round(x = model$fitted.values,
+*                                                      digits = 2))
+*                                 }
+
+*) 
+```
+]
+ 
+.panel2-extend2-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-extend2-auto[
+
+```r
+StatOlsfitted &lt;- ggplot2::ggproto(`_class` = "StatOlsfitted",
+                                  `_inherit` = ggplot2::Stat,
+                                  required_aes = c("x", "y"),
+                                  compute_group = function(data, scales) {
+
+                                    model &lt;- lm(formula = data$y ~ data$x)
+
+                                    data.frame(x = data$x,
+                                               y = model$fitted.values,
+                                               label =
+                                                 round(x = model$fitted.values,
+                                                       digits = 2))
+                                  }
+
+)
+
+
+*geom_text_lm_fitted &lt;- function(mapping = NULL, data = NULL,
+*                          position = "identity", na.rm = FALSE,
+*                          show.legend = NA,
+*                          inherit.aes = TRUE, ...) {
+* ggplot2::layer(
+*   stat = StatOlsfitted,
+*   geom = ggplot2::GeomText,
+*   data = data,
+*   mapping = mapping,
+*   position = position,
+*   show.legend = show.legend,
+*   inherit.aes = inherit.aes,
+*   params = list(na.rm = na.rm, ...)
+* )
+*} 
+```
+]
+ 
+.panel2-extend2-auto[
+
+]
+
+&lt;style&gt;
+.panel1-extend2-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-extend2-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-extend2-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-use2-auto[
+
+```r
+*library(ggplot2)
+```
+]
+ 
+.panel2-use2-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-use2-auto[
+
+```r
+library(ggplot2)
+*ggplot(cars)
+```
+]
+ 
+.panel2-use2-auto[
+![](geom_text_lm_fitted_exploded_files/figure-html/use2_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use2-auto[
+
+```r
+library(ggplot2)
+ggplot(cars) +
+* aes(x = speed, y = dist)
+```
+]
+ 
+.panel2-use2-auto[
+![](geom_text_lm_fitted_exploded_files/figure-html/use2_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use2-auto[
+
+```r
+library(ggplot2)
+ggplot(cars) +
+  aes(x = speed, y = dist) +
+* geom_point()
+```
+]
+ 
+.panel2-use2-auto[
+![](geom_text_lm_fitted_exploded_files/figure-html/use2_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use2-auto[
+
+```r
+library(ggplot2)
+ggplot(cars) +
+  aes(x = speed, y = dist) +
+  geom_point() +
+* geom_smooth(method = lm)
+```
+]
+ 
+.panel2-use2-auto[
+![](geom_text_lm_fitted_exploded_files/figure-html/use2_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use2-auto[
+
+```r
+library(ggplot2)
+ggplot(cars) +
+  aes(x = speed, y = dist) +
+  geom_point() +
+  geom_smooth(method = lm) +
+* geom_text_lm_fitted(color = "plum4")
+```
+]
+ 
+.panel2-use2-auto[
+![](geom_text_lm_fitted_exploded_files/figure-html/use2_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-use2-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-use2-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-use2-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

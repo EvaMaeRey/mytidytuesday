@@ -25,7 +25,7 @@ class: center, middle, inverse, title-slide
 
 
 &lt;style type="text/css"&gt;
-.remark-code{line-height: 1.5; font-size: 80%}
+.remark-code{line-height: 1.5; font-size: 100%}
 
 @media print {
   .has-continuation {
@@ -83,7 +83,7 @@ library(tidyverse)
 &lt;style&gt;
 .panel1-setup-auto {
   color: black;
-  width: 38.6060606060606%;
+  width: 49%;
   hight: 32%;
   float: left;
   padding-left: 1%;
@@ -91,7 +91,7 @@ library(tidyverse)
 }
 .panel2-setup-auto {
   color: black;
-  width: 59.3939393939394%;
+  width: 49%;
   hight: 32%;
   float: left;
   padding-left: 1%;
@@ -573,79 +573,173 @@ datasets::anscombe %&gt;%
   select(-name) %&gt;%
   pivot_wider(names_from = var,
               values_from = value) %&gt;%
-  unnest() %&gt;%
-* ggplot()
+  unnest() -&gt;
+*tidy_anscombe
 ```
 ]
  
 .panel2-anscombe-auto[
-![](anscombes_exploded_files/figure-html/anscombe_auto_08_output-1.png)&lt;!-- --&gt;
+
+]
+
+&lt;style&gt;
+.panel1-anscombe-auto {
+  color: black;
+  width: 49%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-anscombe-auto {
+  color: black;
+  width: 49%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-anscombe-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-anscombe_plot-auto[
+
+```r
+*tidy_anscombe
+```
+]
+ 
+.panel2-anscombe_plot-auto[
+
+```
+# A tibble: 44 x 3
+   group     x     y
+   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1 1        10  8.04
+ 2 1         8  6.95
+ 3 1        13  7.58
+ 4 1         9  8.81
+ 5 1        11  8.33
+ 6 1        14  9.96
+ 7 1         6  7.24
+ 8 1         4  4.26
+ 9 1        12 10.8 
+10 1         7  4.82
+11 1         5  5.68
+12 2        10  9.14
+13 2         8  8.14
+14 2        13  8.74
+15 2         9  8.77
+16 2        11  9.26
+17 2        14  8.1 
+18 2         6  6.13
+19 2         4  3.1 
+20 2        12  9.13
+21 2         7  7.26
+22 2         5  4.74
+23 3        10  7.46
+24 3         8  6.77
+25 3        13 12.7 
+26 3         9  7.11
+27 3        11  7.81
+28 3        14  8.84
+29 3         6  6.08
+30 3         4  5.39
+31 3        12  8.15
+32 3         7  6.42
+33 3         5  5.73
+34 4         8  6.58
+35 4         8  5.76
+36 4         8  7.71
+37 4         8  8.84
+38 4         8  8.47
+39 4         8  7.04
+40 4         8  5.25
+41 4        19 12.5 
+42 4         8  5.56
+43 4         8  7.91
+44 4         8  6.89
+```
 ]
 
 ---
 count: false
  
 
-.panel1-anscombe-auto[
+.panel1-anscombe_plot-auto[
 
 ```r
-datasets::anscombe %&gt;%
-  pivot_longer(cols = 1:8) %&gt;%
-  mutate(group = str_extract(name, "\\d")) %&gt;%
-  mutate(var = str_extract(name, "\\w")) %&gt;%
-  select(-name) %&gt;%
-  pivot_wider(names_from = var,
-              values_from = value) %&gt;%
-  unnest() %&gt;%
+tidy_anscombe %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-anscombe_plot-auto[
+![](anscombes_exploded_files/figure-html/anscombe_plot_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-anscombe_plot-auto[
+
+```r
+tidy_anscombe %&gt;%
   ggplot() +
 * aes(x = x, y = y)
 ```
 ]
  
-.panel2-anscombe-auto[
-![](anscombes_exploded_files/figure-html/anscombe_auto_09_output-1.png)&lt;!-- --&gt;
+.panel2-anscombe_plot-auto[
+![](anscombes_exploded_files/figure-html/anscombe_plot_auto_03_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-anscombe-auto[
+.panel1-anscombe_plot-auto[
 
 ```r
-datasets::anscombe %&gt;%
-  pivot_longer(cols = 1:8) %&gt;%
-  mutate(group = str_extract(name, "\\d")) %&gt;%
-  mutate(var = str_extract(name, "\\w")) %&gt;%
-  select(-name) %&gt;%
-  pivot_wider(names_from = var,
-              values_from = value) %&gt;%
-  unnest() %&gt;%
+tidy_anscombe %&gt;%
   ggplot() +
   aes(x = x, y = y) +
 * geom_point()
 ```
 ]
  
-.panel2-anscombe-auto[
-![](anscombes_exploded_files/figure-html/anscombe_auto_10_output-1.png)&lt;!-- --&gt;
+.panel2-anscombe_plot-auto[
+![](anscombes_exploded_files/figure-html/anscombe_plot_auto_04_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-anscombe-auto[
+.panel1-anscombe_plot-auto[
 
 ```r
-datasets::anscombe %&gt;%
-  pivot_longer(cols = 1:8) %&gt;%
-  mutate(group = str_extract(name, "\\d")) %&gt;%
-  mutate(var = str_extract(name, "\\w")) %&gt;%
-  select(-name) %&gt;%
-  pivot_wider(names_from = var,
-              values_from = value) %&gt;%
-  unnest() %&gt;%
+tidy_anscombe %&gt;%
   ggplot() +
   aes(x = x, y = y) +
   geom_point() +
@@ -653,25 +747,18 @@ datasets::anscombe %&gt;%
 ```
 ]
  
-.panel2-anscombe-auto[
-![](anscombes_exploded_files/figure-html/anscombe_auto_11_output-1.png)&lt;!-- --&gt;
+.panel2-anscombe_plot-auto[
+![](anscombes_exploded_files/figure-html/anscombe_plot_auto_05_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-anscombe-auto[
+.panel1-anscombe_plot-auto[
 
 ```r
-datasets::anscombe %&gt;%
-  pivot_longer(cols = 1:8) %&gt;%
-  mutate(group = str_extract(name, "\\d")) %&gt;%
-  mutate(var = str_extract(name, "\\w")) %&gt;%
-  select(-name) %&gt;%
-  pivot_wider(names_from = var,
-              values_from = value) %&gt;%
-  unnest() %&gt;%
+tidy_anscombe %&gt;%
   ggplot() +
   aes(x = x, y = y) +
   geom_point() +
@@ -680,195 +767,196 @@ datasets::anscombe %&gt;%
 ```
 ]
  
-.panel2-anscombe-auto[
-![](anscombes_exploded_files/figure-html/anscombe_auto_12_output-1.png)&lt;!-- --&gt;
+.panel2-anscombe_plot-auto[
+![](anscombes_exploded_files/figure-html/anscombe_plot_auto_06_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-anscombe-auto[
+.panel1-anscombe_plot-auto[
 
 ```r
-datasets::anscombe %&gt;%
-  pivot_longer(cols = 1:8) %&gt;%
-  mutate(group = str_extract(name, "\\d")) %&gt;%
-  mutate(var = str_extract(name, "\\w")) %&gt;%
-  select(-name) %&gt;%
-  pivot_wider(names_from = var,
-              values_from = value) %&gt;%
-  unnest() %&gt;%
+tidy_anscombe %&gt;%
   ggplot() +
   aes(x = x, y = y) +
   geom_point() +
   aes(color = group) +
   facet_wrap(facets = vars(group)) +
+# mean of x
 * ggxmean::geom_x_mean()
 ```
 ]
  
-.panel2-anscombe-auto[
-![](anscombes_exploded_files/figure-html/anscombe_auto_13_output-1.png)&lt;!-- --&gt;
+.panel2-anscombe_plot-auto[
+![](anscombes_exploded_files/figure-html/anscombe_plot_auto_07_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-anscombe-auto[
+.panel1-anscombe_plot-auto[
 
 ```r
-datasets::anscombe %&gt;%
-  pivot_longer(cols = 1:8) %&gt;%
-  mutate(group = str_extract(name, "\\d")) %&gt;%
-  mutate(var = str_extract(name, "\\w")) %&gt;%
-  select(-name) %&gt;%
-  pivot_wider(names_from = var,
-              values_from = value) %&gt;%
-  unnest() %&gt;%
+tidy_anscombe %&gt;%
   ggplot() +
   aes(x = x, y = y) +
   geom_point() +
   aes(color = group) +
   facet_wrap(facets = vars(group)) +
+# mean of x
   ggxmean::geom_x_mean() +
 * ggxmean::geom_y_mean()
 ```
 ]
  
-.panel2-anscombe-auto[
-![](anscombes_exploded_files/figure-html/anscombe_auto_14_output-1.png)&lt;!-- --&gt;
+.panel2-anscombe_plot-auto[
+![](anscombes_exploded_files/figure-html/anscombe_plot_auto_08_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-anscombe-auto[
+.panel1-anscombe_plot-auto[
 
 ```r
-datasets::anscombe %&gt;%
-  pivot_longer(cols = 1:8) %&gt;%
-  mutate(group = str_extract(name, "\\d")) %&gt;%
-  mutate(var = str_extract(name, "\\w")) %&gt;%
-  select(-name) %&gt;%
-  pivot_wider(names_from = var,
-              values_from = value) %&gt;%
-  unnest() %&gt;%
+tidy_anscombe %&gt;%
   ggplot() +
   aes(x = x, y = y) +
   geom_point() +
   aes(color = group) +
   facet_wrap(facets = vars(group)) +
+# mean of x
   ggxmean::geom_x_mean() +
   ggxmean::geom_y_mean() +
+# mean of y
 * ggxmean:::geom_x1sd(linetype = "dashed")
 ```
 ]
  
-.panel2-anscombe-auto[
-![](anscombes_exploded_files/figure-html/anscombe_auto_15_output-1.png)&lt;!-- --&gt;
+.panel2-anscombe_plot-auto[
+![](anscombes_exploded_files/figure-html/anscombe_plot_auto_09_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-anscombe-auto[
+.panel1-anscombe_plot-auto[
 
 ```r
-datasets::anscombe %&gt;%
-  pivot_longer(cols = 1:8) %&gt;%
-  mutate(group = str_extract(name, "\\d")) %&gt;%
-  mutate(var = str_extract(name, "\\w")) %&gt;%
-  select(-name) %&gt;%
-  pivot_wider(names_from = var,
-              values_from = value) %&gt;%
-  unnest() %&gt;%
+tidy_anscombe %&gt;%
   ggplot() +
   aes(x = x, y = y) +
   geom_point() +
   aes(color = group) +
   facet_wrap(facets = vars(group)) +
+# mean of x
   ggxmean::geom_x_mean() +
   ggxmean::geom_y_mean() +
+# mean of y
   ggxmean:::geom_x1sd(linetype = "dashed") +
 * ggxmean:::geom_y1sd(linetype = "dashed")
 ```
 ]
  
-.panel2-anscombe-auto[
-![](anscombes_exploded_files/figure-html/anscombe_auto_16_output-1.png)&lt;!-- --&gt;
+.panel2-anscombe_plot-auto[
+![](anscombes_exploded_files/figure-html/anscombe_plot_auto_10_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-anscombe-auto[
+.panel1-anscombe_plot-auto[
 
 ```r
-datasets::anscombe %&gt;%
-  pivot_longer(cols = 1:8) %&gt;%
-  mutate(group = str_extract(name, "\\d")) %&gt;%
-  mutate(var = str_extract(name, "\\w")) %&gt;%
-  select(-name) %&gt;%
-  pivot_wider(names_from = var,
-              values_from = value) %&gt;%
-  unnest() %&gt;%
+tidy_anscombe %&gt;%
   ggplot() +
   aes(x = x, y = y) +
   geom_point() +
   aes(color = group) +
   facet_wrap(facets = vars(group)) +
+# mean of x
   ggxmean::geom_x_mean() +
   ggxmean::geom_y_mean() +
+# mean of y
   ggxmean:::geom_x1sd(linetype = "dashed") +
   ggxmean:::geom_y1sd(linetype = "dashed") +
+# linear model
 * ggxmean::geom_lm()
 ```
 ]
  
-.panel2-anscombe-auto[
-![](anscombes_exploded_files/figure-html/anscombe_auto_17_output-1.png)&lt;!-- --&gt;
+.panel2-anscombe_plot-auto[
+![](anscombes_exploded_files/figure-html/anscombe_plot_auto_11_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-anscombe-auto[
+.panel1-anscombe_plot-auto[
 
 ```r
-datasets::anscombe %&gt;%
-  pivot_longer(cols = 1:8) %&gt;%
-  mutate(group = str_extract(name, "\\d")) %&gt;%
-  mutate(var = str_extract(name, "\\w")) %&gt;%
-  select(-name) %&gt;%
-  pivot_wider(names_from = var,
-              values_from = value) %&gt;%
-  unnest() %&gt;%
+tidy_anscombe %&gt;%
   ggplot() +
   aes(x = x, y = y) +
   geom_point() +
   aes(color = group) +
   facet_wrap(facets = vars(group)) +
+# mean of x
   ggxmean::geom_x_mean() +
   ggxmean::geom_y_mean() +
+# mean of y
   ggxmean:::geom_x1sd(linetype = "dashed") +
   ggxmean:::geom_y1sd(linetype = "dashed") +
+# linear model
   ggxmean::geom_lm() +
+* ggxmean::geom_lm_formula()
+```
+]
+ 
+.panel2-anscombe_plot-auto[
+![](anscombes_exploded_files/figure-html/anscombe_plot_auto_12_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-anscombe_plot-auto[
+
+```r
+tidy_anscombe %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+  aes(color = group) +
+  facet_wrap(facets = vars(group)) +
+# mean of x
+  ggxmean::geom_x_mean() +
+  ggxmean::geom_y_mean() +
+# mean of y
+  ggxmean:::geom_x1sd(linetype = "dashed") +
+  ggxmean:::geom_y1sd(linetype = "dashed") +
+# linear model
+  ggxmean::geom_lm() +
+  ggxmean::geom_lm_formula() +
+# Pearson correlation
 * ggxmean:::geom_corrlabel()
 ```
 ]
  
-.panel2-anscombe-auto[
-![](anscombes_exploded_files/figure-html/anscombe_auto_18_output-1.png)&lt;!-- --&gt;
+.panel2-anscombe_plot-auto[
+![](anscombes_exploded_files/figure-html/anscombe_plot_auto_13_output-1.png)&lt;!-- --&gt;
 ]
 
 &lt;style&gt;
-.panel1-anscombe-auto {
+.panel1-anscombe_plot-auto {
   color: black;
   width: 38.6060606060606%;
   hight: 32%;
@@ -876,7 +964,7 @@ datasets::anscombe %&gt;%
   padding-left: 1%;
   font-size: 80%
 }
-.panel2-anscombe-auto {
+.panel2-anscombe_plot-auto {
   color: black;
   width: 59.3939393939394%;
   hight: 32%;
@@ -884,7 +972,7 @@ datasets::anscombe %&gt;%
   padding-left: 1%;
   font-size: 80%
 }
-.panel3-anscombe-auto {
+.panel3-anscombe_plot-auto {
   color: black;
   width: NA%;
   hight: 33%;

@@ -1,0 +1,146 @@
+---
+title: "geom_text_lm_fitted"
+author: "Evangeline Reynolds"
+date: "11/3/2021"
+output: html_document
+---
+
+
+
+# existing ggplot2
+
+plotting observations and linear model is fairly easy with existing ggplot2 code.
+
+```{r start, message=F, warning=F}
+library(tidyverse)
+anscombe %>% 
+  ggplot() + 
+  aes(x = x3, y = y3) + 
+  geom_point() +
+  geom_smooth(method = lm,
+              se = F)
+```
+
+# plotting predictions
+
+plotting the predicted values of the observations is a bit harder, but we can do it with pre calculation. 
+
+```{r lm}
+# calc fitted and add points at fitted
+lm(formula = anscombe$y3 ~ anscombe$x3) ->
+  my_model
+
+data.frame(x3 = anscombe$x3, 
+           predicted_y3 = my_model$fitted.values) ->
+  fitted_data
+
+anscombe %>% 
+  ggplot() + 
+  aes(x = x3, y = y3) + 
+  geom_point() + 
+  geom_smooth(method = lm, 
+              se = F) + 
+  geom_point(data = fitted_data,
+             aes(x = x3, 
+                 y = predicted_y3),
+             color = "blue") +
+  geom_text(data = fitted_data,
+             aes(x = x3, 
+                 y = predicted_y3,
+                 label = round(predicted_y3, 
+                               digits = 1)
+                 ),
+             color = "midnightblue") 
+```
+
+# Or extend ggplot2
+
+
+```{r extend}
+StatOlsfittedpoint <- ggplot2::ggproto(`_class` = "StatOlsfittedpoint",
+                                  `_inherit` = ggplot2::Stat,
+                                  required_aes = c("x", "y"),
+                                  compute_group = function(data, scales) {
+                                    
+                                    model <- lm(formula = data$y ~ data$x)
+                                  
+                                    data.frame(x = data$x,
+                                               y = model$fitted.values)
+                                  }
+
+)
+
+
+geom_point_lm_fitted <- function(mapping = NULL, data = NULL,
+                           position = "identity", na.rm = FALSE,
+                           show.legend = NA,
+                           inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatOlsfittedpoint, 
+    geom = ggplot2::GeomPoint, 
+    data = data, 
+    mapping = mapping,
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+```
+
+
+```{r use}
+library(ggplot2)
+ggplot(cars) + 
+  aes(x = speed, y = dist) +
+  geom_point() + 
+  geom_smooth(method = lm) + 
+  geom_point_lm_fitted(color = "plum4")
+```
+
+
+```{r extend2}
+StatOlsfitted <- ggplot2::ggproto(`_class` = "StatOlsfitted",
+                                  `_inherit` = ggplot2::Stat,
+                                  required_aes = c("x", "y"),
+                                  compute_group = function(data, scales) {
+                                    
+                                    model <- lm(formula = data$y ~ data$x)
+                                  
+                                    data.frame(x = data$x,
+                                               y = model$fitted.values,
+                                               label = 
+                                                 round(x = model$fitted.values,
+                                                       digits = 2))
+                                  }
+
+)
+
+
+geom_text_lm_fitted <- function(mapping = NULL, data = NULL,
+                           position = "identity", na.rm = FALSE,
+                           show.legend = NA,
+                           inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatOlsfitted, 
+    geom = ggplot2::GeomText, 
+    data = data, 
+    mapping = mapping,
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+```
+
+
+```{r use2}
+library(ggplot2)
+ggplot(cars) + 
+  aes(x = speed, y = dist) +
+  geom_point() + 
+  geom_smooth(method = lm) + 
+  geom_text_lm_fitted(color = "plum4")
+```
+

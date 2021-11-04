@@ -19,7 +19,13 @@ datasets::anscombe %>%
   select(-name) %>% 
   pivot_wider(names_from = var, 
               values_from = value) %>% 
-  unnest() %>% 
+  unnest() ->
+tidy_anscombe
+```
+
+
+```{r anscombe_plot}
+tidy_anscombe %>% 
   ggplot() + 
   aes(x = x, y = y) + 
   geom_point() + 
