@@ -1,0 +1,101 @@
+---
+title: "Untitled"
+author: "Evangeline Reynolds"
+date: "11/5/2021"
+output: html_document
+---
+
+```{r drafting}
+library(tidyverse)
+library(ggstamp)
+myalpha = .5
+ggcanvas() + 
+  stamp_text_ljust(label = "Counting Fish",
+                   x = -.75,
+                   y = 1.5,
+                   color = "gray30") +
+  stamp_text(x = 0:3*2,
+                   y = .75,
+                   label = c("one\nfish","two\nfishes","three\nfishes","four\nfishes"),
+                   size = 6,
+                   color = "gray30") +
+  stamp_png(png = "noun_Fish_2459037.png", 
+            x0y0 = pos_wrap_multi(ncol = 1, 
+                               n = 1:4),
+            width = 1.4,
+            reduce = 30,
+              alpha = myalpha) + 
+  stamp_text(label = "It's 'fishes' for different species",text_wrap = T,char_width = 30,
+              
+              
+             x = 1.5,
+             y = -2.75,
+             size = 6,
+             color = "gray39"
+             ) +
+  # theme_void_fill() +
+  NULL ->
+plot_sketch
+
+plot_sketch
+```
+
+
+```{r highres}
+myalpha = 0
+ggcanvas() + 
+  stamp_text_ljust(label = "Counting Fish",
+                   x = -.75,
+                   y = 1.5,
+                   color = "gray30") +
+  stamp_text(x = 0:3*2,
+                   y = .75,
+                   label = c("one\nfish","two\nfishes","three\nfishes","four\nfishes"),
+                   size = 6,
+                   color = "gray30") +
+  # stamp_png(png = "noun_Fish_2459037.png", 
+  #           x0y0 = pos_wrap_multi(ncol = 1, 
+  #                              n = 1:4),
+  #           width = 1.4,
+  #           reduce = 30,
+  #             alpha = myalpha) + 
+  stamp_text(label = "It's 'fishes' for different species",text_wrap = T,char_width = 30,
+              
+              
+             x = 1.5,
+             y = -2.75,
+             size = 6,
+             color = "gray39"
+             ) +
+  # theme_void_fill() +
+  NULL ->
+plot_sketch
+
+
+my_pos <- pos_wrap_multi(ncol = 1, 
+                               n = 1:4)
+
+# api a little awkward but works
+myalpha = 0 
+reduce(
+  1:nrow(my_pos),
+  ~ .x + stamp_png2(png = c("noun_bluegill_1974339.png",
+                            "noun_bluegill_1974339.png",
+                            "noun_dory fish_1974348.png",
+                            "noun_bluegill_1974339.png",
+                            "noun_dory fish_1974348.png",
+                            "noun_file fish_1974346.png",       
+                            "noun_bluegill_1974339.png",
+                            "noun_dory fish_1974348.png",
+                            "noun_file fish_1974346.png",
+                            "noun_sea bass_1974341.png")[.y],
+                    width = 1.4,
+                    color = "gray30",
+                    x0y0 = my_pos[.y,]),
+  .init = plot_sketch
+)  + 
+  theme_void_fill(margin.top = 30,
+                  margin.left = 40,
+                  margin.right = 40) 
+```
+
