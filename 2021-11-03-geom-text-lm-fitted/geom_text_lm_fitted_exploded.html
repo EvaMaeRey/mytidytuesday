@@ -25,7 +25,7 @@ class: center, middle, inverse, title-slide
 
 
 &lt;style type="text/css"&gt;
-.remark-code{line-height: 1.5; font-size: 80%}
+.remark-code{line-height: 1.5; font-size: 40%}
 
 @media print {
   .has-continuation {
@@ -47,7 +47,7 @@ code.r.hljs.remark-code:hover{
 &lt;/style&gt;
 
 
----
+
 
 # existing ggplot2
 
@@ -206,8 +206,6 @@ anscombe %&gt;%
 
 
 
-
----
 
 # plotting predictions
 
@@ -554,8 +552,6 @@ anscombe %&gt;%
 
 
 
-
----
 
 # Or extend ggplot2
 
@@ -1048,6 +1044,680 @@ ggplot(cars) +
 }
 &lt;/style&gt;
 
+
+
+
+
+
+
+# Finally extension following TLP's advise - write out the data transformation function separately
+
+In the video, Thomas Lin Pederson advises pulling out the data transformation function.
+
+---
+
+
+count: false
+ 
+
+.panel1-extendfollowTLPadvise-auto[
+
+```r
+# this function takes in a dataframe with columns named x and y
+# and returns a data frame with columns named x y and label
+# for the output, the x column is the same as the input
+# the y column is computed based on a fit of the input x and y
+# and the label is also computed
+*my_compute_group &lt;- function(data, scales) {
+
+*                                   model &lt;- lm(formula = data$y ~ data$x)
+
+*                                   data.frame(x = data$x,
+*                                              y = model$fitted.values,
+*                                              label =
+*                                                round(x = model$fitted.values,
+*                                                      digits = 2))
+*} 
+```
+]
+ 
+.panel2-extendfollowTLPadvise-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-extendfollowTLPadvise-auto[
+
+```r
+# this function takes in a dataframe with columns named x and y
+# and returns a data frame with columns named x y and label
+# for the output, the x column is the same as the input
+# the y column is computed based on a fit of the input x and y
+# and the label is also computed
+my_compute_group &lt;- function(data, scales) {
+
+                                    model &lt;- lm(formula = data$y ~ data$x)
+
+                                    data.frame(x = data$x,
+                                               y = model$fitted.values,
+                                               label =
+                                                 round(x = model$fitted.values,
+                                                       digits = 2))
+}
+
+# lets see how this function works...
+*cars
+```
+]
+ 
+.panel2-extendfollowTLPadvise-auto[
+
+```
+   speed dist
+1      4    2
+2      4   10
+3      7    4
+4      7   22
+5      8   16
+6      9   10
+7     10   18
+8     10   26
+9     10   34
+10    11   17
+11    11   28
+12    12   14
+13    12   20
+14    12   24
+15    12   28
+16    13   26
+17    13   34
+18    13   34
+19    13   46
+20    14   26
+21    14   36
+22    14   60
+23    14   80
+24    15   20
+25    15   26
+26    15   54
+27    16   32
+28    16   40
+29    17   32
+30    17   40
+31    17   50
+32    18   42
+33    18   56
+34    18   76
+35    18   84
+36    19   36
+37    19   46
+38    19   68
+39    20   32
+40    20   48
+41    20   52
+42    20   56
+43    20   64
+44    22   66
+45    23   54
+46    24   70
+47    24   92
+48    24   93
+49    24  120
+50    25   85
+```
+]
+
+---
+count: false
+ 
+
+.panel1-extendfollowTLPadvise-auto[
+
+```r
+# this function takes in a dataframe with columns named x and y
+# and returns a data frame with columns named x y and label
+# for the output, the x column is the same as the input
+# the y column is computed based on a fit of the input x and y
+# and the label is also computed
+my_compute_group &lt;- function(data, scales) {
+
+                                    model &lt;- lm(formula = data$y ~ data$x)
+
+                                    data.frame(x = data$x,
+                                               y = model$fitted.values,
+                                               label =
+                                                 round(x = model$fitted.values,
+                                                       digits = 2))
+}
+
+# lets see how this function works...
+cars %&gt;%
+* transmute(x = speed,
+*           y = dist)
+```
+]
+ 
+.panel2-extendfollowTLPadvise-auto[
+
+```
+    x   y
+1   4   2
+2   4  10
+3   7   4
+4   7  22
+5   8  16
+6   9  10
+7  10  18
+8  10  26
+9  10  34
+10 11  17
+11 11  28
+12 12  14
+13 12  20
+14 12  24
+15 12  28
+16 13  26
+17 13  34
+18 13  34
+19 13  46
+20 14  26
+21 14  36
+22 14  60
+23 14  80
+24 15  20
+25 15  26
+26 15  54
+27 16  32
+28 16  40
+29 17  32
+30 17  40
+31 17  50
+32 18  42
+33 18  56
+34 18  76
+35 18  84
+36 19  36
+37 19  46
+38 19  68
+39 20  32
+40 20  48
+41 20  52
+42 20  56
+43 20  64
+44 22  66
+45 23  54
+46 24  70
+47 24  92
+48 24  93
+49 24 120
+50 25  85
+```
+]
+
+---
+count: false
+ 
+
+.panel1-extendfollowTLPadvise-auto[
+
+```r
+# this function takes in a dataframe with columns named x and y
+# and returns a data frame with columns named x y and label
+# for the output, the x column is the same as the input
+# the y column is computed based on a fit of the input x and y
+# and the label is also computed
+my_compute_group &lt;- function(data, scales) {
+
+                                    model &lt;- lm(formula = data$y ~ data$x)
+
+                                    data.frame(x = data$x,
+                                               y = model$fitted.values,
+                                               label =
+                                                 round(x = model$fitted.values,
+                                                       digits = 2))
+}
+
+# lets see how this function works...
+cars %&gt;%
+  transmute(x = speed,
+            y = dist) %&gt;%
+*my_compute_group(data = .)
+```
+]
+ 
+.panel2-extendfollowTLPadvise-auto[
+
+```
+    x         y label
+1   4 -1.849460 -1.85
+2   4 -1.849460 -1.85
+3   7  9.947766  9.95
+4   7  9.947766  9.95
+5   8 13.880175 13.88
+6   9 17.812584 17.81
+7  10 21.744993 21.74
+8  10 21.744993 21.74
+9  10 21.744993 21.74
+10 11 25.677401 25.68
+11 11 25.677401 25.68
+12 12 29.609810 29.61
+13 12 29.609810 29.61
+14 12 29.609810 29.61
+15 12 29.609810 29.61
+16 13 33.542219 33.54
+17 13 33.542219 33.54
+18 13 33.542219 33.54
+19 13 33.542219 33.54
+20 14 37.474628 37.47
+21 14 37.474628 37.47
+22 14 37.474628 37.47
+23 14 37.474628 37.47
+24 15 41.407036 41.41
+25 15 41.407036 41.41
+26 15 41.407036 41.41
+27 16 45.339445 45.34
+28 16 45.339445 45.34
+29 17 49.271854 49.27
+30 17 49.271854 49.27
+31 17 49.271854 49.27
+32 18 53.204263 53.20
+33 18 53.204263 53.20
+34 18 53.204263 53.20
+35 18 53.204263 53.20
+36 19 57.136672 57.14
+37 19 57.136672 57.14
+38 19 57.136672 57.14
+39 20 61.069080 61.07
+40 20 61.069080 61.07
+41 20 61.069080 61.07
+42 20 61.069080 61.07
+43 20 61.069080 61.07
+44 22 68.933898 68.93
+45 23 72.866307 72.87
+46 24 76.798715 76.80
+47 24 76.798715 76.80
+48 24 76.798715 76.80
+49 24 76.798715 76.80
+50 25 80.731124 80.73
+```
+]
+
+---
+count: false
+ 
+
+.panel1-extendfollowTLPadvise-auto[
+
+```r
+# this function takes in a dataframe with columns named x and y
+# and returns a data frame with columns named x y and label
+# for the output, the x column is the same as the input
+# the y column is computed based on a fit of the input x and y
+# and the label is also computed
+my_compute_group &lt;- function(data, scales) {
+
+                                    model &lt;- lm(formula = data$y ~ data$x)
+
+                                    data.frame(x = data$x,
+                                               y = model$fitted.values,
+                                               label =
+                                                 round(x = model$fitted.values,
+                                                       digits = 2))
+}
+
+# lets see how this function works...
+cars %&gt;%
+  transmute(x = speed,
+            y = dist) %&gt;%
+my_compute_group(data = .)
+
+
+*StatOlsfitted &lt;- ggplot2::ggproto(`_class` = "StatOlsfitted",
+*                                 `_inherit` = ggplot2::Stat,
+*                                 required_aes = c("x", "y"),
+*                                 compute_group = my_compute_group
+*) 
+```
+]
+ 
+.panel2-extendfollowTLPadvise-auto[
+
+```
+    x         y label
+1   4 -1.849460 -1.85
+2   4 -1.849460 -1.85
+3   7  9.947766  9.95
+4   7  9.947766  9.95
+5   8 13.880175 13.88
+6   9 17.812584 17.81
+7  10 21.744993 21.74
+8  10 21.744993 21.74
+9  10 21.744993 21.74
+10 11 25.677401 25.68
+11 11 25.677401 25.68
+12 12 29.609810 29.61
+13 12 29.609810 29.61
+14 12 29.609810 29.61
+15 12 29.609810 29.61
+16 13 33.542219 33.54
+17 13 33.542219 33.54
+18 13 33.542219 33.54
+19 13 33.542219 33.54
+20 14 37.474628 37.47
+21 14 37.474628 37.47
+22 14 37.474628 37.47
+23 14 37.474628 37.47
+24 15 41.407036 41.41
+25 15 41.407036 41.41
+26 15 41.407036 41.41
+27 16 45.339445 45.34
+28 16 45.339445 45.34
+29 17 49.271854 49.27
+30 17 49.271854 49.27
+31 17 49.271854 49.27
+32 18 53.204263 53.20
+33 18 53.204263 53.20
+34 18 53.204263 53.20
+35 18 53.204263 53.20
+36 19 57.136672 57.14
+37 19 57.136672 57.14
+38 19 57.136672 57.14
+39 20 61.069080 61.07
+40 20 61.069080 61.07
+41 20 61.069080 61.07
+42 20 61.069080 61.07
+43 20 61.069080 61.07
+44 22 68.933898 68.93
+45 23 72.866307 72.87
+46 24 76.798715 76.80
+47 24 76.798715 76.80
+48 24 76.798715 76.80
+49 24 76.798715 76.80
+50 25 80.731124 80.73
+```
+]
+
+---
+count: false
+ 
+
+.panel1-extendfollowTLPadvise-auto[
+
+```r
+# this function takes in a dataframe with columns named x and y
+# and returns a data frame with columns named x y and label
+# for the output, the x column is the same as the input
+# the y column is computed based on a fit of the input x and y
+# and the label is also computed
+my_compute_group &lt;- function(data, scales) {
+
+                                    model &lt;- lm(formula = data$y ~ data$x)
+
+                                    data.frame(x = data$x,
+                                               y = model$fitted.values,
+                                               label =
+                                                 round(x = model$fitted.values,
+                                                       digits = 2))
+}
+
+# lets see how this function works...
+cars %&gt;%
+  transmute(x = speed,
+            y = dist) %&gt;%
+my_compute_group(data = .)
+
+
+StatOlsfitted &lt;- ggplot2::ggproto(`_class` = "StatOlsfitted",
+                                  `_inherit` = ggplot2::Stat,
+                                  required_aes = c("x", "y"),
+                                  compute_group = my_compute_group
+)
+
+
+*geom_text_lm_fitted &lt;- function(mapping = NULL, data = NULL,
+*                          position = "identity", na.rm = FALSE,
+*                          show.legend = NA,
+*                          inherit.aes = TRUE, ...) {
+* ggplot2::layer(
+*   stat = StatOlsfitted,
+*   geom = ggplot2::GeomText,
+*   data = data,
+*   mapping = mapping,
+*   position = position,
+*   show.legend = show.legend,
+*   inherit.aes = inherit.aes,
+*   params = list(na.rm = na.rm, ...)
+* )
+*} 
+```
+]
+ 
+.panel2-extendfollowTLPadvise-auto[
+
+```
+    x         y label
+1   4 -1.849460 -1.85
+2   4 -1.849460 -1.85
+3   7  9.947766  9.95
+4   7  9.947766  9.95
+5   8 13.880175 13.88
+6   9 17.812584 17.81
+7  10 21.744993 21.74
+8  10 21.744993 21.74
+9  10 21.744993 21.74
+10 11 25.677401 25.68
+11 11 25.677401 25.68
+12 12 29.609810 29.61
+13 12 29.609810 29.61
+14 12 29.609810 29.61
+15 12 29.609810 29.61
+16 13 33.542219 33.54
+17 13 33.542219 33.54
+18 13 33.542219 33.54
+19 13 33.542219 33.54
+20 14 37.474628 37.47
+21 14 37.474628 37.47
+22 14 37.474628 37.47
+23 14 37.474628 37.47
+24 15 41.407036 41.41
+25 15 41.407036 41.41
+26 15 41.407036 41.41
+27 16 45.339445 45.34
+28 16 45.339445 45.34
+29 17 49.271854 49.27
+30 17 49.271854 49.27
+31 17 49.271854 49.27
+32 18 53.204263 53.20
+33 18 53.204263 53.20
+34 18 53.204263 53.20
+35 18 53.204263 53.20
+36 19 57.136672 57.14
+37 19 57.136672 57.14
+38 19 57.136672 57.14
+39 20 61.069080 61.07
+40 20 61.069080 61.07
+41 20 61.069080 61.07
+42 20 61.069080 61.07
+43 20 61.069080 61.07
+44 22 68.933898 68.93
+45 23 72.866307 72.87
+46 24 76.798715 76.80
+47 24 76.798715 76.80
+48 24 76.798715 76.80
+49 24 76.798715 76.80
+50 25 80.731124 80.73
+```
+]
+
+&lt;style&gt;
+.panel1-extendfollowTLPadvise-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-extendfollowTLPadvise-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-extendfollowTLPadvise-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-use2TLP-auto[
+
+```r
+*library(ggplot2)
+```
+]
+ 
+.panel2-use2TLP-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-use2TLP-auto[
+
+```r
+library(ggplot2)
+*ggplot(cars)
+```
+]
+ 
+.panel2-use2TLP-auto[
+![](geom_text_lm_fitted_exploded_files/figure-html/use2TLP_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use2TLP-auto[
+
+```r
+library(ggplot2)
+ggplot(cars) +
+* aes(x = speed, y = dist)
+```
+]
+ 
+.panel2-use2TLP-auto[
+![](geom_text_lm_fitted_exploded_files/figure-html/use2TLP_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use2TLP-auto[
+
+```r
+library(ggplot2)
+ggplot(cars) +
+  aes(x = speed, y = dist) +
+* geom_point()
+```
+]
+ 
+.panel2-use2TLP-auto[
+![](geom_text_lm_fitted_exploded_files/figure-html/use2TLP_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use2TLP-auto[
+
+```r
+library(ggplot2)
+ggplot(cars) +
+  aes(x = speed, y = dist) +
+  geom_point() +
+* geom_smooth(method = lm)
+```
+]
+ 
+.panel2-use2TLP-auto[
+![](geom_text_lm_fitted_exploded_files/figure-html/use2TLP_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use2TLP-auto[
+
+```r
+library(ggplot2)
+ggplot(cars) +
+  aes(x = speed, y = dist) +
+  geom_point() +
+  geom_smooth(method = lm) +
+* geom_text_lm_fitted(color = "plum4")
+```
+]
+ 
+.panel2-use2TLP-auto[
+![](geom_text_lm_fitted_exploded_files/figure-html/use2TLP_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-use2TLP-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-use2TLP-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-use2TLP-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
 
 
 

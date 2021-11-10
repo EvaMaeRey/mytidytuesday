@@ -144,3 +144,65 @@ ggplot(cars) +
   geom_text_lm_fitted(color = "plum4")
 ```
 
+
+# Finally extension following TLP's advise - write out the data transformation function separately
+
+In the video, Thomas Lin Pederson advises pulling out the data transformation function.
+
+```{r extendfollowTLPadvise}
+# this function takes in a dataframe with columns named x and y
+# and returns a data frame with columns named x y and label
+# for the output, the x column is the same as the input 
+# the y column is computed based on a fit of the input x and y
+# and the label is also computed 
+my_compute_group <- function(data, scales) {
+                                    
+                                    model <- lm(formula = data$y ~ data$x)
+                                  
+                                    data.frame(x = data$x,
+                                               y = model$fitted.values,
+                                               label = 
+                                                 round(x = model$fitted.values,
+                                                       digits = 2))
+}
+
+# lets see how this function works...
+cars %>% 
+  transmute(x = speed,
+            y = dist) %>% 
+my_compute_group(data = .)
+
+
+StatOlsfitted <- ggplot2::ggproto(`_class` = "StatOlsfitted",
+                                  `_inherit` = ggplot2::Stat,
+                                  required_aes = c("x", "y"),
+                                  compute_group = my_compute_group
+)
+
+
+geom_text_lm_fitted <- function(mapping = NULL, data = NULL,
+                           position = "identity", na.rm = FALSE,
+                           show.legend = NA,
+                           inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatOlsfitted, 
+    geom = ggplot2::GeomText, 
+    data = data, 
+    mapping = mapping,
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+```
+
+
+```{r use2TLP}
+library(ggplot2)
+ggplot(cars) + 
+  aes(x = speed, y = dist) +
+  geom_point() + 
+  geom_smooth(method = lm) + 
+  geom_text_lm_fitted(color = "plum4")
+```
