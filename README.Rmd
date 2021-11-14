@@ -1,0 +1,29 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# mytidytuesday git repo
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of mytidytuesday is to hold the little projects, in the spirit of tidy tuesday.  
+
+```{r, results='asis'}
+library(magrittr)
+webpages <- fs::dir_ls(type = "file", recurse = T, glob = "*.html")
+
+webpages %>% 
+  paste0("https://evamaerey.github.io/mytidytuesday/", ., "\n") %>% 
+  cat()
+```
+
