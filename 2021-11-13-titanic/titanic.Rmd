@@ -1,0 +1,26 @@
+---
+title: "titanic"
+author: "Evangeline Reynolds"
+date: "11/13/2021"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+Titanic %>% 
+  data.frame() %>%
+  uncount(weights = Freq) ->
+titanic
+  
+ggcanvas() +
+  stamp_point(xy = pos_wrap(n = 2201, ncol = 40),
+              size = .5,
+              color = ifelse(titanic$Sex == "Male", "blue", "green"),
+              alpha = ifelse(titanic$Survived == "Yes", 1, .4))  
+  
+Titanic %>% 
+  data.frame() %>% 
+  filter(Freq != 0) %>% 
+  filter(Class == "3rd")
+```
+

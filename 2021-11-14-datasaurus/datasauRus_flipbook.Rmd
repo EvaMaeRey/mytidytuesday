@@ -1,0 +1,76 @@
+---
+title: "Exploded code"
+subtitle: "Using flipbookr and xaringan"
+author: "Me"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = F, warning = FALSE, comment = "", cache = F)
+
+options(tibble.print_min = 55)
+options(knitr.duplicate.label = "allow")
+options(width=300) # prevents data wrapping
+```
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 40%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+
+
+---
+
+
+`r flipbookr::chunk_reveal("dino", left_assign = "detect")`
+
+
+```{r dino, include = FALSE}
+library(tidyverse)
+datasauRus::datasaurus_dozen %>% 
+  ggplot() + 
+  aes(x = x, 
+      y = y) + 
+  geom_point() + 
+  facet_wrap(facets = vars(dataset)) + 
+  # mean of x
+  ggxmean::geom_x_mean() + 
+  ggxmean::geom_y_mean() + 
+  # mean of y
+  ggxmean:::geom_x1sd(linetype = "dashed") + 
+  ggxmean:::geom_y1sd(linetype = "dashed") + 
+  # linear model
+  ggxmean::geom_lm() + 
+  ggxmean::geom_lm_formula() + 
+  # Pearson correlation
+  ggxmean:::geom_corrlabel()
+```

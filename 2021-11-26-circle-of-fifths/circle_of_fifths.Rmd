@@ -1,0 +1,46 @@
+---
+title: "circle of fifths"
+author: "Evangeline Reynolds"
+date: "11/26/2021"
+output: html_document
+---
+
+```{r}
+library(ggstamp)
+library(ggplot2)
+library(tidyverse)
+
+major = c("C", "G", "D", "A", "E", "B", 
+            "Gb","Db", "Ab", "Eb", "Bb", "F")
+minor = c("Am", "Em", "Bm", "F#m", "C#m", "G#m", "Ebm",
+            "Bbm", "Fm", "Cm", "Gm", "Dm")
+spot = 1:12
+
+ggcanvas() + 
+  stamp_polygon(n_vertices = 12) + 
+  stamp_circle(radius = 1.4) +
+  stamp_text(xy = pos_polygon(n = 12,
+             radius = 1.1), 
+             label = major,
+             size = 6) + 
+  stamp_circle(radius = .8) +
+  stamp_text(xy = pos_polygon(n = 12, radius = .5),
+             label = minor,
+             size = 5) +
+  stamp_spoke(radius = 1.4, 
+              angle = pi*1:12/6 + 
+                1/12*pi)
+```
+
+```{r}
+ggcanvas() + 
+  stamp_tile(x = 1:12) +
+  stamp_text(x = 1:12, label = major) + 
+  stamp_tile(x = 1:12, y = -1) +
+  stamp_text(x = 1:12, y = -.8, 
+             label = minor,
+             size = 4) +
+  coord_polar(start = -.25) + 
+  theme_void_fill()
+```
+
