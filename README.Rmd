@@ -20,10 +20,13 @@ The goal of mytidytuesday is to hold the little projects, in the spirit of tidy 
 
 ```{r, results='asis'}
 library(magrittr)
-webpages <- fs::dir_ls(type = "file", recurse = T, glob = "*.html")
+webpages <- fs::dir_ls(type = "file", recurse = T, glob = "*.html") %>% rev()
 
 webpages %>% 
-  paste0("https://evamaerey.github.io/mytidytuesday/", ., "\n") %>% 
+  paste0("- [",
+         . ,
+         "]",
+         "(https://evamaerey.github.io/mytidytuesday/", ., ")\n") %>% 
   cat()
 ```
 

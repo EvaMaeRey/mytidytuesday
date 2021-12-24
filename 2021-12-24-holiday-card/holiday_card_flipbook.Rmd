@@ -1,0 +1,109 @@
+---
+title: "Exploded code"
+subtitle: "Using flipbookr and xaringan"
+author: "Me"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 8, message = F, warning = FALSE, comment = "", cache = F)
+
+options(tibble.print_min = 55)
+options(knitr.duplicate.label = "allow")
+options(width=300) # prevents data wrapping
+```
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 65%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+
+
+---
+
+
+`r flipbookr::chunk_reveal("setup", left_assign = "detect")`
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+---
+
+
+`r flipbookr::chunk_reveal("card", left_assign = "detect")`
+
+
+```{r card, include = FALSE}
+library(tidyverse)
+url <- "https://images.unsplash.com/photo-1612036795959-6e3e21a015c8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1471&q=80"
+image_credit <- "Jody Confer, Columbia, Missouri" # via unsplash
+magick::image_read(url) %>% 
+  magick::image_scale(geometry = 400) %>% 
+  magick::image_write(format = "png") %>% 
+  ggstamp::ggbackdrop(png = .) +
+  ggstamp::stamp_tile(height = 60:64,
+             width = 93:97,
+             x = 50, y = 33,
+             alpha = 0, #fill
+             size = c(.5,.75,1,.75,.5),
+             color = alpha("darkred", .7)) +
+  ggstamp::stamp_text(x = 53, y = 12:1*5, 
+                      label = paste(1:12, "X")) +
+  ggstamp::stamp_png2(png = "noun-partridge-3016488.png", 
+                      width = 6, y0 = 60, x0 = 60) +
+  ggstamp::stamp_png2(png = "noun-dove-165472.png", 
+                      width = 6, y0 = 55, x0 = 60) +
+  ggstamp::stamp_png2(png = "noun-hen-703301.png", 
+                      width = 6, y0 = 50, x0 = 60) +
+  ggstamp::stamp_png2(png = "noun-bird-52580.png", 
+                      width = 6, y0 = 45, x0 = 60) +
+  ggstamp::stamp_png2(png = "noun-ring-147802.png", 
+                      width = 6, y0 = 40, x0 = 60) +
+  ggstamp::stamp_png2(png = "noun-goose-38207.png", 
+                      width = 7, y0 = 34, x0 = 60) +
+  ggstamp::stamp_png2(png = "noun-swan-1200565.png", 
+                      width = 7, y0 = 29.5, x0 = 60) +
+  ggstamp::stamp_png2(png = "noun-woman-feeding-baby-with-milk-bottle-1922307.png", 
+                      width = 6, y0 = 25, x0 = 60) +
+  ggstamp::stamp_png2(png = "noun-ballerina-1381034.png", 
+                      width = 8, y0 = 20, x0 = 60) +
+  ggstamp::stamp_png2(png = "noun-happy-dance-152595.png", 
+                      width = 6, y0 = 15, x0 = 60) +
+  ggstamp::stamp_text(label = "%>%", size = 5,
+                      y = 10, x = 61) +
+  ggstamp::stamp_png2(png = "noun-drummer-20148.png", 
+                      width = 7, y0 = 5, x0 = 60) +
+  theme_void()
+```
