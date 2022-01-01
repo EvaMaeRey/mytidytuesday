@@ -51,3 +51,29 @@ magick::image_read(url) %>%
                       width = 7, y0 = 5, x0 = 60) +
   theme_void()
 ```
+```{r}
+
+
+ggcanvas() %>% 
+  reduce(
+  1:nrow(my_pos),
+  ~ .x + stamp_png2(png = "noun_Fish_2459037.png", 
+                    width = 1.4,
+                    color = c("gray30","gray30","gray30","darkred","navy")[.y],
+                    x0y0 = my_pos[.y,]),
+  .init = plot_sketch
+)  
+ "noun-partridge-3016488.png", 
+ "noun-dove-165472.png", 
+ "noun-hen-703301.png", 
+ "noun-bird-52580.png", 
+ "noun-ring-147802.png", 
+ "noun-goose-38207.png", 
+ "noun-swan-1200565.png", 
+ "noun-woman-feeding-baby-with-milk-bottle-1922307.png", 
+ "noun-ballerina-1381034.png", 
+ "noun-happy-dance-152595.png", 
+ "noun-pied-piper-2199126.png",
+ "noun-drummer-20148.png"
+`
+
