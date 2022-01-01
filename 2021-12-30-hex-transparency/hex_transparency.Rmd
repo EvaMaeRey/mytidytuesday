@@ -1,0 +1,57 @@
+---
+title: "Untitled"
+author: "Evangeline Reynolds"
+date: "12/30/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r cars}
+library(tidyverse)
+library(ggstamp)  
+set.seed(1243)
+tibble::tibble(x = rnorm(40000, sd = .7),
+       y = rnorm(40000, sd = .7)) %>% 
+  ggplot() + 
+  aes(x = x, y = y) +
+  geom_hex(show.legend = F, color = alpha("white", 0)) + 
+  coord_equal(xlim = c(-3,3), ylim = c(-2.3, 2.3)) + 
+  stamp_polygon_inverse(radius = 2, radius_outer = Inf, 
+                        fill = "green", color = "red"
+                        ) +
+  stamp_polygon(alpha = .2, n = 5, size = 1.75,
+                fill = "magenta", color = "grey15",
+                rotation = -.55) + 
+  stamp_polygon(radius = .4, n = 3,
+                x0 = .3, y0 = .77, rotation = -.4,
+                alpha = 1, fill = "orange", size = 0) + 
+  stamp_text(angle = 30, label = "ggstamp",
+             x = .7, y = -1,
+             color = "snow1") + 
+  stamp_text(angle = 30, label = "github.com/EvaMaeRey/ggstamp",
+             x = .7, y = -1.45, size = 1.8,
+             color = "grey85") + 
+  stamp_polygon(radius = 2, 
+                alpha = 0, size = 2,
+                color = "plum3") + 
+  theme_void_fill(fill = "green") +
+  ggxmean::stamp_normal_dist(sd = .2, alpha = .8, height = 1.5) + 
+  stamp_point(xy = pos_wrap(n = 22, ncol = 6, width = .15, x0 = -.95, y0 = -.3), size = 3,
+              color = "seagreen2") ->
+g; g
+```
+
+
+```{r magick}
+ggsave("hex_sticker_ggstamp.png", plot = g, dpi = 320) 
+
+magick::image_read("hex_sticker_ggstamp.png") %>% 
+  magick::image_fill("transparent",  "+40+40", fuzz = 40) %>% 
+  magick::image_write("hex_sticker_ggstamp2.png")
+```
+
