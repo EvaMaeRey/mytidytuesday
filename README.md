@@ -6,23 +6,15 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of mytidytuesday is to hold the little projects, in the spirit
-of tidy tuesday.
+The goal of mytidytuesday is to hold the little projects. They are like
+blogs posts, but just code, hardly any prose. It’s in the spirit of
+\#tidytuesday!
 
-``` r
-library(magrittr)
-#> Warning: package 'magrittr' was built under R version 3.6.2
-webpages <- fs::dir_ls(type = "file", recurse = T, glob = "*.html") %>% rev()
-
-webpages %>% 
-  paste0("- [",
-         . ,
-         "]",
-         "(https://evamaerey.github.io/mytidytuesday/", ., ")\n") %>% 
-  cat()
-```
-
+-   [2022-01-03-easy-geom-recipes/easy\_geom\_recipes.html](https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/easy_geom_recipes.html)
+-   [2021-12-30-hex-transparency/hex\_transparency\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2021-12-30-hex-transparency/hex_transparency_flipbook.html)
+-   [2021-12-30-hex-transparency/hex\_transparency.html](https://evamaerey.github.io/mytidytuesday/2021-12-30-hex-transparency/hex_transparency.html)
 -   [2021-12-24-holiday-card/holiday\_card\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2021-12-24-holiday-card/holiday_card_flipbook.html)
+-   [2021-12-24-holiday-card/holiday\_card.html](https://evamaerey.github.io/mytidytuesday/2021-12-24-holiday-card/holiday_card.html)
 -   [2021-11-26-circle-of-fifths/circle\_of\_fifths\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2021-11-26-circle-of-fifths/circle_of_fifths_flipbook.html)
 -   [2021-11-14-datasaurus/datasauRus\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2021-11-14-datasaurus/datasauRus_flipbook.html)
 -   [2021-11-14-datasaurus/datasauRus.html](https://evamaerey.github.io/mytidytuesday/2021-11-14-datasaurus/datasauRus.html)

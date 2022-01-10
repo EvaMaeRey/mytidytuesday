@@ -7,6 +7,7 @@ output: github_document
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
+  warning = FALSE,
   comment = "#>"
 )
 ```
@@ -16,9 +17,9 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of mytidytuesday is to hold the little projects, in the spirit of tidy tuesday.  
+The goal of mytidytuesday is to hold the little projects.  They are like blogs posts, but just code, hardly any prose.  It's in the spirit of #tidytuesday!  
 
-```{r, results='asis'}
+```{r, results='asis', echo = F}
 library(magrittr)
 webpages <- fs::dir_ls(type = "file", recurse = T, glob = "*.html") %>% rev()
 

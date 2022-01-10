@@ -1,0 +1,43 @@
+---
+title: "ggstamp"
+author: "Evangeline Reynolds"
+date: "1/1/2022"
+output: html_document
+---
+
+```{r}
+library(ggstamp)
+
+tc <- "lavender"
+ggdraft() + 
+  stamp_text_ljust("What can you do with {ggstamp}?",x = .05,
+                   y = .55) + 
+  stamp_png(png = "../2021-12-30-hex-transparency/hex_sticker_ggstamp2.png", 
+            reduce = 100, width = .5,
+            x0 = .5, y0 = .3) +
+  stamp_text(label = "Add commentary to your work", 
+             color = tc,
+             text_wrap = T, char_width = 12,
+             angle = 12, size = 4,
+             x = .3, y = .4) + 
+  stamp_text(label = "Point out important elements",
+             color = tc,
+             text_wrap = T, char_width = 20,
+             angle = -12, size = 4,
+             x = .7, y = .4) + 
+  stamp_curve(x = .6, xend = .7,
+              y = .30, yend = .36, 
+              color = "blue") + 
+  stamp_text(label = "Represent counts!",
+             x = .3, y = .2,
+             color = tc,
+             angle = -12, size = 4) +
+  stamp_arrow(x = .3, xend = .4, headtype = "closed",
+              y = .22, yend = .25, 
+              color = "darkorange3") + 
+  stamp_point(x = .52, y = .36, size = 12,
+              alpha = .6, color = "greenyellow") +
+  theme_void_fill("darkseagreen")
+  
+```
+

@@ -7,6 +7,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
 ```
 
 
@@ -51,19 +52,15 @@ magick::image_read(url) %>%
                       width = 7, y0 = 5, x0 = 60) +
   theme_void()
 ```
-```{r}
+```{r tree}
+
+my_seq <- rep(1:12, 1:12)
+
+my_pos <- ggstamp::pos_branching(n = length(my_seq), 
+                                 width = 1, height = 2)
 
 
-ggcanvas() %>% 
-  reduce(
-  1:nrow(my_pos),
-  ~ .x + stamp_png2(png = "noun_Fish_2459037.png", 
-                    width = 1.4,
-                    color = c("gray30","gray30","gray30","darkred","navy")[.y],
-                    x0y0 = my_pos[.y,]),
-  .init = plot_sketch
-)  
- "noun-partridge-3016488.png", 
+images <- c("noun-partridge-3016488.png", 
  "noun-dove-165472.png", 
  "noun-hen-703301.png", 
  "noun-bird-52580.png", 
@@ -74,6 +71,46 @@ ggcanvas() %>%
  "noun-ballerina-1381034.png", 
  "noun-happy-dance-152595.png", 
  "noun-pied-piper-2199126.png",
- "noun-drummer-20148.png"
-`
+ "noun-drummer-20148.png")
+
+
+ggstamp::ggcanvas() %>% 
+  reduce(
+  1:nrow(my_pos),
+  ~ .x + ggstamp::stamp_png2(png = images[my_seq][.y],
+                    x0y0 = my_pos[.y,]),
+  .init = .
+) 
+```
+```{r}
+url <- "https://images.unsplash.com/photo-1612037262026-ef4ff27708e7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
+
+my_seq <- rep(1:12, 1:12)
+
+my_pos <- ggstamp::pos_branching(n = length(my_seq), x0 = 40, y0 = 130,
+                                 width = 5, height = 10)
+
+image_credit <- "Jody Confer, Columbia, Missouri" # via unsplash
+magick::image_read(url) %>% 
+  magick::image_scale(geometry = 400) %>% 
+  magick::image_write(format = "png") %>% 
+  ggstamp::ggbackdrop(png = .) +
+  ggstamp::stamp_tile(height = 142:146,
+             width = 93:97,
+             x = 50, y = 75,
+             alpha = 0, #fill
+             size = c(.5,.75,1,.75,.5),
+             color = alpha("darkred", .7)) ->
+my_card; my_card
+
+my_card %>% 
+  reduce(
+  1:nrow(my_pos),
+  ~ .x + ggstamp::stamp_png2(png = images[my_seq][.y], width = 7,
+                             # color = rep(c("darkolivegreen", "darkgreen"), 39)[.y],
+                    x0y0 = my_pos[.y,]),
+  .init = .
+)  +
+  theme_void()
+```
 
