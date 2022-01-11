@@ -29,7 +29,7 @@ cars %>%
 
 ---
 
-## Step 1: computation function
+## Step 1: computation
 
 - define computation that ggplot2 should do for you, before plotting
   - here it's computing a variable with labels for each observation
@@ -102,7 +102,11 @@ cars %>%
   aes(x = speed, y = dist) + 
   geom_point() + 
   geom_label_row_number(hjust = 1.2) # function in action
+```
 
+### And check out conditionality!
+
+```{r}
 last_plot() + 
   aes(color = dist > 60) # Computation is within group
 ```
@@ -124,6 +128,13 @@ last_plot() +
 - geom should have behavior of geom_text (not geom_label)
 
 
+Hint:
+
+```{r}
+paste0("(", 1, ", ",3., ")")
+```
+
+
 ---
 
 # Recipe #2: `geom_point_xy_medians()`
@@ -132,35 +143,48 @@ last_plot() +
 
 - This will be a point at the median of x and y
 
-## Step 0:
+## Step 0: use base ggplot2 to get the job done
+
+```{r}
+cars %>% 
+  summarize(dist_median = median(dist),
+            speed_median = median(speed)) ->
+cars_medians
+
+cars %>% 
+  ggplot() + 
+  aes(x = speed) + 
+  aes(y = dist) + 
+  geom_point() + 
+  geom_point(data = cars_medians,
+    color = "red", size = 4,
+             aes(x = speed_median,
+                 y = dist_median))
+```
+
+
+## Step 1: computation
 
 ```{r}
 
 ```
 
 
-## Step 1:
+## Step 2: define ggproto
 
 ```{r}
 
 ```
 
 
-## Step 2:
-
-```{r}
-
-```
-
-
-## Step 3:
+## Step 3: define geom_* function
 
 
 ```{r}
 
 ```
 
-## Now you
+## Now you ...
 
 
 ### Create the function `geom_point_xy_means()`.  
@@ -173,28 +197,41 @@ Recipe #2 modification:  `geom_point_xy_means()`
 
 ---
 
-## Step 0:
+## Step 0: use base ggplot2 to get the job done
+
+```{r}
+model <- lm(formula = dist ~ speed, data = cars) 
+
+cars %>% 
+  mutate(fitted = model$fitted.values) ->
+cars_w_fitted
+
+cars %>% 
+  ggplot() + 
+  aes(x = speed, y = dist) +
+  geom_point() + 
+  geom_smooth(method = "lm", se = F) + 
+  geom_point(data = cars_w_fitted,
+             aes(y = fitted),
+             color = "blue")
+```
+
+
+## Step 1: computation
 
 ```{r}
 
 ```
 
 
-## Step 1:
+## Step 2: define ggproto
 
 ```{r}
 
 ```
 
 
-## Step 2:
-
-```{r}
-
-```
-
-
-## Step 3:
+## Step 3: define geom_* function
 
 
 ```{r}
@@ -203,7 +240,8 @@ Recipe #2 modification:  `geom_point_xy_means()`
 
 ---
 
-## Now you
+## Now you...
 
 
 ### Create the function `geom_segment_lm_residuals()`.  
+Hint: read about what aesthetics are required for segments.
