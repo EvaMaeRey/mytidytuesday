@@ -1,0 +1,53 @@
+---
+title: "Untitled"
+author: "Evangeline Reynolds"
+date: "12/30/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r cars}
+library(tidyverse)
+library(ggstamp)  
+library(ggxmean)
+set.seed(1243)
+ggcanvas() + 
+  stamp_wash(fill = "linen", alpha = 1) + 
+  stamp_chisq_dist(df = 3,  fill = "steelblue", sd = .22, height = 10, color = "snow") +
+  stamp_chisq_dist(df = 5,  fill = "goldenrod", sd = .22, height = 10, color = "snow") +
+  stamp_chisq_dist(df = 7,  fill = "plum", sd = .22, height = 10, color = "snow") +
+  stamp_chisq_dist(df = 11, fill = "sienna", sd = .22, height = 10, color = "snow") +
+  stamp_text( y = -.2, x = 1,
+             label = "ggdistribution",
+             color = "lightblue4") + 
+    # coord_equal(xlim = c(-3,3), ylim = c(-2.3, 2.3)) + 
+  stamp_text(angle = 30, label = "github.com/...",
+             x = 1.7, y = -1.45, size = 1.8, 
+             color = "brown") + 
+    stamp_polygon(radius = 2, x0 = 1, y0 = .5,
+                alpha = 0, size = 7,
+                color = alpha("rosybrown4", .9)) +
+    stamp_polygon_inverse(radius = 2, radius_outer = Inf, x0 = 1, y0 = .5,
+                        fill = "white", color = "red"
+                         ) +
+  theme_void_fill(fill = "white") +
+  NULL
+
+
+  
+```
+
+
+```{r magick}
+ggsave("hex_sticker_dist.png", dpi = 320) 
+
+magick::image_read("hex_sticker_dist.png") %>% 
+  magick::image_fill("transparent",  "+40+40", fuzz = 40) %>% 
+  magick::image_write("hex_sticker_dist.png")
+```
+

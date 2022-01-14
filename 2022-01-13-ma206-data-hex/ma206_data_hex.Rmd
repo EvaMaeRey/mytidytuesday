@@ -1,0 +1,58 @@
+---
+title: "Untitled"
+author: "Evangeline Reynolds"
+date: "12/30/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r cars}
+library(tidyverse)
+library(ggstamp)  
+set.seed(1243)
+ggcanvas() + 
+  stamp_wash(fill = "black", alpha = 1) + 
+  stamp_text(x = rnorm(1200, sd = 2),
+             y = rnorm(1200, sd = 2),
+             alpha = runif(1200, min = 0, max = 1),
+             label = sample(0:1, 1200, replace = T), 
+             color = "green", size = 5) + 
+  ggxmean::stamp_normal_dist(sd = .5, alpha = .8, height = 3, 
+                             fill = "black", 
+                             color = "green", size = .1) + 
+  ggxmean::stamp_normal_dist(sd = .5, alpha = .2, height = 3, 
+                             fill = "green", 
+                             color = "green", size = .1) + 
+  stamp_tile(width = 4, y = -.2, height =.4, alpha = .8,
+             fill = "green", color = "black") + 
+  stamp_text( y = -.2, 
+             label = "ma206data",
+             color = "black") + 
+    coord_equal(xlim = c(-3,3), ylim = c(-2.3, 2.3)) + 
+  stamp_text(angle = 30, label = "github.com/...",
+             x = .7, y = -1.45, size = 1.8,
+             color = "green") + 
+    stamp_polygon(radius = 2, 
+                alpha = 0, size = 7,
+                color = alpha("black", .9)) +
+    stamp_polygon_inverse(radius = 2, radius_outer = Inf, 
+                        fill = "white", color = "red"
+                        ) +
+  theme_void_fill(fill = "white") +
+  NULL
+```
+
+
+```{r magick}
+ggsave("hex_sticker_ma_206.png", dpi = 320) 
+
+magick::image_read("hex_sticker_ma_206.png") %>% 
+  magick::image_fill("transparent",  "+40+40", fuzz = 40) %>% 
+  magick::image_write("hex_sticker_ma_206.png")
+```
+
