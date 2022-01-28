@@ -10,6 +10,9 @@ The goal of mytidytuesday is to hold the little projects. They are like
 blogs posts, but just code, hardly any prose. It’s in the spirit of
 \#tidytuesday!
 
+-   [2022-01-28-quieting/quieting.html](https://evamaerey.github.io/mytidytuesday/2022-01-28-quieting/quieting.html)
+-   [2022-01-17-rosling-style/rosling\_style.html](https://evamaerey.github.io/mytidytuesday/2022-01-17-rosling-style/rosling_style.html)
+-   [2022-01-16-ggxmean-hex/ggxmean\_hex.html](https://evamaerey.github.io/mytidytuesday/2022-01-16-ggxmean-hex/ggxmean_hex.html)
 -   [2022-01-13-ma206-data-hex/ma206\_data\_hex.html](https://evamaerey.github.io/mytidytuesday/2022-01-13-ma206-data-hex/ma206_data_hex.html)
 -   [2022-01-13-ggdistributions-hex/ggdistributions\_hex.html](https://evamaerey.github.io/mytidytuesday/2022-01-13-ggdistributions-hex/ggdistributions_hex.html)
 -   [2022-01-03-easy-geom-recipes/easy\_geom\_recipes.html](https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/easy_geom_recipes.html)

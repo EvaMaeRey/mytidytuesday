@@ -1,0 +1,79 @@
+---
+title: "quieting techniques"
+author: "J, T, G"
+date: "1/28/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+
+```{r plot}
+p <- ggplot(data = cars) +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point() +
+  aes(color = speed) +
+  labs(title = "Correlation") + 
+  labs(caption = "cars dataset") +
+  theme(legend.position = c(.2,.8), 
+        legend.direction = "horizontal")
+```
+
+
+# Method 1: Manipulating gtable
+Pros - very straightforward; not hacky, just uses existing gtable API
+Cons - output is no longer a ggplot object
+
+```{r method_1}
+library(grid)
+library(gtable)
+
+p_gtable <- ggplot_gtable(ggplot_build(p))
+grid.newpage()
+grid.draw(p_gtable)
+```
+
+
+```{r part_2}
+p_gtable_legend_quiet <- gtable_filter(p_gtable, "guide-box", invert = TRUE)
+grid.newpage()
+grid.draw(p_gtable_legend_quiet)
+```
+
+# Method 2: Manipulating ggplot theme
+
+Pros - you get back a ggplot object and can keep adding layers to it
+Cons - quite a lot to search through and replace
+
+```{r method2}
+p_global_theme <- ggplot2:::plot_theme(p)
+typeof(p_global_theme)
+names(p_global_theme)
+p_elements_with_colour <- Filter(Negate(is.null), 
+                                 lapply(p_global_theme, 
+                                        function(element) if (is.list(element)) 
+                                          element$colour))
+
+p_elements_with_colour
+```
+
+## ggplot list
+
+```{r thomas}
+p +
+  aes(color = NULL) ->
+p
+
+p$layers[[1]]$geom$default_aes$colour ->
+  color
+
+alpha(color, alpha = .3) ->
+ p$layers[[1]]$geom$default_aes$colour 
+
+p
+```
+

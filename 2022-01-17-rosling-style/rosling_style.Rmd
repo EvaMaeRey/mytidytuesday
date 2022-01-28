@@ -1,0 +1,205 @@
+---
+title: "A minimal flipbook"
+subtitle: "With flipbookr and xaringan"
+author: "You!"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F)
+library(flipbookr)
+library(tidyverse)
+```
+
+
+
+---
+background-image: url(images_for_lecture/ggplot_beautiful_examples.png)
+background-size: contain
+
+
+---
+
+
+
+Function of Data Viz:
+
+"The simple graph has brought more information to the data analyst’s mind than any other device" 
+
+
+
+
+---
+
+# Use *visual channels* to communicated information
+
+- consumed "pre-attentive processing" (McGill and Cleveland)
+
+
+---
+
+## Key Aesthetics:
+
+
+```{r}
+# knitr::include_graphics("images_for_lecture/common-aesthetics-1.png")
+```
+
+
+From Fundamentals of Data Visualization - Clause Wilke
+
+
+
+
+
+---
+class: 
+# A famous data visualization presentation
+
+https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A
+
+--
+
+What are the variables that are represented in the data vizualization?
+
+--
+
+What are the *aesthetics* (visual channels) are used to represent variables?
+
+--
+
+What are the aesthetic mappings (variable  <-> aesthetic pairings)
+
+--
+
+
+
+---
+
+# Hans Rosling
+
+<iframe width="767" height="431" src="https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A
+
+
+
+---
+
+
+
+
+# definition of a data visualization...
+
+
+---
+
+
+# A data visualization is made up of ...
+
+--
+
+### .left[... geometric objects ...]
+
+--
+
+### .center[...that take on aesthetics (color, line width, x-position) ...]
+
+--
+
+### .center[...which represent variables ...]
+
+--
+
+### .right[...from a dataset (dataframe)]
+
+
+---
+
+# The "Grammar of Graphics" - 1999 
+
+```{r, out.width="40%"}
+# knitr::include_graphics("images_for_lecture/wilkinson_grammar_of_graphics.png")
+```
+
+
+---
+
+## Elements of the Grammar of Graphics (choices)
+
+```{r}
+# knitr::include_graphics("images_for_lecture/wilkinson_layers_grammar_of_graphics.png")
+```
+
+---
+
+### A series of choices:
+
+- choose data
+--
+
+- choose aesthetic mapping (what aesthetics will represent what variables)
+
+--
+- choose geometric objects
+
+--
+- make decision to facet or not
+
+--
+- make choice to summarize data or not (statistics)
+
+--
+- choose a coordinate system
+
+--
+- make thematic choices
+
+
+
+---
+
+# Implementations
+
+
+# Tableau 
+
+Polaris -> Tableau - Acquired for 15.7 Billion dollars (salesforce)
+
+--
+
+# Vega Lite... (dynamic, interactive data visualizations in web browsers)
+
+
+--
+
+# ggplot2 (in R)
+
+
+---
+
+
+
+`r flipbookr::chunk_reveal("faithful", title = "# Old faithful")`
+
+```{r faithful, include = F}
+library(gapminder)
+library(ggstamp)
+
+magick::image_read("rosling_warehouse.png") %>% 
+  magick::image_scale(geometry = 100) %>% 
+  magick::image_write(path = "my_bird.png", format = "png") %>% 
+ggbackdrop(png = .)
+```
+

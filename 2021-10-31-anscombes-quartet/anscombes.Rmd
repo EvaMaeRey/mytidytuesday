@@ -30,7 +30,7 @@ tidy_anscombe %>%
   aes(x = x, y = y) + 
   geom_point() + 
   aes(color = group) + 
-  facet_wrap(facets = vars(group)) + 
+  facet_wrap(facets = vars(paste("dataset", group))) + 
   # mean of x
   ggxmean::geom_x_mean() + 
   ggxmean::geom_y_mean() + 
