@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
 ```{r}
 library(tidyverse)
 cars %>% 
-  mutate(id_number = 1:n()) %>% 
+  mutate(id_number = row_number()) %>% 
   ggplot() + 
   aes(x = speed, y = dist) + 
   geom_point() + 
@@ -40,7 +40,7 @@ compute_group_row_number <- function(data, scales){
   
   data %>% 
     # add an additional column called label
-    mutate(label = 1:n())
+    mutate(id_number = row_number())
   
 }
 
@@ -64,7 +64,8 @@ cars %>%
 StatRownumber <- ggplot2::ggproto(`_class` = "StatRownumber",
                                   `_inherit` = ggplot2::Stat,
                                   required_aes = c("x", "y"),
-                                  compute_group = compute_group_row_number)
+                                  compute_group = compute_group_row_number,
+                                  default_aes = aes(label = after_stat(id_number)))
 ```
 
 
@@ -73,13 +74,14 @@ StatRownumber <- ggplot2::ggproto(`_class` = "StatRownumber",
 ## Step 3: define geom_* function
 
 ```{r}
-geom_label_row_number <- function(mapping = NULL, data = NULL,
+stat_row_number <- function(mapping = NULL, data = NULL,
+                                  geom = "label",
                            position = "identity", na.rm = FALSE,
                            show.legend = NA,
                            inherit.aes = TRUE, ...) {
   ggplot2::layer(
     stat = StatRownumber, # proto object from step 2
-    geom = ggplot2::GeomLabel, # inherit other behavior
+    geom = geom, # inherit other behavior; defaults to GeomLabel
     data = data, 
     mapping = mapping,
     position = position, 
@@ -97,12 +99,22 @@ geom_label_row_number <- function(mapping = NULL, data = NULL,
 ## Step 4: Enjoy! Use your function
 
 ```{r}
-cars %>% 
+base <- cars %>% 
   ggplot() + 
   aes(x = speed, y = dist) + 
-  geom_point() + 
-  geom_label_row_number(hjust = 1.2) # function in action
+  geom_point()
+  
+base +
+  stat_row_number(hjust = 1.2) # function in action
 ```
+
+### Checkout using other geoms
+
+```{r}
+base + 
+  stat_row_number(hjust = 1.2, geom = "text") # or `geom = GeomText`
+```
+
 
 ### And check out conditionality!
 
@@ -111,8 +123,27 @@ last_plot() +
   aes(color = dist > 60) # Computation is within group
 ```
 
+### The internal `id_number` variable mapped to the label aes by default is accessible via `after_stat()`
 
+Example 1:
 
+```{r}
+base + 
+  stat_row_number(
+    aes(label = paste("#", after_stat(id_number))),
+    hjust = 1.2
+  )
+```
+
+Example 2:
+
+```{r}
+base + 
+  stat_row_number(
+    aes(label = after_stat(paste0(id_number, "/", max(id_number)))),
+    hjust = 1.2
+  )
+```
 
 ---
 
@@ -206,6 +237,8 @@ geom_point_xy_medians <- function(mapping = NULL, data = NULL,
     show.legend = show.legend, 
     inherit.aes = inherit.aes,
     params = list(na.rm = na.rm, ...)
+  )
+}
 ```
 
 
@@ -305,6 +338,7 @@ geom_point_lm_fitted <- function(mapping = NULL, data = NULL,
     inherit.aes = inherit.aes,
     params = list(na.rm = na.rm, ...)
   )
+}
 ```
 
 ## Step 4: Enjoy! Use your function
