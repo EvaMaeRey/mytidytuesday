@@ -99,20 +99,19 @@ stat_row_number <- function(mapping = NULL, data = NULL,
 ## Step 4: Enjoy! Use your function
 
 ```{r}
-cars %>% 
+base <- cars %>% 
   ggplot() + 
   aes(x = speed, y = dist) + 
-  geom_point() + 
+  geom_point()
+  
+base +
   stat_row_number(hjust = 1.2) # function in action
 ```
 
 ### Checkout using other geoms
 
 ```{r}
-cars %>% 
-  ggplot() + 
-  aes(x = speed, y = dist) + 
-  geom_point() + 
+base + 
   stat_row_number(hjust = 1.2, geom = "text") # or `geom = GeomText`
 ```
 
@@ -129,10 +128,7 @@ last_plot() +
 Example 1:
 
 ```{r}
-cars %>% 
-  ggplot() + 
-  aes(x = speed, y = dist) + 
-  geom_point() + 
+base + 
   stat_row_number(
     aes(label = paste("#", after_stat(id_number))),
     hjust = 1.2
@@ -142,10 +138,7 @@ cars %>%
 Example 2:
 
 ```{r}
-cars %>% 
-  ggplot() + 
-  aes(x = speed, y = dist) + 
-  geom_point() + 
+base + 
   stat_row_number(
     aes(label = after_stat(paste0(id_number, "/", max(id_number)))),
     hjust = 1.2
