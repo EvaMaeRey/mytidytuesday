@@ -126,6 +126,8 @@ last_plot() +
 
 ### The internal `id_number` variable mapped to the label aes by default is accessible via `after_stat()`
 
+Example 1:
+
 ```{r}
 cars %>% 
   ggplot() + 
@@ -137,6 +139,18 @@ cars %>%
   )
 ```
 
+Example 2:
+
+```{r}
+cars %>% 
+  ggplot() + 
+  aes(x = speed, y = dist) + 
+  geom_point() + 
+  stat_row_number(
+    aes(label = after_stat(paste0(id_number, "/", max(id_number)))),
+    hjust = 1.2
+  )
+```
 
 ---
 
