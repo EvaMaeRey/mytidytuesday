@@ -73,13 +73,14 @@ StatRownumber <- ggplot2::ggproto(`_class` = "StatRownumber",
 ## Step 3: define geom_* function
 
 ```{r}
-geom_label_row_number <- function(mapping = NULL, data = NULL,
+stat_label_row_number <- function(mapping = NULL, data = NULL,
+                                  geom = "label",
                            position = "identity", na.rm = FALSE,
                            show.legend = NA,
                            inherit.aes = TRUE, ...) {
   ggplot2::layer(
     stat = StatRownumber, # proto object from step 2
-    geom = ggplot2::GeomLabel, # inherit other behavior
+    geom = geom, # inherit other behavior; defaults to GeomLabel
     data = data, 
     mapping = mapping,
     position = position, 
@@ -101,8 +102,19 @@ cars %>%
   ggplot() + 
   aes(x = speed, y = dist) + 
   geom_point() + 
-  geom_label_row_number(hjust = 1.2) # function in action
+  stat_label_row_number(hjust = 1.2) # function in action
 ```
+
+### Checkout using other geoms
+
+```{r}
+cars %>% 
+  ggplot() + 
+  aes(x = speed, y = dist) + 
+  geom_point() + 
+  stat_label_row_number(hjust = 1.2, geom = "text") # or `geom = GeomText`
+```
+
 
 ### And check out conditionality!
 
@@ -110,8 +122,6 @@ cars %>%
 last_plot() + 
   aes(color = dist > 60) # Computation is within group
 ```
-
-
 
 
 ---
