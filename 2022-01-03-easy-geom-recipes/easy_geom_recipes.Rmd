@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
 ```{r}
 library(tidyverse)
 cars %>% 
-  mutate(id_number = 1:n()) %>% 
+  mutate(id_number = row_number()) %>% 
   ggplot() + 
   aes(x = speed, y = dist) + 
   geom_point() + 
@@ -40,7 +40,7 @@ compute_group_row_number <- function(data, scales){
   
   data %>% 
     # add an additional column called label
-    mutate(label = 1:n())
+    mutate(label = row_number())
   
 }
 
