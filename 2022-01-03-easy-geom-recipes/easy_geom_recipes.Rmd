@@ -166,14 +166,26 @@ cars %>%
 ## Step 1: computation
 
 ```{r}
-
+compute_group_xy_medians<- function(data, scales){
+  data%>% 
+    summarize(x = median(x),
+            y = median(y)) ->
+xy_medians
+  xy_medians
+}
+cars%>%
+  rename(x= speed, y=dist)%>%
+  compute_group_xy_medians()
 ```
 
 
 ## Step 2: define ggproto
 
 ```{r}
-
+StatXYMedians<-ggplot2::ggproto(`_class` = "StatXYMedians",
+                                  `_inherit` = ggplot2::Stat,
+                                  required_aes = c("x", "y"),
+                                  compute_group = compute_group_xy_medians)
 ```
 
 
@@ -181,7 +193,40 @@ cars %>%
 
 
 ```{r}
+geom_point_xy_medians <- function(mapping = NULL, data = NULL,
+                           position = "identity", na.rm = FALSE,
+                           show.legend = NA,
+                           inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatXYMedians, # proto object from step 2
+    geom = ggplot2::GeomPoint, # inherit other behavior
+    data = data, 
+    mapping = mapping,
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+```
 
+
+## Step 4: Enjoy! Use your function
+
+```{r}
+cars%>%
+  ggplot()+
+  aes(x=speed, y=dist)+
+  geom_point()+
+  geom_point_xy_medians(color= "red")
+```
+
+### And check out conditionality!
+
+```{r}
+cars%>%
+  ggplot()+
+  aes(x=speed, y=dist, color= dist>40)+
+  geom_point()+
+  geom_point_xy_medians(size = 4)
 ```
 
 ## Now you ...
@@ -220,14 +265,25 @@ cars %>%
 ## Step 1: computation
 
 ```{r}
-
+compute_group_lm_fitted<- function(data, scales){
+  model<-lm(formula= y~x, data=data)
+  data%>% 
+    mutate(y=model$fitted.values)-> data_w_fitted
+  data_w_fitted
+}
+cars%>%
+  rename(x= speed, y=dist)%>%
+  compute_group_lm_fitted()
 ```
 
 
 ## Step 2: define ggproto
 
 ```{r}
-
+StatLmFitted<-ggplot2::ggproto(`_class` = "StatLmFitted",
+                                  `_inherit` = ggplot2::Stat,
+                                  required_aes = c("x", "y"),
+                                  compute_group = compute_group_lm_fitted)
 ```
 
 
@@ -235,7 +291,31 @@ cars %>%
 
 
 ```{r}
+geom_point_lm_fitted <- function(mapping = NULL, data = NULL,
+                           position = "identity", na.rm = FALSE,
+                           show.legend = NA,
+                           inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatLmFitted, # proto object from step 2
+    geom = ggplot2::GeomPoint, # inherit other behavior
+    data = data, 
+    mapping = mapping,
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+```
 
+## Step 4: Enjoy! Use your function
+
+```{r}
+cars %>% 
+  ggplot() + 
+  aes(x = speed, y = dist) +
+  geom_point() + 
+  geom_smooth(method="lm", se= F)+
+  geom_point_lm_fitted(color="blue")
 ```
 
 ---
