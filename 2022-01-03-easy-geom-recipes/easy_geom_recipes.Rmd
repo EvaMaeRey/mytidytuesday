@@ -73,7 +73,7 @@ StatRownumber <- ggplot2::ggproto(`_class` = "StatRownumber",
 ## Step 3: define geom_* function
 
 ```{r}
-stat_label_row_number <- function(mapping = NULL, data = NULL,
+stat_row_number <- function(mapping = NULL, data = NULL,
                                   geom = "label",
                            position = "identity", na.rm = FALSE,
                            show.legend = NA,
@@ -102,7 +102,7 @@ cars %>%
   ggplot() + 
   aes(x = speed, y = dist) + 
   geom_point() + 
-  stat_label_row_number(hjust = 1.2) # function in action
+  stat_row_number(hjust = 1.2) # function in action
 ```
 
 ### Checkout using other geoms
@@ -112,7 +112,7 @@ cars %>%
   ggplot() + 
   aes(x = speed, y = dist) + 
   geom_point() + 
-  stat_label_row_number(hjust = 1.2, geom = "text") # or `geom = GeomText`
+  stat_row_number(hjust = 1.2, geom = "text") # or `geom = GeomText`
 ```
 
 
