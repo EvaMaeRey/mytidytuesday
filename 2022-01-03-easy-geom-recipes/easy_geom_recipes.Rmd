@@ -1,6 +1,6 @@
 ---
 title: "easy geom recipes"
-author: "Evangeline Reynolds"
+author: "Evangeline Reynolds, Morgan Brown"
 date: "1/3/2022"
 output: html_document
 ---
@@ -18,6 +18,7 @@ knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
 
 ```{r}
 library(tidyverse)
+library(palmerpenguins)
 cars %>% 
   mutate(id_number = 1:n()) %>% 
   ggplot() + 
@@ -36,17 +37,19 @@ cars %>%
 - test that functionality!
 
 ```{r}
+# you won't use the scales argument, but ggplot will later
 compute_group_row_number <- function(data, scales){
   
   data %>% 
     # add an additional column called label
+    # the geom we inherit from requires the label aesthetic
     mutate(label = 1:n())
   
 }
 
 # step 1b test the computation function 
 cars %>% 
-  # input must have required aesthetic inputs 
+  # input must have required aesthetic inputs as columns
   rename(x = speed, y = dist) %>% 
   compute_group_row_number() %>% 
   head()
@@ -78,7 +81,7 @@ geom_label_row_number <- function(mapping = NULL, data = NULL,
                            show.legend = NA,
                            inherit.aes = TRUE, ...) {
   ggplot2::layer(
-    stat = StatRownumber, # proto object from step 2
+    stat = StatRownumber, # proto object from Step 2
     geom = ggplot2::GeomLabel, # inherit other behavior
     data = data, 
     mapping = mapping,
@@ -167,14 +170,12 @@ cars %>%
 
 ```{r}
 compute_group_xy_medians<- function(data, scales){
-  data%>% 
+  data %>% 
     summarize(x = median(x),
-            y = median(y)) ->
-xy_medians
-  xy_medians
+            y = median(y))
 }
 cars%>%
-  rename(x= speed, y=dist)%>%
+  rename(x = speed, y = dist)%>%
   compute_group_xy_medians()
 ```
 
@@ -206,6 +207,8 @@ geom_point_xy_medians <- function(mapping = NULL, data = NULL,
     show.legend = show.legend, 
     inherit.aes = inherit.aes,
     params = list(na.rm = na.rm, ...)
+  )
+}
 ```
 
 
@@ -266,13 +269,15 @@ cars %>%
 
 ```{r}
 compute_group_lm_fitted<- function(data, scales){
-  model<-lm(formula= y~x, data=data)
-  data%>% 
-    mutate(y=model$fitted.values)-> data_w_fitted
-  data_w_fitted
+  model<-lm(formula= y ~ x, data = data)
+  data %>% 
+    mutate(y=model$fitted.values)
 }
-cars%>%
-  rename(x= speed, y=dist)%>%
+
+# test out the function
+cars %>%
+  # rename to explicitly state the x and y inputs
+  rename(x = speed, y = dist)%>%
   compute_group_lm_fitted()
 ```
 
@@ -305,6 +310,7 @@ geom_point_lm_fitted <- function(mapping = NULL, data = NULL,
     inherit.aes = inherit.aes,
     params = list(na.rm = na.rm, ...)
   )
+}
 ```
 
 ## Step 4: Enjoy! Use your function

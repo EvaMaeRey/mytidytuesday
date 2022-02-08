@@ -59,6 +59,16 @@ p_elements_with_colour <- Filter(Negate(is.null),
                                           element$colour))
 
 p_elements_with_colour
+
+ggplot2:::plot_theme(p) ->
+  theme_list
+
+theme_get()
+theme_list$axis.title.x$colour
+
+p + 
+  ggquiet::theme_quiet() + 
+  ggquiet::theme_x_axis_loud(color = theme_list$text$colour)
 ```
 
 ## ggplot list
