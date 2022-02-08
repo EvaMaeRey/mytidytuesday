@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
 
 ```{r}
 library(tidyverse)
-library(palmerpenguins)
+
 cars %>% 
   mutate(id_number = 1:n()) %>% 
   ggplot() + 
@@ -149,33 +149,36 @@ paste0("(", 1, ", ",3., ")")
 ## Step 0: use base ggplot2 to get the job done
 
 ```{r}
-cars %>% 
-  summarize(dist_median = median(dist),
-            speed_median = median(speed)) ->
-cars_medians
+library(palmerpenguins)
+penguins <- remove_missing(penguins)
+penguins %>% 
+  summarize(bill_length_mm_median = median(bill_length_mm),
+            bill_depth_mm_median = median(bill_depth_mm)) ->
+penguins_medians
 
-cars %>% 
+penguins %>% 
   ggplot() + 
-  aes(x = speed) + 
-  aes(y = dist) + 
+  aes(x = bill_depth_mm) + 
+  aes(y = bill_length_mm) + 
   geom_point() + 
-  geom_point(data = cars_medians,
+  geom_point(data = penguins_medians,
     color = "red", size = 4,
-             aes(x = speed_median,
-                 y = dist_median))
+             aes(x = bill_depth_mm_median,
+                 y = bill_length_mm_median))
 ```
 
 
 ## Step 1: computation
 
 ```{r}
-compute_group_xy_medians<- function(data, scales){
+compute_group_xy_medians <- function(data, scales){
   data %>% 
     summarize(x = median(x),
             y = median(y))
 }
-cars%>%
-  rename(x = speed, y = dist)%>%
+penguins %>%
+  rename(x = bill_depth_mm, 
+         y = bill_length_mm) %>%
   compute_group_xy_medians()
 ```
 
@@ -215,19 +218,21 @@ geom_point_xy_medians <- function(mapping = NULL, data = NULL,
 ## Step 4: Enjoy! Use your function
 
 ```{r}
-cars%>%
+penguins %>%
   ggplot()+
-  aes(x=speed, y=dist)+
+  aes(x = bill_depth_mm, y = bill_length_mm)+
   geom_point()+
-  geom_point_xy_medians(color= "red")
+  geom_point_xy_medians(color = "red")
 ```
 
 ### And check out conditionality!
 
 ```{r}
-cars%>%
+penguins %>%
   ggplot()+
-  aes(x=speed, y=dist, color= dist>40)+
+  aes(x = bill_depth_mm, 
+      y = bill_length_mm, 
+      color = species)+
   geom_point()+
   geom_point_xy_medians(size = 4)
 ```
@@ -248,18 +253,19 @@ Recipe #2 modification:  `geom_point_xy_means()`
 ## Step 0: use base ggplot2 to get the job done
 
 ```{r}
-model <- lm(formula = dist ~ speed, data = cars) 
+model <- lm(formula = bill_length_mm ~ bill_depth_mm, 
+            data = penguins) 
 
-cars %>% 
+penguins %>% 
   mutate(fitted = model$fitted.values) ->
-cars_w_fitted
+penguins_w_fitted
 
-cars %>% 
+penguins %>% 
   ggplot() + 
-  aes(x = speed, y = dist) +
+  aes(x = bill_depth_mm, y = bill_length_mm) +
   geom_point() + 
   geom_smooth(method = "lm", se = F) + 
-  geom_point(data = cars_w_fitted,
+  geom_point(data = penguins_w_fitted,
              aes(y = fitted),
              color = "blue")
 ```
@@ -275,9 +281,9 @@ compute_group_lm_fitted<- function(data, scales){
 }
 
 # test out the function
-cars %>%
+penguins %>%
   # rename to explicitly state the x and y inputs
-  rename(x = speed, y = dist)%>%
+  rename(x = bill_depth_mm, y = bill_length_mm)%>%
   compute_group_lm_fitted()
 ```
 
@@ -316,18 +322,50 @@ geom_point_lm_fitted <- function(mapping = NULL, data = NULL,
 ## Step 4: Enjoy! Use your function
 
 ```{r}
-cars %>% 
+penguins %>% 
   ggplot() + 
-  aes(x = speed, y = dist) +
+  aes(x = bill_depth_mm, y = bill_length_mm) +
   geom_point() + 
   geom_smooth(method="lm", se= F)+
   geom_point_lm_fitted(color="blue")
 ```
 
+### And check out conditionality
+
+```{r}
+penguins %>% 
+  ggplot() + 
+  aes(x = bill_depth_mm, y = bill_length_mm) +
+  geom_point() + 
+  geom_smooth(method="lm", se= F) +
+  geom_point_lm_fitted() + 
+  facet_wrap(facets = vars(species))
+```
+
 ---
 
-## Now you...
+## Now you... Create the function `geom_segment_lm_residuals()`. 
+
+### Hint: read about what aesthetics are required for segments.  We'll give you Step 0 this time...
+
+## Step 0: use base ggplot2 to get the job done
+
+```{r}
+model <- lm(formula = bill_length_mm ~ bill_depth_mm, 
+            data = penguins) 
+
+penguins %>% 
+  mutate(fitted = model$fitted.values) ->
+penguins_w_fitted
+
+penguins %>% 
+  ggplot() + 
+  aes(x = bill_depth_mm, y = bill_length_mm) +
+  geom_point() + 
+  geom_smooth(method = "lm", se = F) + 
+  geom_segment(data = penguins_w_fitted,
+             aes(yend = fitted, xend = bill_depth_mm),
+             color = "blue")
+```
 
 
-### Create the function `geom_segment_lm_residuals()`.  
-Hint: read about what aesthetics are required for segments.
