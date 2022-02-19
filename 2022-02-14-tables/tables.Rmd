@@ -1,0 +1,204 @@
+---
+title: "Tables"
+author: "Evangeline Reynolds"
+date: "2/14/2022"
+output: html_document
+---
+
+
+```{r prep}
+library(tidyverse)
+
+Titanic %>% 
+  data.frame() %>% 
+  uncount(weights = Freq) ->
+tidy_titanic ; tidy_titanic %>% head()
+
+Titanic %>% 
+  data.frame() ->
+flat_titanic ; flat_titanic %>% head()
+```
+
+
+```{r slow} 
+tidy_titanic %>% 
+  group_by(Sex, Survived) %>% 
+  summarize(value = n()) %>% 
+  pivot_wider(names_from = Survived)
+```
+
+```{r count}
+pivot_count <- function(data, y, y0, y00, x = NULL, 
+                          value = NULL, 
+                          fun = sum, 
+                          pivot = T #ifelse(is.null(x),F,T)
+                          ){
+  
+  y00 <- enquo(y00)
+  y0 <- enquo(y0)
+  y <- enquo(y)
+  x <- enquo(x)
+
+  # if(is.null(value)){
+    data <- data %>% mutate(value = 1)
+  # }else{
+  #   value <- enquo(value)
+  # }
+  
+tidy <- data %>% 
+  group_by(!!y00, !!y0, !!y, !!x) %>% 
+  summarize(value = fun(value)) %>% 
+  ungroup()
+  
+  if(pivot){#or x is null
+  tidy %>% 
+    pivot_wider(names_from = !!x)
+  }else{
+  tidy
+  }
+
+}
+```
+
+
+```{r calc}
+pivot_calc <- function(data, y, y0, y00, x = NULL, 
+                          value, 
+                          fun = sum, 
+                          pivot = T #ifelse(is.null(x),F,T)
+                          ){
+  
+  y00 <- enquo(y00)
+  y0 <- enquo(y0)
+  y <- enquo(y)
+  x <- enquo(x)
+  value <- enquo(value)
+  
+tidy <- data %>% 
+  group_by(!!y00, !!y0, !!y, !!x) %>% 
+  summarize(value = fun(!!value)) %>% 
+  ungroup()
+  
+  if(pivot){#or x is null
+  tidy %>% 
+    pivot_wider(names_from = !!x)
+  }else{
+  tidy
+  }
+
+}
+```
+
+
+```{r examples}
+tidy_titanic %>% 
+   pivot_count(x = Sex)
+
+tidy_titanic %>% 
+  pivot_count(y = Survived, x = Sex) 
+
+tidy_titanic %>% 
+  pivot_count(y = Survived, x = Sex, y0 = Class)
+
+tidy_titanic %>% 
+  pivot_count(x = Sex, y = Survived, pivot = F)
+```
+
+
+
+```{r calc2}
+flat_titanic %>%
+  pivot_calc(x = Sex, y = Survived, 
+             value = Freq, fun = sum)
+```
+
+```{r style}
+tidy_titanic %>% 
+  pivot_count(x = Sex, y = Survived, y0 = Class) %>% 
+  group_by(Class) %>% 
+  gt::gt()
+```
+
+
+```{r style2}
+tidy_titanic %>% 
+  pivot_count(x = Sex, y = Survived, y0 = Class, y00 = Age) %>% 
+  group_by(Age) %>% 
+  gt::gt()
+```
+
+
+```{r proportionslow}
+tidy_titanic %>% 
+  group_by(Sex, Survived) %>% 
+  summarize(value = n()) %>% 
+  group_by(Sex) %>% 
+  mutate(prop = value/sum(value)) %>% 
+  select(-value) %>% 
+  pivot_wider(values_from = prop, names_from = Sex)
+```
+
+```{r propfunction}
+two_way_prop <- function(data, y, y0, y00, x = NULL, value = NULL, fun = sum, within, pivot = !is.null(x)){
+  
+  y00 <- enquo(y00)
+  y0 <- enquo(y0)
+  x <- enquo(x)
+  y <- enquo(y)
+  within <- enquo(within)
+  
+  if(is.null(value)){
+    data <- data %>% mutate(value = 1)
+  }else{
+    value <- enquo(value)
+  }
+  
+  data %>% 
+  group_by(!!y00, !!y0, !!y, !!x) %>% 
+  summarize(value = fun(value)) %>% 
+  group_by(!!within) %>% 
+  mutate(prop = value/sum(value)) %>% 
+  select(-value) %>%
+  ungroup() ->
+tidy
+  
+  if(pivot){
+    
+    tidy %>% 
+      pivot_wider(values_from = prop, names_from = !!x) 
+    
+  }else{
+    
+    tidy
+  }
+  
+}
+```
+
+
+```{r propusage}
+tidy_titanic %>% 
+  two_way_prop(y = Survived, x = Class, within = Class)
+
+tidy_titanic %>% 
+  two_way_prop(y0 = Survived, 
+               y = Sex, 
+               x = Class, 
+               within = Survived)
+```
+
+```{r propgraph}
+tidy_titanic %>% 
+  two_way_prop(y0 = Survived, 
+               y = Sex, 
+               x = Class, 
+               within = Survived, pivot = F) %>% 
+  ggplot() +
+  aes(x = Class, y = Sex) +
+  facet_grid(rows = vars(Survived)) +
+  geom_tile() +
+  aes(fill = prop) + 
+  geom_text(aes(label = prop %>% round(3)))
+```
+
+
