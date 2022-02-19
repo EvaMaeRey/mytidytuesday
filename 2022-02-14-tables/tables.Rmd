@@ -32,7 +32,7 @@ flat_titanic ; flat_titanic %>% head()
 
 # Step 0. Some observations
 
-## ggplot2 
+## ggplot2: user needs to describe layout of table
 
 you can make a visual pivot table in ggplot2; analyst job is to describe the form. How will it look
 
@@ -52,11 +52,11 @@ tidy_titanic %>%
 
 ---
 
-## Same table with existing pivot tools, vis comes last
+## With existing pivot tools, description isn't so visual
 
 - specify vars
 - specify aggregation
-- specify visual arrangement <- this comes last
+- specify visual arrangement (names from?) <- this comes last
 
 ```{r slow} 
 tidy_titanic %>% 
@@ -67,7 +67,9 @@ tidy_titanic %>%
 
 ---
 
-# Step 1a. Make Functions to make table with the visual specification coming first
+# Step 1a. Make Functions to allow description of final table, pivot_count and pivot_calc
+
+## x argument is horizontal elements (columns) and y is vertical elements (rows)
 
 
 ```{r count}
@@ -185,7 +187,7 @@ tidy_titanic %>%
   gt::gt()
 ```
 
-# Back to Step 0 observations: use existing tools to calculate proportions is many step process
+# Back to Step 0, Observations: use existing tools to calculate *proportions* is many step process
 
 ### feels like lots of gymnastics... a vis first approach is what we are after
 
@@ -290,4 +292,9 @@ tidy_titanic %>%
 
 ```
 
+# Reflections and questions
 
+1. Does this already exist?
+2. How can API improve? possibly rows = vars(y00, y0, y), cols = vars(x).  and within = vars(?, ?)  This requires more digging into tidy eval.  What about multiple x vars?
+3. How can internals improve?  Also tidy eval is old I think. defaults for missing data. 
+4. What about summary columns, rows.  Column totals, etc.  Maybe not very tidy...
