@@ -2,12 +2,21 @@
 title: "Tables"
 author: "Evangeline Reynolds"
 date: "2/14/2022"
-output: html_document
+output:
+  html_document:
+    toc: true
 ---
 
+```{r}
+knitr::opts_chunk$set(message = F, warning = F)
+```
+
+
+# Step 00. prep some data, records and flat
 
 ```{r prep}
 library(tidyverse)
+library(magrittr)
 
 Titanic %>% 
   data.frame() %>% 
@@ -19,6 +28,35 @@ Titanic %>%
 flat_titanic ; flat_titanic %>% head()
 ```
 
+---
+
+# Step 0. Some observations
+
+## ggplot2 
+
+you can make a visual pivot table in ggplot2; analyst job is to describe the form. How will it look
+
+specify 3 things - start with visual layout
+
+- specify x
+- specify y
+- specify count type geom
+
+```{r}
+tidy_titanic %>% 
+  ggplot() + 
+  aes(x = Sex, y = Survived) + 
+  geom_jitter() + 
+  geom_count(color = "blue")
+```
+
+---
+
+## Same table with existing pivot tools, vis comes last
+
+- specify vars
+- specify aggregation
+- specify visual arrangement <- this comes last
 
 ```{r slow} 
 tidy_titanic %>% 
@@ -26,6 +64,11 @@ tidy_titanic %>%
   summarize(value = n()) %>% 
   pivot_wider(names_from = Survived)
 ```
+
+---
+
+# Step 1a. Make Functions to make table with the visual specification coming first
+
 
 ```{r count}
 pivot_count <- function(data, y, y0, y00, x = NULL, 
@@ -39,15 +82,11 @@ pivot_count <- function(data, y, y0, y00, x = NULL,
   y <- enquo(y)
   x <- enquo(x)
 
-  # if(is.null(value)){
-    data <- data %>% mutate(value = 1)
-  # }else{
-  #   value <- enquo(value)
-  # }
+    data <- data %>% mutate(count = 1)
   
 tidy <- data %>% 
   group_by(!!y00, !!y0, !!y, !!x) %>% 
-  summarize(value = fun(value)) %>% 
+  summarize(value = fun(count)) %>% 
   ungroup()
   
   if(pivot){#or x is null
@@ -90,6 +129,8 @@ tidy <- data %>%
 ```
 
 
+# Step 1b. Using those functions
+
 ```{r examples}
 tidy_titanic %>% 
    pivot_count(x = Sex)
@@ -100,17 +141,33 @@ tidy_titanic %>%
 tidy_titanic %>% 
   pivot_count(y = Survived, x = Sex, y0 = Class)
 
+# for fun organize like it will appear visually in code
+tidy_titanic %>% 
+  pivot_count(                          x = Sex, 
+              y0 = Class, y = Survived          )
+```
+
+
+## After designing your table you might actually want to have the calculation in long form.
+
+```{r}
 tidy_titanic %>% 
   pivot_count(x = Sex, y = Survived, pivot = F)
 ```
 
+## 1b. pivot_calc using pivot calc function for non count aggregation
 
+### just for fun arrange the code how the table will look
 
 ```{r calc2}
 flat_titanic %>%
-  pivot_calc(x = Sex, y = Survived, 
-             value = Freq, fun = sum)
+  pivot_calc(              x = Sex, 
+             y = Survived, value = Freq, fun = sum)
 ```
+
+## 1b style. use another tool to style
+
+### goal of functions is not to style - just to make calculation faster by using a visually driven API
 
 ```{r style}
 tidy_titanic %>% 
@@ -119,6 +176,7 @@ tidy_titanic %>%
   gt::gt()
 ```
 
+# 
 
 ```{r style2}
 tidy_titanic %>% 
@@ -127,6 +185,9 @@ tidy_titanic %>%
   gt::gt()
 ```
 
+# Back to Step 0 observations: use existing tools to calculate proportions is many step process
+
+### feels like lots of gymnastics... a vis first approach is what we are after
 
 ```{r proportionslow}
 tidy_titanic %>% 
@@ -138,14 +199,18 @@ tidy_titanic %>%
   pivot_wider(values_from = prop, names_from = Sex)
 ```
 
+# Step 2a. build a function where visual arrangement leads.
+
 ```{r propfunction}
-two_way_prop <- function(data, y, y0, y00, x = NULL, value = NULL, fun = sum, within, pivot = !is.null(x)){
+two_way_prop <- function(data, y, y0, y00, x = NULL, value = NULL, fun = sum, within, within2,  pivot = !is.null(x), percent = T, round = F){
   
   y00 <- enquo(y00)
   y0 <- enquo(y0)
   x <- enquo(x)
   y <- enquo(y)
   within <- enquo(within)
+  within2 <- enquo(within2)
+
   
   if(is.null(value)){
     data <- data %>% mutate(value = 1)
@@ -156,8 +221,8 @@ two_way_prop <- function(data, y, y0, y00, x = NULL, value = NULL, fun = sum, wi
   data %>% 
   group_by(!!y00, !!y0, !!y, !!x) %>% 
   summarize(value = fun(value)) %>% 
-  group_by(!!within) %>% 
-  mutate(prop = value/sum(value)) %>% 
+  group_by(!!within, !!within2) %>% 
+  mutate(prop = (value/sum(value)*ifelse(percent, 100, 1)) %>% round(1)) %>% 
   select(-value) %>%
   ungroup() ->
 tidy
@@ -175,6 +240,7 @@ tidy
 }
 ```
 
+# Step 2b. using the pivot_prop
 
 ```{r propusage}
 tidy_titanic %>% 
@@ -185,6 +251,13 @@ tidy_titanic %>%
                y = Sex, 
                x = Class, 
                within = Survived)
+
+tidy_titanic %>% 
+  two_way_prop(y0 = Survived, 
+               y = Sex, 
+               x = Class, 
+               within = Survived,
+               within2 = Sex)
 ```
 
 ```{r propgraph}
@@ -199,6 +272,22 @@ tidy_titanic %>%
   geom_tile() +
   aes(fill = prop) + 
   geom_text(aes(label = prop %>% round(3)))
+```
+
+```{r propgraph2}
+tidy_titanic %>% 
+  two_way_prop(y0 = Survived, 
+               y = Sex, 
+               x = Class, 
+               within = Survived, 
+               within2 = Sex, pivot = F) %>% 
+  ggplot() +
+  aes(x = Class, y = 1) +
+  facet_grid(rows = vars(Survived, Sex)) +
+  geom_tile() +
+  aes(fill = prop) + 
+  geom_text(aes(label = prop %>% round(3)))
+
 ```
 
 
