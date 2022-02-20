@@ -298,3 +298,28 @@ tidy_titanic %>%
 2. How can API improve? possibly rows = vars(y00, y0, y), cols = vars(x).  and within = vars(?, ?)  This requires more digging into tidy eval.  What about multiple x vars?
 3. How can internals improve?  Also tidy eval is old I think. defaults for missing data. 
 4. What about summary columns, rows.  Column totals, etc.  Maybe not very tidy...
+
+
+```{r, echo = F}
+library(ggstamp)
+
+ggcanvas() + 
+  stamp_point(size = 8, color = "grey85") + 
+  stamp_spoke(angle = pi, size = 1.7, 
+              radius = .65, color = "grey85") +
+  stamp_point(size = 5, color = "grey85") + 
+  stamp_point(size = 3, color = "grey55") + 
+  stamp_spoke(angle = .45, size = 1.7, 
+              radius = .85, color = "grey55") +
+  stamp_polygon_holes(y0 = .25) + 
+  stamp_text(label = "tidy", hjust = 1.3,
+             color = "violetred", 
+               vjust = -.2, size = 17) + 
+  stamp_text(label = "pivot", hjust = -.1,
+             angle = 25, color = "violetred", 
+               vjust = -.2, size = 17) + 
+  ggstamp::theme_void_fill(fill = "darkslateblue") + 
+  stamp_polygon(color = "lightslateblue", 
+                alpha = 0, y0 = .25, size = 4)
+```
+
