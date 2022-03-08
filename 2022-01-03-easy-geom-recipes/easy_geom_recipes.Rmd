@@ -5,6 +5,18 @@ date: "1/3/2022"
 output: html_document
 ---
 
+
+
+Using ggplot2 has been compared to writing 'graphical poems'.
+<!-- and a system that lets us 'speak our plot into existence'.  -->
+But sometimes we don't have the vocabulary to express ourselves in a fluent way; we may feel tounge-tied.  The ggplot2 extension system allows us to build new vocabulary.  
+
+An exciting extension mechanism is inheriting from existing geoms.  Particularly important to statisticians and mathematicians is writing new geom_* that perform and visualize calculations.  
+
+To get your feet wet in this world and give you a taste of patterns for geom extension, we provide three basic examples of the geoms_ that inherit from *existing* geoms (point, text, segment, etc) along with practice exercises.  With such geoms, calculation is done under the hood by the ggplot2 system; with these geom, you can write new graphical poems with exciting new graphical 'words'! 
+
+This tutorial is intended for individuals who already have a working knowledge of the grammar of ggplot2, but may like to build a richer vocabulary for themselves.  
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
 ```
@@ -60,7 +72,7 @@ cars %>%
 ## Step 2: define ggproto
 
 - what's the naming convention for the proto object?
-- which aesthetics are required as inputs
+- which aesthetics are required as inputs?
 - where does the function from above go?
 
 ```{r}
@@ -151,10 +163,10 @@ paste0("(", 1, ", ",3., ")")
 ```{r}
 library(palmerpenguins)
 penguins <- remove_missing(penguins)
-penguins %>% 
+penguins_medians <- penguins %>% 
   summarize(bill_length_mm_median = median(bill_length_mm),
-            bill_depth_mm_median = median(bill_depth_mm)) ->
-penguins_medians
+            bill_depth_mm_median = median(bill_depth_mm))
+
 
 penguins %>% 
   ggplot() + 
@@ -256,9 +268,9 @@ Recipe #2 modification:  `geom_point_xy_means()`
 model <- lm(formula = bill_length_mm ~ bill_depth_mm, 
             data = penguins) 
 
-penguins %>% 
-  mutate(fitted = model$fitted.values) ->
-penguins_w_fitted
+penguins_w_fitted <- penguins %>% 
+  mutate(fitted = model$fitted.values)
+
 
 penguins %>% 
   ggplot() + 
@@ -354,9 +366,8 @@ penguins %>%
 model <- lm(formula = bill_length_mm ~ bill_depth_mm, 
             data = penguins) 
 
-penguins %>% 
-  mutate(fitted = model$fitted.values) ->
-penguins_w_fitted
+penguins_w_fitted <- penguins %>% 
+  mutate(fitted = model$fitted.values)
 
 penguins %>% 
   ggplot() + 
@@ -368,4 +379,13 @@ penguins %>%
              color = "blue")
 ```
 
+---
+
+Not interested in writing your own geoms?  
+
+Check out some ready-to-go geoms that might be of interest in the ggxmean package... or other extension packages.
+
+Interested in working a bit more with geoms and making them available to more folks, but not interested in writing your own package?
+
+Join in on the development and validation of the ggxmean package for statistical educators and everyday analysis!
 

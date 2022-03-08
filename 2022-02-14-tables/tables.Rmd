@@ -323,3 +323,33 @@ ggcanvas() +
                 alpha = 0, y0 = .25, size = 4)
 ```
 
+```{r}
+my_select <- function(data, x){
+  
+  data %>% 
+    select(x)
+  
+}
+
+tidy_titanic %>% 
+  my_select(vars(Sex))
+
+
+pivot_table <- function(data, rows, cols){
+    
+  tidy <- data %>% 
+    group_by(across(c({{rows}}, {{cols}}))) %>% 
+    summarize(value = n()) %>%
+    ungroup()
+  
+  tidy %>% 
+    pivot_wider(names_from = {{rows}}, names_sep = "_")
+}
+
+
+tidy_titanic %>% 
+  pivot_table(cols = Sex, rows = c(Class, Survived))
+
+
+```
+
