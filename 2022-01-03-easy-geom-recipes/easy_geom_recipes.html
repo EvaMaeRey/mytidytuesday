@@ -195,7 +195,7 @@ summary {
 </div>
 
 
-<p>Using ggplot2 has been compared to writing ‘graphical poems’. <!-- and a system that lets us 'speak our plot into existence'.  --> But sometimes we don’t have the vocabulary to express ourselves in a fluent way; we may feel tongue-tied. The ggplot2 extension system allows us to build new vocabulary for more fluent expression.</p>
+<p>Using ggplot2 has been described as writing ‘graphical poems’. <!-- and a system that lets us 'speak our plot into existence'.  --> But we may feel tongue-tied when functions we’d like to have don’t exist. The ggplot2 extension system allows us to build new ‘vocabulary’ for fluent expression.</p>
 <p>An exciting extension mechanism is inheriting from existing geoms. Particularly important to statisticians and mathematicians is writing new geom_* that perform and visualize calculations.</p>
 <p>To get your feet wet in this world and give you a taste of patterns for geom extension, we provide three basic examples of the geoms_ that inherit from <em>existing</em> geoms (point, text, segment, etc) along with practice exercises. With such geoms, calculation is done under the hood by the ggplot2 system; with these geom, you can write new graphical poems with exciting new graphical ‘words’!</p>
 <p>This tutorial is intended for individuals who already have a working knowledge of the grammar of ggplot2, but may like to build a richer vocabulary for themselves.</p>
@@ -231,7 +231,7 @@ compute_group_row_number &lt;- function(data, scales){
   data %&gt;% 
     # add an additional column called label
     # the geom we inherit from requires the label aesthetic
-    mutate(label = 1:n())
+    mutate(id = 1:n())
   
 }
 
@@ -241,13 +241,13 @@ cars %&gt;%
   rename(x = speed, y = dist) %&gt;% 
   compute_group_row_number() %&gt;% 
   head()</code></pre>
-<pre><code>##   x  y label
-## 1 4  2     1
-## 2 4 10     2
-## 3 7  4     3
-## 4 7 22     4
-## 5 8 16     5
-## 6 9 10     6</code></pre>
+<pre><code>##   x  y id
+## 1 4  2  1
+## 2 4 10  2
+## 3 7  4  3
+## 4 7 22  4
+## 5 8 16  5
+## 6 9 10  6</code></pre>
 <hr />
 </div>
 <div id="step-2-define-ggproto" class="section level2">
@@ -260,7 +260,8 @@ cars %&gt;%
 <pre class="r"><code>StatRownumber &lt;- ggplot2::ggproto(`_class` = &quot;StatRownumber&quot;,
                                   `_inherit` = ggplot2::Stat,
                                   required_aes = c(&quot;x&quot;, &quot;y&quot;),
-                                  compute_group = compute_group_row_number)</code></pre>
+                                  compute_group = compute_group_row_number,
+                                  default_aes = aes(label = after_stat(id)))</code></pre>
 <hr />
 </div>
 <div id="step-3-define-geom_-function" class="section level2">

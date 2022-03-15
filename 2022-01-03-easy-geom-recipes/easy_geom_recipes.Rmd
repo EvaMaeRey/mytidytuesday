@@ -7,7 +7,7 @@ output: html_document
 
 
 
-Using ggplot2 has been compared to writing 'graphical poems'.
+Using ggplot2 has been described as writing 'graphical poems'.
 <!-- and a system that lets us 'speak our plot into existence'.  -->
 But we may feel tongue-tied when functions we'd like to have don't exist.  The ggplot2 extension system allows us to build new 'vocabulary' for fluent expression.  
 
@@ -55,7 +55,7 @@ compute_group_row_number <- function(data, scales){
   data %>% 
     # add an additional column called label
     # the geom we inherit from requires the label aesthetic
-    mutate(label = 1:n())
+    mutate(id = 1:n())
   
 }
 
@@ -79,7 +79,8 @@ cars %>%
 StatRownumber <- ggplot2::ggproto(`_class` = "StatRownumber",
                                   `_inherit` = ggplot2::Stat,
                                   required_aes = c("x", "y"),
-                                  compute_group = compute_group_row_number)
+                                  compute_group = compute_group_row_number,
+                                  default_aes = aes(label = after_stat(id)))
 ```
 
 
