@@ -1,0 +1,32 @@
+---
+title: "Hive"
+subtitle: "Using ggstamp to keep track of and advertize your projects"
+author: "Evangeline Reynolds"
+date: "3/25/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+library(ggstamp)
+```
+
+```{r}
+packages <- c("ggxmean", "flipbookr", "ggstamp", "tidytitanic", 
+              "doublecrochet", "xaringanPrinter")
+```
+
+```{r}
+ggcanvas() + 
+  stamp_text(xy = pos_honeycomb(n = 6), 
+             label = packages, 
+             size = c(8,8,8,6,5,5)) + 
+  stamp_polygon_holes(x0y0 = 
+                        pos_honeycomb(n = 6))
+```
+
