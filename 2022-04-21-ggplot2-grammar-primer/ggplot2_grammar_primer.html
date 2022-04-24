@@ -1,0 +1,1928 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>A ggplot2 grammar primer</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. Evangeline Reynolds" />
+    <script src="libs/header-attrs-2.6/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+class: inverse, left, bottom
+background-image: url(https://images.unsplash.com/photo-1543286386-713bdd548da4?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80)
+background-size: cover
+
+# .Large[A ggplot2 grammar primer]
+
+## .small[Ideas for learning, teaching, and using ggplot2 effectively]
+#### .tiny[Dr. Evangeline Reynolds | 2022-04-26 |Image credit: William Iven, Upsplash]
+
+
+???
+
+Title slide
+
+
+
+
+
+
+
+
+---
+class: middle, inverse, center
+
+# So ggplot2...
+
+--
+#               ... what's the fuss? 
+
+---
+class: inverse, center, middle
+
+
+# But wait.
+--
+First one step back. 
+
+--
+# Data viz ...
+
+--
+
+# ... what's the fuss?
+
+---
+
+
+#  Function of Data Viz:
+
+&gt; # The simple graph has brought more information to the data analyst's mind than any other device - Tukey
+
+
+
+---
+
+# Use *visual channels* to represent/communicate information
+
+## *"pre-attentive processing"* - Cleveland and McGill, 1984
+
+
+---
+
+### Key Aesthetics:
+
+
+![](https://clauswilke.com/dataviz/aesthetic_mapping_files/figure-html/common-aesthetics-1.png)&lt;!-- --&gt;
+
+from Claus Wilke's fundamentals of data visualization https://clauswilke.com/dataviz/
+
+---
+
+###  *Patterns* are identified with visual 'pre-attentive processing' 
+
+--
+
+### Uber-fast identification of relationships that you might never see in tabular form
+
+---
+
+# So what's the promise of ggplot2?
+
+--
+
+&gt; ### And, you know, I'd get a dataset. And, *in my head I could very clearly kind of picture*, I want to put this on the x-axis. Let's put this on the y-axis, draw a line, put some points here, break it up by this variable. 
+
+--
+
+&gt; ### And then, like, getting that vision out of my head, and into reality, it's just really, really hard. Just, like, felt harder than it should be. Like, there's a lot of custom programming involved, 
+
+--
+
+&gt; ### where I just felt, like, to me, I just want them to say, like, you know, *this is what I'm thinking, this is how I'm picturing this plot. Like you're the computer 'Go and do it'.* 
+
+---
+
+&gt; ### ... and I'd also been reading about the Grammar of Graphics by Leland Wilkinson, I got to meet him a couple of times and that really kind of, I was, like, this book has been, like, written for me. 
+
+https://www.trifacta.com/podcast/tidy-data-with-hadley-wickham/
+
+---
+# So what's the promise of ggplot2?
+
+--
+
+## Getting the plot form you picture in your head ...
+
+--
+
+## ... into reality...
+
+--
+
+## ... by describing it.
+
+---
+
+## ggplot2 is called a 'declarative' graphing system.
+
+--
+
+# 'speak your plot into existance'. (Thomas Lin Pederson?) 
+
+--
+
+### This is fast. Because most of us, like Hadley Wickham, can conceive of the form of the plot we're going after very clearly!
+
+
+---
+
+# The "Grammar of Graphics" (1999)
+
+
+```r
+knitr::include_graphics("../../../teaching/lecture_topics/images_for_lecture/wilkinson_grammar_of_graphics.png")
+```
+
+&lt;img src="../../../teaching/lecture_topics/images_for_lecture/wilkinson_grammar_of_graphics.png" width="40%" /&gt;
+
+---
+## Sidebar/related...
+
+### A 'grammar of graphics' also ... flexibility and creative freedom!...
+
+### Wilkinson... this grammar of graphics implementations would allow "drawing every statistical graphic"
+
+???
+The grammar of graphics framework, proposed by Leland Wilkinson in 1999, that identified 'seven orthogonal components' in the creation of data visualizations.\
+Wilkinson asserted that if data visualization packages were created using a separation of concerns approach -- dividing decision making surrounding these components --- the packages would be able to "draw every statistical graphic". The grammar of graphic principles were incredibly powerful and gave rise to a number of visualization platforms including Tableau, vega-lite, and ggplot2.
+
+
+
+--
+
+But the focus of this talk is ... 'speaking your plot into existance'
+
+---
+
+
+
+
+
+
+
+
+---
+class: center, middle
+# Okay, let's see a well known instance of someone speaking their plot into existence!
+
+---
+
+# Hans Rosling
+
+&lt;iframe width="767" height="431" src="https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
+
+https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A
+
+
+
+---
+
+## How does Hans Rosling (2010) 'Speak his chart into existence? 
+
+--
+
+### ...help from BBC/Adobe After Effects/data viz Team
+
+---
+
+## How can we 'Speak our chart into existance?'
+
+### ggplot2!  or another implementation of the grammar of graphics...
+
+---
+
+# Implementations
+
+
+## Tableau 
+
+### Polaris -&gt; Tableau - Acquired for 15.7 Billion dollars (salesforce)
+
+--
+
+## Vega Lite... (dynamic, interactive data visualizations in web browsers)
+
+
+--
+
+## ggplot2 (in R)
+
+--
+
+## plot9
+(python's ggplot2)
+
+## altair (python declarative newcomer) https://youtu.be/FytuB8nFHPQ?t=1382
+
+---
+
+## So learning the grammar/syntax... 
+
+--
+
+### I remember in my English/Arabic/Spanish/German/Chinese classes, that Grammar lessons just suck!
+
+--
+
+&gt; #### Grammar makes language expressive. A language consisting of words and no grammar (statement = word) expresses only as many ideas as there are words. By specifying how words are combined in statements, a grammar expands a language's scope.
+
+– Wilkinson, 2005, The Grammar of Graphics, 2nd edition
+
+--
+
+### 'we wait'
+
+--
+
+### vs 'we waited'
+
+???
+
+just this little change puts us in a totally frame of mind!
+
+---
+
+# definition of a data visualization...
+
+---
+
+
+# A data visualization is made up of ...
+
+--
+
+### .left[... geometric objects ...]
+
+--
+
+### .center[...that take on aesthetics (color, line width, x-position) ...]
+
+--
+
+### .center[...which represent variables ...]
+
+--
+
+### .right[...from a dataset (dataframe)]
+
+
+
+
+---
+
+## Elements of the Grammar of Graphics (choices)
+
+
+```r
+knitr::include_graphics("../../../teaching/lecture_topics/images_for_lecture/wilkinson_layers_grammar_of_graphics.png")
+```
+
+&lt;img src="../../../teaching/lecture_topics/images_for_lecture/wilkinson_layers_grammar_of_graphics.png" width="957" /&gt;
+
+---
+
+### A series of choices (declarations):
+
+
+- choose data
+--
+
+- choose aesthetic mapping (what aesthetics will represent what variables)
+
+--
+
+- choose geometric objects
+
+--
+- make decision to facet or not
+
+--
+- make choice to summarize data or not (statistics)
+
+--
+- choose a coordinate system
+
+--
+- make thematic choices
+
+
+---
+class: center, middle, inverse
+
+# In your head, be Hans Rosling!
+
+---
+class: center, middle, inverse
+
+
+
+# Go slow.  
+
+---
+class: center, middle, inverse
+
+
+# Give full voice to the decisions that you are making as you learn/teach/create.
+
+
+---
+class: center, middle, inverse
+
+
+# You're writing 'graphical poems' ...
+
+--
+
+... The paper concludes by discussing some perceptual issues, and thinking about how we can build on the grammar to learn how to create graphical ''poems''. -- Hadley Wickham Hadley Wickham, 2010 'A layered grammar of graphics.'  Journal of Computational and Graphical Statistics
+
+--
+
+# ... do a poetry slam, every time!
+
+---
+
+
+# Slide with unsubstantiated claims about language learning needing repetition and 'out loud' practice. 
+
+---
+
+
+# What do I mean in ggplot2?
+
+- try to decompose the plot as much as possible
+- each decision gets a (+)
+- don't worry about being repetitive
+- name your parameters 
+
+
+
+---
+
+What are the variables that are represented in the data visualization?
+
+--
+
+What are the *aesthetics* (visual channels) are used to represent variables?
+
+--
+
+What are the aesthetic mappings (variable  &lt;-&gt; aesthetic pairings)
+
+--
+
+
+---
+
+count: false
+ 
+Our dataprep
+.panel1-dataprep-auto[
+
+```r
+*library(tidyverse)
+```
+]
+ 
+.panel2-dataprep-auto[
+
+]
+
+---
+count: false
+ 
+Our dataprep
+.panel1-dataprep-auto[
+
+```r
+library(tidyverse)
+*library(gapminder)
+```
+]
+ 
+.panel2-dataprep-auto[
+
+]
+
+---
+count: false
+ 
+Our dataprep
+.panel1-dataprep-auto[
+
+```r
+library(tidyverse)
+library(gapminder)
+
+*gapminder   # data from package
+```
+]
+ 
+.panel2-dataprep-auto[
+
+```
+# A tibble: 1,704 × 6
+   country     continent  year lifeExp      pop gdpPercap
+   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+ 1 Afghanistan Asia       1952    28.8  8425333      779.
+ 2 Afghanistan Asia       1957    30.3  9240934      821.
+ 3 Afghanistan Asia       1962    32.0 10267083      853.
+ 4 Afghanistan Asia       1967    34.0 11537966      836.
+ 5 Afghanistan Asia       1972    36.1 13079460      740.
+ 6 Afghanistan Asia       1977    38.4 14880372      786.
+ 7 Afghanistan Asia       1982    39.9 12881816      978.
+ 8 Afghanistan Asia       1987    40.8 13867957      852.
+ 9 Afghanistan Asia       1992    41.7 16317921      649.
+10 Afghanistan Asia       1997    41.8 22227415      635.
+# … with 1,694 more rows
+```
+]
+
+---
+count: false
+ 
+Our dataprep
+.panel1-dataprep-auto[
+
+```r
+library(tidyverse)
+library(gapminder)
+
+gapminder %&gt;%  # data from package
+* filter(year == 2002)   # filtering
+```
+]
+ 
+.panel2-dataprep-auto[
+
+```
+# A tibble: 142 × 6
+   country     continent  year lifeExp       pop gdpPercap
+   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;     &lt;int&gt;     &lt;dbl&gt;
+ 1 Afghanistan Asia       2002    42.1  25268405      727.
+ 2 Albania     Europe     2002    75.7   3508512     4604.
+ 3 Algeria     Africa     2002    71.0  31287142     5288.
+ 4 Angola      Africa     2002    41.0  10866106     2773.
+ 5 Argentina   Americas   2002    74.3  38331121     8798.
+ 6 Australia   Oceania    2002    80.4  19546792    30688.
+ 7 Austria     Europe     2002    79.0   8148312    32418.
+ 8 Bahrain     Asia       2002    74.8    656397    23404.
+ 9 Bangladesh  Asia       2002    62.0 135656790     1136.
+10 Belgium     Europe     2002    78.3  10311970    30486.
+# … with 132 more rows
+```
+]
+
+---
+count: false
+ 
+Our dataprep
+.panel1-dataprep-auto[
+
+```r
+library(tidyverse)
+library(gapminder)
+
+gapminder %&gt;%  # data from package
+  filter(year == 2002) -&gt;  # filtering
+*gapminder_2002  # saving subset object
+```
+]
+ 
+.panel2-dataprep-auto[
+
+]
+
+---
+count: false
+ 
+Our dataprep
+.panel1-dataprep-auto[
+
+```r
+library(tidyverse)
+library(gapminder)
+
+gapminder %&gt;%  # data from package
+  filter(year == 2002) -&gt;  # filtering
+gapminder_2002  # saving subset object
+
+*gapminder_2002
+```
+]
+ 
+.panel2-dataprep-auto[
+
+```
+# A tibble: 142 × 6
+   country     continent  year lifeExp       pop gdpPercap
+   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;     &lt;int&gt;     &lt;dbl&gt;
+ 1 Afghanistan Asia       2002    42.1  25268405      727.
+ 2 Albania     Europe     2002    75.7   3508512     4604.
+ 3 Algeria     Africa     2002    71.0  31287142     5288.
+ 4 Angola      Africa     2002    41.0  10866106     2773.
+ 5 Argentina   Americas   2002    74.3  38331121     8798.
+ 6 Australia   Oceania    2002    80.4  19546792    30688.
+ 7 Austria     Europe     2002    79.0   8148312    32418.
+ 8 Bahrain     Asia       2002    74.8    656397    23404.
+ 9 Bangladesh  Asia       2002    62.0 135656790     1136.
+10 Belgium     Europe     2002    78.3  10311970    30486.
+# … with 132 more rows
+```
+]
+
+---
+count: false
+ 
+Our dataprep
+.panel1-dataprep-auto[
+
+```r
+library(tidyverse)
+library(gapminder)
+
+gapminder %&gt;%  # data from package
+  filter(year == 2002) -&gt;  # filtering
+gapminder_2002  # saving subset object
+
+gapminder_2002 %&gt;%
+* filter(continent == "Europe")
+```
+]
+ 
+.panel2-dataprep-auto[
+
+```
+# A tibble: 30 × 6
+   country                continent  year lifeExp      pop gdpPercap
+   &lt;fct&gt;                  &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+ 1 Albania                Europe     2002    75.7  3508512     4604.
+ 2 Austria                Europe     2002    79.0  8148312    32418.
+ 3 Belgium                Europe     2002    78.3 10311970    30486.
+ 4 Bosnia and Herzegovina Europe     2002    74.1  4165416     6019.
+ 5 Bulgaria               Europe     2002    72.1  7661799     7697.
+ 6 Croatia                Europe     2002    74.9  4481020    11628.
+ 7 Czech Republic         Europe     2002    75.5 10256295    17596.
+ 8 Denmark                Europe     2002    77.2  5374693    32167.
+ 9 Finland                Europe     2002    78.4  5193039    28205.
+10 France                 Europe     2002    79.6 59925035    28926.
+# … with 20 more rows
+```
+]
+
+---
+count: false
+ 
+Our dataprep
+.panel1-dataprep-auto[
+
+```r
+library(tidyverse)
+library(gapminder)
+
+gapminder %&gt;%  # data from package
+  filter(year == 2002) -&gt;  # filtering
+gapminder_2002  # saving subset object
+
+gapminder_2002 %&gt;%
+  filter(continent == "Europe") -&gt;
+*gapminder_2002_europe
+```
+]
+ 
+.panel2-dataprep-auto[
+
+]
+
+---
+count: false
+ 
+Our dataprep
+.panel1-dataprep-auto[
+
+```r
+library(tidyverse)
+library(gapminder)
+
+gapminder %&gt;%  # data from package
+  filter(year == 2002) -&gt;  # filtering
+gapminder_2002  # saving subset object
+
+gapminder_2002 %&gt;%
+  filter(continent == "Europe") -&gt;
+gapminder_2002_europe
+
+*gapminder
+```
+]
+ 
+.panel2-dataprep-auto[
+
+```
+# A tibble: 1,704 × 6
+   country     continent  year lifeExp      pop gdpPercap
+   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+ 1 Afghanistan Asia       1952    28.8  8425333      779.
+ 2 Afghanistan Asia       1957    30.3  9240934      821.
+ 3 Afghanistan Asia       1962    32.0 10267083      853.
+ 4 Afghanistan Asia       1967    34.0 11537966      836.
+ 5 Afghanistan Asia       1972    36.1 13079460      740.
+ 6 Afghanistan Asia       1977    38.4 14880372      786.
+ 7 Afghanistan Asia       1982    39.9 12881816      978.
+ 8 Afghanistan Asia       1987    40.8 13867957      852.
+ 9 Afghanistan Asia       1992    41.7 16317921      649.
+10 Afghanistan Asia       1997    41.8 22227415      635.
+# … with 1,694 more rows
+```
+]
+
+---
+count: false
+ 
+Our dataprep
+.panel1-dataprep-auto[
+
+```r
+library(tidyverse)
+library(gapminder)
+
+gapminder %&gt;%  # data from package
+  filter(year == 2002) -&gt;  # filtering
+gapminder_2002  # saving subset object
+
+gapminder_2002 %&gt;%
+  filter(continent == "Europe") -&gt;
+gapminder_2002_europe
+
+gapminder %&gt;%
+* select(country, continent)
+```
+]
+ 
+.panel2-dataprep-auto[
+
+```
+# A tibble: 1,704 × 2
+   country     continent
+   &lt;fct&gt;       &lt;fct&gt;    
+ 1 Afghanistan Asia     
+ 2 Afghanistan Asia     
+ 3 Afghanistan Asia     
+ 4 Afghanistan Asia     
+ 5 Afghanistan Asia     
+ 6 Afghanistan Asia     
+ 7 Afghanistan Asia     
+ 8 Afghanistan Asia     
+ 9 Afghanistan Asia     
+10 Afghanistan Asia     
+# … with 1,694 more rows
+```
+]
+
+---
+count: false
+ 
+Our dataprep
+.panel1-dataprep-auto[
+
+```r
+library(tidyverse)
+library(gapminder)
+
+gapminder %&gt;%  # data from package
+  filter(year == 2002) -&gt;  # filtering
+gapminder_2002  # saving subset object
+
+gapminder_2002 %&gt;%
+  filter(continent == "Europe") -&gt;
+gapminder_2002_europe
+
+gapminder %&gt;%
+  select(country, continent) %&gt;%
+* distinct()
+```
+]
+ 
+.panel2-dataprep-auto[
+
+```
+# A tibble: 142 × 2
+   country     continent
+   &lt;fct&gt;       &lt;fct&gt;    
+ 1 Afghanistan Asia     
+ 2 Albania     Europe   
+ 3 Algeria     Africa   
+ 4 Angola      Africa   
+ 5 Argentina   Americas 
+ 6 Australia   Oceania  
+ 7 Austria     Europe   
+ 8 Bahrain     Asia     
+ 9 Bangladesh  Asia     
+10 Belgium     Europe   
+# … with 132 more rows
+```
+]
+
+---
+count: false
+ 
+Our dataprep
+.panel1-dataprep-auto[
+
+```r
+library(tidyverse)
+library(gapminder)
+
+gapminder %&gt;%  # data from package
+  filter(year == 2002) -&gt;  # filtering
+gapminder_2002  # saving subset object
+
+gapminder_2002 %&gt;%
+  filter(continent == "Europe") -&gt;
+gapminder_2002_europe
+
+gapminder %&gt;%
+  select(country, continent) %&gt;%
+  distinct() %&gt;%
+* group_by(continent)
+```
+]
+ 
+.panel2-dataprep-auto[
+
+```
+# A tibble: 142 × 2
+# Groups:   continent [5]
+   country     continent
+   &lt;fct&gt;       &lt;fct&gt;    
+ 1 Afghanistan Asia     
+ 2 Albania     Europe   
+ 3 Algeria     Africa   
+ 4 Angola      Africa   
+ 5 Argentina   Americas 
+ 6 Australia   Oceania  
+ 7 Austria     Europe   
+ 8 Bahrain     Asia     
+ 9 Bangladesh  Asia     
+10 Belgium     Europe   
+# … with 132 more rows
+```
+]
+
+---
+count: false
+ 
+Our dataprep
+.panel1-dataprep-auto[
+
+```r
+library(tidyverse)
+library(gapminder)
+
+gapminder %&gt;%  # data from package
+  filter(year == 2002) -&gt;  # filtering
+gapminder_2002  # saving subset object
+
+gapminder_2002 %&gt;%
+  filter(continent == "Europe") -&gt;
+gapminder_2002_europe
+
+gapminder %&gt;%
+  select(country, continent) %&gt;%
+  distinct() %&gt;%
+  group_by(continent) %&gt;%
+* summarise(country_count = n())
+```
+]
+ 
+.panel2-dataprep-auto[
+
+```
+# A tibble: 5 × 2
+  continent country_count
+  &lt;fct&gt;             &lt;int&gt;
+1 Africa               52
+2 Americas             25
+3 Asia                 33
+4 Europe               30
+5 Oceania               2
+```
+]
+
+---
+count: false
+ 
+Our dataprep
+.panel1-dataprep-auto[
+
+```r
+library(tidyverse)
+library(gapminder)
+
+gapminder %&gt;%  # data from package
+  filter(year == 2002) -&gt;  # filtering
+gapminder_2002  # saving subset object
+
+gapminder_2002 %&gt;%
+  filter(continent == "Europe") -&gt;
+gapminder_2002_europe
+
+gapminder %&gt;%
+  select(country, continent) %&gt;%
+  distinct() %&gt;%
+  group_by(continent) %&gt;%
+  summarise(country_count = n()) -&gt;
+*continent_aggregate
+```
+]
+ 
+.panel2-dataprep-auto[
+
+]
+
+&lt;style&gt;
+.panel1-dataprep-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-dataprep-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-dataprep-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+count: false
+ 
+# Our scatter practice
+.panel1-scatter-auto[
+
+```r
+*ggplot(data = gapminder_2002)
+```
+]
+ 
+.panel2-scatter-auto[
+![](ggplot2_grammar_primer_files/figure-html/scatter_auto_01_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+# Our scatter practice
+.panel1-scatter-auto[
+
+```r
+ggplot(data = gapminder_2002) +
+* aes(y = lifeExp)
+```
+]
+ 
+.panel2-scatter-auto[
+![](ggplot2_grammar_primer_files/figure-html/scatter_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+# Our scatter practice
+.panel1-scatter-auto[
+
+```r
+ggplot(data = gapminder_2002) +
+  aes(y = lifeExp) +
+* aes(x = gdpPercap)
+```
+]
+ 
+.panel2-scatter-auto[
+![](ggplot2_grammar_primer_files/figure-html/scatter_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+# Our scatter practice
+.panel1-scatter-auto[
+
+```r
+ggplot(data = gapminder_2002) +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+* geom_point()
+```
+]
+ 
+.panel2-scatter-auto[
+![](ggplot2_grammar_primer_files/figure-html/scatter_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+# Our scatter practice
+.panel1-scatter-auto[
+
+```r
+ggplot(data = gapminder_2002) +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  geom_point() +
+* aes(size = pop)
+```
+]
+ 
+.panel2-scatter-auto[
+![](ggplot2_grammar_primer_files/figure-html/scatter_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+# Our scatter practice
+.panel1-scatter-auto[
+
+```r
+ggplot(data = gapminder_2002) +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  geom_point() +
+  aes(size = pop) +
+* aes(color = continent)
+```
+]
+ 
+.panel2-scatter-auto[
+![](ggplot2_grammar_primer_files/figure-html/scatter_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+# Our scatter practice
+.panel1-scatter-auto[
+
+```r
+ggplot(data = gapminder_2002) +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  geom_point() +
+  aes(size = pop) +
+  aes(color = continent) +
+* aes(shape = continent)
+```
+]
+ 
+.panel2-scatter-auto[
+![](ggplot2_grammar_primer_files/figure-html/scatter_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+# Our scatter practice
+.panel1-scatter-auto[
+
+```r
+ggplot(data = gapminder_2002) +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  geom_point() +
+  aes(size = pop) +
+  aes(color = continent) +
+  aes(shape = continent) +
+* aes(alpha = gdpPercap)
+```
+]
+ 
+.panel2-scatter-auto[
+![](ggplot2_grammar_primer_files/figure-html/scatter_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+# Our scatter practice
+.panel1-scatter-auto[
+
+```r
+ggplot(data = gapminder_2002) +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  geom_point() +
+  aes(size = pop) +
+  aes(color = continent) +
+  aes(shape = continent) +
+  aes(alpha = gdpPercap) +
+* labs(x = "GDP per capita (US$)")
+```
+]
+ 
+.panel2-scatter-auto[
+![](ggplot2_grammar_primer_files/figure-html/scatter_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+# Our scatter practice
+.panel1-scatter-auto[
+
+```r
+ggplot(data = gapminder_2002) +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  geom_point() +
+  aes(size = pop) +
+  aes(color = continent) +
+  aes(shape = continent) +
+  aes(alpha = gdpPercap) +
+  labs(x = "GDP per capita (US$)") +
+* labs(alpha = "GDP per cap")
+```
+]
+ 
+.panel2-scatter-auto[
+![](ggplot2_grammar_primer_files/figure-html/scatter_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+# Our scatter practice
+.panel1-scatter-auto[
+
+```r
+ggplot(data = gapminder_2002) +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  geom_point() +
+  aes(size = pop) +
+  aes(color = continent) +
+  aes(shape = continent) +
+  aes(alpha = gdpPercap) +
+  labs(x = "GDP per capita (US$)") +
+  labs(alpha = "GDP per cap") +
+* labs(shape = NULL)
+```
+]
+ 
+.panel2-scatter-auto[
+![](ggplot2_grammar_primer_files/figure-html/scatter_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+# Our scatter practice
+.panel1-scatter-auto[
+
+```r
+ggplot(data = gapminder_2002) +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  geom_point() +
+  aes(size = pop) +
+  aes(color = continent) +
+  aes(shape = continent) +
+  aes(alpha = gdpPercap) +
+  labs(x = "GDP per capita (US$)") +
+  labs(alpha = "GDP per cap") +
+  labs(shape = NULL) +
+* labs(color = NULL)
+```
+]
+ 
+.panel2-scatter-auto[
+![](ggplot2_grammar_primer_files/figure-html/scatter_auto_12_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+# Our scatter practice
+.panel1-scatter-auto[
+
+```r
+ggplot(data = gapminder_2002) +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  geom_point() +
+  aes(size = pop) +
+  aes(color = continent) +
+  aes(shape = continent) +
+  aes(alpha = gdpPercap) +
+  labs(x = "GDP per capita (US$)") +
+  labs(alpha = "GDP per cap") +
+  labs(shape = NULL) +
+  labs(color = NULL) +
+* labs(title = "hi")
+```
+]
+ 
+.panel2-scatter-auto[
+![](ggplot2_grammar_primer_files/figure-html/scatter_auto_13_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+# Our scatter practice
+.panel1-scatter-auto[
+
+```r
+ggplot(data = gapminder_2002) +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  geom_point() +
+  aes(size = pop) +
+  aes(color = continent) +
+  aes(shape = continent) +
+  aes(alpha = gdpPercap) +
+  labs(x = "GDP per capita (US$)") +
+  labs(alpha = "GDP per cap") +
+  labs(shape = NULL) +
+  labs(color = NULL) +
+  labs(title = "hi") +
+* labs(subtitle = "hello")
+```
+]
+ 
+.panel2-scatter-auto[
+![](ggplot2_grammar_primer_files/figure-html/scatter_auto_14_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+# Our scatter practice
+.panel1-scatter-auto[
+
+```r
+ggplot(data = gapminder_2002) +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  geom_point() +
+  aes(size = pop) +
+  aes(color = continent) +
+  aes(shape = continent) +
+  aes(alpha = gdpPercap) +
+  labs(x = "GDP per capita (US$)") +
+  labs(alpha = "GDP per cap") +
+  labs(shape = NULL) +
+  labs(color = NULL) +
+  labs(title = "hi") +
+  labs(subtitle = "hello") +
+* labs(caption = "hi again")
+```
+]
+ 
+.panel2-scatter-auto[
+![](ggplot2_grammar_primer_files/figure-html/scatter_auto_15_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+# Our scatter practice
+.panel1-scatter-auto[
+
+```r
+ggplot(data = gapminder_2002) +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  geom_point() +
+  aes(size = pop) +
+  aes(color = continent) +
+  aes(shape = continent) +
+  aes(alpha = gdpPercap) +
+  labs(x = "GDP per capita (US$)") +
+  labs(alpha = "GDP per cap") +
+  labs(shape = NULL) +
+  labs(color = NULL) +
+  labs(title = "hi") +
+  labs(subtitle = "hello") +
+  labs(caption = "hi again") +
+* labs(tag = "plot1")
+```
+]
+ 
+.panel2-scatter-auto[
+![](ggplot2_grammar_primer_files/figure-html/scatter_auto_16_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+# Our scatter practice
+.panel1-scatter-auto[
+
+```r
+ggplot(data = gapminder_2002) +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  geom_point() +
+  aes(size = pop) +
+  aes(color = continent) +
+  aes(shape = continent) +
+  aes(alpha = gdpPercap) +
+  labs(x = "GDP per capita (US$)") +
+  labs(alpha = "GDP per cap") +
+  labs(shape = NULL) +
+  labs(color = NULL) +
+  labs(title = "hi") +
+  labs(subtitle = "hello") +
+  labs(caption = "hi again") +
+  labs(tag = "plot1") +
+* scale_x_log10()
+```
+]
+ 
+.panel2-scatter-auto[
+![](ggplot2_grammar_primer_files/figure-html/scatter_auto_17_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+# Our scatter practice
+.panel1-scatter-auto[
+
+```r
+ggplot(data = gapminder_2002) +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  geom_point() +
+  aes(size = pop) +
+  aes(color = continent) +
+  aes(shape = continent) +
+  aes(alpha = gdpPercap) +
+  labs(x = "GDP per capita (US$)") +
+  labs(alpha = "GDP per cap") +
+  labs(shape = NULL) +
+  labs(color = NULL) +
+  labs(title = "hi") +
+  labs(subtitle = "hello") +
+  labs(caption = "hi again") +
+  labs(tag = "plot1") +
+  scale_x_log10() +
+* scale_y_reverse()
+```
+]
+ 
+.panel2-scatter-auto[
+![](ggplot2_grammar_primer_files/figure-html/scatter_auto_18_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+# Our scatter practice
+.panel1-scatter-auto[
+
+```r
+ggplot(data = gapminder_2002) +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  geom_point() +
+  aes(size = pop) +
+  aes(color = continent) +
+  aes(shape = continent) +
+  aes(alpha = gdpPercap) +
+  labs(x = "GDP per capita (US$)") +
+  labs(alpha = "GDP per cap") +
+  labs(shape = NULL) +
+  labs(color = NULL) +
+  labs(title = "hi") +
+  labs(subtitle = "hello") +
+  labs(caption = "hi again") +
+  labs(tag = "plot1") +
+  scale_x_log10() +
+  scale_y_reverse() +
+* scale_color_viridis_d()
+```
+]
+ 
+.panel2-scatter-auto[
+![](ggplot2_grammar_primer_files/figure-html/scatter_auto_19_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+# Our scatter practice
+.panel1-scatter-auto[
+
+```r
+ggplot(data = gapminder_2002) +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  geom_point() +
+  aes(size = pop) +
+  aes(color = continent) +
+  aes(shape = continent) +
+  aes(alpha = gdpPercap) +
+  labs(x = "GDP per capita (US$)") +
+  labs(alpha = "GDP per cap") +
+  labs(shape = NULL) +
+  labs(color = NULL) +
+  labs(title = "hi") +
+  labs(subtitle = "hello") +
+  labs(caption = "hi again") +
+  labs(tag = "plot1") +
+  scale_x_log10() +
+  scale_y_reverse() +
+  scale_color_viridis_d() +
+* coord_flip()
+```
+]
+ 
+.panel2-scatter-auto[
+![](ggplot2_grammar_primer_files/figure-html/scatter_auto_20_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-scatter-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-scatter-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-scatter-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+count: false
+ 
+our column
+.panel1-column-auto[
+
+```r
+*continent_aggregate
+```
+]
+ 
+.panel2-column-auto[
+
+```
+# A tibble: 5 × 2
+  continent country_count
+  &lt;fct&gt;             &lt;int&gt;
+1 Africa               52
+2 Americas             25
+3 Asia                 33
+4 Europe               30
+5 Oceania               2
+```
+]
+
+---
+count: false
+ 
+our column
+.panel1-column-auto[
+
+```r
+continent_aggregate %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-column-auto[
+![](ggplot2_grammar_primer_files/figure-html/column_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+our column
+.panel1-column-auto[
+
+```r
+continent_aggregate %&gt;%
+  ggplot() +
+* aes(x = continent)
+```
+]
+ 
+.panel2-column-auto[
+![](ggplot2_grammar_primer_files/figure-html/column_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+our column
+.panel1-column-auto[
+
+```r
+continent_aggregate %&gt;%
+  ggplot() +
+  aes(x = continent) +
+* aes(y = country_count)
+```
+]
+ 
+.panel2-column-auto[
+![](ggplot2_grammar_primer_files/figure-html/column_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+our column
+.panel1-column-auto[
+
+```r
+continent_aggregate %&gt;%
+  ggplot() +
+  aes(x = continent) +
+  aes(y = country_count) +
+* geom_col()
+```
+]
+ 
+.panel2-column-auto[
+![](ggplot2_grammar_primer_files/figure-html/column_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+our column
+.panel1-column-auto[
+
+```r
+continent_aggregate %&gt;%
+  ggplot() +
+  aes(x = continent) +
+  aes(y = country_count) +
+  geom_col() +
+* aes(color = continent)
+```
+]
+ 
+.panel2-column-auto[
+![](ggplot2_grammar_primer_files/figure-html/column_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+our column
+.panel1-column-auto[
+
+```r
+continent_aggregate %&gt;%
+  ggplot() +
+  aes(x = continent) +
+  aes(y = country_count) +
+  geom_col() +
+  aes(color = continent) +
+* aes(fill = continent)
+```
+]
+ 
+.panel2-column-auto[
+![](ggplot2_grammar_primer_files/figure-html/column_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+our column
+.panel1-column-auto[
+
+```r
+continent_aggregate %&gt;%
+  ggplot() +
+  aes(x = continent) +
+  aes(y = country_count) +
+  geom_col() +
+  aes(color = continent) +
+  aes(fill = continent) +
+* aes(linetype = continent)
+```
+]
+ 
+.panel2-column-auto[
+![](ggplot2_grammar_primer_files/figure-html/column_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+our column
+.panel1-column-auto[
+
+```r
+continent_aggregate %&gt;%
+  ggplot() +
+  aes(x = continent) +
+  aes(y = country_count) +
+  geom_col() +
+  aes(color = continent) +
+  aes(fill = continent) +
+  aes(linetype = continent) +
+* aes(alpha = country_count)
+```
+]
+ 
+.panel2-column-auto[
+![](ggplot2_grammar_primer_files/figure-html/column_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-column-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-column-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-column-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+count: false
+ 
+'local' declarations
+.panel1-conditional-auto[
+
+```r
+*ggplot(data = gapminder_2002)
+```
+]
+ 
+.panel2-conditional-auto[
+![](ggplot2_grammar_primer_files/figure-html/conditional_auto_01_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+'local' declarations
+.panel1-conditional-auto[
+
+```r
+ggplot(data = gapminder_2002) +
+* aes(x = gdpPercap / 1000)
+```
+]
+ 
+.panel2-conditional-auto[
+![](ggplot2_grammar_primer_files/figure-html/conditional_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+'local' declarations
+.panel1-conditional-auto[
+
+```r
+ggplot(data = gapminder_2002) +
+  aes(x = gdpPercap / 1000) +
+* aes(y = lifeExp)
+```
+]
+ 
+.panel2-conditional-auto[
+![](ggplot2_grammar_primer_files/figure-html/conditional_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+'local' declarations
+.panel1-conditional-auto[
+
+```r
+ggplot(data = gapminder_2002) +
+  aes(x = gdpPercap / 1000) +
+  aes(y = lifeExp) +
+* geom_point()
+```
+]
+ 
+.panel2-conditional-auto[
+![](ggplot2_grammar_primer_files/figure-html/conditional_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+'local' declarations
+.panel1-conditional-auto[
+
+```r
+ggplot(data = gapminder_2002) +
+  aes(x = gdpPercap / 1000) +
+  aes(y = lifeExp) +
+  geom_point() +
+* geom_point(data = gapminder_2002_europe,
+*            aes(size = gdpPercap),
+*            color = "red")
+```
+]
+ 
+.panel2-conditional-auto[
+![](ggplot2_grammar_primer_files/figure-html/conditional_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+'local' declarations
+.panel1-conditional-auto[
+
+```r
+ggplot(data = gapminder_2002) +
+  aes(x = gdpPercap / 1000) +
+  aes(y = lifeExp) +
+  geom_point() +
+  geom_point(data = gapminder_2002_europe,
+             aes(size = gdpPercap),
+             color = "red") +
+* annotate(geom = "text",
+*          x = c(10, 20),
+*          y = 45,
+*          label = "My annotation")
+```
+]
+ 
+.panel2-conditional-auto[
+![](ggplot2_grammar_primer_files/figure-html/conditional_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-conditional-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-conditional-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-conditional-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+# See the grammar guide...
+
+https://evamaerey.github.io/ggplot2_grammar_guide/about
+
+---
+
+
+&lt;!-- adjust font size in this css code chunk, currently 80 --&gt;
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 80%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+&lt;/style&gt;
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"seal": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
