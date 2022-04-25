@@ -48,8 +48,9 @@ class: inverse, center, middle
 
 
 # But wait.
+
 --
-First one step back. 
+## First one step back. 
 
 --
 # Data viz ...
@@ -76,7 +77,7 @@ First one step back.
 
 ---
 
-### Key Aesthetics:
+### Visual channels for aesthetic mapping:
 
 
 ![](https://clauswilke.com/dataviz/aesthetic_mapping_files/figure-html/common-aesthetics-1.png)&lt;!-- --&gt;
@@ -93,7 +94,7 @@ from Claus Wilke's fundamentals of data visualization https://clauswilke.com/dat
 
 ---
 
-# So what's the promise of ggplot2?
+# Back to ggplot2. What's the fuss?
 
 --
 
@@ -105,11 +106,11 @@ from Claus Wilke's fundamentals of data visualization https://clauswilke.com/dat
 
 --
 
-&gt; ### where I just felt, like, to me, I just want them to say, like, you know, *this is what I'm thinking, this is how I'm picturing this plot. Like you're the computer 'Go and do it'.* 
+&gt; ### where I just felt, like, to me, I just wanted to say, like, you know, *this is what I'm thinking, this is how I'm picturing this plot. Like you're the computer 'Go and do it'.* 
 
 ---
 
-&gt; ### ... and I'd also been reading about the Grammar of Graphics by Leland Wilkinson, I got to meet him a couple of times and that really kind of, I was, like, this book has been, like, written for me. 
+&gt; ### ... and I'd also been reading about the Grammar of Graphics by Leland Wilkinson, I got to meet him a couple of times and ... I was, like, this book has been, like, written for me. 
 
 https://www.trifacta.com/podcast/tidy-data-with-hadley-wickham/
 
@@ -130,25 +131,22 @@ https://www.trifacta.com/podcast/tidy-data-with-hadley-wickham/
 
 ---
 
-## ggplot2 is called a 'declarative' graphing system.
+# ggplot2 is called a 'declarative' graphing system.
 
 --
 
-# 'speak your plot into existance'. (Thomas Lin Pederson?) 
+# It lets you 'speak your plot into existance'. (Thomas Lin Pederson?) 
 
 --
 
-### This is fast. Because most of us, like Hadley Wickham, can conceive of the form of the plot we're going after very clearly!
+### This is fast. Because most of us, like Hadley Wickham, can **picture** the form of the plot we're going after rather clearly (i.e. what the horizontal position should represent, what color should represent, what 'marks' (points, lines) are going to appear on the plot).  
+--
+'Getting' our plot made becomes a matter of describing what we're already picturing!
 
 
 ---
 
 # The "Grammar of Graphics" (1999)
-
-
-```r
-knitr::include_graphics("../../../teaching/lecture_topics/images_for_lecture/wilkinson_grammar_of_graphics.png")
-```
 
 &lt;img src="../../../teaching/lecture_topics/images_for_lecture/wilkinson_grammar_of_graphics.png" width="40%" /&gt;
 
@@ -157,7 +155,7 @@ knitr::include_graphics("../../../teaching/lecture_topics/images_for_lecture/wil
 
 ### A 'grammar of graphics' also ... flexibility and creative freedom!...
 
-### Wilkinson... this grammar of graphics implementations would allow "drawing every statistical graphic"
+### When Wilkinson describes grammar of graphics, he sells it arguing that this grammar of graphics implementations would allow "drawing every statistical graphic"
 
 ???
 The grammar of graphics framework, proposed by Leland Wilkinson in 1999, that identified 'seven orthogonal components' in the creation of data visualizations.\
@@ -169,9 +167,6 @@ Wilkinson asserted that if data visualization packages were created using a sepa
 
 But the focus of this talk is ... 'speaking your plot into existance'
 
----
-
-
 
 
 
@@ -180,7 +175,11 @@ But the focus of this talk is ... 'speaking your plot into existance'
 
 ---
 class: center, middle
-# Okay, let's see a well known instance of someone speaking their plot into existence!
+# Maybe you've seen data viz luminary Hans Rosling 'speaking a plot into existence'?
+
+--
+
+# Let's watch.
 
 ---
 
@@ -191,10 +190,44 @@ class: center, middle
 https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A
 
 
+---
+background-image: url(images/paste-A8314E33.png)
+background-size: cover
+
+
+---
+background-image: url(images/paste-D46A77DF.png)
+background-size: cover
+
+---
+background-image: url(images/paste-CAD8C893.png)
+background-size: cover
+
+---
+background-image: url(images/paste-DC46E991.png)
+background-size: cover
 
 ---
 
-## How does Hans Rosling (2010) 'Speak his chart into existence? 
+
+![](images/paste-DD5DC294.png)
+
+
+Also, see Garr Reynolds 'presentation zen': https://policyviz.com/podcast/episode-62-garr-reynolds/
+
+???
+
+'Making the simple complicated is commonplace; making the complicated simple, awesomely simple, that's creativity.'
+
+— Charles Mingus
+
+'Cognitive scientists have discovered three important features of the human information processing system that are particularly relevant for PowerPoint users: dual-channels, that is, people have separate information processing channels for visual material and verbal material; limited capacity, that is, people can pay attention to only a few pieces of information in each channel at a time; and active processing, that is, people understand the presented material when they pay attention to the relevant material, organize it into a coherent mental structure, and integrate it with their prior knowledge.'
+
+— Rich Mayer, in an interview with Sociable Media, Inc. 
+
+---
+
+## What tech does Hans Rosling (2010) use to 'Speak his chart into existence? 
 
 --
 
@@ -202,40 +235,56 @@ https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A
 
 ---
 
-## How can we 'Speak our chart into existance?'
 
-### ggplot2!  or another implementation of the grammar of graphics...
+
+
+## How can we 'speak our chart into existance?'
+
+--
+
+### ggplot2!  
 
 ---
 
-# Implementations
+### (or another implementation of the grammar of graphics...)
 
+--
 
-## Tableau 
+### Tableau 
 
 ### Polaris -&gt; Tableau - Acquired for 15.7 Billion dollars (salesforce)
 
 --
 
-## Vega Lite... (dynamic, interactive data visualizations in web browsers)
+### Vega Lite... (dynamic, interactive data visualizations in web browsers)
 
 
 --
 
-## ggplot2 (in R)
-
---
-
-## plot9
+### plot9
 (python's ggplot2)
 
-## altair (python declarative newcomer) https://youtu.be/FytuB8nFHPQ?t=1382
+
+--
+
+### altair (python declarative newcomer) https://youtu.be/FytuB8nFHPQ?t=1382
 
 ---
 
-## So learning the grammar/syntax... 
+![](images/paste-99474543.png)
+
+Third wave data visualization, Meeks: https://www.youtube.com/watch?v=itChfcTx7aos
+
+
+---
+
+## We're doing ggplot2 - R programming language, coded implementation
 
 --
+
+## we need to learning the grammar/syntax to 'speak our charts into reality'
+
+---
 
 ### I remember in my English/Arabic/Spanish/German/Chinese classes, that Grammar lessons just suck!
 
@@ -298,29 +347,63 @@ knitr::include_graphics("../../../teaching/lecture_topics/images_for_lecture/wil
 
 ---
 
-### A series of choices (declarations):
-
-
-- choose data
---
-
-- choose aesthetic mapping (what aesthetics will represent what variables)
+### A series of 'grammatical' choices:
 
 --
 
-- choose geometric objects
+- declarative mood: Declare data
 
 --
-- make decision to facet or not
+
+- interrogative mood: ask for representation choose aesthetic mapping (what aesthetics (color, size, position) will represent what variables)
 
 --
-- make choice to summarize data or not (statistics)
+
+- nouns: geometric objects, 'geoms' or 'marks' (tableau's vocabulary) that take on the visual attributes
 
 --
-- choose a coordinate system
+
+- modifiers (adjectives, adverbs): change defaults
+
+  - labels
+  - aesthetic scales
+  - coordinate system
+  
+--
+
+- conditional mood: 
+
+  - change data, aesthetic mapping, or defaults for specific geom layer
+  
+--
+
+- punctuation: make decision to facet or not, breaking up your ideas
+    
+--
+
+- interjections: annotation
 
 --
-- make thematic choices
+
+- greetings: theme (plot look and feel)
+
+--
+
+full grammar guide:  https://evamaerey.github.io/ggplot2_grammar_guide/about
+
+---
+
+What are the variables that are represented in the data visualization?
+
+--
+
+What are the *aesthetics* (visual channels) are used to represent variables?
+
+--
+
+What are the aesthetic mappings (variable  &lt;-&gt; aesthetic pairings)
+
+
 
 
 ---
@@ -330,8 +413,6 @@ class: center, middle, inverse
 
 ---
 class: center, middle, inverse
-
-
 
 # Go slow.  
 
@@ -354,7 +435,7 @@ class: center, middle, inverse
 
 --
 
-# ... do a poetry slam, every time!
+# ... think poetry slam!
 
 ---
 
@@ -369,30 +450,19 @@ class: center, middle, inverse
 - try to decompose the plot as much as possible
 - each decision gets a (+)
 - don't worry about being repetitive
-- name your parameters 
-
-
-
----
-
-What are the variables that are represented in the data visualization?
+- name your parameters
 
 --
 
-What are the *aesthetics* (visual channels) are used to represent variables?
+At least when learning/teaching.
 
---
-
-What are the aesthetic mappings (variable  &lt;-&gt; aesthetic pairings)
-
---
 
 
 ---
 
 count: false
  
-Our dataprep
+# DEMO PREP, PROVIDED
 .panel1-dataprep-auto[
 
 ```r
@@ -407,7 +477,7 @@ Our dataprep
 ---
 count: false
  
-Our dataprep
+# DEMO PREP, PROVIDED
 .panel1-dataprep-auto[
 
 ```r
@@ -423,7 +493,7 @@ library(tidyverse)
 ---
 count: false
  
-Our dataprep
+# DEMO PREP, PROVIDED
 .panel1-dataprep-auto[
 
 ```r
@@ -457,7 +527,7 @@ library(gapminder)
 ---
 count: false
  
-Our dataprep
+# DEMO PREP, PROVIDED
 .panel1-dataprep-auto[
 
 ```r
@@ -492,7 +562,7 @@ gapminder %&gt;%  # data from package
 ---
 count: false
  
-Our dataprep
+# DEMO PREP, PROVIDED
 .panel1-dataprep-auto[
 
 ```r
@@ -512,7 +582,7 @@ gapminder %&gt;%  # data from package
 ---
 count: false
  
-Our dataprep
+# DEMO PREP, PROVIDED
 .panel1-dataprep-auto[
 
 ```r
@@ -550,7 +620,7 @@ gapminder_2002  # saving subset object
 ---
 count: false
  
-Our dataprep
+# DEMO PREP, PROVIDED
 .panel1-dataprep-auto[
 
 ```r
@@ -589,7 +659,7 @@ gapminder_2002 %&gt;%
 ---
 count: false
  
-Our dataprep
+# DEMO PREP, PROVIDED
 .panel1-dataprep-auto[
 
 ```r
@@ -613,7 +683,7 @@ gapminder_2002 %&gt;%
 ---
 count: false
  
-Our dataprep
+# DEMO PREP, PROVIDED
 .panel1-dataprep-auto[
 
 ```r
@@ -655,7 +725,7 @@ gapminder_2002_europe
 ---
 count: false
  
-Our dataprep
+# DEMO PREP, PROVIDED
 .panel1-dataprep-auto[
 
 ```r
@@ -698,7 +768,7 @@ gapminder %&gt;%
 ---
 count: false
  
-Our dataprep
+# DEMO PREP, PROVIDED
 .panel1-dataprep-auto[
 
 ```r
@@ -742,7 +812,7 @@ gapminder %&gt;%
 ---
 count: false
  
-Our dataprep
+# DEMO PREP, PROVIDED
 .panel1-dataprep-auto[
 
 ```r
@@ -788,7 +858,7 @@ gapminder %&gt;%
 ---
 count: false
  
-Our dataprep
+# DEMO PREP, PROVIDED
 .panel1-dataprep-auto[
 
 ```r
@@ -828,7 +898,7 @@ gapminder %&gt;%
 ---
 count: false
  
-Our dataprep
+# DEMO PREP, PROVIDED
 .panel1-dataprep-auto[
 
 ```r
@@ -891,7 +961,7 @@ gapminder %&gt;%
 
 count: false
  
-# Our scatter practice
+# LIVE DEMO Our scatter practice
 .panel1-scatter-auto[
 
 ```r
@@ -906,7 +976,7 @@ count: false
 ---
 count: false
  
-# Our scatter practice
+# LIVE DEMO Our scatter practice
 .panel1-scatter-auto[
 
 ```r
@@ -922,7 +992,7 @@ ggplot(data = gapminder_2002) +
 ---
 count: false
  
-# Our scatter practice
+# LIVE DEMO Our scatter practice
 .panel1-scatter-auto[
 
 ```r
@@ -939,7 +1009,7 @@ ggplot(data = gapminder_2002) +
 ---
 count: false
  
-# Our scatter practice
+# LIVE DEMO Our scatter practice
 .panel1-scatter-auto[
 
 ```r
@@ -957,7 +1027,7 @@ ggplot(data = gapminder_2002) +
 ---
 count: false
  
-# Our scatter practice
+# LIVE DEMO Our scatter practice
 .panel1-scatter-auto[
 
 ```r
@@ -976,7 +1046,7 @@ ggplot(data = gapminder_2002) +
 ---
 count: false
  
-# Our scatter practice
+# LIVE DEMO Our scatter practice
 .panel1-scatter-auto[
 
 ```r
@@ -996,7 +1066,7 @@ ggplot(data = gapminder_2002) +
 ---
 count: false
  
-# Our scatter practice
+# LIVE DEMO Our scatter practice
 .panel1-scatter-auto[
 
 ```r
@@ -1017,7 +1087,7 @@ ggplot(data = gapminder_2002) +
 ---
 count: false
  
-# Our scatter practice
+# LIVE DEMO Our scatter practice
 .panel1-scatter-auto[
 
 ```r
@@ -1028,7 +1098,7 @@ ggplot(data = gapminder_2002) +
   aes(size = pop) +
   aes(color = continent) +
   aes(shape = continent) +
-* aes(alpha = gdpPercap)
+* labs(x = "GDP per capita (US$)")
 ```
 ]
  
@@ -1039,7 +1109,7 @@ ggplot(data = gapminder_2002) +
 ---
 count: false
  
-# Our scatter practice
+# LIVE DEMO Our scatter practice
 .panel1-scatter-auto[
 
 ```r
@@ -1050,8 +1120,8 @@ ggplot(data = gapminder_2002) +
   aes(size = pop) +
   aes(color = continent) +
   aes(shape = continent) +
-  aes(alpha = gdpPercap) +
-* labs(x = "GDP per capita (US$)")
+  labs(x = "GDP per capita (US$)") +
+* labs(alpha = "GDP per cap")
 ```
 ]
  
@@ -1062,7 +1132,7 @@ ggplot(data = gapminder_2002) +
 ---
 count: false
  
-# Our scatter practice
+# LIVE DEMO Our scatter practice
 .panel1-scatter-auto[
 
 ```r
@@ -1073,9 +1143,9 @@ ggplot(data = gapminder_2002) +
   aes(size = pop) +
   aes(color = continent) +
   aes(shape = continent) +
-  aes(alpha = gdpPercap) +
   labs(x = "GDP per capita (US$)") +
-* labs(alpha = "GDP per cap")
+  labs(alpha = "GDP per cap") +
+* labs(shape = NULL)
 ```
 ]
  
@@ -1086,7 +1156,7 @@ ggplot(data = gapminder_2002) +
 ---
 count: false
  
-# Our scatter practice
+# LIVE DEMO Our scatter practice
 .panel1-scatter-auto[
 
 ```r
@@ -1097,10 +1167,10 @@ ggplot(data = gapminder_2002) +
   aes(size = pop) +
   aes(color = continent) +
   aes(shape = continent) +
-  aes(alpha = gdpPercap) +
   labs(x = "GDP per capita (US$)") +
   labs(alpha = "GDP per cap") +
-* labs(shape = NULL)
+  labs(shape = NULL) +
+* labs(color = NULL)
 ```
 ]
  
@@ -1111,7 +1181,7 @@ ggplot(data = gapminder_2002) +
 ---
 count: false
  
-# Our scatter practice
+# LIVE DEMO Our scatter practice
 .panel1-scatter-auto[
 
 ```r
@@ -1122,11 +1192,11 @@ ggplot(data = gapminder_2002) +
   aes(size = pop) +
   aes(color = continent) +
   aes(shape = continent) +
-  aes(alpha = gdpPercap) +
   labs(x = "GDP per capita (US$)") +
   labs(alpha = "GDP per cap") +
   labs(shape = NULL) +
-* labs(color = NULL)
+  labs(color = NULL) +
+* labs(title = "hi")
 ```
 ]
  
@@ -1137,7 +1207,7 @@ ggplot(data = gapminder_2002) +
 ---
 count: false
  
-# Our scatter practice
+# LIVE DEMO Our scatter practice
 .panel1-scatter-auto[
 
 ```r
@@ -1148,34 +1218,6 @@ ggplot(data = gapminder_2002) +
   aes(size = pop) +
   aes(color = continent) +
   aes(shape = continent) +
-  aes(alpha = gdpPercap) +
-  labs(x = "GDP per capita (US$)") +
-  labs(alpha = "GDP per cap") +
-  labs(shape = NULL) +
-  labs(color = NULL) +
-* labs(title = "hi")
-```
-]
- 
-.panel2-scatter-auto[
-![](ggplot2_grammar_primer_files/figure-html/scatter_auto_13_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-# Our scatter practice
-.panel1-scatter-auto[
-
-```r
-ggplot(data = gapminder_2002) +
-  aes(y = lifeExp) +
-  aes(x = gdpPercap) +
-  geom_point() +
-  aes(size = pop) +
-  aes(color = continent) +
-  aes(shape = continent) +
-  aes(alpha = gdpPercap) +
   labs(x = "GDP per capita (US$)") +
   labs(alpha = "GDP per cap") +
   labs(shape = NULL) +
@@ -1186,13 +1228,13 @@ ggplot(data = gapminder_2002) +
 ]
  
 .panel2-scatter-auto[
-![](ggplot2_grammar_primer_files/figure-html/scatter_auto_14_output-1.png)&lt;!-- --&gt;
+![](ggplot2_grammar_primer_files/figure-html/scatter_auto_13_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
 count: false
  
-# Our scatter practice
+# LIVE DEMO Our scatter practice
 .panel1-scatter-auto[
 
 ```r
@@ -1203,7 +1245,6 @@ ggplot(data = gapminder_2002) +
   aes(size = pop) +
   aes(color = continent) +
   aes(shape = continent) +
-  aes(alpha = gdpPercap) +
   labs(x = "GDP per capita (US$)") +
   labs(alpha = "GDP per cap") +
   labs(shape = NULL) +
@@ -1215,13 +1256,13 @@ ggplot(data = gapminder_2002) +
 ]
  
 .panel2-scatter-auto[
-![](ggplot2_grammar_primer_files/figure-html/scatter_auto_15_output-1.png)&lt;!-- --&gt;
+![](ggplot2_grammar_primer_files/figure-html/scatter_auto_14_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
 count: false
  
-# Our scatter practice
+# LIVE DEMO Our scatter practice
 .panel1-scatter-auto[
 
 ```r
@@ -1232,7 +1273,6 @@ ggplot(data = gapminder_2002) +
   aes(size = pop) +
   aes(color = continent) +
   aes(shape = continent) +
-  aes(alpha = gdpPercap) +
   labs(x = "GDP per capita (US$)") +
   labs(alpha = "GDP per cap") +
   labs(shape = NULL) +
@@ -1245,13 +1285,13 @@ ggplot(data = gapminder_2002) +
 ]
  
 .panel2-scatter-auto[
-![](ggplot2_grammar_primer_files/figure-html/scatter_auto_16_output-1.png)&lt;!-- --&gt;
+![](ggplot2_grammar_primer_files/figure-html/scatter_auto_15_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
 count: false
  
-# Our scatter practice
+# LIVE DEMO Our scatter practice
 .panel1-scatter-auto[
 
 ```r
@@ -1262,7 +1302,6 @@ ggplot(data = gapminder_2002) +
   aes(size = pop) +
   aes(color = continent) +
   aes(shape = continent) +
-  aes(alpha = gdpPercap) +
   labs(x = "GDP per capita (US$)") +
   labs(alpha = "GDP per cap") +
   labs(shape = NULL) +
@@ -1276,13 +1315,13 @@ ggplot(data = gapminder_2002) +
 ]
  
 .panel2-scatter-auto[
-![](ggplot2_grammar_primer_files/figure-html/scatter_auto_17_output-1.png)&lt;!-- --&gt;
+![](ggplot2_grammar_primer_files/figure-html/scatter_auto_16_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
 count: false
  
-# Our scatter practice
+# LIVE DEMO Our scatter practice
 .panel1-scatter-auto[
 
 ```r
@@ -1293,7 +1332,6 @@ ggplot(data = gapminder_2002) +
   aes(size = pop) +
   aes(color = continent) +
   aes(shape = continent) +
-  aes(alpha = gdpPercap) +
   labs(x = "GDP per capita (US$)") +
   labs(alpha = "GDP per cap") +
   labs(shape = NULL) +
@@ -1308,13 +1346,13 @@ ggplot(data = gapminder_2002) +
 ]
  
 .panel2-scatter-auto[
-![](ggplot2_grammar_primer_files/figure-html/scatter_auto_18_output-1.png)&lt;!-- --&gt;
+![](ggplot2_grammar_primer_files/figure-html/scatter_auto_17_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
 count: false
  
-# Our scatter practice
+# LIVE DEMO Our scatter practice
 .panel1-scatter-auto[
 
 ```r
@@ -1325,7 +1363,6 @@ ggplot(data = gapminder_2002) +
   aes(size = pop) +
   aes(color = continent) +
   aes(shape = continent) +
-  aes(alpha = gdpPercap) +
   labs(x = "GDP per capita (US$)") +
   labs(alpha = "GDP per cap") +
   labs(shape = NULL) +
@@ -1341,13 +1378,13 @@ ggplot(data = gapminder_2002) +
 ]
  
 .panel2-scatter-auto[
-![](ggplot2_grammar_primer_files/figure-html/scatter_auto_19_output-1.png)&lt;!-- --&gt;
+![](ggplot2_grammar_primer_files/figure-html/scatter_auto_18_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
 count: false
  
-# Our scatter practice
+# LIVE DEMO Our scatter practice
 .panel1-scatter-auto[
 
 ```r
@@ -1358,7 +1395,6 @@ ggplot(data = gapminder_2002) +
   aes(size = pop) +
   aes(color = continent) +
   aes(shape = continent) +
-  aes(alpha = gdpPercap) +
   labs(x = "GDP per capita (US$)") +
   labs(alpha = "GDP per cap") +
   labs(shape = NULL) +
@@ -1371,6 +1407,40 @@ ggplot(data = gapminder_2002) +
   scale_y_reverse() +
   scale_color_viridis_d() +
 * coord_flip()
+```
+]
+ 
+.panel2-scatter-auto[
+![](ggplot2_grammar_primer_files/figure-html/scatter_auto_19_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+# LIVE DEMO Our scatter practice
+.panel1-scatter-auto[
+
+```r
+ggplot(data = gapminder_2002) +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  geom_point() +
+  aes(size = pop) +
+  aes(color = continent) +
+  aes(shape = continent) +
+  labs(x = "GDP per capita (US$)") +
+  labs(alpha = "GDP per cap") +
+  labs(shape = NULL) +
+  labs(color = NULL) +
+  labs(title = "hi") +
+  labs(subtitle = "hello") +
+  labs(caption = "hi again") +
+  labs(tag = "plot1") +
+  scale_x_log10() +
+  scale_y_reverse() +
+  scale_color_viridis_d() +
+  coord_flip() +
+* facet_wrap(facets = vars(continent))
 ```
 ]
  
@@ -1413,7 +1483,7 @@ ggplot(data = gapminder_2002) +
 
 count: false
  
-our column
+# LIVE DEMO: our column
 .panel1-column-auto[
 
 ```r
@@ -1438,7 +1508,7 @@ our column
 ---
 count: false
  
-our column
+# LIVE DEMO: our column
 .panel1-column-auto[
 
 ```r
@@ -1454,7 +1524,7 @@ continent_aggregate %&gt;%
 ---
 count: false
  
-our column
+# LIVE DEMO: our column
 .panel1-column-auto[
 
 ```r
@@ -1471,7 +1541,7 @@ continent_aggregate %&gt;%
 ---
 count: false
  
-our column
+# LIVE DEMO: our column
 .panel1-column-auto[
 
 ```r
@@ -1489,7 +1559,7 @@ continent_aggregate %&gt;%
 ---
 count: false
  
-our column
+# LIVE DEMO: our column
 .panel1-column-auto[
 
 ```r
@@ -1508,7 +1578,7 @@ continent_aggregate %&gt;%
 ---
 count: false
  
-our column
+# LIVE DEMO: our column
 .panel1-column-auto[
 
 ```r
@@ -1528,7 +1598,7 @@ continent_aggregate %&gt;%
 ---
 count: false
  
-our column
+# LIVE DEMO: our column
 .panel1-column-auto[
 
 ```r
@@ -1549,7 +1619,7 @@ continent_aggregate %&gt;%
 ---
 count: false
  
-our column
+# LIVE DEMO: our column
 .panel1-column-auto[
 
 ```r
@@ -1571,7 +1641,7 @@ continent_aggregate %&gt;%
 ---
 count: false
  
-our column
+# LIVE DEMO: our column
 .panel1-column-auto[
 
 ```r
@@ -1627,7 +1697,7 @@ continent_aggregate %&gt;%
 
 count: false
  
-'local' declarations
+## LIVE DEMO 'local' declarations
 .panel1-conditional-auto[
 
 ```r
@@ -1642,7 +1712,7 @@ count: false
 ---
 count: false
  
-'local' declarations
+## LIVE DEMO 'local' declarations
 .panel1-conditional-auto[
 
 ```r
@@ -1658,7 +1728,7 @@ ggplot(data = gapminder_2002) +
 ---
 count: false
  
-'local' declarations
+## LIVE DEMO 'local' declarations
 .panel1-conditional-auto[
 
 ```r
@@ -1675,7 +1745,7 @@ ggplot(data = gapminder_2002) +
 ---
 count: false
  
-'local' declarations
+## LIVE DEMO 'local' declarations
 .panel1-conditional-auto[
 
 ```r
@@ -1693,7 +1763,7 @@ ggplot(data = gapminder_2002) +
 ---
 count: false
  
-'local' declarations
+## LIVE DEMO 'local' declarations
 .panel1-conditional-auto[
 
 ```r
@@ -1714,7 +1784,7 @@ ggplot(data = gapminder_2002) +
 ---
 count: false
  
-'local' declarations
+## LIVE DEMO 'local' declarations
 .panel1-conditional-auto[
 
 ```r
@@ -1734,6 +1804,32 @@ ggplot(data = gapminder_2002) +
  
 .panel2-conditional-auto[
 ![](ggplot2_grammar_primer_files/figure-html/conditional_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+## LIVE DEMO 'local' declarations
+.panel1-conditional-auto[
+
+```r
+ggplot(data = gapminder_2002) +
+  aes(x = gdpPercap / 1000) +
+  aes(y = lifeExp) +
+  geom_point() +
+  geom_point(data = gapminder_2002_europe,
+             aes(size = gdpPercap),
+             color = "red") +
+  annotate(geom = "text",
+           x = c(10, 20),
+           y = 45,
+           label = "My annotation") +
+* theme_minimal()
+```
+]
+ 
+.panel2-conditional-auto[
+![](ggplot2_grammar_primer_files/figure-html/conditional_auto_07_output-1.png)&lt;!-- --&gt;
 ]
 
 &lt;style&gt;
@@ -1769,12 +1865,69 @@ ggplot(data = gapminder_2002) +
 
 
 
+
+
+
 ---
-# See the grammar guide...
+
+# You promised me tricks and tips!!
 
 https://evamaerey.github.io/ggplot2_grammar_guide/about
 
+lot's of annotation strategies
+
+
+![](images/paste-53E41027.png)
+
+
 ---
+
+# Last slide: ggplot2::last_plot()
+
+
+```r
+ggplot(data = gapminder_2002) +
+  aes(y = lifeExp)
+```
+
+![](ggplot2_grammar_primer_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
+
+---
+
+# Last slide: ggplot2::last_plot()
+
+
+```r
+last_plot() + aes(x = gdpPercap)
+```
+
+![](ggplot2_grammar_primer_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+
+---
+
+# Last slide: ggplot2::last_plot()
+
+
+```r
+last_plot() + aes(x = gdpPercap)
+```
+
+![](ggplot2_grammar_primer_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+
+---
+
+# Last slide: ggplot2::last_plot()
+
+
+```r
+last_plot() + geom_point()
+```
+
+![](ggplot2_grammar_primer_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
+
+
 
 
 &lt;!-- adjust font size in this css code chunk, currently 80 --&gt;

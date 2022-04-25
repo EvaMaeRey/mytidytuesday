@@ -10,6 +10,8 @@ The goal of mytidytuesday is to hold the little projects. They are like
 blogs posts, but just code, hardly any prose. It’s in the spirit of
 \#tidytuesday!
 
+-   [test.html](https://evamaerey.github.io/mytidytuesday/test.html)
+-   [2022-04-21-ggplot2-grammar-primer/ggplot2\_grammar\_primer.html](https://evamaerey.github.io/mytidytuesday/2022-04-21-ggplot2-grammar-primer/ggplot2_grammar_primer.html)
 -   [2022-04-01-isi-data/isi-data.html](https://evamaerey.github.io/mytidytuesday/2022-04-01-isi-data/isi-data.html)
 -   [2022-03-25-hive/hive.html](https://evamaerey.github.io/mytidytuesday/2022-03-25-hive/hive.html)
 -   [2022-02-14-tables/tables\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-02-14-tables/tables_flipbook.html)
