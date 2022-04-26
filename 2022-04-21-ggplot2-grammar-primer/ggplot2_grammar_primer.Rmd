@@ -1,6 +1,5 @@
 ---
-title: "A ggplot2 grammar primer"
-subtitle: "Ideas for learning, teaching, and using ggplot2 effectively"
+title: "Speaking ggplot2"
 author: "Dr. Evangeline Reynolds"
 output:
   xaringan::moon_reader:
@@ -20,9 +19,9 @@ class: inverse, left, bottom
 background-image: url(https://images.unsplash.com/photo-1543286386-713bdd548da4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80)
 background-size: cover
 
-# .Large[A ggplot2 grammar primer]
+# .Large[Speaking ggplot2]
 
-## .small[Ideas for learning, teaching, and using ggplot2 effectively]
+## .small[Some ideas]
 #### .tiny[Dr. Evangeline Reynolds | 2022-04-26 |Image credit: William Iven, Upsplash]
 
 
@@ -108,17 +107,26 @@ from Claus Wilke's fundamentals of data visualization https://clauswilke.com/dat
 
 ---
 
-###  *Patterns* are identified with visual 'pre-attentive processing' 
+##  *Patterns* are identified with visual 'pre-attentive processing' 
 
 --
 
-### Uber-fast identification of relationships that you might never see in tabular form
+## Uber-fast identification of relationships that you might never see in tabular form
+
+--
+
+# Fast pattern discovery
+
+--
+
+# Fast pattern communication
 
 ---
 
 # Back to ggplot2. What's the fuss?
 
 --
+Hadley Wickham, ggplot2 author on it's motivation:
 
 > ### And, you know, I'd get a dataset. And, *in my head I could very clearly kind of picture*, I want to put this on the x-axis. Let's put this on the y-axis, draw a line, put some points here, break it up by this variable. 
 
@@ -126,11 +134,11 @@ from Claus Wilke's fundamentals of data visualization https://clauswilke.com/dat
 
 > ### And then, like, getting that vision out of my head, and into reality, it's just really, really hard. Just, like, felt harder than it should be. Like, there's a lot of custom programming involved, 
 
---
+---
 
 > ### where I just felt, like, to me, I just wanted to say, like, you know, *this is what I'm thinking, this is how I'm picturing this plot. Like you're the computer 'Go and do it'.* 
 
----
+--
 
 > ### ... and I'd also been reading about the Grammar of Graphics by Leland Wilkinson, I got to meet him a couple of times and ... I was, like, this book has been, like, written for me. 
 
@@ -157,7 +165,7 @@ https://www.trifacta.com/podcast/tidy-data-with-hadley-wickham/
 
 --
 
-# It lets you 'speak your plot into existance'. (Thomas Lin Pederson?) 
+# It lets you *'speak your plot into existance'*. (Thomas Lin Pederson?) 
 
 --
 
@@ -190,12 +198,6 @@ Wilkinson asserted that if data visualization packages were created using a sepa
 --
 
 But the focus of this talk is ... 'speaking your plot into existance'
-
-
-
-
-
-
 
 ---
 class: center, middle
@@ -310,7 +312,7 @@ Third wave data visualization, Meeks: https://www.youtube.com/watch?v=itChfcTx7a
 
 ---
 
-### I remember in my English/Arabic/Spanish/German/Chinese classes, that Grammar lessons just suck!
+### 'I remember in my English/Arabic/Spanish/German/Chinese classes, that Grammar lessons just suck!'
 
 --
 
@@ -362,7 +364,7 @@ just this little change puts us in a totally frame of mind!
 
 ## Elements of the Grammar of Graphics (choices)
 
-```{r}
+```{r, echo = F}
 knitr::include_graphics("../../../teaching/lecture_topics/images_for_lecture/wilkinson_layers_grammar_of_graphics.png")
 ```
 
@@ -408,29 +410,12 @@ knitr::include_graphics("../../../teaching/lecture_topics/images_for_lecture/wil
 
 - greetings: theme (plot look and feel)
 
---
-
-full grammar guide:  https://evamaerey.github.io/ggplot2_grammar_guide/about
-
----
-
-What are the variables that are represented in the data visualization?
-
---
-
-What are the *aesthetics* (visual channels) are used to represent variables?
-
---
-
-What are the aesthetic mappings (variable  <-> aesthetic pairings)
-
-
 
 
 ---
 class: center, middle, inverse
 
-# In your head, be Hans Rosling!
+# In your head, think 'Hans Rosling'!
 
 ---
 class: center, middle, inverse
@@ -441,7 +426,7 @@ class: center, middle, inverse
 class: center, middle, inverse
 
 
-# Give full voice to the decisions that you are making as you learn/teach/create.
+# Give full voice to the decisions that you are making as you learn/teach/create your plot!
 
 
 ---
@@ -461,7 +446,7 @@ class: center, middle, inverse
 ---
 
 
-# Slide with unsubstantiated claims about language learning needing repetition and 'out loud' practice. 
+# Placeholder slide with claims about language learning needing repetition and 'out loud' practice. 
 
 ---
 
@@ -476,6 +461,11 @@ class: center, middle, inverse
 --
 
 At least when learning/teaching.
+
+--
+
+And maybe all the time.
+
 
 
 
@@ -511,7 +501,7 @@ continent_aggregate
 ggplot(data = gapminder_2002) +
   aes(y = lifeExp) +
   aes(x = gdpPercap) +
-  geom_point() +
+  geom_point() + 
   aes(size = pop) +
   aes(color = continent) +
   aes(shape = continent) +
@@ -570,61 +560,134 @@ ggplot(data = gapminder_2002) +
 
 
 
-
 ---
 
-# You promised me tricks and tips!!
+### 'I'm already pro, I came for tricks and tips...'
+
+
+Lots of annotation strategies (still grammatical!), that feels tricky; people love faceting with shadow data of full data...
+![](images/paste-53E41027.png)
 
 https://evamaerey.github.io/ggplot2_grammar_guide/about
 
-lot's of annotation strategies
+---
 
+## Last slide: ggplot2::last_plot()
 
-![](images/paste-53E41027.png)
+### "Here we go..."
+
+```{r}
+ggplot(data = gapminder_2002) + 
+  NULL
+```
 
 
 ---
 
-# Last slide: ggplot2::last_plot()
+## Last slide: ggplot2::last_plot()
+
+### "On the y axis life expectancy..."
 
 ```{r}
 ggplot(data = gapminder_2002) +
   aes(y = lifeExp)
 ```
 
-
 ---
 
-# Last slide: ggplot2::last_plot()
+## Last slide: ggplot2::last_plot()
+
+### "On the x axis gdp per capita..."
+
 
 ```{r}
-last_plot() + aes(x = gdpPercap)
+last_plot() + 
+  aes(x = gdpPercap)
 ```
 
 ---
 
-# Last slide: ggplot2::last_plot()
+## Last slide: ggplot2::last_plot()
+
+### "Africa red, Americas yellow, Asia green..."
 
 ```{r}
-last_plot() + aes(x = gdpPercap)
-```
-
----
-
-# Last slide: ggplot2::last_plot()
-
-```{r}
-last_plot() + geom_point()
+last_plot() + 
+  geom_point() + aes(color = continent)
 ```
 
 
 
 ---
+
+## Last slide: ggplot2::last_plot()
+
+### The size of the country bubble shows the size of the population.
+
+
+```{r}
+last_plot() + 
+  aes(size = pop)
+```
+
+---
+
+# Epilogue... 
+
+## grudgingly, the animation 
+
+--
+
+## ... I think this is kind of a distraction from the many other reasons Hans Rosling's talk is so awesome... the animation is cool ... but there's so much more!
+
+---
+
+`r flipbookr::chunk_reveal("grumpy")`
+
+```{r grumpy, include = F}
+options(gganimate.nframes = 50)  
+library(tidyverse)  
+library(gapminder)  
+ggplot(data = gapminder) +  
+  facet_wrap(facets = vars(year)) + 
+  aes(x = gdpPercap) +  
+  aes(y = lifeExp) +  
+  geom_point() +  
+  aes(color = continent) +  
+  aes(size = pop) +  
+  scale_x_log10() +  
+  facet_null() +
+  aes(group = country) + # needed for connecting between years   
+  gganimate::transition_reveal(along = year)
+```
+
+
+---
+class: inverse, center, middle
+
+# End
+
+---
+
+`r chunk_reveal("custom", title = "## LIVE DEMO Time permitting, What's this plot called where area is gdp? It doesn't matter if we know or not, we can still imagine and build it")``
+
+```{r custom, include = F}
+gapminder_2002_europe %>% 
+  ggplot() + 
+  aes(x = pop) + 
+  aes(y = gdpPercap) + 
+  geom_point() +
+  geom_rect(aes(xmin = 0, xmax = pop,
+                ymin = 0, ymax = gdpPercap),
+            alpha = .5) +
+  facet_wrap(facets = vars(country))
+```
+
 
 <!-- adjust font size in this css code chunk, currently 80 -->
 
 ```{css, eval = TRUE, echo = FALSE}
-.remark-code{line-height: 1.5; font-size: 80%}
+.remark-code{line-height: 1.5; font-size: 100%}
 
 @media print {
   .has-continuation {

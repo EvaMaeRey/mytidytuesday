@@ -5,9 +5,12 @@ date: "4/21/2022"
 output: html_document
 ---
 
+Raw .Rmd file [here]("ggplot2_grammar_primer_worksheet.rmd")
+
 ```{r setup, include=FALSE}
 library(tidyverse) # contains ggplot and data manipulation tools
-library(gapminder)
+library(gapminder) # contains country data
+head(gapminder)
 ```
 
 # Prep 'gapminder' data
@@ -17,12 +20,17 @@ gapminder %>%
   filter(year == 2002) ->
 gapminder_2002
 
+gapminder_2002 %>%
+  filter(continent == "Europe") ->
+gapminder_2002_europe
+
+
 gapminder_2002 %>% 
   count(continent) ->
 gapminder_continent_count
 ```
 
-# Build 2002 wealth v. life exp
+# Build 2002 wealth v. life exp, observations are countries
 
 ```{r}
 

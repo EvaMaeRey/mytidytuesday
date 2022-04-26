@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>A ggplot2 grammar primer</title>
+    <title>Speaking ggplot2</title>
     <meta charset="utf-8" />
     <meta name="author" content="Dr. Evangeline Reynolds" />
     <script src="libs/header-attrs-2.6/header-attrs.js"></script>
@@ -18,9 +18,9 @@ class: inverse, left, bottom
 background-image: url(https://images.unsplash.com/photo-1543286386-713bdd548da4?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80)
 background-size: cover
 
-# .Large[A ggplot2 grammar primer]
+# .Large[Speaking ggplot2]
 
-## .small[Ideas for learning, teaching, and using ggplot2 effectively]
+## .small[Ideas for learning, teaching, and using ggplot2]
 #### .tiny[Dr. Evangeline Reynolds | 2022-04-26 |Image credit: William Iven, Upsplash]
 
 
@@ -86,17 +86,26 @@ from Claus Wilke's fundamentals of data visualization https://clauswilke.com/dat
 
 ---
 
-###  *Patterns* are identified with visual 'pre-attentive processing' 
+##  *Patterns* are identified with visual 'pre-attentive processing' 
 
 --
 
-### Uber-fast identification of relationships that you might never see in tabular form
+## Uber-fast identification of relationships that you might never see in tabular form
+
+--
+
+# Fast pattern discovery
+
+--
+
+# Fast pattern communication
 
 ---
 
 # Back to ggplot2. What's the fuss?
 
 --
+Hadley Wickham, ggplot2 author on it's motivation:
 
 &gt; ### And, you know, I'd get a dataset. And, *in my head I could very clearly kind of picture*, I want to put this on the x-axis. Let's put this on the y-axis, draw a line, put some points here, break it up by this variable. 
 
@@ -104,11 +113,11 @@ from Claus Wilke's fundamentals of data visualization https://clauswilke.com/dat
 
 &gt; ### And then, like, getting that vision out of my head, and into reality, it's just really, really hard. Just, like, felt harder than it should be. Like, there's a lot of custom programming involved, 
 
---
+---
 
 &gt; ### where I just felt, like, to me, I just wanted to say, like, you know, *this is what I'm thinking, this is how I'm picturing this plot. Like you're the computer 'Go and do it'.* 
 
----
+--
 
 &gt; ### ... and I'd also been reading about the Grammar of Graphics by Leland Wilkinson, I got to meet him a couple of times and ... I was, like, this book has been, like, written for me. 
 
@@ -135,7 +144,7 @@ https://www.trifacta.com/podcast/tidy-data-with-hadley-wickham/
 
 --
 
-# It lets you 'speak your plot into existance'. (Thomas Lin Pederson?) 
+# It lets you *'speak your plot into existance'*. (Thomas Lin Pederson?) 
 
 --
 
@@ -166,12 +175,6 @@ Wilkinson asserted that if data visualization packages were created using a sepa
 --
 
 But the focus of this talk is ... 'speaking your plot into existance'
-
-
-
-
-
-
 
 ---
 class: center, middle
@@ -286,7 +289,7 @@ Third wave data visualization, Meeks: https://www.youtube.com/watch?v=itChfcTx7a
 
 ---
 
-### I remember in my English/Arabic/Spanish/German/Chinese classes, that Grammar lessons just suck!
+### 'I remember in my English/Arabic/Spanish/German/Chinese classes, that Grammar lessons just suck!'
 
 --
 
@@ -338,11 +341,6 @@ just this little change puts us in a totally frame of mind!
 
 ## Elements of the Grammar of Graphics (choices)
 
-
-```r
-knitr::include_graphics("../../../teaching/lecture_topics/images_for_lecture/wilkinson_layers_grammar_of_graphics.png")
-```
-
 &lt;img src="../../../teaching/lecture_topics/images_for_lecture/wilkinson_layers_grammar_of_graphics.png" width="957" /&gt;
 
 ---
@@ -387,29 +385,12 @@ knitr::include_graphics("../../../teaching/lecture_topics/images_for_lecture/wil
 
 - greetings: theme (plot look and feel)
 
---
-
-full grammar guide:  https://evamaerey.github.io/ggplot2_grammar_guide/about
-
----
-
-What are the variables that are represented in the data visualization?
-
---
-
-What are the *aesthetics* (visual channels) are used to represent variables?
-
---
-
-What are the aesthetic mappings (variable  &lt;-&gt; aesthetic pairings)
-
-
 
 
 ---
 class: center, middle, inverse
 
-# In your head, be Hans Rosling!
+# In your head, think 'Hans Rosling'!
 
 ---
 class: center, middle, inverse
@@ -420,7 +401,7 @@ class: center, middle, inverse
 class: center, middle, inverse
 
 
-# Give full voice to the decisions that you are making as you learn/teach/create.
+# Give full voice to the decisions that you are making as you learn/teach/create your plot!
 
 
 ---
@@ -440,7 +421,7 @@ class: center, middle, inverse
 ---
 
 
-# Slide with unsubstantiated claims about language learning needing repetition and 'out loud' practice. 
+# Placeholder slide with claims about language learning needing repetition and 'out loud' practice. 
 
 ---
 
@@ -455,6 +436,11 @@ class: center, middle, inverse
 --
 
 At least when learning/teaching.
+
+--
+
+And maybe all the time.
+
 
 
 
@@ -1867,27 +1853,26 @@ ggplot(data = gapminder_2002) +
 
 
 
-
 ---
 
-# You promised me tricks and tips!!
+### 'I'm already pro, I came for tricks and tips...'
+
+
+Lots of annotation strategies (still grammatical!), that feels tricky; people love faceting with shadow data of full data...
+![](images/paste-53E41027.png)
 
 https://evamaerey.github.io/ggplot2_grammar_guide/about
 
-lot's of annotation strategies
-
-
-![](images/paste-53E41027.png)
-
-
 ---
 
-# Last slide: ggplot2::last_plot()
+## Last slide: ggplot2::last_plot()
+
+### "Here we go..."
 
 
 ```r
-ggplot(data = gapminder_2002) +
-  aes(y = lifeExp)
+ggplot(data = gapminder_2002) + 
+  NULL
 ```
 
 ![](ggplot2_grammar_primer_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
@@ -1895,37 +1880,588 @@ ggplot(data = gapminder_2002) +
 
 ---
 
-# Last slide: ggplot2::last_plot()
+## Last slide: ggplot2::last_plot()
+
+### "On the y axis life expectancy..."
 
 
 ```r
-last_plot() + aes(x = gdpPercap)
+ggplot(data = gapminder_2002) +
+  aes(y = lifeExp)
 ```
 
 ![](ggplot2_grammar_primer_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
 
 ---
 
-# Last slide: ggplot2::last_plot()
+## Last slide: ggplot2::last_plot()
+
+### "On the x axis gdp per capita..."
+
 
 
 ```r
-last_plot() + aes(x = gdpPercap)
+last_plot() + 
+  aes(x = gdpPercap)
 ```
 
 ![](ggplot2_grammar_primer_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
 
 ---
 
-# Last slide: ggplot2::last_plot()
+## Last slide: ggplot2::last_plot()
+
+### "Africa red, Americas yellow, Asia green..."
 
 
 ```r
-last_plot() + geom_point()
+last_plot() + 
+  geom_point() + aes(color = continent)
 ```
 
 ![](ggplot2_grammar_primer_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
 
+
+
+---
+
+## Last slide: ggplot2::last_plot()
+
+### The size of the country bubble shows the size of the population.
+
+
+
+```r
+last_plot() + 
+  aes(size = pop)
+```
+
+![](ggplot2_grammar_primer_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+
+---
+
+# Epilogue... 
+
+## grudgingly, the animation 
+
+--
+
+## ... I think this is kind of a distraction from the many other reasons Hans Rosling's talk is so awesome... the animation is cool ... but there's so much more!
+
+---
+
+count: false
+ 
+
+.panel1-grumpy-auto[
+
+```r
+*options(gganimate.nframes = 50)
+```
+]
+ 
+.panel2-grumpy-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-grumpy-auto[
+
+```r
+options(gganimate.nframes = 50)
+*library(tidyverse)
+```
+]
+ 
+.panel2-grumpy-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-grumpy-auto[
+
+```r
+options(gganimate.nframes = 50)
+library(tidyverse)
+*library(gapminder)
+```
+]
+ 
+.panel2-grumpy-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-grumpy-auto[
+
+```r
+options(gganimate.nframes = 50)
+library(tidyverse)
+library(gapminder)
+*ggplot(data = gapminder)
+```
+]
+ 
+.panel2-grumpy-auto[
+![](ggplot2_grammar_primer_files/figure-html/grumpy_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-grumpy-auto[
+
+```r
+options(gganimate.nframes = 50)
+library(tidyverse)
+library(gapminder)
+ggplot(data = gapminder) +
+* facet_wrap(facets = vars(year))
+```
+]
+ 
+.panel2-grumpy-auto[
+![](ggplot2_grammar_primer_files/figure-html/grumpy_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-grumpy-auto[
+
+```r
+options(gganimate.nframes = 50)
+library(tidyverse)
+library(gapminder)
+ggplot(data = gapminder) +
+  facet_wrap(facets = vars(year)) +
+* aes(x = gdpPercap)
+```
+]
+ 
+.panel2-grumpy-auto[
+![](ggplot2_grammar_primer_files/figure-html/grumpy_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-grumpy-auto[
+
+```r
+options(gganimate.nframes = 50)
+library(tidyverse)
+library(gapminder)
+ggplot(data = gapminder) +
+  facet_wrap(facets = vars(year)) +
+  aes(x = gdpPercap) +
+* aes(y = lifeExp)
+```
+]
+ 
+.panel2-grumpy-auto[
+![](ggplot2_grammar_primer_files/figure-html/grumpy_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-grumpy-auto[
+
+```r
+options(gganimate.nframes = 50)
+library(tidyverse)
+library(gapminder)
+ggplot(data = gapminder) +
+  facet_wrap(facets = vars(year)) +
+  aes(x = gdpPercap) +
+  aes(y = lifeExp) +
+* geom_point()
+```
+]
+ 
+.panel2-grumpy-auto[
+![](ggplot2_grammar_primer_files/figure-html/grumpy_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-grumpy-auto[
+
+```r
+options(gganimate.nframes = 50)
+library(tidyverse)
+library(gapminder)
+ggplot(data = gapminder) +
+  facet_wrap(facets = vars(year)) +
+  aes(x = gdpPercap) +
+  aes(y = lifeExp) +
+  geom_point() +
+* aes(color = continent)
+```
+]
+ 
+.panel2-grumpy-auto[
+![](ggplot2_grammar_primer_files/figure-html/grumpy_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-grumpy-auto[
+
+```r
+options(gganimate.nframes = 50)
+library(tidyverse)
+library(gapminder)
+ggplot(data = gapminder) +
+  facet_wrap(facets = vars(year)) +
+  aes(x = gdpPercap) +
+  aes(y = lifeExp) +
+  geom_point() +
+  aes(color = continent) +
+* aes(size = pop)
+```
+]
+ 
+.panel2-grumpy-auto[
+![](ggplot2_grammar_primer_files/figure-html/grumpy_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-grumpy-auto[
+
+```r
+options(gganimate.nframes = 50)
+library(tidyverse)
+library(gapminder)
+ggplot(data = gapminder) +
+  facet_wrap(facets = vars(year)) +
+  aes(x = gdpPercap) +
+  aes(y = lifeExp) +
+  geom_point() +
+  aes(color = continent) +
+  aes(size = pop) +
+* scale_x_log10()
+```
+]
+ 
+.panel2-grumpy-auto[
+![](ggplot2_grammar_primer_files/figure-html/grumpy_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-grumpy-auto[
+
+```r
+options(gganimate.nframes = 50)
+library(tidyverse)
+library(gapminder)
+ggplot(data = gapminder) +
+  facet_wrap(facets = vars(year)) +
+  aes(x = gdpPercap) +
+  aes(y = lifeExp) +
+  geom_point() +
+  aes(color = continent) +
+  aes(size = pop) +
+  scale_x_log10() +
+* facet_null()
+```
+]
+ 
+.panel2-grumpy-auto[
+![](ggplot2_grammar_primer_files/figure-html/grumpy_auto_12_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-grumpy-auto[
+
+```r
+options(gganimate.nframes = 50)
+library(tidyverse)
+library(gapminder)
+ggplot(data = gapminder) +
+  facet_wrap(facets = vars(year)) +
+  aes(x = gdpPercap) +
+  aes(y = lifeExp) +
+  geom_point() +
+  aes(color = continent) +
+  aes(size = pop) +
+  scale_x_log10() +
+  facet_null() +
+* aes(group = country)   # needed for connecting between years
+```
+]
+ 
+.panel2-grumpy-auto[
+![](ggplot2_grammar_primer_files/figure-html/grumpy_auto_13_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-grumpy-auto[
+
+```r
+options(gganimate.nframes = 50)
+library(tidyverse)
+library(gapminder)
+ggplot(data = gapminder) +
+  facet_wrap(facets = vars(year)) +
+  aes(x = gdpPercap) +
+  aes(y = lifeExp) +
+  geom_point() +
+  aes(color = continent) +
+  aes(size = pop) +
+  scale_x_log10() +
+  facet_null() +
+  aes(group = country) +  # needed for connecting between years
+* gganimate::transition_reveal(along = year)
+```
+]
+ 
+.panel2-grumpy-auto[
+![](ggplot2_grammar_primer_files/figure-html/grumpy_auto_14_output-1.gif)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-grumpy-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-grumpy-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-grumpy-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+class: inverse, center, middle
+
+# End
+
+---
+
+count: false
+ 
+## LIVE DEMO Time permitting, What's this plot called where area is gdp? It doesn't matter if we know or not, we can still imagine and build it
+.panel1-custom-auto[
+
+```r
+*gapminder_2002_europe
+```
+]
+ 
+.panel2-custom-auto[
+
+```
+# A tibble: 30 × 6
+   country                continent  year lifeExp      pop gdpPercap
+   &lt;fct&gt;                  &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+ 1 Albania                Europe     2002    75.7  3508512     4604.
+ 2 Austria                Europe     2002    79.0  8148312    32418.
+ 3 Belgium                Europe     2002    78.3 10311970    30486.
+ 4 Bosnia and Herzegovina Europe     2002    74.1  4165416     6019.
+ 5 Bulgaria               Europe     2002    72.1  7661799     7697.
+ 6 Croatia                Europe     2002    74.9  4481020    11628.
+ 7 Czech Republic         Europe     2002    75.5 10256295    17596.
+ 8 Denmark                Europe     2002    77.2  5374693    32167.
+ 9 Finland                Europe     2002    78.4  5193039    28205.
+10 France                 Europe     2002    79.6 59925035    28926.
+# … with 20 more rows
+```
+]
+
+---
+count: false
+ 
+## LIVE DEMO Time permitting, What's this plot called where area is gdp? It doesn't matter if we know or not, we can still imagine and build it
+.panel1-custom-auto[
+
+```r
+gapminder_2002_europe %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-custom-auto[
+![](ggplot2_grammar_primer_files/figure-html/custom_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+## LIVE DEMO Time permitting, What's this plot called where area is gdp? It doesn't matter if we know or not, we can still imagine and build it
+.panel1-custom-auto[
+
+```r
+gapminder_2002_europe %&gt;%
+  ggplot() +
+* aes(x = pop)
+```
+]
+ 
+.panel2-custom-auto[
+![](ggplot2_grammar_primer_files/figure-html/custom_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+## LIVE DEMO Time permitting, What's this plot called where area is gdp? It doesn't matter if we know or not, we can still imagine and build it
+.panel1-custom-auto[
+
+```r
+gapminder_2002_europe %&gt;%
+  ggplot() +
+  aes(x = pop) +
+* aes(y = gdpPercap)
+```
+]
+ 
+.panel2-custom-auto[
+![](ggplot2_grammar_primer_files/figure-html/custom_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+## LIVE DEMO Time permitting, What's this plot called where area is gdp? It doesn't matter if we know or not, we can still imagine and build it
+.panel1-custom-auto[
+
+```r
+gapminder_2002_europe %&gt;%
+  ggplot() +
+  aes(x = pop) +
+  aes(y = gdpPercap) +
+* geom_point()
+```
+]
+ 
+.panel2-custom-auto[
+![](ggplot2_grammar_primer_files/figure-html/custom_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+## LIVE DEMO Time permitting, What's this plot called where area is gdp? It doesn't matter if we know or not, we can still imagine and build it
+.panel1-custom-auto[
+
+```r
+gapminder_2002_europe %&gt;%
+  ggplot() +
+  aes(x = pop) +
+  aes(y = gdpPercap) +
+  geom_point() +
+* geom_rect(aes(xmin = 0, xmax = pop,
+*               ymin = 0, ymax = gdpPercap),
+*           alpha = .5)
+```
+]
+ 
+.panel2-custom-auto[
+![](ggplot2_grammar_primer_files/figure-html/custom_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+## LIVE DEMO Time permitting, What's this plot called where area is gdp? It doesn't matter if we know or not, we can still imagine and build it
+.panel1-custom-auto[
+
+```r
+gapminder_2002_europe %&gt;%
+  ggplot() +
+  aes(x = pop) +
+  aes(y = gdpPercap) +
+  geom_point() +
+  geom_rect(aes(xmin = 0, xmax = pop,
+                ymin = 0, ymax = gdpPercap),
+            alpha = .5) +
+* facet_wrap(facets = vars(country))
+```
+]
+ 
+.panel2-custom-auto[
+![](ggplot2_grammar_primer_files/figure-html/custom_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-custom-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-custom-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-custom-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+`
 
 
 
@@ -1933,7 +2469,7 @@ last_plot() + geom_point()
 &lt;!-- adjust font size in this css code chunk, currently 80 --&gt;
 
 &lt;style type="text/css"&gt;
-.remark-code{line-height: 1.5; font-size: 80%}
+.remark-code{line-height: 1.5; font-size: 100%}
 
 @media print {
   .has-continuation {
