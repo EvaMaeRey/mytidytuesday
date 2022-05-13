@@ -1,0 +1,3278 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Easy Geom Recipes (Exploded version)</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gina Reynold, Morgan Brown" />
+    <script src="libs/header-attrs-2.6/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Easy Geom Recipes (Exploded version)
+## Using flipbookr and xaringan
+### Gina Reynold, Morgan Brown
+
+---
+
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 70%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+&lt;/style&gt;
+
+
+
+
+Using ggplot2 has been described as writing 'graphical poems'.
+&lt;!-- and a system that lets us 'speak our plot into existence'.  --&gt;
+But we may feel at a loss for 'words' when functions we'd like to have don't exist.  The ggplot2 extension system allows us to build new 'vocabulary' for fluent expression.  
+
+An exciting extension mechanism is inheriting from existing geoms.  Particularly important to statisticians and mathematicians is writing new geom_* that perform and visualize calculations.  
+
+To get your feet wet in this world and give you a taste of patterns for geom extension, we provide three basic examples of the geoms_ that inherit from *existing* geoms (point, text, segment, etc) along with practice exercises.  With such geoms, calculation is done under the hood by the ggplot2 system; with these geom, you can write new graphical poems with exciting new graphical 'words'! 
+
+This tutorial is intended for individuals who already have a working knowledge of the grammar of ggplot2, but may like to build a richer vocabulary for themselves.  
+
+---
+
+
+count: false
+ 
+
+.panel1-setup-auto[
+
+```r
+*knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
+```
+]
+ 
+.panel2-setup-auto[
+
+]
+
+&lt;style&gt;
+.panel1-setup-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-setup-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-setup-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+class: inverse, middle, center
+
+# Recipe #1: `geom_point_xy_medians()`
+
+--
+
+- This will be a point at the median of x and y
+
+---
+class: inverse, middle, center
+
+## Step 0: use base ggplot2 to get the job done
+
+---
+
+
+count: false
+ 
+
+.panel1-penguins-auto[
+
+```r
+*library(tidyverse)
+```
+]
+ 
+.panel2-penguins-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-penguins-auto[
+
+```r
+library(tidyverse)
+*library(palmerpenguins)
+```
+]
+ 
+.panel2-penguins-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-penguins-auto[
+
+```r
+library(tidyverse)
+library(palmerpenguins)
+*penguins &lt;- remove_missing(penguins)
+```
+]
+ 
+.panel2-penguins-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-penguins-auto[
+
+```r
+library(tidyverse)
+library(palmerpenguins)
+penguins &lt;- remove_missing(penguins)
+
+
+*penguins_medians &lt;- penguins
+```
+]
+ 
+.panel2-penguins-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-penguins-auto[
+
+```r
+library(tidyverse)
+library(palmerpenguins)
+penguins &lt;- remove_missing(penguins)
+
+
+penguins_medians &lt;- penguins %&gt;%
+* summarize(bill_length_mm_median = median(bill_length_mm),
+*           bill_depth_mm_median = median(bill_depth_mm))
+```
+]
+ 
+.panel2-penguins-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-penguins-auto[
+
+```r
+library(tidyverse)
+library(palmerpenguins)
+penguins &lt;- remove_missing(penguins)
+
+
+penguins_medians &lt;- penguins %&gt;%
+  summarize(bill_length_mm_median = median(bill_length_mm),
+            bill_depth_mm_median = median(bill_depth_mm))
+
+*penguins
+```
+]
+ 
+.panel2-penguins-auto[
+
+```
+# A tibble: 333 × 8
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g sex     year
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt;  &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750 male    2007
+ 2 Adelie  Torgersen           39.5          17.4               186        3800 female  2007
+ 3 Adelie  Torgersen           40.3          18                 195        3250 female  2007
+ 4 Adelie  Torgersen           36.7          19.3               193        3450 female  2007
+ 5 Adelie  Torgersen           39.3          20.6               190        3650 male    2007
+ 6 Adelie  Torgersen           38.9          17.8               181        3625 female  2007
+ 7 Adelie  Torgersen           39.2          19.6               195        4675 male    2007
+ 8 Adelie  Torgersen           41.1          17.6               182        3200 female  2007
+ 9 Adelie  Torgersen           38.6          21.2               191        3800 male    2007
+10 Adelie  Torgersen           34.6          21.1               198        4400 male    2007
+11 Adelie  Torgersen           36.6          17.8               185        3700 female  2007
+12 Adelie  Torgersen           38.7          19                 195        3450 female  2007
+13 Adelie  Torgersen           42.5          20.7               197        4500 male    2007
+14 Adelie  Torgersen           34.4          18.4               184        3325 female  2007
+15 Adelie  Torgersen           46            21.5               194        4200 male    2007
+16 Adelie  Biscoe              37.8          18.3               174        3400 female  2007
+17 Adelie  Biscoe              37.7          18.7               180        3600 male    2007
+18 Adelie  Biscoe              35.9          19.2               189        3800 female  2007
+19 Adelie  Biscoe              38.2          18.1               185        3950 male    2007
+20 Adelie  Biscoe              38.8          17.2               180        3800 male    2007
+21 Adelie  Biscoe              35.3          18.9               187        3800 female  2007
+22 Adelie  Biscoe              40.6          18.6               183        3550 male    2007
+23 Adelie  Biscoe              40.5          17.9               187        3200 female  2007
+24 Adelie  Biscoe              37.9          18.6               172        3150 female  2007
+25 Adelie  Biscoe              40.5          18.9               180        3950 male    2007
+26 Adelie  Dream               39.5          16.7               178        3250 female  2007
+27 Adelie  Dream               37.2          18.1               178        3900 male    2007
+28 Adelie  Dream               39.5          17.8               188        3300 female  2007
+29 Adelie  Dream               40.9          18.9               184        3900 male    2007
+30 Adelie  Dream               36.4          17                 195        3325 female  2007
+31 Adelie  Dream               39.2          21.1               196        4150 male    2007
+32 Adelie  Dream               38.8          20                 190        3950 male    2007
+33 Adelie  Dream               42.2          18.5               180        3550 female  2007
+34 Adelie  Dream               37.6          19.3               181        3300 female  2007
+35 Adelie  Dream               39.8          19.1               184        4650 male    2007
+36 Adelie  Dream               36.5          18                 182        3150 female  2007
+37 Adelie  Dream               40.8          18.4               195        3900 male    2007
+38 Adelie  Dream               36            18.5               186        3100 female  2007
+39 Adelie  Dream               44.1          19.7               196        4400 male    2007
+40 Adelie  Dream               37            16.9               185        3000 female  2007
+41 Adelie  Dream               39.6          18.8               190        4600 male    2007
+42 Adelie  Dream               41.1          19                 182        3425 male    2007
+43 Adelie  Dream               36            17.9               190        3450 female  2007
+44 Adelie  Dream               42.3          21.2               191        4150 male    2007
+45 Adelie  Biscoe              39.6          17.7               186        3500 female  2008
+46 Adelie  Biscoe              40.1          18.9               188        4300 male    2008
+47 Adelie  Biscoe              35            17.9               190        3450 female  2008
+48 Adelie  Biscoe              42            19.5               200        4050 male    2008
+49 Adelie  Biscoe              34.5          18.1               187        2900 female  2008
+50 Adelie  Biscoe              41.4          18.6               191        3700 male    2008
+51 Adelie  Biscoe              39            17.5               186        3550 female  2008
+52 Adelie  Biscoe              40.6          18.8               193        3800 male    2008
+53 Adelie  Biscoe              36.5          16.6               181        2850 female  2008
+54 Adelie  Biscoe              37.6          19.1               194        3750 male    2008
+55 Adelie  Biscoe              35.7          16.9               185        3150 female  2008
+# … with 278 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-penguins-auto[
+
+```r
+library(tidyverse)
+library(palmerpenguins)
+penguins &lt;- remove_missing(penguins)
+
+
+penguins_medians &lt;- penguins %&gt;%
+  summarize(bill_length_mm_median = median(bill_length_mm),
+            bill_depth_mm_median = median(bill_depth_mm))
+
+penguins %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-penguins-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/penguins_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-penguins-auto[
+
+```r
+library(tidyverse)
+library(palmerpenguins)
+penguins &lt;- remove_missing(penguins)
+
+
+penguins_medians &lt;- penguins %&gt;%
+  summarize(bill_length_mm_median = median(bill_length_mm),
+            bill_depth_mm_median = median(bill_depth_mm))
+
+penguins %&gt;%
+  ggplot() +
+* aes(x = bill_depth_mm)
+```
+]
+ 
+.panel2-penguins-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/penguins_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-penguins-auto[
+
+```r
+library(tidyverse)
+library(palmerpenguins)
+penguins &lt;- remove_missing(penguins)
+
+
+penguins_medians &lt;- penguins %&gt;%
+  summarize(bill_length_mm_median = median(bill_length_mm),
+            bill_depth_mm_median = median(bill_depth_mm))
+
+penguins %&gt;%
+  ggplot() +
+  aes(x = bill_depth_mm) +
+* aes(y = bill_length_mm)
+```
+]
+ 
+.panel2-penguins-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/penguins_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-penguins-auto[
+
+```r
+library(tidyverse)
+library(palmerpenguins)
+penguins &lt;- remove_missing(penguins)
+
+
+penguins_medians &lt;- penguins %&gt;%
+  summarize(bill_length_mm_median = median(bill_length_mm),
+            bill_depth_mm_median = median(bill_depth_mm))
+
+penguins %&gt;%
+  ggplot() +
+  aes(x = bill_depth_mm) +
+  aes(y = bill_length_mm) +
+* geom_point()
+```
+]
+ 
+.panel2-penguins-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/penguins_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-penguins-auto[
+
+```r
+library(tidyverse)
+library(palmerpenguins)
+penguins &lt;- remove_missing(penguins)
+
+
+penguins_medians &lt;- penguins %&gt;%
+  summarize(bill_length_mm_median = median(bill_length_mm),
+            bill_depth_mm_median = median(bill_depth_mm))
+
+penguins %&gt;%
+  ggplot() +
+  aes(x = bill_depth_mm) +
+  aes(y = bill_length_mm) +
+  geom_point() +
+* geom_point(data = penguins_medians,
+*   color = "red", size = 4,
+*            aes(x = bill_depth_mm_median,
+*                y = bill_length_mm_median))
+```
+]
+ 
+.panel2-penguins-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/penguins_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-penguins-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-penguins-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-penguins-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+class: inverse, middle, center
+
+## Step 1: computation
+
+--
+
+- define computation that ggplot2 should do for you, before plotting
+  - here it's computing a variable with labels for each observation
+- test that functionality!
+
+---
+
+
+count: false
+ 
+
+.panel1-compute_group_xy_medians-auto[
+
+```r
+*compute_group_xy_medians &lt;- function(data, scales){
+* data %&gt;%
+*   summarize(x = median(x),
+*           y = median(y))
+*} 
+```
+]
+ 
+.panel2-compute_group_xy_medians-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-compute_group_xy_medians-auto[
+
+```r
+compute_group_xy_medians &lt;- function(data, scales){
+  data %&gt;%
+    summarize(x = median(x),
+            y = median(y))
+}
+*penguins
+```
+]
+ 
+.panel2-compute_group_xy_medians-auto[
+
+```
+# A tibble: 333 × 8
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g sex     year
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt;  &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750 male    2007
+ 2 Adelie  Torgersen           39.5          17.4               186        3800 female  2007
+ 3 Adelie  Torgersen           40.3          18                 195        3250 female  2007
+ 4 Adelie  Torgersen           36.7          19.3               193        3450 female  2007
+ 5 Adelie  Torgersen           39.3          20.6               190        3650 male    2007
+ 6 Adelie  Torgersen           38.9          17.8               181        3625 female  2007
+ 7 Adelie  Torgersen           39.2          19.6               195        4675 male    2007
+ 8 Adelie  Torgersen           41.1          17.6               182        3200 female  2007
+ 9 Adelie  Torgersen           38.6          21.2               191        3800 male    2007
+10 Adelie  Torgersen           34.6          21.1               198        4400 male    2007
+11 Adelie  Torgersen           36.6          17.8               185        3700 female  2007
+12 Adelie  Torgersen           38.7          19                 195        3450 female  2007
+13 Adelie  Torgersen           42.5          20.7               197        4500 male    2007
+14 Adelie  Torgersen           34.4          18.4               184        3325 female  2007
+15 Adelie  Torgersen           46            21.5               194        4200 male    2007
+16 Adelie  Biscoe              37.8          18.3               174        3400 female  2007
+17 Adelie  Biscoe              37.7          18.7               180        3600 male    2007
+18 Adelie  Biscoe              35.9          19.2               189        3800 female  2007
+19 Adelie  Biscoe              38.2          18.1               185        3950 male    2007
+20 Adelie  Biscoe              38.8          17.2               180        3800 male    2007
+21 Adelie  Biscoe              35.3          18.9               187        3800 female  2007
+22 Adelie  Biscoe              40.6          18.6               183        3550 male    2007
+23 Adelie  Biscoe              40.5          17.9               187        3200 female  2007
+24 Adelie  Biscoe              37.9          18.6               172        3150 female  2007
+25 Adelie  Biscoe              40.5          18.9               180        3950 male    2007
+26 Adelie  Dream               39.5          16.7               178        3250 female  2007
+27 Adelie  Dream               37.2          18.1               178        3900 male    2007
+28 Adelie  Dream               39.5          17.8               188        3300 female  2007
+29 Adelie  Dream               40.9          18.9               184        3900 male    2007
+30 Adelie  Dream               36.4          17                 195        3325 female  2007
+31 Adelie  Dream               39.2          21.1               196        4150 male    2007
+32 Adelie  Dream               38.8          20                 190        3950 male    2007
+33 Adelie  Dream               42.2          18.5               180        3550 female  2007
+34 Adelie  Dream               37.6          19.3               181        3300 female  2007
+35 Adelie  Dream               39.8          19.1               184        4650 male    2007
+36 Adelie  Dream               36.5          18                 182        3150 female  2007
+37 Adelie  Dream               40.8          18.4               195        3900 male    2007
+38 Adelie  Dream               36            18.5               186        3100 female  2007
+39 Adelie  Dream               44.1          19.7               196        4400 male    2007
+40 Adelie  Dream               37            16.9               185        3000 female  2007
+41 Adelie  Dream               39.6          18.8               190        4600 male    2007
+42 Adelie  Dream               41.1          19                 182        3425 male    2007
+43 Adelie  Dream               36            17.9               190        3450 female  2007
+44 Adelie  Dream               42.3          21.2               191        4150 male    2007
+45 Adelie  Biscoe              39.6          17.7               186        3500 female  2008
+46 Adelie  Biscoe              40.1          18.9               188        4300 male    2008
+47 Adelie  Biscoe              35            17.9               190        3450 female  2008
+48 Adelie  Biscoe              42            19.5               200        4050 male    2008
+49 Adelie  Biscoe              34.5          18.1               187        2900 female  2008
+50 Adelie  Biscoe              41.4          18.6               191        3700 male    2008
+51 Adelie  Biscoe              39            17.5               186        3550 female  2008
+52 Adelie  Biscoe              40.6          18.8               193        3800 male    2008
+53 Adelie  Biscoe              36.5          16.6               181        2850 female  2008
+54 Adelie  Biscoe              37.6          19.1               194        3750 male    2008
+55 Adelie  Biscoe              35.7          16.9               185        3150 female  2008
+# … with 278 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-compute_group_xy_medians-auto[
+
+```r
+compute_group_xy_medians &lt;- function(data, scales){
+  data %&gt;%
+    summarize(x = median(x),
+            y = median(y))
+}
+penguins %&gt;%
+* rename(x = bill_depth_mm,
+*        y = bill_length_mm)
+```
+]
+ 
+.panel2-compute_group_xy_medians-auto[
+
+```
+# A tibble: 333 × 8
+   species island        y     x flipper_length_mm body_mass_g sex     year
+   &lt;fct&gt;   &lt;fct&gt;     &lt;dbl&gt; &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt;  &lt;int&gt;
+ 1 Adelie  Torgersen  39.1  18.7               181        3750 male    2007
+ 2 Adelie  Torgersen  39.5  17.4               186        3800 female  2007
+ 3 Adelie  Torgersen  40.3  18                 195        3250 female  2007
+ 4 Adelie  Torgersen  36.7  19.3               193        3450 female  2007
+ 5 Adelie  Torgersen  39.3  20.6               190        3650 male    2007
+ 6 Adelie  Torgersen  38.9  17.8               181        3625 female  2007
+ 7 Adelie  Torgersen  39.2  19.6               195        4675 male    2007
+ 8 Adelie  Torgersen  41.1  17.6               182        3200 female  2007
+ 9 Adelie  Torgersen  38.6  21.2               191        3800 male    2007
+10 Adelie  Torgersen  34.6  21.1               198        4400 male    2007
+11 Adelie  Torgersen  36.6  17.8               185        3700 female  2007
+12 Adelie  Torgersen  38.7  19                 195        3450 female  2007
+13 Adelie  Torgersen  42.5  20.7               197        4500 male    2007
+14 Adelie  Torgersen  34.4  18.4               184        3325 female  2007
+15 Adelie  Torgersen  46    21.5               194        4200 male    2007
+16 Adelie  Biscoe     37.8  18.3               174        3400 female  2007
+17 Adelie  Biscoe     37.7  18.7               180        3600 male    2007
+18 Adelie  Biscoe     35.9  19.2               189        3800 female  2007
+19 Adelie  Biscoe     38.2  18.1               185        3950 male    2007
+20 Adelie  Biscoe     38.8  17.2               180        3800 male    2007
+21 Adelie  Biscoe     35.3  18.9               187        3800 female  2007
+22 Adelie  Biscoe     40.6  18.6               183        3550 male    2007
+23 Adelie  Biscoe     40.5  17.9               187        3200 female  2007
+24 Adelie  Biscoe     37.9  18.6               172        3150 female  2007
+25 Adelie  Biscoe     40.5  18.9               180        3950 male    2007
+26 Adelie  Dream      39.5  16.7               178        3250 female  2007
+27 Adelie  Dream      37.2  18.1               178        3900 male    2007
+28 Adelie  Dream      39.5  17.8               188        3300 female  2007
+29 Adelie  Dream      40.9  18.9               184        3900 male    2007
+30 Adelie  Dream      36.4  17                 195        3325 female  2007
+31 Adelie  Dream      39.2  21.1               196        4150 male    2007
+32 Adelie  Dream      38.8  20                 190        3950 male    2007
+33 Adelie  Dream      42.2  18.5               180        3550 female  2007
+34 Adelie  Dream      37.6  19.3               181        3300 female  2007
+35 Adelie  Dream      39.8  19.1               184        4650 male    2007
+36 Adelie  Dream      36.5  18                 182        3150 female  2007
+37 Adelie  Dream      40.8  18.4               195        3900 male    2007
+38 Adelie  Dream      36    18.5               186        3100 female  2007
+39 Adelie  Dream      44.1  19.7               196        4400 male    2007
+40 Adelie  Dream      37    16.9               185        3000 female  2007
+41 Adelie  Dream      39.6  18.8               190        4600 male    2007
+42 Adelie  Dream      41.1  19                 182        3425 male    2007
+43 Adelie  Dream      36    17.9               190        3450 female  2007
+44 Adelie  Dream      42.3  21.2               191        4150 male    2007
+45 Adelie  Biscoe     39.6  17.7               186        3500 female  2008
+46 Adelie  Biscoe     40.1  18.9               188        4300 male    2008
+47 Adelie  Biscoe     35    17.9               190        3450 female  2008
+48 Adelie  Biscoe     42    19.5               200        4050 male    2008
+49 Adelie  Biscoe     34.5  18.1               187        2900 female  2008
+50 Adelie  Biscoe     41.4  18.6               191        3700 male    2008
+51 Adelie  Biscoe     39    17.5               186        3550 female  2008
+52 Adelie  Biscoe     40.6  18.8               193        3800 male    2008
+53 Adelie  Biscoe     36.5  16.6               181        2850 female  2008
+54 Adelie  Biscoe     37.6  19.1               194        3750 male    2008
+55 Adelie  Biscoe     35.7  16.9               185        3150 female  2008
+# … with 278 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-compute_group_xy_medians-auto[
+
+```r
+compute_group_xy_medians &lt;- function(data, scales){
+  data %&gt;%
+    summarize(x = median(x),
+            y = median(y))
+}
+penguins %&gt;%
+  rename(x = bill_depth_mm,
+         y = bill_length_mm) %&gt;%
+* compute_group_xy_medians()
+```
+]
+ 
+.panel2-compute_group_xy_medians-auto[
+
+```
+# A tibble: 1 × 2
+      x     y
+  &lt;dbl&gt; &lt;dbl&gt;
+1  17.3  44.5
+```
+]
+
+&lt;style&gt;
+.panel1-compute_group_xy_medians-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-compute_group_xy_medians-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-compute_group_xy_medians-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+class: inverse, middle, center
+
+## Step 2: define ggproto
+
+--
+
+- what's the naming convention for the proto object?
+- which aesthetics are required as inputs?
+- where does the function from above go?
+
+---
+
+
+count: false
+ 
+
+.panel1-StatXYMedians-auto[
+
+```r
+*StatXYMedians &lt;- ggplot2::ggproto(`_class` = "StatXYMedians",
+*                                 `_inherit` = ggplot2::Stat,
+*                                 required_aes = c("x", "y"),
+*                                 compute_group = compute_group_xy_medians)
+```
+]
+ 
+.panel2-StatXYMedians-auto[
+
+]
+
+&lt;style&gt;
+.panel1-StatXYMedians-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-StatXYMedians-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-StatXYMedians-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+class: inverse, middle, center
+
+## Step 3: define geom_* function
+
+
+--
+
+- define the stat and geom for your layer
+
+---
+
+
+count: false
+ 
+
+.panel1-geom_point_xy_medians-auto[
+
+```r
+*geom_point_xy_medians &lt;- function(mapping = NULL, data = NULL,
+*                          position = "identity", na.rm = FALSE,
+*                          show.legend = NA,
+*                          inherit.aes = TRUE, ...) {
+* ggplot2::layer(
+*   stat = StatXYMedians,  # proto object from step 2
+*   geom = ggplot2::GeomPoint,  # inherit other behavior
+*   data = data,
+*   mapping = mapping,
+*   position = position,
+*   show.legend = show.legend,
+*   inherit.aes = inherit.aes,
+*   params = list(na.rm = na.rm, ...)
+* )
+*} 
+```
+]
+ 
+.panel2-geom_point_xy_medians-auto[
+
+]
+
+&lt;style&gt;
+.panel1-geom_point_xy_medians-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-geom_point_xy_medians-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-geom_point_xy_medians-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+class: inverse, middle, center
+
+## Step 4: Enjoy! Use your function
+
+---
+
+
+count: false
+ 
+
+.panel1-enjoy_penguins-auto[
+
+```r
+*penguins
+```
+]
+ 
+.panel2-enjoy_penguins-auto[
+
+```
+# A tibble: 333 × 8
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g sex     year
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt;  &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750 male    2007
+ 2 Adelie  Torgersen           39.5          17.4               186        3800 female  2007
+ 3 Adelie  Torgersen           40.3          18                 195        3250 female  2007
+ 4 Adelie  Torgersen           36.7          19.3               193        3450 female  2007
+ 5 Adelie  Torgersen           39.3          20.6               190        3650 male    2007
+ 6 Adelie  Torgersen           38.9          17.8               181        3625 female  2007
+ 7 Adelie  Torgersen           39.2          19.6               195        4675 male    2007
+ 8 Adelie  Torgersen           41.1          17.6               182        3200 female  2007
+ 9 Adelie  Torgersen           38.6          21.2               191        3800 male    2007
+10 Adelie  Torgersen           34.6          21.1               198        4400 male    2007
+11 Adelie  Torgersen           36.6          17.8               185        3700 female  2007
+12 Adelie  Torgersen           38.7          19                 195        3450 female  2007
+13 Adelie  Torgersen           42.5          20.7               197        4500 male    2007
+14 Adelie  Torgersen           34.4          18.4               184        3325 female  2007
+15 Adelie  Torgersen           46            21.5               194        4200 male    2007
+16 Adelie  Biscoe              37.8          18.3               174        3400 female  2007
+17 Adelie  Biscoe              37.7          18.7               180        3600 male    2007
+18 Adelie  Biscoe              35.9          19.2               189        3800 female  2007
+19 Adelie  Biscoe              38.2          18.1               185        3950 male    2007
+20 Adelie  Biscoe              38.8          17.2               180        3800 male    2007
+21 Adelie  Biscoe              35.3          18.9               187        3800 female  2007
+22 Adelie  Biscoe              40.6          18.6               183        3550 male    2007
+23 Adelie  Biscoe              40.5          17.9               187        3200 female  2007
+24 Adelie  Biscoe              37.9          18.6               172        3150 female  2007
+25 Adelie  Biscoe              40.5          18.9               180        3950 male    2007
+26 Adelie  Dream               39.5          16.7               178        3250 female  2007
+27 Adelie  Dream               37.2          18.1               178        3900 male    2007
+28 Adelie  Dream               39.5          17.8               188        3300 female  2007
+29 Adelie  Dream               40.9          18.9               184        3900 male    2007
+30 Adelie  Dream               36.4          17                 195        3325 female  2007
+31 Adelie  Dream               39.2          21.1               196        4150 male    2007
+32 Adelie  Dream               38.8          20                 190        3950 male    2007
+33 Adelie  Dream               42.2          18.5               180        3550 female  2007
+34 Adelie  Dream               37.6          19.3               181        3300 female  2007
+35 Adelie  Dream               39.8          19.1               184        4650 male    2007
+36 Adelie  Dream               36.5          18                 182        3150 female  2007
+37 Adelie  Dream               40.8          18.4               195        3900 male    2007
+38 Adelie  Dream               36            18.5               186        3100 female  2007
+39 Adelie  Dream               44.1          19.7               196        4400 male    2007
+40 Adelie  Dream               37            16.9               185        3000 female  2007
+41 Adelie  Dream               39.6          18.8               190        4600 male    2007
+42 Adelie  Dream               41.1          19                 182        3425 male    2007
+43 Adelie  Dream               36            17.9               190        3450 female  2007
+44 Adelie  Dream               42.3          21.2               191        4150 male    2007
+45 Adelie  Biscoe              39.6          17.7               186        3500 female  2008
+46 Adelie  Biscoe              40.1          18.9               188        4300 male    2008
+47 Adelie  Biscoe              35            17.9               190        3450 female  2008
+48 Adelie  Biscoe              42            19.5               200        4050 male    2008
+49 Adelie  Biscoe              34.5          18.1               187        2900 female  2008
+50 Adelie  Biscoe              41.4          18.6               191        3700 male    2008
+51 Adelie  Biscoe              39            17.5               186        3550 female  2008
+52 Adelie  Biscoe              40.6          18.8               193        3800 male    2008
+53 Adelie  Biscoe              36.5          16.6               181        2850 female  2008
+54 Adelie  Biscoe              37.6          19.1               194        3750 male    2008
+55 Adelie  Biscoe              35.7          16.9               185        3150 female  2008
+# … with 278 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-enjoy_penguins-auto[
+
+```r
+penguins %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-enjoy_penguins-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/enjoy_penguins_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-enjoy_penguins-auto[
+
+```r
+penguins %&gt;%
+  ggplot()+
+* aes(x = bill_depth_mm, y = bill_length_mm)
+```
+]
+ 
+.panel2-enjoy_penguins-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/enjoy_penguins_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-enjoy_penguins-auto[
+
+```r
+penguins %&gt;%
+  ggplot()+
+  aes(x = bill_depth_mm, y = bill_length_mm)+
+* geom_point()
+```
+]
+ 
+.panel2-enjoy_penguins-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/enjoy_penguins_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-enjoy_penguins-auto[
+
+```r
+penguins %&gt;%
+  ggplot()+
+  aes(x = bill_depth_mm, y = bill_length_mm)+
+  geom_point()+
+* geom_point_xy_medians(color = "red")
+```
+]
+ 
+.panel2-enjoy_penguins-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/enjoy_penguins_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-enjoy_penguins-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-enjoy_penguins-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-enjoy_penguins-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+class: inverse, middle, center
+
+### And check out conditionality!
+
+---
+
+
+count: false
+ 
+
+.panel1-conditional_penguins-auto[
+
+```r
+*penguins
+```
+]
+ 
+.panel2-conditional_penguins-auto[
+
+```
+# A tibble: 333 × 8
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g sex     year
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt;  &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750 male    2007
+ 2 Adelie  Torgersen           39.5          17.4               186        3800 female  2007
+ 3 Adelie  Torgersen           40.3          18                 195        3250 female  2007
+ 4 Adelie  Torgersen           36.7          19.3               193        3450 female  2007
+ 5 Adelie  Torgersen           39.3          20.6               190        3650 male    2007
+ 6 Adelie  Torgersen           38.9          17.8               181        3625 female  2007
+ 7 Adelie  Torgersen           39.2          19.6               195        4675 male    2007
+ 8 Adelie  Torgersen           41.1          17.6               182        3200 female  2007
+ 9 Adelie  Torgersen           38.6          21.2               191        3800 male    2007
+10 Adelie  Torgersen           34.6          21.1               198        4400 male    2007
+11 Adelie  Torgersen           36.6          17.8               185        3700 female  2007
+12 Adelie  Torgersen           38.7          19                 195        3450 female  2007
+13 Adelie  Torgersen           42.5          20.7               197        4500 male    2007
+14 Adelie  Torgersen           34.4          18.4               184        3325 female  2007
+15 Adelie  Torgersen           46            21.5               194        4200 male    2007
+16 Adelie  Biscoe              37.8          18.3               174        3400 female  2007
+17 Adelie  Biscoe              37.7          18.7               180        3600 male    2007
+18 Adelie  Biscoe              35.9          19.2               189        3800 female  2007
+19 Adelie  Biscoe              38.2          18.1               185        3950 male    2007
+20 Adelie  Biscoe              38.8          17.2               180        3800 male    2007
+21 Adelie  Biscoe              35.3          18.9               187        3800 female  2007
+22 Adelie  Biscoe              40.6          18.6               183        3550 male    2007
+23 Adelie  Biscoe              40.5          17.9               187        3200 female  2007
+24 Adelie  Biscoe              37.9          18.6               172        3150 female  2007
+25 Adelie  Biscoe              40.5          18.9               180        3950 male    2007
+26 Adelie  Dream               39.5          16.7               178        3250 female  2007
+27 Adelie  Dream               37.2          18.1               178        3900 male    2007
+28 Adelie  Dream               39.5          17.8               188        3300 female  2007
+29 Adelie  Dream               40.9          18.9               184        3900 male    2007
+30 Adelie  Dream               36.4          17                 195        3325 female  2007
+31 Adelie  Dream               39.2          21.1               196        4150 male    2007
+32 Adelie  Dream               38.8          20                 190        3950 male    2007
+33 Adelie  Dream               42.2          18.5               180        3550 female  2007
+34 Adelie  Dream               37.6          19.3               181        3300 female  2007
+35 Adelie  Dream               39.8          19.1               184        4650 male    2007
+36 Adelie  Dream               36.5          18                 182        3150 female  2007
+37 Adelie  Dream               40.8          18.4               195        3900 male    2007
+38 Adelie  Dream               36            18.5               186        3100 female  2007
+39 Adelie  Dream               44.1          19.7               196        4400 male    2007
+40 Adelie  Dream               37            16.9               185        3000 female  2007
+41 Adelie  Dream               39.6          18.8               190        4600 male    2007
+42 Adelie  Dream               41.1          19                 182        3425 male    2007
+43 Adelie  Dream               36            17.9               190        3450 female  2007
+44 Adelie  Dream               42.3          21.2               191        4150 male    2007
+45 Adelie  Biscoe              39.6          17.7               186        3500 female  2008
+46 Adelie  Biscoe              40.1          18.9               188        4300 male    2008
+47 Adelie  Biscoe              35            17.9               190        3450 female  2008
+48 Adelie  Biscoe              42            19.5               200        4050 male    2008
+49 Adelie  Biscoe              34.5          18.1               187        2900 female  2008
+50 Adelie  Biscoe              41.4          18.6               191        3700 male    2008
+51 Adelie  Biscoe              39            17.5               186        3550 female  2008
+52 Adelie  Biscoe              40.6          18.8               193        3800 male    2008
+53 Adelie  Biscoe              36.5          16.6               181        2850 female  2008
+54 Adelie  Biscoe              37.6          19.1               194        3750 male    2008
+55 Adelie  Biscoe              35.7          16.9               185        3150 female  2008
+# … with 278 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-conditional_penguins-auto[
+
+```r
+penguins %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-conditional_penguins-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/conditional_penguins_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-conditional_penguins-auto[
+
+```r
+penguins %&gt;%
+  ggplot()+
+* aes(x = bill_depth_mm,
+*     y = bill_length_mm,
+*     color = species)
+```
+]
+ 
+.panel2-conditional_penguins-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/conditional_penguins_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-conditional_penguins-auto[
+
+```r
+penguins %&gt;%
+  ggplot()+
+  aes(x = bill_depth_mm,
+      y = bill_length_mm,
+      color = species)+
+* geom_point()
+```
+]
+ 
+.panel2-conditional_penguins-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/conditional_penguins_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-conditional_penguins-auto[
+
+```r
+penguins %&gt;%
+  ggplot()+
+  aes(x = bill_depth_mm,
+      y = bill_length_mm,
+      color = species)+
+  geom_point()+
+* geom_point_xy_medians(size = 4)
+```
+]
+ 
+.panel2-conditional_penguins-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/conditional_penguins_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-conditional_penguins-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-conditional_penguins-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-conditional_penguins-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+## Now you ...
+
+### Create the function `geom_point_xy_means()`.  
+
+---
+class: inverse, middle, center
+
+# Recipe #2:  `geom_label_id()`
+
+---
+class: inverse, middle, center
+
+## Step 1: computation
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-compute_group_row_number-auto[
+
+```r
+# you won't use the scales argument, but ggplot will later
+*compute_group_row_number &lt;- function(data, scales){
+
+* data %&gt;%
+# add an additional column called label
+# the geom we inherit from requires the label aesthetic
+*   mutate(label = 1:n())
+
+*} 
+```
+]
+ 
+.panel2-compute_group_row_number-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-compute_group_row_number-auto[
+
+```r
+# you won't use the scales argument, but ggplot will later
+compute_group_row_number &lt;- function(data, scales){
+
+  data %&gt;%
+# add an additional column called label
+# the geom we inherit from requires the label aesthetic
+    mutate(label = 1:n())
+
+}
+
+# step 1b test the computation function
+*cars
+```
+]
+ 
+.panel2-compute_group_row_number-auto[
+
+```
+   speed dist
+1      4    2
+2      4   10
+3      7    4
+4      7   22
+5      8   16
+6      9   10
+7     10   18
+8     10   26
+9     10   34
+10    11   17
+11    11   28
+12    12   14
+13    12   20
+14    12   24
+15    12   28
+16    13   26
+17    13   34
+18    13   34
+19    13   46
+20    14   26
+21    14   36
+22    14   60
+23    14   80
+24    15   20
+25    15   26
+26    15   54
+27    16   32
+28    16   40
+29    17   32
+30    17   40
+31    17   50
+32    18   42
+33    18   56
+34    18   76
+35    18   84
+36    19   36
+37    19   46
+38    19   68
+39    20   32
+40    20   48
+41    20   52
+42    20   56
+43    20   64
+44    22   66
+45    23   54
+46    24   70
+47    24   92
+48    24   93
+49    24  120
+50    25   85
+```
+]
+
+---
+count: false
+ 
+
+.panel1-compute_group_row_number-auto[
+
+```r
+# you won't use the scales argument, but ggplot will later
+compute_group_row_number &lt;- function(data, scales){
+
+  data %&gt;%
+# add an additional column called label
+# the geom we inherit from requires the label aesthetic
+    mutate(label = 1:n())
+
+}
+
+# step 1b test the computation function
+cars %&gt;%
+# input must have required aesthetic inputs as columns
+* rename(x = speed, y = dist)
+```
+]
+ 
+.panel2-compute_group_row_number-auto[
+
+```
+    x   y
+1   4   2
+2   4  10
+3   7   4
+4   7  22
+5   8  16
+6   9  10
+7  10  18
+8  10  26
+9  10  34
+10 11  17
+11 11  28
+12 12  14
+13 12  20
+14 12  24
+15 12  28
+16 13  26
+17 13  34
+18 13  34
+19 13  46
+20 14  26
+21 14  36
+22 14  60
+23 14  80
+24 15  20
+25 15  26
+26 15  54
+27 16  32
+28 16  40
+29 17  32
+30 17  40
+31 17  50
+32 18  42
+33 18  56
+34 18  76
+35 18  84
+36 19  36
+37 19  46
+38 19  68
+39 20  32
+40 20  48
+41 20  52
+42 20  56
+43 20  64
+44 22  66
+45 23  54
+46 24  70
+47 24  92
+48 24  93
+49 24 120
+50 25  85
+```
+]
+
+---
+count: false
+ 
+
+.panel1-compute_group_row_number-auto[
+
+```r
+# you won't use the scales argument, but ggplot will later
+compute_group_row_number &lt;- function(data, scales){
+
+  data %&gt;%
+# add an additional column called label
+# the geom we inherit from requires the label aesthetic
+    mutate(label = 1:n())
+
+}
+
+# step 1b test the computation function
+cars %&gt;%
+# input must have required aesthetic inputs as columns
+  rename(x = speed, y = dist) %&gt;%
+* compute_group_row_number()
+```
+]
+ 
+.panel2-compute_group_row_number-auto[
+
+```
+    x   y label
+1   4   2     1
+2   4  10     2
+3   7   4     3
+4   7  22     4
+5   8  16     5
+6   9  10     6
+7  10  18     7
+8  10  26     8
+9  10  34     9
+10 11  17    10
+11 11  28    11
+12 12  14    12
+13 12  20    13
+14 12  24    14
+15 12  28    15
+16 13  26    16
+17 13  34    17
+18 13  34    18
+19 13  46    19
+20 14  26    20
+21 14  36    21
+22 14  60    22
+23 14  80    23
+24 15  20    24
+25 15  26    25
+26 15  54    26
+27 16  32    27
+28 16  40    28
+29 17  32    29
+30 17  40    30
+31 17  50    31
+32 18  42    32
+33 18  56    33
+34 18  76    34
+35 18  84    35
+36 19  36    36
+37 19  46    37
+38 19  68    38
+39 20  32    39
+40 20  48    40
+41 20  52    41
+42 20  56    42
+43 20  64    43
+44 22  66    44
+45 23  54    45
+46 24  70    46
+47 24  92    47
+48 24  93    48
+49 24 120    49
+50 25  85    50
+```
+]
+
+---
+count: false
+ 
+
+.panel1-compute_group_row_number-auto[
+
+```r
+# you won't use the scales argument, but ggplot will later
+compute_group_row_number &lt;- function(data, scales){
+
+  data %&gt;%
+# add an additional column called label
+# the geom we inherit from requires the label aesthetic
+    mutate(label = 1:n())
+
+}
+
+# step 1b test the computation function
+cars %&gt;%
+# input must have required aesthetic inputs as columns
+  rename(x = speed, y = dist) %&gt;%
+  compute_group_row_number() %&gt;%
+* head()
+```
+]
+ 
+.panel2-compute_group_row_number-auto[
+
+```
+  x  y label
+1 4  2     1
+2 4 10     2
+3 7  4     3
+4 7 22     4
+5 8 16     5
+6 9 10     6
+```
+]
+
+&lt;style&gt;
+.panel1-compute_group_row_number-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-compute_group_row_number-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-compute_group_row_number-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+class: inverse, middle, center
+
+## Step 2: define ggproto
+
+
+---
+
+
+count: false
+ 
+
+.panel1-StatRownumber-auto[
+
+```r
+*StatRownumber &lt;- ggplot2::ggproto(`_class` = "StatRownumber",
+*                                 `_inherit` = ggplot2::Stat,
+*                                 required_aes = c("x", "y"),
+*                                 compute_group = compute_group_row_number)
+```
+]
+ 
+.panel2-StatRownumber-auto[
+
+]
+
+&lt;style&gt;
+.panel1-StatRownumber-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-StatRownumber-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-StatRownumber-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+class: inverse, middle, center
+
+## Step 3: define geom_* function
+
+---
+
+
+count: false
+ 
+
+.panel1-geom_label_row_number-auto[
+
+```r
+*geom_label_row_number &lt;- function(mapping = NULL, data = NULL,
+*                          position = "identity", na.rm = FALSE,
+*                          show.legend = NA,
+*                          inherit.aes = TRUE, ...) {
+* ggplot2::layer(
+*   stat = StatRownumber,  # proto object from Step 2
+*   geom = ggplot2::GeomLabel,  # inherit other behavior
+*   data = data,
+*   mapping = mapping,
+*   position = position,
+*   show.legend = show.legend,
+*   inherit.aes = inherit.aes,
+*   params = list(na.rm = na.rm, ...)
+* )
+*} 
+```
+]
+ 
+.panel2-geom_label_row_number-auto[
+
+]
+
+&lt;style&gt;
+.panel1-geom_label_row_number-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-geom_label_row_number-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-geom_label_row_number-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+class: inverse, middle, center
+
+## Step 4: Enjoy! Use your function
+
+---
+
+
+count: false
+ 
+
+.panel1-enjoy_again-auto[
+
+```r
+*cars
+```
+]
+ 
+.panel2-enjoy_again-auto[
+
+```
+   speed dist
+1      4    2
+2      4   10
+3      7    4
+4      7   22
+5      8   16
+6      9   10
+7     10   18
+8     10   26
+9     10   34
+10    11   17
+11    11   28
+12    12   14
+13    12   20
+14    12   24
+15    12   28
+16    13   26
+17    13   34
+18    13   34
+19    13   46
+20    14   26
+21    14   36
+22    14   60
+23    14   80
+24    15   20
+25    15   26
+26    15   54
+27    16   32
+28    16   40
+29    17   32
+30    17   40
+31    17   50
+32    18   42
+33    18   56
+34    18   76
+35    18   84
+36    19   36
+37    19   46
+38    19   68
+39    20   32
+40    20   48
+41    20   52
+42    20   56
+43    20   64
+44    22   66
+45    23   54
+46    24   70
+47    24   92
+48    24   93
+49    24  120
+50    25   85
+```
+]
+
+---
+count: false
+ 
+
+.panel1-enjoy_again-auto[
+
+```r
+cars %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-enjoy_again-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/enjoy_again_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-enjoy_again-auto[
+
+```r
+cars %&gt;%
+  ggplot() +
+* aes(x = speed, y = dist)
+```
+]
+ 
+.panel2-enjoy_again-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/enjoy_again_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-enjoy_again-auto[
+
+```r
+cars %&gt;%
+  ggplot() +
+  aes(x = speed, y = dist) +
+* geom_point()
+```
+]
+ 
+.panel2-enjoy_again-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/enjoy_again_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-enjoy_again-auto[
+
+```r
+cars %&gt;%
+  ggplot() +
+  aes(x = speed, y = dist) +
+  geom_point() +
+* geom_label_row_number(hjust = 1.2)  # function in action
+```
+]
+ 
+.panel2-enjoy_again-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/enjoy_again_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-enjoy_again-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-enjoy_again-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-enjoy_again-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+class: inverse, middle, center
+
+### And check out conditionality!
+
+---
+
+
+count: false
+ 
+
+.panel1-conditional_compute-auto[
+
+```r
+*last_plot()
+```
+]
+ 
+.panel2-conditional_compute-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/conditional_compute_auto_01_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-conditional_compute-auto[
+
+```r
+last_plot() +
+* aes(color = dist &gt; 60)  # Computation is within group
+```
+]
+ 
+.panel2-conditional_compute-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/conditional_compute_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-conditional_compute-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-conditional_compute-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-conditional_compute-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+
+---
+
+## Now you...
+
+--
+
+### Create the function `geom_text_coordinates()`.  
+
+--
+
+- geom should label point with its coordinates '(x, y)'
+- geom should have behavior of geom_text (not geom_label)
+
+
+Hint:
+
+
+
+---
+
+# Recipe #3:  `geom_point_lm_fitted()`
+
+---
+
+## Step 0: use base ggplot2 to get the job done
+
+---
+
+
+count: false
+ 
+
+.panel1-fitted_1-auto[
+
+```r
+*model &lt;- lm(formula = bill_length_mm ~ bill_depth_mm,
+*           data = penguins)
+```
+]
+ 
+.panel2-fitted_1-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-fitted_1-auto[
+
+```r
+model &lt;- lm(formula = bill_length_mm ~ bill_depth_mm,
+            data = penguins)
+
+*penguins_w_fitted &lt;- penguins
+```
+]
+ 
+.panel2-fitted_1-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-fitted_1-auto[
+
+```r
+model &lt;- lm(formula = bill_length_mm ~ bill_depth_mm,
+            data = penguins)
+
+penguins_w_fitted &lt;- penguins %&gt;%
+* mutate(fitted = model$fitted.values)
+```
+]
+ 
+.panel2-fitted_1-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-fitted_1-auto[
+
+```r
+model &lt;- lm(formula = bill_length_mm ~ bill_depth_mm,
+            data = penguins)
+
+penguins_w_fitted &lt;- penguins %&gt;%
+  mutate(fitted = model$fitted.values)
+
+
+*penguins
+```
+]
+ 
+.panel2-fitted_1-auto[
+
+```
+# A tibble: 333 × 8
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g sex     year
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt;  &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750 male    2007
+ 2 Adelie  Torgersen           39.5          17.4               186        3800 female  2007
+ 3 Adelie  Torgersen           40.3          18                 195        3250 female  2007
+ 4 Adelie  Torgersen           36.7          19.3               193        3450 female  2007
+ 5 Adelie  Torgersen           39.3          20.6               190        3650 male    2007
+ 6 Adelie  Torgersen           38.9          17.8               181        3625 female  2007
+ 7 Adelie  Torgersen           39.2          19.6               195        4675 male    2007
+ 8 Adelie  Torgersen           41.1          17.6               182        3200 female  2007
+ 9 Adelie  Torgersen           38.6          21.2               191        3800 male    2007
+10 Adelie  Torgersen           34.6          21.1               198        4400 male    2007
+11 Adelie  Torgersen           36.6          17.8               185        3700 female  2007
+12 Adelie  Torgersen           38.7          19                 195        3450 female  2007
+13 Adelie  Torgersen           42.5          20.7               197        4500 male    2007
+14 Adelie  Torgersen           34.4          18.4               184        3325 female  2007
+15 Adelie  Torgersen           46            21.5               194        4200 male    2007
+16 Adelie  Biscoe              37.8          18.3               174        3400 female  2007
+17 Adelie  Biscoe              37.7          18.7               180        3600 male    2007
+18 Adelie  Biscoe              35.9          19.2               189        3800 female  2007
+19 Adelie  Biscoe              38.2          18.1               185        3950 male    2007
+20 Adelie  Biscoe              38.8          17.2               180        3800 male    2007
+21 Adelie  Biscoe              35.3          18.9               187        3800 female  2007
+22 Adelie  Biscoe              40.6          18.6               183        3550 male    2007
+23 Adelie  Biscoe              40.5          17.9               187        3200 female  2007
+24 Adelie  Biscoe              37.9          18.6               172        3150 female  2007
+25 Adelie  Biscoe              40.5          18.9               180        3950 male    2007
+26 Adelie  Dream               39.5          16.7               178        3250 female  2007
+27 Adelie  Dream               37.2          18.1               178        3900 male    2007
+28 Adelie  Dream               39.5          17.8               188        3300 female  2007
+29 Adelie  Dream               40.9          18.9               184        3900 male    2007
+30 Adelie  Dream               36.4          17                 195        3325 female  2007
+31 Adelie  Dream               39.2          21.1               196        4150 male    2007
+32 Adelie  Dream               38.8          20                 190        3950 male    2007
+33 Adelie  Dream               42.2          18.5               180        3550 female  2007
+34 Adelie  Dream               37.6          19.3               181        3300 female  2007
+35 Adelie  Dream               39.8          19.1               184        4650 male    2007
+36 Adelie  Dream               36.5          18                 182        3150 female  2007
+37 Adelie  Dream               40.8          18.4               195        3900 male    2007
+38 Adelie  Dream               36            18.5               186        3100 female  2007
+39 Adelie  Dream               44.1          19.7               196        4400 male    2007
+40 Adelie  Dream               37            16.9               185        3000 female  2007
+41 Adelie  Dream               39.6          18.8               190        4600 male    2007
+42 Adelie  Dream               41.1          19                 182        3425 male    2007
+43 Adelie  Dream               36            17.9               190        3450 female  2007
+44 Adelie  Dream               42.3          21.2               191        4150 male    2007
+45 Adelie  Biscoe              39.6          17.7               186        3500 female  2008
+46 Adelie  Biscoe              40.1          18.9               188        4300 male    2008
+47 Adelie  Biscoe              35            17.9               190        3450 female  2008
+48 Adelie  Biscoe              42            19.5               200        4050 male    2008
+49 Adelie  Biscoe              34.5          18.1               187        2900 female  2008
+50 Adelie  Biscoe              41.4          18.6               191        3700 male    2008
+51 Adelie  Biscoe              39            17.5               186        3550 female  2008
+52 Adelie  Biscoe              40.6          18.8               193        3800 male    2008
+53 Adelie  Biscoe              36.5          16.6               181        2850 female  2008
+54 Adelie  Biscoe              37.6          19.1               194        3750 male    2008
+55 Adelie  Biscoe              35.7          16.9               185        3150 female  2008
+# … with 278 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-fitted_1-auto[
+
+```r
+model &lt;- lm(formula = bill_length_mm ~ bill_depth_mm,
+            data = penguins)
+
+penguins_w_fitted &lt;- penguins %&gt;%
+  mutate(fitted = model$fitted.values)
+
+
+penguins %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-fitted_1-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/fitted_1_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fitted_1-auto[
+
+```r
+model &lt;- lm(formula = bill_length_mm ~ bill_depth_mm,
+            data = penguins)
+
+penguins_w_fitted &lt;- penguins %&gt;%
+  mutate(fitted = model$fitted.values)
+
+
+penguins %&gt;%
+  ggplot() +
+* aes(x = bill_depth_mm, y = bill_length_mm)
+```
+]
+ 
+.panel2-fitted_1-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/fitted_1_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fitted_1-auto[
+
+```r
+model &lt;- lm(formula = bill_length_mm ~ bill_depth_mm,
+            data = penguins)
+
+penguins_w_fitted &lt;- penguins %&gt;%
+  mutate(fitted = model$fitted.values)
+
+
+penguins %&gt;%
+  ggplot() +
+  aes(x = bill_depth_mm, y = bill_length_mm) +
+* geom_point()
+```
+]
+ 
+.panel2-fitted_1-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/fitted_1_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fitted_1-auto[
+
+```r
+model &lt;- lm(formula = bill_length_mm ~ bill_depth_mm,
+            data = penguins)
+
+penguins_w_fitted &lt;- penguins %&gt;%
+  mutate(fitted = model$fitted.values)
+
+
+penguins %&gt;%
+  ggplot() +
+  aes(x = bill_depth_mm, y = bill_length_mm) +
+  geom_point() +
+* geom_smooth(method = "lm", se = F)
+```
+]
+ 
+.panel2-fitted_1-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/fitted_1_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fitted_1-auto[
+
+```r
+model &lt;- lm(formula = bill_length_mm ~ bill_depth_mm,
+            data = penguins)
+
+penguins_w_fitted &lt;- penguins %&gt;%
+  mutate(fitted = model$fitted.values)
+
+
+penguins %&gt;%
+  ggplot() +
+  aes(x = bill_depth_mm, y = bill_length_mm) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F) +
+* geom_point(data = penguins_w_fitted,
+*            aes(y = fitted),
+*            color = "blue")
+```
+]
+ 
+.panel2-fitted_1-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/fitted_1_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-fitted_1-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-fitted_1-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-fitted_1-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+class: inverse, middle, center
+
+## Step 1: computation
+
+---
+
+
+count: false
+ 
+
+.panel1-fitted_2-auto[
+
+```r
+*compute_group_lm_fitted&lt;- function(data, scales){
+* model&lt;-lm(formula= y ~ x, data = data)
+* data %&gt;%
+*   mutate(y=model$fitted.values)
+*} 
+```
+]
+ 
+.panel2-fitted_2-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-fitted_2-auto[
+
+```r
+compute_group_lm_fitted&lt;- function(data, scales){
+  model&lt;-lm(formula= y ~ x, data = data)
+  data %&gt;%
+    mutate(y=model$fitted.values)
+}
+
+# test out the function
+*penguins
+```
+]
+ 
+.panel2-fitted_2-auto[
+
+```
+# A tibble: 333 × 8
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g sex     year
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt;  &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750 male    2007
+ 2 Adelie  Torgersen           39.5          17.4               186        3800 female  2007
+ 3 Adelie  Torgersen           40.3          18                 195        3250 female  2007
+ 4 Adelie  Torgersen           36.7          19.3               193        3450 female  2007
+ 5 Adelie  Torgersen           39.3          20.6               190        3650 male    2007
+ 6 Adelie  Torgersen           38.9          17.8               181        3625 female  2007
+ 7 Adelie  Torgersen           39.2          19.6               195        4675 male    2007
+ 8 Adelie  Torgersen           41.1          17.6               182        3200 female  2007
+ 9 Adelie  Torgersen           38.6          21.2               191        3800 male    2007
+10 Adelie  Torgersen           34.6          21.1               198        4400 male    2007
+11 Adelie  Torgersen           36.6          17.8               185        3700 female  2007
+12 Adelie  Torgersen           38.7          19                 195        3450 female  2007
+13 Adelie  Torgersen           42.5          20.7               197        4500 male    2007
+14 Adelie  Torgersen           34.4          18.4               184        3325 female  2007
+15 Adelie  Torgersen           46            21.5               194        4200 male    2007
+16 Adelie  Biscoe              37.8          18.3               174        3400 female  2007
+17 Adelie  Biscoe              37.7          18.7               180        3600 male    2007
+18 Adelie  Biscoe              35.9          19.2               189        3800 female  2007
+19 Adelie  Biscoe              38.2          18.1               185        3950 male    2007
+20 Adelie  Biscoe              38.8          17.2               180        3800 male    2007
+21 Adelie  Biscoe              35.3          18.9               187        3800 female  2007
+22 Adelie  Biscoe              40.6          18.6               183        3550 male    2007
+23 Adelie  Biscoe              40.5          17.9               187        3200 female  2007
+24 Adelie  Biscoe              37.9          18.6               172        3150 female  2007
+25 Adelie  Biscoe              40.5          18.9               180        3950 male    2007
+26 Adelie  Dream               39.5          16.7               178        3250 female  2007
+27 Adelie  Dream               37.2          18.1               178        3900 male    2007
+28 Adelie  Dream               39.5          17.8               188        3300 female  2007
+29 Adelie  Dream               40.9          18.9               184        3900 male    2007
+30 Adelie  Dream               36.4          17                 195        3325 female  2007
+31 Adelie  Dream               39.2          21.1               196        4150 male    2007
+32 Adelie  Dream               38.8          20                 190        3950 male    2007
+33 Adelie  Dream               42.2          18.5               180        3550 female  2007
+34 Adelie  Dream               37.6          19.3               181        3300 female  2007
+35 Adelie  Dream               39.8          19.1               184        4650 male    2007
+36 Adelie  Dream               36.5          18                 182        3150 female  2007
+37 Adelie  Dream               40.8          18.4               195        3900 male    2007
+38 Adelie  Dream               36            18.5               186        3100 female  2007
+39 Adelie  Dream               44.1          19.7               196        4400 male    2007
+40 Adelie  Dream               37            16.9               185        3000 female  2007
+41 Adelie  Dream               39.6          18.8               190        4600 male    2007
+42 Adelie  Dream               41.1          19                 182        3425 male    2007
+43 Adelie  Dream               36            17.9               190        3450 female  2007
+44 Adelie  Dream               42.3          21.2               191        4150 male    2007
+45 Adelie  Biscoe              39.6          17.7               186        3500 female  2008
+46 Adelie  Biscoe              40.1          18.9               188        4300 male    2008
+47 Adelie  Biscoe              35            17.9               190        3450 female  2008
+48 Adelie  Biscoe              42            19.5               200        4050 male    2008
+49 Adelie  Biscoe              34.5          18.1               187        2900 female  2008
+50 Adelie  Biscoe              41.4          18.6               191        3700 male    2008
+51 Adelie  Biscoe              39            17.5               186        3550 female  2008
+52 Adelie  Biscoe              40.6          18.8               193        3800 male    2008
+53 Adelie  Biscoe              36.5          16.6               181        2850 female  2008
+54 Adelie  Biscoe              37.6          19.1               194        3750 male    2008
+55 Adelie  Biscoe              35.7          16.9               185        3150 female  2008
+# … with 278 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-fitted_2-auto[
+
+```r
+compute_group_lm_fitted&lt;- function(data, scales){
+  model&lt;-lm(formula= y ~ x, data = data)
+  data %&gt;%
+    mutate(y=model$fitted.values)
+}
+
+# test out the function
+penguins %&gt;%
+# rename to explicitly state the x and y inputs
+* rename(x = bill_depth_mm, y = bill_length_mm)
+```
+]
+ 
+.panel2-fitted_2-auto[
+
+```
+# A tibble: 333 × 8
+   species island        y     x flipper_length_mm body_mass_g sex     year
+   &lt;fct&gt;   &lt;fct&gt;     &lt;dbl&gt; &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt;  &lt;int&gt;
+ 1 Adelie  Torgersen  39.1  18.7               181        3750 male    2007
+ 2 Adelie  Torgersen  39.5  17.4               186        3800 female  2007
+ 3 Adelie  Torgersen  40.3  18                 195        3250 female  2007
+ 4 Adelie  Torgersen  36.7  19.3               193        3450 female  2007
+ 5 Adelie  Torgersen  39.3  20.6               190        3650 male    2007
+ 6 Adelie  Torgersen  38.9  17.8               181        3625 female  2007
+ 7 Adelie  Torgersen  39.2  19.6               195        4675 male    2007
+ 8 Adelie  Torgersen  41.1  17.6               182        3200 female  2007
+ 9 Adelie  Torgersen  38.6  21.2               191        3800 male    2007
+10 Adelie  Torgersen  34.6  21.1               198        4400 male    2007
+11 Adelie  Torgersen  36.6  17.8               185        3700 female  2007
+12 Adelie  Torgersen  38.7  19                 195        3450 female  2007
+13 Adelie  Torgersen  42.5  20.7               197        4500 male    2007
+14 Adelie  Torgersen  34.4  18.4               184        3325 female  2007
+15 Adelie  Torgersen  46    21.5               194        4200 male    2007
+16 Adelie  Biscoe     37.8  18.3               174        3400 female  2007
+17 Adelie  Biscoe     37.7  18.7               180        3600 male    2007
+18 Adelie  Biscoe     35.9  19.2               189        3800 female  2007
+19 Adelie  Biscoe     38.2  18.1               185        3950 male    2007
+20 Adelie  Biscoe     38.8  17.2               180        3800 male    2007
+21 Adelie  Biscoe     35.3  18.9               187        3800 female  2007
+22 Adelie  Biscoe     40.6  18.6               183        3550 male    2007
+23 Adelie  Biscoe     40.5  17.9               187        3200 female  2007
+24 Adelie  Biscoe     37.9  18.6               172        3150 female  2007
+25 Adelie  Biscoe     40.5  18.9               180        3950 male    2007
+26 Adelie  Dream      39.5  16.7               178        3250 female  2007
+27 Adelie  Dream      37.2  18.1               178        3900 male    2007
+28 Adelie  Dream      39.5  17.8               188        3300 female  2007
+29 Adelie  Dream      40.9  18.9               184        3900 male    2007
+30 Adelie  Dream      36.4  17                 195        3325 female  2007
+31 Adelie  Dream      39.2  21.1               196        4150 male    2007
+32 Adelie  Dream      38.8  20                 190        3950 male    2007
+33 Adelie  Dream      42.2  18.5               180        3550 female  2007
+34 Adelie  Dream      37.6  19.3               181        3300 female  2007
+35 Adelie  Dream      39.8  19.1               184        4650 male    2007
+36 Adelie  Dream      36.5  18                 182        3150 female  2007
+37 Adelie  Dream      40.8  18.4               195        3900 male    2007
+38 Adelie  Dream      36    18.5               186        3100 female  2007
+39 Adelie  Dream      44.1  19.7               196        4400 male    2007
+40 Adelie  Dream      37    16.9               185        3000 female  2007
+41 Adelie  Dream      39.6  18.8               190        4600 male    2007
+42 Adelie  Dream      41.1  19                 182        3425 male    2007
+43 Adelie  Dream      36    17.9               190        3450 female  2007
+44 Adelie  Dream      42.3  21.2               191        4150 male    2007
+45 Adelie  Biscoe     39.6  17.7               186        3500 female  2008
+46 Adelie  Biscoe     40.1  18.9               188        4300 male    2008
+47 Adelie  Biscoe     35    17.9               190        3450 female  2008
+48 Adelie  Biscoe     42    19.5               200        4050 male    2008
+49 Adelie  Biscoe     34.5  18.1               187        2900 female  2008
+50 Adelie  Biscoe     41.4  18.6               191        3700 male    2008
+51 Adelie  Biscoe     39    17.5               186        3550 female  2008
+52 Adelie  Biscoe     40.6  18.8               193        3800 male    2008
+53 Adelie  Biscoe     36.5  16.6               181        2850 female  2008
+54 Adelie  Biscoe     37.6  19.1               194        3750 male    2008
+55 Adelie  Biscoe     35.7  16.9               185        3150 female  2008
+# … with 278 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-fitted_2-auto[
+
+```r
+compute_group_lm_fitted&lt;- function(data, scales){
+  model&lt;-lm(formula= y ~ x, data = data)
+  data %&gt;%
+    mutate(y=model$fitted.values)
+}
+
+# test out the function
+penguins %&gt;%
+# rename to explicitly state the x and y inputs
+  rename(x = bill_depth_mm, y = bill_length_mm)%&gt;%
+* compute_group_lm_fitted()
+```
+]
+ 
+.panel2-fitted_2-auto[
+
+```
+# A tibble: 333 × 8
+   species island        y     x flipper_length_mm body_mass_g sex     year
+   &lt;fct&gt;   &lt;fct&gt;     &lt;dbl&gt; &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt;  &lt;int&gt;
+ 1 Adelie  Torgersen  43.0  18.7               181        3750 male    2007
+ 2 Adelie  Torgersen  43.8  17.4               186        3800 female  2007
+ 3 Adelie  Torgersen  43.5  18                 195        3250 female  2007
+ 4 Adelie  Torgersen  42.6  19.3               193        3450 female  2007
+ 5 Adelie  Torgersen  41.8  20.6               190        3650 male    2007
+ 6 Adelie  Torgersen  43.6  17.8               181        3625 female  2007
+ 7 Adelie  Torgersen  42.4  19.6               195        4675 male    2007
+ 8 Adelie  Torgersen  43.7  17.6               182        3200 female  2007
+ 9 Adelie  Torgersen  41.4  21.2               191        3800 male    2007
+10 Adelie  Torgersen  41.5  21.1               198        4400 male    2007
+11 Adelie  Torgersen  43.6  17.8               185        3700 female  2007
+12 Adelie  Torgersen  42.8  19                 195        3450 female  2007
+13 Adelie  Torgersen  41.7  20.7               197        4500 male    2007
+14 Adelie  Torgersen  43.2  18.4               184        3325 female  2007
+15 Adelie  Torgersen  41.2  21.5               194        4200 male    2007
+16 Adelie  Biscoe     43.3  18.3               174        3400 female  2007
+17 Adelie  Biscoe     43.0  18.7               180        3600 male    2007
+18 Adelie  Biscoe     42.7  19.2               189        3800 female  2007
+19 Adelie  Biscoe     43.4  18.1               185        3950 male    2007
+20 Adelie  Biscoe     44.0  17.2               180        3800 male    2007
+21 Adelie  Biscoe     42.9  18.9               187        3800 female  2007
+22 Adelie  Biscoe     43.1  18.6               183        3550 male    2007
+23 Adelie  Biscoe     43.5  17.9               187        3200 female  2007
+24 Adelie  Biscoe     43.1  18.6               172        3150 female  2007
+25 Adelie  Biscoe     42.9  18.9               180        3950 male    2007
+26 Adelie  Dream      44.3  16.7               178        3250 female  2007
+27 Adelie  Dream      43.4  18.1               178        3900 male    2007
+28 Adelie  Dream      43.6  17.8               188        3300 female  2007
+29 Adelie  Dream      42.9  18.9               184        3900 male    2007
+30 Adelie  Dream      44.1  17                 195        3325 female  2007
+31 Adelie  Dream      41.5  21.1               196        4150 male    2007
+32 Adelie  Dream      42.2  20                 190        3950 male    2007
+33 Adelie  Dream      43.1  18.5               180        3550 female  2007
+34 Adelie  Dream      42.6  19.3               181        3300 female  2007
+35 Adelie  Dream      42.8  19.1               184        4650 male    2007
+36 Adelie  Dream      43.5  18                 182        3150 female  2007
+37 Adelie  Dream      43.2  18.4               195        3900 male    2007
+38 Adelie  Dream      43.1  18.5               186        3100 female  2007
+39 Adelie  Dream      42.4  19.7               196        4400 male    2007
+40 Adelie  Dream      44.2  16.9               185        3000 female  2007
+41 Adelie  Dream      43.0  18.8               190        4600 male    2007
+42 Adelie  Dream      42.8  19                 182        3425 male    2007
+43 Adelie  Dream      43.5  17.9               190        3450 female  2007
+44 Adelie  Dream      41.4  21.2               191        4150 male    2007
+45 Adelie  Biscoe     43.7  17.7               186        3500 female  2008
+46 Adelie  Biscoe     42.9  18.9               188        4300 male    2008
+47 Adelie  Biscoe     43.5  17.9               190        3450 female  2008
+48 Adelie  Biscoe     42.5  19.5               200        4050 male    2008
+49 Adelie  Biscoe     43.4  18.1               187        2900 female  2008
+50 Adelie  Biscoe     43.1  18.6               191        3700 male    2008
+51 Adelie  Biscoe     43.8  17.5               186        3550 female  2008
+52 Adelie  Biscoe     43.0  18.8               193        3800 male    2008
+53 Adelie  Biscoe     44.4  16.6               181        2850 female  2008
+54 Adelie  Biscoe     42.8  19.1               194        3750 male    2008
+55 Adelie  Biscoe     44.2  16.9               185        3150 female  2008
+# … with 278 more rows
+```
+]
+
+&lt;style&gt;
+.panel1-fitted_2-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-fitted_2-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-fitted_2-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+## Step 2: define ggproto
+
+---
+
+
+count: false
+ 
+
+.panel1-fitted_3-auto[
+
+```r
+*StatLmFitted&lt;-ggplot2::ggproto(`_class` = "StatLmFitted",
+*                                 `_inherit` = ggplot2::Stat,
+*                                 required_aes = c("x", "y"),
+*                                 compute_group = compute_group_lm_fitted)
+```
+]
+ 
+.panel2-fitted_3-auto[
+
+]
+
+&lt;style&gt;
+.panel1-fitted_3-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-fitted_3-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-fitted_3-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+## Step 3: define geom_* function
+
+
+---
+
+
+count: false
+ 
+
+.panel1-fitted_4-auto[
+
+```r
+*geom_point_lm_fitted &lt;- function(mapping = NULL, data = NULL,
+*                          position = "identity", na.rm = FALSE,
+*                          show.legend = NA,
+*                          inherit.aes = TRUE, ...) {
+* ggplot2::layer(
+*   stat = StatLmFitted,  # proto object from step 2
+*   geom = ggplot2::GeomPoint,  # inherit other behavior
+*   data = data,
+*   mapping = mapping,
+*   position = position,
+*   show.legend = show.legend,
+*   inherit.aes = inherit.aes,
+*   params = list(na.rm = na.rm, ...)
+* )
+*} 
+```
+]
+ 
+.panel2-fitted_4-auto[
+
+]
+
+&lt;style&gt;
+.panel1-fitted_4-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-fitted_4-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-fitted_4-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+## Step 4: Enjoy! Use your function
+
+---
+
+
+count: false
+ 
+
+.panel1-fitted_5-auto[
+
+```r
+*penguins
+```
+]
+ 
+.panel2-fitted_5-auto[
+
+```
+# A tibble: 333 × 8
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g sex     year
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt;  &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750 male    2007
+ 2 Adelie  Torgersen           39.5          17.4               186        3800 female  2007
+ 3 Adelie  Torgersen           40.3          18                 195        3250 female  2007
+ 4 Adelie  Torgersen           36.7          19.3               193        3450 female  2007
+ 5 Adelie  Torgersen           39.3          20.6               190        3650 male    2007
+ 6 Adelie  Torgersen           38.9          17.8               181        3625 female  2007
+ 7 Adelie  Torgersen           39.2          19.6               195        4675 male    2007
+ 8 Adelie  Torgersen           41.1          17.6               182        3200 female  2007
+ 9 Adelie  Torgersen           38.6          21.2               191        3800 male    2007
+10 Adelie  Torgersen           34.6          21.1               198        4400 male    2007
+11 Adelie  Torgersen           36.6          17.8               185        3700 female  2007
+12 Adelie  Torgersen           38.7          19                 195        3450 female  2007
+13 Adelie  Torgersen           42.5          20.7               197        4500 male    2007
+14 Adelie  Torgersen           34.4          18.4               184        3325 female  2007
+15 Adelie  Torgersen           46            21.5               194        4200 male    2007
+16 Adelie  Biscoe              37.8          18.3               174        3400 female  2007
+17 Adelie  Biscoe              37.7          18.7               180        3600 male    2007
+18 Adelie  Biscoe              35.9          19.2               189        3800 female  2007
+19 Adelie  Biscoe              38.2          18.1               185        3950 male    2007
+20 Adelie  Biscoe              38.8          17.2               180        3800 male    2007
+21 Adelie  Biscoe              35.3          18.9               187        3800 female  2007
+22 Adelie  Biscoe              40.6          18.6               183        3550 male    2007
+23 Adelie  Biscoe              40.5          17.9               187        3200 female  2007
+24 Adelie  Biscoe              37.9          18.6               172        3150 female  2007
+25 Adelie  Biscoe              40.5          18.9               180        3950 male    2007
+26 Adelie  Dream               39.5          16.7               178        3250 female  2007
+27 Adelie  Dream               37.2          18.1               178        3900 male    2007
+28 Adelie  Dream               39.5          17.8               188        3300 female  2007
+29 Adelie  Dream               40.9          18.9               184        3900 male    2007
+30 Adelie  Dream               36.4          17                 195        3325 female  2007
+31 Adelie  Dream               39.2          21.1               196        4150 male    2007
+32 Adelie  Dream               38.8          20                 190        3950 male    2007
+33 Adelie  Dream               42.2          18.5               180        3550 female  2007
+34 Adelie  Dream               37.6          19.3               181        3300 female  2007
+35 Adelie  Dream               39.8          19.1               184        4650 male    2007
+36 Adelie  Dream               36.5          18                 182        3150 female  2007
+37 Adelie  Dream               40.8          18.4               195        3900 male    2007
+38 Adelie  Dream               36            18.5               186        3100 female  2007
+39 Adelie  Dream               44.1          19.7               196        4400 male    2007
+40 Adelie  Dream               37            16.9               185        3000 female  2007
+41 Adelie  Dream               39.6          18.8               190        4600 male    2007
+42 Adelie  Dream               41.1          19                 182        3425 male    2007
+43 Adelie  Dream               36            17.9               190        3450 female  2007
+44 Adelie  Dream               42.3          21.2               191        4150 male    2007
+45 Adelie  Biscoe              39.6          17.7               186        3500 female  2008
+46 Adelie  Biscoe              40.1          18.9               188        4300 male    2008
+47 Adelie  Biscoe              35            17.9               190        3450 female  2008
+48 Adelie  Biscoe              42            19.5               200        4050 male    2008
+49 Adelie  Biscoe              34.5          18.1               187        2900 female  2008
+50 Adelie  Biscoe              41.4          18.6               191        3700 male    2008
+51 Adelie  Biscoe              39            17.5               186        3550 female  2008
+52 Adelie  Biscoe              40.6          18.8               193        3800 male    2008
+53 Adelie  Biscoe              36.5          16.6               181        2850 female  2008
+54 Adelie  Biscoe              37.6          19.1               194        3750 male    2008
+55 Adelie  Biscoe              35.7          16.9               185        3150 female  2008
+# … with 278 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-fitted_5-auto[
+
+```r
+penguins %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-fitted_5-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/fitted_5_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fitted_5-auto[
+
+```r
+penguins %&gt;%
+  ggplot() +
+* aes(x = bill_depth_mm, y = bill_length_mm)
+```
+]
+ 
+.panel2-fitted_5-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/fitted_5_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fitted_5-auto[
+
+```r
+penguins %&gt;%
+  ggplot() +
+  aes(x = bill_depth_mm, y = bill_length_mm) +
+* geom_point()
+```
+]
+ 
+.panel2-fitted_5-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/fitted_5_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fitted_5-auto[
+
+```r
+penguins %&gt;%
+  ggplot() +
+  aes(x = bill_depth_mm, y = bill_length_mm) +
+  geom_point() +
+* geom_smooth(method="lm", se= F)
+```
+]
+ 
+.panel2-fitted_5-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/fitted_5_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fitted_5-auto[
+
+```r
+penguins %&gt;%
+  ggplot() +
+  aes(x = bill_depth_mm, y = bill_length_mm) +
+  geom_point() +
+  geom_smooth(method="lm", se= F)+
+* geom_point_lm_fitted(color="blue")
+```
+]
+ 
+.panel2-fitted_5-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/fitted_5_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-fitted_5-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-fitted_5-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-fitted_5-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+### And check out conditionality
+
+---
+
+
+count: false
+ 
+
+.panel1-fitted_6-auto[
+
+```r
+*penguins
+```
+]
+ 
+.panel2-fitted_6-auto[
+
+```
+# A tibble: 333 × 8
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g sex     year
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt;  &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750 male    2007
+ 2 Adelie  Torgersen           39.5          17.4               186        3800 female  2007
+ 3 Adelie  Torgersen           40.3          18                 195        3250 female  2007
+ 4 Adelie  Torgersen           36.7          19.3               193        3450 female  2007
+ 5 Adelie  Torgersen           39.3          20.6               190        3650 male    2007
+ 6 Adelie  Torgersen           38.9          17.8               181        3625 female  2007
+ 7 Adelie  Torgersen           39.2          19.6               195        4675 male    2007
+ 8 Adelie  Torgersen           41.1          17.6               182        3200 female  2007
+ 9 Adelie  Torgersen           38.6          21.2               191        3800 male    2007
+10 Adelie  Torgersen           34.6          21.1               198        4400 male    2007
+11 Adelie  Torgersen           36.6          17.8               185        3700 female  2007
+12 Adelie  Torgersen           38.7          19                 195        3450 female  2007
+13 Adelie  Torgersen           42.5          20.7               197        4500 male    2007
+14 Adelie  Torgersen           34.4          18.4               184        3325 female  2007
+15 Adelie  Torgersen           46            21.5               194        4200 male    2007
+16 Adelie  Biscoe              37.8          18.3               174        3400 female  2007
+17 Adelie  Biscoe              37.7          18.7               180        3600 male    2007
+18 Adelie  Biscoe              35.9          19.2               189        3800 female  2007
+19 Adelie  Biscoe              38.2          18.1               185        3950 male    2007
+20 Adelie  Biscoe              38.8          17.2               180        3800 male    2007
+21 Adelie  Biscoe              35.3          18.9               187        3800 female  2007
+22 Adelie  Biscoe              40.6          18.6               183        3550 male    2007
+23 Adelie  Biscoe              40.5          17.9               187        3200 female  2007
+24 Adelie  Biscoe              37.9          18.6               172        3150 female  2007
+25 Adelie  Biscoe              40.5          18.9               180        3950 male    2007
+26 Adelie  Dream               39.5          16.7               178        3250 female  2007
+27 Adelie  Dream               37.2          18.1               178        3900 male    2007
+28 Adelie  Dream               39.5          17.8               188        3300 female  2007
+29 Adelie  Dream               40.9          18.9               184        3900 male    2007
+30 Adelie  Dream               36.4          17                 195        3325 female  2007
+31 Adelie  Dream               39.2          21.1               196        4150 male    2007
+32 Adelie  Dream               38.8          20                 190        3950 male    2007
+33 Adelie  Dream               42.2          18.5               180        3550 female  2007
+34 Adelie  Dream               37.6          19.3               181        3300 female  2007
+35 Adelie  Dream               39.8          19.1               184        4650 male    2007
+36 Adelie  Dream               36.5          18                 182        3150 female  2007
+37 Adelie  Dream               40.8          18.4               195        3900 male    2007
+38 Adelie  Dream               36            18.5               186        3100 female  2007
+39 Adelie  Dream               44.1          19.7               196        4400 male    2007
+40 Adelie  Dream               37            16.9               185        3000 female  2007
+41 Adelie  Dream               39.6          18.8               190        4600 male    2007
+42 Adelie  Dream               41.1          19                 182        3425 male    2007
+43 Adelie  Dream               36            17.9               190        3450 female  2007
+44 Adelie  Dream               42.3          21.2               191        4150 male    2007
+45 Adelie  Biscoe              39.6          17.7               186        3500 female  2008
+46 Adelie  Biscoe              40.1          18.9               188        4300 male    2008
+47 Adelie  Biscoe              35            17.9               190        3450 female  2008
+48 Adelie  Biscoe              42            19.5               200        4050 male    2008
+49 Adelie  Biscoe              34.5          18.1               187        2900 female  2008
+50 Adelie  Biscoe              41.4          18.6               191        3700 male    2008
+51 Adelie  Biscoe              39            17.5               186        3550 female  2008
+52 Adelie  Biscoe              40.6          18.8               193        3800 male    2008
+53 Adelie  Biscoe              36.5          16.6               181        2850 female  2008
+54 Adelie  Biscoe              37.6          19.1               194        3750 male    2008
+55 Adelie  Biscoe              35.7          16.9               185        3150 female  2008
+# … with 278 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-fitted_6-auto[
+
+```r
+penguins %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-fitted_6-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/fitted_6_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fitted_6-auto[
+
+```r
+penguins %&gt;%
+  ggplot() +
+* aes(x = bill_depth_mm, y = bill_length_mm)
+```
+]
+ 
+.panel2-fitted_6-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/fitted_6_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fitted_6-auto[
+
+```r
+penguins %&gt;%
+  ggplot() +
+  aes(x = bill_depth_mm, y = bill_length_mm) +
+* geom_point()
+```
+]
+ 
+.panel2-fitted_6-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/fitted_6_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fitted_6-auto[
+
+```r
+penguins %&gt;%
+  ggplot() +
+  aes(x = bill_depth_mm, y = bill_length_mm) +
+  geom_point() +
+* geom_smooth(method="lm", se= F)
+```
+]
+ 
+.panel2-fitted_6-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/fitted_6_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fitted_6-auto[
+
+```r
+penguins %&gt;%
+  ggplot() +
+  aes(x = bill_depth_mm, y = bill_length_mm) +
+  geom_point() +
+  geom_smooth(method="lm", se= F) +
+* geom_point_lm_fitted()
+```
+]
+ 
+.panel2-fitted_6-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/fitted_6_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fitted_6-auto[
+
+```r
+penguins %&gt;%
+  ggplot() +
+  aes(x = bill_depth_mm, y = bill_length_mm) +
+  geom_point() +
+  geom_smooth(method="lm", se= F) +
+  geom_point_lm_fitted() +
+* facet_wrap(facets = vars(species))
+```
+]
+ 
+.panel2-fitted_6-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/fitted_6_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-fitted_6-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-fitted_6-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-fitted_6-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

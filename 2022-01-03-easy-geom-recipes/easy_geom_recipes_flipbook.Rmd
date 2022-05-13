@@ -1,9 +1,52 @@
 ---
-title: "easy geom recipes"
-author: "Gina Reynolds, Morgan Brown"
-date: "1/3/2022"
-output: html_document
+title: "Easy Geom Recipes (Exploded version)"
+subtitle: "Using flipbookr and xaringan"
+author: "Gina Reynold, Morgan Brown"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
 ---
+
+
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, fig.height = 4, message = F, warning = FALSE, comment = "", cache = F)
+
+options(tibble.print_min = 55)
+options(knitr.duplicate.label = "allow")
+options(width=300) # prevents data wrapping
+```
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 70%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+
 
 
 
@@ -17,9 +60,18 @@ To get your feet wet in this world and give you a taste of patterns for geom ext
 
 This tutorial is intended for individuals who already have a working knowledge of the grammar of ggplot2, but may like to build a richer vocabulary for themselves.  
 
+---
+
+
+`r flipbookr::chunk_reveal("setup", left_assign = "detect")`
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
 ```
+
+---
+class: inverse, middle, center
 
 # Recipe #1: `geom_point_xy_medians()`
 
@@ -27,9 +79,18 @@ knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
 
 - This will be a point at the median of x and y
 
+---
+class: inverse, middle, center
+
 ## Step 0: use base ggplot2 to get the job done
 
-```{r penguins}
+---
+
+
+`r flipbookr::chunk_reveal("penguins", left_assign = "detect")`
+
+
+```{r penguins, include = FALSE}
 library(tidyverse)
 library(palmerpenguins)
 penguins <- remove_missing(penguins)
@@ -50,14 +111,24 @@ penguins %>%
                  y = bill_length_mm_median))
 ```
 
+---
+class: inverse, middle, center
 
 ## Step 1: computation
+
+--
 
 - define computation that ggplot2 should do for you, before plotting
   - here it's computing a variable with labels for each observation
 - test that functionality!
 
-```{r compute_group_xy_medians}
+---
+
+
+`r flipbookr::chunk_reveal("compute_group_xy_medians", left_assign = "detect")`
+
+
+```{r compute_group_xy_medians, include = FALSE}
 compute_group_xy_medians <- function(data, scales){
   data %>% 
     summarize(x = median(x),
@@ -70,24 +141,47 @@ penguins %>%
 ```
 
 
+---
+class: inverse, middle, center
+
 ## Step 2: define ggproto
+
+--
 
 - what's the naming convention for the proto object?
 - which aesthetics are required as inputs?
 - where does the function from above go?
 
-```{r StatXYMedians}
+---
+
+
+`r flipbookr::chunk_reveal("StatXYMedians", left_assign = "detect")`
+
+
+```{r StatXYMedians, include = FALSE}
 StatXYMedians <- ggplot2::ggproto(`_class` = "StatXYMedians",
                                   `_inherit` = ggplot2::Stat,
                                   required_aes = c("x", "y"),
                                   compute_group = compute_group_xy_medians)
 ```
 
+---
+class: inverse, middle, center
 
 ## Step 3: define geom_* function
 
 
-```{r geom_point_xy_medians} 
+--
+
+- define the stat and geom for your layer
+
+---
+
+
+`r flipbookr::chunk_reveal("geom_point_xy_medians", left_assign = "detect")`
+
+
+```{r geom_point_xy_medians, include = FALSE} 
 geom_point_xy_medians <- function(mapping = NULL, data = NULL,
                            position = "identity", na.rm = FALSE,
                            show.legend = NA,
@@ -105,10 +199,18 @@ geom_point_xy_medians <- function(mapping = NULL, data = NULL,
 }
 ```
 
+---
+class: inverse, middle, center
 
 ## Step 4: Enjoy! Use your function
 
-```{r enjoy_penguins}
+---
+
+
+`r flipbookr::chunk_reveal("enjoy_penguins", left_assign = "detect")`
+
+
+```{r enjoy_penguins, include = FALSE}
 penguins %>%
   ggplot()+
   aes(x = bill_depth_mm, y = bill_length_mm)+
@@ -116,9 +218,18 @@ penguins %>%
   geom_point_xy_medians(color = "red")
 ```
 
+---
+class: inverse, middle, center
+
 ### And check out conditionality!
 
-```{r conditional_penguins}
+---
+
+
+`r flipbookr::chunk_reveal("conditional_penguins", left_assign = "detect")`
+
+
+```{r conditional_penguins, include = FALSE}
 penguins %>%
   ggplot()+
   aes(x = bill_depth_mm, 
@@ -132,32 +243,25 @@ penguins %>%
 
 ### Create the function `geom_point_xy_means()`.  
 
-
+---
+class: inverse, middle, center
 
 # Recipe #2:  `geom_label_id()`
 
 ---
-
-## Step 0: use base ggplot2 to get the job done
-
-
-```{r cars}
-cars %>% 
-  mutate(id_number = 1:n()) %>% 
-  ggplot() + 
-  aes(x = speed, y = dist) + 
-  geom_point() + 
-  geom_label(aes(label = id_number), 
-             hjust = 1.2)
-```
-
----
+class: inverse, middle, center
 
 ## Step 1: computation
 
 
 
-```{r compute_group_row_number}
+---
+
+
+`r flipbookr::chunk_reveal("compute_group_row_number", left_assign = "detect")`
+
+
+```{r compute_group_row_number, include = FALSE}
 # you won't use the scales argument, but ggplot will later
 compute_group_row_number <- function(data, scales){
   
@@ -177,29 +281,36 @@ cars %>%
 ```
 
 ---
+class: inverse, middle, center
 
 ## Step 2: define ggproto
 
 
+---
 
-```{r StatRownumber}
+
+`r flipbookr::chunk_reveal("StatRownumber", left_assign = "detect")`
+
+
+```{r StatRownumber, include = FALSE}
 StatRownumber <- ggplot2::ggproto(`_class` = "StatRownumber",
                                   `_inherit` = ggplot2::Stat,
                                   required_aes = c("x", "y"),
                                   compute_group = compute_group_row_number)
 ```
 
-
 ---
+class: inverse, middle, center
 
 ## Step 3: define geom_* function
 
+---
 
 
-- define the stat and geom for your layer
+`r flipbookr::chunk_reveal("geom_label_row_number", left_assign = "detect")`
 
 
-```{r geom_label_row_number}
+```{r geom_label_row_number, include = FALSE}
 geom_label_row_number <- function(mapping = NULL, data = NULL,
                            position = "identity", na.rm = FALSE,
                            show.legend = NA,
@@ -218,12 +329,18 @@ geom_label_row_number <- function(mapping = NULL, data = NULL,
 ```
 
 
-
 ---
+class: inverse, middle, center
 
 ## Step 4: Enjoy! Use your function
 
-```{r enjoy_again}
+---
+
+
+`r flipbookr::chunk_reveal("enjoy_again", left_assign = "detect")`
+
+
+```{r enjoy_again, include = FALSE}
 cars %>% 
   ggplot() + 
   aes(x = speed, y = dist) + 
@@ -231,9 +348,18 @@ cars %>%
   geom_label_row_number(hjust = 1.2) # function in action
 ```
 
+---
+class: inverse, middle, center
+
 ### And check out conditionality!
 
-```{r conditional_compute}
+---
+
+
+`r flipbookr::chunk_reveal("conditional_compute", left_assign = "detect")`
+
+
+```{r conditional_compute, include = FALSE}
 last_plot() + 
   aes(color = dist > 60) # Computation is within group
 ```
@@ -257,9 +383,6 @@ last_plot() +
 
 Hint:
 
-```{r}
-paste0("(", 1, ", ",3., ")")
-```
 
 
 ---
@@ -270,7 +393,13 @@ paste0("(", 1, ", ",3., ")")
 
 ## Step 0: use base ggplot2 to get the job done
 
-```{r fitted_1}
+---
+
+
+`r flipbookr::chunk_reveal("fitted_1", left_assign = "detect")`
+
+
+```{r fitted_1, include = FALSE}
 model <- lm(formula = bill_length_mm ~ bill_depth_mm, 
             data = penguins) 
 
@@ -288,10 +417,18 @@ penguins %>%
              color = "blue")
 ```
 
+---
+class: inverse, middle, center
 
 ## Step 1: computation
 
-```{r fitted_2}
+---
+
+
+`r flipbookr::chunk_reveal("fitted_2", left_assign = "detect")`
+
+
+```{r fitted_2, include = FALSE}
 compute_group_lm_fitted<- function(data, scales){
   model<-lm(formula= y ~ x, data = data)
   data %>% 
@@ -308,7 +445,13 @@ penguins %>%
 
 ## Step 2: define ggproto
 
-```{r fitted_3}
+---
+
+
+`r flipbookr::chunk_reveal("fitted_3", left_assign = "detect")`
+
+
+```{r fitted_3, include = FALSE}
 StatLmFitted<-ggplot2::ggproto(`_class` = "StatLmFitted",
                                   `_inherit` = ggplot2::Stat,
                                   required_aes = c("x", "y"),
@@ -319,7 +462,13 @@ StatLmFitted<-ggplot2::ggproto(`_class` = "StatLmFitted",
 ## Step 3: define geom_* function
 
 
-```{r fitted_4}
+---
+
+
+`r flipbookr::chunk_reveal("fitted_4", left_assign = "detect")`
+
+
+```{r fitted_4, include = FALSE}
 geom_point_lm_fitted <- function(mapping = NULL, data = NULL,
                            position = "identity", na.rm = FALSE,
                            show.legend = NA,
@@ -339,7 +488,13 @@ geom_point_lm_fitted <- function(mapping = NULL, data = NULL,
 
 ## Step 4: Enjoy! Use your function
 
-```{r fitted_5}
+---
+
+
+`r flipbookr::chunk_reveal("fitted_5", left_assign = "detect")`
+
+
+```{r fitted_5, include = FALSE}
 penguins %>% 
   ggplot() + 
   aes(x = bill_depth_mm, y = bill_length_mm) +
@@ -350,7 +505,13 @@ penguins %>%
 
 ### And check out conditionality
 
-```{r fitted_6}
+---
+
+
+`r flipbookr::chunk_reveal("fitted_6", left_assign = "detect")`
+
+
+```{r fitted_6, include = FALSE}
 penguins %>% 
   ggplot() + 
   aes(x = bill_depth_mm, y = bill_length_mm) +
@@ -359,39 +520,4 @@ penguins %>%
   geom_point_lm_fitted() + 
   facet_wrap(facets = vars(species))
 ```
-
----
-
-## Now you... Create the function `geom_segment_lm_residuals()`. 
-
-### Hint: read about what aesthetics are required for segments.  We'll give you Step 0 this time...
-
-## Step 0: use base ggplot2 to get the job done
-
-```{r}
-model <- lm(formula = bill_length_mm ~ bill_depth_mm, 
-            data = penguins) 
-
-penguins_w_fitted <- penguins %>% 
-  mutate(fitted = model$fitted.values)
-
-penguins %>% 
-  ggplot() + 
-  aes(x = bill_depth_mm, y = bill_length_mm) +
-  geom_point() + 
-  geom_smooth(method = "lm", se = F) + 
-  geom_segment(data = penguins_w_fitted,
-             aes(yend = fitted, xend = bill_depth_mm),
-             color = "blue")
-```
-
----
-
-Not interested in writing your own geoms?  
-
-Check out some ready-to-go geoms that might be of interest in the ggxmean package... or other extension packages.
-
-Interested in working a bit more with geoms and making them available to more folks, but not interested in writing your own package?
-
-Join in on the development and validation of the ggxmean package for statistical educators and everyday analysis!
 

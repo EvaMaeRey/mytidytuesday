@@ -22,6 +22,7 @@ blogs posts, but just code, hardly any prose. It’s in the spirit of
 -   [2022-01-16-ggxmean-hex/ggxmean\_hex.html](https://evamaerey.github.io/mytidytuesday/2022-01-16-ggxmean-hex/ggxmean_hex.html)
 -   [2022-01-13-ma206-data-hex/ma206\_data\_hex.html](https://evamaerey.github.io/mytidytuesday/2022-01-13-ma206-data-hex/ma206_data_hex.html)
 -   [2022-01-13-ggdistributions-hex/ggdistributions\_hex.html](https://evamaerey.github.io/mytidytuesday/2022-01-13-ggdistributions-hex/ggdistributions_hex.html)
+-   [2022-01-03-easy-geom-recipes/easy\_geom\_recipes\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/easy_geom_recipes_flipbook.html)
 -   [2022-01-03-easy-geom-recipes/easy\_geom\_recipes.html](https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/easy_geom_recipes.html)
 -   [2021-12-30-hex-transparency/hex\_transparency\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2021-12-30-hex-transparency/hex_transparency_flipbook.html)
 -   [2021-12-30-hex-transparency/hex\_transparency.html](https://evamaerey.github.io/mytidytuesday/2021-12-30-hex-transparency/hex_transparency.html)
