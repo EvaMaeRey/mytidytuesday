@@ -11,21 +11,23 @@
   </head>
   <body>
     <textarea id="source">
-class: center, middle, inverse, title-slide
-
-# Easy Geom Recipes (Exploded version)
-## Using flipbookr and xaringan
-### Gina Reynold, Morgan Brown
-
----
 
 
+
+class: inverse, middle
+background-image: url(https://images.unsplash.com/photo-1592173376801-185310a68dea?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1286&amp;q=80)
+background-size: cover
+# Easy geom_*() recipes
+
+### Gina Reynolds and Morgan Brown
+
+#### Photo Credit: Thalia Ruiz
 
 
 
 
 &lt;style type="text/css"&gt;
-.remark-code{line-height: 1.5; font-size: 70%}
+.remark-code{line-height: 1.5; font-size: 90%}
 
 @media print {
   .has-continuation {
@@ -46,63 +48,39 @@ code.r.hljs.remark-code:hover{
 }
 &lt;/style&gt;
 
-
-
-
-Using ggplot2 has been described as writing 'graphical poems'.
-&lt;!-- and a system that lets us 'speak our plot into existence'.  --&gt;
-But we may feel at a loss for 'words' when functions we'd like to have don't exist.  The ggplot2 extension system allows us to build new 'vocabulary' for fluent expression.  
-
-An exciting extension mechanism is inheriting from existing geoms.  Particularly important to statisticians and mathematicians is writing new geom_* that perform and visualize calculations.  
-
-To get your feet wet in this world and give you a taste of patterns for geom extension, we provide three basic examples of the geoms_ that inherit from *existing* geoms (point, text, segment, etc) along with practice exercises.  With such geoms, calculation is done under the hood by the ggplot2 system; with these geom, you can write new graphical poems with exciting new graphical 'words'! 
-
-This tutorial is intended for individuals who already have a working knowledge of the grammar of ggplot2, but may like to build a richer vocabulary for themselves.  
-
 ---
 
 
-count: false
- 
+### Using ggplot2 has been described as writing 'graphical poems'.
 
-.panel1-setup-auto[
+--
 
-```r
-*knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
-```
-]
- 
-.panel2-setup-auto[
+&lt;!-- and a system that lets us 'speak our plot into existence'.  --&gt;
+### But we may feel at a loss for words when functions we'd like to have don't exist.  The ggplot2 extension system allows us to build new 'vocabulary' for fluent expression.  
 
-]
+--
 
-&lt;style&gt;
-.panel1-setup-auto {
-  color: black;
-  width: 38.6060606060606%;
-  hight: 32%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-.panel2-setup-auto {
-  color: black;
-  width: 59.3939393939394%;
-  hight: 32%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-.panel3-setup-auto {
-  color: black;
-  width: NA%;
-  hight: 33%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-&lt;/style&gt;
+### An exciting extension mechanism is inheriting from existing geoms.  Particularly important to statisticians and mathematicians is writing new geom_* that perform and visualize calculations.  
 
+---
+
+### To get your feet wet in this world and give you a taste of patterns for geom extension, we provide three *introductory* examples of the geoms_ that inherit from *existing* geoms (point, text, segment, etc) along with practice exercises.  
+
+--
+
+### With such geoms, calculation is done under the hood by the ggplot2 system; with these geom, you can write graphical poems with exciting new graphical 'words'! 
+
+---
+
+### This tutorial is intended for individuals who already have a working knowledge of the grammar of ggplot2, but may like to build a richer vocabulary for themselves. 
+
+--
+
+### Grab an .Rmd worksheet version [here](https://raw.githubusercontent.com/EvaMaeRey/mytidytuesday/master/2022-01-03-easy-geom-recipes/easy_geom_recipes.Rmd).
+
+### or you can browse the rendered version of that [here](https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/easy_geom_recipes.html).
+
+---
 
 
 
@@ -111,7 +89,11 @@ count: false
 ---
 class: inverse, middle, center
 
-# Recipe #1: `geom_point_xy_medians()`
+# Recipe #1
+
+--
+
+##`geom_point_xy_medians()`
 
 --
 
@@ -164,6 +146,7 @@ count: false
 ```r
 library(tidyverse)
 library(palmerpenguins)
+
 *penguins &lt;- remove_missing(penguins)
 ```
 ]
@@ -181,54 +164,8 @@ count: false
 ```r
 library(tidyverse)
 library(palmerpenguins)
+
 penguins &lt;- remove_missing(penguins)
-
-
-*penguins_medians &lt;- penguins
-```
-]
- 
-.panel2-penguins-auto[
-
-]
-
----
-count: false
- 
-
-.panel1-penguins-auto[
-
-```r
-library(tidyverse)
-library(palmerpenguins)
-penguins &lt;- remove_missing(penguins)
-
-
-penguins_medians &lt;- penguins %&gt;%
-* summarize(bill_length_mm_median = median(bill_length_mm),
-*           bill_depth_mm_median = median(bill_depth_mm))
-```
-]
- 
-.panel2-penguins-auto[
-
-]
-
----
-count: false
- 
-
-.panel1-penguins-auto[
-
-```r
-library(tidyverse)
-library(palmerpenguins)
-penguins &lt;- remove_missing(penguins)
-
-
-penguins_medians &lt;- penguins %&gt;%
-  summarize(bill_length_mm_median = median(bill_length_mm),
-            bill_depth_mm_median = median(bill_depth_mm))
 
 *penguins
 ```
@@ -308,20 +245,23 @@ count: false
 ```r
 library(tidyverse)
 library(palmerpenguins)
+
 penguins &lt;- remove_missing(penguins)
 
-
-penguins_medians &lt;- penguins %&gt;%
-  summarize(bill_length_mm_median = median(bill_length_mm),
-            bill_depth_mm_median = median(bill_depth_mm))
-
 penguins %&gt;%
-* ggplot()
+* summarize(bill_length_mm_median = median(bill_length_mm),
+*           bill_depth_mm_median = median(bill_depth_mm))
 ```
 ]
  
 .panel2-penguins-auto[
-![](easy_geom_recipes_flipbook_files/figure-html/penguins_auto_07_output-1.png)&lt;!-- --&gt;
+
+```
+# A tibble: 1 × 2
+  bill_length_mm_median bill_depth_mm_median
+                  &lt;dbl&gt;                &lt;dbl&gt;
+1                  44.5                 17.3
+```
 ]
 
 ---
@@ -333,16 +273,125 @@ count: false
 ```r
 library(tidyverse)
 library(palmerpenguins)
+
 penguins &lt;- remove_missing(penguins)
 
-
-penguins_medians &lt;- penguins %&gt;%
+penguins %&gt;%
   summarize(bill_length_mm_median = median(bill_length_mm),
-            bill_depth_mm_median = median(bill_depth_mm))
+            bill_depth_mm_median = median(bill_depth_mm)) -&gt;
+*penguins_medians
+```
+]
+ 
+.panel2-penguins-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-penguins-auto[
+
+```r
+library(tidyverse)
+library(palmerpenguins)
+
+penguins &lt;- remove_missing(penguins)
 
 penguins %&gt;%
-  ggplot() +
-* aes(x = bill_depth_mm)
+  summarize(bill_length_mm_median = median(bill_length_mm),
+            bill_depth_mm_median = median(bill_depth_mm)) -&gt;
+penguins_medians
+
+*penguins
+```
+]
+ 
+.panel2-penguins-auto[
+
+```
+# A tibble: 333 × 8
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g sex     year
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt;  &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750 male    2007
+ 2 Adelie  Torgersen           39.5          17.4               186        3800 female  2007
+ 3 Adelie  Torgersen           40.3          18                 195        3250 female  2007
+ 4 Adelie  Torgersen           36.7          19.3               193        3450 female  2007
+ 5 Adelie  Torgersen           39.3          20.6               190        3650 male    2007
+ 6 Adelie  Torgersen           38.9          17.8               181        3625 female  2007
+ 7 Adelie  Torgersen           39.2          19.6               195        4675 male    2007
+ 8 Adelie  Torgersen           41.1          17.6               182        3200 female  2007
+ 9 Adelie  Torgersen           38.6          21.2               191        3800 male    2007
+10 Adelie  Torgersen           34.6          21.1               198        4400 male    2007
+11 Adelie  Torgersen           36.6          17.8               185        3700 female  2007
+12 Adelie  Torgersen           38.7          19                 195        3450 female  2007
+13 Adelie  Torgersen           42.5          20.7               197        4500 male    2007
+14 Adelie  Torgersen           34.4          18.4               184        3325 female  2007
+15 Adelie  Torgersen           46            21.5               194        4200 male    2007
+16 Adelie  Biscoe              37.8          18.3               174        3400 female  2007
+17 Adelie  Biscoe              37.7          18.7               180        3600 male    2007
+18 Adelie  Biscoe              35.9          19.2               189        3800 female  2007
+19 Adelie  Biscoe              38.2          18.1               185        3950 male    2007
+20 Adelie  Biscoe              38.8          17.2               180        3800 male    2007
+21 Adelie  Biscoe              35.3          18.9               187        3800 female  2007
+22 Adelie  Biscoe              40.6          18.6               183        3550 male    2007
+23 Adelie  Biscoe              40.5          17.9               187        3200 female  2007
+24 Adelie  Biscoe              37.9          18.6               172        3150 female  2007
+25 Adelie  Biscoe              40.5          18.9               180        3950 male    2007
+26 Adelie  Dream               39.5          16.7               178        3250 female  2007
+27 Adelie  Dream               37.2          18.1               178        3900 male    2007
+28 Adelie  Dream               39.5          17.8               188        3300 female  2007
+29 Adelie  Dream               40.9          18.9               184        3900 male    2007
+30 Adelie  Dream               36.4          17                 195        3325 female  2007
+31 Adelie  Dream               39.2          21.1               196        4150 male    2007
+32 Adelie  Dream               38.8          20                 190        3950 male    2007
+33 Adelie  Dream               42.2          18.5               180        3550 female  2007
+34 Adelie  Dream               37.6          19.3               181        3300 female  2007
+35 Adelie  Dream               39.8          19.1               184        4650 male    2007
+36 Adelie  Dream               36.5          18                 182        3150 female  2007
+37 Adelie  Dream               40.8          18.4               195        3900 male    2007
+38 Adelie  Dream               36            18.5               186        3100 female  2007
+39 Adelie  Dream               44.1          19.7               196        4400 male    2007
+40 Adelie  Dream               37            16.9               185        3000 female  2007
+41 Adelie  Dream               39.6          18.8               190        4600 male    2007
+42 Adelie  Dream               41.1          19                 182        3425 male    2007
+43 Adelie  Dream               36            17.9               190        3450 female  2007
+44 Adelie  Dream               42.3          21.2               191        4150 male    2007
+45 Adelie  Biscoe              39.6          17.7               186        3500 female  2008
+46 Adelie  Biscoe              40.1          18.9               188        4300 male    2008
+47 Adelie  Biscoe              35            17.9               190        3450 female  2008
+48 Adelie  Biscoe              42            19.5               200        4050 male    2008
+49 Adelie  Biscoe              34.5          18.1               187        2900 female  2008
+50 Adelie  Biscoe              41.4          18.6               191        3700 male    2008
+51 Adelie  Biscoe              39            17.5               186        3550 female  2008
+52 Adelie  Biscoe              40.6          18.8               193        3800 male    2008
+53 Adelie  Biscoe              36.5          16.6               181        2850 female  2008
+54 Adelie  Biscoe              37.6          19.1               194        3750 male    2008
+55 Adelie  Biscoe              35.7          16.9               185        3150 female  2008
+# … with 278 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-penguins-auto[
+
+```r
+library(tidyverse)
+library(palmerpenguins)
+
+penguins &lt;- remove_missing(penguins)
+
+penguins %&gt;%
+  summarize(bill_length_mm_median = median(bill_length_mm),
+            bill_depth_mm_median = median(bill_depth_mm)) -&gt;
+penguins_medians
+
+penguins %&gt;%
+* ggplot()
 ```
 ]
  
@@ -359,17 +408,17 @@ count: false
 ```r
 library(tidyverse)
 library(palmerpenguins)
+
 penguins &lt;- remove_missing(penguins)
 
-
-penguins_medians &lt;- penguins %&gt;%
+penguins %&gt;%
   summarize(bill_length_mm_median = median(bill_length_mm),
-            bill_depth_mm_median = median(bill_depth_mm))
+            bill_depth_mm_median = median(bill_depth_mm)) -&gt;
+penguins_medians
 
 penguins %&gt;%
   ggplot() +
-  aes(x = bill_depth_mm) +
-* aes(y = bill_length_mm)
+* aes(x = bill_depth_mm)
 ```
 ]
  
@@ -386,18 +435,18 @@ count: false
 ```r
 library(tidyverse)
 library(palmerpenguins)
+
 penguins &lt;- remove_missing(penguins)
 
-
-penguins_medians &lt;- penguins %&gt;%
+penguins %&gt;%
   summarize(bill_length_mm_median = median(bill_length_mm),
-            bill_depth_mm_median = median(bill_depth_mm))
+            bill_depth_mm_median = median(bill_depth_mm)) -&gt;
+penguins_medians
 
 penguins %&gt;%
   ggplot() +
   aes(x = bill_depth_mm) +
-  aes(y = bill_length_mm) +
-* geom_point()
+* aes(y = bill_length_mm)
 ```
 ]
  
@@ -414,12 +463,42 @@ count: false
 ```r
 library(tidyverse)
 library(palmerpenguins)
+
 penguins &lt;- remove_missing(penguins)
 
-
-penguins_medians &lt;- penguins %&gt;%
+penguins %&gt;%
   summarize(bill_length_mm_median = median(bill_length_mm),
-            bill_depth_mm_median = median(bill_depth_mm))
+            bill_depth_mm_median = median(bill_depth_mm)) -&gt;
+penguins_medians
+
+penguins %&gt;%
+  ggplot() +
+  aes(x = bill_depth_mm) +
+  aes(y = bill_length_mm) +
+* geom_point()
+```
+]
+ 
+.panel2-penguins-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/penguins_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-penguins-auto[
+
+```r
+library(tidyverse)
+library(palmerpenguins)
+
+penguins &lt;- remove_missing(penguins)
+
+penguins %&gt;%
+  summarize(bill_length_mm_median = median(bill_length_mm),
+            bill_depth_mm_median = median(bill_depth_mm)) -&gt;
+penguins_medians
 
 penguins %&gt;%
   ggplot() +
@@ -434,7 +513,7 @@ penguins %&gt;%
 ]
  
 .panel2-penguins-auto[
-![](easy_geom_recipes_flipbook_files/figure-html/penguins_auto_11_output-1.png)&lt;!-- --&gt;
+![](easy_geom_recipes_flipbook_files/figure-html/penguins_auto_12_output-1.png)&lt;!-- --&gt;
 ]
 
 &lt;style&gt;
@@ -489,7 +568,8 @@ count: false
 .panel1-compute_group_xy_medians-auto[
 
 ```r
-*compute_group_xy_medians &lt;- function(data, scales){
+*compute_group_xy_medians &lt;- function(data,
+*                                    scales){
 * data %&gt;%
 *   summarize(x = median(x),
 *           y = median(y))
@@ -508,11 +588,13 @@ count: false
 .panel1-compute_group_xy_medians-auto[
 
 ```r
-compute_group_xy_medians &lt;- function(data, scales){
+compute_group_xy_medians &lt;- function(data,
+                                     scales){
   data %&gt;%
     summarize(x = median(x),
             y = median(y))
 }
+
 *penguins
 ```
 ]
@@ -589,12 +671,16 @@ count: false
 .panel1-compute_group_xy_medians-auto[
 
 ```r
-compute_group_xy_medians &lt;- function(data, scales){
+compute_group_xy_medians &lt;- function(data,
+                                     scales){
   data %&gt;%
     summarize(x = median(x),
             y = median(y))
 }
+
 penguins %&gt;%
+# function requires data
+# with columns named x and y
 * rename(x = bill_depth_mm,
 *        y = bill_length_mm)
 ```
@@ -672,12 +758,16 @@ count: false
 .panel1-compute_group_xy_medians-auto[
 
 ```r
-compute_group_xy_medians &lt;- function(data, scales){
+compute_group_xy_medians &lt;- function(data,
+                                     scales){
   data %&gt;%
     summarize(x = median(x),
             y = median(y))
 }
+
 penguins %&gt;%
+# function requires data
+# with columns named x and y
   rename(x = bill_depth_mm,
          y = bill_length_mm) %&gt;%
 * compute_group_xy_medians()
@@ -747,10 +837,12 @@ count: false
 .panel1-StatXYMedians-auto[
 
 ```r
-*StatXYMedians &lt;- ggplot2::ggproto(`_class` = "StatXYMedians",
-*                                 `_inherit` = ggplot2::Stat,
-*                                 required_aes = c("x", "y"),
-*                                 compute_group = compute_group_xy_medians)
+*StatXYMedians &lt;- ggplot2::ggproto(
+* `_class` = "StatXYMedians",
+* `_inherit` = ggplot2::Stat,
+* required_aes = c("x", "y"),
+* compute_group = compute_group_xy_medians
+* )
 ```
 ]
  
@@ -809,10 +901,14 @@ count: false
 .panel1-geom_point_xy_medians-auto[
 
 ```r
-*geom_point_xy_medians &lt;- function(mapping = NULL, data = NULL,
-*                          position = "identity", na.rm = FALSE,
-*                          show.legend = NA,
-*                          inherit.aes = TRUE, ...) {
+*geom_point_xy_medians &lt;- function(
+* mapping = NULL,
+* data = NULL,
+* position = "identity",
+* na.rm = FALSE,
+* show.legend = NA,
+* inherit.aes = TRUE, ...) {
+
 * ggplot2::layer(
 *   stat = StatXYMedians,  # proto object from step 2
 *   geom = ggplot2::GeomPoint,  # inherit other behavior
@@ -823,6 +919,7 @@ count: false
 *   inherit.aes = inherit.aes,
 *   params = list(na.rm = na.rm, ...)
 * )
+
 *} 
 ```
 ]
@@ -866,7 +963,9 @@ count: false
 ---
 class: inverse, middle, center
 
+
 ## Step 4: Enjoy! Use your function
+
 
 ---
 
@@ -971,7 +1070,8 @@ count: false
 ```r
 penguins %&gt;%
   ggplot()+
-* aes(x = bill_depth_mm, y = bill_length_mm)
+* aes(x = bill_depth_mm,
+*     y = bill_length_mm)
 ```
 ]
  
@@ -988,7 +1088,8 @@ count: false
 ```r
 penguins %&gt;%
   ggplot()+
-  aes(x = bill_depth_mm, y = bill_length_mm)+
+  aes(x = bill_depth_mm,
+      y = bill_length_mm) +
 * geom_point()
 ```
 ]
@@ -1006,7 +1107,8 @@ count: false
 ```r
 penguins %&gt;%
   ggplot()+
-  aes(x = bill_depth_mm, y = bill_length_mm)+
+  aes(x = bill_depth_mm,
+      y = bill_length_mm) +
   geom_point()+
 * geom_point_xy_medians(color = "red")
 ```
@@ -1239,14 +1341,281 @@ penguins %&gt;%
 
 
 
-## Now you ...
+---
+class: inverse, middle, center
+background-image: url(https://images.unsplash.com/photo-1628559225804-71f6e4643f44?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=837&amp;q=80)
+background-size: cover
 
-### Create the function `geom_point_xy_means()`.  
+
 
 ---
 class: inverse, middle, center
 
-# Recipe #2:  `geom_label_id()`
+## Now you ...
+
+--
+
+### Create the function `geom_point_xy_means()`
+
+---
+class: inverse, middle, center
+
+# Recipe #2
+
+--
+
+## `geom_label_id()`
+
+
+---
+class: inverse, center, middle
+
+## Step 0: use base ggplot2 to get the job done
+
+---
+
+count: false
+ 
+
+.panel1-cars-auto[
+
+```r
+*cars
+```
+]
+ 
+.panel2-cars-auto[
+
+```
+   speed dist
+1      4    2
+2      4   10
+3      7    4
+4      7   22
+5      8   16
+6      9   10
+7     10   18
+8     10   26
+9     10   34
+10    11   17
+11    11   28
+12    12   14
+13    12   20
+14    12   24
+15    12   28
+16    13   26
+17    13   34
+18    13   34
+19    13   46
+20    14   26
+21    14   36
+22    14   60
+23    14   80
+24    15   20
+25    15   26
+26    15   54
+27    16   32
+28    16   40
+29    17   32
+30    17   40
+31    17   50
+32    18   42
+33    18   56
+34    18   76
+35    18   84
+36    19   36
+37    19   46
+38    19   68
+39    20   32
+40    20   48
+41    20   52
+42    20   56
+43    20   64
+44    22   66
+45    23   54
+46    24   70
+47    24   92
+48    24   93
+49    24  120
+50    25   85
+```
+]
+
+---
+count: false
+ 
+
+.panel1-cars-auto[
+
+```r
+cars %&gt;%
+* mutate(id_number = 1:n())
+```
+]
+ 
+.panel2-cars-auto[
+
+```
+   speed dist id_number
+1      4    2         1
+2      4   10         2
+3      7    4         3
+4      7   22         4
+5      8   16         5
+6      9   10         6
+7     10   18         7
+8     10   26         8
+9     10   34         9
+10    11   17        10
+11    11   28        11
+12    12   14        12
+13    12   20        13
+14    12   24        14
+15    12   28        15
+16    13   26        16
+17    13   34        17
+18    13   34        18
+19    13   46        19
+20    14   26        20
+21    14   36        21
+22    14   60        22
+23    14   80        23
+24    15   20        24
+25    15   26        25
+26    15   54        26
+27    16   32        27
+28    16   40        28
+29    17   32        29
+30    17   40        30
+31    17   50        31
+32    18   42        32
+33    18   56        33
+34    18   76        34
+35    18   84        35
+36    19   36        36
+37    19   46        37
+38    19   68        38
+39    20   32        39
+40    20   48        40
+41    20   52        41
+42    20   56        42
+43    20   64        43
+44    22   66        44
+45    23   54        45
+46    24   70        46
+47    24   92        47
+48    24   93        48
+49    24  120        49
+50    25   85        50
+```
+]
+
+---
+count: false
+ 
+
+.panel1-cars-auto[
+
+```r
+cars %&gt;%
+  mutate(id_number = 1:n()) %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-cars-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/cars_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cars-auto[
+
+```r
+cars %&gt;%
+  mutate(id_number = 1:n()) %&gt;%
+  ggplot() +
+* aes(x = speed, y = dist)
+```
+]
+ 
+.panel2-cars-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/cars_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cars-auto[
+
+```r
+cars %&gt;%
+  mutate(id_number = 1:n()) %&gt;%
+  ggplot() +
+  aes(x = speed, y = dist) +
+* geom_point()
+```
+]
+ 
+.panel2-cars-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/cars_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cars-auto[
+
+```r
+cars %&gt;%
+  mutate(id_number = 1:n()) %&gt;%
+  ggplot() +
+  aes(x = speed, y = dist) +
+  geom_point() +
+* geom_label(aes(label = id_number),
+*            hjust = 1.2)
+```
+]
+ 
+.panel2-cars-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/cars_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-cars-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-cars-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-cars-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
 
 ---
 class: inverse, middle, center
@@ -1265,7 +1634,8 @@ count: false
 
 ```r
 # you won't use the scales argument, but ggplot will later
-*compute_group_row_number &lt;- function(data, scales){
+*compute_group_row_number &lt;- function(data,
+*                                    scales){
 
 * data %&gt;%
 # add an additional column called label
@@ -1288,7 +1658,8 @@ count: false
 
 ```r
 # you won't use the scales argument, but ggplot will later
-compute_group_row_number &lt;- function(data, scales){
+compute_group_row_number &lt;- function(data,
+                                     scales){
 
   data %&gt;%
 # add an additional column called label
@@ -1367,7 +1738,8 @@ count: false
 
 ```r
 # you won't use the scales argument, but ggplot will later
-compute_group_row_number &lt;- function(data, scales){
+compute_group_row_number &lt;- function(data,
+                                     scales){
 
   data %&gt;%
 # add an additional column called label
@@ -1379,7 +1751,8 @@ compute_group_row_number &lt;- function(data, scales){
 # step 1b test the computation function
 cars %&gt;%
 # input must have required aesthetic inputs as columns
-* rename(x = speed, y = dist)
+* rename(x = speed,
+*        y = dist)
 ```
 ]
  
@@ -1448,7 +1821,8 @@ count: false
 
 ```r
 # you won't use the scales argument, but ggplot will later
-compute_group_row_number &lt;- function(data, scales){
+compute_group_row_number &lt;- function(data,
+                                     scales){
 
   data %&gt;%
 # add an additional column called label
@@ -1460,7 +1834,8 @@ compute_group_row_number &lt;- function(data, scales){
 # step 1b test the computation function
 cars %&gt;%
 # input must have required aesthetic inputs as columns
-  rename(x = speed, y = dist) %&gt;%
+  rename(x = speed,
+         y = dist) %&gt;%
 * compute_group_row_number()
 ```
 ]
@@ -1522,45 +1897,6 @@ cars %&gt;%
 ```
 ]
 
----
-count: false
- 
-
-.panel1-compute_group_row_number-auto[
-
-```r
-# you won't use the scales argument, but ggplot will later
-compute_group_row_number &lt;- function(data, scales){
-
-  data %&gt;%
-# add an additional column called label
-# the geom we inherit from requires the label aesthetic
-    mutate(label = 1:n())
-
-}
-
-# step 1b test the computation function
-cars %&gt;%
-# input must have required aesthetic inputs as columns
-  rename(x = speed, y = dist) %&gt;%
-  compute_group_row_number() %&gt;%
-* head()
-```
-]
- 
-.panel2-compute_group_row_number-auto[
-
-```
-  x  y label
-1 4  2     1
-2 4 10     2
-3 7  4     3
-4 7 22     4
-5 8 16     5
-6 9 10     6
-```
-]
-
 &lt;style&gt;
 .panel1-compute_group_row_number-auto {
   color: black;
@@ -1608,10 +1944,12 @@ count: false
 .panel1-StatRownumber-auto[
 
 ```r
-*StatRownumber &lt;- ggplot2::ggproto(`_class` = "StatRownumber",
-*                                 `_inherit` = ggplot2::Stat,
-*                                 required_aes = c("x", "y"),
-*                                 compute_group = compute_group_row_number)
+*StatRownumber &lt;- ggplot2::ggproto(
+* `_class` = "StatRownumber",
+* `_inherit` = ggplot2::Stat,
+* required_aes = c("x", "y"),
+* compute_group = compute_group_row_number
+* )
 ```
 ]
  
@@ -1665,10 +2003,14 @@ count: false
 .panel1-geom_label_row_number-auto[
 
 ```r
-*geom_label_row_number &lt;- function(mapping = NULL, data = NULL,
-*                          position = "identity", na.rm = FALSE,
-*                          show.legend = NA,
-*                          inherit.aes = TRUE, ...) {
+*geom_label_row_number &lt;- function(
+* mapping = NULL,
+* data = NULL,
+* position = "identity",
+* na.rm = FALSE,
+* show.legend = NA,
+* inherit.aes = TRUE, ...) {
+
 * ggplot2::layer(
 *   stat = StatRownumber,  # proto object from Step 2
 *   geom = ggplot2::GeomLabel,  # inherit other behavior
@@ -1678,6 +2020,7 @@ count: false
 *   show.legend = show.legend,
 *   inherit.aes = inherit.aes,
 *   params = list(na.rm = na.rm, ...)
+
 * )
 *} 
 ```
@@ -1723,7 +2066,9 @@ count: false
 ---
 class: inverse, middle, center
 
+
 ## Step 4: Enjoy! Use your function
+
 
 ---
 
@@ -1968,9 +2313,13 @@ last_plot() +
 
 
 
-
+---
+class: inverse, middle, center
+background-image: url(https://images.unsplash.com/photo-1530751127259-074b0cdc0469?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1413&amp;q=80)
+background-size: cover
 
 ---
+class: inverse, middle, center
 
 ## Now you...
 
@@ -1989,8 +2338,14 @@ Hint:
 
 
 ---
+class: inverse, middle, center
 
-# Recipe #3:  `geom_point_lm_fitted()`
+# Recipe #3:  
+
+--
+
+
+## `geom_point_lm_fitted()`
 
 ---
 
@@ -2005,7 +2360,8 @@ count: false
 .panel1-fitted_1-auto[
 
 ```r
-*model &lt;- lm(formula = bill_length_mm ~ bill_depth_mm,
+*model &lt;- lm(formula =
+*             bill_length_mm ~ bill_depth_mm,
 *           data = penguins)
 ```
 ]
@@ -2021,7 +2377,8 @@ count: false
 .panel1-fitted_1-auto[
 
 ```r
-model &lt;- lm(formula = bill_length_mm ~ bill_depth_mm,
+model &lt;- lm(formula =
+              bill_length_mm ~ bill_depth_mm,
             data = penguins)
 
 *penguins_w_fitted &lt;- penguins
@@ -2039,7 +2396,8 @@ count: false
 .panel1-fitted_1-auto[
 
 ```r
-model &lt;- lm(formula = bill_length_mm ~ bill_depth_mm,
+model &lt;- lm(formula =
+              bill_length_mm ~ bill_depth_mm,
             data = penguins)
 
 penguins_w_fitted &lt;- penguins %&gt;%
@@ -2058,7 +2416,8 @@ count: false
 .panel1-fitted_1-auto[
 
 ```r
-model &lt;- lm(formula = bill_length_mm ~ bill_depth_mm,
+model &lt;- lm(formula =
+              bill_length_mm ~ bill_depth_mm,
             data = penguins)
 
 penguins_w_fitted &lt;- penguins %&gt;%
@@ -2141,7 +2500,8 @@ count: false
 .panel1-fitted_1-auto[
 
 ```r
-model &lt;- lm(formula = bill_length_mm ~ bill_depth_mm,
+model &lt;- lm(formula =
+              bill_length_mm ~ bill_depth_mm,
             data = penguins)
 
 penguins_w_fitted &lt;- penguins %&gt;%
@@ -2164,7 +2524,8 @@ count: false
 .panel1-fitted_1-auto[
 
 ```r
-model &lt;- lm(formula = bill_length_mm ~ bill_depth_mm,
+model &lt;- lm(formula =
+              bill_length_mm ~ bill_depth_mm,
             data = penguins)
 
 penguins_w_fitted &lt;- penguins %&gt;%
@@ -2188,7 +2549,8 @@ count: false
 .panel1-fitted_1-auto[
 
 ```r
-model &lt;- lm(formula = bill_length_mm ~ bill_depth_mm,
+model &lt;- lm(formula =
+              bill_length_mm ~ bill_depth_mm,
             data = penguins)
 
 penguins_w_fitted &lt;- penguins %&gt;%
@@ -2213,7 +2575,8 @@ count: false
 .panel1-fitted_1-auto[
 
 ```r
-model &lt;- lm(formula = bill_length_mm ~ bill_depth_mm,
+model &lt;- lm(formula =
+              bill_length_mm ~ bill_depth_mm,
             data = penguins)
 
 penguins_w_fitted &lt;- penguins %&gt;%
@@ -2239,7 +2602,8 @@ count: false
 .panel1-fitted_1-auto[
 
 ```r
-model &lt;- lm(formula = bill_length_mm ~ bill_depth_mm,
+model &lt;- lm(formula =
+              bill_length_mm ~ bill_depth_mm,
             data = penguins)
 
 penguins_w_fitted &lt;- penguins %&gt;%
@@ -2307,7 +2671,8 @@ count: false
 .panel1-fitted_2-auto[
 
 ```r
-*compute_group_lm_fitted&lt;- function(data, scales){
+*compute_group_lm_fitted&lt;- function(data,
+*                                  scales){
 * model&lt;-lm(formula= y ~ x, data = data)
 * data %&gt;%
 *   mutate(y=model$fitted.values)
@@ -2326,7 +2691,8 @@ count: false
 .panel1-fitted_2-auto[
 
 ```r
-compute_group_lm_fitted&lt;- function(data, scales){
+compute_group_lm_fitted&lt;- function(data,
+                                   scales){
   model&lt;-lm(formula= y ~ x, data = data)
   data %&gt;%
     mutate(y=model$fitted.values)
@@ -2409,7 +2775,8 @@ count: false
 .panel1-fitted_2-auto[
 
 ```r
-compute_group_lm_fitted&lt;- function(data, scales){
+compute_group_lm_fitted&lt;- function(data,
+                                   scales){
   model&lt;-lm(formula= y ~ x, data = data)
   data %&gt;%
     mutate(y=model$fitted.values)
@@ -2418,7 +2785,8 @@ compute_group_lm_fitted&lt;- function(data, scales){
 # test out the function
 penguins %&gt;%
 # rename to explicitly state the x and y inputs
-* rename(x = bill_depth_mm, y = bill_length_mm)
+* rename(x = bill_depth_mm,
+*        y = bill_length_mm)
 ```
 ]
  
@@ -2494,7 +2862,8 @@ count: false
 .panel1-fitted_2-auto[
 
 ```r
-compute_group_lm_fitted&lt;- function(data, scales){
+compute_group_lm_fitted&lt;- function(data,
+                                   scales){
   model&lt;-lm(formula= y ~ x, data = data)
   data %&gt;%
     mutate(y=model$fitted.values)
@@ -2503,7 +2872,8 @@ compute_group_lm_fitted&lt;- function(data, scales){
 # test out the function
 penguins %&gt;%
 # rename to explicitly state the x and y inputs
-  rename(x = bill_depth_mm, y = bill_length_mm)%&gt;%
+  rename(x = bill_depth_mm,
+         y = bill_length_mm)%&gt;%
 * compute_group_lm_fitted()
 ```
 ]
@@ -2617,10 +2987,12 @@ count: false
 .panel1-fitted_3-auto[
 
 ```r
-*StatLmFitted&lt;-ggplot2::ggproto(`_class` = "StatLmFitted",
-*                                 `_inherit` = ggplot2::Stat,
-*                                 required_aes = c("x", "y"),
-*                                 compute_group = compute_group_lm_fitted)
+*StatLmFitted &lt;- ggplot2::ggproto(
+* `_class` = "StatLmFitted",
+* `_inherit` = ggplot2::Stat,
+* required_aes = c("x", "y"),
+* compute_group = compute_group_lm_fitted
+* )
 ```
 ]
  
@@ -2727,7 +3099,13 @@ count: false
 
 
 
+---
+class: inverse, middle, center
+
+
 ## Step 4: Enjoy! Use your function
+
+
 
 ---
 
@@ -2929,6 +3307,10 @@ penguins %&gt;%
 
 
 
+---
+class: inverse, middle, center
+
+
 ### And check out conditionality
 
 ---
@@ -3034,7 +3416,8 @@ count: false
 ```r
 penguins %&gt;%
   ggplot() +
-* aes(x = bill_depth_mm, y = bill_length_mm)
+* aes(x = bill_depth_mm,
+*     y = bill_length_mm)
 ```
 ]
  
@@ -3051,7 +3434,8 @@ count: false
 ```r
 penguins %&gt;%
   ggplot() +
-  aes(x = bill_depth_mm, y = bill_length_mm) +
+  aes(x = bill_depth_mm,
+      y = bill_length_mm) +
 * geom_point()
 ```
 ]
@@ -3069,7 +3453,8 @@ count: false
 ```r
 penguins %&gt;%
   ggplot() +
-  aes(x = bill_depth_mm, y = bill_length_mm) +
+  aes(x = bill_depth_mm,
+      y = bill_length_mm) +
   geom_point() +
 * geom_smooth(method="lm", se= F)
 ```
@@ -3088,7 +3473,8 @@ count: false
 ```r
 penguins %&gt;%
   ggplot() +
-  aes(x = bill_depth_mm, y = bill_length_mm) +
+  aes(x = bill_depth_mm,
+      y = bill_length_mm) +
   geom_point() +
   geom_smooth(method="lm", se= F) +
 * geom_point_lm_fitted()
@@ -3108,7 +3494,8 @@ count: false
 ```r
 penguins %&gt;%
   ggplot() +
-  aes(x = bill_depth_mm, y = bill_length_mm) +
+  aes(x = bill_depth_mm,
+      y = bill_length_mm) +
   geom_point() +
   geom_smooth(method="lm", se= F) +
   geom_point_lm_fitted() +
@@ -3151,6 +3538,347 @@ penguins %&gt;%
 
 
 
+
+
+
+---
+class: inverse, middle, center
+background-image: url(https://images.unsplash.com/photo-1499636136210-6f4ee915583e?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=464&amp;q=80)
+background-size: cover
+
+
+---
+class: inverse, middle, center
+
+## Now you... Create the function `geom_segment_lm_residuals()`. 
+
+--
+
+### Hint: read about what aesthetics are required for segments.  We'll give you Step 0 this time...
+
+--
+
+## Step 0: use base ggplot2 to get the job done
+
+---
+
+count: false
+ 
+
+.panel1-residuals-auto[
+
+```r
+*model &lt;- lm(formula =
+*             bill_length_mm ~ bill_depth_mm,
+*           data = penguins)
+```
+]
+ 
+.panel2-residuals-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-residuals-auto[
+
+```r
+model &lt;- lm(formula =
+              bill_length_mm ~ bill_depth_mm,
+            data = penguins)
+
+*penguins_w_fitted &lt;- penguins
+```
+]
+ 
+.panel2-residuals-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-residuals-auto[
+
+```r
+model &lt;- lm(formula =
+              bill_length_mm ~ bill_depth_mm,
+            data = penguins)
+
+penguins_w_fitted &lt;- penguins %&gt;%
+* mutate(fitted = model$fitted.values)
+```
+]
+ 
+.panel2-residuals-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-residuals-auto[
+
+```r
+model &lt;- lm(formula =
+              bill_length_mm ~ bill_depth_mm,
+            data = penguins)
+
+penguins_w_fitted &lt;- penguins %&gt;%
+  mutate(fitted = model$fitted.values)
+
+*penguins
+```
+]
+ 
+.panel2-residuals-auto[
+
+```
+# A tibble: 333 × 8
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g sex     year
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt;  &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750 male    2007
+ 2 Adelie  Torgersen           39.5          17.4               186        3800 female  2007
+ 3 Adelie  Torgersen           40.3          18                 195        3250 female  2007
+ 4 Adelie  Torgersen           36.7          19.3               193        3450 female  2007
+ 5 Adelie  Torgersen           39.3          20.6               190        3650 male    2007
+ 6 Adelie  Torgersen           38.9          17.8               181        3625 female  2007
+ 7 Adelie  Torgersen           39.2          19.6               195        4675 male    2007
+ 8 Adelie  Torgersen           41.1          17.6               182        3200 female  2007
+ 9 Adelie  Torgersen           38.6          21.2               191        3800 male    2007
+10 Adelie  Torgersen           34.6          21.1               198        4400 male    2007
+11 Adelie  Torgersen           36.6          17.8               185        3700 female  2007
+12 Adelie  Torgersen           38.7          19                 195        3450 female  2007
+13 Adelie  Torgersen           42.5          20.7               197        4500 male    2007
+14 Adelie  Torgersen           34.4          18.4               184        3325 female  2007
+15 Adelie  Torgersen           46            21.5               194        4200 male    2007
+16 Adelie  Biscoe              37.8          18.3               174        3400 female  2007
+17 Adelie  Biscoe              37.7          18.7               180        3600 male    2007
+18 Adelie  Biscoe              35.9          19.2               189        3800 female  2007
+19 Adelie  Biscoe              38.2          18.1               185        3950 male    2007
+20 Adelie  Biscoe              38.8          17.2               180        3800 male    2007
+21 Adelie  Biscoe              35.3          18.9               187        3800 female  2007
+22 Adelie  Biscoe              40.6          18.6               183        3550 male    2007
+23 Adelie  Biscoe              40.5          17.9               187        3200 female  2007
+24 Adelie  Biscoe              37.9          18.6               172        3150 female  2007
+25 Adelie  Biscoe              40.5          18.9               180        3950 male    2007
+26 Adelie  Dream               39.5          16.7               178        3250 female  2007
+27 Adelie  Dream               37.2          18.1               178        3900 male    2007
+28 Adelie  Dream               39.5          17.8               188        3300 female  2007
+29 Adelie  Dream               40.9          18.9               184        3900 male    2007
+30 Adelie  Dream               36.4          17                 195        3325 female  2007
+31 Adelie  Dream               39.2          21.1               196        4150 male    2007
+32 Adelie  Dream               38.8          20                 190        3950 male    2007
+33 Adelie  Dream               42.2          18.5               180        3550 female  2007
+34 Adelie  Dream               37.6          19.3               181        3300 female  2007
+35 Adelie  Dream               39.8          19.1               184        4650 male    2007
+36 Adelie  Dream               36.5          18                 182        3150 female  2007
+37 Adelie  Dream               40.8          18.4               195        3900 male    2007
+38 Adelie  Dream               36            18.5               186        3100 female  2007
+39 Adelie  Dream               44.1          19.7               196        4400 male    2007
+40 Adelie  Dream               37            16.9               185        3000 female  2007
+41 Adelie  Dream               39.6          18.8               190        4600 male    2007
+42 Adelie  Dream               41.1          19                 182        3425 male    2007
+43 Adelie  Dream               36            17.9               190        3450 female  2007
+44 Adelie  Dream               42.3          21.2               191        4150 male    2007
+45 Adelie  Biscoe              39.6          17.7               186        3500 female  2008
+46 Adelie  Biscoe              40.1          18.9               188        4300 male    2008
+47 Adelie  Biscoe              35            17.9               190        3450 female  2008
+48 Adelie  Biscoe              42            19.5               200        4050 male    2008
+49 Adelie  Biscoe              34.5          18.1               187        2900 female  2008
+50 Adelie  Biscoe              41.4          18.6               191        3700 male    2008
+51 Adelie  Biscoe              39            17.5               186        3550 female  2008
+52 Adelie  Biscoe              40.6          18.8               193        3800 male    2008
+53 Adelie  Biscoe              36.5          16.6               181        2850 female  2008
+54 Adelie  Biscoe              37.6          19.1               194        3750 male    2008
+55 Adelie  Biscoe              35.7          16.9               185        3150 female  2008
+# … with 278 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-residuals-auto[
+
+```r
+model &lt;- lm(formula =
+              bill_length_mm ~ bill_depth_mm,
+            data = penguins)
+
+penguins_w_fitted &lt;- penguins %&gt;%
+  mutate(fitted = model$fitted.values)
+
+penguins %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-residuals-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/residuals_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-residuals-auto[
+
+```r
+model &lt;- lm(formula =
+              bill_length_mm ~ bill_depth_mm,
+            data = penguins)
+
+penguins_w_fitted &lt;- penguins %&gt;%
+  mutate(fitted = model$fitted.values)
+
+penguins %&gt;%
+  ggplot() +
+* aes(x = bill_depth_mm, y = bill_length_mm)
+```
+]
+ 
+.panel2-residuals-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/residuals_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-residuals-auto[
+
+```r
+model &lt;- lm(formula =
+              bill_length_mm ~ bill_depth_mm,
+            data = penguins)
+
+penguins_w_fitted &lt;- penguins %&gt;%
+  mutate(fitted = model$fitted.values)
+
+penguins %&gt;%
+  ggplot() +
+  aes(x = bill_depth_mm, y = bill_length_mm) +
+* geom_point()
+```
+]
+ 
+.panel2-residuals-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/residuals_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-residuals-auto[
+
+```r
+model &lt;- lm(formula =
+              bill_length_mm ~ bill_depth_mm,
+            data = penguins)
+
+penguins_w_fitted &lt;- penguins %&gt;%
+  mutate(fitted = model$fitted.values)
+
+penguins %&gt;%
+  ggplot() +
+  aes(x = bill_depth_mm, y = bill_length_mm) +
+  geom_point() +
+* geom_smooth(method = "lm", se = F)
+```
+]
+ 
+.panel2-residuals-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/residuals_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-residuals-auto[
+
+```r
+model &lt;- lm(formula =
+              bill_length_mm ~ bill_depth_mm,
+            data = penguins)
+
+penguins_w_fitted &lt;- penguins %&gt;%
+  mutate(fitted = model$fitted.values)
+
+penguins %&gt;%
+  ggplot() +
+  aes(x = bill_depth_mm, y = bill_length_mm) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F) +
+* geom_segment(data = penguins_w_fitted,
+*            aes(yend = fitted, xend = bill_depth_mm),
+*            color = "blue")
+```
+]
+ 
+.panel2-residuals-auto[
+![](easy_geom_recipes_flipbook_files/figure-html/residuals_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-residuals-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-residuals-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-residuals-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+class: inverse, center, middle
+background-image: url(https://images.unsplash.com/photo-1630297169944-1316e5e011f8?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTc1fHxiYWtlcnl8ZW58MHx8MHx8&amp;auto=format&amp;fit=crop&amp;w=400&amp;q=60)
+background-size: cover
+
+
+## Not interested in writing your own geoms?  
+
+--
+
+### Check out some ready-to-go geoms that might be of interest in the {ggxmean} package... or other extension packages.
+
+
+--
+
+## Or interested in working a bit more with geoms and making them available to more folks, but not interested in writing your own package?
+
+--
+
+
+### Join in on the development and validation of the ggxmean package for statistical educators and everyday analysis.
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

@@ -5,6 +5,7 @@ author: "Gina Reynold, Morgan Brown"
 output:
   xaringan::moon_reader:
     lib_dir: libs
+    seal: false
     css: [default, hygge, ninjutsu]
     nature:
       ratio: 16:9
@@ -14,10 +15,19 @@ output:
 ---
 
 
+class: inverse, middle
+background-image: url(https://images.unsplash.com/photo-1592173376801-185310a68dea?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1286&q=80)
+background-size: cover
+# Easy geom_*() recipes
+
+### Gina Reynolds and Morgan Brown
+
+#### Photo Credit: Thalia Ruiz
+
 ```{r, include = F}
 # This is the recommended set up for flipbooks
 # you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
-knitr::opts_chunk$set(fig.width = 6, fig.height = 4, message = F, warning = FALSE, comment = "", cache = F)
+knitr::opts_chunk$set(fig.width = 7, fig.height = 5, message = F, warning = FALSE, comment = "", cache = T)
 
 options(tibble.print_min = 55)
 options(knitr.duplicate.label = "allow")
@@ -26,7 +36,7 @@ options(width=300) # prevents data wrapping
 
 
 ```{css, eval = TRUE, echo = FALSE}
-.remark-code{line-height: 1.5; font-size: 70%}
+.remark-code{line-height: 1.5; font-size: 90%}
 
 @media print {
   .has-continuation {
@@ -47,23 +57,40 @@ code.r.hljs.remark-code:hover{
 }
 ```
 
-
-
-
-Using ggplot2 has been described as writing 'graphical poems'.
-<!-- and a system that lets us 'speak our plot into existence'.  -->
-But we may feel at a loss for 'words' when functions we'd like to have don't exist.  The ggplot2 extension system allows us to build new 'vocabulary' for fluent expression.  
-
-An exciting extension mechanism is inheriting from existing geoms.  Particularly important to statisticians and mathematicians is writing new geom_* that perform and visualize calculations.  
-
-To get your feet wet in this world and give you a taste of patterns for geom extension, we provide three basic examples of the geoms_ that inherit from *existing* geoms (point, text, segment, etc) along with practice exercises.  With such geoms, calculation is done under the hood by the ggplot2 system; with these geom, you can write new graphical poems with exciting new graphical 'words'! 
-
-This tutorial is intended for individuals who already have a working knowledge of the grammar of ggplot2, but may like to build a richer vocabulary for themselves.  
-
 ---
 
 
-`r flipbookr::chunk_reveal("setup", left_assign = "detect")`
+### Using ggplot2 has been described as writing 'graphical poems'.
+
+--
+
+<!-- and a system that lets us 'speak our plot into existence'.  -->
+### But we may feel at a loss for words when functions we'd like to have don't exist.  The ggplot2 extension system allows us to build new 'vocabulary' for fluent expression.  
+
+--
+
+### An exciting extension mechanism is inheriting from existing geoms.  Particularly important to statisticians and mathematicians is writing new geom_* that perform and visualize calculations.  
+
+---
+
+### To get your feet wet in this world and give you a taste of patterns for geom extension, we provide three *introductory* examples of the geoms_ that inherit from *existing* geoms (point, text, segment, etc) along with practice exercises.  
+
+--
+
+### With such geoms, calculation is done under the hood by the ggplot2 system; with these geom, you can write graphical poems with exciting new graphical 'words'! 
+
+---
+
+### This tutorial is intended for individuals who already have a working knowledge of the grammar of ggplot2, but may like to build a richer vocabulary for themselves. 
+
+--
+
+### Grab an .Rmd worksheet version [here](https://raw.githubusercontent.com/EvaMaeRey/mytidytuesday/master/2022-01-03-easy-geom-recipes/easy_geom_recipes.Rmd).
+
+### or you can browse the rendered version of that [here](https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/easy_geom_recipes.html).
+
+---
+
 
 
 ```{r setup, include=FALSE}
@@ -73,7 +100,11 @@ knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
 ---
 class: inverse, middle, center
 
-# Recipe #1: `geom_point_xy_medians()`
+# Recipe #1
+
+--
+
+##`geom_point_xy_medians()`
 
 --
 
@@ -93,12 +124,13 @@ class: inverse, middle, center
 ```{r penguins, include = FALSE}
 library(tidyverse)
 library(palmerpenguins)
+
 penguins <- remove_missing(penguins)
 
-
-penguins_medians <- penguins %>% 
+penguins %>% 
   summarize(bill_length_mm_median = median(bill_length_mm),
-            bill_depth_mm_median = median(bill_depth_mm))
+            bill_depth_mm_median = median(bill_depth_mm)) ->
+penguins_medians
 
 penguins %>% 
   ggplot() + 
@@ -129,12 +161,16 @@ class: inverse, middle, center
 
 
 ```{r compute_group_xy_medians, include = FALSE}
-compute_group_xy_medians <- function(data, scales){
+compute_group_xy_medians <- function(data, 
+                                     scales){
   data %>% 
     summarize(x = median(x),
             y = median(y))
 }
+
 penguins %>%
+  # function requires data 
+  # with columns named x and y
   rename(x = bill_depth_mm, 
          y = bill_length_mm) %>%
   compute_group_xy_medians()
@@ -159,10 +195,12 @@ class: inverse, middle, center
 
 
 ```{r StatXYMedians, include = FALSE}
-StatXYMedians <- ggplot2::ggproto(`_class` = "StatXYMedians",
-                                  `_inherit` = ggplot2::Stat,
-                                  required_aes = c("x", "y"),
-                                  compute_group = compute_group_xy_medians)
+StatXYMedians <- ggplot2::ggproto(
+  `_class` = "StatXYMedians",
+  `_inherit` = ggplot2::Stat,
+  required_aes = c("x", "y"),
+  compute_group = compute_group_xy_medians
+  )
 ```
 
 ---
@@ -182,10 +220,14 @@ class: inverse, middle, center
 
 
 ```{r geom_point_xy_medians, include = FALSE} 
-geom_point_xy_medians <- function(mapping = NULL, data = NULL,
-                           position = "identity", na.rm = FALSE,
-                           show.legend = NA,
-                           inherit.aes = TRUE, ...) {
+geom_point_xy_medians <- function(
+  mapping = NULL, 
+  data = NULL,
+  position = "identity", 
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE, ...) {
+  
   ggplot2::layer(
     stat = StatXYMedians, # proto object from step 2
     geom = ggplot2::GeomPoint, # inherit other behavior
@@ -196,13 +238,16 @@ geom_point_xy_medians <- function(mapping = NULL, data = NULL,
     inherit.aes = inherit.aes,
     params = list(na.rm = na.rm, ...)
   )
+  
 }
 ```
 
 ---
 class: inverse, middle, center
 
+
 ## Step 4: Enjoy! Use your function
+
 
 ---
 
@@ -213,7 +258,8 @@ class: inverse, middle, center
 ```{r enjoy_penguins, include = FALSE}
 penguins %>%
   ggplot()+
-  aes(x = bill_depth_mm, y = bill_length_mm)+
+  aes(x = bill_depth_mm, 
+      y = bill_length_mm) +
   geom_point()+
   geom_point_xy_medians(color = "red")
 ```
@@ -239,14 +285,51 @@ penguins %>%
   geom_point_xy_medians(size = 4)
 ```
 
-## Now you ...
+---
+class: inverse, middle, center
+background-image: url(https://images.unsplash.com/photo-1628559225804-71f6e4643f44?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=837&q=80)
+background-size: cover
 
-### Create the function `geom_point_xy_means()`.  
+
 
 ---
 class: inverse, middle, center
 
-# Recipe #2:  `geom_label_id()`
+## Now you ...
+
+--
+
+### Create the function `geom_point_xy_means()`
+
+---
+class: inverse, middle, center
+
+# Recipe #2
+
+--
+
+## `geom_label_id()`
+
+
+---
+class: inverse, center, middle
+
+## Step 0: use base ggplot2 to get the job done
+
+---
+
+`r flipbookr::chunk_reveal("cars")`
+
+```{r cars, include = F}
+cars %>% 
+  mutate(id_number = 1:n()) %>% 
+  ggplot() + 
+  aes(x = speed, y = dist) + 
+  geom_point() + 
+  geom_label(aes(label = id_number), 
+             hjust = 1.2)
+```
+
 
 ---
 class: inverse, middle, center
@@ -263,7 +346,8 @@ class: inverse, middle, center
 
 ```{r compute_group_row_number, include = FALSE}
 # you won't use the scales argument, but ggplot will later
-compute_group_row_number <- function(data, scales){
+compute_group_row_number <- function(data,
+                                     scales){
   
   data %>% 
     # add an additional column called label
@@ -275,9 +359,9 @@ compute_group_row_number <- function(data, scales){
 # step 1b test the computation function 
 cars %>% 
   # input must have required aesthetic inputs as columns
-  rename(x = speed, y = dist) %>% 
-  compute_group_row_number() %>% 
-  head()
+  rename(x = speed, 
+         y = dist) %>% 
+  compute_group_row_number()
 ```
 
 ---
@@ -293,10 +377,12 @@ class: inverse, middle, center
 
 
 ```{r StatRownumber, include = FALSE}
-StatRownumber <- ggplot2::ggproto(`_class` = "StatRownumber",
-                                  `_inherit` = ggplot2::Stat,
-                                  required_aes = c("x", "y"),
-                                  compute_group = compute_group_row_number)
+StatRownumber <- ggplot2::ggproto(
+  `_class` = "StatRownumber",
+  `_inherit` = ggplot2::Stat,
+  required_aes = c("x", "y"),
+  compute_group = compute_group_row_number
+  )
 ```
 
 ---
@@ -311,10 +397,14 @@ class: inverse, middle, center
 
 
 ```{r geom_label_row_number, include = FALSE}
-geom_label_row_number <- function(mapping = NULL, data = NULL,
-                           position = "identity", na.rm = FALSE,
-                           show.legend = NA,
-                           inherit.aes = TRUE, ...) {
+geom_label_row_number <- function(
+  mapping = NULL, 
+  data = NULL,
+  position = "identity", 
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE, ...) {
+  
   ggplot2::layer(
     stat = StatRownumber, # proto object from Step 2
     geom = ggplot2::GeomLabel, # inherit other behavior
@@ -324,6 +414,7 @@ geom_label_row_number <- function(mapping = NULL, data = NULL,
     show.legend = show.legend, 
     inherit.aes = inherit.aes,
     params = list(na.rm = na.rm, ...)
+    
   )
 }
 ```
@@ -332,7 +423,9 @@ geom_label_row_number <- function(mapping = NULL, data = NULL,
 ---
 class: inverse, middle, center
 
+
 ## Step 4: Enjoy! Use your function
+
 
 ---
 
@@ -365,9 +458,13 @@ last_plot() +
 ```
 
 
-
+---
+class: inverse, middle, center
+background-image: url(https://images.unsplash.com/photo-1530751127259-074b0cdc0469?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1413&q=80)
+background-size: cover
 
 ---
+class: inverse, middle, center
 
 ## Now you...
 
@@ -386,8 +483,14 @@ Hint:
 
 
 ---
+class: inverse, middle, center
 
-# Recipe #3:  `geom_point_lm_fitted()`
+# Recipe #3:  
+
+--
+
+
+## `geom_point_lm_fitted()`
 
 ---
 
@@ -400,7 +503,8 @@ Hint:
 
 
 ```{r fitted_1, include = FALSE}
-model <- lm(formula = bill_length_mm ~ bill_depth_mm, 
+model <- lm(formula = 
+              bill_length_mm ~ bill_depth_mm, 
             data = penguins) 
 
 penguins_w_fitted <- penguins %>% 
@@ -429,7 +533,8 @@ class: inverse, middle, center
 
 
 ```{r fitted_2, include = FALSE}
-compute_group_lm_fitted<- function(data, scales){
+compute_group_lm_fitted<- function(data,
+                                   scales){
   model<-lm(formula= y ~ x, data = data)
   data %>% 
     mutate(y=model$fitted.values)
@@ -438,7 +543,8 @@ compute_group_lm_fitted<- function(data, scales){
 # test out the function
 penguins %>%
   # rename to explicitly state the x and y inputs
-  rename(x = bill_depth_mm, y = bill_length_mm)%>%
+  rename(x = bill_depth_mm, 
+         y = bill_length_mm)%>%
   compute_group_lm_fitted()
 ```
 
@@ -452,10 +558,12 @@ penguins %>%
 
 
 ```{r fitted_3, include = FALSE}
-StatLmFitted<-ggplot2::ggproto(`_class` = "StatLmFitted",
-                                  `_inherit` = ggplot2::Stat,
-                                  required_aes = c("x", "y"),
-                                  compute_group = compute_group_lm_fitted)
+StatLmFitted <- ggplot2::ggproto(
+  `_class` = "StatLmFitted",
+  `_inherit` = ggplot2::Stat,
+  required_aes = c("x", "y"),
+  compute_group = compute_group_lm_fitted
+  )
 ```
 
 
@@ -486,7 +594,13 @@ geom_point_lm_fitted <- function(mapping = NULL, data = NULL,
 }
 ```
 
+---
+class: inverse, middle, center
+
+
 ## Step 4: Enjoy! Use your function
+
+
 
 ---
 
@@ -503,6 +617,10 @@ penguins %>%
   geom_point_lm_fitted(color="blue")
 ```
 
+---
+class: inverse, middle, center
+
+
 ### And check out conditionality
 
 ---
@@ -514,10 +632,76 @@ penguins %>%
 ```{r fitted_6, include = FALSE}
 penguins %>% 
   ggplot() + 
-  aes(x = bill_depth_mm, y = bill_length_mm) +
+  aes(x = bill_depth_mm, 
+      y = bill_length_mm) +
   geom_point() + 
   geom_smooth(method="lm", se= F) +
   geom_point_lm_fitted() + 
   facet_wrap(facets = vars(species))
 ```
+
+
+
+---
+class: inverse, middle, center
+background-image: url(https://images.unsplash.com/photo-1499636136210-6f4ee915583e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80)
+background-size: cover
+
+
+---
+class: inverse, middle, center
+
+## Now you... Create the function `geom_segment_lm_residuals()`. 
+
+--
+
+### Hint: read about what aesthetics are required for segments.  We'll give you Step 0 this time...
+
+--
+
+## Step 0: use base ggplot2 to get the job done
+
+---
+
+`r flipbookr::chunk_reveal("residuals")`
+
+```{r residuals, include=FALSE}
+model <- lm(formula = 
+              bill_length_mm ~ bill_depth_mm, 
+            data = penguins) 
+
+penguins_w_fitted <- penguins %>% 
+  mutate(fitted = model$fitted.values)
+
+penguins %>% 
+  ggplot() + 
+  aes(x = bill_depth_mm, y = bill_length_mm) +
+  geom_point() + 
+  geom_smooth(method = "lm", se = F) + 
+  geom_segment(data = penguins_w_fitted,
+             aes(yend = fitted, xend = bill_depth_mm),
+             color = "blue")
+```
+
+---
+class: inverse, center, middle
+background-image: url(https://images.unsplash.com/photo-1630297169944-1316e5e011f8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTc1fHxiYWtlcnl8ZW58MHx8MHx8&auto=format&fit=crop&w=400&q=60)
+background-size: cover
+
+
+## Not interested in writing your own geoms?  
+
+--
+
+### Check out some ready-to-go geoms that might be of interest in the {ggxmean} package... or other extension packages.
+
+
+--
+
+## Or interested in working a bit more with geoms and making them available to more folks, but not interested in writing your own package?
+
+--
+
+
+### Join in on the development and validation of the ggxmean package for statistical educators and everyday analysis.
 
