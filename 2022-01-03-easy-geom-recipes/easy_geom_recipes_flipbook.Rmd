@@ -18,11 +18,16 @@ output:
 class: inverse, middle
 background-image: url(https://images.unsplash.com/photo-1592173376801-185310a68dea?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1286&q=80)
 background-size: cover
+
+
+
 # Easy geom_*() recipes
 
-### Gina Reynolds and Morgan Brown
+###Gina Reynolds and Morgan Brown
 
-#### Photo Credit: Thalia Ruiz
+<br>
+<br>
+<br>
 
 ```{r, include = F}
 # This is the recommended set up for flipbooks
@@ -478,7 +483,7 @@ class: inverse, middle, center
 - geom should have behavior of geom_text (not geom_label)
 
 
-Hint:
+Hint: `paste0("(", 1, ", ",3., ")")`
 
 
 
@@ -577,10 +582,13 @@ StatLmFitted <- ggplot2::ggproto(
 
 
 ```{r fitted_4, include = FALSE}
-geom_point_lm_fitted <- function(mapping = NULL, data = NULL,
-                           position = "identity", na.rm = FALSE,
-                           show.legend = NA,
-                           inherit.aes = TRUE, ...) {
+geom_point_lm_fitted <- function(
+  mapping = NULL, data = NULL,
+  position = "identity", 
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE, ...) {
+  
   ggplot2::layer(
     stat = StatLmFitted, # proto object from step 2
     geom = ggplot2::GeomPoint, # inherit other behavior
@@ -591,6 +599,7 @@ geom_point_lm_fitted <- function(mapping = NULL, data = NULL,
     inherit.aes = inherit.aes,
     params = list(na.rm = na.rm, ...)
   )
+  
 }
 ```
 
@@ -693,7 +702,7 @@ background-size: cover
 
 --
 
-### Check out some ready-to-go geoms that might be of interest in the {ggxmean} package... or other extension packages.
+### Check out some ready-to-go geoms that might be of interest in the [{ggxmean}](https://evamaerey.github.io/ggxmean/) package... or [other extension packages](https://exts.ggplot2.tidyverse.org/).
 
 
 --
@@ -705,3 +714,15 @@ background-size: cover
 
 ### Join in on the development and validation of the ggxmean package for statistical educators and everyday analysis.
 
+---
+
+
+
+#### Photo Credits: Thalia Ruiz, Jennifer Pallian, Lisa Hanly, John Dancy, Piper Bchamp
+
+#### More comprehensive extension resources: 
+
+- https://www.youtube.com/watch?v=uj7A3i2fi54
+- https://cran.r-project.org/web/packages/ggplot2/vignettes/extending-ggplot2.html
+
+- https://ggplot2-book.org/extensions.html
