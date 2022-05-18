@@ -279,7 +279,11 @@ ggplot2 intentionally lean for maintainance purposes...
 
 --
 
-but geom_x_mean() would be so nice
+but geom_x_mean() would be so nice!
+
+--
+
+{ggxmean} r package
 
 ---
 
@@ -345,7 +349,7 @@ $$ cor(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{n *\sigma_x \sigma_y} $
 
 ---
 
-# Phase 1: New geometries to tell the covariance, variance, sd, 
+# Phase 1: New geometries to tell the covariance, variance, sd, correlation
 
 `r flipbookr::chunk_reveal("correlation")`
 
@@ -375,13 +379,106 @@ palmerpenguins::penguins %>%
 
 # phase 2, New geometries to tell MA206 stories
 
-OLS
+---
+
+`r flipbookr::chunk_reveal("ols")`
+
+```{r ols, include = F}
+library(tidyverse)
+library(ggxmean)
+#library(transformr) might help w/ animate
+
+## basic example code
+cars %>% 
+  ggplot() +
+  aes(x = speed,
+      y = dist) +
+  geom_point() + 
+  ggxmean::geom_x_mean() +
+  ggxmean::geom_x_mean_label() +
+  ggxmean::geom_y_mean() +
+  ggxmean::geom_xy_means(color = "red",
+                size = 5) +
+  ggxmean::geom_lm_fitted(color = "goldenrod3",
+                          size = 3) +
+  ggxmean::geom_lm_pred_int() +
+  ggxmean::geom_lm() +
+  ggxmean::geom_lm_residuals(linetype = "dashed") +
+  ggxmean::geom_lm_conf_int() +
+  ggxmean::geom_lm_formula() +
+  ggxmean::geom_lm_intercept(color = "red",
+                             size = 5) +
+  ggxmean::geom_lm_intercept_label(size = 3,
+                                   hjust = 0)
+```
 
 ---
 
 # phase 3, Fall Independent Studies (geoms together) New geometries - epilogue of story...
 
+---
+
+`r flipbookr::chunk_reveal("anscombe")`
+
+```{r anscombe, include = T}
+datasets::anscombe %>%
+  pivot_longer(cols = 1:8) %>%
+  mutate(group = str_extract(name, "\\d")) %>%
+  mutate(var = str_extract(name, "\\w")) %>%
+  select(-name) %>%
+  pivot_wider(names_from = var,
+              values_from = value) %>%
+  unnest() ->
+tidy_anscombe
+```
+
+---
+
+`r flipbookr::chunk_reveal("dino")`
+
+
+```{r dino, include = F}
+tidy_anscombe %>%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+  aes(color = group) +
+  facet_wrap(facets = vars(group)) +
+# mean of x
+  ggxmean::geom_x_mean() +
+  ggxmean::geom_y_mean() +
+# mean of y
+  ggxmean:::geom_x1sd(linetype = "dashed") +
+  ggxmean:::geom_y1sd(linetype = "dashed") +
+# linear model
+  ggxmean::geom_lm() +
+  ggxmean::geom_lm_formula() +
+# Pearson correlation
+  ggxmean:::geom_corrlabel() 
+```
+
 Anscombs quartet/datasaurus...
+
+```{r dino, include = F}
+datasauRus::datasaurus_dozen %>%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+  facet_wrap(facets = vars(dataset)) +
+# mean of x
+  ggxmean::geom_x_mean() +
+  ggxmean::geom_y_mean() +
+# mean of y
+  ggxmean:::geom_x1sd(linetype = "dashed") +
+  ggxmean:::geom_y1sd(linetype = "dashed") +
+# linear model
+  ggxmean::geom_lm() +
+  ggxmean::geom_lm_formula() +
+# Pearson correlation
+  ggxmean:::geom_corrlabel() + 
+  ggxmean::geom_point_high_cooks(color = "goldenrod",
+                                 size = 5) 
+```
 
 ---
 
@@ -392,6 +489,296 @@ Easy Geom Recipes
 
 
 ---
+class: inverse, middle
+background-image: url(https://images.unsplash.com/photo-1592173376801-185310a68dea?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1286&q=80)
+background-size: cover
+
+
+
+# Easy geom_*() recipes
+
+###Gina Reynolds and Morgan Brown
+
+<br>
+<br>
+<br>
+
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 7, fig.height = 5, message = F, warning = FALSE, comment = "", cache = T)
+
+options(tibble.print_min = 55)
+options(knitr.duplicate.label = "allow")
+options(width=300) # prevents data wrapping
+```
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 90%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+
+---
+
+
+### Using ggplot2 has been described as writing 'graphical poems'.
+
+--
+
+<!-- and a system that lets us 'speak our plot into existence'.  -->
+### But we may feel at a loss for words when functions we'd like to have don't exist.  The ggplot2 extension system allows us to build new 'vocabulary' for fluent expression.  
+
+--
+
+### An exciting extension mechanism is inheriting from existing geoms.  Particularly important to statisticians and mathematicians is writing new geom_* that perform and visualize calculations.  
+
+---
+
+### To get your feet wet in this world and give you a taste of patterns for geom extension, we provide three *introductory* examples of the geoms_ that inherit from *existing* geoms (point, text, segment, etc) along with practice exercises.  
+
+--
+
+### With such geoms, calculation is done under the hood by the ggplot2 system; with these geom, you can write graphical poems with exciting new graphical 'words'! 
+
+---
+
+### This tutorial is intended for individuals who already have a working knowledge of the grammar of ggplot2, but may like to build a richer vocabulary for themselves. 
+
+--
+
+### Grab an .Rmd worksheet version [here](https://raw.githubusercontent.com/EvaMaeRey/mytidytuesday/master/2022-01-03-easy-geom-recipes/easy_geom_recipes.Rmd).
+
+### or you can browse the rendered version of that [here](https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/easy_geom_recipes.html).
+
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
+```
+
+---
+class: inverse, middle, center
+
+# Recipe #1
+
+--
+
+##`geom_point_xy_medians()`
+
+--
+
+- This will be a point at the median of x and y
+
+---
+class: inverse, middle, center
+
+## Step 0: use base ggplot2 to get the job done
+
+---
+
+
+`r flipbookr::chunk_reveal("penguins", left_assign = "detect")`
+
+
+```{r penguins, include = FALSE}
+library(tidyverse)
+library(palmerpenguins)
+
+penguins <- remove_missing(penguins)
+
+penguins %>% 
+  summarize(bill_length_mm_median = median(bill_length_mm),
+            bill_depth_mm_median = median(bill_depth_mm)) ->
+penguins_medians
+
+penguins %>% 
+  ggplot() + 
+  aes(x = bill_depth_mm) + 
+  aes(y = bill_length_mm) + 
+  geom_point() + 
+  geom_point(data = penguins_medians,
+    color = "red", size = 4,
+             aes(x = bill_depth_mm_median,
+                 y = bill_length_mm_median))
+```
+
+---
+class: inverse, middle, center
+
+## Step 1: computation
+
+--
+
+- define computation that ggplot2 should do for you, before plotting
+  - here it's computing a variable with labels for each observation
+- test that functionality!
+
+---
+
+
+`r flipbookr::chunk_reveal("compute_group_xy_medians", left_assign = "detect")`
+
+
+```{r compute_group_xy_medians, include = FALSE}
+compute_group_xy_medians <- function(data, 
+                                     scales){
+  data %>% 
+    summarize(x = median(x),
+            y = median(y))
+}
+
+penguins %>%
+  # function requires data 
+  # with columns named x and y
+  rename(x = bill_depth_mm, 
+         y = bill_length_mm) %>%
+  compute_group_xy_medians()
+```
+
+
+---
+class: inverse, middle, center
+
+## Step 2: define ggproto
+
+--
+
+- what's the naming convention for the proto object?
+- which aesthetics are required as inputs?
+- where does the function from above go?
+
+---
+
+
+`r flipbookr::chunk_reveal("StatXYMedians", left_assign = "detect")`
+
+
+```{r StatXYMedians, include = FALSE}
+StatXYMedians <- ggplot2::ggproto(
+  `_class` = "StatXYMedians",
+  `_inherit` = ggplot2::Stat,
+  required_aes = c("x", "y"),
+  compute_group = compute_group_xy_medians
+  )
+```
+
+---
+class: inverse, middle, center
+
+## Step 3: define geom_* function
+
+
+--
+
+- define the stat and geom for your layer
+
+---
+
+
+`r flipbookr::chunk_reveal("geom_point_xy_medians", left_assign = "detect")`
+
+
+```{r geom_point_xy_medians, include = FALSE} 
+geom_point_xy_medians <- function(
+  mapping = NULL, 
+  data = NULL,
+  position = "identity", 
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE, ...) {
+  
+  ggplot2::layer(
+    stat = StatXYMedians, # proto object from step 2
+    geom = ggplot2::GeomPoint, # inherit other behavior
+    data = data, 
+    mapping = mapping,
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+  
+}
+```
+
+---
+class: inverse, middle, center
+
+
+## Step 4: Enjoy! Use your function
+
+
+---
+
+
+`r flipbookr::chunk_reveal("enjoy_penguins", left_assign = "detect")`
+
+
+```{r enjoy_penguins, include = FALSE}
+penguins %>%
+  ggplot()+
+  aes(x = bill_depth_mm, 
+      y = bill_length_mm) +
+  geom_point()+
+  geom_point_xy_medians(color = "red")
+```
+
+---
+class: inverse, middle, center
+
+### And check out conditionality!
+
+---
+
+
+`r flipbookr::chunk_reveal("conditional_penguins", left_assign = "detect")`
+
+
+```{r conditional_penguins, include = FALSE}
+penguins %>%
+  ggplot()+
+  aes(x = bill_depth_mm, 
+      y = bill_length_mm, 
+      color = species)+
+  geom_point()+
+  geom_point_xy_medians(size = 4)
+```
+
+---
+class: inverse, middle, center
+background-image: url(https://images.unsplash.com/photo-1628559225804-71f6e4643f44?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=837&q=80)
+background-size: cover
+
+
+
+---
+class: inverse, middle, center
+
+## Now you ...
+
+--
+
+### Create the function `geom_point_xy_means()`
 
 
 
