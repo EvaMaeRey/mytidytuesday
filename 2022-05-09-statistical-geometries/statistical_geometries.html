@@ -1,0 +1,2099 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Extending ggplot2 statistical geometries</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gina Reynolds" />
+    <script src="libs/header-attrs-2.6/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: inverse, bottom
+background-image: url(https://images.unsplash.com/photo-1603300216540-6b77f84ee101?ixlib=rb-1.2.1&amp;raw_url=true&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=387)
+background-size: cover
+
+# Unlocking ggplot2 as a computational engine 
+## by extending ggplot2 statistical geometries
+### Dr. Evangeline 'Gina' Reynolds
+
+### Thursday May 19, 2022, 12:15AM
+#### Photo Credit: Mike Lewis HeadSmart Media
+
+
+
+
+
+
+
+---
+
+# Grammar of Graphics
+
+---
+
+## Elements of the Grammar of Graphics (choices)
+
+![](https://miro.medium.com/max/1400/1*MMZuYgeC_YjXNC1r4D4sog.png)&lt;!-- --&gt;
+
+
+---
+
+### A series of 'grammatical' choices:
+
+--
+
+- declarative mood: Declare data
+
+--
+
+- interrogative mood: ask for representation choose aesthetic mapping (what aesthetics (color, size, position) will represent what variables)
+
+--
+
+- nouns: geometric objects, 'geoms' or 'marks' (tableau's vocabulary) that take on the visual attributes
+
+--
+
+- modifiers (adjectives, adverbs): change defaults
+
+  - labels
+  - aesthetic scales
+  - coordinate system
+  
+--
+
+- conditional mood: 
+
+  - change data, aesthetic mapping, or defaults for specific geom layer
+  
+--
+
+- punctuation: make decision to facet or not, breaking up your ideas
+    
+--
+
+- interjections: annotation
+
+--
+
+- greetings: theme (plot look and feel)
+
+
+
+---
+
+&gt; # "the Grammar of Graphics makes everything else easy because you've just got all these, like, little nice decomposable components" -- Hadley Wickham
+
+
+---
+# So what's the promise of ggplot2?
+
+--
+
+## Getting the plot form you picture in your head ...
+
+--
+
+## ... into reality...
+
+--
+
+## ... by describing it.
+
+---
+
+# ggplot2 is called a 'declarative' graphing system.
+
+--
+
+# It lets you *'speak your plot into existence'*. (Thomas Lin Pederson?) 
+
+--
+
+### This is fast. Because most of us, can **picture** the form of the plot we're going after rather clearly (i.e. what the horizontal position should represent, what color should represent, what 'marks' (points, lines) are going to appear on the plot).  
+--
+'Getting' our plot made becomes a matter of describing what we're already picturing!
+
+---
+
+
+
+## "Create graphical 'poems'." - Hadley Wickham
+
+--
+
+## 'Write statistical stories.' - Gina Reynolds
+
+
+
+---
+
+# The problem?
+
+--
+
+## Sometimes we don't have the vocabulary that's needed to 'speak' fluently.
+
+---
+
+## Example: adding the mean
+
+&lt;img src="statistical_geometries_files/figure-html/unnamed-chunk-3-1.png" width="504" /&gt;
+
+???
+Consider for example, a the seemingly simple enterprise of adding a vertical line at the mean of x, perhaps atop a histogram or density plot.
+
+
+---
+
+count: false
+ 
+### Adding the mean at x w/ base ggplot2
+.panel1-basic-auto[
+
+```r
+*airquality
+```
+]
+ 
+.panel2-basic-auto[
+
+```
+    Ozone Solar.R Wind Temp Month Day
+1      41     190  7.4   67     5   1
+2      36     118  8.0   72     5   2
+3      12     149 12.6   74     5   3
+4      18     313 11.5   62     5   4
+5      NA      NA 14.3   56     5   5
+6      28      NA 14.9   66     5   6
+7      23     299  8.6   65     5   7
+8      19      99 13.8   59     5   8
+9       8      19 20.1   61     5   9
+10     NA     194  8.6   69     5  10
+11      7      NA  6.9   74     5  11
+12     16     256  9.7   69     5  12
+13     11     290  9.2   66     5  13
+14     14     274 10.9   68     5  14
+15     18      65 13.2   58     5  15
+16     14     334 11.5   64     5  16
+17     34     307 12.0   66     5  17
+18      6      78 18.4   57     5  18
+19     30     322 11.5   68     5  19
+20     11      44  9.7   62     5  20
+21      1       8  9.7   59     5  21
+22     11     320 16.6   73     5  22
+23      4      25  9.7   61     5  23
+24     32      92 12.0   61     5  24
+25     NA      66 16.6   57     5  25
+26     NA     266 14.9   58     5  26
+27     NA      NA  8.0   57     5  27
+28     23      13 12.0   67     5  28
+29     45     252 14.9   81     5  29
+30    115     223  5.7   79     5  30
+31     37     279  7.4   76     5  31
+32     NA     286  8.6   78     6   1
+33     NA     287  9.7   74     6   2
+34     NA     242 16.1   67     6   3
+35     NA     186  9.2   84     6   4
+36     NA     220  8.6   85     6   5
+37     NA     264 14.3   79     6   6
+38     29     127  9.7   82     6   7
+39     NA     273  6.9   87     6   8
+40     71     291 13.8   90     6   9
+41     39     323 11.5   87     6  10
+42     NA     259 10.9   93     6  11
+43     NA     250  9.2   92     6  12
+44     23     148  8.0   82     6  13
+45     NA     332 13.8   80     6  14
+46     NA     322 11.5   79     6  15
+47     21     191 14.9   77     6  16
+48     37     284 20.7   72     6  17
+49     20      37  9.2   65     6  18
+50     12     120 11.5   73     6  19
+51     13     137 10.3   76     6  20
+52     NA     150  6.3   77     6  21
+53     NA      59  1.7   76     6  22
+54     NA      91  4.6   76     6  23
+55     NA     250  6.3   76     6  24
+56     NA     135  8.0   75     6  25
+57     NA     127  8.0   78     6  26
+58     NA      47 10.3   73     6  27
+59     NA      98 11.5   80     6  28
+60     NA      31 14.9   77     6  29
+61     NA     138  8.0   83     6  30
+62    135     269  4.1   84     7   1
+63     49     248  9.2   85     7   2
+64     32     236  9.2   81     7   3
+65     NA     101 10.9   84     7   4
+66     64     175  4.6   83     7   5
+67     40     314 10.9   83     7   6
+68     77     276  5.1   88     7   7
+69     97     267  6.3   92     7   8
+70     97     272  5.7   92     7   9
+71     85     175  7.4   89     7  10
+72     NA     139  8.6   82     7  11
+73     10     264 14.3   73     7  12
+74     27     175 14.9   81     7  13
+75     NA     291 14.9   91     7  14
+76      7      48 14.3   80     7  15
+77     48     260  6.9   81     7  16
+78     35     274 10.3   82     7  17
+79     61     285  6.3   84     7  18
+80     79     187  5.1   87     7  19
+81     63     220 11.5   85     7  20
+82     16       7  6.9   74     7  21
+83     NA     258  9.7   81     7  22
+84     NA     295 11.5   82     7  23
+85     80     294  8.6   86     7  24
+86    108     223  8.0   85     7  25
+87     20      81  8.6   82     7  26
+88     52      82 12.0   86     7  27
+89     82     213  7.4   88     7  28
+90     50     275  7.4   86     7  29
+91     64     253  7.4   83     7  30
+92     59     254  9.2   81     7  31
+93     39      83  6.9   81     8   1
+94      9      24 13.8   81     8   2
+95     16      77  7.4   82     8   3
+96     78      NA  6.9   86     8   4
+97     35      NA  7.4   85     8   5
+98     66      NA  4.6   87     8   6
+99    122     255  4.0   89     8   7
+100    89     229 10.3   90     8   8
+101   110     207  8.0   90     8   9
+102    NA     222  8.6   92     8  10
+103    NA     137 11.5   86     8  11
+104    44     192 11.5   86     8  12
+105    28     273 11.5   82     8  13
+106    65     157  9.7   80     8  14
+107    NA      64 11.5   79     8  15
+108    22      71 10.3   77     8  16
+109    59      51  6.3   79     8  17
+110    23     115  7.4   76     8  18
+111    31     244 10.9   78     8  19
+112    44     190 10.3   78     8  20
+113    21     259 15.5   77     8  21
+114     9      36 14.3   72     8  22
+115    NA     255 12.6   75     8  23
+116    45     212  9.7   79     8  24
+117   168     238  3.4   81     8  25
+118    73     215  8.0   86     8  26
+119    NA     153  5.7   88     8  27
+120    76     203  9.7   97     8  28
+121   118     225  2.3   94     8  29
+122    84     237  6.3   96     8  30
+123    85     188  6.3   94     8  31
+124    96     167  6.9   91     9   1
+125    78     197  5.1   92     9   2
+126    73     183  2.8   93     9   3
+127    91     189  4.6   93     9   4
+128    47      95  7.4   87     9   5
+129    32      92 15.5   84     9   6
+130    20     252 10.9   80     9   7
+131    23     220 10.3   78     9   8
+132    21     230 10.9   75     9   9
+133    24     259  9.7   73     9  10
+134    44     236 14.9   81     9  11
+135    21     259 15.5   76     9  12
+136    28     238  6.3   77     9  13
+137     9      24 10.9   71     9  14
+138    13     112 11.5   71     9  15
+139    46     237  6.9   78     9  16
+140    18     224 13.8   67     9  17
+141    13      27 10.3   76     9  18
+142    24     238 10.3   68     9  19
+143    16     201  8.0   82     9  20
+144    13     238 12.6   64     9  21
+145    23      14  9.2   71     9  22
+146    36     139 10.3   81     9  23
+147     7      49 10.3   69     9  24
+148    14      20 16.6   63     9  25
+149    30     193  6.9   70     9  26
+150    NA     145 13.2   77     9  27
+151    14     191 14.3   75     9  28
+152    18     131  8.0   76     9  29
+153    20     223 11.5   68     9  30
+```
+]
+
+---
+count: false
+ 
+### Adding the mean at x w/ base ggplot2
+.panel1-basic-auto[
+
+```r
+airquality %&gt;%
+* ggplot(data = .)
+```
+]
+ 
+.panel2-basic-auto[
+&lt;img src="statistical_geometries_files/figure-html/basic_auto_02_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+### Adding the mean at x w/ base ggplot2
+.panel1-basic-auto[
+
+```r
+airquality %&gt;%
+  ggplot(data = .) +
+* aes(x = Ozone)
+```
+]
+ 
+.panel2-basic-auto[
+&lt;img src="statistical_geometries_files/figure-html/basic_auto_03_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+### Adding the mean at x w/ base ggplot2
+.panel1-basic-auto[
+
+```r
+airquality %&gt;%
+  ggplot(data = .) +
+  aes(x = Ozone) +
+* geom_rug()
+```
+]
+ 
+.panel2-basic-auto[
+&lt;img src="statistical_geometries_files/figure-html/basic_auto_04_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+### Adding the mean at x w/ base ggplot2
+.panel1-basic-auto[
+
+```r
+airquality %&gt;%
+  ggplot(data = .) +
+  aes(x = Ozone) +
+  geom_rug() +
+* geom_histogram()
+```
+]
+ 
+.panel2-basic-auto[
+&lt;img src="statistical_geometries_files/figure-html/basic_auto_05_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+### Adding the mean at x w/ base ggplot2
+.panel1-basic-auto[
+
+```r
+airquality %&gt;%
+  ggplot(data = .) +
+  aes(x = Ozone) +
+  geom_rug() +
+  geom_histogram() +
+* geom_vline(
+*   xintercept =
+*     mean(airquality$Ozone,
+*          na.rm = T)
+*   )
+```
+]
+ 
+.panel2-basic-auto[
+&lt;img src="statistical_geometries_files/figure-html/basic_auto_06_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+### Adding the mean at x w/ base ggplot2
+.panel1-basic-auto[
+
+```r
+airquality %&gt;%
+  ggplot(data = .) +
+  aes(x = Ozone) +
+  geom_rug() +
+  geom_histogram() +
+  geom_vline(
+    xintercept =
+      mean(airquality$Ozone,
+           na.rm = T)
+    ) -&gt;
+*g 
+```
+]
+ 
+.panel2-basic-auto[
+
+]
+
+---
+count: false
+ 
+### Adding the mean at x w/ base ggplot2
+.panel1-basic-auto[
+
+```r
+airquality %&gt;%
+  ggplot(data = .) +
+  aes(x = Ozone) +
+  geom_rug() +
+  geom_histogram() +
+  geom_vline(
+    xintercept =
+      mean(airquality$Ozone,
+           na.rm = T)
+    ) -&gt;
+g
+
+*g %&gt;% layer_data(i = 2)  # histogram layer
+```
+]
+ 
+.panel2-basic-auto[
+
+```
+    y count          x       xmin       xmax     density     ncount   ndensity
+1   1     1   0.000000  -2.879310   2.879310 0.001497006 0.05882353 0.05882353
+2   6     6   5.758621   2.879310   8.637931 0.008982036 0.35294118 0.35294118
+3  17    17  11.517241   8.637931  14.396552 0.025449102 1.00000000 1.00000000
+4  13    13  17.275862  14.396552  20.155172 0.019461078 0.76470588 0.76470588
+5  13    13  23.034483  20.155172  25.913793 0.019461078 0.76470588 0.76470588
+6   8     8  28.793103  25.913793  31.672414 0.011976048 0.47058824 0.47058824
+7  10    10  34.551724  31.672414  37.431034 0.014970060 0.58823529 0.58823529
+8   4     4  40.310345  37.431034  43.189655 0.005988024 0.23529412 0.23529412
+9   8     8  46.068966  43.189655  48.948276 0.011976048 0.47058824 0.47058824
+10  3     3  51.827586  48.948276  54.706897 0.004491018 0.17647059 0.17647059
+11  2     2  57.586207  54.706897  60.465517 0.002994012 0.11764706 0.11764706
+12  6     6  63.344828  60.465517  66.224138 0.008982036 0.35294118 0.35294118
+13  1     1  69.103448  66.224138  71.982759 0.001497006 0.05882353 0.05882353
+14  4     4  74.862069  71.982759  77.741379 0.005988024 0.23529412 0.23529412
+15  5     5  80.620690  77.741379  83.500000 0.007485030 0.29411765 0.29411765
+16  4     4  86.379310  83.500000  89.258621 0.005988024 0.23529412 0.23529412
+17  1     1  92.137931  89.258621  95.017241 0.001497006 0.05882353 0.05882353
+18  3     3  97.896552  95.017241 100.775862 0.004491018 0.17647059 0.17647059
+19  0     0 103.655172 100.775862 106.534483 0.000000000 0.00000000 0.00000000
+20  2     2 109.413793 106.534483 112.293103 0.002994012 0.11764706 0.11764706
+21  2     2 115.172414 112.293103 118.051724 0.002994012 0.11764706 0.11764706
+22  1     1 120.931034 118.051724 123.810345 0.001497006 0.05882353 0.05882353
+23  0     0 126.689655 123.810345 129.568966 0.000000000 0.00000000 0.00000000
+24  1     1 132.448276 129.568966 135.327586 0.001497006 0.05882353 0.05882353
+25  0     0 138.206897 135.327586 141.086207 0.000000000 0.00000000 0.00000000
+26  0     0 143.965517 141.086207 146.844828 0.000000000 0.00000000 0.00000000
+27  0     0 149.724138 146.844828 152.603448 0.000000000 0.00000000 0.00000000
+28  0     0 155.482759 152.603448 158.362069 0.000000000 0.00000000 0.00000000
+29  0     0 161.241379 158.362069 164.120690 0.000000000 0.00000000 0.00000000
+30  1     1 167.000000 164.120690 169.879310 0.001497006 0.05882353 0.05882353
+   flipped_aes PANEL group ymin ymax colour   fill size linetype alpha
+1        FALSE     1    -1    0    1     NA grey35  0.5        1    NA
+2        FALSE     1    -1    0    6     NA grey35  0.5        1    NA
+3        FALSE     1    -1    0   17     NA grey35  0.5        1    NA
+4        FALSE     1    -1    0   13     NA grey35  0.5        1    NA
+5        FALSE     1    -1    0   13     NA grey35  0.5        1    NA
+6        FALSE     1    -1    0    8     NA grey35  0.5        1    NA
+7        FALSE     1    -1    0   10     NA grey35  0.5        1    NA
+8        FALSE     1    -1    0    4     NA grey35  0.5        1    NA
+9        FALSE     1    -1    0    8     NA grey35  0.5        1    NA
+10       FALSE     1    -1    0    3     NA grey35  0.5        1    NA
+11       FALSE     1    -1    0    2     NA grey35  0.5        1    NA
+12       FALSE     1    -1    0    6     NA grey35  0.5        1    NA
+13       FALSE     1    -1    0    1     NA grey35  0.5        1    NA
+14       FALSE     1    -1    0    4     NA grey35  0.5        1    NA
+15       FALSE     1    -1    0    5     NA grey35  0.5        1    NA
+16       FALSE     1    -1    0    4     NA grey35  0.5        1    NA
+17       FALSE     1    -1    0    1     NA grey35  0.5        1    NA
+18       FALSE     1    -1    0    3     NA grey35  0.5        1    NA
+19       FALSE     1    -1    0    0     NA grey35  0.5        1    NA
+20       FALSE     1    -1    0    2     NA grey35  0.5        1    NA
+21       FALSE     1    -1    0    2     NA grey35  0.5        1    NA
+22       FALSE     1    -1    0    1     NA grey35  0.5        1    NA
+23       FALSE     1    -1    0    0     NA grey35  0.5        1    NA
+24       FALSE     1    -1    0    1     NA grey35  0.5        1    NA
+25       FALSE     1    -1    0    0     NA grey35  0.5        1    NA
+26       FALSE     1    -1    0    0     NA grey35  0.5        1    NA
+27       FALSE     1    -1    0    0     NA grey35  0.5        1    NA
+28       FALSE     1    -1    0    0     NA grey35  0.5        1    NA
+29       FALSE     1    -1    0    0     NA grey35  0.5        1    NA
+30       FALSE     1    -1    0    1     NA grey35  0.5        1    NA
+```
+]
+
+&lt;style&gt;
+.panel1-basic-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-basic-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-basic-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+```
+    y count          x       xmin       xmax     density     ncount   ndensity
+1   1     1   0.000000  -2.879310   2.879310 0.001497006 0.05882353 0.05882353
+2   6     6   5.758621   2.879310   8.637931 0.008982036 0.35294118 0.35294118
+3  17    17  11.517241   8.637931  14.396552 0.025449102 1.00000000 1.00000000
+4  13    13  17.275862  14.396552  20.155172 0.019461078 0.76470588 0.76470588
+5  13    13  23.034483  20.155172  25.913793 0.019461078 0.76470588 0.76470588
+6   8     8  28.793103  25.913793  31.672414 0.011976048 0.47058824 0.47058824
+7  10    10  34.551724  31.672414  37.431034 0.014970060 0.58823529 0.58823529
+8   4     4  40.310345  37.431034  43.189655 0.005988024 0.23529412 0.23529412
+9   8     8  46.068966  43.189655  48.948276 0.011976048 0.47058824 0.47058824
+10  3     3  51.827586  48.948276  54.706897 0.004491018 0.17647059 0.17647059
+11  2     2  57.586207  54.706897  60.465517 0.002994012 0.11764706 0.11764706
+12  6     6  63.344828  60.465517  66.224138 0.008982036 0.35294118 0.35294118
+13  1     1  69.103448  66.224138  71.982759 0.001497006 0.05882353 0.05882353
+14  4     4  74.862069  71.982759  77.741379 0.005988024 0.23529412 0.23529412
+15  5     5  80.620690  77.741379  83.500000 0.007485030 0.29411765 0.29411765
+16  4     4  86.379310  83.500000  89.258621 0.005988024 0.23529412 0.23529412
+17  1     1  92.137931  89.258621  95.017241 0.001497006 0.05882353 0.05882353
+18  3     3  97.896552  95.017241 100.775862 0.004491018 0.17647059 0.17647059
+19  0     0 103.655172 100.775862 106.534483 0.000000000 0.00000000 0.00000000
+20  2     2 109.413793 106.534483 112.293103 0.002994012 0.11764706 0.11764706
+21  2     2 115.172414 112.293103 118.051724 0.002994012 0.11764706 0.11764706
+22  1     1 120.931034 118.051724 123.810345 0.001497006 0.05882353 0.05882353
+23  0     0 126.689655 123.810345 129.568966 0.000000000 0.00000000 0.00000000
+24  1     1 132.448276 129.568966 135.327586 0.001497006 0.05882353 0.05882353
+25  0     0 138.206897 135.327586 141.086207 0.000000000 0.00000000 0.00000000
+26  0     0 143.965517 141.086207 146.844828 0.000000000 0.00000000 0.00000000
+27  0     0 149.724138 146.844828 152.603448 0.000000000 0.00000000 0.00000000
+28  0     0 155.482759 152.603448 158.362069 0.000000000 0.00000000 0.00000000
+29  0     0 161.241379 158.362069 164.120690 0.000000000 0.00000000 0.00000000
+30  1     1 167.000000 164.120690 169.879310 0.001497006 0.05882353 0.05882353
+   flipped_aes PANEL group ymin ymax colour   fill size linetype alpha
+1        FALSE     1    -1    0    1     NA grey35  0.5        1    NA
+2        FALSE     1    -1    0    6     NA grey35  0.5        1    NA
+3        FALSE     1    -1    0   17     NA grey35  0.5        1    NA
+4        FALSE     1    -1    0   13     NA grey35  0.5        1    NA
+5        FALSE     1    -1    0   13     NA grey35  0.5        1    NA
+6        FALSE     1    -1    0    8     NA grey35  0.5        1    NA
+7        FALSE     1    -1    0   10     NA grey35  0.5        1    NA
+8        FALSE     1    -1    0    4     NA grey35  0.5        1    NA
+9        FALSE     1    -1    0    8     NA grey35  0.5        1    NA
+10       FALSE     1    -1    0    3     NA grey35  0.5        1    NA
+11       FALSE     1    -1    0    2     NA grey35  0.5        1    NA
+12       FALSE     1    -1    0    6     NA grey35  0.5        1    NA
+13       FALSE     1    -1    0    1     NA grey35  0.5        1    NA
+14       FALSE     1    -1    0    4     NA grey35  0.5        1    NA
+15       FALSE     1    -1    0    5     NA grey35  0.5        1    NA
+16       FALSE     1    -1    0    4     NA grey35  0.5        1    NA
+17       FALSE     1    -1    0    1     NA grey35  0.5        1    NA
+18       FALSE     1    -1    0    3     NA grey35  0.5        1    NA
+19       FALSE     1    -1    0    0     NA grey35  0.5        1    NA
+20       FALSE     1    -1    0    2     NA grey35  0.5        1    NA
+21       FALSE     1    -1    0    2     NA grey35  0.5        1    NA
+22       FALSE     1    -1    0    1     NA grey35  0.5        1    NA
+23       FALSE     1    -1    0    0     NA grey35  0.5        1    NA
+24       FALSE     1    -1    0    1     NA grey35  0.5        1    NA
+25       FALSE     1    -1    0    0     NA grey35  0.5        1    NA
+26       FALSE     1    -1    0    0     NA grey35  0.5        1    NA
+27       FALSE     1    -1    0    0     NA grey35  0.5        1    NA
+28       FALSE     1    -1    0    0     NA grey35  0.5        1    NA
+29       FALSE     1    -1    0    0     NA grey35  0.5        1    NA
+30       FALSE     1    -1    0    1     NA grey35  0.5        1    NA
+```
+
+???
+Creating this plot requires greater focus on ggplot2 *syntax*, likely detracting from discussion of *the mean* that statistical instructors desire.
+It may require a discussion about dollar sign syntax and how geom_vline is actually a special geom -- an annotation -- rather than being mapped to the data. None of this is relevant to the point you as an instructor aim to make: maybe that the the mean is the balancing point of the data or maybe a comment about skewness.
+
+
+---
+
+### Adding the conditional means
+
+&lt;img src="statistical_geometries_files/figure-html/cond_means_hard-1.png" width="504" /&gt;
+
+???
+Further, for the case of adding a vertical line at the mean for different subsets of the data, a different approach is required. This enterprise may take instructor/analyst/student on an even larger detour -- possibly googling, and maybe landing on the following stack overflow page where 11,000 analytics souls (some repeats to be sure) have landed:
+
+---
+
+count: false
+ 
+#### Conditional means (may require a trip to stackoverflow!)
+.panel1-cond_means_hard-auto[
+
+```r
+*airquality
+```
+]
+ 
+.panel2-cond_means_hard-auto[
+
+```
+    Ozone Solar.R Wind Temp Month Day
+1      41     190  7.4   67     5   1
+2      36     118  8.0   72     5   2
+3      12     149 12.6   74     5   3
+4      18     313 11.5   62     5   4
+5      NA      NA 14.3   56     5   5
+6      28      NA 14.9   66     5   6
+7      23     299  8.6   65     5   7
+8      19      99 13.8   59     5   8
+9       8      19 20.1   61     5   9
+10     NA     194  8.6   69     5  10
+11      7      NA  6.9   74     5  11
+12     16     256  9.7   69     5  12
+13     11     290  9.2   66     5  13
+14     14     274 10.9   68     5  14
+15     18      65 13.2   58     5  15
+16     14     334 11.5   64     5  16
+17     34     307 12.0   66     5  17
+18      6      78 18.4   57     5  18
+19     30     322 11.5   68     5  19
+20     11      44  9.7   62     5  20
+21      1       8  9.7   59     5  21
+22     11     320 16.6   73     5  22
+23      4      25  9.7   61     5  23
+24     32      92 12.0   61     5  24
+25     NA      66 16.6   57     5  25
+26     NA     266 14.9   58     5  26
+27     NA      NA  8.0   57     5  27
+28     23      13 12.0   67     5  28
+29     45     252 14.9   81     5  29
+30    115     223  5.7   79     5  30
+31     37     279  7.4   76     5  31
+32     NA     286  8.6   78     6   1
+33     NA     287  9.7   74     6   2
+34     NA     242 16.1   67     6   3
+35     NA     186  9.2   84     6   4
+36     NA     220  8.6   85     6   5
+37     NA     264 14.3   79     6   6
+38     29     127  9.7   82     6   7
+39     NA     273  6.9   87     6   8
+40     71     291 13.8   90     6   9
+41     39     323 11.5   87     6  10
+42     NA     259 10.9   93     6  11
+43     NA     250  9.2   92     6  12
+44     23     148  8.0   82     6  13
+45     NA     332 13.8   80     6  14
+46     NA     322 11.5   79     6  15
+47     21     191 14.9   77     6  16
+48     37     284 20.7   72     6  17
+49     20      37  9.2   65     6  18
+50     12     120 11.5   73     6  19
+51     13     137 10.3   76     6  20
+52     NA     150  6.3   77     6  21
+53     NA      59  1.7   76     6  22
+54     NA      91  4.6   76     6  23
+55     NA     250  6.3   76     6  24
+56     NA     135  8.0   75     6  25
+57     NA     127  8.0   78     6  26
+58     NA      47 10.3   73     6  27
+59     NA      98 11.5   80     6  28
+60     NA      31 14.9   77     6  29
+61     NA     138  8.0   83     6  30
+62    135     269  4.1   84     7   1
+63     49     248  9.2   85     7   2
+64     32     236  9.2   81     7   3
+65     NA     101 10.9   84     7   4
+66     64     175  4.6   83     7   5
+67     40     314 10.9   83     7   6
+68     77     276  5.1   88     7   7
+69     97     267  6.3   92     7   8
+70     97     272  5.7   92     7   9
+71     85     175  7.4   89     7  10
+72     NA     139  8.6   82     7  11
+73     10     264 14.3   73     7  12
+74     27     175 14.9   81     7  13
+75     NA     291 14.9   91     7  14
+76      7      48 14.3   80     7  15
+77     48     260  6.9   81     7  16
+78     35     274 10.3   82     7  17
+79     61     285  6.3   84     7  18
+80     79     187  5.1   87     7  19
+81     63     220 11.5   85     7  20
+82     16       7  6.9   74     7  21
+83     NA     258  9.7   81     7  22
+84     NA     295 11.5   82     7  23
+85     80     294  8.6   86     7  24
+86    108     223  8.0   85     7  25
+87     20      81  8.6   82     7  26
+88     52      82 12.0   86     7  27
+89     82     213  7.4   88     7  28
+90     50     275  7.4   86     7  29
+91     64     253  7.4   83     7  30
+92     59     254  9.2   81     7  31
+93     39      83  6.9   81     8   1
+94      9      24 13.8   81     8   2
+95     16      77  7.4   82     8   3
+96     78      NA  6.9   86     8   4
+97     35      NA  7.4   85     8   5
+98     66      NA  4.6   87     8   6
+99    122     255  4.0   89     8   7
+100    89     229 10.3   90     8   8
+101   110     207  8.0   90     8   9
+102    NA     222  8.6   92     8  10
+103    NA     137 11.5   86     8  11
+104    44     192 11.5   86     8  12
+105    28     273 11.5   82     8  13
+106    65     157  9.7   80     8  14
+107    NA      64 11.5   79     8  15
+108    22      71 10.3   77     8  16
+109    59      51  6.3   79     8  17
+110    23     115  7.4   76     8  18
+111    31     244 10.9   78     8  19
+112    44     190 10.3   78     8  20
+113    21     259 15.5   77     8  21
+114     9      36 14.3   72     8  22
+115    NA     255 12.6   75     8  23
+116    45     212  9.7   79     8  24
+117   168     238  3.4   81     8  25
+118    73     215  8.0   86     8  26
+119    NA     153  5.7   88     8  27
+120    76     203  9.7   97     8  28
+121   118     225  2.3   94     8  29
+122    84     237  6.3   96     8  30
+123    85     188  6.3   94     8  31
+124    96     167  6.9   91     9   1
+125    78     197  5.1   92     9   2
+126    73     183  2.8   93     9   3
+127    91     189  4.6   93     9   4
+128    47      95  7.4   87     9   5
+129    32      92 15.5   84     9   6
+130    20     252 10.9   80     9   7
+131    23     220 10.3   78     9   8
+132    21     230 10.9   75     9   9
+133    24     259  9.7   73     9  10
+134    44     236 14.9   81     9  11
+135    21     259 15.5   76     9  12
+136    28     238  6.3   77     9  13
+137     9      24 10.9   71     9  14
+138    13     112 11.5   71     9  15
+139    46     237  6.9   78     9  16
+140    18     224 13.8   67     9  17
+141    13      27 10.3   76     9  18
+142    24     238 10.3   68     9  19
+143    16     201  8.0   82     9  20
+144    13     238 12.6   64     9  21
+145    23      14  9.2   71     9  22
+146    36     139 10.3   81     9  23
+147     7      49 10.3   69     9  24
+148    14      20 16.6   63     9  25
+149    30     193  6.9   70     9  26
+150    NA     145 13.2   77     9  27
+151    14     191 14.3   75     9  28
+152    18     131  8.0   76     9  29
+153    20     223 11.5   68     9  30
+```
+]
+
+---
+count: false
+ 
+#### Conditional means (may require a trip to stackoverflow!)
+.panel1-cond_means_hard-auto[
+
+```r
+airquality %&gt;%
+* group_by(Month)
+```
+]
+ 
+.panel2-cond_means_hard-auto[
+
+```
+# A tibble: 153 × 6
+# Groups:   Month [5]
+   Ozone Solar.R  Wind  Temp Month   Day
+   &lt;int&gt;   &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
+ 1    41     190   7.4    67     5     1
+ 2    36     118   8      72     5     2
+ 3    12     149  12.6    74     5     3
+ 4    18     313  11.5    62     5     4
+ 5    NA      NA  14.3    56     5     5
+ 6    28      NA  14.9    66     5     6
+ 7    23     299   8.6    65     5     7
+ 8    19      99  13.8    59     5     8
+ 9     8      19  20.1    61     5     9
+10    NA     194   8.6    69     5    10
+# … with 143 more rows
+```
+]
+
+---
+count: false
+ 
+#### Conditional means (may require a trip to stackoverflow!)
+.panel1-cond_means_hard-auto[
+
+```r
+airquality %&gt;%
+  group_by(Month) %&gt;%
+* summarise(
+*   Ozone_mean =
+*     mean(Ozone, na.rm = T)
+*   )
+```
+]
+ 
+.panel2-cond_means_hard-auto[
+
+```
+# A tibble: 5 × 2
+  Month Ozone_mean
+  &lt;int&gt;      &lt;dbl&gt;
+1     5       23.6
+2     6       29.4
+3     7       59.1
+4     8       60.0
+5     9       31.4
+```
+]
+
+---
+count: false
+ 
+#### Conditional means (may require a trip to stackoverflow!)
+.panel1-cond_means_hard-auto[
+
+```r
+airquality %&gt;%
+  group_by(Month) %&gt;%
+  summarise(
+    Ozone_mean =
+      mean(Ozone, na.rm = T)
+    ) -&gt;
+*airquality_by_month
+```
+]
+ 
+.panel2-cond_means_hard-auto[
+
+]
+
+---
+count: false
+ 
+#### Conditional means (may require a trip to stackoverflow!)
+.panel1-cond_means_hard-auto[
+
+```r
+airquality %&gt;%
+  group_by(Month) %&gt;%
+  summarise(
+    Ozone_mean =
+      mean(Ozone, na.rm = T)
+    ) -&gt;
+airquality_by_month
+*ggplot(airquality)
+```
+]
+ 
+.panel2-cond_means_hard-auto[
+&lt;img src="statistical_geometries_files/figure-html/cond_means_hard_auto_05_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+#### Conditional means (may require a trip to stackoverflow!)
+.panel1-cond_means_hard-auto[
+
+```r
+airquality %&gt;%
+  group_by(Month) %&gt;%
+  summarise(
+    Ozone_mean =
+      mean(Ozone, na.rm = T)
+    ) -&gt;
+airquality_by_month
+ggplot(airquality) +
+* aes(x = Ozone)
+```
+]
+ 
+.panel2-cond_means_hard-auto[
+&lt;img src="statistical_geometries_files/figure-html/cond_means_hard_auto_06_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+#### Conditional means (may require a trip to stackoverflow!)
+.panel1-cond_means_hard-auto[
+
+```r
+airquality %&gt;%
+  group_by(Month) %&gt;%
+  summarise(
+    Ozone_mean =
+      mean(Ozone, na.rm = T)
+    ) -&gt;
+airquality_by_month
+ggplot(airquality) +
+  aes(x = Ozone) +
+* geom_histogram()
+```
+]
+ 
+.panel2-cond_means_hard-auto[
+&lt;img src="statistical_geometries_files/figure-html/cond_means_hard_auto_07_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+#### Conditional means (may require a trip to stackoverflow!)
+.panel1-cond_means_hard-auto[
+
+```r
+airquality %&gt;%
+  group_by(Month) %&gt;%
+  summarise(
+    Ozone_mean =
+      mean(Ozone, na.rm = T)
+    ) -&gt;
+airquality_by_month
+ggplot(airquality) +
+  aes(x = Ozone) +
+  geom_histogram() +
+* facet_grid(rows = vars(Month))
+```
+]
+ 
+.panel2-cond_means_hard-auto[
+&lt;img src="statistical_geometries_files/figure-html/cond_means_hard_auto_08_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+#### Conditional means (may require a trip to stackoverflow!)
+.panel1-cond_means_hard-auto[
+
+```r
+airquality %&gt;%
+  group_by(Month) %&gt;%
+  summarise(
+    Ozone_mean =
+      mean(Ozone, na.rm = T)
+    ) -&gt;
+airquality_by_month
+ggplot(airquality) +
+  aes(x = Ozone) +
+  geom_histogram() +
+  facet_grid(rows = vars(Month)) +
+* geom_vline(data = airquality_by_month,
+*            aes(xintercept =
+*              Ozone_mean))
+```
+]
+ 
+.panel2-cond_means_hard-auto[
+&lt;img src="statistical_geometries_files/figure-html/cond_means_hard_auto_09_output-1.png" width="504" /&gt;
+]
+
+&lt;style&gt;
+.panel1-cond_means_hard-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-cond_means_hard-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-cond_means_hard-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+---
+
+
+---
+
+geom_boxplot()
+
+---
+
+count: false
+ 
+
+.panel1-boxplot-auto[
+
+```r
+*library(tidyverse)
+```
+]
+ 
+.panel2-boxplot-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-boxplot-auto[
+
+```r
+library(tidyverse)
+*gapminder::gapminder
+```
+]
+ 
+.panel2-boxplot-auto[
+
+```
+# A tibble: 1,704 × 6
+   country     continent  year lifeExp      pop gdpPercap
+   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+ 1 Afghanistan Asia       1952    28.8  8425333      779.
+ 2 Afghanistan Asia       1957    30.3  9240934      821.
+ 3 Afghanistan Asia       1962    32.0 10267083      853.
+ 4 Afghanistan Asia       1967    34.0 11537966      836.
+ 5 Afghanistan Asia       1972    36.1 13079460      740.
+ 6 Afghanistan Asia       1977    38.4 14880372      786.
+ 7 Afghanistan Asia       1982    39.9 12881816      978.
+ 8 Afghanistan Asia       1987    40.8 13867957      852.
+ 9 Afghanistan Asia       1992    41.7 16317921      649.
+10 Afghanistan Asia       1997    41.8 22227415      635.
+# … with 1,694 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-boxplot-auto[
+
+```r
+library(tidyverse)
+gapminder::gapminder %&gt;%
+* filter(year == 2002)
+```
+]
+ 
+.panel2-boxplot-auto[
+
+```
+# A tibble: 142 × 6
+   country     continent  year lifeExp       pop gdpPercap
+   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;     &lt;int&gt;     &lt;dbl&gt;
+ 1 Afghanistan Asia       2002    42.1  25268405      727.
+ 2 Albania     Europe     2002    75.7   3508512     4604.
+ 3 Algeria     Africa     2002    71.0  31287142     5288.
+ 4 Angola      Africa     2002    41.0  10866106     2773.
+ 5 Argentina   Americas   2002    74.3  38331121     8798.
+ 6 Australia   Oceania    2002    80.4  19546792    30688.
+ 7 Austria     Europe     2002    79.0   8148312    32418.
+ 8 Bahrain     Asia       2002    74.8    656397    23404.
+ 9 Bangladesh  Asia       2002    62.0 135656790     1136.
+10 Belgium     Europe     2002    78.3  10311970    30486.
+# … with 132 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-boxplot-auto[
+
+```r
+library(tidyverse)
+gapminder::gapminder %&gt;%
+  filter(year == 2002) %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-boxplot-auto[
+&lt;img src="statistical_geometries_files/figure-html/boxplot_auto_04_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-boxplot-auto[
+
+```r
+library(tidyverse)
+gapminder::gapminder %&gt;%
+  filter(year == 2002) %&gt;%
+  ggplot() +
+* aes(x = continent)
+```
+]
+ 
+.panel2-boxplot-auto[
+&lt;img src="statistical_geometries_files/figure-html/boxplot_auto_05_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-boxplot-auto[
+
+```r
+library(tidyverse)
+gapminder::gapminder %&gt;%
+  filter(year == 2002) %&gt;%
+  ggplot() +
+  aes(x = continent) +
+* aes(y = gdpPercap)
+```
+]
+ 
+.panel2-boxplot-auto[
+&lt;img src="statistical_geometries_files/figure-html/boxplot_auto_06_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-boxplot-auto[
+
+```r
+library(tidyverse)
+gapminder::gapminder %&gt;%
+  filter(year == 2002) %&gt;%
+  ggplot() +
+  aes(x = continent) +
+  aes(y = gdpPercap) +
+* geom_boxplot()
+```
+]
+ 
+.panel2-boxplot-auto[
+&lt;img src="statistical_geometries_files/figure-html/boxplot_auto_07_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-boxplot-auto[
+
+```r
+library(tidyverse)
+gapminder::gapminder %&gt;%
+  filter(year == 2002) %&gt;%
+  ggplot() +
+  aes(x = continent) +
+  aes(y = gdpPercap) +
+  geom_boxplot() -&gt;
+*g 
+```
+]
+ 
+.panel2-boxplot-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-boxplot-auto[
+
+```r
+library(tidyverse)
+gapminder::gapminder %&gt;%
+  filter(year == 2002) %&gt;%
+  ggplot() +
+  aes(x = continent) +
+  aes(y = gdpPercap) +
+  geom_boxplot() -&gt;
+g
+
+*g 
+```
+]
+ 
+.panel2-boxplot-auto[
+&lt;img src="statistical_geometries_files/figure-html/boxplot_auto_09_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-boxplot-auto[
+
+```r
+library(tidyverse)
+gapminder::gapminder %&gt;%
+  filter(year == 2002) %&gt;%
+  ggplot() +
+  aes(x = continent) +
+  aes(y = gdpPercap) +
+  geom_boxplot() -&gt;
+g
+
+g %&gt;%
+* layer_data()
+```
+]
+ 
+.panel2-boxplot-auto[
+
+```
+        ymin      lower    middle     upper      ymax
+1   241.1659   780.5778  1215.683  3314.887  6316.165
+2  1270.3649  4858.3475  6994.775  8797.641 11460.600
+3   611.0000  2092.7124  4090.925 19233.988 36023.105
+4  4604.2117 11721.8515 23674.863 30373.363 44683.975
+5 23189.8014 25064.2897 26938.778 28813.266 30687.755
+                                                      outliers notchupper
+1 11003.605, 7703.496, 12521.714, 9534.677, 9021.816, 7710.946   1770.967
+2                                 33328.97, 18855.61, 39097.10   8239.592
+3                                                                8805.508
+4                                                               29055.213
+5                                                               31127.242
+  notchlower x flipped_aes PANEL group ymin_final ymax_final  xmin  xmax xid
+1   660.3994 1       FALSE     1     1   241.1659   12521.71 0.625 1.375   1
+2  5749.9582 2       FALSE     1     2  1270.3649   39097.10 1.625 2.375   2
+3  -623.6574 3       FALSE     1     3   611.0000   36023.11 2.625 3.375   3
+4 18294.5136 4       FALSE     1     4  4604.2117   44683.98 3.625 4.375   4
+5 22750.3136 5       FALSE     1     5 23189.8014   30687.75 4.625 5.375   5
+  newx new_width weight colour  fill size alpha shape linetype
+1    1      0.75      1 grey20 white  0.5    NA    19    solid
+2    2      0.75      1 grey20 white  0.5    NA    19    solid
+3    3      0.75      1 grey20 white  0.5    NA    19    solid
+4    4      0.75      1 grey20 white  0.5    NA    19    solid
+5    5      0.75      1 grey20 white  0.5    NA    19    solid
+```
+]
+
+&lt;style&gt;
+.panel1-boxplot-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-boxplot-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-boxplot-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+# Like histogram, geom_boxplot does lots of compute in the background
+
+--
+
+### lots of compute in the background
+
+--
+
+### built from a number of primitives
+
+- rect
+- point
+- segment
+
+--
+
+### conceptually distinct from those components
+
+
+---
+
+ggplot2 intentionally lean for maintainance purposes...
+
+--
+
+but geom_x_mean() would be so nice
+
+---
+
+*'extending statistical geometries'*
+
+geoms -&gt; "nouns..."
+
+--
+
+Nouns that inherit from existing geometries.
+
+---
+
+## Hand*schuh*
+
+--
+
+## Nackt*schnecke*
+
+--
+
+## Daumen*kino*
+
+---
+
+Unique new concepts, but inheriting from more primitive forms (segment, point, text, etc)
+
+geom_point*_xy_means
+
+--
+
+geom_coordinates (inherit from geom_text)
+
+--
+
+geom_segment*_residuals (inherits from segment)
+
+--
+
+Easy to use -- you know the grammar!
+
+--
+
+Not horribly to make (especially now...)
+
+
+
+# Origin story... 
+
+---
+
+# Phase 0: Wanting to tell a statistical story w/ ggplot2.  Not fluent
+# correlation + 
+https://evamaerey.github.io/statistics/covariance_correlation.html#1
+
+---
+class: inverse, center, middle
+
+.huge[
+
+$$ cor(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{n *\sigma_x \sigma_y} $$
+] 
+
+---
+
+# Phase 1: New geometries to tell the covariance, variance, sd, 
+
+count: false
+ 
+
+.panel1-correlation-auto[
+
+```r
+*library(ggxmean)
+```
+]
+ 
+.panel2-correlation-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-correlation-auto[
+
+```r
+library(ggxmean)
+*palmerpenguins::penguins
+```
+]
+ 
+.panel2-correlation-auto[
+
+```
+# A tibble: 344 × 8
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750
+ 2 Adelie  Torgersen           39.5          17.4               186        3800
+ 3 Adelie  Torgersen           40.3          18                 195        3250
+ 4 Adelie  Torgersen           NA            NA                  NA          NA
+ 5 Adelie  Torgersen           36.7          19.3               193        3450
+ 6 Adelie  Torgersen           39.3          20.6               190        3650
+ 7 Adelie  Torgersen           38.9          17.8               181        3625
+ 8 Adelie  Torgersen           39.2          19.6               195        4675
+ 9 Adelie  Torgersen           34.1          18.1               193        3475
+10 Adelie  Torgersen           42            20.2               190        4250
+# … with 334 more rows, and 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-correlation-auto[
+
+```r
+library(ggxmean)
+palmerpenguins::penguins %&gt;%
+* drop_na()
+```
+]
+ 
+.panel2-correlation-auto[
+
+```
+# A tibble: 333 × 8
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750
+ 2 Adelie  Torgersen           39.5          17.4               186        3800
+ 3 Adelie  Torgersen           40.3          18                 195        3250
+ 4 Adelie  Torgersen           36.7          19.3               193        3450
+ 5 Adelie  Torgersen           39.3          20.6               190        3650
+ 6 Adelie  Torgersen           38.9          17.8               181        3625
+ 7 Adelie  Torgersen           39.2          19.6               195        4675
+ 8 Adelie  Torgersen           41.1          17.6               182        3200
+ 9 Adelie  Torgersen           38.6          21.2               191        3800
+10 Adelie  Torgersen           34.6          21.1               198        4400
+# … with 323 more rows, and 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-correlation-auto[
+
+```r
+library(ggxmean)
+palmerpenguins::penguins %&gt;%
+  drop_na() %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-correlation-auto[
+&lt;img src="statistical_geometries_files/figure-html/correlation_auto_04_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-correlation-auto[
+
+```r
+library(ggxmean)
+palmerpenguins::penguins %&gt;%
+  drop_na() %&gt;%
+  ggplot() +
+* aes(x = bill_length_mm)
+```
+]
+ 
+.panel2-correlation-auto[
+&lt;img src="statistical_geometries_files/figure-html/correlation_auto_05_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-correlation-auto[
+
+```r
+library(ggxmean)
+palmerpenguins::penguins %&gt;%
+  drop_na() %&gt;%
+  ggplot() +
+  aes(x = bill_length_mm) +
+* aes(y = flipper_length_mm)
+```
+]
+ 
+.panel2-correlation-auto[
+&lt;img src="statistical_geometries_files/figure-html/correlation_auto_06_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-correlation-auto[
+
+```r
+library(ggxmean)
+palmerpenguins::penguins %&gt;%
+  drop_na() %&gt;%
+  ggplot() +
+  aes(x = bill_length_mm) +
+  aes(y = flipper_length_mm) +
+* geom_point()
+```
+]
+ 
+.panel2-correlation-auto[
+&lt;img src="statistical_geometries_files/figure-html/correlation_auto_07_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-correlation-auto[
+
+```r
+library(ggxmean)
+palmerpenguins::penguins %&gt;%
+  drop_na() %&gt;%
+  ggplot() +
+  aes(x = bill_length_mm) +
+  aes(y = flipper_length_mm) +
+  geom_point() +
+* ggxmean:::geom_x_mean()
+```
+]
+ 
+.panel2-correlation-auto[
+&lt;img src="statistical_geometries_files/figure-html/correlation_auto_08_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-correlation-auto[
+
+```r
+library(ggxmean)
+palmerpenguins::penguins %&gt;%
+  drop_na() %&gt;%
+  ggplot() +
+  aes(x = bill_length_mm) +
+  aes(y = flipper_length_mm) +
+  geom_point() +
+  ggxmean:::geom_x_mean() +
+* ggxmean:::geom_y_mean()
+```
+]
+ 
+.panel2-correlation-auto[
+&lt;img src="statistical_geometries_files/figure-html/correlation_auto_09_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-correlation-auto[
+
+```r
+library(ggxmean)
+palmerpenguins::penguins %&gt;%
+  drop_na() %&gt;%
+  ggplot() +
+  aes(x = bill_length_mm) +
+  aes(y = flipper_length_mm) +
+  geom_point() +
+  ggxmean:::geom_x_mean() +
+  ggxmean:::geom_y_mean() +
+* ggxmean:::geom_xdiff()
+```
+]
+ 
+.panel2-correlation-auto[
+&lt;img src="statistical_geometries_files/figure-html/correlation_auto_10_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-correlation-auto[
+
+```r
+library(ggxmean)
+palmerpenguins::penguins %&gt;%
+  drop_na() %&gt;%
+  ggplot() +
+  aes(x = bill_length_mm) +
+  aes(y = flipper_length_mm) +
+  geom_point() +
+  ggxmean:::geom_x_mean() +
+  ggxmean:::geom_y_mean() +
+  ggxmean:::geom_xdiff() +
+* ggxmean:::geom_ydiff()
+```
+]
+ 
+.panel2-correlation-auto[
+&lt;img src="statistical_geometries_files/figure-html/correlation_auto_11_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-correlation-auto[
+
+```r
+library(ggxmean)
+palmerpenguins::penguins %&gt;%
+  drop_na() %&gt;%
+  ggplot() +
+  aes(x = bill_length_mm) +
+  aes(y = flipper_length_mm) +
+  geom_point() +
+  ggxmean:::geom_x_mean() +
+  ggxmean:::geom_y_mean() +
+  ggxmean:::geom_xdiff() +
+  ggxmean:::geom_ydiff() +
+* ggxmean:::geom_x1sd(linetype = "dashed")
+```
+]
+ 
+.panel2-correlation-auto[
+&lt;img src="statistical_geometries_files/figure-html/correlation_auto_12_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-correlation-auto[
+
+```r
+library(ggxmean)
+palmerpenguins::penguins %&gt;%
+  drop_na() %&gt;%
+  ggplot() +
+  aes(x = bill_length_mm) +
+  aes(y = flipper_length_mm) +
+  geom_point() +
+  ggxmean:::geom_x_mean() +
+  ggxmean:::geom_y_mean() +
+  ggxmean:::geom_xdiff() +
+  ggxmean:::geom_ydiff() +
+  ggxmean:::geom_x1sd(linetype = "dashed") +
+* ggxmean:::geom_y1sd(linetype = "dashed")
+```
+]
+ 
+.panel2-correlation-auto[
+&lt;img src="statistical_geometries_files/figure-html/correlation_auto_13_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-correlation-auto[
+
+```r
+library(ggxmean)
+palmerpenguins::penguins %&gt;%
+  drop_na() %&gt;%
+  ggplot() +
+  aes(x = bill_length_mm) +
+  aes(y = flipper_length_mm) +
+  geom_point() +
+  ggxmean:::geom_x_mean() +
+  ggxmean:::geom_y_mean() +
+  ggxmean:::geom_xdiff() +
+  ggxmean:::geom_ydiff() +
+  ggxmean:::geom_x1sd(linetype = "dashed") +
+  ggxmean:::geom_y1sd(linetype = "dashed") +
+* ggxmean:::geom_diffsmultiplied()
+```
+]
+ 
+.panel2-correlation-auto[
+&lt;img src="statistical_geometries_files/figure-html/correlation_auto_14_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-correlation-auto[
+
+```r
+library(ggxmean)
+palmerpenguins::penguins %&gt;%
+  drop_na() %&gt;%
+  ggplot() +
+  aes(x = bill_length_mm) +
+  aes(y = flipper_length_mm) +
+  geom_point() +
+  ggxmean:::geom_x_mean() +
+  ggxmean:::geom_y_mean() +
+  ggxmean:::geom_xdiff() +
+  ggxmean:::geom_ydiff() +
+  ggxmean:::geom_x1sd(linetype = "dashed") +
+  ggxmean:::geom_y1sd(linetype = "dashed") +
+  ggxmean:::geom_diffsmultiplied() +
+* ggxmean:::geom_xydiffsmean(alpha = 1)
+```
+]
+ 
+.panel2-correlation-auto[
+&lt;img src="statistical_geometries_files/figure-html/correlation_auto_15_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-correlation-auto[
+
+```r
+library(ggxmean)
+palmerpenguins::penguins %&gt;%
+  drop_na() %&gt;%
+  ggplot() +
+  aes(x = bill_length_mm) +
+  aes(y = flipper_length_mm) +
+  geom_point() +
+  ggxmean:::geom_x_mean() +
+  ggxmean:::geom_y_mean() +
+  ggxmean:::geom_xdiff() +
+  ggxmean:::geom_ydiff() +
+  ggxmean:::geom_x1sd(linetype = "dashed") +
+  ggxmean:::geom_y1sd(linetype = "dashed") +
+  ggxmean:::geom_diffsmultiplied() +
+  ggxmean:::geom_xydiffsmean(alpha = 1) +
+* ggxmean:::geom_rsq1()
+```
+]
+ 
+.panel2-correlation-auto[
+&lt;img src="statistical_geometries_files/figure-html/correlation_auto_16_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-correlation-auto[
+
+```r
+library(ggxmean)
+palmerpenguins::penguins %&gt;%
+  drop_na() %&gt;%
+  ggplot() +
+  aes(x = bill_length_mm) +
+  aes(y = flipper_length_mm) +
+  geom_point() +
+  ggxmean:::geom_x_mean() +
+  ggxmean:::geom_y_mean() +
+  ggxmean:::geom_xdiff() +
+  ggxmean:::geom_ydiff() +
+  ggxmean:::geom_x1sd(linetype = "dashed") +
+  ggxmean:::geom_y1sd(linetype = "dashed") +
+  ggxmean:::geom_diffsmultiplied() +
+  ggxmean:::geom_xydiffsmean(alpha = 1) +
+  ggxmean:::geom_rsq1() +
+* ggxmean:::geom_corrlabel()
+```
+]
+ 
+.panel2-correlation-auto[
+&lt;img src="statistical_geometries_files/figure-html/correlation_auto_17_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-correlation-auto[
+
+```r
+library(ggxmean)
+palmerpenguins::penguins %&gt;%
+  drop_na() %&gt;%
+  ggplot() +
+  aes(x = bill_length_mm) +
+  aes(y = flipper_length_mm) +
+  geom_point() +
+  ggxmean:::geom_x_mean() +
+  ggxmean:::geom_y_mean() +
+  ggxmean:::geom_xdiff() +
+  ggxmean:::geom_ydiff() +
+  ggxmean:::geom_x1sd(linetype = "dashed") +
+  ggxmean:::geom_y1sd(linetype = "dashed") +
+  ggxmean:::geom_diffsmultiplied() +
+  ggxmean:::geom_xydiffsmean(alpha = 1) +
+  ggxmean:::geom_rsq1() +
+  ggxmean:::geom_corrlabel() +
+* facet_wrap(~species)
+```
+]
+ 
+.panel2-correlation-auto[
+&lt;img src="statistical_geometries_files/figure-html/correlation_auto_18_output-1.png" width="504" /&gt;
+]
+
+&lt;style&gt;
+.panel1-correlation-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-correlation-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-correlation-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+# phase 2, New geometries to tell MA206 stories
+
+OLS
+
+---
+
+# phase 3, Fall Independent Studies (geoms together) New geometries - epilogue of story...
+
+Anscombs quartet/datasaurus...
+
+---
+
+# phase 4, Spring Independent Study (geom extension patterns) Helping others to build new vocabulary for stories yet to be told...
+
+Easy Geom Recipes
+
+
+
+---
+
+
+
+
+
+&lt;!-- adjust font size in this css code chunk, currently 80 --&gt;
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 100%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+&lt;/style&gt;
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:10",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
