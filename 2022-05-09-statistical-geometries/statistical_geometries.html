@@ -24,12 +24,30 @@ background-size: cover
 #### Photo Credit: Mike Lewis HeadSmart Media
 
 
+---
+
+class: inverse, bottom
+background-image: url(https://images.unsplash.com/photo-1542178432-52211bc52073?crop=entropy&amp;cs=tinysrgb&amp;fm=jpg&amp;ixlib=rb-1.2.1&amp;q=80&amp;raw_url=true&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1374)
+background-size: cover
+
+# Creating new geom vocabulary for richer statistical stories 
+## by extending ggplot2 statistical geometries
+### Dr. Evangeline 'Gina' Reynolds
+
+### Thursday May 19, 2022, 12:15AM
+#### Photo Credit: Klim Sergeev
+
+
 
 
 
 
 
 ---
+
+# gg in ggplot2
+
+--
 
 # Grammar of Graphics
 
@@ -114,23 +132,24 @@ background-size: cover
 
 --
 
-### This is fast. Because most of us, can **picture** the form of the plot we're going after rather clearly (i.e. what the horizontal position should represent, what color should represent, what 'marks' (points, lines) are going to appear on the plot).  
+## This is fast. Because most of us, can **picture** the form of the plot we're going after rather clearly (i.e. what the horizontal position should represent, what color should represent, what 'marks' (points, lines) are going to appear on the plot).  
 --
-'Getting' our plot made becomes a matter of describing what we're already picturing!
+## 'Getting' our plot made becomes a matter of describing what we're already picturing!
 
 ---
 
 
 
-## "Create graphical 'poems'." - Hadley Wickham
+## "Create graphical 'poems'." - Hadley Wickham (2010)
 
 --
 
-## 'Write statistical stories.' - Gina Reynolds
+## 'Write statistical stories.' - Gina Reynolds (2022)
 
 
 
 ---
+class: inverse, center, middle
 
 # The problem?
 
@@ -632,7 +651,19 @@ It may require a discussion about dollar sign syntax and how geom_vline is actua
 
 ---
 
-### Adding the conditional means
+## geom_histogram()
+
+--
+
+## counts the number of observations in a 'bin'
+
+--
+
+## draws rectangles accordingly
+
+---
+
+### Adding the conditional means?
 
 &lt;img src="statistical_geometries_files/figure-html/cond_means_hard-1.png" width="504" /&gt;
 
@@ -909,6 +940,7 @@ airquality %&gt;%
       mean(Ozone, na.rm = T)
     ) -&gt;
 airquality_by_month
+
 *ggplot(airquality)
 ```
 ]
@@ -931,6 +963,7 @@ airquality %&gt;%
       mean(Ozone, na.rm = T)
     ) -&gt;
 airquality_by_month
+
 ggplot(airquality) +
 * aes(x = Ozone)
 ```
@@ -954,6 +987,7 @@ airquality %&gt;%
       mean(Ozone, na.rm = T)
     ) -&gt;
 airquality_by_month
+
 ggplot(airquality) +
   aes(x = Ozone) +
 * geom_histogram()
@@ -978,6 +1012,7 @@ airquality %&gt;%
       mean(Ozone, na.rm = T)
     ) -&gt;
 airquality_by_month
+
 ggplot(airquality) +
   aes(x = Ozone) +
   geom_histogram() +
@@ -1003,6 +1038,7 @@ airquality %&gt;%
       mean(Ozone, na.rm = T)
     ) -&gt;
 airquality_by_month
+
 ggplot(airquality) +
   aes(x = Ozone) +
   geom_histogram() +
@@ -1047,223 +1083,41 @@ ggplot(airquality) +
 
 
 
----
-
 
 ---
 
-geom_boxplot()
+geom_boxplot(), example of compute happening under the hood
 
 ---
 
 count: false
  
 
-.panel1-boxplot-auto[
+.panel1-boxplot-user[
 
 ```r
 *library(tidyverse)
-```
-]
- 
-.panel2-boxplot-auto[
-
-]
-
----
-count: false
- 
-
-.panel1-boxplot-auto[
-
-```r
-library(tidyverse)
-*gapminder::gapminder
-```
-]
- 
-.panel2-boxplot-auto[
-
-```
-# A tibble: 1,704 × 6
-   country     continent  year lifeExp      pop gdpPercap
-   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
- 1 Afghanistan Asia       1952    28.8  8425333      779.
- 2 Afghanistan Asia       1957    30.3  9240934      821.
- 3 Afghanistan Asia       1962    32.0 10267083      853.
- 4 Afghanistan Asia       1967    34.0 11537966      836.
- 5 Afghanistan Asia       1972    36.1 13079460      740.
- 6 Afghanistan Asia       1977    38.4 14880372      786.
- 7 Afghanistan Asia       1982    39.9 12881816      978.
- 8 Afghanistan Asia       1987    40.8 13867957      852.
- 9 Afghanistan Asia       1992    41.7 16317921      649.
-10 Afghanistan Asia       1997    41.8 22227415      635.
-# … with 1,694 more rows
-```
-]
-
----
-count: false
- 
-
-.panel1-boxplot-auto[
-
-```r
-library(tidyverse)
-gapminder::gapminder %&gt;%
-* filter(year == 2002)
-```
-]
- 
-.panel2-boxplot-auto[
-
-```
-# A tibble: 142 × 6
-   country     continent  year lifeExp       pop gdpPercap
-   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;     &lt;int&gt;     &lt;dbl&gt;
- 1 Afghanistan Asia       2002    42.1  25268405      727.
- 2 Albania     Europe     2002    75.7   3508512     4604.
- 3 Algeria     Africa     2002    71.0  31287142     5288.
- 4 Angola      Africa     2002    41.0  10866106     2773.
- 5 Argentina   Americas   2002    74.3  38331121     8798.
- 6 Australia   Oceania    2002    80.4  19546792    30688.
- 7 Austria     Europe     2002    79.0   8148312    32418.
- 8 Bahrain     Asia       2002    74.8    656397    23404.
- 9 Bangladesh  Asia       2002    62.0 135656790     1136.
-10 Belgium     Europe     2002    78.3  10311970    30486.
-# … with 132 more rows
-```
-]
-
----
-count: false
- 
-
-.panel1-boxplot-auto[
-
-```r
-library(tidyverse)
-gapminder::gapminder %&gt;%
-  filter(year == 2002) %&gt;%
-* ggplot()
-```
-]
- 
-.panel2-boxplot-auto[
-&lt;img src="statistical_geometries_files/figure-html/boxplot_auto_04_output-1.png" width="504" /&gt;
-]
-
----
-count: false
- 
-
-.panel1-boxplot-auto[
-
-```r
-library(tidyverse)
-gapminder::gapminder %&gt;%
-  filter(year == 2002) %&gt;%
-  ggplot() +
-* aes(x = continent)
-```
-]
- 
-.panel2-boxplot-auto[
-&lt;img src="statistical_geometries_files/figure-html/boxplot_auto_05_output-1.png" width="504" /&gt;
-]
-
----
-count: false
- 
-
-.panel1-boxplot-auto[
-
-```r
-library(tidyverse)
-gapminder::gapminder %&gt;%
-  filter(year == 2002) %&gt;%
-  ggplot() +
-  aes(x = continent) +
-* aes(y = gdpPercap)
-```
-]
- 
-.panel2-boxplot-auto[
-&lt;img src="statistical_geometries_files/figure-html/boxplot_auto_06_output-1.png" width="504" /&gt;
-]
-
----
-count: false
- 
-
-.panel1-boxplot-auto[
-
-```r
-library(tidyverse)
-gapminder::gapminder %&gt;%
-  filter(year == 2002) %&gt;%
-  ggplot() +
-  aes(x = continent) +
-  aes(y = gdpPercap) +
-* geom_boxplot()
-```
-]
- 
-.panel2-boxplot-auto[
-&lt;img src="statistical_geometries_files/figure-html/boxplot_auto_07_output-1.png" width="504" /&gt;
-]
-
----
-count: false
- 
-
-.panel1-boxplot-auto[
-
-```r
-library(tidyverse)
-gapminder::gapminder %&gt;%
-  filter(year == 2002) %&gt;%
-  ggplot() +
-  aes(x = continent) +
-  aes(y = gdpPercap) +
-  geom_boxplot() -&gt;
+*gapminder::gapminder %&gt;%
+* filter(year == 2002) %&gt;%
+* ggplot() +
+* aes(x = continent) +
+* aes(y = gdpPercap) +
+* geom_boxplot() -&gt;
 *g 
-```
-]
- 
-.panel2-boxplot-auto[
-
-]
-
----
-count: false
- 
-
-.panel1-boxplot-auto[
-
-```r
-library(tidyverse)
-gapminder::gapminder %&gt;%
-  filter(year == 2002) %&gt;%
-  ggplot() +
-  aes(x = continent) +
-  aes(y = gdpPercap) +
-  geom_boxplot() -&gt;
-g
 
 *g 
 ```
 ]
  
-.panel2-boxplot-auto[
-&lt;img src="statistical_geometries_files/figure-html/boxplot_auto_09_output-1.png" width="504" /&gt;
+.panel2-boxplot-user[
+&lt;img src="statistical_geometries_files/figure-html/boxplot_user_01_output-1.png" width="504" /&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-boxplot-auto[
+.panel1-boxplot-user[
 
 ```r
 library(tidyverse)
@@ -1280,7 +1134,7 @@ g %&gt;%
 ```
 ]
  
-.panel2-boxplot-auto[
+.panel2-boxplot-user[
 
 ```
         ymin      lower    middle     upper      ymax
@@ -1311,7 +1165,7 @@ g %&gt;%
 ]
 
 &lt;style&gt;
-.panel1-boxplot-auto {
+.panel1-boxplot-user {
   color: black;
   width: 38.6060606060606%;
   hight: 32%;
@@ -1319,7 +1173,7 @@ g %&gt;%
   padding-left: 1%;
   font-size: 80%
 }
-.panel2-boxplot-auto {
+.panel2-boxplot-user {
   color: black;
   width: 59.3939393939394%;
   hight: 32%;
@@ -1327,7 +1181,7 @@ g %&gt;%
   padding-left: 1%;
   font-size: 80%
 }
-.panel3-boxplot-auto {
+.panel3-boxplot-user {
   color: black;
   width: NA%;
   hight: 33%;
@@ -1347,10 +1201,6 @@ g %&gt;%
 
 --
 
-### lots of compute in the background
-
---
-
 ### built from a number of primitives
 
 - rect
@@ -1361,28 +1211,31 @@ g %&gt;%
 
 ### conceptually distinct from those components
 
+---
+
+## ggplot2 intentionally lean for maintenance purposes.
+
+--
+
+## ... but geom_x_mean() would be so nice!
+
+--
+
+## ggplot2 extensions system exists...
+
+--
+
+## thus, {ggxmean} r package https://github.com/EvaMaeRey/ggxmean
 
 ---
 
-ggplot2 intentionally lean for maintainance purposes...
-
---
-
-but geom_x_mean() would be so nice!
-
---
-
-{ggxmean} r package
+geoms that inherit from existing geometries.
 
 ---
 
-*'extending statistical geometries'*
 
-geoms -&gt; "nouns..."
 
---
-
-Nouns that inherit from existing geometries.
+really underutilized...
 
 ---
 
@@ -1390,55 +1243,108 @@ Nouns that inherit from existing geometries.
 
 --
 
+## hand shoe 
+
+--
+
+## glove
+
+---
+
 ## Nackt*schnecke*
 
 --
 
+## naked snail
+
+--
+
+## slug
+
+---
+
 ## Daumen*kino*
 
----
+--
 
-Unique new concepts, but inheriting from more primitive forms (segment, point, text, etc)
-
-geom_point*_xy_means
+## thumb movie
 
 --
 
-geom_coordinates (inherit from geom_text)
-
---
-
-geom_segment*_residuals (inherits from segment)
-
---
-
-Easy to use -- you know the grammar!
-
---
-
-Not horribly to make (especially now...)
-
-
-
-# Origin story... 
+## flip book
 
 ---
 
-# Phase 0: Wanting to tell a statistical story w/ ggplot2.  Not fluent
-# correlation + 
-https://evamaerey.github.io/statistics/covariance_correlation.html#1
+# geoms that have their own conceptual identity, but inheriting from more primitive forms (segment, point, text, etc)
+
+--
+
+# geom_*point*_xy_means
+
+--
+
+# geom_*text*_coordinates
+
+--
+
+# geom_*segment*_residuals
 
 ---
-class: inverse, center, middle
 
+# Inheriting geoms easy to use -- you know the grammar!
+
+--
+
+# Not horrible to make (especially now...)
+
+---
+
+# A journey in geom extension...
+
+--
+
+# Usefulness of this geom extension mechanism
+
+--
+
+# for people that want to tell visual statistical stories in a fluid way! :-)
+
+
+---
+
+# Chapter 1: Wanting to tell a statistical story. 
+
+--
+
+# What does Pearson correlation look like...?
+
+
+--
 .huge[
 
 $$ cor(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{n *\sigma_x \sigma_y} $$
 ] 
 
+--
+
+# 'by-hand' compute all values
+--
+, fragile
+--
+, not portable
+--
+, not delightful!:
+https://evamaerey.github.io/statistics/covariance_correlation.html#1
+
 ---
 
-# Phase 1: New geometries to tell the covariance, variance, sd, correlation
+# Chapter 2: New geometries to tell the covariance, variance, sd, correlation
+
+--
+
+Starting with the mean of x (so {ggxmean})
+
+---
 
 count: false
  
@@ -1495,28 +1401,12 @@ count: false
 ```r
 library(ggxmean)
 palmerpenguins::penguins %&gt;%
-* drop_na()
+* ggplot()
 ```
 ]
  
 .panel2-correlation-auto[
-
-```
-# A tibble: 333 × 8
-   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
-   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
- 1 Adelie  Torgersen           39.1          18.7               181        3750
- 2 Adelie  Torgersen           39.5          17.4               186        3800
- 3 Adelie  Torgersen           40.3          18                 195        3250
- 4 Adelie  Torgersen           36.7          19.3               193        3450
- 5 Adelie  Torgersen           39.3          20.6               190        3650
- 6 Adelie  Torgersen           38.9          17.8               181        3625
- 7 Adelie  Torgersen           39.2          19.6               195        4675
- 8 Adelie  Torgersen           41.1          17.6               182        3200
- 9 Adelie  Torgersen           38.6          21.2               191        3800
-10 Adelie  Torgersen           34.6          21.1               198        4400
-# … with 323 more rows, and 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;
-```
+&lt;img src="statistical_geometries_files/figure-html/correlation_auto_03_output-1.png" width="504" /&gt;
 ]
 
 ---
@@ -1528,8 +1418,8 @@ count: false
 ```r
 library(ggxmean)
 palmerpenguins::penguins %&gt;%
-  drop_na() %&gt;%
-* ggplot()
+  ggplot() +
+* aes(x = bill_length_mm)
 ```
 ]
  
@@ -1546,9 +1436,9 @@ count: false
 ```r
 library(ggxmean)
 palmerpenguins::penguins %&gt;%
-  drop_na() %&gt;%
   ggplot() +
-* aes(x = bill_length_mm)
+  aes(x = bill_length_mm) +
+* aes(y = flipper_length_mm)
 ```
 ]
  
@@ -1565,10 +1455,10 @@ count: false
 ```r
 library(ggxmean)
 palmerpenguins::penguins %&gt;%
-  drop_na() %&gt;%
   ggplot() +
   aes(x = bill_length_mm) +
-* aes(y = flipper_length_mm)
+  aes(y = flipper_length_mm) +
+* geom_point()
 ```
 ]
  
@@ -1585,11 +1475,11 @@ count: false
 ```r
 library(ggxmean)
 palmerpenguins::penguins %&gt;%
-  drop_na() %&gt;%
   ggplot() +
   aes(x = bill_length_mm) +
   aes(y = flipper_length_mm) +
-* geom_point()
+  geom_point() +
+* ggxmean:::geom_x_mean()
 ```
 ]
  
@@ -1606,12 +1496,12 @@ count: false
 ```r
 library(ggxmean)
 palmerpenguins::penguins %&gt;%
-  drop_na() %&gt;%
   ggplot() +
   aes(x = bill_length_mm) +
   aes(y = flipper_length_mm) +
   geom_point() +
-* ggxmean:::geom_x_mean()
+  ggxmean:::geom_x_mean() +
+* ggxmean:::geom_y_mean()
 ```
 ]
  
@@ -1628,13 +1518,13 @@ count: false
 ```r
 library(ggxmean)
 palmerpenguins::penguins %&gt;%
-  drop_na() %&gt;%
   ggplot() +
   aes(x = bill_length_mm) +
   aes(y = flipper_length_mm) +
   geom_point() +
   ggxmean:::geom_x_mean() +
-* ggxmean:::geom_y_mean()
+  ggxmean:::geom_y_mean() +
+* ggxmean:::geom_xdiff()
 ```
 ]
  
@@ -1651,14 +1541,14 @@ count: false
 ```r
 library(ggxmean)
 palmerpenguins::penguins %&gt;%
-  drop_na() %&gt;%
   ggplot() +
   aes(x = bill_length_mm) +
   aes(y = flipper_length_mm) +
   geom_point() +
   ggxmean:::geom_x_mean() +
   ggxmean:::geom_y_mean() +
-* ggxmean:::geom_xdiff()
+  ggxmean:::geom_xdiff() +
+* ggxmean:::geom_ydiff()
 ```
 ]
  
@@ -1675,7 +1565,6 @@ count: false
 ```r
 library(ggxmean)
 palmerpenguins::penguins %&gt;%
-  drop_na() %&gt;%
   ggplot() +
   aes(x = bill_length_mm) +
   aes(y = flipper_length_mm) +
@@ -1683,7 +1572,8 @@ palmerpenguins::penguins %&gt;%
   ggxmean:::geom_x_mean() +
   ggxmean:::geom_y_mean() +
   ggxmean:::geom_xdiff() +
-* ggxmean:::geom_ydiff()
+  ggxmean:::geom_ydiff() +
+* ggxmean:::geom_x1sd(linetype = "dashed")
 ```
 ]
  
@@ -1700,7 +1590,6 @@ count: false
 ```r
 library(ggxmean)
 palmerpenguins::penguins %&gt;%
-  drop_na() %&gt;%
   ggplot() +
   aes(x = bill_length_mm) +
   aes(y = flipper_length_mm) +
@@ -1709,7 +1598,8 @@ palmerpenguins::penguins %&gt;%
   ggxmean:::geom_y_mean() +
   ggxmean:::geom_xdiff() +
   ggxmean:::geom_ydiff() +
-* ggxmean:::geom_x1sd(linetype = "dashed")
+  ggxmean:::geom_x1sd(linetype = "dashed") +
+* ggxmean:::geom_y1sd(linetype = "dashed")
 ```
 ]
  
@@ -1726,7 +1616,6 @@ count: false
 ```r
 library(ggxmean)
 palmerpenguins::penguins %&gt;%
-  drop_na() %&gt;%
   ggplot() +
   aes(x = bill_length_mm) +
   aes(y = flipper_length_mm) +
@@ -1736,7 +1625,8 @@ palmerpenguins::penguins %&gt;%
   ggxmean:::geom_xdiff() +
   ggxmean:::geom_ydiff() +
   ggxmean:::geom_x1sd(linetype = "dashed") +
-* ggxmean:::geom_y1sd(linetype = "dashed")
+  ggxmean:::geom_y1sd(linetype = "dashed") +
+* ggxmean:::geom_diffsmultiplied()
 ```
 ]
  
@@ -1753,35 +1643,6 @@ count: false
 ```r
 library(ggxmean)
 palmerpenguins::penguins %&gt;%
-  drop_na() %&gt;%
-  ggplot() +
-  aes(x = bill_length_mm) +
-  aes(y = flipper_length_mm) +
-  geom_point() +
-  ggxmean:::geom_x_mean() +
-  ggxmean:::geom_y_mean() +
-  ggxmean:::geom_xdiff() +
-  ggxmean:::geom_ydiff() +
-  ggxmean:::geom_x1sd(linetype = "dashed") +
-  ggxmean:::geom_y1sd(linetype = "dashed") +
-* ggxmean:::geom_diffsmultiplied()
-```
-]
- 
-.panel2-correlation-auto[
-&lt;img src="statistical_geometries_files/figure-html/correlation_auto_14_output-1.png" width="504" /&gt;
-]
-
----
-count: false
- 
-
-.panel1-correlation-auto[
-
-```r
-library(ggxmean)
-palmerpenguins::penguins %&gt;%
-  drop_na() %&gt;%
   ggplot() +
   aes(x = bill_length_mm) +
   aes(y = flipper_length_mm) +
@@ -1798,7 +1659,7 @@ palmerpenguins::penguins %&gt;%
 ]
  
 .panel2-correlation-auto[
-&lt;img src="statistical_geometries_files/figure-html/correlation_auto_15_output-1.png" width="504" /&gt;
+&lt;img src="statistical_geometries_files/figure-html/correlation_auto_14_output-1.png" width="504" /&gt;
 ]
 
 ---
@@ -1810,7 +1671,6 @@ count: false
 ```r
 library(ggxmean)
 palmerpenguins::penguins %&gt;%
-  drop_na() %&gt;%
   ggplot() +
   aes(x = bill_length_mm) +
   aes(y = flipper_length_mm) +
@@ -1828,7 +1688,7 @@ palmerpenguins::penguins %&gt;%
 ]
  
 .panel2-correlation-auto[
-&lt;img src="statistical_geometries_files/figure-html/correlation_auto_16_output-1.png" width="504" /&gt;
+&lt;img src="statistical_geometries_files/figure-html/correlation_auto_15_output-1.png" width="504" /&gt;
 ]
 
 ---
@@ -1840,7 +1700,6 @@ count: false
 ```r
 library(ggxmean)
 palmerpenguins::penguins %&gt;%
-  drop_na() %&gt;%
   ggplot() +
   aes(x = bill_length_mm) +
   aes(y = flipper_length_mm) +
@@ -1859,7 +1718,7 @@ palmerpenguins::penguins %&gt;%
 ]
  
 .panel2-correlation-auto[
-&lt;img src="statistical_geometries_files/figure-html/correlation_auto_17_output-1.png" width="504" /&gt;
+&lt;img src="statistical_geometries_files/figure-html/correlation_auto_16_output-1.png" width="504" /&gt;
 ]
 
 ---
@@ -1871,7 +1730,6 @@ count: false
 ```r
 library(ggxmean)
 palmerpenguins::penguins %&gt;%
-  drop_na() %&gt;%
   ggplot() +
   aes(x = bill_length_mm) +
   aes(y = flipper_length_mm) +
@@ -1891,7 +1749,7 @@ palmerpenguins::penguins %&gt;%
 ]
  
 .panel2-correlation-auto[
-&lt;img src="statistical_geometries_files/figure-html/correlation_auto_18_output-1.png" width="504" /&gt;
+&lt;img src="statistical_geometries_files/figure-html/correlation_auto_17_output-1.png" width="504" /&gt;
 ]
 
 &lt;style&gt;
@@ -1928,7 +1786,7 @@ palmerpenguins::penguins %&gt;%
 
 ---
 
-# phase 2, New geometries to tell MA206 stories
+# Chapter 3, New geometries to tell MA206 stories
 
 ---
 
@@ -2539,43 +2397,659 @@ cars %&gt;%
 
 ---
 
-# phase 3, Fall Independent Studies (geoms together) New geometries - epilogue of story...
+# Chapter 4, Fall Independent Studies (geoms together) New geometries - epilogue of story...
 
 ---
 
+count: false
+ 
+
+.panel1-anscombe-auto[
+
+```r
+*datasets::anscombe
+```
+]
+ 
+.panel2-anscombe-auto[
+
+```
+   x1 x2 x3 x4    y1   y2    y3    y4
+1  10 10 10  8  8.04 9.14  7.46  6.58
+2   8  8  8  8  6.95 8.14  6.77  5.76
+3  13 13 13  8  7.58 8.74 12.74  7.71
+4   9  9  9  8  8.81 8.77  7.11  8.84
+5  11 11 11  8  8.33 9.26  7.81  8.47
+6  14 14 14  8  9.96 8.10  8.84  7.04
+7   6  6  6  8  7.24 6.13  6.08  5.25
+8   4  4  4 19  4.26 3.10  5.39 12.50
+9  12 12 12  8 10.84 9.13  8.15  5.56
+10  7  7  7  8  4.82 7.26  6.42  7.91
+11  5  5  5  8  5.68 4.74  5.73  6.89
+```
+]
+
+---
+count: false
+ 
+
+.panel1-anscombe-auto[
+
+```r
+datasets::anscombe %&gt;%
+* pivot_longer(cols = 1:8)
+```
+]
+ 
+.panel2-anscombe-auto[
+
+```
+# A tibble: 88 × 2
+   name  value
+   &lt;chr&gt; &lt;dbl&gt;
+ 1 x1    10   
+ 2 x2    10   
+ 3 x3    10   
+ 4 x4     8   
+ 5 y1     8.04
+ 6 y2     9.14
+ 7 y3     7.46
+ 8 y4     6.58
+ 9 x1     8   
+10 x2     8   
+# … with 78 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-anscombe-auto[
+
+```r
+datasets::anscombe %&gt;%
+  pivot_longer(cols = 1:8) %&gt;%
+* mutate(group = str_extract(name, "\\d"))
+```
+]
+ 
+.panel2-anscombe-auto[
+
+```
+# A tibble: 88 × 3
+   name  value group
+   &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;
+ 1 x1    10    1    
+ 2 x2    10    2    
+ 3 x3    10    3    
+ 4 x4     8    4    
+ 5 y1     8.04 1    
+ 6 y2     9.14 2    
+ 7 y3     7.46 3    
+ 8 y4     6.58 4    
+ 9 x1     8    1    
+10 x2     8    2    
+# … with 78 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-anscombe-auto[
+
+```r
+datasets::anscombe %&gt;%
+  pivot_longer(cols = 1:8) %&gt;%
+  mutate(group = str_extract(name, "\\d")) %&gt;%
+* mutate(var = str_extract(name, "\\w"))
+```
+]
+ 
+.panel2-anscombe-auto[
+
+```
+# A tibble: 88 × 4
+   name  value group var  
+   &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;
+ 1 x1    10    1     x    
+ 2 x2    10    2     x    
+ 3 x3    10    3     x    
+ 4 x4     8    4     x    
+ 5 y1     8.04 1     y    
+ 6 y2     9.14 2     y    
+ 7 y3     7.46 3     y    
+ 8 y4     6.58 4     y    
+ 9 x1     8    1     x    
+10 x2     8    2     x    
+# … with 78 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-anscombe-auto[
+
+```r
+datasets::anscombe %&gt;%
+  pivot_longer(cols = 1:8) %&gt;%
+  mutate(group = str_extract(name, "\\d")) %&gt;%
+  mutate(var = str_extract(name, "\\w")) %&gt;%
+* select(-name)
+```
+]
+ 
+.panel2-anscombe-auto[
+
+```
+# A tibble: 88 × 3
+   value group var  
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;
+ 1 10    1     x    
+ 2 10    2     x    
+ 3 10    3     x    
+ 4  8    4     x    
+ 5  8.04 1     y    
+ 6  9.14 2     y    
+ 7  7.46 3     y    
+ 8  6.58 4     y    
+ 9  8    1     x    
+10  8    2     x    
+# … with 78 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-anscombe-auto[
+
+```r
+datasets::anscombe %&gt;%
+  pivot_longer(cols = 1:8) %&gt;%
+  mutate(group = str_extract(name, "\\d")) %&gt;%
+  mutate(var = str_extract(name, "\\w")) %&gt;%
+  select(-name) %&gt;%
+* pivot_wider(names_from = var,
+*             values_from = value)
+```
+]
+ 
+.panel2-anscombe-auto[
+
+```
+# A tibble: 4 × 3
+  group x          y         
+  &lt;chr&gt; &lt;list&gt;     &lt;list&gt;    
+1 1     &lt;dbl [11]&gt; &lt;dbl [11]&gt;
+2 2     &lt;dbl [11]&gt; &lt;dbl [11]&gt;
+3 3     &lt;dbl [11]&gt; &lt;dbl [11]&gt;
+4 4     &lt;dbl [11]&gt; &lt;dbl [11]&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-anscombe-auto[
+
+```r
+datasets::anscombe %&gt;%
+  pivot_longer(cols = 1:8) %&gt;%
+  mutate(group = str_extract(name, "\\d")) %&gt;%
+  mutate(var = str_extract(name, "\\w")) %&gt;%
+  select(-name) %&gt;%
+  pivot_wider(names_from = var,
+              values_from = value) %&gt;%
+* unnest()
+```
+]
+ 
+.panel2-anscombe-auto[
+
+```
+# A tibble: 44 × 3
+   group     x     y
+   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1 1        10  8.04
+ 2 1         8  6.95
+ 3 1        13  7.58
+ 4 1         9  8.81
+ 5 1        11  8.33
+ 6 1        14  9.96
+ 7 1         6  7.24
+ 8 1         4  4.26
+ 9 1        12 10.8 
+10 1         7  4.82
+# … with 34 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-anscombe-auto[
+
+```r
+datasets::anscombe %&gt;%
+  pivot_longer(cols = 1:8) %&gt;%
+  mutate(group = str_extract(name, "\\d")) %&gt;%
+  mutate(var = str_extract(name, "\\w")) %&gt;%
+  select(-name) %&gt;%
+  pivot_wider(names_from = var,
+              values_from = value) %&gt;%
+  unnest() -&gt;
+*tidy_anscombe
+```
+]
+ 
+.panel2-anscombe-auto[
+
+]
+
+&lt;style&gt;
+.panel1-anscombe-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-anscombe-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-anscombe-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
 
 
 ---
+
+count: false
+ 
+
+.panel1-anscomb-auto[
+
+```r
+*tidy_anscombe
+```
+]
+ 
+.panel2-anscomb-auto[
+
+```
+# A tibble: 44 × 3
+   group     x     y
+   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1 1        10  8.04
+ 2 1         8  6.95
+ 3 1        13  7.58
+ 4 1         9  8.81
+ 5 1        11  8.33
+ 6 1        14  9.96
+ 7 1         6  7.24
+ 8 1         4  4.26
+ 9 1        12 10.8 
+10 1         7  4.82
+# … with 34 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-anscomb-auto[
+
+```r
+tidy_anscombe %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-anscomb-auto[
+&lt;img src="statistical_geometries_files/figure-html/anscomb_auto_02_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-anscomb-auto[
+
+```r
+tidy_anscombe %&gt;%
+  ggplot() +
+* aes(x = x, y = y)
+```
+]
+ 
+.panel2-anscomb-auto[
+&lt;img src="statistical_geometries_files/figure-html/anscomb_auto_03_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-anscomb-auto[
+
+```r
+tidy_anscombe %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+* geom_point()
+```
+]
+ 
+.panel2-anscomb-auto[
+&lt;img src="statistical_geometries_files/figure-html/anscomb_auto_04_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-anscomb-auto[
+
+```r
+tidy_anscombe %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+* aes(color = group)
+```
+]
+ 
+.panel2-anscomb-auto[
+&lt;img src="statistical_geometries_files/figure-html/anscomb_auto_05_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-anscomb-auto[
+
+```r
+tidy_anscombe %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+  aes(color = group) +
+* facet_wrap(facets = vars(group))
+```
+]
+ 
+.panel2-anscomb-auto[
+&lt;img src="statistical_geometries_files/figure-html/anscomb_auto_06_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-anscomb-auto[
+
+```r
+tidy_anscombe %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+  aes(color = group) +
+  facet_wrap(facets = vars(group)) +
+* ggxmean::geom_x_mean()
+```
+]
+ 
+.panel2-anscomb-auto[
+&lt;img src="statistical_geometries_files/figure-html/anscomb_auto_07_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-anscomb-auto[
+
+```r
+tidy_anscombe %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+  aes(color = group) +
+  facet_wrap(facets = vars(group)) +
+  ggxmean::geom_x_mean() +
+* ggxmean::geom_y_mean()
+```
+]
+ 
+.panel2-anscomb-auto[
+&lt;img src="statistical_geometries_files/figure-html/anscomb_auto_08_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-anscomb-auto[
+
+```r
+tidy_anscombe %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+  aes(color = group) +
+  facet_wrap(facets = vars(group)) +
+  ggxmean::geom_x_mean() +
+  ggxmean::geom_y_mean() +
+* ggxmean:::geom_x1sd(linetype = "dashed")
+```
+]
+ 
+.panel2-anscomb-auto[
+&lt;img src="statistical_geometries_files/figure-html/anscomb_auto_09_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-anscomb-auto[
+
+```r
+tidy_anscombe %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+  aes(color = group) +
+  facet_wrap(facets = vars(group)) +
+  ggxmean::geom_x_mean() +
+  ggxmean::geom_y_mean() +
+  ggxmean:::geom_x1sd(linetype = "dashed") +
+* ggxmean:::geom_y1sd(linetype = "dashed")
+```
+]
+ 
+.panel2-anscomb-auto[
+&lt;img src="statistical_geometries_files/figure-html/anscomb_auto_10_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-anscomb-auto[
+
+```r
+tidy_anscombe %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+  aes(color = group) +
+  facet_wrap(facets = vars(group)) +
+  ggxmean::geom_x_mean() +
+  ggxmean::geom_y_mean() +
+  ggxmean:::geom_x1sd(linetype = "dashed") +
+  ggxmean:::geom_y1sd(linetype = "dashed") +
+* ggxmean::geom_lm()
+```
+]
+ 
+.panel2-anscomb-auto[
+&lt;img src="statistical_geometries_files/figure-html/anscomb_auto_11_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-anscomb-auto[
+
+```r
+tidy_anscombe %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+  aes(color = group) +
+  facet_wrap(facets = vars(group)) +
+  ggxmean::geom_x_mean() +
+  ggxmean::geom_y_mean() +
+  ggxmean:::geom_x1sd(linetype = "dashed") +
+  ggxmean:::geom_y1sd(linetype = "dashed") +
+  ggxmean::geom_lm() +
+* ggxmean::geom_lm_formula()
+```
+]
+ 
+.panel2-anscomb-auto[
+&lt;img src="statistical_geometries_files/figure-html/anscomb_auto_12_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-anscomb-auto[
+
+```r
+tidy_anscombe %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+  aes(color = group) +
+  facet_wrap(facets = vars(group)) +
+  ggxmean::geom_x_mean() +
+  ggxmean::geom_y_mean() +
+  ggxmean:::geom_x1sd(linetype = "dashed") +
+  ggxmean:::geom_y1sd(linetype = "dashed") +
+  ggxmean::geom_lm() +
+  ggxmean::geom_lm_formula() +
+* ggxmean:::geom_corrlabel()
+```
+]
+ 
+.panel2-anscomb-auto[
+&lt;img src="statistical_geometries_files/figure-html/anscomb_auto_13_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-anscomb-auto[
+
+```r
+tidy_anscombe %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+  aes(color = group) +
+  facet_wrap(facets = vars(group)) +
+  ggxmean::geom_x_mean() +
+  ggxmean::geom_y_mean() +
+  ggxmean:::geom_x1sd(linetype = "dashed") +
+  ggxmean:::geom_y1sd(linetype = "dashed") +
+  ggxmean::geom_lm() +
+  ggxmean::geom_lm_formula() +
+  ggxmean:::geom_corrlabel() +
+* ggxmean::geom_point_high_leverage()
+```
+]
+ 
+.panel2-anscomb-auto[
+&lt;img src="statistical_geometries_files/figure-html/anscomb_auto_14_output-1.png" width="504" /&gt;
+]
+
+&lt;style&gt;
+.panel1-anscomb-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-anscomb-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-anscomb-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
 
 
 
 Anscombs quartet/datasaurus...
 
 
-```
-# A tibble: 1,846 × 3
-   dataset     x     y
-   &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
- 1 dino     55.4  97.2
- 2 dino     51.5  96.0
- 3 dino     46.2  94.5
- 4 dino     42.8  91.4
- 5 dino     40.8  88.3
- 6 dino     38.7  84.9
- 7 dino     35.6  79.9
- 8 dino     33.1  77.6
- 9 dino     29.0  74.5
-10 dino     26.2  71.4
-# … with 1,836 more rows
-```
 
 ---
 
-# phase 4, Spring Independent Study (geom extension patterns) Helping others to build new vocabulary for stories yet to be told...
-
-Easy Geom Recipes
+# Chapter 5, Spring Independent Study (geom extension patterns) 
 
 
+# 'Easy Geom Recipes'
+
+--
+
+
+# Helping others to build new vocabulary for stories yet to be told...?
 
 ---
 class: inverse, middle
@@ -2595,27 +3069,6 @@ background-size: cover
 
 
 
-&lt;style type="text/css"&gt;
-.remark-code{line-height: 1.5; font-size: 90%}
-
-@media print {
-  .has-continuation {
-    display: block;
-  }
-}
-
-code.r.hljs.remark-code{
-  position: relative;
-  overflow-x: hidden;
-}
-
-
-code.r.hljs.remark-code:hover{
-  overflow-x:visible;
-  width: 500px;
-  border-style: solid;
-}
-&lt;/style&gt;
 
 ---
 
@@ -2744,64 +3197,19 @@ penguins &lt;- remove_missing(penguins)
 
 ```
 # A tibble: 333 × 8
-   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g sex     year
-   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt;  &lt;int&gt;
- 1 Adelie  Torgersen           39.1          18.7               181        3750 male    2007
- 2 Adelie  Torgersen           39.5          17.4               186        3800 female  2007
- 3 Adelie  Torgersen           40.3          18                 195        3250 female  2007
- 4 Adelie  Torgersen           36.7          19.3               193        3450 female  2007
- 5 Adelie  Torgersen           39.3          20.6               190        3650 male    2007
- 6 Adelie  Torgersen           38.9          17.8               181        3625 female  2007
- 7 Adelie  Torgersen           39.2          19.6               195        4675 male    2007
- 8 Adelie  Torgersen           41.1          17.6               182        3200 female  2007
- 9 Adelie  Torgersen           38.6          21.2               191        3800 male    2007
-10 Adelie  Torgersen           34.6          21.1               198        4400 male    2007
-11 Adelie  Torgersen           36.6          17.8               185        3700 female  2007
-12 Adelie  Torgersen           38.7          19                 195        3450 female  2007
-13 Adelie  Torgersen           42.5          20.7               197        4500 male    2007
-14 Adelie  Torgersen           34.4          18.4               184        3325 female  2007
-15 Adelie  Torgersen           46            21.5               194        4200 male    2007
-16 Adelie  Biscoe              37.8          18.3               174        3400 female  2007
-17 Adelie  Biscoe              37.7          18.7               180        3600 male    2007
-18 Adelie  Biscoe              35.9          19.2               189        3800 female  2007
-19 Adelie  Biscoe              38.2          18.1               185        3950 male    2007
-20 Adelie  Biscoe              38.8          17.2               180        3800 male    2007
-21 Adelie  Biscoe              35.3          18.9               187        3800 female  2007
-22 Adelie  Biscoe              40.6          18.6               183        3550 male    2007
-23 Adelie  Biscoe              40.5          17.9               187        3200 female  2007
-24 Adelie  Biscoe              37.9          18.6               172        3150 female  2007
-25 Adelie  Biscoe              40.5          18.9               180        3950 male    2007
-26 Adelie  Dream               39.5          16.7               178        3250 female  2007
-27 Adelie  Dream               37.2          18.1               178        3900 male    2007
-28 Adelie  Dream               39.5          17.8               188        3300 female  2007
-29 Adelie  Dream               40.9          18.9               184        3900 male    2007
-30 Adelie  Dream               36.4          17                 195        3325 female  2007
-31 Adelie  Dream               39.2          21.1               196        4150 male    2007
-32 Adelie  Dream               38.8          20                 190        3950 male    2007
-33 Adelie  Dream               42.2          18.5               180        3550 female  2007
-34 Adelie  Dream               37.6          19.3               181        3300 female  2007
-35 Adelie  Dream               39.8          19.1               184        4650 male    2007
-36 Adelie  Dream               36.5          18                 182        3150 female  2007
-37 Adelie  Dream               40.8          18.4               195        3900 male    2007
-38 Adelie  Dream               36            18.5               186        3100 female  2007
-39 Adelie  Dream               44.1          19.7               196        4400 male    2007
-40 Adelie  Dream               37            16.9               185        3000 female  2007
-41 Adelie  Dream               39.6          18.8               190        4600 male    2007
-42 Adelie  Dream               41.1          19                 182        3425 male    2007
-43 Adelie  Dream               36            17.9               190        3450 female  2007
-44 Adelie  Dream               42.3          21.2               191        4150 male    2007
-45 Adelie  Biscoe              39.6          17.7               186        3500 female  2008
-46 Adelie  Biscoe              40.1          18.9               188        4300 male    2008
-47 Adelie  Biscoe              35            17.9               190        3450 female  2008
-48 Adelie  Biscoe              42            19.5               200        4050 male    2008
-49 Adelie  Biscoe              34.5          18.1               187        2900 female  2008
-50 Adelie  Biscoe              41.4          18.6               191        3700 male    2008
-51 Adelie  Biscoe              39            17.5               186        3550 female  2008
-52 Adelie  Biscoe              40.6          18.8               193        3800 male    2008
-53 Adelie  Biscoe              36.5          16.6               181        2850 female  2008
-54 Adelie  Biscoe              37.6          19.1               194        3750 male    2008
-55 Adelie  Biscoe              35.7          16.9               185        3150 female  2008
-# … with 278 more rows
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750
+ 2 Adelie  Torgersen           39.5          17.4               186        3800
+ 3 Adelie  Torgersen           40.3          18                 195        3250
+ 4 Adelie  Torgersen           36.7          19.3               193        3450
+ 5 Adelie  Torgersen           39.3          20.6               190        3650
+ 6 Adelie  Torgersen           38.9          17.8               181        3625
+ 7 Adelie  Torgersen           39.2          19.6               195        4675
+ 8 Adelie  Torgersen           41.1          17.6               182        3200
+ 9 Adelie  Torgersen           38.6          21.2               191        3800
+10 Adelie  Torgersen           34.6          21.1               198        4400
+# … with 323 more rows, and 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;
 ```
 ]
 
@@ -2881,64 +3289,19 @@ penguins_medians
 
 ```
 # A tibble: 333 × 8
-   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g sex     year
-   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt;  &lt;int&gt;
- 1 Adelie  Torgersen           39.1          18.7               181        3750 male    2007
- 2 Adelie  Torgersen           39.5          17.4               186        3800 female  2007
- 3 Adelie  Torgersen           40.3          18                 195        3250 female  2007
- 4 Adelie  Torgersen           36.7          19.3               193        3450 female  2007
- 5 Adelie  Torgersen           39.3          20.6               190        3650 male    2007
- 6 Adelie  Torgersen           38.9          17.8               181        3625 female  2007
- 7 Adelie  Torgersen           39.2          19.6               195        4675 male    2007
- 8 Adelie  Torgersen           41.1          17.6               182        3200 female  2007
- 9 Adelie  Torgersen           38.6          21.2               191        3800 male    2007
-10 Adelie  Torgersen           34.6          21.1               198        4400 male    2007
-11 Adelie  Torgersen           36.6          17.8               185        3700 female  2007
-12 Adelie  Torgersen           38.7          19                 195        3450 female  2007
-13 Adelie  Torgersen           42.5          20.7               197        4500 male    2007
-14 Adelie  Torgersen           34.4          18.4               184        3325 female  2007
-15 Adelie  Torgersen           46            21.5               194        4200 male    2007
-16 Adelie  Biscoe              37.8          18.3               174        3400 female  2007
-17 Adelie  Biscoe              37.7          18.7               180        3600 male    2007
-18 Adelie  Biscoe              35.9          19.2               189        3800 female  2007
-19 Adelie  Biscoe              38.2          18.1               185        3950 male    2007
-20 Adelie  Biscoe              38.8          17.2               180        3800 male    2007
-21 Adelie  Biscoe              35.3          18.9               187        3800 female  2007
-22 Adelie  Biscoe              40.6          18.6               183        3550 male    2007
-23 Adelie  Biscoe              40.5          17.9               187        3200 female  2007
-24 Adelie  Biscoe              37.9          18.6               172        3150 female  2007
-25 Adelie  Biscoe              40.5          18.9               180        3950 male    2007
-26 Adelie  Dream               39.5          16.7               178        3250 female  2007
-27 Adelie  Dream               37.2          18.1               178        3900 male    2007
-28 Adelie  Dream               39.5          17.8               188        3300 female  2007
-29 Adelie  Dream               40.9          18.9               184        3900 male    2007
-30 Adelie  Dream               36.4          17                 195        3325 female  2007
-31 Adelie  Dream               39.2          21.1               196        4150 male    2007
-32 Adelie  Dream               38.8          20                 190        3950 male    2007
-33 Adelie  Dream               42.2          18.5               180        3550 female  2007
-34 Adelie  Dream               37.6          19.3               181        3300 female  2007
-35 Adelie  Dream               39.8          19.1               184        4650 male    2007
-36 Adelie  Dream               36.5          18                 182        3150 female  2007
-37 Adelie  Dream               40.8          18.4               195        3900 male    2007
-38 Adelie  Dream               36            18.5               186        3100 female  2007
-39 Adelie  Dream               44.1          19.7               196        4400 male    2007
-40 Adelie  Dream               37            16.9               185        3000 female  2007
-41 Adelie  Dream               39.6          18.8               190        4600 male    2007
-42 Adelie  Dream               41.1          19                 182        3425 male    2007
-43 Adelie  Dream               36            17.9               190        3450 female  2007
-44 Adelie  Dream               42.3          21.2               191        4150 male    2007
-45 Adelie  Biscoe              39.6          17.7               186        3500 female  2008
-46 Adelie  Biscoe              40.1          18.9               188        4300 male    2008
-47 Adelie  Biscoe              35            17.9               190        3450 female  2008
-48 Adelie  Biscoe              42            19.5               200        4050 male    2008
-49 Adelie  Biscoe              34.5          18.1               187        2900 female  2008
-50 Adelie  Biscoe              41.4          18.6               191        3700 male    2008
-51 Adelie  Biscoe              39            17.5               186        3550 female  2008
-52 Adelie  Biscoe              40.6          18.8               193        3800 male    2008
-53 Adelie  Biscoe              36.5          16.6               181        2850 female  2008
-54 Adelie  Biscoe              37.6          19.1               194        3750 male    2008
-55 Adelie  Biscoe              35.7          16.9               185        3150 female  2008
-# … with 278 more rows
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750
+ 2 Adelie  Torgersen           39.5          17.4               186        3800
+ 3 Adelie  Torgersen           40.3          18                 195        3250
+ 4 Adelie  Torgersen           36.7          19.3               193        3450
+ 5 Adelie  Torgersen           39.3          20.6               190        3650
+ 6 Adelie  Torgersen           38.9          17.8               181        3625
+ 7 Adelie  Torgersen           39.2          19.6               195        4675
+ 8 Adelie  Torgersen           41.1          17.6               182        3200
+ 9 Adelie  Torgersen           38.6          21.2               191        3800
+10 Adelie  Torgersen           34.6          21.1               198        4400
+# … with 323 more rows, and 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;
 ```
 ]
 
@@ -3172,64 +3535,19 @@ compute_group_xy_medians &lt;- function(data,
 
 ```
 # A tibble: 333 × 8
-   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g sex     year
-   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt;  &lt;int&gt;
- 1 Adelie  Torgersen           39.1          18.7               181        3750 male    2007
- 2 Adelie  Torgersen           39.5          17.4               186        3800 female  2007
- 3 Adelie  Torgersen           40.3          18                 195        3250 female  2007
- 4 Adelie  Torgersen           36.7          19.3               193        3450 female  2007
- 5 Adelie  Torgersen           39.3          20.6               190        3650 male    2007
- 6 Adelie  Torgersen           38.9          17.8               181        3625 female  2007
- 7 Adelie  Torgersen           39.2          19.6               195        4675 male    2007
- 8 Adelie  Torgersen           41.1          17.6               182        3200 female  2007
- 9 Adelie  Torgersen           38.6          21.2               191        3800 male    2007
-10 Adelie  Torgersen           34.6          21.1               198        4400 male    2007
-11 Adelie  Torgersen           36.6          17.8               185        3700 female  2007
-12 Adelie  Torgersen           38.7          19                 195        3450 female  2007
-13 Adelie  Torgersen           42.5          20.7               197        4500 male    2007
-14 Adelie  Torgersen           34.4          18.4               184        3325 female  2007
-15 Adelie  Torgersen           46            21.5               194        4200 male    2007
-16 Adelie  Biscoe              37.8          18.3               174        3400 female  2007
-17 Adelie  Biscoe              37.7          18.7               180        3600 male    2007
-18 Adelie  Biscoe              35.9          19.2               189        3800 female  2007
-19 Adelie  Biscoe              38.2          18.1               185        3950 male    2007
-20 Adelie  Biscoe              38.8          17.2               180        3800 male    2007
-21 Adelie  Biscoe              35.3          18.9               187        3800 female  2007
-22 Adelie  Biscoe              40.6          18.6               183        3550 male    2007
-23 Adelie  Biscoe              40.5          17.9               187        3200 female  2007
-24 Adelie  Biscoe              37.9          18.6               172        3150 female  2007
-25 Adelie  Biscoe              40.5          18.9               180        3950 male    2007
-26 Adelie  Dream               39.5          16.7               178        3250 female  2007
-27 Adelie  Dream               37.2          18.1               178        3900 male    2007
-28 Adelie  Dream               39.5          17.8               188        3300 female  2007
-29 Adelie  Dream               40.9          18.9               184        3900 male    2007
-30 Adelie  Dream               36.4          17                 195        3325 female  2007
-31 Adelie  Dream               39.2          21.1               196        4150 male    2007
-32 Adelie  Dream               38.8          20                 190        3950 male    2007
-33 Adelie  Dream               42.2          18.5               180        3550 female  2007
-34 Adelie  Dream               37.6          19.3               181        3300 female  2007
-35 Adelie  Dream               39.8          19.1               184        4650 male    2007
-36 Adelie  Dream               36.5          18                 182        3150 female  2007
-37 Adelie  Dream               40.8          18.4               195        3900 male    2007
-38 Adelie  Dream               36            18.5               186        3100 female  2007
-39 Adelie  Dream               44.1          19.7               196        4400 male    2007
-40 Adelie  Dream               37            16.9               185        3000 female  2007
-41 Adelie  Dream               39.6          18.8               190        4600 male    2007
-42 Adelie  Dream               41.1          19                 182        3425 male    2007
-43 Adelie  Dream               36            17.9               190        3450 female  2007
-44 Adelie  Dream               42.3          21.2               191        4150 male    2007
-45 Adelie  Biscoe              39.6          17.7               186        3500 female  2008
-46 Adelie  Biscoe              40.1          18.9               188        4300 male    2008
-47 Adelie  Biscoe              35            17.9               190        3450 female  2008
-48 Adelie  Biscoe              42            19.5               200        4050 male    2008
-49 Adelie  Biscoe              34.5          18.1               187        2900 female  2008
-50 Adelie  Biscoe              41.4          18.6               191        3700 male    2008
-51 Adelie  Biscoe              39            17.5               186        3550 female  2008
-52 Adelie  Biscoe              40.6          18.8               193        3800 male    2008
-53 Adelie  Biscoe              36.5          16.6               181        2850 female  2008
-54 Adelie  Biscoe              37.6          19.1               194        3750 male    2008
-55 Adelie  Biscoe              35.7          16.9               185        3150 female  2008
-# … with 278 more rows
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750
+ 2 Adelie  Torgersen           39.5          17.4               186        3800
+ 3 Adelie  Torgersen           40.3          18                 195        3250
+ 4 Adelie  Torgersen           36.7          19.3               193        3450
+ 5 Adelie  Torgersen           39.3          20.6               190        3650
+ 6 Adelie  Torgersen           38.9          17.8               181        3625
+ 7 Adelie  Torgersen           39.2          19.6               195        4675
+ 8 Adelie  Torgersen           41.1          17.6               182        3200
+ 9 Adelie  Torgersen           38.6          21.2               191        3800
+10 Adelie  Torgersen           34.6          21.1               198        4400
+# … with 323 more rows, and 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;
 ```
 ]
 
@@ -3271,52 +3589,7 @@ penguins %&gt;%
  8 Adelie  Torgersen  41.1  17.6               182        3200 female  2007
  9 Adelie  Torgersen  38.6  21.2               191        3800 male    2007
 10 Adelie  Torgersen  34.6  21.1               198        4400 male    2007
-11 Adelie  Torgersen  36.6  17.8               185        3700 female  2007
-12 Adelie  Torgersen  38.7  19                 195        3450 female  2007
-13 Adelie  Torgersen  42.5  20.7               197        4500 male    2007
-14 Adelie  Torgersen  34.4  18.4               184        3325 female  2007
-15 Adelie  Torgersen  46    21.5               194        4200 male    2007
-16 Adelie  Biscoe     37.8  18.3               174        3400 female  2007
-17 Adelie  Biscoe     37.7  18.7               180        3600 male    2007
-18 Adelie  Biscoe     35.9  19.2               189        3800 female  2007
-19 Adelie  Biscoe     38.2  18.1               185        3950 male    2007
-20 Adelie  Biscoe     38.8  17.2               180        3800 male    2007
-21 Adelie  Biscoe     35.3  18.9               187        3800 female  2007
-22 Adelie  Biscoe     40.6  18.6               183        3550 male    2007
-23 Adelie  Biscoe     40.5  17.9               187        3200 female  2007
-24 Adelie  Biscoe     37.9  18.6               172        3150 female  2007
-25 Adelie  Biscoe     40.5  18.9               180        3950 male    2007
-26 Adelie  Dream      39.5  16.7               178        3250 female  2007
-27 Adelie  Dream      37.2  18.1               178        3900 male    2007
-28 Adelie  Dream      39.5  17.8               188        3300 female  2007
-29 Adelie  Dream      40.9  18.9               184        3900 male    2007
-30 Adelie  Dream      36.4  17                 195        3325 female  2007
-31 Adelie  Dream      39.2  21.1               196        4150 male    2007
-32 Adelie  Dream      38.8  20                 190        3950 male    2007
-33 Adelie  Dream      42.2  18.5               180        3550 female  2007
-34 Adelie  Dream      37.6  19.3               181        3300 female  2007
-35 Adelie  Dream      39.8  19.1               184        4650 male    2007
-36 Adelie  Dream      36.5  18                 182        3150 female  2007
-37 Adelie  Dream      40.8  18.4               195        3900 male    2007
-38 Adelie  Dream      36    18.5               186        3100 female  2007
-39 Adelie  Dream      44.1  19.7               196        4400 male    2007
-40 Adelie  Dream      37    16.9               185        3000 female  2007
-41 Adelie  Dream      39.6  18.8               190        4600 male    2007
-42 Adelie  Dream      41.1  19                 182        3425 male    2007
-43 Adelie  Dream      36    17.9               190        3450 female  2007
-44 Adelie  Dream      42.3  21.2               191        4150 male    2007
-45 Adelie  Biscoe     39.6  17.7               186        3500 female  2008
-46 Adelie  Biscoe     40.1  18.9               188        4300 male    2008
-47 Adelie  Biscoe     35    17.9               190        3450 female  2008
-48 Adelie  Biscoe     42    19.5               200        4050 male    2008
-49 Adelie  Biscoe     34.5  18.1               187        2900 female  2008
-50 Adelie  Biscoe     41.4  18.6               191        3700 male    2008
-51 Adelie  Biscoe     39    17.5               186        3550 female  2008
-52 Adelie  Biscoe     40.6  18.8               193        3800 male    2008
-53 Adelie  Biscoe     36.5  16.6               181        2850 female  2008
-54 Adelie  Biscoe     37.6  19.1               194        3750 male    2008
-55 Adelie  Biscoe     35.7  16.9               185        3150 female  2008
-# … with 278 more rows
+# … with 323 more rows
 ```
 ]
 
@@ -3553,64 +3826,19 @@ count: false
 
 ```
 # A tibble: 333 × 8
-   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g sex     year
-   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt;  &lt;int&gt;
- 1 Adelie  Torgersen           39.1          18.7               181        3750 male    2007
- 2 Adelie  Torgersen           39.5          17.4               186        3800 female  2007
- 3 Adelie  Torgersen           40.3          18                 195        3250 female  2007
- 4 Adelie  Torgersen           36.7          19.3               193        3450 female  2007
- 5 Adelie  Torgersen           39.3          20.6               190        3650 male    2007
- 6 Adelie  Torgersen           38.9          17.8               181        3625 female  2007
- 7 Adelie  Torgersen           39.2          19.6               195        4675 male    2007
- 8 Adelie  Torgersen           41.1          17.6               182        3200 female  2007
- 9 Adelie  Torgersen           38.6          21.2               191        3800 male    2007
-10 Adelie  Torgersen           34.6          21.1               198        4400 male    2007
-11 Adelie  Torgersen           36.6          17.8               185        3700 female  2007
-12 Adelie  Torgersen           38.7          19                 195        3450 female  2007
-13 Adelie  Torgersen           42.5          20.7               197        4500 male    2007
-14 Adelie  Torgersen           34.4          18.4               184        3325 female  2007
-15 Adelie  Torgersen           46            21.5               194        4200 male    2007
-16 Adelie  Biscoe              37.8          18.3               174        3400 female  2007
-17 Adelie  Biscoe              37.7          18.7               180        3600 male    2007
-18 Adelie  Biscoe              35.9          19.2               189        3800 female  2007
-19 Adelie  Biscoe              38.2          18.1               185        3950 male    2007
-20 Adelie  Biscoe              38.8          17.2               180        3800 male    2007
-21 Adelie  Biscoe              35.3          18.9               187        3800 female  2007
-22 Adelie  Biscoe              40.6          18.6               183        3550 male    2007
-23 Adelie  Biscoe              40.5          17.9               187        3200 female  2007
-24 Adelie  Biscoe              37.9          18.6               172        3150 female  2007
-25 Adelie  Biscoe              40.5          18.9               180        3950 male    2007
-26 Adelie  Dream               39.5          16.7               178        3250 female  2007
-27 Adelie  Dream               37.2          18.1               178        3900 male    2007
-28 Adelie  Dream               39.5          17.8               188        3300 female  2007
-29 Adelie  Dream               40.9          18.9               184        3900 male    2007
-30 Adelie  Dream               36.4          17                 195        3325 female  2007
-31 Adelie  Dream               39.2          21.1               196        4150 male    2007
-32 Adelie  Dream               38.8          20                 190        3950 male    2007
-33 Adelie  Dream               42.2          18.5               180        3550 female  2007
-34 Adelie  Dream               37.6          19.3               181        3300 female  2007
-35 Adelie  Dream               39.8          19.1               184        4650 male    2007
-36 Adelie  Dream               36.5          18                 182        3150 female  2007
-37 Adelie  Dream               40.8          18.4               195        3900 male    2007
-38 Adelie  Dream               36            18.5               186        3100 female  2007
-39 Adelie  Dream               44.1          19.7               196        4400 male    2007
-40 Adelie  Dream               37            16.9               185        3000 female  2007
-41 Adelie  Dream               39.6          18.8               190        4600 male    2007
-42 Adelie  Dream               41.1          19                 182        3425 male    2007
-43 Adelie  Dream               36            17.9               190        3450 female  2007
-44 Adelie  Dream               42.3          21.2               191        4150 male    2007
-45 Adelie  Biscoe              39.6          17.7               186        3500 female  2008
-46 Adelie  Biscoe              40.1          18.9               188        4300 male    2008
-47 Adelie  Biscoe              35            17.9               190        3450 female  2008
-48 Adelie  Biscoe              42            19.5               200        4050 male    2008
-49 Adelie  Biscoe              34.5          18.1               187        2900 female  2008
-50 Adelie  Biscoe              41.4          18.6               191        3700 male    2008
-51 Adelie  Biscoe              39            17.5               186        3550 female  2008
-52 Adelie  Biscoe              40.6          18.8               193        3800 male    2008
-53 Adelie  Biscoe              36.5          16.6               181        2850 female  2008
-54 Adelie  Biscoe              37.6          19.1               194        3750 male    2008
-55 Adelie  Biscoe              35.7          16.9               185        3150 female  2008
-# … with 278 more rows
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750
+ 2 Adelie  Torgersen           39.5          17.4               186        3800
+ 3 Adelie  Torgersen           40.3          18                 195        3250
+ 4 Adelie  Torgersen           36.7          19.3               193        3450
+ 5 Adelie  Torgersen           39.3          20.6               190        3650
+ 6 Adelie  Torgersen           38.9          17.8               181        3625
+ 7 Adelie  Torgersen           39.2          19.6               195        4675
+ 8 Adelie  Torgersen           41.1          17.6               182        3200
+ 9 Adelie  Torgersen           38.6          21.2               191        3800
+10 Adelie  Torgersen           34.6          21.1               198        4400
+# … with 323 more rows, and 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;
 ```
 ]
 
@@ -3741,64 +3969,19 @@ count: false
 
 ```
 # A tibble: 333 × 8
-   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g sex     year
-   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt;  &lt;int&gt;
- 1 Adelie  Torgersen           39.1          18.7               181        3750 male    2007
- 2 Adelie  Torgersen           39.5          17.4               186        3800 female  2007
- 3 Adelie  Torgersen           40.3          18                 195        3250 female  2007
- 4 Adelie  Torgersen           36.7          19.3               193        3450 female  2007
- 5 Adelie  Torgersen           39.3          20.6               190        3650 male    2007
- 6 Adelie  Torgersen           38.9          17.8               181        3625 female  2007
- 7 Adelie  Torgersen           39.2          19.6               195        4675 male    2007
- 8 Adelie  Torgersen           41.1          17.6               182        3200 female  2007
- 9 Adelie  Torgersen           38.6          21.2               191        3800 male    2007
-10 Adelie  Torgersen           34.6          21.1               198        4400 male    2007
-11 Adelie  Torgersen           36.6          17.8               185        3700 female  2007
-12 Adelie  Torgersen           38.7          19                 195        3450 female  2007
-13 Adelie  Torgersen           42.5          20.7               197        4500 male    2007
-14 Adelie  Torgersen           34.4          18.4               184        3325 female  2007
-15 Adelie  Torgersen           46            21.5               194        4200 male    2007
-16 Adelie  Biscoe              37.8          18.3               174        3400 female  2007
-17 Adelie  Biscoe              37.7          18.7               180        3600 male    2007
-18 Adelie  Biscoe              35.9          19.2               189        3800 female  2007
-19 Adelie  Biscoe              38.2          18.1               185        3950 male    2007
-20 Adelie  Biscoe              38.8          17.2               180        3800 male    2007
-21 Adelie  Biscoe              35.3          18.9               187        3800 female  2007
-22 Adelie  Biscoe              40.6          18.6               183        3550 male    2007
-23 Adelie  Biscoe              40.5          17.9               187        3200 female  2007
-24 Adelie  Biscoe              37.9          18.6               172        3150 female  2007
-25 Adelie  Biscoe              40.5          18.9               180        3950 male    2007
-26 Adelie  Dream               39.5          16.7               178        3250 female  2007
-27 Adelie  Dream               37.2          18.1               178        3900 male    2007
-28 Adelie  Dream               39.5          17.8               188        3300 female  2007
-29 Adelie  Dream               40.9          18.9               184        3900 male    2007
-30 Adelie  Dream               36.4          17                 195        3325 female  2007
-31 Adelie  Dream               39.2          21.1               196        4150 male    2007
-32 Adelie  Dream               38.8          20                 190        3950 male    2007
-33 Adelie  Dream               42.2          18.5               180        3550 female  2007
-34 Adelie  Dream               37.6          19.3               181        3300 female  2007
-35 Adelie  Dream               39.8          19.1               184        4650 male    2007
-36 Adelie  Dream               36.5          18                 182        3150 female  2007
-37 Adelie  Dream               40.8          18.4               195        3900 male    2007
-38 Adelie  Dream               36            18.5               186        3100 female  2007
-39 Adelie  Dream               44.1          19.7               196        4400 male    2007
-40 Adelie  Dream               37            16.9               185        3000 female  2007
-41 Adelie  Dream               39.6          18.8               190        4600 male    2007
-42 Adelie  Dream               41.1          19                 182        3425 male    2007
-43 Adelie  Dream               36            17.9               190        3450 female  2007
-44 Adelie  Dream               42.3          21.2               191        4150 male    2007
-45 Adelie  Biscoe              39.6          17.7               186        3500 female  2008
-46 Adelie  Biscoe              40.1          18.9               188        4300 male    2008
-47 Adelie  Biscoe              35            17.9               190        3450 female  2008
-48 Adelie  Biscoe              42            19.5               200        4050 male    2008
-49 Adelie  Biscoe              34.5          18.1               187        2900 female  2008
-50 Adelie  Biscoe              41.4          18.6               191        3700 male    2008
-51 Adelie  Biscoe              39            17.5               186        3550 female  2008
-52 Adelie  Biscoe              40.6          18.8               193        3800 male    2008
-53 Adelie  Biscoe              36.5          16.6               181        2850 female  2008
-54 Adelie  Biscoe              37.6          19.1               194        3750 male    2008
-55 Adelie  Biscoe              35.7          16.9               185        3150 female  2008
-# … with 278 more rows
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750
+ 2 Adelie  Torgersen           39.5          17.4               186        3800
+ 3 Adelie  Torgersen           40.3          18                 195        3250
+ 4 Adelie  Torgersen           36.7          19.3               193        3450
+ 5 Adelie  Torgersen           39.3          20.6               190        3650
+ 6 Adelie  Torgersen           38.9          17.8               181        3625
+ 7 Adelie  Torgersen           39.2          19.6               195        4675
+ 8 Adelie  Torgersen           41.1          17.6               182        3200
+ 9 Adelie  Torgersen           38.6          21.2               191        3800
+10 Adelie  Torgersen           34.6          21.1               198        4400
+# … with 323 more rows, and 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;
 ```
 ]
 
@@ -3925,6 +4108,26 @@ class: inverse, middle, center
 --
 
 ### Create the function `geom_point_xy_means()`
+
+
+---
+
+Q&amp;A:  Suggested questions.
+
+Is ggxmean aimed at statistical classroom and MA206?
+
+Can all new geoms be modeled after the easy geom recipes?
+
+Why did it take you so long to figure out the extension mechanism? 
+
+Which was the most difficult geom to build in {ggxmean}?
+
+How long does it take to get through the 'Easy Geom Recipes' tutorial? 
+
+Is building a package difficult?
+
+Is maintaining a package difficult? 
+
 
 
 

@@ -27,6 +27,20 @@ background-size: cover
 #### Photo Credit: Mike Lewis HeadSmart Media
 
 
+---
+
+class: inverse, bottom
+background-image: url(https://images.unsplash.com/photo-1542178432-52211bc52073?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374)
+background-size: cover
+
+# Creating new geom vocabulary for richer statistical stories 
+## by extending ggplot2 statistical geometries
+### Dr. Evangeline 'Gina' Reynolds
+
+### Thursday May 19, 2022, 12:15AM
+#### Photo Credit: Klim Sergeev
+
+
 
 
 ```{r, include = F}
@@ -47,6 +61,10 @@ theme_set(theme_gray(base_size = 20))
 
 
 ---
+
+# gg in ggplot2
+
+--
 
 # Grammar of Graphics
 
@@ -109,6 +127,21 @@ knitr::include_graphics("https://miro.medium.com/max/1400/1*MMZuYgeC_YjXNC1r4D4s
 
 
 ---
+
+# ggplot2 is called a 'declarative' graphing system.
+
+--
+
+# It lets you *'speak your plot into existence'*. (Thomas Lin Pederson?) 
+
+--
+
+## This is fast. Because most of us, can **picture** the form of the plot we're going after rather clearly (i.e. what the horizontal position should represent, what color should represent, what 'marks' (points, lines) are going to appear on the plot).  
+--
+## 'Getting' our plot made becomes a matter of describing what we're already picturing!
+
+
+---
 # So what's the promise of ggplot2?
 
 --
@@ -123,33 +156,21 @@ knitr::include_graphics("https://miro.medium.com/max/1400/1*MMZuYgeC_YjXNC1r4D4s
 
 ## ... by describing it.
 
----
-
-# ggplot2 is called a 'declarative' graphing system.
-
---
-
-# It lets you *'speak your plot into existence'*. (Thomas Lin Pederson?) 
-
---
-
-### This is fast. Because most of us, can **picture** the form of the plot we're going after rather clearly (i.e. what the horizontal position should represent, what color should represent, what 'marks' (points, lines) are going to appear on the plot).  
---
-'Getting' our plot made becomes a matter of describing what we're already picturing!
 
 ---
 
 
 
-## "Create graphical 'poems'." - Hadley Wickham
+## "Create graphical 'poems'." - Hadley Wickham (2010)
 
 --
 
-## 'Write statistical stories.' - Gina Reynolds
+## 'Write statistical stories.' - Gina Reynolds (2022)
 
 
 
 ---
+class: inverse, center, middle
 
 # The problem?
 
@@ -165,6 +186,7 @@ knitr::include_graphics("https://miro.medium.com/max/1400/1*MMZuYgeC_YjXNC1r4D4s
 library(ggplot2)
 ggplot(airquality) + 
   aes(x = Ozone) + 
+  geom_rug() + 
   geom_histogram() + 
   ggxmean::geom_x_mean()
 ```
@@ -200,7 +222,19 @@ It may require a discussion about dollar sign syntax and how geom_vline is actua
 
 ---
 
-### Adding the conditional means
+## geom_histogram()
+
+--
+
+## counts the number of observations in a 'bin'
+
+--
+
+## draws rectangles accordingly
+
+---
+
+### Adding the conditional means?
 
 ```{r cond_means_hard, echo = F}
 airquality %>% 
@@ -210,6 +244,7 @@ airquality %>%
       mean(Ozone, na.rm = T)
     ) ->
 airquality_by_month
+
 ggplot(airquality) + 
   aes(x = Ozone) + 
   geom_histogram() + 
@@ -227,16 +262,14 @@ Further, for the case of adding a vertical line at the mean for different subset
 `r chunk_reveal("cond_means_hard", title = "#### Conditional means (may require a trip to stackoverflow!)")`
 
 
----
-
 
 ---
 
-geom_boxplot()
+geom_boxplot(), example of compute happening under the hood
 
 ---
 
-`r flipbookr::chunk_reveal("boxplot")`
+`r flipbookr::chunk_reveal("boxplot", break_type = "user")`
 
 ```{r boxplot, include = F}
 library(tidyverse)
@@ -248,17 +281,13 @@ gapminder::gapminder %>%
   geom_boxplot() ->
 g
   
-g %>% 
-  layer_data()
+g %>% #BREAK
+  layer_data() #BREAK
 ```
 
 ---
 
 # Like histogram, geom_boxplot does lots of compute in the background
-
---
-
-### lots of compute in the background
 
 --
 
@@ -272,28 +301,29 @@ g %>%
 
 ### conceptually distinct from those components
 
-
 ---
 
-ggplot2 intentionally lean for maintainance purposes...
+## ggplot2 intentionally lean for maintenance purposes.
 
 --
 
-but geom_x_mean() would be so nice!
+## ... but geom_x_mean() would be so nice!
 
 --
 
-{ggxmean} r package
-
----
-
-*'extending statistical geometries'*
-
-geoms -> "nouns..."
+## ggplot2 extensions system exists...
 
 --
 
-Nouns that inherit from existing geometries.
+## thus, {ggxmean} r package https://github.com/EvaMaeRey/ggxmean
+
+--
+
+Mostly creates geoms that inherit from existing geometries
+
+--
+
+Cool mechanism, probably underutilized...
 
 ---
 
@@ -301,62 +331,117 @@ Nouns that inherit from existing geometries.
 
 --
 
+## hand shoe 
+
+--
+
+## glove
+
+---
+
 ## Nackt*schnecke*
 
 --
 
+## naked snail
+
+--
+
+## slug
+
+---
+
 ## Daumen*kino*
 
----
+--
 
-Unique new concepts, but inheriting from more primitive forms (segment, point, text, etc)
-
-geom_point*_xy_means
+## thumb movie
 
 --
 
-geom_coordinates (inherit from geom_text)
-
---
-
-geom_segment*_residuals (inherits from segment)
-
---
-
-Easy to use -- you know the grammar!
-
---
-
-Not horribly to make (especially now...)
-
-
-
-# Origin story... 
+## flip book
 
 ---
 
-# Phase 0: Wanting to tell a statistical story w/ ggplot2.  Not fluent
-# correlation + 
-https://evamaerey.github.io/statistics/covariance_correlation.html#1
+# geoms that have their own conceptual identity, but inheriting from more primitive forms (segment, point, text, etc)
+
+--
+
+# geom_*point*_xy_means
+
+--
+
+# geom_*text*_coordinates
+
+--
+
+# geom_*segment*_residuals
 
 ---
-class: inverse, center, middle
 
+# Inheriting geoms easy to use -- you know the grammar!
+
+--
+
+# Not horrible to make (especially now...)
+
+---
+
+# {ggxmean}:  A journey in geom extension...
+
+--
+
+# Usefulness of this geom extension mechanism
+
+--
+
+# for people that want to tell visual statistical stories in a fluid way! :-)
+
+
+---
+
+# Chapter 1: Wanting to tell a statistical story. 
+
+--
+
+# What does Pearson correlation look like...?
+
+
+--
 .huge[
 
 $$ cor(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{n *\sigma_x \sigma_y} $$
 ] 
 
+--
+
+# 'by-hand' compute all values
+--
+, fragile
+--
+, not portable
+--
+, not delightful!
+--
+, no group-wise compute
+:
+https://evamaerey.github.io/statistics/covariance_correlation.html#1
+
 ---
 
-# Phase 1: New geometries to tell the covariance, variance, sd, correlation
+# Chapter 2: fluidly telling the covariance, variance, sd, correlation story
+
+--
+
+Starting with the mean of x (so {ggxmean})
+
+---
 
 `r flipbookr::chunk_reveal("correlation")`
 
 ```{r correlation, include = F}
 library(ggxmean)
 palmerpenguins::penguins %>% 
-  drop_na() %>% 
   ggplot() +
   aes(x = bill_length_mm) +
   aes(y = flipper_length_mm) +
@@ -377,7 +462,11 @@ palmerpenguins::penguins %>%
 
 ---
 
-# phase 2, New geometries to tell MA206 stories
+# Chapter 3, Visually telling an MA206 story
+
+--
+
+## Linear model (OLS)
 
 ---
 
@@ -414,11 +503,22 @@ cars %>%
 
 ---
 
-# phase 3, Fall Independent Studies (geoms together) New geometries - epilogue of story...
+# Chapter 4. MA206 Epilogue
+
+--
+
+Fall Independent Studies
+
+--
+
+Outlying observations,
+--
+high influence (cooks)
+--
+high leverage
 
 ---
 
-`r flipbookr::chunk_reveal("anscombe")`
 
 ```{r anscombe, include = T}
 datasets::anscombe %>%
@@ -434,30 +534,29 @@ tidy_anscombe
 
 ---
 
-`r flipbookr::chunk_reveal("dino")`
+`r flipbookr::chunk_reveal("anscomb")`
 
 
-```{r dino, include = F}
+```{r anscomb, include = F}
 tidy_anscombe %>%
   ggplot() +
   aes(x = x, y = y) +
   geom_point() +
   aes(color = group) +
   facet_wrap(facets = vars(group)) +
-# mean of x
   ggxmean::geom_x_mean() +
   ggxmean::geom_y_mean() +
-# mean of y
   ggxmean:::geom_x1sd(linetype = "dashed") +
   ggxmean:::geom_y1sd(linetype = "dashed") +
-# linear model
   ggxmean::geom_lm() +
   ggxmean::geom_lm_formula() +
-# Pearson correlation
-  ggxmean:::geom_corrlabel() 
+  ggxmean:::geom_corrlabel() + 
+  ggxmean::geom_point_high_leverage()
 ```
 
-Anscombs quartet/datasaurus...
+---
+
+`r flipbookr::chunk_reveal("dino")`
 
 ```{r dino, include = F}
 datasauRus::datasaurus_dozen %>%
@@ -482,11 +581,15 @@ datasauRus::datasaurus_dozen %>%
 
 ---
 
-# phase 4, Spring Independent Study (geom extension patterns) Helping others to build new vocabulary for stories yet to be told...
-
-Easy Geom Recipes
+# Chapter 5, Spring Independent Study (geom extension patterns) 
 
 
+# 'Easy Geom Recipes'
+
+--
+
+
+# Helping others to build new vocabulary for stories yet to be told...?
 
 ---
 class: inverse, middle
@@ -503,38 +606,9 @@ background-size: cover
 <br>
 <br>
 
-```{r, include = F}
-# This is the recommended set up for flipbooks
-# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
-knitr::opts_chunk$set(fig.width = 7, fig.height = 5, message = F, warning = FALSE, comment = "", cache = T)
-
-options(tibble.print_min = 55)
-options(knitr.duplicate.label = "allow")
-options(width=300) # prevents data wrapping
-```
 
 
-```{css, eval = TRUE, echo = FALSE}
-.remark-code{line-height: 1.5; font-size: 90%}
 
-@media print {
-  .has-continuation {
-    display: block;
-  }
-}
-
-code.r.hljs.remark-code{
-  position: relative;
-  overflow-x: hidden;
-}
-
-
-code.r.hljs.remark-code:hover{
-  overflow-x:visible;
-  width: 500px;
-  border-style: solid;
-}
-```
 
 ---
 
@@ -572,9 +646,7 @@ code.r.hljs.remark-code:hover{
 
 
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
-```
+
 
 ---
 class: inverse, middle, center
@@ -779,6 +851,26 @@ class: inverse, middle, center
 --
 
 ### Create the function `geom_point_xy_means()`
+
+
+---
+
+Q&A:  Suggested questions.
+
+Is ggxmean aimed at statistical classroom and MA206?
+
+Can all new geoms be modeled after the easy geom recipes?
+
+Why did it take you so long to figure out the extension mechanism? 
+
+Which was the most difficult geom to build in {ggxmean}?
+
+How long does it take to get through the 'Easy Geom Recipes' tutorial? 
+
+Is building a package difficult?
+
+Is maintaining a package difficult? 
+
 
 
 
