@@ -33,7 +33,7 @@ class: inverse, bottom
 background-image: url(https://images.unsplash.com/photo-1542178432-52211bc52073?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374)
 background-size: cover
 
-# Creating new geom vocabulary for richer statistical stories 
+# Creating new geom vocabulary for richer statistical visual stories 
 ## by extending ggplot2 statistical geometries
 ### Dr. Evangeline 'Gina' Reynolds
 
@@ -125,6 +125,10 @@ knitr::include_graphics("https://miro.medium.com/max/1400/1*MMZuYgeC_YjXNC1r4D4s
 
 > # "the Grammar of Graphics makes everything else easy because you've just got all these, like, little nice decomposable components" -- Hadley Wickham
 
+--
+
+# Build up your plot, bit by bit
+
 
 ---
 
@@ -136,9 +140,20 @@ knitr::include_graphics("https://miro.medium.com/max/1400/1*MMZuYgeC_YjXNC1r4D4s
 
 --
 
+# Describe the elements of the plot you have in your mind.  
+
+
+
+
+
+---
+
 ## This is fast. Because most of us, can **picture** the form of the plot we're going after rather clearly (i.e. what the horizontal position should represent, what color should represent, what 'marks' (points, lines) are going to appear on the plot).  
+
 --
+
 ## 'Getting' our plot made becomes a matter of describing what we're already picturing!
+
 
 
 ---
@@ -165,7 +180,7 @@ knitr::include_graphics("https://miro.medium.com/max/1400/1*MMZuYgeC_YjXNC1r4D4s
 
 --
 
-## 'Write statistical stories.' - Gina Reynolds (2022)
+## 'Write statistical stories.' - (May 2022)
 
 
 
@@ -180,7 +195,7 @@ class: inverse, center, middle
 
 ---
 
-## Example: adding the mean
+## Example
 
 ```{r, echo = F}
 library(ggplot2)
@@ -197,7 +212,7 @@ Consider for example, a the seemingly simple enterprise of adding a vertical lin
 
 ---
 
-`r chunk_reveal("basic", title = "### Adding the mean at x w/ base ggplot2")`
+`r chunk_reveal("basic", title = "### What's the experience")`
 
 ```{r basic}
 airquality %>% 
@@ -315,15 +330,15 @@ g %>% #BREAK
 
 --
 
-## thus, {ggxmean} r package https://github.com/EvaMaeRey/ggxmean
+## thus, {ggxmean} r package https://github.com/EvaMaeRey/ggxmean, that gives us geom_x_mean(), and ~ 25 more geoms...
 
 --
 
-Mostly creates geoms that inherit from existing geometries
+## Mostly creates geoms that inherit from existing geometries
 
 --
 
-Cool mechanism, probably underutilized...
+## Cool mechanism, probably underutilized...
 
 ---
 
@@ -363,7 +378,7 @@ Cool mechanism, probably underutilized...
 
 ---
 
-# geoms that have their own conceptual identity, but inheriting from more primitive forms (segment, point, text, etc)
+# inheriting geoms: have their own conceptual identity, but inheriting from more primitive forms (segment, point, text, etc)
 
 --
 
@@ -383,7 +398,9 @@ Cool mechanism, probably underutilized...
 
 --
 
-# Not horrible to make (especially now...)
+# Not horrible to make 
+--
+(especially now...)
 
 ---
 
@@ -391,7 +408,7 @@ Cool mechanism, probably underutilized...
 
 --
 
-# Usefulness of this geom extension mechanism
+# Usefulness of the inheritance geom extension mechanism
 
 --
 
@@ -415,7 +432,14 @@ $$ cor(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{n *\sigma_x \sigma_y} $
 
 --
 
-# 'by-hand' compute all values
+--
+
+https://evamaerey.github.io/statistics/covariance_correlation.html#1
+
+--
+
+
+# 'by-hand' compute all values (mean of x, y, differences, sd etc)
 --
 , fragile
 --
@@ -425,7 +449,6 @@ $$ cor(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{n *\sigma_x \sigma_y} $
 --
 , no group-wise compute
 :
-https://evamaerey.github.io/statistics/covariance_correlation.html#1
 
 ---
 
@@ -483,39 +506,37 @@ cars %>%
   aes(x = speed,
       y = dist) +
   geom_point() + 
-  ggxmean::geom_x_mean() +
-  ggxmean::geom_x_mean_label() +
-  ggxmean::geom_y_mean() +
-  ggxmean::geom_xy_means(color = "red",
-                size = 5) +
-  ggxmean::geom_lm_fitted(color = "goldenrod3",
-                          size = 3) +
-  ggxmean::geom_lm_pred_int() +
   ggxmean::geom_lm() +
   ggxmean::geom_lm_residuals(linetype = "dashed") +
+  ggxmean::geom_lm_fitted(
+    color = "goldenrod3",
+    size = 3) +
   ggxmean::geom_lm_conf_int() +
+  ggxmean::geom_lm_pred_int() +
   ggxmean::geom_lm_formula() +
   ggxmean::geom_lm_intercept(color = "red",
                              size = 5) +
-  ggxmean::geom_lm_intercept_label(size = 3,
-                                   hjust = 0)
+  ggxmean::geom_lm_intercept_label(
+    size = 3,
+    hjust = 0)
 ```
 
 ---
 
-# Chapter 4. MA206 Epilogue
+# Chapter 4. MA206 Epilogue: OLS outliers
 
 --
 
-Fall Independent Studies
+## Fall Independent Studies, w/ Morgan and Madison
+
 
 --
 
-Outlying observations,
+## high influence (cooks distance) (McGovern)
+
 --
-high influence (cooks)
---
-high leverage
+
+## high leverage (Brown)
 
 ---
 
@@ -551,7 +572,7 @@ tidy_anscombe %>%
   ggxmean::geom_lm() +
   ggxmean::geom_lm_formula() +
   ggxmean:::geom_corrlabel() + 
-  ggxmean::geom_point_high_leverage()
+  ggxmean::geom_text_leverage()
 ```
 
 ---
@@ -575,8 +596,9 @@ datasauRus::datasaurus_dozen %>%
   ggxmean::geom_lm_formula() +
 # Pearson correlation
   ggxmean:::geom_corrlabel() + 
-  ggxmean::geom_point_high_cooks(color = "goldenrod",
-                                 size = 5) 
+  ggxmean::geom_point_high_cooks(
+    color = "goldenrod",
+    size = 5) 
 ```
 
 ---
@@ -590,6 +612,32 @@ datasauRus::datasaurus_dozen %>%
 
 
 # Helping others to build new vocabulary for stories yet to be told...?
+
+--
+
+# Identifying patterns for success in building geoms that inherit from other primitives
+
+
+
+---
+
+## Step 0.  Build it with 'base gglot2'
+
+--
+
+## Step 1. Capture the compute that's needed, and test
+
+--
+
+## Step 2. Pass the compute to a ggproto object
+
+--
+
+## Step 2. Pass the ggproto object to your geom_*() function
+
+--
+
+## Step 4. Enjoy.
 
 ---
 class: inverse, middle
@@ -735,9 +783,9 @@ class: inverse, middle, center
 
 --
 
-- what's the naming convention for the proto object?
-- which aesthetics are required as inputs?
-- where does the function from above go?
+- ## what's the naming convention for the proto object?
+- ## which aesthetics are required as inputs?
+- ## where does the function from above go?
 
 ---
 
@@ -812,7 +860,9 @@ penguins %>%
   aes(x = bill_depth_mm, 
       y = bill_length_mm) +
   geom_point()+
-  geom_point_xy_medians(color = "red")
+  geom_point_xy_medians(
+    size = 8,
+    color = "red")
 ```
 
 ---
@@ -833,7 +883,7 @@ penguins %>%
       y = bill_length_mm, 
       color = species)+
   geom_point()+
-  geom_point_xy_medians(size = 4)
+  geom_point_xy_medians(size = 8)
 ```
 
 ---
@@ -855,23 +905,55 @@ class: inverse, middle, center
 
 ---
 
-Q&A:  Suggested questions.
+## Q&A
 
-Is ggxmean aimed at statistical classroom and MA206?
+--
 
-Can all new geoms be modeled after the easy geom recipes?
+## Suggested questions.
 
-Why did it take you so long to figure out the extension mechanism? 
+--
 
-Which was the most difficult geom to build in {ggxmean}?
+### How long does it take to get through one of the 'Easy Geom Recipes'? 
 
-How long does it take to get through the 'Easy Geom Recipes' tutorial? 
+### Can all new geoms be modeled after a 'easy geom recipes'?
 
-Is building a package difficult?
+### Why did it take you so long to figure out the extension mechanism?/What does your and Morgan's tutorial offer? Isn't there already instruction out there?
 
-Is maintaining a package difficult? 
+### Which was the most difficult geom to build in {ggxmean}?
+
+### Is building a package difficult?
+
+### Is maintaining a package difficult? 
+
+### Dusty Turner: Is the idea that MA206 students might use this package to aid in their learning of statistics?  
 
 
+---
+
+`r chunk_reveal("ma206verse", display_type = "output")`
+
+```{r ma206verse, include = F}
+library(ggstamp)
+ggcanvas() + 
+  stamp_polygon(fill = "slateblue") + 
+  stamp_text(label = "tidyverse") + 
+  stamp_polygon(x0y0 = pos_honeycomb()[2,], fill = "darkred") + 
+  stamp_text(label = "ggxmean", 
+             xy = pos_honeycomb()[2,]) + 
+  stamp_polygon(x0y0 = pos_honeycomb()[4,], fill = "darkolivegreen") + 
+  stamp_text(label = "ma206data", 
+             xy = pos_honeycomb()[4,]) + 
+  stamp_polygon(x0y0 = pos_honeycomb()[5,], fill = "goldenrod4") + 
+  stamp_text(label = "ggsample", 
+             xy = pos_honeycomb()[5,]) + 
+  stamp_polygon(radius = 3, alpha = .6, 
+                x0 = 1, y = -.7)  + 
+  stamp_text(label = "ma206verse", 
+            x = 1, size = 15, y = -2,
+            color = "gray15")
+  
+  
+```
 
 
 
