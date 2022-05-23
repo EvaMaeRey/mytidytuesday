@@ -1,0 +1,125 @@
+---
+title: "Introducing {ggxmean}"
+author: "Gina Reynolds, Morgan Brown, Madison McGovern"
+date: "5/11/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# TL;DR
+
+The ggxmean package introduces new geom\_\* for fluid visual description of statistical concepts. These include geom_x\_mean, which draws a vertical line at the mean of x, and other visualizations of basic statistical concepts.  We also introduce "Easy Geom Recipes"; a tutorial for creating a class of geoms that perform useful computation and inherit characteristics from more primitive geoms. 
+
+# The path to ggxmean
+
+Some time ago, I was sitting on the floor in the back of a packed-out ballroom, watching Thomas Lin Pederson give a talk: 'Extend your Ability to Extend ggplot2.'
+
+'I want to do that' I thought to myself, like the hundreds of others there!
+
+And I had a use case: statistical summaries, especially those for explaining rather basic statistical concepts like variance, covariance, and correlation.
+
+[include tweet?] <https://evamaerey.github.io/statistics/covariance_correlation.html>
+
+or
+
+<blockquote class="twitter-tweet">
+
+<p lang="en" dir="ltr">
+
+So, math notation and visual representation builds of basic statistics! They co-evolve speaking to different learning styles. Plus DRY principles for coders and a walk through of calc w num vals, for numerophiles! <a href="https://twitter.com/hashtag/ggplot2?src=hash&amp;ref_src=twsrc%5Etfw">\#ggplot2</a> <a href="https://twitter.com/hashtag/xaringan?src=hash&amp;ref_src=twsrc%5Etfw">\#xaringan</a> <a href="https://twitter.com/hashtag/flipbookr?src=hash&amp;ref_src=twsrc%5Etfw">\#flipbookr</a> <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">\#rstats</a> <a href="https://t.co/JgWLxo94Ms">https://t.co/JgWLxo94Ms</a> <a href="https://t.co/ol08lMGdtD">pic.twitter.com/ol08lMGdtD</a>
+
+</p>
+
+--- Gina Reynolds (@EvaMaeRey) <a href="https://twitter.com/EvaMaeRey/status/1276260233577238528?ref_src=twsrc%5Etfw">June 25, 2020</a>
+
+</blockquote>
+
+```{=html}
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+```
+
+I'd been working on visual walk-throughs of these concepts for courses I'd taught. But there was so much preparatory computation that had to happen before you could do this walk-through. It didn't feel like the powerful declarative experience that you have a lot of the time using ggplot2. For example, the boxplot experience is:
+
+a. I want to know about the pattern in this dataset; okay, so `ggplot(data = my_data)`
+
+b. I'm picturing my different categories on the x axis; alright, `mapping = aes(x = my_category)`
+
+c. And I'd like y to represent my continous variable; great, then `mapping = aes(y = my_continuous_outcome)`
+
+d.  And I'll use boxplots to summarize these groupwise distributions; so it's `'+ geom_boxplot()'`.
+
+e.  and bam! I've built my plot and I can see group differences!
+
+In this boxplot example, lots of computation has happened in the background for us: min, max, 25%, 75%, median. And that is great. I understand the boxplot well, so I don't need to do those computations myself. I'm happy for ggplot2 to do those computations for me.
+
+For my stats walk through, I felt that we should enjoy the same declarative experience. I'm understand the mean well, and one standard deviation away from the mean, etc. I should be able to ask ggplot2 to do that computation for me -- to compute the global mean (and also the group-wise mean if I desire). The extension system was the ticket to making it happen.
+
+
+
+
+
+Fast forward a few years from Thomas Lin Pederson's talk and I'm happy to introduce the {ggxmean} package!
+
+The ggxmean package allows you to easily add statistical summaries to your data visualization with new geom functions!
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Excited to be working on a ggplot2 extension package!!! 😮🥳🤯 <a href="https://twitter.com/hashtag/ggplot2?src=hash&amp;ref_src=twsrc%5Etfw">#ggplot2</a><br><br>{ggxmean} lets you put a vertical line at the mean of x w/ geom_xmean() and do other stuff! <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a><br><br>In action: <a href="https://t.co/oxzudwlNXn">https://t.co/oxzudwlNXn</a> <br><br>Repo: <a href="https://t.co/7DTxa7n4ye">https://t.co/7DTxa7n4ye</a><br><br>Some thoughts in 🧵 <a href="https://t.co/vRjXFdmAaQ">pic.twitter.com/vRjXFdmAaQ</a></p>&mdash; Gina Reynolds (@EvaMaeRey) <a href="https://twitter.com/EvaMaeRey/status/1353484900385628166?ref_src=twsrc%5Etfw">January 24, 2021</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+Reviewing Thomas' talk and other materials like [vingette] and [ggplot2 extension chapter], we were excited to  
+
+# Newest geoms
+
+The most recent additions to the ggxmean package have been by students at West Point. Morgan Brown and Madison McGovern picked up where I left off thinking about statistical concepts: outliers in linear regression.
+
+With the functions I'd worked on, we can look at the typical statistics discussed when looking at Anscombe's quartet here:
+
+<!-- ![](C:/Users/Evangeline.Reynolds/AppData/Local/RStudio/tmp/paste-DE1D7FD3.png) -->
+
+This is cool. Usually we are told "and these four datasets all have the same mean, sds, correlation." And now we get to *see* this right in our plot! Yay!
+
+But, Anscomb's quartet raises the question, don't we have statistics that will identify outlying observations? The distributions in Anscombs quartet are pretty wonky.  What do other statistics have to 'say' about them?
+
+Morgan and Madison tackled visualizing some additional statistical concepts that speak to less well behaved data: leverage and influence. Morgan's used her function geom_text_leverage() to calculate leverage for each point.
+
+...Morgan's work placeholder... 
+
+
+#  An 'Easy geom recipes' tutorial
+
+The ggplot2 extension space is vast and includes the orthogonal components of ggplot2 builds (geoms, scales, coords, facets etc). And even within the space of new geoms, the strategies are varied.
+
+-
+-
+-
+-
+
+This can may be overwhelming to those interested in ggplot extension.  The status quo for newcomers are directed to creating a new theme as the go-to starting point for getting started with extension.  
+
+In my experience, though, using a new theme pales to the thrill of seeing a new geom, doing a bunch of computational work in the background, used in a ggplot build.  I think this feeling will be true for a lot of more math-minded folks!  
+
+In a new tutorial, we focus on a mechanism that we found productive for many cases where we might want ggplot to do computational work for us:  make visualize key statistical concepts more fluid. The inheritance mechanism may be a useful point of entry -- with easy wins -- for folks interested in entering this space!
+
+Working with Morgan and Madison on the creation of new geoms lead to an addition, unanticipated output: extrapolating a recipe for success when it comes to building this type of geom\_\* extension that inherits from existing geoms. For almost all of the geoms in ggxmean we followed the formula:
+
+1)  use base ggplot2 to build the desired output
+
+2)  build your ggplot2 function by
+
+    a)  writing a compute function based on computations done using the base ggplot2 build (we only use compute_group for these easy recipes)
+    b)  passing the compute_group function to create a ggproto object
+    c)  passing the ggproto object ('Stat') to a geom\_\* function
+
+3)  test and enjoy the functionality!
+
+This past term, Morgan Brown and I created the tutorial 'Easy geom recipes' so ggplot2 users can get a taste of extension mechanism. 
+
+The tutorial contains 6 recipes - three that are fully worked out, and three that we invite users to complete.  Try out the recipes [here](https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/easy_geom_recipes.html).
+
+From a pedigocial perspective, the tutorial:
+
+1. minimizes new content (ggproto)
+2. builds in practice and repetition.  
+3. 
+

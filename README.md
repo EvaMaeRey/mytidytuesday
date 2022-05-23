@@ -10,6 +10,11 @@ The goal of mytidytuesday is to hold the little projects. They are like
 blogs posts, but just code, hardly any prose. It’s in the spirit of
 \#tidytuesday!
 
+-   [2022-05-23-networks-presentation/networks\_presentation.html](https://evamaerey.github.io/mytidytuesday/2022-05-23-networks-presentation/networks_presentation.html)
+-   [2022-05-23-networks-presentation/images\_for\_lecture/federalist\_widget
+    copy.html](https://evamaerey.github.io/mytidytuesday/2022-05-23-networks-presentation/images_for_lecture/federalist_widget%20copy.html)
+-   [2022-05-09-statistical-geometries/statistical\_geometries.html](https://evamaerey.github.io/mytidytuesday/2022-05-09-statistical-geometries/statistical_geometries.html)
+-   [2022-05-09-statistical-geometries/rstudio\_blog\_post\_draft.html](https://evamaerey.github.io/mytidytuesday/2022-05-09-statistical-geometries/rstudio_blog_post_draft.html)
 -   [2022-04-21-ggplot2-grammar-primer/ggplot2\_grammar\_primer\_worksheet.html](https://evamaerey.github.io/mytidytuesday/2022-04-21-ggplot2-grammar-primer/ggplot2_grammar_primer_worksheet.html)
 -   [2022-04-21-ggplot2-grammar-primer/ggplot2\_grammar\_primer\_double\_crochet.html](https://evamaerey.github.io/mytidytuesday/2022-04-21-ggplot2-grammar-primer/ggplot2_grammar_primer_double_crochet.html)
 -   [2022-04-21-ggplot2-grammar-primer/ggplot2\_grammar\_primer.html](https://evamaerey.github.io/mytidytuesday/2022-04-21-ggplot2-grammar-primer/ggplot2_grammar_primer.html)
