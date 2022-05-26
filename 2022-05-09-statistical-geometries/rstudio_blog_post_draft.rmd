@@ -11,11 +11,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # TL;DR
 
-The ggxmean package introduces new geom\_\* for fluid visual description of statistical concepts. These include geom_x\_mean, which draws a vertical line at the mean of x, and other visualizations of basic statistical concepts.  We also introduce "Easy Geom Recipes"; a tutorial for creating a class of geoms that perform useful computation and inherit characteristics from more primitive geoms. 
+The ggxmean package introduces new geom\_\* for fluid visual description of statistical concepts. These include geom_x\_mean, which draws a vertical line at the mean of x, and other visualizations of basic statistical concepts.  We also introduce "Easy Geom Recipes"; an introductory tutorial for creating a class of geoms that perform useful computation and inherit characteristics from more primitive geoms. 
 
 # The path to ggxmean
 
-Some time ago, I was sitting on the floor in the back of a packed-out ballroom, watching Thomas Lin Pederson give a talk: 'Extend your Ability to Extend ggplot2.'
+Some time ago, I was sitting on the floor in the back of a packed-out ballroom, watching Thomas Lin Pederson give a talk: ['Extend your Ability to Extend ggplot2'](https://www.youtube.com/watch?v=uj7A3i2fi54).
 
 'I want to do that' I thought to myself, like the hundreds of others there!
 
@@ -55,23 +55,21 @@ e.  and bam! I've built my plot and I can see group differences!
 
 In this boxplot example, lots of computation has happened in the background for us: min, max, 25%, 75%, median. And that is great. I understand the boxplot well, so I don't need to do those computations myself. I'm happy for ggplot2 to do those computations for me.
 
-For my stats walk through, I felt that we should enjoy the same declarative experience. I'm understand the mean well, and one standard deviation away from the mean, etc. I should be able to ask ggplot2 to do that computation for me -- to compute the global mean (and also the group-wise mean if I desire). The extension system was the ticket to making it happen.
+For my stats walk through, I felt that we should enjoy the same declarative experience. I'm understand the mean well, and one standard deviation away from the mean, etc. I should be able to ask ggplot2 to do that computation for me -- to compute the global mean (and also the group-wise mean if I desire) -- an put a vertical line there. But as things stood, my solution to choreographing the stats visualizations felt inelegant -- fragile and not portable (not easy to move to other cases or do group-wise work), and simply not very fun.
 
+While there are a lot of [ggplot2 extension packages](https://exts.ggplot2.tidyverse.org/gallery/) nobody had built the simple geoms like `geom_x_mean` that would make the stats walk-through flow!  
 
+Fast forward a few years.  I've dug into tutorial material like the ['Extending ggplot2' vignette](https://cran.r-project.org/web/packages/ggplot2/vignettes/extending-ggplot2.html) and the ['Extension'](https://ggplot2-book.org/extensions.html) chapter in the newest edition of the ggplot2 book, rewatched Thomas Lin Pederson's talk a number of times, and examined [ggplot2 code on github](https://github.com/tidyverse/ggplot2/blob/main/R/geom-vline.r).  And now I'm happy to introduce the {ggxmean} package!
 
-
-
-Fast forward a few years from Thomas Lin Pederson's talk and I'm happy to introduce the {ggxmean} package!
-
-The ggxmean package allows you to easily add statistical summaries to your data visualization with new geom functions!
+The ggxmean package allows you to easily add statistical summaries to your data visualization with new geom functions!  It makes doing statistical walk-throughs like the covariance, variance, sd, and correlation walk-through elegant and fluid!
 
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Excited to be working on a ggplot2 extension package!!! 😮🥳🤯 <a href="https://twitter.com/hashtag/ggplot2?src=hash&amp;ref_src=twsrc%5Etfw">#ggplot2</a><br><br>{ggxmean} lets you put a vertical line at the mean of x w/ geom_xmean() and do other stuff! <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a><br><br>In action: <a href="https://t.co/oxzudwlNXn">https://t.co/oxzudwlNXn</a> <br><br>Repo: <a href="https://t.co/7DTxa7n4ye">https://t.co/7DTxa7n4ye</a><br><br>Some thoughts in 🧵 <a href="https://t.co/vRjXFdmAaQ">pic.twitter.com/vRjXFdmAaQ</a></p>&mdash; Gina Reynolds (@EvaMaeRey) <a href="https://twitter.com/EvaMaeRey/status/1353484900385628166?ref_src=twsrc%5Etfw">January 24, 2021</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-Reviewing Thomas' talk and other materials like [vingette] and [ggplot2 extension chapter], we were excited to  
+I further worked on functions visualize ordinary least squares regression.  
 
 # Newest geoms
 
-The most recent additions to the ggxmean package have been by students at West Point. Morgan Brown and Madison McGovern picked up where I left off thinking about statistical concepts: outliers in linear regression.
+The most recent additions to the ggxmean package are written by students at West Point. Morgan Brown and Madison McGovern picked up where I left off thinking about statistical concepts: outliers in linear regression.
 
 With the functions I'd worked on, we can look at the typical statistics discussed when looking at Anscombe's quartet here:
 
