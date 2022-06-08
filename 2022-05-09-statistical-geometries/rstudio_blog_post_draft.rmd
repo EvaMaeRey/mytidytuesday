@@ -103,7 +103,7 @@ At the time I got more comfortable building these new functions, I was also inte
 ```{r ols}
 library(tidyverse)
 library(ggxmean)
-library(transformr) #might help w/ animate
+#library(transformr) #might help w/ animate
 
 ## basic example code
 cars %>% 
@@ -153,8 +153,7 @@ tidy_anscombe %>%
   ggxmean::geom_lm() +
   ggxmean::geom_lm_formula() +
   ggxmean:::geom_corrlabel() + 
-  guides(color = "none") + 
-  gganimate::transition_layers()
+  guides(color = "none")
 ```
 
 <!-- This is cool. Usually we are told "and these four datasets all have the same mean, sds, correlation", with the numeric values possibly provided in a nearby table. And now we get to *see* the values right in our plot!  -->
