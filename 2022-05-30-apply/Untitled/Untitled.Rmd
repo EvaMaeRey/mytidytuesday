@@ -1,0 +1,99 @@
+---
+title: "A minimal flipbook"
+subtitle: "With flipbookr and xaringan"
+author: "You!"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F)
+library(flipbookr)
+library(tidyverse)
+```
+
+
+
+
+
+
+
+
+<!-- get a flipbook version of the my_cars code chunk - pauses are where parentheses are balanced -->
+---
+
+`r chunk_reveal("my_cars")`
+
+
+```{r my_cars, include = FALSE}
+cbind(x1 = 3, x2 = c(4:1, 2:5)) ->
+  x
+
+letters[1:8] ->
+  dimnames(x)[[1]]
+
+x %>% 
+  apply(X = .,
+        MARGIN = 2, 
+        FUN = mean, 
+        trim = .2)
+
+apply(x, 2, sum) ->
+  col.sums
+
+apply(x, 1, sum) -> 
+  row.sums
+
+rbind(cbind(x, 
+            Rtot = row.sums), 
+      Ctot = c(col.sums, sum(col.sums)))
+
+```
+
+---
+
+`r chunk_reveal("lapply")`
+
+```{r lapply, include = F}
+list(a = 1:10, 
+          beta = exp(-3:3), 
+          logic = c(TRUE,FALSE,FALSE,TRUE)) ->
+x
+
+# compute the list mean for each list element
+x %>% 
+lapply(., mean)
+
+# median and quartiles for each list element
+x %>% 
+lapply(., quantile, probs = 1:3/4)
+
+x %>% 
+sapply(., quantile)
+
+# list of vectors
+sapply(3:9, seq) -> 
+  i39 
+
+i39 %>% 
+sapply(FUN = fivenum) ->
+  hide
+
+i39 %>% 
+vapply(., FUN = fivenum,
+       c(Min. = 0, "1st Qu." = 0, 
+         Median = 0, "3rd Qu." = 0, Max. = 0))
+
+
+```
+

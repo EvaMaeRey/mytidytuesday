@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>A minimal flipbook</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="You!" />
+    <script src="libs/header-attrs-2.6/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# A minimal flipbook
+## With flipbookr and xaringan
+### You!
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;!-- get a flipbook version of the my_cars code chunk - pauses are where parentheses are balanced --&gt;
+---
+
+count: false
+ 
+
+.panel1-my_cars-auto[
+
+```r
+*cbind(x1 = 3, x2 = c(4:1, 2:5))
+```
+]
+ 
+.panel2-my_cars-auto[
+
+```
+     x1 x2
+[1,]  3  4
+[2,]  3  3
+[3,]  3  2
+[4,]  3  1
+[5,]  3  2
+[6,]  3  3
+[7,]  3  4
+[8,]  3  5
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars-auto[
+
+```r
+cbind(x1 = 3, x2 = c(4:1, 2:5)) -&gt;
+* x
+```
+]
+ 
+.panel2-my_cars-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars-auto[
+
+```r
+cbind(x1 = 3, x2 = c(4:1, 2:5)) -&gt;
+  x
+
+*letters[1:8]
+```
+]
+ 
+.panel2-my_cars-auto[
+
+```
+[1] "a" "b" "c" "d" "e" "f" "g" "h"
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars-auto[
+
+```r
+cbind(x1 = 3, x2 = c(4:1, 2:5)) -&gt;
+  x
+
+letters[1:8] -&gt;
+* dimnames(x)[[1]]
+```
+]
+ 
+.panel2-my_cars-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars-auto[
+
+```r
+cbind(x1 = 3, x2 = c(4:1, 2:5)) -&gt;
+  x
+
+letters[1:8] -&gt;
+  dimnames(x)[[1]]
+
+*x 
+```
+]
+ 
+.panel2-my_cars-auto[
+
+```
+  x1 x2
+a  3  4
+b  3  3
+c  3  2
+d  3  1
+e  3  2
+f  3  3
+g  3  4
+h  3  5
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars-auto[
+
+```r
+cbind(x1 = 3, x2 = c(4:1, 2:5)) -&gt;
+  x
+
+letters[1:8] -&gt;
+  dimnames(x)[[1]]
+
+x %&gt;%
+* apply(X = .,
+*       MARGIN = 2,
+*       FUN = mean,
+*       trim = .2)
+```
+]
+ 
+.panel2-my_cars-auto[
+
+```
+x1 x2 
+ 3  3 
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars-auto[
+
+```r
+cbind(x1 = 3, x2 = c(4:1, 2:5)) -&gt;
+  x
+
+letters[1:8] -&gt;
+  dimnames(x)[[1]]
+
+x %&gt;%
+  apply(X = .,
+        MARGIN = 2,
+        FUN = mean,
+        trim = .2)
+
+*apply(x, 2, sum)
+```
+]
+ 
+.panel2-my_cars-auto[
+
+```
+x1 x2 
+ 3  3 
+```
+
+```
+x1 x2 
+24 24 
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars-auto[
+
+```r
+cbind(x1 = 3, x2 = c(4:1, 2:5)) -&gt;
+  x
+
+letters[1:8] -&gt;
+  dimnames(x)[[1]]
+
+x %&gt;%
+  apply(X = .,
+        MARGIN = 2,
+        FUN = mean,
+        trim = .2)
+
+apply(x, 2, sum) -&gt;
+* col.sums
+```
+]
+ 
+.panel2-my_cars-auto[
+
+```
+x1 x2 
+ 3  3 
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars-auto[
+
+```r
+cbind(x1 = 3, x2 = c(4:1, 2:5)) -&gt;
+  x
+
+letters[1:8] -&gt;
+  dimnames(x)[[1]]
+
+x %&gt;%
+  apply(X = .,
+        MARGIN = 2,
+        FUN = mean,
+        trim = .2)
+
+apply(x, 2, sum) -&gt;
+  col.sums
+
+*apply(x, 1, sum)
+```
+]
+ 
+.panel2-my_cars-auto[
+
+```
+x1 x2 
+ 3  3 
+```
+
+```
+a b c d e f g h 
+7 6 5 4 5 6 7 8 
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars-auto[
+
+```r
+cbind(x1 = 3, x2 = c(4:1, 2:5)) -&gt;
+  x
+
+letters[1:8] -&gt;
+  dimnames(x)[[1]]
+
+x %&gt;%
+  apply(X = .,
+        MARGIN = 2,
+        FUN = mean,
+        trim = .2)
+
+apply(x, 2, sum) -&gt;
+  col.sums
+
+apply(x, 1, sum) -&gt;
+* row.sums
+```
+]
+ 
+.panel2-my_cars-auto[
+
+```
+x1 x2 
+ 3  3 
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars-auto[
+
+```r
+cbind(x1 = 3, x2 = c(4:1, 2:5)) -&gt;
+  x
+
+letters[1:8] -&gt;
+  dimnames(x)[[1]]
+
+x %&gt;%
+  apply(X = .,
+        MARGIN = 2,
+        FUN = mean,
+        trim = .2)
+
+apply(x, 2, sum) -&gt;
+  col.sums
+
+apply(x, 1, sum) -&gt;
+  row.sums
+
+*rbind(cbind(x,
+*           Rtot = row.sums),
+*     Ctot = c(col.sums, sum(col.sums)))
+```
+]
+ 
+.panel2-my_cars-auto[
+
+```
+x1 x2 
+ 3  3 
+```
+
+```
+     x1 x2 Rtot
+a     3  4    7
+b     3  3    6
+c     3  2    5
+d     3  1    4
+e     3  2    5
+f     3  3    6
+g     3  4    7
+h     3  5    8
+Ctot 24 24   48
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars-auto[
+
+```r
+cbind(x1 = 3, x2 = c(4:1, 2:5)) -&gt;
+  x
+
+letters[1:8] -&gt;
+  dimnames(x)[[1]]
+
+x %&gt;%
+  apply(X = .,
+        MARGIN = 2,
+        FUN = mean,
+        trim = .2)
+
+apply(x, 2, sum) -&gt;
+  col.sums
+
+apply(x, 1, sum) -&gt;
+  row.sums
+
+rbind(cbind(x,
+            Rtot = row.sums),
+      Ctot = c(col.sums, sum(col.sums)))
+```
+]
+ 
+.panel2-my_cars-auto[
+
+```
+x1 x2 
+ 3  3 
+```
+
+```
+     x1 x2 Rtot
+a     3  4    7
+b     3  3    6
+c     3  2    5
+d     3  1    4
+e     3  2    5
+f     3  3    6
+g     3  4    7
+h     3  5    8
+Ctot 24 24   48
+```
+]
+
+&lt;style&gt;
+.panel1-my_cars-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-my_cars-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-my_cars-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-lapply-auto[
+
+```r
+*list(a = 1:10,
+*         beta = exp(-3:3),
+*         logic = c(TRUE,FALSE,FALSE,TRUE))
+```
+]
+ 
+.panel2-lapply-auto[
+
+```
+$a
+ [1]  1  2  3  4  5  6  7  8  9 10
+
+$beta
+[1]  0.04978707  0.13533528  0.36787944  1.00000000  2.71828183  7.38905610
+[7] 20.08553692
+
+$logic
+[1]  TRUE FALSE FALSE  TRUE
+```
+]
+
+---
+count: false
+ 
+
+.panel1-lapply-auto[
+
+```r
+list(a = 1:10,
+          beta = exp(-3:3),
+          logic = c(TRUE,FALSE,FALSE,TRUE)) -&gt;
+*x 
+```
+]
+ 
+.panel2-lapply-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-lapply-auto[
+
+```r
+list(a = 1:10,
+          beta = exp(-3:3),
+          logic = c(TRUE,FALSE,FALSE,TRUE)) -&gt;
+x
+
+# compute the list mean for each list element
+*x 
+```
+]
+ 
+.panel2-lapply-auto[
+
+```
+$a
+ [1]  1  2  3  4  5  6  7  8  9 10
+
+$beta
+[1]  0.04978707  0.13533528  0.36787944  1.00000000  2.71828183  7.38905610
+[7] 20.08553692
+
+$logic
+[1]  TRUE FALSE FALSE  TRUE
+```
+]
+
+---
+count: false
+ 
+
+.panel1-lapply-auto[
+
+```r
+list(a = 1:10,
+          beta = exp(-3:3),
+          logic = c(TRUE,FALSE,FALSE,TRUE)) -&gt;
+x
+
+# compute the list mean for each list element
+x %&gt;%
+*lapply(., mean)
+```
+]
+ 
+.panel2-lapply-auto[
+
+```
+$a
+[1] 5.5
+
+$beta
+[1] 4.535125
+
+$logic
+[1] 0.5
+```
+]
+
+---
+count: false
+ 
+
+.panel1-lapply-auto[
+
+```r
+list(a = 1:10,
+          beta = exp(-3:3),
+          logic = c(TRUE,FALSE,FALSE,TRUE)) -&gt;
+x
+
+# compute the list mean for each list element
+x %&gt;%
+lapply(., mean)
+
+# median and quartiles for each list element
+*x 
+```
+]
+ 
+.panel2-lapply-auto[
+
+```
+$a
+[1] 5.5
+
+$beta
+[1] 4.535125
+
+$logic
+[1] 0.5
+```
+
+```
+$a
+ [1]  1  2  3  4  5  6  7  8  9 10
+
+$beta
+[1]  0.04978707  0.13533528  0.36787944  1.00000000  2.71828183  7.38905610
+[7] 20.08553692
+
+$logic
+[1]  TRUE FALSE FALSE  TRUE
+```
+]
+
+---
+count: false
+ 
+
+.panel1-lapply-auto[
+
+```r
+list(a = 1:10,
+          beta = exp(-3:3),
+          logic = c(TRUE,FALSE,FALSE,TRUE)) -&gt;
+x
+
+# compute the list mean for each list element
+x %&gt;%
+lapply(., mean)
+
+# median and quartiles for each list element
+x %&gt;%
+*lapply(., quantile, probs = 1:3/4)
+```
+]
+ 
+.panel2-lapply-auto[
+
+```
+$a
+[1] 5.5
+
+$beta
+[1] 4.535125
+
+$logic
+[1] 0.5
+```
+
+```
+$a
+ 25%  50%  75% 
+3.25 5.50 7.75 
+
+$beta
+      25%       50%       75% 
+0.2516074 1.0000000 5.0536690 
+
+$logic
+25% 50% 75% 
+0.0 0.5 1.0 
+```
+]
+
+---
+count: false
+ 
+
+.panel1-lapply-auto[
+
+```r
+list(a = 1:10,
+          beta = exp(-3:3),
+          logic = c(TRUE,FALSE,FALSE,TRUE)) -&gt;
+x
+
+# compute the list mean for each list element
+x %&gt;%
+lapply(., mean)
+
+# median and quartiles for each list element
+x %&gt;%
+lapply(., quantile, probs = 1:3/4)
+
+*x 
+```
+]
+ 
+.panel2-lapply-auto[
+
+```
+$a
+[1] 5.5
+
+$beta
+[1] 4.535125
+
+$logic
+[1] 0.5
+```
+
+```
+$a
+ 25%  50%  75% 
+3.25 5.50 7.75 
+
+$beta
+      25%       50%       75% 
+0.2516074 1.0000000 5.0536690 
+
+$logic
+25% 50% 75% 
+0.0 0.5 1.0 
+```
+
+```
+$a
+ [1]  1  2  3  4  5  6  7  8  9 10
+
+$beta
+[1]  0.04978707  0.13533528  0.36787944  1.00000000  2.71828183  7.38905610
+[7] 20.08553692
+
+$logic
+[1]  TRUE FALSE FALSE  TRUE
+```
+]
+
+---
+count: false
+ 
+
+.panel1-lapply-auto[
+
+```r
+list(a = 1:10,
+          beta = exp(-3:3),
+          logic = c(TRUE,FALSE,FALSE,TRUE)) -&gt;
+x
+
+# compute the list mean for each list element
+x %&gt;%
+lapply(., mean)
+
+# median and quartiles for each list element
+x %&gt;%
+lapply(., quantile, probs = 1:3/4)
+
+x %&gt;%
+*sapply(., quantile)
+```
+]
+ 
+.panel2-lapply-auto[
+
+```
+$a
+[1] 5.5
+
+$beta
+[1] 4.535125
+
+$logic
+[1] 0.5
+```
+
+```
+$a
+ 25%  50%  75% 
+3.25 5.50 7.75 
+
+$beta
+      25%       50%       75% 
+0.2516074 1.0000000 5.0536690 
+
+$logic
+25% 50% 75% 
+0.0 0.5 1.0 
+```
+
+```
+         a        beta logic
+0%    1.00  0.04978707   0.0
+25%   3.25  0.25160736   0.0
+50%   5.50  1.00000000   0.5
+75%   7.75  5.05366896   1.0
+100% 10.00 20.08553692   1.0
+```
+]
+
+---
+count: false
+ 
+
+.panel1-lapply-auto[
+
+```r
+list(a = 1:10,
+          beta = exp(-3:3),
+          logic = c(TRUE,FALSE,FALSE,TRUE)) -&gt;
+x
+
+# compute the list mean for each list element
+x %&gt;%
+lapply(., mean)
+
+# median and quartiles for each list element
+x %&gt;%
+lapply(., quantile, probs = 1:3/4)
+
+x %&gt;%
+sapply(., quantile)
+
+# list of vectors
+*sapply(3:9, seq)
+```
+]
+ 
+.panel2-lapply-auto[
+
+```
+$a
+[1] 5.5
+
+$beta
+[1] 4.535125
+
+$logic
+[1] 0.5
+```
+
+```
+$a
+ 25%  50%  75% 
+3.25 5.50 7.75 
+
+$beta
+      25%       50%       75% 
+0.2516074 1.0000000 5.0536690 
+
+$logic
+25% 50% 75% 
+0.0 0.5 1.0 
+```
+
+```
+         a        beta logic
+0%    1.00  0.04978707   0.0
+25%   3.25  0.25160736   0.0
+50%   5.50  1.00000000   0.5
+75%   7.75  5.05366896   1.0
+100% 10.00 20.08553692   1.0
+```
+
+```
+[[1]]
+[1] 1 2 3
+
+[[2]]
+[1] 1 2 3 4
+
+[[3]]
+[1] 1 2 3 4 5
+
+[[4]]
+[1] 1 2 3 4 5 6
+
+[[5]]
+[1] 1 2 3 4 5 6 7
+
+[[6]]
+[1] 1 2 3 4 5 6 7 8
+
+[[7]]
+[1] 1 2 3 4 5 6 7 8 9
+```
+]
+
+---
+count: false
+ 
+
+.panel1-lapply-auto[
+
+```r
+list(a = 1:10,
+          beta = exp(-3:3),
+          logic = c(TRUE,FALSE,FALSE,TRUE)) -&gt;
+x
+
+# compute the list mean for each list element
+x %&gt;%
+lapply(., mean)
+
+# median and quartiles for each list element
+x %&gt;%
+lapply(., quantile, probs = 1:3/4)
+
+x %&gt;%
+sapply(., quantile)
+
+# list of vectors
+sapply(3:9, seq) -&gt;
+* i39
+```
+]
+ 
+.panel2-lapply-auto[
+
+```
+$a
+[1] 5.5
+
+$beta
+[1] 4.535125
+
+$logic
+[1] 0.5
+```
+
+```
+$a
+ 25%  50%  75% 
+3.25 5.50 7.75 
+
+$beta
+      25%       50%       75% 
+0.2516074 1.0000000 5.0536690 
+
+$logic
+25% 50% 75% 
+0.0 0.5 1.0 
+```
+
+```
+         a        beta logic
+0%    1.00  0.04978707   0.0
+25%   3.25  0.25160736   0.0
+50%   5.50  1.00000000   0.5
+75%   7.75  5.05366896   1.0
+100% 10.00 20.08553692   1.0
+```
+]
+
+---
+count: false
+ 
+
+.panel1-lapply-auto[
+
+```r
+list(a = 1:10,
+          beta = exp(-3:3),
+          logic = c(TRUE,FALSE,FALSE,TRUE)) -&gt;
+x
+
+# compute the list mean for each list element
+x %&gt;%
+lapply(., mean)
+
+# median and quartiles for each list element
+x %&gt;%
+lapply(., quantile, probs = 1:3/4)
+
+x %&gt;%
+sapply(., quantile)
+
+# list of vectors
+sapply(3:9, seq) -&gt;
+  i39
+
+*i39
+```
+]
+ 
+.panel2-lapply-auto[
+
+```
+$a
+[1] 5.5
+
+$beta
+[1] 4.535125
+
+$logic
+[1] 0.5
+```
+
+```
+$a
+ 25%  50%  75% 
+3.25 5.50 7.75 
+
+$beta
+      25%       50%       75% 
+0.2516074 1.0000000 5.0536690 
+
+$logic
+25% 50% 75% 
+0.0 0.5 1.0 
+```
+
+```
+         a        beta logic
+0%    1.00  0.04978707   0.0
+25%   3.25  0.25160736   0.0
+50%   5.50  1.00000000   0.5
+75%   7.75  5.05366896   1.0
+100% 10.00 20.08553692   1.0
+```
+
+```
+[[1]]
+[1] 1 2 3
+
+[[2]]
+[1] 1 2 3 4
+
+[[3]]
+[1] 1 2 3 4 5
+
+[[4]]
+[1] 1 2 3 4 5 6
+
+[[5]]
+[1] 1 2 3 4 5 6 7
+
+[[6]]
+[1] 1 2 3 4 5 6 7 8
+
+[[7]]
+[1] 1 2 3 4 5 6 7 8 9
+```
+]
+
+---
+count: false
+ 
+
+.panel1-lapply-auto[
+
+```r
+list(a = 1:10,
+          beta = exp(-3:3),
+          logic = c(TRUE,FALSE,FALSE,TRUE)) -&gt;
+x
+
+# compute the list mean for each list element
+x %&gt;%
+lapply(., mean)
+
+# median and quartiles for each list element
+x %&gt;%
+lapply(., quantile, probs = 1:3/4)
+
+x %&gt;%
+sapply(., quantile)
+
+# list of vectors
+sapply(3:9, seq) -&gt;
+  i39
+
+i39 %&gt;%
+*sapply(FUN = fivenum)
+```
+]
+ 
+.panel2-lapply-auto[
+
+```
+$a
+[1] 5.5
+
+$beta
+[1] 4.535125
+
+$logic
+[1] 0.5
+```
+
+```
+$a
+ 25%  50%  75% 
+3.25 5.50 7.75 
+
+$beta
+      25%       50%       75% 
+0.2516074 1.0000000 5.0536690 
+
+$logic
+25% 50% 75% 
+0.0 0.5 1.0 
+```
+
+```
+         a        beta logic
+0%    1.00  0.04978707   0.0
+25%   3.25  0.25160736   0.0
+50%   5.50  1.00000000   0.5
+75%   7.75  5.05366896   1.0
+100% 10.00 20.08553692   1.0
+```
+
+```
+     [,1] [,2] [,3] [,4] [,5] [,6] [,7]
+[1,]  1.0  1.0    1  1.0  1.0  1.0    1
+[2,]  1.5  1.5    2  2.0  2.5  2.5    3
+[3,]  2.0  2.5    3  3.5  4.0  4.5    5
+[4,]  2.5  3.5    4  5.0  5.5  6.5    7
+[5,]  3.0  4.0    5  6.0  7.0  8.0    9
+```
+]
+
+---
+count: false
+ 
+
+.panel1-lapply-auto[
+
+```r
+list(a = 1:10,
+          beta = exp(-3:3),
+          logic = c(TRUE,FALSE,FALSE,TRUE)) -&gt;
+x
+
+# compute the list mean for each list element
+x %&gt;%
+lapply(., mean)
+
+# median and quartiles for each list element
+x %&gt;%
+lapply(., quantile, probs = 1:3/4)
+
+x %&gt;%
+sapply(., quantile)
+
+# list of vectors
+sapply(3:9, seq) -&gt;
+  i39
+
+i39 %&gt;%
+sapply(FUN = fivenum) -&gt;
+* hide
+```
+]
+ 
+.panel2-lapply-auto[
+
+```
+$a
+[1] 5.5
+
+$beta
+[1] 4.535125
+
+$logic
+[1] 0.5
+```
+
+```
+$a
+ 25%  50%  75% 
+3.25 5.50 7.75 
+
+$beta
+      25%       50%       75% 
+0.2516074 1.0000000 5.0536690 
+
+$logic
+25% 50% 75% 
+0.0 0.5 1.0 
+```
+
+```
+         a        beta logic
+0%    1.00  0.04978707   0.0
+25%   3.25  0.25160736   0.0
+50%   5.50  1.00000000   0.5
+75%   7.75  5.05366896   1.0
+100% 10.00 20.08553692   1.0
+```
+]
+
+---
+count: false
+ 
+
+.panel1-lapply-auto[
+
+```r
+list(a = 1:10,
+          beta = exp(-3:3),
+          logic = c(TRUE,FALSE,FALSE,TRUE)) -&gt;
+x
+
+# compute the list mean for each list element
+x %&gt;%
+lapply(., mean)
+
+# median and quartiles for each list element
+x %&gt;%
+lapply(., quantile, probs = 1:3/4)
+
+x %&gt;%
+sapply(., quantile)
+
+# list of vectors
+sapply(3:9, seq) -&gt;
+  i39
+
+i39 %&gt;%
+sapply(FUN = fivenum) -&gt;
+  hide
+
+*i39
+```
+]
+ 
+.panel2-lapply-auto[
+
+```
+$a
+[1] 5.5
+
+$beta
+[1] 4.535125
+
+$logic
+[1] 0.5
+```
+
+```
+$a
+ 25%  50%  75% 
+3.25 5.50 7.75 
+
+$beta
+      25%       50%       75% 
+0.2516074 1.0000000 5.0536690 
+
+$logic
+25% 50% 75% 
+0.0 0.5 1.0 
+```
+
+```
+         a        beta logic
+0%    1.00  0.04978707   0.0
+25%   3.25  0.25160736   0.0
+50%   5.50  1.00000000   0.5
+75%   7.75  5.05366896   1.0
+100% 10.00 20.08553692   1.0
+```
+
+```
+[[1]]
+[1] 1 2 3
+
+[[2]]
+[1] 1 2 3 4
+
+[[3]]
+[1] 1 2 3 4 5
+
+[[4]]
+[1] 1 2 3 4 5 6
+
+[[5]]
+[1] 1 2 3 4 5 6 7
+
+[[6]]
+[1] 1 2 3 4 5 6 7 8
+
+[[7]]
+[1] 1 2 3 4 5 6 7 8 9
+```
+]
+
+---
+count: false
+ 
+
+.panel1-lapply-auto[
+
+```r
+list(a = 1:10,
+          beta = exp(-3:3),
+          logic = c(TRUE,FALSE,FALSE,TRUE)) -&gt;
+x
+
+# compute the list mean for each list element
+x %&gt;%
+lapply(., mean)
+
+# median and quartiles for each list element
+x %&gt;%
+lapply(., quantile, probs = 1:3/4)
+
+x %&gt;%
+sapply(., quantile)
+
+# list of vectors
+sapply(3:9, seq) -&gt;
+  i39
+
+i39 %&gt;%
+sapply(FUN = fivenum) -&gt;
+  hide
+
+i39 %&gt;%
+*vapply(., FUN = fivenum,
+*      c(Min. = 0, "1st Qu." = 0,
+*        Median = 0, "3rd Qu." = 0, Max. = 0))
+```
+]
+ 
+.panel2-lapply-auto[
+
+```
+$a
+[1] 5.5
+
+$beta
+[1] 4.535125
+
+$logic
+[1] 0.5
+```
+
+```
+$a
+ 25%  50%  75% 
+3.25 5.50 7.75 
+
+$beta
+      25%       50%       75% 
+0.2516074 1.0000000 5.0536690 
+
+$logic
+25% 50% 75% 
+0.0 0.5 1.0 
+```
+
+```
+         a        beta logic
+0%    1.00  0.04978707   0.0
+25%   3.25  0.25160736   0.0
+50%   5.50  1.00000000   0.5
+75%   7.75  5.05366896   1.0
+100% 10.00 20.08553692   1.0
+```
+
+```
+        [,1] [,2] [,3] [,4] [,5] [,6] [,7]
+Min.     1.0  1.0    1  1.0  1.0  1.0    1
+1st Qu.  1.5  1.5    2  2.0  2.5  2.5    3
+Median   2.0  2.5    3  3.5  4.0  4.5    5
+3rd Qu.  2.5  3.5    4  5.0  5.5  6.5    7
+Max.     3.0  4.0    5  6.0  7.0  8.0    9
+```
+]
+
+---
+count: false
+ 
+
+.panel1-lapply-auto[
+
+```r
+list(a = 1:10,
+          beta = exp(-3:3),
+          logic = c(TRUE,FALSE,FALSE,TRUE)) -&gt;
+x
+
+# compute the list mean for each list element
+x %&gt;%
+lapply(., mean)
+
+# median and quartiles for each list element
+x %&gt;%
+lapply(., quantile, probs = 1:3/4)
+
+x %&gt;%
+sapply(., quantile)
+
+# list of vectors
+sapply(3:9, seq) -&gt;
+  i39
+
+i39 %&gt;%
+sapply(FUN = fivenum) -&gt;
+  hide
+
+i39 %&gt;%
+vapply(., FUN = fivenum,
+       c(Min. = 0, "1st Qu." = 0,
+         Median = 0, "3rd Qu." = 0, Max. = 0))
+```
+]
+ 
+.panel2-lapply-auto[
+
+```
+$a
+[1] 5.5
+
+$beta
+[1] 4.535125
+
+$logic
+[1] 0.5
+```
+
+```
+$a
+ 25%  50%  75% 
+3.25 5.50 7.75 
+
+$beta
+      25%       50%       75% 
+0.2516074 1.0000000 5.0536690 
+
+$logic
+25% 50% 75% 
+0.0 0.5 1.0 
+```
+
+```
+         a        beta logic
+0%    1.00  0.04978707   0.0
+25%   3.25  0.25160736   0.0
+50%   5.50  1.00000000   0.5
+75%   7.75  5.05366896   1.0
+100% 10.00 20.08553692   1.0
+```
+
+```
+        [,1] [,2] [,3] [,4] [,5] [,6] [,7]
+Min.     1.0  1.0    1  1.0  1.0  1.0    1
+1st Qu.  1.5  1.5    2  2.0  2.5  2.5    3
+Median   2.0  2.5    3  3.5  4.0  4.5    5
+3rd Qu.  2.5  3.5    4  5.0  5.5  6.5    7
+Max.     3.0  4.0    5  6.0  7.0  8.0    9
+```
+]
+
+&lt;style&gt;
+.panel1-lapply-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-lapply-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-lapply-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,121 @@
+---
+title: "scale_x_sd"
+subtitle: "building a new scale like scale_x_log10"
+author: "Gina Reynolds"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F)
+library(flipbookr)
+library(tidyverse)
+```
+
+
+
+`r chunk_reveal("my_cars")`
+
+```{r my_cars, include = FALSE}
+ggplot2::scale_x_log10
+```
+
+---
+
+`r chunk_reveal("2")`
+
+
+```{r 2, include = F}
+scales::log10_trans
+```
+---
+
+`r chunk_reveal("3")`
+
+
+```{r 3, include = F}
+scales::log_trans
+
+scales::log_trans(base = exp(1))
+```
+
+---
+
+`r chunk_reveal("4")`
+
+
+```{r 4, include = F}
+
+
+
+scale_sd <- function(x){
+  
+  sdx <- sd(x)
+  meanx <- mean(x)
+  
+  x/sdx - meanx/sdx
+}
+
+library(scales)
+
+mine <- trans_new(
+  name = "mine",
+  transform = scale_sd,
+  inverse = scale_sd,
+  breaks = extended_breaks(5),
+  minor_breaks = regular_minor_breaks(),
+  format = format_format(),
+  domain = c(-Inf, Inf)
+)
+
+
+1:10 %>% scale_sd()
+  
+cars %>% 
+  ggplot()+ aes(speed, dist) + 
+  geom_point() + 
+  ggxmean:::geom_x1sd() +
+  ggxmean::geom_x_mean() +
+  scale_x_continuous(trans = mine)
+
+```
+
+
+---
+
+<!-- adjust font size in this css code chunk, currently 80 -->
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 80%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+
+
+

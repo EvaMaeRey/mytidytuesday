@@ -78,6 +78,56 @@ href_df %>%
 ```
 
 
+---
+
+# Write documentation
+
+--
+
+# in the end will not be very rich!
+
+---
+
+An example from .R file done right
+
+```{r}
+#' Taste scores of 31 bottled water and tap water samples
+#'
+#' A dataset containing the scores of 31 subjects rating of bottled and tap water
+#'
+#' @format A data frame with 31 rows and 2 variables:
+#' \describe{
+#'   \item{Tap}{Score for tap water}
+#'   \item{Bottled}{Score for bottled water}
+#'   ...
+#' }
+#' @source \url{http://www.isi-stats.com/isi/data/chap7/AP/BottledWater.txt}
+"AP.BottledWater"
+```
+
+---
+
+
+```{r}
+"#' {{dataset_name}}
+#'
+#' A dataset containing the scores of 31 subjects rating of bottled and tap water
+#'
+#' @format A data frame with {{number_of_rows}} rows and {{number_of_vars}} variables:
+#' \describe{
+#'   \item{}{See your book}
+#'   \item{}{See your book}
+#'   ...
+#' }
+#' @source \url{http://www.isi-stats.com/isi/data/chap7/AP/BottledWater.txt}
+'AP.BottledWater'" ->
+generic_documentation
+```
+
+
+
+
+
 <!-- adjust font size in this css code chunk, currently 80 -->
 
 ```{css, eval = TRUE, echo = FALSE}
