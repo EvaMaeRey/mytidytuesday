@@ -12,7 +12,7 @@ usma = T
 
 # TL;DR
 
-The ggxmean package introduces new geom\_\* for fluid visual description of statistical concepts. These include geom_x\_mean, which draws a vertical line at the mean of x, and other visualizations of basic statistical concepts.  We also introduce "Easy Geom Recipes"; an introductory tutorial for creating a class of geoms that perform useful computation and inherit characteristics from more primitive geoms. 
+The ggxmean package introduces new geom\_\* for fluid visual description of some basic statistical concepts, the title character, geom_x\_mean, which draws a vertical line at the mean of x.  We also introduce "Easy Geom Recipes", an introductory tutorial for creating a class of geoms that perform useful computation and inherit characteristics from more primitive geoms. 
 
 # On the path to {ggxmean}: 
 
@@ -47,8 +47,7 @@ So, math notation and visual representation builds of basic statistics! They co-
 
 </blockquote>
 
-I managed to pull this together, but there was so much preparatory computation that had to happen before you could do this walk-through. I calculated the means, standard deviations etc, all before beginning to plot, and then would feed those calculations into existing geom functions like geom_vline and geom_segment.
-
+I managed to pull this together, but there was so much prep that had to happen before you could do this start with the visualization. I calculated the means, standard deviations etc, all before beginning to plot, and then fed those calculations into existing geom functions like geom_vline and geom_segment.
 
 But this didn't feel like the powerful declarative experience that you have a lot of the time using ggplot2. For example, the boxplot experience is:
 
@@ -62,17 +61,17 @@ d.  And I'll use boxplots to summarize these groupwise distributions; so it's `'
 
 e.  and bam! I've built my plot and I can see group differences!
 
-In this boxplot example, lots of computation has happened in the background for us: min, max, 25%, 75%, median. And that is great. I understand the boxplot well, so I don't need to do those computations myself. I'm happy for ggplot2 to do those computations for me.
+In this boxplot example, lots of computation happens in the background for us: min, max, 25%, 75%, median. And that is great. I understand the boxplot well; I don't need to do those computations myself. I'm happy for ggplot2 to that for me.
 
-For this stats walk through, I felt that we should enjoy the same declarative experience. I understand the mean well, and one standard deviation away from the mean, etc. I should be able to ask ggplot2 to do that computation for me -- to compute the global mean (or the group-wise mean if I desire) -- and put a vertical line there. 
+For this stats walk through, I wanted the same declarative experience. I understand the mean well, and one standard deviation away from the mean, etc. I should be able to ask ggplot2 to do that computation for me -- to compute the global mean (or a group-wise mean if I'm in the mood for that) -- and put a vertical line there. 
 
-But as things stood, my solution to choreographing the stats visualizations felt inelegant and fragile. It wasn't portable (not easy to move to other cases -- data that I or my students might be more passionate about) or dynamic (I couldn't easily do group-wise work instead of acting globally). Put simply, it wasn't very fun.
+But as things stood, my solution to choreographing the stats visualizations felt inelegant and fragile. It wasn't portable (not easy to move to other cases -- maybe data that I or my students might be more passionate about) or dynamic (I couldn't easily do group-wise work instead of acting globally). Put simply, it wasn't very fun.
 
-Thomas' talk and the ggplot2 extension system seemed like the answer to bringing the fun to this statistical choreography.
+Thomas' talk and the extension system seemed like the answer to bringing ggplot2 fun to this the statistical storytelling that I'd been wanting to do. 
 
-Fast forward a few years.  I've dug into tutorial material like the ['Extending ggplot2' vignette](https://cran.r-project.org/web/packages/ggplot2/vignettes/extending-ggplot2.html) and the ['Extension'](https://ggplot2-book.org/extensions.html) chapter in the newest edition of the ggplot2 book, rewatched Thomas Lin Pederson's talk a number of times, and examined [ggplot2 code on github](https://github.com/tidyverse/ggplot2/blob/main/R/geom-vline.r) and code from other extension packages in the [ggplot2 extension gallery](https://exts.ggplot2.tidyverse.org/gallery/).  And now I'm happy to introduce the {ggxmean} package!
+Fast forward a few years.  I've dug into tutorial material like the ['Extending ggplot2' vignette](https://cran.r-project.org/web/packages/ggplot2/vignettes/extending-ggplot2.html) and the ['Extension'](https://ggplot2-book.org/extensions.html) chapter in the newest edition of the ggplot2 book, rewatched Thomas Lin Pederson's talk a number of times, and examined [ggplot2 code on github](https://github.com/tidyverse/ggplot2/blob/main/R/geom-vline.r) and code from other extension packages in the [ggplot2 extension gallery](https://exts.ggplot2.tidyverse.org/gallery/).  And now I'm happy to introduce the [{ggxmean}](https://github.com/EvaMaeRey/ggxmean) package!
 
-The ggxmean package allows you to easily add statistical summaries to your data visualization with new geom functions!  It makes doing statistical walk-throughs like the covariance, variance, sd, and correlation walk-through elegant and fluid!  The syntax reads just like you might go about interpreting the equation for covariance and applying it to a dataset on a chalkboard! Plus, you can easily ask ggplot2 to do all these computations group-wise if you so choose -- in the example that follows we do that by faceting by species.  [footnote: some of these functions aren't exported because I'm not confident of the names.]
+The ggxmean package allows you to easily add statistical summaries to your data visualization with new geom functions!  It makes doing statistical walk-throughs like the covariance, variance, sd, and correlation walk-through elegant and fluid!  The syntax mirrors how you might go about untangling the covariance equation and applying it to a scatter plot on a classroom chalkboard! Plus, you can easily ask ggplot2 to do all these computations group-wise if you so choose -- in the example that follows, ggplot recomputes everything for us when we add the faceting by species declaration. Yahoo! That is awesome; ggplot2 hard at work; doing the most. [footnote: some of these functions aren't exported because I'm not confident of the names.]
 
 ```{r, message=F, warning=F}
 library(tidyverse)
@@ -96,6 +95,8 @@ palmerpenguins::penguins %>%
 ```
 
 <!-- <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Excited to be working on a ggplot2 extension package!!! 😮🥳🤯 <a href="https://twitter.com/hashtag/ggplot2?src=hash&amp;ref_src=twsrc%5Etfw">#ggplot2</a><br><br>{ggxmean} lets you put a vertical line at the mean of x w/ geom_xmean() and do other stuff! <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a><br><br>In action: <a href="https://t.co/oxzudwlNXn">https://t.co/oxzudwlNXn</a> <br><br>Repo: <a href="https://t.co/7DTxa7n4ye">https://t.co/7DTxa7n4ye</a><br><br>Some thoughts in 🧵 <a href="https://t.co/vRjXFdmAaQ">pic.twitter.com/vRjXFdmAaQ</a></p>&mdash; Gina Reynolds (@EvaMaeRey) <a href="https://twitter.com/EvaMaeRey/status/1353484900385628166?ref_src=twsrc%5Etfw">January 24, 2021</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> -->
+
+# Way leads onto way ...
 
 At the time I got more comfortable building these new functions, I was also interested visualizing a typical introduction to ordinary least squares (OLS) regression.  What does an instructor draw as the named concepts in teaching linear regression?  Could we isolate those concepts and provide geoms to build up those ideas in code, just as an instructor would do on a chalkboard? This exercise lead to a number of new geoms including those that compute and draw residuals, the intercept, fitted values and more. 
 
@@ -197,9 +198,9 @@ As a guide, I think a geom_*() function may be in order when we have well articu
 
 #  Extending the circle of extenders with new point of entry: 'easy geom recipes'? 
 
-Learning the particular mechanism needed to build ggxmean functions took me a chunk of time - about six months. Once worked out, though, I found that mechanisms really generative, writing about 20 geom_* functions in ggxmean with this mechanism.   
+Learning the particular mechanism needed to build ggxmean functions took me a chunk of time - about six months. Once worked out, though, I found that mechanism to be really enabling --- writing about 20 geom_* functions in ggxmean with this mechanism.   
 
-Working with Morgan and Madison was chance to think more about this particular extension mechanism, and how to make it accessible to new learners.  Morgan and Madison are top students in the West Point math department, but relative newcomers to R and ggplot2; and yet they managed to write usable geom extensions in less time than I'd done!  
+Working with Morgan and Madison was chance to think more about this particular extension mechanism, and about how to make it accessible to new learners.  Morgan and Madison are top students in the West Point math department, but relative newcomers to R and ggplot2; and yet they managed to write usable geom extensions in less time than I'd done!  
 
 And not only did they write geoms about outlying observations -- arguably more statistically interesting than any of the geoms I'd worked on -- but the also wrote what are, at first glance the most trivial geoms: geom_label_id and geom_coordinate.  
 
@@ -211,10 +212,14 @@ ggplot(cars) +
                                 check_overlap = T)
 ```
 
-And they put together these these additional geoms very quickly and very little guidance.  Their competence at translating their skills along with the computational accessibility of these more 'trivial' geoms was exciting.  Could we make this space much more accessible to a lot more ggplot2 practitioners?
+And they put together these additional geoms very quickly and with very little guidance.  Their competence at translating their skills along with the computational accessibility of these more 'trivial' geoms was exciting.  Could we make this space much more accessible to a lot more ggplot2 practitioners?
 
 
-This past term, Morgan and I put together and have tested the tutorial 'easy geom recipes', where we distilled our process for success with the mechanism used in {ggxmean}.  For almost all of the geoms in ggxmean we followed the formula:
+In a second independent study term, Morgan and I put together tutorial 'easy geom recipes'; and have tested the tutorial with extension newcomers. We distilled down our process for success in building geoms in {ggxmean}.  
+
+
+
+For almost all of the geoms in ggxmean we followed the formula:
 
 1)  Step 0: use base ggplot2 to build the desired output
 
@@ -235,13 +240,15 @@ The tutorial contains 6 recipes - three that are fully worked out, and three tha
 - https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/easy_geom_recipes.html
 - https://raw.githubusercontent.com/EvaMaeRey/mytidytuesday/master/2022-01-03-easy-geom-recipes/easy_geom_recipes.Rmd
 
+A go-to starting point for ggplot extension is theme.  But in my experience, though, using a home-grown theme pales to the thrill of seeing a home-grown geom -- doing a bunch of computational work in the background -- in action.  I think  more mathematically and statistically minded folks may have the same experience!  
+
+
 # What's next?
 
 The ggplot2 extension space is vast and includes the orthogonal components of ggplot2 builds (geoms, scales, coords, facets etc). Even within the space of new geoms, the strategies are varied. 
 
-The status quo for newcomers are directed to create a new theme as the go-to starting point for getting started with extension.  In my experience, though, using a new theme pales to the thrill of seeing a new geom, doing a bunch of computational work in the background, (nerd alert!!) used in a ggplot build.  I think the same  will be true for a lot of more math and statistically minded folks!  
 
-'Easy geom recipes' bites into a little, exciting area of the extension space.  It expands the number of examples for that space and the material to play with this particular mechanism.  We hope that it make more folks will feel that entering the ggplot extension space doable!  There is certainly more to terrain to cover, and perhaps we'll get to work on a 'just-a-tad-bit-harder geom recipes' soon.  
+'Easy geom recipes' bites down into a little, exciting area of the ggplot2 extension space.  It expands the number of examples for that space and the material to play with this particular mechanism -- and lets new comers chew and linger on this the particular flavor of extension.  We hope that this tutorial gives folks a small win and makes more people curious about entering the ggplot extension space!  There is certainly more to terrain to cover, and perhaps we'll get to work on a 'just-a-tad-bit-harder geom recipes' soon.  
 
 
 ---
