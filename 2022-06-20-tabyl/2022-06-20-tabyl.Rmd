@@ -1,0 +1,136 @@
+---
+title: "janitor::tabyl()"
+subtitle: ""
+author: ""
+output:
+  xaringan::moon_reader:
+    seal: false
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = T)
+library(flipbookr)
+library(tidyverse)
+```
+
+
+class: center, inverse, middle
+
+# Do you know the [{janitor}](https://github.com/sfirke/janitor) package?
+
+--
+
+# and `janitor::tabyl()`?
+
+--
+
+## 'A fully-featured alternative to table()'?
+
+---
+class: center, inverse middle
+
+# Let's have a look at how to produce some report-ready tables!
+
+
+---
+
+`r chunk_reveal("cars_multi")`
+
+```{r cars_multi, include = FALSE}
+library(tidyverse)
+datasets::Titanic %>% 
+  data.frame() %>% 
+  janitor::clean_names() %>% 
+  tidyr::uncount(weights = freq) %>% 
+  janitor::tabyl(survived, class) %>% 
+  janitor::adorn_totals(c("row", "col")) %>% 
+  janitor::adorn_percentages(denominator = "col") %>% 
+  janitor::adorn_pct_formatting() %>% 
+  janitor::adorn_ns(position = "front")
+```
+
+---
+
+`r chunk_reveal("cars_multi2", break_type = 2)`
+
+```{r cars_multi2, include = FALSE}
+datasets::Titanic %>% 
+  data.frame() %>% 
+  janitor::clean_names() %>% 
+  tidyr::uncount(weights = freq) %>% 
+  janitor::tabyl(survived, class, sex) %>% #<<
+  janitor::adorn_totals(c("row", "col")) %>% 
+  janitor::adorn_percentages(denominator = "col") %>% 
+  janitor::adorn_pct_formatting() %>% 
+  janitor::adorn_ns(position = "front")
+```
+
+---
+class: inverse, middle, center
+
+# A bit more about how it works.
+
+--
+
+## Let's see tabyl carrying along the raw counts as meta data using `str()` on each step in the same pipeline. 
+
+--
+
+## This allows tabyl() to calculate other quantities of interest, like percentages and percentages on totals.
+
+---
+
+`r chunk_reveal("cars_multi3", left_assign_add = "str()", left_assign = T)`
+
+```{r cars_multi3, include = FALSE}
+output <- datasets::Titanic %>% 
+  data.frame() %>% 
+  janitor::clean_names() %>% 
+  tidyr::uncount(weights = freq) %>% 
+  janitor::tabyl(survived, class) %>% 
+  janitor::adorn_totals(c("row", "col")) %>% 
+  janitor::adorn_percentages(denominator = "col") %>% 
+  janitor::adorn_pct_formatting() %>% 
+  janitor::adorn_ns(position = "front")
+```
+
+---
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 80%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+
+---
+class: center, middle
+
+# [https://github.com/sfirke/janitor](https://github.com/sfirke/janitor)
+
+---
