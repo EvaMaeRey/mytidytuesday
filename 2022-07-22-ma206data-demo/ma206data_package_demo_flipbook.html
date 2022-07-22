@@ -1,0 +1,3719 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Exploded code</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Me" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Exploded code
+## Using flipbookr and xaringan
+### Me
+
+---
+
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 70%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+&lt;/style&gt;
+
+
+---
+
+
+count: false
+ 
+
+.panel1-setup-auto[
+
+```r
+*library(tidyverse)
+```
+]
+ 
+.panel2-setup-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-setup-auto[
+
+```r
+library(tidyverse)
+*# remotes::install_github("EvaMaeRey/ma206data")  # remotes::install_github("EvaMaeRey/ma206data")
+```
+]
+ 
+.panel2-setup-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-setup-auto[
+
+```r
+library(tidyverse)
+# remotes::install_github("EvaMaeRey/ma206data")  # remotes::install_github("EvaMaeRey/ma206data")
+
+*library(ma206data)
+```
+]
+ 
+.panel2-setup-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-setup-auto[
+
+```r
+library(tidyverse)
+# remotes::install_github("EvaMaeRey/ma206data")  # remotes::install_github("EvaMaeRey/ma206data")
+
+library(ma206data)
+*options(scipen = 10)
+```
+]
+ 
+.panel2-setup-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-setup-auto[
+
+```r
+library(tidyverse)
+# remotes::install_github("EvaMaeRey/ma206data")  # remotes::install_github("EvaMaeRey/ma206data")
+
+library(ma206data)
+options(scipen = 10)
+```
+]
+ 
+.panel2-setup-auto[
+
+]
+
+&lt;style&gt;
+.panel1-setup-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-setup-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-setup-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-prelim-auto[
+
+```r
+*prelim_NationalAnthemTimes
+```
+]
+ 
+.panel2-prelim-auto[
+
+```
+# A tibble: 40 × 4
+    year genre    sex     time
+   &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;dbl&gt;
+ 1  2019 R&amp;B/Soul female   121
+ 2  2018 Pop      female   113
+ 3  2017 Country  male     124
+ 4  2016 Pop      female   129
+ 5  2015 Pop      female   124
+ 6  2014 Other    female   114
+ 7  2013 Pop      female   155
+ 8  2012 Pop      female    94
+ 9  2011 Pop      female   114
+10  2010 Country  female   107
+11  2009 R&amp;B/Soul female   130
+12  2008 Pop      female   114
+13  2007 Pop      male      90
+14  2006 R&amp;B/Soul mixed    128
+15  2005 Other    mixed    112
+16  2004 Pop      female   129
+17  2003 Country  female    96
+18  2002 Pop      female   116
+19  2001 Pop      male     110
+20  2000 Country  female   121
+21  1999 Pop      female   115
+22  1998 Pop      female    87
+23  1997 R&amp;B/Soul male     113
+24  1996 Pop      female    95
+25  1995 Other    female   100
+26  1994 R&amp;B/Soul female   153
+27  1993 Country  male     105
+28  1992 Pop      male     126
+29  1991 Pop      female   116
+30  1990 R&amp;B/Soul male      90
+31  1989 Pop      male      85
+32  1988 Other    male      91
+33  1987 Pop      male      64
+34  1986 Other    male      83
+35  1985 Other    mixed     81
+36  1984 Pop      male     100
+37  1983 Other    female   102
+38  1982 R&amp;B/Soul female    99
+39  1981 Pop      female    86
+40  1980 Pop      female    89
+```
+]
+
+---
+count: false
+ 
+
+.panel1-prelim-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-prelim-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/prelim_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-prelim-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+* aes(x = year)
+```
+]
+ 
+.panel2-prelim-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/prelim_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-prelim-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+  aes(x = year) +
+* aes(y = time)
+```
+]
+ 
+.panel2-prelim-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/prelim_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-prelim-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+  aes(x = year) +
+  aes(y = time) +
+* geom_point()
+```
+]
+ 
+.panel2-prelim-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/prelim_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-prelim-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+  aes(x = year) +
+  aes(y = time) +
+  geom_point() +
+* aes(color = sex)
+```
+]
+ 
+.panel2-prelim-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/prelim_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-prelim-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+  aes(x = year) +
+  aes(y = time) +
+  geom_point() +
+  aes(color = sex) +
+* aes(shape = genre)
+```
+]
+ 
+.panel2-prelim-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/prelim_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-prelim-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-prelim-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-prelim-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-ch2-auto[
+
+```r
+*chap2_LaughIncrease
+```
+]
+ 
+.panel2-ch2-auto[
+
+```
+# A tibble: 40 × 1
+   rating_increase
+             &lt;dbl&gt;
+ 1            0.42
+ 2            0.53
+ 3            0.43
+ 4            0.23
+ 5           -0.01
+ 6            0.53
+ 7            0.25
+ 8           -0.45
+ 9            0.24
+10            0.78
+11           -1.33
+12            0.34
+13            0.4 
+14            0.58
+15            0.87
+16            0.37
+17            0.75
+18            0.57
+19            0.96
+20            0.1 
+21            0.19
+22           -0.01
+23            0.89
+24            0   
+25            0.62
+26           -0.22
+27            0.53
+28            0.17
+29           -0.09
+30            0.23
+31            0.34
+32            0.26
+33            0.29
+34            0.32
+35           -0.35
+36            0.29
+37            0.84
+38           -0.17
+39            0.66
+40            0.47
+```
+]
+
+---
+count: false
+ 
+
+.panel1-ch2-auto[
+
+```r
+chap2_LaughIncrease %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-ch2-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch2_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch2-auto[
+
+```r
+chap2_LaughIncrease %&gt;%
+  ggplot() +
+* aes(x = rating_increase)
+```
+]
+ 
+.panel2-ch2-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch2_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch2-auto[
+
+```r
+chap2_LaughIncrease %&gt;%
+  ggplot() +
+  aes(x = rating_increase) +
+* geom_dotplot()
+```
+]
+ 
+.panel2-ch2-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch2_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch2-auto[
+
+```r
+chap2_LaughIncrease %&gt;%
+  ggplot() +
+  aes(x = rating_increase) +
+  geom_dotplot() +
+* geom_vline(xintercept = 0,
+*            linetype = "dashed")
+```
+]
+ 
+.panel2-ch2-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch2_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-ch2-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-ch2-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-ch2-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-ch3-auto[
+
+```r
+*chap3_Hockey2
+```
+]
+ 
+.panel2-ch3-auto[
+
+```
+# A tibble: 44 × 1
+   margin_victory
+            &lt;dbl&gt;
+ 1              2
+ 2              1
+ 3              1
+ 4              3
+ 5              2
+ 6              1
+ 7              2
+ 8              4
+ 9              3
+10              2
+11              3
+12              1
+13              2
+14              2
+15              1
+16              3
+17              1
+18              1
+19              1
+20              3
+21              1
+22              1
+23              2
+24              1
+25              3
+26              1
+27              6
+28              1
+29              3
+30              1
+31              1
+32              1
+33              1
+34              1
+35              5
+36              3
+37              5
+38              3
+39              3
+40              4
+41              1
+42              4
+43              3
+44              1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-ch3-auto[
+
+```r
+chap3_Hockey2 %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-ch3-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch3_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch3-auto[
+
+```r
+chap3_Hockey2 %&gt;%
+  ggplot() +
+* aes(x = margin_victory %&gt;% as.factor())
+```
+]
+ 
+.panel2-ch3-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch3_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch3-auto[
+
+```r
+chap3_Hockey2 %&gt;%
+  ggplot() +
+  aes(x = margin_victory %&gt;% as.factor()) +
+* geom_bar()
+```
+]
+ 
+.panel2-ch3-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch3_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-ch3-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-ch3-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-ch3-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-ch5-auto[
+
+```r
+*chap5_Blood
+```
+]
+ 
+.panel2-ch5-auto[
+
+```
+# A tibble: 2,698 × 2
+    year response
+   &lt;dbl&gt; &lt;chr&gt;   
+ 1  2002 donated 
+ 2  2002 donated 
+ 3  2002 donated 
+ 4  2002 donated 
+ 5  2002 donated 
+ 6  2002 donated 
+ 7  2002 donated 
+ 8  2002 donated 
+ 9  2002 donated 
+10  2002 donated 
+11  2002 donated 
+12  2002 donated 
+13  2002 donated 
+14  2002 donated 
+15  2002 donated 
+16  2002 donated 
+17  2002 donated 
+18  2002 donated 
+19  2002 donated 
+20  2002 donated 
+21  2002 donated 
+22  2002 donated 
+23  2002 donated 
+24  2002 donated 
+25  2002 donated 
+26  2002 donated 
+27  2002 donated 
+28  2002 donated 
+29  2002 donated 
+30  2002 donated 
+31  2002 donated 
+32  2002 donated 
+33  2002 donated 
+34  2002 donated 
+35  2002 donated 
+36  2002 donated 
+37  2002 donated 
+38  2002 donated 
+39  2002 donated 
+40  2002 donated 
+41  2002 donated 
+42  2002 donated 
+43  2002 donated 
+44  2002 donated 
+45  2002 donated 
+46  2002 donated 
+47  2002 donated 
+48  2002 donated 
+49  2002 donated 
+50  2002 donated 
+51  2002 donated 
+52  2002 donated 
+53  2002 donated 
+54  2002 donated 
+55  2002 donated 
+# … with 2,643 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-ch5-auto[
+
+```r
+chap5_Blood %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-ch5-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch5_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch5-auto[
+
+```r
+chap5_Blood %&gt;%
+  ggplot() +
+* aes(x = year %&gt;% as.factor(), fill = response)
+```
+]
+ 
+.panel2-ch5-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch5_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch5-auto[
+
+```r
+chap5_Blood %&gt;%
+  ggplot() +
+  aes(x = year %&gt;% as.factor(), fill = response) +
+* geom_bar(position = "fill")
+```
+]
+ 
+.panel2-ch5-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch5_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-ch5-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-ch5-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-ch5-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-ch5gilbert-auto[
+
+```r
+*chap5_Gilbert
+```
+]
+ 
+.panel2-ch5gilbert-auto[
+
+```
+# A tibble: 1,641 × 2
+   gilbert_worked patient
+   &lt;chr&gt;          &lt;chr&gt;  
+ 1 Yes            Death  
+ 2 Yes            Death  
+ 3 Yes            Death  
+ 4 Yes            Death  
+ 5 Yes            Death  
+ 6 Yes            Death  
+ 7 Yes            Death  
+ 8 Yes            Death  
+ 9 Yes            Death  
+10 Yes            Death  
+11 Yes            Death  
+12 Yes            Death  
+13 Yes            Death  
+14 Yes            Death  
+15 Yes            Death  
+16 Yes            Death  
+17 Yes            Death  
+18 Yes            Death  
+19 Yes            Death  
+20 Yes            Death  
+21 Yes            Death  
+22 Yes            Death  
+23 Yes            Death  
+24 Yes            Death  
+25 Yes            Death  
+26 Yes            Death  
+27 Yes            Death  
+28 Yes            Death  
+29 Yes            Death  
+30 Yes            Death  
+31 Yes            Death  
+32 Yes            Death  
+33 Yes            Death  
+34 Yes            Death  
+35 Yes            Death  
+36 Yes            Death  
+37 Yes            Death  
+38 Yes            Death  
+39 Yes            Death  
+40 Yes            Death  
+41 No             Death  
+42 No             Death  
+43 No             Death  
+44 No             Death  
+45 No             Death  
+46 No             Death  
+47 No             Death  
+48 No             Death  
+49 No             Death  
+50 No             Death  
+51 No             Death  
+52 No             Death  
+53 No             Death  
+54 No             Death  
+55 No             Death  
+# … with 1,586 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-ch5gilbert-auto[
+
+```r
+chap5_Gilbert %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-ch5gilbert-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch5gilbert_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch5gilbert-auto[
+
+```r
+chap5_Gilbert %&gt;%
+  ggplot() +
+* aes(x = gilbert_worked, fill = patient)
+```
+]
+ 
+.panel2-ch5gilbert-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch5gilbert_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch5gilbert-auto[
+
+```r
+chap5_Gilbert %&gt;%
+  ggplot() +
+  aes(x = gilbert_worked, fill = patient) +
+* geom_bar(position = "fill")
+```
+]
+ 
+.panel2-ch5gilbert-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch5gilbert_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-ch5gilbert-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-ch5gilbert-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-ch5gilbert-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-ch6-auto[
+
+```r
+*chap6_DungBeetles
+```
+]
+ 
+.panel2-ch6-auto[
+
+```
+# A tibble: 18 × 2
+   cap    time
+   &lt;chr&gt; &lt;dbl&gt;
+ 1 clear  34.2
+ 2 clear  38.5
+ 3 clear  58.1
+ 4 clear  43.8
+ 5 clear  16.2
+ 6 clear  70.7
+ 7 clear  37.2
+ 8 clear  49.5
+ 9 clear  36.9
+10 black 152. 
+11 black 124. 
+12 black 124. 
+13 black 114. 
+14 black 157. 
+15 black  84.2
+16 black 113. 
+17 black 132. 
+18 black 140. 
+```
+]
+
+---
+count: false
+ 
+
+.panel1-ch6-auto[
+
+```r
+chap6_DungBeetles %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-ch6-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch6_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch6-auto[
+
+```r
+chap6_DungBeetles %&gt;%
+  ggplot() +
+* aes(color = cap, x = time)
+```
+]
+ 
+.panel2-ch6-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch6_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch6-auto[
+
+```r
+chap6_DungBeetles %&gt;%
+  ggplot() +
+  aes(color = cap, x = time) +
+* geom_point(y = 0, alpha = .7)
+```
+]
+ 
+.panel2-ch6-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch6_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch6-auto[
+
+```r
+chap6_DungBeetles %&gt;%
+  ggplot() +
+  aes(color = cap, x = time) +
+  geom_point(y = 0, alpha = .7) +
+* geom_density(alpha = .2, aes(fill = cap))
+```
+]
+ 
+.panel2-ch6-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch6_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch6-auto[
+
+```r
+chap6_DungBeetles %&gt;%
+  ggplot() +
+  aes(color = cap, x = time) +
+  geom_point(y = 0, alpha = .7) +
+  geom_density(alpha = .2, aes(fill = cap)) +
+* facet_wrap(~cap, ncol = 1)
+```
+]
+ 
+.panel2-ch6-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch6_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch6-auto[
+
+```r
+chap6_DungBeetles %&gt;%
+  ggplot() +
+  aes(color = cap, x = time) +
+  geom_point(y = 0, alpha = .7) +
+  geom_density(alpha = .2, aes(fill = cap)) +
+  facet_wrap(~cap, ncol = 1) +
+* ggxmean::geom_x_mean()
+```
+]
+ 
+.panel2-ch6-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch6_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-ch6-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-ch6-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-ch6-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-ch7-auto[
+
+```r
+*chap7_DadJokes
+```
+]
+ 
+.panel2-ch7-auto[
+
+```
+# A tibble: 40 × 3
+    joke laugh_track no_laugh_track
+   &lt;dbl&gt;       &lt;dbl&gt;          &lt;dbl&gt;
+ 1     1        3.22           2.8 
+ 2     2        3.09           2.56
+ 3     3        3.08           2.65
+ 4     4        2.53           2.3 
+ 5     5        2.64           2.65
+ 6     6        3.18           2.65
+ 7     7        2.8            2.55
+ 8     8        2.2            2.65
+ 9     9        3.33           3.09
+10    10        3.89           3.11
+11    11        2.22           3.55
+12    12        3.05           2.71
+13    13        3.01           2.61
+14    14        2.08           1.5 
+15    15        2.62           1.75
+16    16        2.72           2.35
+17    17        3.05           2.3 
+18    18        2.62           2.05
+19    19        3.92           2.96
+20    20        3.21           3.11
+21    21        2.45           2.26
+22    22        3.45           3.46
+23    23        4.1            3.21
+24    24        2.36           2.36
+25    25        2.52           1.9 
+26    26        2.65           2.87
+27    27        3.29           2.76
+28    28        3.74           3.57
+29    29        2.97           3.06
+30    30        3.89           3.66
+31    31        3.19           2.85
+32    32        2.57           2.31
+33    33        3.1            2.81
+34    34        3.28           2.96
+35    35        3.21           3.56
+36    36        3.01           2.72
+37    37        3.46           2.62
+38    38        3.15           3.32
+39    39        2.93           2.27
+40    40        2.63           2.16
+```
+]
+
+---
+count: false
+ 
+
+.panel1-ch7-auto[
+
+```r
+chap7_DadJokes %&gt;%
+* pivot_longer(-1)
+```
+]
+ 
+.panel2-ch7-auto[
+
+```
+# A tibble: 80 × 3
+    joke name           value
+   &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;
+ 1     1 laugh_track     3.22
+ 2     1 no_laugh_track  2.8 
+ 3     2 laugh_track     3.09
+ 4     2 no_laugh_track  2.56
+ 5     3 laugh_track     3.08
+ 6     3 no_laugh_track  2.65
+ 7     4 laugh_track     2.53
+ 8     4 no_laugh_track  2.3 
+ 9     5 laugh_track     2.64
+10     5 no_laugh_track  2.65
+11     6 laugh_track     3.18
+12     6 no_laugh_track  2.65
+13     7 laugh_track     2.8 
+14     7 no_laugh_track  2.55
+15     8 laugh_track     2.2 
+16     8 no_laugh_track  2.65
+17     9 laugh_track     3.33
+18     9 no_laugh_track  3.09
+19    10 laugh_track     3.89
+20    10 no_laugh_track  3.11
+21    11 laugh_track     2.22
+22    11 no_laugh_track  3.55
+23    12 laugh_track     3.05
+24    12 no_laugh_track  2.71
+25    13 laugh_track     3.01
+26    13 no_laugh_track  2.61
+27    14 laugh_track     2.08
+28    14 no_laugh_track  1.5 
+29    15 laugh_track     2.62
+30    15 no_laugh_track  1.75
+31    16 laugh_track     2.72
+32    16 no_laugh_track  2.35
+33    17 laugh_track     3.05
+34    17 no_laugh_track  2.3 
+35    18 laugh_track     2.62
+36    18 no_laugh_track  2.05
+37    19 laugh_track     3.92
+38    19 no_laugh_track  2.96
+39    20 laugh_track     3.21
+40    20 no_laugh_track  3.11
+41    21 laugh_track     2.45
+42    21 no_laugh_track  2.26
+43    22 laugh_track     3.45
+44    22 no_laugh_track  3.46
+45    23 laugh_track     4.1 
+46    23 no_laugh_track  3.21
+47    24 laugh_track     2.36
+48    24 no_laugh_track  2.36
+49    25 laugh_track     2.52
+50    25 no_laugh_track  1.9 
+51    26 laugh_track     2.65
+52    26 no_laugh_track  2.87
+53    27 laugh_track     3.29
+54    27 no_laugh_track  2.76
+55    28 laugh_track     3.74
+# … with 25 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-ch7-auto[
+
+```r
+chap7_DadJokes %&gt;%
+  pivot_longer(-1) %&gt;%
+* mutate(name = fct_rev(name))
+```
+]
+ 
+.panel2-ch7-auto[
+
+```
+# A tibble: 80 × 3
+    joke name           value
+   &lt;dbl&gt; &lt;fct&gt;          &lt;dbl&gt;
+ 1     1 laugh_track     3.22
+ 2     1 no_laugh_track  2.8 
+ 3     2 laugh_track     3.09
+ 4     2 no_laugh_track  2.56
+ 5     3 laugh_track     3.08
+ 6     3 no_laugh_track  2.65
+ 7     4 laugh_track     2.53
+ 8     4 no_laugh_track  2.3 
+ 9     5 laugh_track     2.64
+10     5 no_laugh_track  2.65
+11     6 laugh_track     3.18
+12     6 no_laugh_track  2.65
+13     7 laugh_track     2.8 
+14     7 no_laugh_track  2.55
+15     8 laugh_track     2.2 
+16     8 no_laugh_track  2.65
+17     9 laugh_track     3.33
+18     9 no_laugh_track  3.09
+19    10 laugh_track     3.89
+20    10 no_laugh_track  3.11
+21    11 laugh_track     2.22
+22    11 no_laugh_track  3.55
+23    12 laugh_track     3.05
+24    12 no_laugh_track  2.71
+25    13 laugh_track     3.01
+26    13 no_laugh_track  2.61
+27    14 laugh_track     2.08
+28    14 no_laugh_track  1.5 
+29    15 laugh_track     2.62
+30    15 no_laugh_track  1.75
+31    16 laugh_track     2.72
+32    16 no_laugh_track  2.35
+33    17 laugh_track     3.05
+34    17 no_laugh_track  2.3 
+35    18 laugh_track     2.62
+36    18 no_laugh_track  2.05
+37    19 laugh_track     3.92
+38    19 no_laugh_track  2.96
+39    20 laugh_track     3.21
+40    20 no_laugh_track  3.11
+41    21 laugh_track     2.45
+42    21 no_laugh_track  2.26
+43    22 laugh_track     3.45
+44    22 no_laugh_track  3.46
+45    23 laugh_track     4.1 
+46    23 no_laugh_track  3.21
+47    24 laugh_track     2.36
+48    24 no_laugh_track  2.36
+49    25 laugh_track     2.52
+50    25 no_laugh_track  1.9 
+51    26 laugh_track     2.65
+52    26 no_laugh_track  2.87
+53    27 laugh_track     3.29
+54    27 no_laugh_track  2.76
+55    28 laugh_track     3.74
+# … with 25 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-ch7-auto[
+
+```r
+chap7_DadJokes %&gt;%
+  pivot_longer(-1) %&gt;%
+  mutate(name = fct_rev(name)) %&gt;%
+* arrange(joke, name)
+```
+]
+ 
+.panel2-ch7-auto[
+
+```
+# A tibble: 80 × 3
+    joke name           value
+   &lt;dbl&gt; &lt;fct&gt;          &lt;dbl&gt;
+ 1     1 no_laugh_track  2.8 
+ 2     1 laugh_track     3.22
+ 3     2 no_laugh_track  2.56
+ 4     2 laugh_track     3.09
+ 5     3 no_laugh_track  2.65
+ 6     3 laugh_track     3.08
+ 7     4 no_laugh_track  2.3 
+ 8     4 laugh_track     2.53
+ 9     5 no_laugh_track  2.65
+10     5 laugh_track     2.64
+11     6 no_laugh_track  2.65
+12     6 laugh_track     3.18
+13     7 no_laugh_track  2.55
+14     7 laugh_track     2.8 
+15     8 no_laugh_track  2.65
+16     8 laugh_track     2.2 
+17     9 no_laugh_track  3.09
+18     9 laugh_track     3.33
+19    10 no_laugh_track  3.11
+20    10 laugh_track     3.89
+21    11 no_laugh_track  3.55
+22    11 laugh_track     2.22
+23    12 no_laugh_track  2.71
+24    12 laugh_track     3.05
+25    13 no_laugh_track  2.61
+26    13 laugh_track     3.01
+27    14 no_laugh_track  1.5 
+28    14 laugh_track     2.08
+29    15 no_laugh_track  1.75
+30    15 laugh_track     2.62
+31    16 no_laugh_track  2.35
+32    16 laugh_track     2.72
+33    17 no_laugh_track  2.3 
+34    17 laugh_track     3.05
+35    18 no_laugh_track  2.05
+36    18 laugh_track     2.62
+37    19 no_laugh_track  2.96
+38    19 laugh_track     3.92
+39    20 no_laugh_track  3.11
+40    20 laugh_track     3.21
+41    21 no_laugh_track  2.26
+42    21 laugh_track     2.45
+43    22 no_laugh_track  3.46
+44    22 laugh_track     3.45
+45    23 no_laugh_track  3.21
+46    23 laugh_track     4.1 
+47    24 no_laugh_track  2.36
+48    24 laugh_track     2.36
+49    25 no_laugh_track  1.9 
+50    25 laugh_track     2.52
+51    26 no_laugh_track  2.87
+52    26 laugh_track     2.65
+53    27 no_laugh_track  2.76
+54    27 laugh_track     3.29
+55    28 no_laugh_track  3.57
+# … with 25 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-ch7-auto[
+
+```r
+chap7_DadJokes %&gt;%
+  pivot_longer(-1) %&gt;%
+  mutate(name = fct_rev(name)) %&gt;%
+  arrange(joke, name) %&gt;%
+* group_by(joke)
+```
+]
+ 
+.panel2-ch7-auto[
+
+```
+# A tibble: 80 × 3
+# Groups:   joke [40]
+    joke name           value
+   &lt;dbl&gt; &lt;fct&gt;          &lt;dbl&gt;
+ 1     1 no_laugh_track  2.8 
+ 2     1 laugh_track     3.22
+ 3     2 no_laugh_track  2.56
+ 4     2 laugh_track     3.09
+ 5     3 no_laugh_track  2.65
+ 6     3 laugh_track     3.08
+ 7     4 no_laugh_track  2.3 
+ 8     4 laugh_track     2.53
+ 9     5 no_laugh_track  2.65
+10     5 laugh_track     2.64
+11     6 no_laugh_track  2.65
+12     6 laugh_track     3.18
+13     7 no_laugh_track  2.55
+14     7 laugh_track     2.8 
+15     8 no_laugh_track  2.65
+16     8 laugh_track     2.2 
+17     9 no_laugh_track  3.09
+18     9 laugh_track     3.33
+19    10 no_laugh_track  3.11
+20    10 laugh_track     3.89
+21    11 no_laugh_track  3.55
+22    11 laugh_track     2.22
+23    12 no_laugh_track  2.71
+24    12 laugh_track     3.05
+25    13 no_laugh_track  2.61
+26    13 laugh_track     3.01
+27    14 no_laugh_track  1.5 
+28    14 laugh_track     2.08
+29    15 no_laugh_track  1.75
+30    15 laugh_track     2.62
+31    16 no_laugh_track  2.35
+32    16 laugh_track     2.72
+33    17 no_laugh_track  2.3 
+34    17 laugh_track     3.05
+35    18 no_laugh_track  2.05
+36    18 laugh_track     2.62
+37    19 no_laugh_track  2.96
+38    19 laugh_track     3.92
+39    20 no_laugh_track  3.11
+40    20 laugh_track     3.21
+41    21 no_laugh_track  2.26
+42    21 laugh_track     2.45
+43    22 no_laugh_track  3.46
+44    22 laugh_track     3.45
+45    23 no_laugh_track  3.21
+46    23 laugh_track     4.1 
+47    24 no_laugh_track  2.36
+48    24 laugh_track     2.36
+49    25 no_laugh_track  1.9 
+50    25 laugh_track     2.52
+51    26 no_laugh_track  2.87
+52    26 laugh_track     2.65
+53    27 no_laugh_track  2.76
+54    27 laugh_track     3.29
+55    28 no_laugh_track  3.57
+# … with 25 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-ch7-auto[
+
+```r
+chap7_DadJokes %&gt;%
+  pivot_longer(-1) %&gt;%
+  mutate(name = fct_rev(name)) %&gt;%
+  arrange(joke, name) %&gt;%
+  group_by(joke) %&gt;%
+* mutate(outcome_diff = lead(value) - value)
+```
+]
+ 
+.panel2-ch7-auto[
+
+```
+# A tibble: 80 × 4
+# Groups:   joke [40]
+    joke name           value outcome_diff
+   &lt;dbl&gt; &lt;fct&gt;          &lt;dbl&gt;        &lt;dbl&gt;
+ 1     1 no_laugh_track  2.8        0.420 
+ 2     1 laugh_track     3.22      NA     
+ 3     2 no_laugh_track  2.56       0.53  
+ 4     2 laugh_track     3.09      NA     
+ 5     3 no_laugh_track  2.65       0.43  
+ 6     3 laugh_track     3.08      NA     
+ 7     4 no_laugh_track  2.3        0.23  
+ 8     4 laugh_track     2.53      NA     
+ 9     5 no_laugh_track  2.65      -0.0100
+10     5 laugh_track     2.64      NA     
+11     6 no_laugh_track  2.65       0.53  
+12     6 laugh_track     3.18      NA     
+13     7 no_laugh_track  2.55       0.25  
+14     7 laugh_track     2.8       NA     
+15     8 no_laugh_track  2.65      -0.450 
+16     8 laugh_track     2.2       NA     
+17     9 no_laugh_track  3.09       0.240 
+18     9 laugh_track     3.33      NA     
+19    10 no_laugh_track  3.11       0.78  
+20    10 laugh_track     3.89      NA     
+21    11 no_laugh_track  3.55      -1.33  
+22    11 laugh_track     2.22      NA     
+23    12 no_laugh_track  2.71       0.34  
+24    12 laugh_track     3.05      NA     
+25    13 no_laugh_track  2.61       0.4   
+26    13 laugh_track     3.01      NA     
+27    14 no_laugh_track  1.5        0.58  
+28    14 laugh_track     2.08      NA     
+29    15 no_laugh_track  1.75       0.87  
+30    15 laugh_track     2.62      NA     
+31    16 no_laugh_track  2.35       0.37  
+32    16 laugh_track     2.72      NA     
+33    17 no_laugh_track  2.3        0.75  
+34    17 laugh_track     3.05      NA     
+35    18 no_laugh_track  2.05       0.57  
+36    18 laugh_track     2.62      NA     
+37    19 no_laugh_track  2.96       0.96  
+38    19 laugh_track     3.92      NA     
+39    20 no_laugh_track  3.11       0.100 
+40    20 laugh_track     3.21      NA     
+41    21 no_laugh_track  2.26       0.190 
+42    21 laugh_track     2.45      NA     
+43    22 no_laugh_track  3.46      -0.0100
+44    22 laugh_track     3.45      NA     
+45    23 no_laugh_track  3.21       0.89  
+46    23 laugh_track     4.1       NA     
+47    24 no_laugh_track  2.36       0     
+48    24 laugh_track     2.36      NA     
+49    25 no_laugh_track  1.9        0.62  
+50    25 laugh_track     2.52      NA     
+51    26 no_laugh_track  2.87      -0.220 
+52    26 laugh_track     2.65      NA     
+53    27 no_laugh_track  2.76       0.53  
+54    27 laugh_track     3.29      NA     
+55    28 no_laugh_track  3.57       0.170 
+# … with 25 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-ch7-auto[
+
+```r
+chap7_DadJokes %&gt;%
+  pivot_longer(-1) %&gt;%
+  mutate(name = fct_rev(name)) %&gt;%
+  arrange(joke, name) %&gt;%
+  group_by(joke) %&gt;%
+  mutate(outcome_diff = lead(value) - value) %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-ch7-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch7_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch7-auto[
+
+```r
+chap7_DadJokes %&gt;%
+  pivot_longer(-1) %&gt;%
+  mutate(name = fct_rev(name)) %&gt;%
+  arrange(joke, name) %&gt;%
+  group_by(joke) %&gt;%
+  mutate(outcome_diff = lead(value) - value) %&gt;%
+  ggplot() +
+* aes(x = name, y = value)
+```
+]
+ 
+.panel2-ch7-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch7_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch7-auto[
+
+```r
+chap7_DadJokes %&gt;%
+  pivot_longer(-1) %&gt;%
+  mutate(name = fct_rev(name)) %&gt;%
+  arrange(joke, name) %&gt;%
+  group_by(joke) %&gt;%
+  mutate(outcome_diff = lead(value) - value) %&gt;%
+  ggplot() +
+  aes(x = name, y = value) +
+* geom_point()
+```
+]
+ 
+.panel2-ch7-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch7_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch7-auto[
+
+```r
+chap7_DadJokes %&gt;%
+  pivot_longer(-1) %&gt;%
+  mutate(name = fct_rev(name)) %&gt;%
+  arrange(joke, name) %&gt;%
+  group_by(joke) %&gt;%
+  mutate(outcome_diff = lead(value) - value) %&gt;%
+  ggplot() +
+  aes(x = name, y = value) +
+  geom_point() +
+* geom_line(aes(x = name %&gt;%
+*                 as.factor() %&gt;%
+*                 as.numeric()))
+```
+]
+ 
+.panel2-ch7-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch7_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch7-auto[
+
+```r
+chap7_DadJokes %&gt;%
+  pivot_longer(-1) %&gt;%
+  mutate(name = fct_rev(name)) %&gt;%
+  arrange(joke, name) %&gt;%
+  group_by(joke) %&gt;%
+  mutate(outcome_diff = lead(value) - value) %&gt;%
+  ggplot() +
+  aes(x = name, y = value) +
+  geom_point() +
+  geom_line(aes(x = name %&gt;%
+                  as.factor() %&gt;%
+                  as.numeric())) +
+* aes(group = joke)
+```
+]
+ 
+.panel2-ch7-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch7_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch7-auto[
+
+```r
+chap7_DadJokes %&gt;%
+  pivot_longer(-1) %&gt;%
+  mutate(name = fct_rev(name)) %&gt;%
+  arrange(joke, name) %&gt;%
+  group_by(joke) %&gt;%
+  mutate(outcome_diff = lead(value) - value) %&gt;%
+  ggplot() +
+  aes(x = name, y = value) +
+  geom_point() +
+  geom_line(aes(x = name %&gt;%
+                  as.factor() %&gt;%
+                  as.numeric())) +
+  aes(group = joke) +
+* geom_line(aes(color = outcome_diff &gt; 0))
+```
+]
+ 
+.panel2-ch7-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch7_auto_12_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-ch7-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-ch7-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-ch7-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-ch7dad-auto[
+
+```r
+*chap7_DadJokes
+```
+]
+ 
+.panel2-ch7dad-auto[
+
+```
+# A tibble: 40 × 3
+    joke laugh_track no_laugh_track
+   &lt;dbl&gt;       &lt;dbl&gt;          &lt;dbl&gt;
+ 1     1        3.22           2.8 
+ 2     2        3.09           2.56
+ 3     3        3.08           2.65
+ 4     4        2.53           2.3 
+ 5     5        2.64           2.65
+ 6     6        3.18           2.65
+ 7     7        2.8            2.55
+ 8     8        2.2            2.65
+ 9     9        3.33           3.09
+10    10        3.89           3.11
+11    11        2.22           3.55
+12    12        3.05           2.71
+13    13        3.01           2.61
+14    14        2.08           1.5 
+15    15        2.62           1.75
+16    16        2.72           2.35
+17    17        3.05           2.3 
+18    18        2.62           2.05
+19    19        3.92           2.96
+20    20        3.21           3.11
+21    21        2.45           2.26
+22    22        3.45           3.46
+23    23        4.1            3.21
+24    24        2.36           2.36
+25    25        2.52           1.9 
+26    26        2.65           2.87
+27    27        3.29           2.76
+28    28        3.74           3.57
+29    29        2.97           3.06
+30    30        3.89           3.66
+31    31        3.19           2.85
+32    32        2.57           2.31
+33    33        3.1            2.81
+34    34        3.28           2.96
+35    35        3.21           3.56
+36    36        3.01           2.72
+37    37        3.46           2.62
+38    38        3.15           3.32
+39    39        2.93           2.27
+40    40        2.63           2.16
+```
+]
+
+---
+count: false
+ 
+
+.panel1-ch7dad-auto[
+
+```r
+chap7_DadJokes %&gt;%
+* mutate(diff = laugh_track - no_laugh_track)
+```
+]
+ 
+.panel2-ch7dad-auto[
+
+```
+# A tibble: 40 × 4
+    joke laugh_track no_laugh_track    diff
+   &lt;dbl&gt;       &lt;dbl&gt;          &lt;dbl&gt;   &lt;dbl&gt;
+ 1     1        3.22           2.8   0.420 
+ 2     2        3.09           2.56  0.53  
+ 3     3        3.08           2.65  0.43  
+ 4     4        2.53           2.3   0.23  
+ 5     5        2.64           2.65 -0.0100
+ 6     6        3.18           2.65  0.53  
+ 7     7        2.8            2.55  0.25  
+ 8     8        2.2            2.65 -0.450 
+ 9     9        3.33           3.09  0.240 
+10    10        3.89           3.11  0.78  
+11    11        2.22           3.55 -1.33  
+12    12        3.05           2.71  0.34  
+13    13        3.01           2.61  0.4   
+14    14        2.08           1.5   0.58  
+15    15        2.62           1.75  0.87  
+16    16        2.72           2.35  0.37  
+17    17        3.05           2.3   0.75  
+18    18        2.62           2.05  0.57  
+19    19        3.92           2.96  0.96  
+20    20        3.21           3.11  0.100 
+21    21        2.45           2.26  0.190 
+22    22        3.45           3.46 -0.0100
+23    23        4.1            3.21  0.89  
+24    24        2.36           2.36  0     
+25    25        2.52           1.9   0.62  
+26    26        2.65           2.87 -0.220 
+27    27        3.29           2.76  0.53  
+28    28        3.74           3.57  0.170 
+29    29        2.97           3.06 -0.0900
+30    30        3.89           3.66  0.23  
+31    31        3.19           2.85  0.34  
+32    32        2.57           2.31  0.260 
+33    33        3.1            2.81  0.29  
+34    34        3.28           2.96  0.32  
+35    35        3.21           3.56 -0.35  
+36    36        3.01           2.72  0.290 
+37    37        3.46           2.62  0.84  
+38    38        3.15           3.32 -0.17  
+39    39        2.93           2.27  0.66  
+40    40        2.63           2.16  0.47  
+```
+]
+
+---
+count: false
+ 
+
+.panel1-ch7dad-auto[
+
+```r
+chap7_DadJokes %&gt;%
+  mutate(diff = laugh_track - no_laugh_track) %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-ch7dad-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch7dad_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch7dad-auto[
+
+```r
+chap7_DadJokes %&gt;%
+  mutate(diff = laugh_track - no_laugh_track) %&gt;%
+  ggplot() +
+* aes(y = joke, x = no_laugh_track, color = diff &gt; 0)
+```
+]
+ 
+.panel2-ch7dad-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch7dad_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch7dad-auto[
+
+```r
+chap7_DadJokes %&gt;%
+  mutate(diff = laugh_track - no_laugh_track) %&gt;%
+  ggplot() +
+  aes(y = joke, x = no_laugh_track, color = diff &gt; 0) +
+* geom_point(color = "cadetblue")
+```
+]
+ 
+.panel2-ch7dad-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch7dad_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch7dad-auto[
+
+```r
+chap7_DadJokes %&gt;%
+  mutate(diff = laugh_track - no_laugh_track) %&gt;%
+  ggplot() +
+  aes(y = joke, x = no_laugh_track, color = diff &gt; 0) +
+  geom_point(color = "cadetblue") +
+* geom_segment(aes(xend = laugh_track,
+*                                  yend = joke), arrow = arrow(length = unit(0.20,"cm")))
+```
+]
+ 
+.panel2-ch7dad-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch7dad_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch7dad-auto[
+
+```r
+chap7_DadJokes %&gt;%
+  mutate(diff = laugh_track - no_laugh_track) %&gt;%
+  ggplot() +
+  aes(y = joke, x = no_laugh_track, color = diff &gt; 0) +
+  geom_point(color = "cadetblue") +
+  geom_segment(aes(xend = laugh_track,
+                                   yend = joke), arrow = arrow(length = unit(0.20,"cm"))) +
+* geom_point(color = "cadetblue4", aes(x = laugh_track))
+```
+]
+ 
+.panel2-ch7dad-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch7dad_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch7dad-auto[
+
+```r
+chap7_DadJokes %&gt;%
+  mutate(diff = laugh_track - no_laugh_track) %&gt;%
+  ggplot() +
+  aes(y = joke, x = no_laugh_track, color = diff &gt; 0) +
+  geom_point(color = "cadetblue") +
+  geom_segment(aes(xend = laugh_track,
+                                   yend = joke), arrow = arrow(length = unit(0.20,"cm"))) +
+  geom_point(color = "cadetblue4", aes(x = laugh_track))
+```
+]
+ 
+.panel2-ch7dad-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch7dad_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-ch7dad-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-ch7dad-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-ch7dad-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-ch8-auto[
+
+```r
+*chap8_Goals
+```
+]
+ 
+.panel2-ch8-auto[
+
+```
+# A tibble: 478 × 2
+   gender goal  
+   &lt;chr&gt;  &lt;chr&gt; 
+ 1 boy    grades
+ 2 boy    grades
+ 3 boy    grades
+ 4 boy    grades
+ 5 boy    grades
+ 6 boy    grades
+ 7 boy    grades
+ 8 boy    grades
+ 9 boy    grades
+10 boy    grades
+11 boy    grades
+12 boy    grades
+13 boy    grades
+14 boy    grades
+15 boy    grades
+16 boy    grades
+17 boy    grades
+18 boy    grades
+19 boy    grades
+20 boy    grades
+21 boy    grades
+22 boy    grades
+23 boy    grades
+24 boy    grades
+25 boy    grades
+26 boy    grades
+27 boy    grades
+28 boy    grades
+29 boy    grades
+30 boy    grades
+31 boy    grades
+32 boy    grades
+33 boy    grades
+34 boy    grades
+35 boy    grades
+36 boy    grades
+37 boy    grades
+38 boy    grades
+39 boy    grades
+40 boy    grades
+41 boy    grades
+42 boy    grades
+43 boy    grades
+44 boy    grades
+45 boy    grades
+46 boy    grades
+47 boy    grades
+48 boy    grades
+49 boy    grades
+50 boy    grades
+51 boy    grades
+52 boy    grades
+53 boy    grades
+54 boy    grades
+55 boy    grades
+# … with 423 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-ch8-auto[
+
+```r
+chap8_Goals %&gt;%
+* count(gender, goal)
+```
+]
+ 
+.panel2-ch8-auto[
+
+```
+# A tibble: 6 × 3
+  gender goal        n
+  &lt;chr&gt;  &lt;chr&gt;   &lt;int&gt;
+1 boy    grades    117
+2 boy    popular    50
+3 boy    sports     60
+4 girl   grades    130
+5 girl   popular    91
+6 girl   sports     30
+```
+]
+
+---
+count: false
+ 
+
+.panel1-ch8-auto[
+
+```r
+chap8_Goals %&gt;%
+  count(gender, goal) %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-ch8-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch8_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch8-auto[
+
+```r
+chap8_Goals %&gt;%
+  count(gender, goal) %&gt;%
+  ggplot() +
+* aes(x = gender, y = n, fill = goal)
+```
+]
+ 
+.panel2-ch8-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch8_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch8-auto[
+
+```r
+chap8_Goals %&gt;%
+  count(gender, goal) %&gt;%
+  ggplot() +
+  aes(x = gender, y = n, fill = goal) +
+* geom_col(position = "fill")
+```
+]
+ 
+.panel2-ch8-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch8_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch8-auto[
+
+```r
+chap8_Goals %&gt;%
+  count(gender, goal) %&gt;%
+  ggplot() +
+  aes(x = gender, y = n, fill = goal) +
+  geom_col(position = "fill")
+
+*chap8_Goals
+```
+]
+ 
+.panel2-ch8-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch8_auto_06_output-1.png)&lt;!-- --&gt;
+
+```
+# A tibble: 478 × 2
+   gender goal  
+   &lt;chr&gt;  &lt;chr&gt; 
+ 1 boy    grades
+ 2 boy    grades
+ 3 boy    grades
+ 4 boy    grades
+ 5 boy    grades
+ 6 boy    grades
+ 7 boy    grades
+ 8 boy    grades
+ 9 boy    grades
+10 boy    grades
+11 boy    grades
+12 boy    grades
+13 boy    grades
+14 boy    grades
+15 boy    grades
+16 boy    grades
+17 boy    grades
+18 boy    grades
+19 boy    grades
+20 boy    grades
+21 boy    grades
+22 boy    grades
+23 boy    grades
+24 boy    grades
+25 boy    grades
+26 boy    grades
+27 boy    grades
+28 boy    grades
+29 boy    grades
+30 boy    grades
+31 boy    grades
+32 boy    grades
+33 boy    grades
+34 boy    grades
+35 boy    grades
+36 boy    grades
+37 boy    grades
+38 boy    grades
+39 boy    grades
+40 boy    grades
+41 boy    grades
+42 boy    grades
+43 boy    grades
+44 boy    grades
+45 boy    grades
+46 boy    grades
+47 boy    grades
+48 boy    grades
+49 boy    grades
+50 boy    grades
+51 boy    grades
+52 boy    grades
+53 boy    grades
+54 boy    grades
+55 boy    grades
+# … with 423 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-ch8-auto[
+
+```r
+chap8_Goals %&gt;%
+  count(gender, goal) %&gt;%
+  ggplot() +
+  aes(x = gender, y = n, fill = goal) +
+  geom_col(position = "fill")
+
+chap8_Goals %&gt;%
+* count(gender, goal)
+```
+]
+ 
+.panel2-ch8-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch8_auto_07_output-1.png)&lt;!-- --&gt;
+
+```
+# A tibble: 6 × 3
+  gender goal        n
+  &lt;chr&gt;  &lt;chr&gt;   &lt;int&gt;
+1 boy    grades    117
+2 boy    popular    50
+3 boy    sports     60
+4 girl   grades    130
+5 girl   popular    91
+6 girl   sports     30
+```
+]
+
+---
+count: false
+ 
+
+.panel1-ch8-auto[
+
+```r
+chap8_Goals %&gt;%
+  count(gender, goal) %&gt;%
+  ggplot() +
+  aes(x = gender, y = n, fill = goal) +
+  geom_col(position = "fill")
+
+chap8_Goals %&gt;%
+  count(gender, goal) %&gt;%
+* group_by(gender)
+```
+]
+ 
+.panel2-ch8-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch8_auto_08_output-1.png)&lt;!-- --&gt;
+
+```
+# A tibble: 6 × 3
+# Groups:   gender [2]
+  gender goal        n
+  &lt;chr&gt;  &lt;chr&gt;   &lt;int&gt;
+1 boy    grades    117
+2 boy    popular    50
+3 boy    sports     60
+4 girl   grades    130
+5 girl   popular    91
+6 girl   sports     30
+```
+]
+
+---
+count: false
+ 
+
+.panel1-ch8-auto[
+
+```r
+chap8_Goals %&gt;%
+  count(gender, goal) %&gt;%
+  ggplot() +
+  aes(x = gender, y = n, fill = goal) +
+  geom_col(position = "fill")
+
+chap8_Goals %&gt;%
+  count(gender, goal) %&gt;%
+  group_by(gender) %&gt;%
+* mutate(percent_within_gender = 100*n/sum(n))
+```
+]
+ 
+.panel2-ch8-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch8_auto_09_output-1.png)&lt;!-- --&gt;
+
+```
+# A tibble: 6 × 4
+# Groups:   gender [2]
+  gender goal        n percent_within_gender
+  &lt;chr&gt;  &lt;chr&gt;   &lt;int&gt;                 &lt;dbl&gt;
+1 boy    grades    117                  51.5
+2 boy    popular    50                  22.0
+3 boy    sports     60                  26.4
+4 girl   grades    130                  51.8
+5 girl   popular    91                  36.3
+6 girl   sports     30                  12.0
+```
+]
+
+---
+count: false
+ 
+
+.panel1-ch8-auto[
+
+```r
+chap8_Goals %&gt;%
+  count(gender, goal) %&gt;%
+  ggplot() +
+  aes(x = gender, y = n, fill = goal) +
+  geom_col(position = "fill")
+
+chap8_Goals %&gt;%
+  count(gender, goal) %&gt;%
+  group_by(gender) %&gt;%
+  mutate(percent_within_gender = 100*n/sum(n)) %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-ch8-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch8_auto_10_output-1.png)&lt;!-- --&gt;![](ma206data_package_demo_flipbook_files/figure-html/ch8_auto_10_output-2.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch8-auto[
+
+```r
+chap8_Goals %&gt;%
+  count(gender, goal) %&gt;%
+  ggplot() +
+  aes(x = gender, y = n, fill = goal) +
+  geom_col(position = "fill")
+
+chap8_Goals %&gt;%
+  count(gender, goal) %&gt;%
+  group_by(gender) %&gt;%
+  mutate(percent_within_gender = 100*n/sum(n)) %&gt;%
+  ggplot() +
+* aes(x = gender, label = n, fill = percent_within_gender, y  = goal)
+```
+]
+ 
+.panel2-ch8-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch8_auto_11_output-1.png)&lt;!-- --&gt;![](ma206data_package_demo_flipbook_files/figure-html/ch8_auto_11_output-2.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch8-auto[
+
+```r
+chap8_Goals %&gt;%
+  count(gender, goal) %&gt;%
+  ggplot() +
+  aes(x = gender, y = n, fill = goal) +
+  geom_col(position = "fill")
+
+chap8_Goals %&gt;%
+  count(gender, goal) %&gt;%
+  group_by(gender) %&gt;%
+  mutate(percent_within_gender = 100*n/sum(n)) %&gt;%
+  ggplot() +
+  aes(x = gender, label = n, fill = percent_within_gender, y  = goal) +
+* geom_text()
+```
+]
+ 
+.panel2-ch8-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch8_auto_12_output-1.png)&lt;!-- --&gt;![](ma206data_package_demo_flipbook_files/figure-html/ch8_auto_12_output-2.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch8-auto[
+
+```r
+chap8_Goals %&gt;%
+  count(gender, goal) %&gt;%
+  ggplot() +
+  aes(x = gender, y = n, fill = goal) +
+  geom_col(position = "fill")
+
+chap8_Goals %&gt;%
+  count(gender, goal) %&gt;%
+  group_by(gender) %&gt;%
+  mutate(percent_within_gender = 100*n/sum(n)) %&gt;%
+  ggplot() +
+  aes(x = gender, label = n, fill = percent_within_gender, y  = goal) +
+  geom_text() +
+* geom_tile(alpha = .6)
+```
+]
+ 
+.panel2-ch8-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch8_auto_13_output-1.png)&lt;!-- --&gt;![](ma206data_package_demo_flipbook_files/figure-html/ch8_auto_13_output-2.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch8-auto[
+
+```r
+chap8_Goals %&gt;%
+  count(gender, goal) %&gt;%
+  ggplot() +
+  aes(x = gender, y = n, fill = goal) +
+  geom_col(position = "fill")
+
+chap8_Goals %&gt;%
+  count(gender, goal) %&gt;%
+  group_by(gender) %&gt;%
+  mutate(percent_within_gender = 100*n/sum(n)) %&gt;%
+  ggplot() +
+  aes(x = gender, label = n, fill = percent_within_gender, y  = goal) +
+  geom_text() +
+  geom_tile(alpha = .6) +
+* scale_y_discrete(limits = rev)
+```
+]
+ 
+.panel2-ch8-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch8_auto_14_output-1.png)&lt;!-- --&gt;![](ma206data_package_demo_flipbook_files/figure-html/ch8_auto_14_output-2.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch8-auto[
+
+```r
+chap8_Goals %&gt;%
+  count(gender, goal) %&gt;%
+  ggplot() +
+  aes(x = gender, y = n, fill = goal) +
+  geom_col(position = "fill")
+
+chap8_Goals %&gt;%
+  count(gender, goal) %&gt;%
+  group_by(gender) %&gt;%
+  mutate(percent_within_gender = 100*n/sum(n)) %&gt;%
+  ggplot() +
+  aes(x = gender, label = n, fill = percent_within_gender, y  = goal) +
+  geom_text() +
+  geom_tile(alpha = .6) +
+  scale_y_discrete(limits = rev)
+```
+]
+ 
+.panel2-ch8-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch8_auto_15_output-1.png)&lt;!-- --&gt;![](ma206data_package_demo_flipbook_files/figure-html/ch8_auto_15_output-2.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-ch8-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-ch8-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-ch8-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-ch9-auto[
+
+```r
+*chap9_Donation
+```
+]
+ 
+.panel2-ch9-auto[
+
+```
+# A tibble: 44 × 2
+   state      donation
+   &lt;chr&gt;         &lt;dbl&gt;
+ 1 California       20
+ 2 California        0
+ 3 California       20
+ 4 California       15
+ 5 California       20
+ 6 California       20
+ 7 California        0
+ 8 California       20
+ 9 California      100
+10 California       20
+11 California        0
+12 California       50
+13 California       10
+14 California        0
+15 Kansas            0
+16 Kansas           25
+17 Kansas           10
+18 Kansas           10
+19 Kansas            5
+20 Kansas          100
+21 Kansas           20
+22 Kansas           20
+23 Kansas           20
+24 Kansas            5
+25 Kansas           10
+26 Kansas            0
+27 Kansas           30
+28 Kansas           20
+29 Maine             0
+30 Maine            20
+31 Maine             0
+32 Maine            20
+33 Maine             5
+34 Maine            20
+35 Maine            20
+36 Maine            50
+37 Maine            30
+38 Maine             5
+39 Maine             0
+40 Maine            20
+41 Maine           100
+42 Maine             0
+43 Maine            20
+44 Maine           100
+```
+]
+
+---
+count: false
+ 
+
+.panel1-ch9-auto[
+
+```r
+chap9_Donation %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-ch9-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch9_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch9-auto[
+
+```r
+chap9_Donation %&gt;%
+  ggplot() +
+* aes(x = state, y = donation)
+```
+]
+ 
+.panel2-ch9-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch9_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch9-auto[
+
+```r
+chap9_Donation %&gt;%
+  ggplot() +
+  aes(x = state, y = donation) +
+* geom_jitter(width = .1)
+```
+]
+ 
+.panel2-ch9-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch9_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch9-auto[
+
+```r
+chap9_Donation %&gt;%
+  ggplot() +
+  aes(x = state, y = donation) +
+  geom_jitter(width = .1) +
+* ggxmean::geom_xy_means(color = "goldenrod", size = 5)
+```
+]
+ 
+.panel2-ch9-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch9_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-ch9-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-ch9-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-ch9-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-ch10-auto[
+
+```r
+*chap10_DraftLottery
+```
+]
+ 
+.panel2-ch10-auto[
+
+```
+# A tibble: 366 × 2
+   sequential_date draft_number
+             &lt;dbl&gt;        &lt;dbl&gt;
+ 1               1          305
+ 2               2          159
+ 3               3          251
+ 4               4          215
+ 5               5          101
+ 6               6          224
+ 7               7          306
+ 8               8          199
+ 9               9          194
+10              10          325
+11              11          329
+12              12          221
+13              13          318
+14              14          238
+15              15           17
+16              16          121
+17              17          235
+18              18          140
+19              19           58
+20              20          280
+21              21          186
+22              22          337
+23              23          118
+24              24           59
+25              25           52
+26              26           92
+27              27          355
+28              28           77
+29              29          349
+30              30          164
+31              31          221
+32              32           86
+33              33          144
+34              34          297
+35              35          210
+36              36          214
+37              37          347
+38              38           91
+39              39          181
+40              40          338
+41              41          216
+42              42          150
+43              43           68
+44              44          152
+45              45            4
+46              46           89
+47              47          212
+48              48          189
+49              49          292
+50              50           25
+51              51          302
+52              52          363
+53              53          290
+54              54           57
+55              55          236
+# … with 311 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-ch10-auto[
+
+```r
+chap10_DraftLottery %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-ch10-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch10_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch10-auto[
+
+```r
+chap10_DraftLottery %&gt;%
+  ggplot() +
+* aes(x = sequential_date, y = draft_number)
+```
+]
+ 
+.panel2-ch10-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch10_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch10-auto[
+
+```r
+chap10_DraftLottery %&gt;%
+  ggplot() +
+  aes(x = sequential_date, y = draft_number) +
+* geom_point()
+```
+]
+ 
+.panel2-ch10-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch10_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch10-auto[
+
+```r
+chap10_DraftLottery %&gt;%
+  ggplot() +
+  aes(x = sequential_date, y = draft_number) +
+  geom_point() +
+* geom_density_2d_filled(alpha = .4)
+```
+]
+ 
+.panel2-ch10-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch10_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch10-auto[
+
+```r
+chap10_DraftLottery %&gt;%
+  ggplot() +
+  aes(x = sequential_date, y = draft_number) +
+  geom_point() +
+  geom_density_2d_filled(alpha = .4) +
+* ggxmean:::geom_corrlabel()
+```
+]
+ 
+.panel2-ch10-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch10_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch10-auto[
+
+```r
+chap10_DraftLottery %&gt;%
+  ggplot() +
+  aes(x = sequential_date, y = draft_number) +
+  geom_point() +
+  geom_density_2d_filled(alpha = .4) +
+  ggxmean:::geom_corrlabel()
+
+*chap10_DraftLottery
+```
+]
+ 
+.panel2-ch10-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch10_auto_07_output-1.png)&lt;!-- --&gt;
+
+```
+# A tibble: 366 × 2
+   sequential_date draft_number
+             &lt;dbl&gt;        &lt;dbl&gt;
+ 1               1          305
+ 2               2          159
+ 3               3          251
+ 4               4          215
+ 5               5          101
+ 6               6          224
+ 7               7          306
+ 8               8          199
+ 9               9          194
+10              10          325
+11              11          329
+12              12          221
+13              13          318
+14              14          238
+15              15           17
+16              16          121
+17              17          235
+18              18          140
+19              19           58
+20              20          280
+21              21          186
+22              22          337
+23              23          118
+24              24           59
+25              25           52
+26              26           92
+27              27          355
+28              28           77
+29              29          349
+30              30          164
+31              31          221
+32              32           86
+33              33          144
+34              34          297
+35              35          210
+36              36          214
+37              37          347
+38              38           91
+39              39          181
+40              40          338
+41              41          216
+42              42          150
+43              43           68
+44              44          152
+45              45            4
+46              46           89
+47              47          212
+48              48          189
+49              49          292
+50              50           25
+51              51          302
+52              52          363
+53              53          290
+54              54           57
+55              55          236
+# … with 311 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-ch10-auto[
+
+```r
+chap10_DraftLottery %&gt;%
+  ggplot() +
+  aes(x = sequential_date, y = draft_number) +
+  geom_point() +
+  geom_density_2d_filled(alpha = .4) +
+  ggxmean:::geom_corrlabel()
+
+chap10_DraftLottery %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-ch10-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch10_auto_08_output-1.png)&lt;!-- --&gt;![](ma206data_package_demo_flipbook_files/figure-html/ch10_auto_08_output-2.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch10-auto[
+
+```r
+chap10_DraftLottery %&gt;%
+  ggplot() +
+  aes(x = sequential_date, y = draft_number) +
+  geom_point() +
+  geom_density_2d_filled(alpha = .4) +
+  ggxmean:::geom_corrlabel()
+
+chap10_DraftLottery %&gt;%
+  ggplot() +
+* aes(x = sequential_date,
+*     y = sample(draft_number))   # true non association by random reorder
+```
+]
+ 
+.panel2-ch10-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch10_auto_09_output-1.png)&lt;!-- --&gt;![](ma206data_package_demo_flipbook_files/figure-html/ch10_auto_09_output-2.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch10-auto[
+
+```r
+chap10_DraftLottery %&gt;%
+  ggplot() +
+  aes(x = sequential_date, y = draft_number) +
+  geom_point() +
+  geom_density_2d_filled(alpha = .4) +
+  ggxmean:::geom_corrlabel()
+
+chap10_DraftLottery %&gt;%
+  ggplot() +
+  aes(x = sequential_date,
+      y = sample(draft_number)) +  # true non association by random reorder
+* geom_point()
+```
+]
+ 
+.panel2-ch10-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch10_auto_10_output-1.png)&lt;!-- --&gt;![](ma206data_package_demo_flipbook_files/figure-html/ch10_auto_10_output-2.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch10-auto[
+
+```r
+chap10_DraftLottery %&gt;%
+  ggplot() +
+  aes(x = sequential_date, y = draft_number) +
+  geom_point() +
+  geom_density_2d_filled(alpha = .4) +
+  ggxmean:::geom_corrlabel()
+
+chap10_DraftLottery %&gt;%
+  ggplot() +
+  aes(x = sequential_date,
+      y = sample(draft_number)) +  # true non association by random reorder
+  geom_point() +
+* geom_density_2d_filled(alpha = .4)
+```
+]
+ 
+.panel2-ch10-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch10_auto_11_output-1.png)&lt;!-- --&gt;![](ma206data_package_demo_flipbook_files/figure-html/ch10_auto_11_output-2.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch10-auto[
+
+```r
+chap10_DraftLottery %&gt;%
+  ggplot() +
+  aes(x = sequential_date, y = draft_number) +
+  geom_point() +
+  geom_density_2d_filled(alpha = .4) +
+  ggxmean:::geom_corrlabel()
+
+chap10_DraftLottery %&gt;%
+  ggplot() +
+  aes(x = sequential_date,
+      y = sample(draft_number)) +  # true non association by random reorder
+  geom_point() +
+  geom_density_2d_filled(alpha = .4) +
+* ggxmean:::geom_corrlabel()
+```
+]
+ 
+.panel2-ch10-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch10_auto_12_output-1.png)&lt;!-- --&gt;![](ma206data_package_demo_flipbook_files/figure-html/ch10_auto_12_output-2.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-ch10-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-ch10-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-ch10-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-ch9comp-auto[
+
+```r
+*chap9_Comprehension
+```
+]
+ 
+.panel2-ch9comp-auto[
+
+```
+# A tibble: 57 × 2
+   condition comprehension
+   &lt;chr&gt;             &lt;dbl&gt;
+ 1 After                 6
+ 2 After                 5
+ 3 After                 4
+ 4 After                 2
+ 5 After                 1
+ 6 After                 3
+ 7 After                 5
+ 8 After                 3
+ 9 After                 3
+10 After                 2
+11 After                 2
+12 After                 1
+13 After                 4
+14 After                 4
+15 After                 3
+16 After                 2
+17 After                 5
+18 After                 3
+19 After                 3
+20 Before                7
+21 Before                5
+22 Before                4
+23 Before                2
+24 Before                6
+25 Before                6
+26 Before                3
+27 Before                6
+28 Before                6
+29 Before                6
+30 Before                5
+31 Before                4
+32 Before                6
+33 Before                5
+34 Before                6
+35 Before                4
+36 Before                3
+37 Before                5
+38 Before                5
+39 None                  4
+40 None                  6
+41 None                  4
+42 None                  3
+43 None                  3
+44 None                  1
+45 None                  3
+46 None                  5
+47 None                  4
+48 None                  2
+49 None                  5
+50 None                  3
+51 None                  4
+52 None                  2
+53 None                  3
+54 None                  2
+55 None                  4
+# … with 2 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-ch9comp-auto[
+
+```r
+chap9_Comprehension %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-ch9comp-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch9comp_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch9comp-auto[
+
+```r
+chap9_Comprehension %&gt;%
+  ggplot() +
+* aes(x = condition, y = comprehension)
+```
+]
+ 
+.panel2-ch9comp-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch9comp_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch9comp-auto[
+
+```r
+chap9_Comprehension %&gt;%
+  ggplot() +
+  aes(x = condition, y = comprehension) +
+* geom_jitter(width = .1)
+```
+]
+ 
+.panel2-ch9comp-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch9comp_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch9comp-auto[
+
+```r
+chap9_Comprehension %&gt;%
+  ggplot() +
+  aes(x = condition, y = comprehension) +
+  geom_jitter(width = .1) +
+* ggxmean:::geom_xy_means(color = "goldenrod",
+*                         shape = "-", size = 20)
+```
+]
+ 
+.panel2-ch9comp-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch9comp_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-ch9comp-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-ch9comp-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-ch9comp-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-ch10wimb-auto[
+
+```r
+*chap10_WimbledonMF
+```
+]
+ 
+.panel2-ch10wimb-auto[
+
+```
+# A tibble: 210 × 3
+    year height_cm sex  
+   &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;
+ 1  1881       177 M    
+ 2  1882       177 M    
+ 3  1883       177 M    
+ 4  1884       177 M    
+ 5  1885       177 M    
+ 6  1886       177 M    
+ 7  1887       180 M    
+ 8  1888       178 M    
+ 9  1889       177 M    
+10  1890       175 M    
+11  1896       191 M    
+12  1897       185 M    
+13  1898       185 M    
+14  1899       185 M    
+15  1900       185 M    
+16  1902       177 M    
+17  1903       177 M    
+18  1904       177 M    
+19  1905       177 M    
+20  1906       177 M    
+21  1907       180 M    
+22  1910       187 M    
+23  1911       187 M    
+24  1912       187 M    
+25  1913       187 M    
+26  1914       180 M    
+27  1919       173 M    
+28  1920       188 M    
+29  1921       188 M    
+30  1922       173 M    
+31  1923       173 M    
+32  1924       186 M    
+33  1925       170 M    
+34  1926       186 M    
+35  1927       168 M    
+36  1928       170 M    
+37  1929       168 M    
+38  1930       188 M    
+39  1932       189 M    
+40  1933       185 M    
+41  1934       183 M    
+42  1935       183 M    
+43  1936       183 M    
+44  1937       185 M    
+45  1938       185 M    
+46  1939       170 M    
+47  1946       196 M    
+48  1947       188 M    
+49  1948       191 M    
+50  1951       191 M    
+51  1952       180 M    
+52  1953       185 M    
+53  1954       180 M    
+54  1955       185 M    
+55  1956       179 M    
+# … with 155 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-ch10wimb-auto[
+
+```r
+chap10_WimbledonMF %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-ch10wimb-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch10wimb_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch10wimb-auto[
+
+```r
+chap10_WimbledonMF %&gt;%
+  ggplot() +
+* aes(x = year, y = height_cm, color = sex)
+```
+]
+ 
+.panel2-ch10wimb-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch10wimb_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch10wimb-auto[
+
+```r
+chap10_WimbledonMF %&gt;%
+  ggplot() +
+  aes(x = year, y = height_cm, color = sex) +
+* geom_point(alpha = .5)
+```
+]
+ 
+.panel2-ch10wimb-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch10wimb_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ch10wimb-auto[
+
+```r
+chap10_WimbledonMF %&gt;%
+  ggplot() +
+  aes(x = year, y = height_cm, color = sex) +
+  geom_point(alpha = .5) +
+* geom_smooth(method = lm)
+```
+]
+ 
+.panel2-ch10wimb-auto[
+![](ma206data_package_demo_flipbook_files/figure-html/ch10wimb_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-ch10wimb-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-ch10wimb-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-ch10wimb-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

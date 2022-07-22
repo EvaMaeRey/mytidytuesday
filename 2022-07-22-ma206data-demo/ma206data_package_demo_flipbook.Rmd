@@ -1,0 +1,291 @@
+---
+title: "Exploded code"
+subtitle: "Using flipbookr and xaringan"
+author: "Me"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, fig.height = 4, message = F, warning = FALSE, comment = "", cache = F)
+
+options(tibble.print_min = 55)
+options(knitr.duplicate.label = "allow")
+options(width=300) # prevents data wrapping
+```
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 70%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+
+
+---
+
+
+`r flipbookr::chunk_reveal("setup", left_assign = "detect")`
+
+
+```{r setup, message=F, warning=F, include = FALSE}
+library(tidyverse)
+# remotes::install_github("EvaMaeRey/ma206data")
+
+library(ma206data)
+options(scipen = 10)
+
+```
+
+---
+
+
+`r flipbookr::chunk_reveal("prelim", left_assign = "detect")`
+
+
+```{r prelim, include = FALSE}
+prelim_NationalAnthemTimes %>% 
+  ggplot() + 
+  aes(x = year) + 
+  aes(y = time) +
+  geom_point() + 
+  aes(color = sex) + 
+  aes(shape = genre) 
+```
+
+---
+
+
+`r flipbookr::chunk_reveal("ch2", left_assign = "detect")`
+
+
+```{r ch2, include = FALSE}
+chap2_LaughIncrease %>% 
+  ggplot() + 
+  aes(x = rating_increase) +
+  geom_dotplot() + 
+  geom_vline(xintercept = 0,
+             linetype = "dashed")
+```
+
+
+---
+
+
+`r flipbookr::chunk_reveal("ch3", left_assign = "detect")`
+
+
+```{r ch3, include = FALSE}
+chap3_Hockey2 %>% 
+  ggplot() + 
+  aes(x = margin_victory %>% as.factor()) + 
+  geom_bar() 
+```
+
+---
+
+
+`r flipbookr::chunk_reveal("ch5", left_assign = "detect")`
+
+
+```{r ch5, include = FALSE}
+chap5_Blood %>% 
+  ggplot() + 
+  aes(x = year %>% as.factor(), fill = response) + 
+  geom_bar(position = "fill")
+```
+
+
+
+
+---
+
+
+`r flipbookr::chunk_reveal("ch5gilbert", left_assign = "detect")`
+
+
+```{r ch5gilbert, include = FALSE}
+chap5_Gilbert %>% 
+  ggplot() + 
+  aes(x = gilbert_worked, fill = patient) + 
+  geom_bar(position = "fill")
+```
+
+---
+
+
+`r flipbookr::chunk_reveal("ch6", left_assign = "detect")`
+
+
+```{r ch6, include = FALSE}
+chap6_DungBeetles %>% 
+  ggplot() +
+  aes(color = cap, x = time) + 
+  geom_point(y = 0, alpha = .7) + 
+  geom_density(alpha = .2, aes(fill = cap)) + 
+  facet_wrap(~cap, ncol = 1) + 
+  ggxmean::geom_x_mean()
+```
+
+
+---
+
+
+`r flipbookr::chunk_reveal("ch7", left_assign = "detect")`
+
+
+```{r ch7, include = FALSE}
+chap7_DadJokes %>% 
+  pivot_longer(-1) %>% 
+  mutate(name = fct_rev(name)) %>% 
+  arrange(joke, name) %>% 
+  group_by(joke) %>% 
+  mutate(outcome_diff = lead(value) - value) %>% 
+  ggplot() +
+  aes(x = name, y = value) + 
+  geom_point() +
+  geom_line(aes(x = name %>% 
+                  as.factor() %>%  
+                  as.numeric())) +
+  aes(group = joke) + 
+  geom_line(aes(color = outcome_diff > 0))
+```
+
+
+---
+
+
+`r flipbookr::chunk_reveal("ch7dad", left_assign = "detect")`
+
+
+```{r ch7dad, include = FALSE}
+chap7_DadJokes %>% 
+  mutate(diff = laugh_track - no_laugh_track) %>% 
+  ggplot() + 
+  aes(y = joke, x = no_laugh_track, color = diff > 0) + 
+  geom_point(color = "cadetblue") + 
+  geom_segment(aes(xend = laugh_track, 
+                                   yend = joke), arrow = arrow(length = unit(0.20,"cm"))) + 
+  geom_point(color = "cadetblue4", aes(x = laugh_track))
+
+```
+
+---
+
+
+`r flipbookr::chunk_reveal("ch8", left_assign = "detect")`
+
+
+```{r ch8, include = FALSE}
+chap8_Goals %>% 
+  count(gender, goal) %>% 
+  ggplot() + 
+  aes(x = gender, y = n, fill = goal) + 
+  geom_col(position = "fill")
+
+chap8_Goals %>% 
+  count(gender, goal) %>% 
+  group_by(gender) %>% 
+  mutate(percent_within_gender = 100*n/sum(n)) %>% 
+  ggplot() + 
+  aes(x = gender, label = n, fill = percent_within_gender, y  = goal) + 
+  geom_text() + 
+  geom_tile(alpha = .6) + 
+  scale_y_discrete(limits = rev)
+
+```
+
+
+---
+
+
+`r flipbookr::chunk_reveal("ch9", left_assign = "detect")`
+
+
+```{r ch9, include = FALSE}
+chap9_Donation %>% 
+  ggplot() + 
+  aes(x = state, y = donation) + 
+  geom_jitter(width = .1) + 
+  ggxmean::geom_xy_means(color = "goldenrod", size = 5)
+```
+
+---
+
+
+`r flipbookr::chunk_reveal("ch10", left_assign = "detect")`
+
+
+```{r ch10, include = FALSE}
+chap10_DraftLottery %>% 
+  ggplot() + 
+  aes(x = sequential_date, y = draft_number) + 
+  geom_point() + 
+  geom_density_2d_filled(alpha = .4) + 
+  ggxmean:::geom_corrlabel()
+
+chap10_DraftLottery %>% 
+  ggplot() + 
+  aes(x = sequential_date, 
+      y = sample(draft_number)) + # true non association by random reorder
+  geom_point() + 
+  geom_density_2d_filled(alpha = .4) + 
+  ggxmean:::geom_corrlabel()
+```
+
+
+---
+
+
+`r flipbookr::chunk_reveal("ch9comp", left_assign = "detect")`
+
+
+```{r ch9comp, include = FALSE}
+chap9_Comprehension %>% 
+  ggplot() + 
+  aes(x = condition, y = comprehension) + 
+  geom_jitter(width = .1) + 
+  ggxmean:::geom_xy_means(color = "goldenrod",
+                          shape = "-", size = 20)
+```
+
+
+---
+
+
+`r flipbookr::chunk_reveal("ch10wimb", left_assign = "detect")`
+
+
+```{r ch10wimb, include = FALSE}
+chap10_WimbledonMF %>% 
+  ggplot() + 
+  aes(x = year, y = height_cm, color = sex) + 
+  geom_point(alpha = .5) + 
+  geom_smooth(method = lm)
+```

@@ -1,0 +1,164 @@
+---
+title: "ma206data package demo"
+author: "Dean Data Cell"
+date: '2022-07-21'
+output: html_document
+---
+
+```{r setup, message=F, warning=F}
+library(tidyverse)
+# remotes::install_github("EvaMaeRey/ma206data")
+
+library(ma206data)
+options(scipen = 10)
+
+```
+
+```{r prelim}
+prelim_NationalAnthemTimes %>% 
+  ggplot() + 
+  aes(x = year) + 
+  aes(y = time) +
+  geom_point() + 
+  aes(color = sex) + 
+  aes(shape = genre) 
+```
+
+```{r ch2}
+chap2_LaughIncrease %>% 
+  ggplot() + 
+  aes(x = rating_increase) +
+  geom_dotplot() + 
+  geom_vline(xintercept = 0,
+             linetype = "dashed")
+```
+
+
+```{r ch3}
+chap3_Hockey2 %>% 
+  ggplot() + 
+  aes(x = margin_victory %>% as.factor()) + 
+  geom_bar() 
+```
+
+```{r ch5}
+chap5_Blood %>% 
+  ggplot() + 
+  aes(x = year %>% as.factor(), fill = response) + 
+  geom_bar(position = "fill")
+```
+
+
+
+
+```{r ch5gilbert}
+chap5_Gilbert %>% 
+  ggplot() + 
+  aes(x = gilbert_worked, fill = patient) + 
+  geom_bar(position = "fill")
+```
+
+```{r ch6}
+chap6_DungBeetles %>% 
+  ggplot() +
+  aes(color = cap, x = time) + 
+  geom_point(y = 0, alpha = .7) + 
+  geom_density(alpha = .2, aes(fill = cap)) + 
+  facet_wrap(~cap, ncol = 1) + 
+  ggxmean::geom_x_mean()
+```
+
+
+```{r ch7}
+chap7_DadJokes %>% 
+  pivot_longer(-1) %>% 
+  mutate(name = fct_rev(name)) %>% 
+  arrange(joke, name) %>% 
+  group_by(joke) %>% 
+  mutate(outcome_diff = lead(value) - value) %>% 
+  ggplot() +
+  aes(x = name, y = value) + 
+  geom_point() +
+  geom_line(aes(x = name %>% 
+                  as.factor() %>%  
+                  as.numeric())) +
+  aes(group = joke) + 
+  geom_line(aes(color = outcome_diff > 0))
+```
+
+
+```{r ch7dad}
+chap7_DadJokes %>% 
+  mutate(diff = laugh_track - no_laugh_track) %>% 
+  ggplot() + 
+  aes(y = joke, x = no_laugh_track, color = diff > 0) + 
+  geom_point(color = "cadetblue") + 
+  geom_segment(aes(xend = laugh_track, 
+                                   yend = joke), arrow = arrow(length = unit(0.20,"cm"))) + 
+  geom_point(color = "cadetblue4", aes(x = laugh_track))
+
+```
+
+```{r ch8}
+chap8_Goals %>% 
+  count(gender, goal) %>% 
+  ggplot() + 
+  aes(x = gender, y = n, fill = goal) + 
+  geom_col(position = "fill")
+
+chap8_Goals %>% 
+  count(gender, goal) %>% 
+  group_by(gender) %>% 
+  mutate(percent_within_gender = 100*n/sum(n)) %>% 
+  ggplot() + 
+  aes(x = gender, label = n, fill = percent_within_gender, y  = goal) + 
+  geom_text() + 
+  geom_tile(alpha = .6) + 
+  scale_y_discrete(limits = rev)
+
+```
+
+
+```{r ch9}
+chap9_Donation %>% 
+  ggplot() + 
+  aes(x = state, y = donation) + 
+  geom_jitter(width = .1) + 
+  ggxmean::geom_xy_means(color = "goldenrod", size = 5)
+```
+
+```{r ch10}
+chap10_DraftLottery %>% 
+  ggplot() + 
+  aes(x = sequential_date, y = draft_number) + 
+  geom_point() + 
+  geom_density_2d_filled(alpha = .4) + 
+  ggxmean:::geom_corrlabel()
+
+chap10_DraftLottery %>% 
+  ggplot() + 
+  aes(x = sequential_date, 
+      y = sample(draft_number)) + # true non association by random reorder
+  geom_point() + 
+  geom_density_2d_filled(alpha = .4) + 
+  ggxmean:::geom_corrlabel()
+```
+
+
+```{r ch9comp}
+chap9_Comprehension %>% 
+  ggplot() + 
+  aes(x = condition, y = comprehension) + 
+  geom_jitter(width = .1) + 
+  ggxmean:::geom_xy_means(color = "goldenrod",
+                          shape = "-", size = 20)
+```
+
+
+```{r ch10wimb}
+chap10_WimbledonMF %>% 
+  ggplot() + 
+  aes(x = year, y = height_cm, color = sex) + 
+  geom_point(alpha = .5) + 
+  geom_smooth(method = lm)
+```

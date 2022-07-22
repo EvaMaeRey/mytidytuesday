@@ -11,7 +11,8 @@ The goal of mytidytuesday is to hold little projects. They are like
 blogs posts, but mostly code. In the spirit of \#tidytuesday no pressure
 to write prose\!
 
-  - [2022-06-20-tabyl/skeleton.html](https://evamaerey.github.io/mytidytuesday/2022-06-20-tabyl/skeleton.html)
+  - [2022-07-22-ma206data-demo/ma206data\_package\_demo\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-07-22-ma206data-demo/ma206data_package_demo_flipbook.html)
+  - [2022-07-22-ma206data-demo/ma206data\_package\_demo.html](https://evamaerey.github.io/mytidytuesday/2022-07-22-ma206data-demo/ma206data_package_demo.html)
   - [2022-06-20-tabyl/2022-06-20-tabyl.html](https://evamaerey.github.io/mytidytuesday/2022-06-20-tabyl/2022-06-20-tabyl.html)
   - [2022-06-07-scale-x-sd/scale\_x\_sd.html](https://evamaerey.github.io/mytidytuesday/2022-06-07-scale-x-sd/scale_x_sd.html)
   - [2022-05-30-apply/apply.html](https://evamaerey.github.io/mytidytuesday/2022-05-30-apply/apply.html)
@@ -23,6 +24,7 @@ to write prose\!
   - [2022-05-23-networks-presentation/images\_for\_lecture/federalist\_widget
     copy.html](https://evamaerey.github.io/mytidytuesday/2022-05-23-networks-presentation/images_for_lecture/federalist_widget%20copy.html)
   - [2022-05-09-statistical-geometries/statistical\_geometries.html](https://evamaerey.github.io/mytidytuesday/2022-05-09-statistical-geometries/statistical_geometries.html)
+  - [2022-05-09-statistical-geometries/rstudio\_ggxmean.html](https://evamaerey.github.io/mytidytuesday/2022-05-09-statistical-geometries/rstudio_ggxmean.html)
   - [2022-05-09-statistical-geometries/rstudio\_blog\_post\_draft.html](https://evamaerey.github.io/mytidytuesday/2022-05-09-statistical-geometries/rstudio_blog_post_draft.html)
   - [2022-04-21-ggplot2-grammar-primer/ggplot2\_grammar\_primer\_worksheet.html](https://evamaerey.github.io/mytidytuesday/2022-04-21-ggplot2-grammar-primer/ggplot2_grammar_primer_worksheet.html)
   - [2022-04-21-ggplot2-grammar-primer/ggplot2\_grammar\_primer\_double\_crochet.html](https://evamaerey.github.io/mytidytuesday/2022-04-21-ggplot2-grammar-primer/ggplot2_grammar_primer_double_crochet.html)
