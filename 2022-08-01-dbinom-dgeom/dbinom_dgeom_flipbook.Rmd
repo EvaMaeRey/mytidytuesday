@@ -1,0 +1,128 @@
+---
+title: "Exploded code"
+subtitle: "Using flipbookr and xaringan"
+author: "Me"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, fig.height = 4, message = F, warning = FALSE, comment = "", cache = F)
+
+options(tibble.print_min = 55)
+options(knitr.duplicate.label = "allow")
+options(width=300) # prevents data wrapping
+```
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 70%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+
+
+
+---
+
+
+`r flipbookr::chunk_reveal("base", left_assign = "detect")`
+
+
+```{r base, warning = F, message = F, include = FALSE}
+library(tidyverse)
+
+single_trial_prob <- .5
+
+num_trials <- 10
+
+0:num_trials ->
+  possible_outcomes
+
+dbinom(x = possible_outcomes, 
+       size = 10,
+       prob = single_trial_prob) ->
+  probs
+
+tibble(possible_outcomes, probs) %>% 
+  ggplot() + 
+  aes(x = possible_outcomes) +
+  scale_x_continuous(breaks = possible_outcomes) +
+  aes(y = probs) + 
+  geom_point() + 
+  aes(xend = possible_outcomes,
+      yend = 0) + 
+  geom_segment(lty = "dotted") + 
+  labs(title = "Binomial Distribution of for ten events where probability of success for each event is .5  (success/failure probability is independent)" %>% 
+         str_wrap()) + 
+  geom_text(aes(label = probs %>% round(4)),
+            nudge_y = .01) + 
+  annotate(geom = "text", 
+           x = 1.5,
+           y = .2,
+           label = "P(n==k) == {Pi}",
+           parse = TRUE,
+           size = 5)
+```
+
+
+---
+
+
+`r flipbookr::chunk_reveal("more", left_assign = "detect")`
+
+
+```{r more, include = FALSE}
+# what is the probability of at least eight successes in ten trials
+# when each trial is chance event with probability of .8
+8:10 %>% 
+  dbinom(x = ., 
+         size = 10,
+         prob = .8) %>% 
+  sum()
+
+# or 
+dbinom(8, 10, .8) + 
+  dbinom(9, 10, .8) +
+  dbinom(10, 10, .8)
+```
+
+---
+
+
+`r flipbookr::chunk_reveal("more2", left_assign = "detect")`
+
+
+```{r more2, include = FALSE}
+# what is the probability of exactly 5 successes in 10 trials
+# when each trial is chance event with probility .5 success
+dbinom(5, 10, .5)
+
+
+```

@@ -11,6 +11,8 @@ The goal of mytidytuesday is to hold little projects. They are like
 blogs posts, but mostly code. In the spirit of \#tidytuesday no pressure
 to write prose\!
 
+  - [2022-08-01-dbinom-dgeom/dbinom\_dgeom\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-08-01-dbinom-dgeom/dbinom_dgeom_flipbook.html)
+  - [2022-08-01-dbinom-dgeom/dbinom\_dgeom.html](https://evamaerey.github.io/mytidytuesday/2022-08-01-dbinom-dgeom/dbinom_dgeom.html)
   - [2022-07-22-ma206data-demo/ma206data\_package\_demo\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-07-22-ma206data-demo/ma206data_package_demo_flipbook.html)
   - [2022-07-22-ma206data-demo/ma206data\_package\_demo.html](https://evamaerey.github.io/mytidytuesday/2022-07-22-ma206data-demo/ma206data_package_demo.html)
   - [2022-06-20-tabyl/2022-06-20-tabyl.html](https://evamaerey.github.io/mytidytuesday/2022-06-20-tabyl/2022-06-20-tabyl.html)

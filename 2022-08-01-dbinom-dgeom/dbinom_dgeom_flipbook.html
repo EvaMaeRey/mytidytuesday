@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Exploded code</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Me" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Exploded code
+## Using flipbookr and xaringan
+### Me
+
+---
+
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 70%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+&lt;/style&gt;
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-base-auto[
+
+```r
+*library(tidyverse)
+```
+]
+ 
+.panel2-base-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-base-auto[
+
+```r
+library(tidyverse)
+
+*single_trial_prob &lt;- .5
+```
+]
+ 
+.panel2-base-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-base-auto[
+
+```r
+library(tidyverse)
+
+single_trial_prob &lt;- .5
+
+*num_trials &lt;- 10
+```
+]
+ 
+.panel2-base-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-base-auto[
+
+```r
+library(tidyverse)
+
+single_trial_prob &lt;- .5
+
+num_trials &lt;- 10
+
+*0:num_trials
+```
+]
+ 
+.panel2-base-auto[
+
+```
+ [1]  0  1  2  3  4  5  6  7  8  9 10
+```
+]
+
+---
+count: false
+ 
+
+.panel1-base-auto[
+
+```r
+library(tidyverse)
+
+single_trial_prob &lt;- .5
+
+num_trials &lt;- 10
+
+0:num_trials -&gt;
+* possible_outcomes
+```
+]
+ 
+.panel2-base-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-base-auto[
+
+```r
+library(tidyverse)
+
+single_trial_prob &lt;- .5
+
+num_trials &lt;- 10
+
+0:num_trials -&gt;
+  possible_outcomes
+
+*dbinom(x = possible_outcomes,
+*      size = 10,
+*      prob = single_trial_prob)
+```
+]
+ 
+.panel2-base-auto[
+
+```
+ [1] 0.0009765625 0.0097656250 0.0439453125 0.1171875000 0.2050781250 0.2460937500 0.2050781250 0.1171875000 0.0439453125 0.0097656250 0.0009765625
+```
+]
+
+---
+count: false
+ 
+
+.panel1-base-auto[
+
+```r
+library(tidyverse)
+
+single_trial_prob &lt;- .5
+
+num_trials &lt;- 10
+
+0:num_trials -&gt;
+  possible_outcomes
+
+dbinom(x = possible_outcomes,
+       size = 10,
+       prob = single_trial_prob) -&gt;
+* probs
+```
+]
+ 
+.panel2-base-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-base-auto[
+
+```r
+library(tidyverse)
+
+single_trial_prob &lt;- .5
+
+num_trials &lt;- 10
+
+0:num_trials -&gt;
+  possible_outcomes
+
+dbinom(x = possible_outcomes,
+       size = 10,
+       prob = single_trial_prob) -&gt;
+  probs
+
+*tibble(possible_outcomes, probs)
+```
+]
+ 
+.panel2-base-auto[
+
+```
+# A tibble: 11 × 2
+   possible_outcomes    probs
+               &lt;int&gt;    &lt;dbl&gt;
+ 1                 0 0.000977
+ 2                 1 0.00977 
+ 3                 2 0.0439  
+ 4                 3 0.117   
+ 5                 4 0.205   
+ 6                 5 0.246   
+ 7                 6 0.205   
+ 8                 7 0.117   
+ 9                 8 0.0439  
+10                 9 0.00977 
+11                10 0.000977
+```
+]
+
+---
+count: false
+ 
+
+.panel1-base-auto[
+
+```r
+library(tidyverse)
+
+single_trial_prob &lt;- .5
+
+num_trials &lt;- 10
+
+0:num_trials -&gt;
+  possible_outcomes
+
+dbinom(x = possible_outcomes,
+       size = 10,
+       prob = single_trial_prob) -&gt;
+  probs
+
+tibble(possible_outcomes, probs) %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-base-auto[
+![](dbinom_dgeom_flipbook_files/figure-html/base_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-base-auto[
+
+```r
+library(tidyverse)
+
+single_trial_prob &lt;- .5
+
+num_trials &lt;- 10
+
+0:num_trials -&gt;
+  possible_outcomes
+
+dbinom(x = possible_outcomes,
+       size = 10,
+       prob = single_trial_prob) -&gt;
+  probs
+
+tibble(possible_outcomes, probs) %&gt;%
+  ggplot() +
+* aes(x = possible_outcomes)
+```
+]
+ 
+.panel2-base-auto[
+![](dbinom_dgeom_flipbook_files/figure-html/base_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-base-auto[
+
+```r
+library(tidyverse)
+
+single_trial_prob &lt;- .5
+
+num_trials &lt;- 10
+
+0:num_trials -&gt;
+  possible_outcomes
+
+dbinom(x = possible_outcomes,
+       size = 10,
+       prob = single_trial_prob) -&gt;
+  probs
+
+tibble(possible_outcomes, probs) %&gt;%
+  ggplot() +
+  aes(x = possible_outcomes) +
+* scale_x_continuous(breaks = possible_outcomes)
+```
+]
+ 
+.panel2-base-auto[
+![](dbinom_dgeom_flipbook_files/figure-html/base_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-base-auto[
+
+```r
+library(tidyverse)
+
+single_trial_prob &lt;- .5
+
+num_trials &lt;- 10
+
+0:num_trials -&gt;
+  possible_outcomes
+
+dbinom(x = possible_outcomes,
+       size = 10,
+       prob = single_trial_prob) -&gt;
+  probs
+
+tibble(possible_outcomes, probs) %&gt;%
+  ggplot() +
+  aes(x = possible_outcomes) +
+  scale_x_continuous(breaks = possible_outcomes) +
+* aes(y = probs)
+```
+]
+ 
+.panel2-base-auto[
+![](dbinom_dgeom_flipbook_files/figure-html/base_auto_12_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-base-auto[
+
+```r
+library(tidyverse)
+
+single_trial_prob &lt;- .5
+
+num_trials &lt;- 10
+
+0:num_trials -&gt;
+  possible_outcomes
+
+dbinom(x = possible_outcomes,
+       size = 10,
+       prob = single_trial_prob) -&gt;
+  probs
+
+tibble(possible_outcomes, probs) %&gt;%
+  ggplot() +
+  aes(x = possible_outcomes) +
+  scale_x_continuous(breaks = possible_outcomes) +
+  aes(y = probs) +
+* geom_point()
+```
+]
+ 
+.panel2-base-auto[
+![](dbinom_dgeom_flipbook_files/figure-html/base_auto_13_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-base-auto[
+
+```r
+library(tidyverse)
+
+single_trial_prob &lt;- .5
+
+num_trials &lt;- 10
+
+0:num_trials -&gt;
+  possible_outcomes
+
+dbinom(x = possible_outcomes,
+       size = 10,
+       prob = single_trial_prob) -&gt;
+  probs
+
+tibble(possible_outcomes, probs) %&gt;%
+  ggplot() +
+  aes(x = possible_outcomes) +
+  scale_x_continuous(breaks = possible_outcomes) +
+  aes(y = probs) +
+  geom_point() +
+* aes(xend = possible_outcomes,
+*     yend = 0)
+```
+]
+ 
+.panel2-base-auto[
+![](dbinom_dgeom_flipbook_files/figure-html/base_auto_14_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-base-auto[
+
+```r
+library(tidyverse)
+
+single_trial_prob &lt;- .5
+
+num_trials &lt;- 10
+
+0:num_trials -&gt;
+  possible_outcomes
+
+dbinom(x = possible_outcomes,
+       size = 10,
+       prob = single_trial_prob) -&gt;
+  probs
+
+tibble(possible_outcomes, probs) %&gt;%
+  ggplot() +
+  aes(x = possible_outcomes) +
+  scale_x_continuous(breaks = possible_outcomes) +
+  aes(y = probs) +
+  geom_point() +
+  aes(xend = possible_outcomes,
+      yend = 0) +
+* geom_segment(lty = "dotted")
+```
+]
+ 
+.panel2-base-auto[
+![](dbinom_dgeom_flipbook_files/figure-html/base_auto_15_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-base-auto[
+
+```r
+library(tidyverse)
+
+single_trial_prob &lt;- .5
+
+num_trials &lt;- 10
+
+0:num_trials -&gt;
+  possible_outcomes
+
+dbinom(x = possible_outcomes,
+       size = 10,
+       prob = single_trial_prob) -&gt;
+  probs
+
+tibble(possible_outcomes, probs) %&gt;%
+  ggplot() +
+  aes(x = possible_outcomes) +
+  scale_x_continuous(breaks = possible_outcomes) +
+  aes(y = probs) +
+  geom_point() +
+  aes(xend = possible_outcomes,
+      yend = 0) +
+  geom_segment(lty = "dotted") +
+* labs(title = "Binomial Distribution of for ten events where probability of success for each event is .5  (success/failure probability is independent)" %&gt;%
+*        str_wrap())
+```
+]
+ 
+.panel2-base-auto[
+![](dbinom_dgeom_flipbook_files/figure-html/base_auto_16_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-base-auto[
+
+```r
+library(tidyverse)
+
+single_trial_prob &lt;- .5
+
+num_trials &lt;- 10
+
+0:num_trials -&gt;
+  possible_outcomes
+
+dbinom(x = possible_outcomes,
+       size = 10,
+       prob = single_trial_prob) -&gt;
+  probs
+
+tibble(possible_outcomes, probs) %&gt;%
+  ggplot() +
+  aes(x = possible_outcomes) +
+  scale_x_continuous(breaks = possible_outcomes) +
+  aes(y = probs) +
+  geom_point() +
+  aes(xend = possible_outcomes,
+      yend = 0) +
+  geom_segment(lty = "dotted") +
+  labs(title = "Binomial Distribution of for ten events where probability of success for each event is .5  (success/failure probability is independent)" %&gt;%
+         str_wrap()) +
+* geom_text(aes(label = probs %&gt;% round(4)),
+*           nudge_y = .01)
+```
+]
+ 
+.panel2-base-auto[
+![](dbinom_dgeom_flipbook_files/figure-html/base_auto_17_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-base-auto[
+
+```r
+library(tidyverse)
+
+single_trial_prob &lt;- .5
+
+num_trials &lt;- 10
+
+0:num_trials -&gt;
+  possible_outcomes
+
+dbinom(x = possible_outcomes,
+       size = 10,
+       prob = single_trial_prob) -&gt;
+  probs
+
+tibble(possible_outcomes, probs) %&gt;%
+  ggplot() +
+  aes(x = possible_outcomes) +
+  scale_x_continuous(breaks = possible_outcomes) +
+  aes(y = probs) +
+  geom_point() +
+  aes(xend = possible_outcomes,
+      yend = 0) +
+  geom_segment(lty = "dotted") +
+  labs(title = "Binomial Distribution of for ten events where probability of success for each event is .5  (success/failure probability is independent)" %&gt;%
+         str_wrap()) +
+  geom_text(aes(label = probs %&gt;% round(4)),
+            nudge_y = .01) +
+* annotate(geom = "text",
+*          x = 1.5,
+*          y = .2,
+*          label = "P(n==k) == {Pi}",
+*          parse = TRUE,
+*          size = 5)
+```
+]
+ 
+.panel2-base-auto[
+![](dbinom_dgeom_flipbook_files/figure-html/base_auto_18_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-base-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-base-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-base-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-more-auto[
+
+```r
+# what is the probability of at least eight successes in ten trials
+# when each trial is chance event with probability of .8
+*8:10
+```
+]
+ 
+.panel2-more-auto[
+
+```
+[1]  8  9 10
+```
+]
+
+---
+count: false
+ 
+
+.panel1-more-auto[
+
+```r
+# what is the probability of at least eight successes in ten trials
+# when each trial is chance event with probability of .8
+8:10 %&gt;%
+* dbinom(x = .,
+*        size = 10,
+*        prob = .8)
+```
+]
+ 
+.panel2-more-auto[
+
+```
+[1] 0.3019899 0.2684355 0.1073742
+```
+]
+
+---
+count: false
+ 
+
+.panel1-more-auto[
+
+```r
+# what is the probability of at least eight successes in ten trials
+# when each trial is chance event with probability of .8
+8:10 %&gt;%
+  dbinom(x = .,
+         size = 10,
+         prob = .8) %&gt;%
+* sum()
+```
+]
+ 
+.panel2-more-auto[
+
+```
+[1] 0.6777995
+```
+]
+
+---
+count: false
+ 
+
+.panel1-more-auto[
+
+```r
+# what is the probability of at least eight successes in ten trials
+# when each trial is chance event with probability of .8
+8:10 %&gt;%
+  dbinom(x = .,
+         size = 10,
+         prob = .8) %&gt;%
+  sum()
+
+# or
+*dbinom(8, 10, .8)
+```
+]
+ 
+.panel2-more-auto[
+
+```
+[1] 0.6777995
+```
+
+```
+[1] 0.3019899
+```
+]
+
+---
+count: false
+ 
+
+.panel1-more-auto[
+
+```r
+# what is the probability of at least eight successes in ten trials
+# when each trial is chance event with probability of .8
+8:10 %&gt;%
+  dbinom(x = .,
+         size = 10,
+         prob = .8) %&gt;%
+  sum()
+
+# or
+dbinom(8, 10, .8) +
+* dbinom(9, 10, .8)
+```
+]
+ 
+.panel2-more-auto[
+
+```
+[1] 0.6777995
+```
+
+```
+[1] 0.5704253
+```
+]
+
+---
+count: false
+ 
+
+.panel1-more-auto[
+
+```r
+# what is the probability of at least eight successes in ten trials
+# when each trial is chance event with probability of .8
+8:10 %&gt;%
+  dbinom(x = .,
+         size = 10,
+         prob = .8) %&gt;%
+  sum()
+
+# or
+dbinom(8, 10, .8) +
+  dbinom(9, 10, .8) +
+* dbinom(10, 10, .8)
+```
+]
+ 
+.panel2-more-auto[
+
+```
+[1] 0.6777995
+```
+
+```
+[1] 0.6777995
+```
+]
+
+&lt;style&gt;
+.panel1-more-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-more-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-more-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-more2-auto[
+
+```r
+# what is the probability of exactly 5 successes in 10 trials
+# when each trial is chance event with probility .5 success
+*dbinom(5, 10, .5)
+```
+]
+ 
+.panel2-more2-auto[
+
+```
+[1] 0.2460938
+```
+]
+
+---
+count: false
+ 
+
+.panel1-more2-auto[
+
+```r
+# what is the probability of exactly 5 successes in 10 trials
+# when each trial is chance event with probility .5 success
+dbinom(5, 10, .5)
+```
+]
+ 
+.panel2-more2-auto[
+
+```
+[1] 0.2460938
+```
+]
+
+&lt;style&gt;
+.panel1-more2-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-more2-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-more2-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,67 @@
+---
+title: "discrete distributions"
+author: "Evangeline Reynolds"
+date: "8/1/2022"
+output: html_document
+---
+
+
+```{r base, warning = F, message = F}
+library(tidyverse)
+
+single_trial_prob <- .5
+
+num_trials <- 10
+
+0:num_trials ->
+  possible_outcomes
+
+dbinom(x = possible_outcomes, 
+       size = 10,
+       prob = single_trial_prob) ->
+  probs
+
+tibble(possible_outcomes, probs) %>% 
+  ggplot() + 
+  aes(x = possible_outcomes) +
+  scale_x_continuous(breaks = possible_outcomes) +
+  aes(y = probs) + 
+  geom_point() + 
+  aes(xend = possible_outcomes,
+      yend = 0) + 
+  geom_segment(lty = "dotted") + 
+  labs(title = "Binomial Distribution of for ten events where probability of success for each event is .5  (success/failure probability is independent)" %>% 
+         str_wrap()) + 
+  geom_text(aes(label = probs %>% round(4)),
+            nudge_y = .01) + 
+  annotate(geom = "text", 
+           x = 1.5,
+           y = .2,
+           label = "P(n==k) == {Pi}",
+           parse = TRUE,
+           size = 5)
+```
+
+
+```{r more}
+# what is the probability of at least eight successes in ten trials
+# when each trial is chance event with probability of .8
+8:10 %>% 
+  dbinom(x = ., 
+         size = 10,
+         prob = .8) %>% 
+  sum()
+
+# or 
+dbinom(8, 10, .8) + 
+  dbinom(9, 10, .8) +
+  dbinom(10, 10, .8)
+```
+
+```{r more2}
+# what is the probability of exactly 5 successes in 10 trials
+# when each trial is chance event with probility .5 success
+dbinom(5, 10, .5)
+
+
+```
