@@ -12,7 +12,7 @@ usma = T
 
 # About
 
-This is a guest post from Gina Reynolds (opens in a new tab) with contributions from 3rd- and 4th-year West Point Math majors Morgan Brown and Madison McGovern. Gina works in data analytics and teaches statistics and probability at West Point. Her work focuses on tools for proximate comparison and translation in data analysis and visualization.
+This is a guest post from Gina Reynolds (opens in a new tab to https://twitter.com/EvaMaeRey) with contributions from 3rd- and 4th-year West Point Math majors Morgan Brown and Madison McGovern. Gina works in data analytics and teaches statistics and probability at West Point. Her work focuses on tools for proximate comparison and translation in data analysis and visualization.
 
 
 # TL;DR
@@ -21,11 +21,11 @@ The ggxmean package introduces new geom\_\*s for fluid visual description of som
 
 # On the path to {ggxmean}: 
 
-A few years ago, I was sitting on the floor of a packed-out ballroom watching Thomas Lin Pederson the talk: ['Extend your Ability to Extend ggplot2'](https://www.youtube.com/watch?v=uj7A3i2fi54).
+A few years ago, I was sitting on the floor of a packed-out ballroom watching Thomas Lin Pederson's talk: ['Extend your Ability to Extend ggplot2'](https://www.youtube.com/watch?v=uj7A3i2fi54).
 
 'I want to do that' I thought.
 
-And I had a use case in mind: statistical summaries, especially those for visually explaining fundamental statistical concepts like covariance, standard deviation, and correlation.
+And I had a use case in mind: statistical summaries, especially those used to explain fundamental statistical concepts like covariance, standard deviation, and correlation.
 
 <!-- https://evamaerey.github.io/statistics/covariance_correlation.html -->
 
@@ -35,7 +35,7 @@ And I had a use case in mind: statistical summaries, especially those for visual
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 ```
 
-You can visually walk through these concepts, dissecting the equations for their computation, at a chalkboard.  With ggplot2 you can of course get this done.  I put together that walk-through here: 
+You can visually walk through these concepts, dissecting the equations for their computation, at a chalkboard.  With ggplot2 you can of course get this done as well.  I put together that walk-through here: 
 
 <blockquote class="twitter-tweet">
 
@@ -49,9 +49,9 @@ So, math notation and visual representation builds of basic statistics! They co-
 
 </blockquote>
 
-But to choreograph this walk-through, there was a lot of prep that happens before starting to visualize. I had to calculate the means, standard deviations etc, all before beginning to plot, and then to feed those calculations into existing geom functions like geom_vline and geom_segment.
+But to choreograph this, there was a lot of prep that I need to do before starting to visualize. I had to calculate the means, standard deviations etc, all before beginning to plot, and then to feed those calculations into existing geom functions like geom_vline and geom_segment.
 
-This didn't feel like the powerful declarative experience that you have a lot of the time using ggplot2. Compare to the experience that you get with the boxplot.  That goes something like this:
+This didn't feel like the powerful declarative experience that you have a lot of the time using ggplot2. Compare that to the experience that you get with the boxplot.  That goes something like this:
 
 a. I want to know about the pattern in this dataset; okay, so `ggplot(data = my_data)`
 
@@ -65,19 +65,19 @@ e.  Bam! I've built my plot and I can see group differences!
 
 In this boxplot example, lots of computation happens in the background for us: min, max, 25%, 75%, median. And that is great. I understand the boxplot well; I don't need to do those computations myself. I'm happy for ggplot2 to that for me.  
 
-For the correlation stats walk through, I wanted to have the same declarative experience. I understand the mean well, and one standard deviation away from the mean, etc. I should be able to ask ggplot2 to do that computation for me -- to compute the global mean (or a group-wise mean if I'm in the mood for that) -- and put a vertical line there. 
+For the covariance/variance/correlation stats walk throughs, I wanted to have the same declarative experience. I understand the mean well, and one standard deviation away from the mean, etc. I should be able to ask ggplot2 to do that computation for me -- to compute the global mean (or a group-wise mean if I'm in the mood for that) -- and put a vertical line there. 
 
-My solution to choreographing the stats visualizations with 'base ggplot2' (without using the extension mechanisms) felt inelegant and fragile. It wasn't very portable (not easy to move to other cases -- maybe data that I or my students might be more passionate about); or dynamic (I couldn't easily do group-wise work instead of acting globally). It wasn't much fun.
+My solution to choreographing the stats visualizations with 'base ggplot2' (without using the extension mechanisms) felt inelegant and fragile. It wasn't very portable (not easy to move to other data -- maybe data that I or my students might be more passionate about); or dynamic (I couldn't easily do group-wise work instead of acting globally). It wasn't much fun.
 
-Thomas' talk and the extension system seemed like the answer to bringing ggplot2's fluid feel to this these particular statistical stories. 
+Thomas' talk and the extension system seemed like the answer to bringing ggplot2's fluid feel to these particular statistical stories. 
 
 Fast forward a few years.  I consulted great materials on extending ggplot2 like the ['Extending ggplot2' vignette](https://cran.r-project.org/web/packages/ggplot2/vignettes/extending-ggplot2.html); the ['Extension'](https://ggplot2-book.org/extensions.html) chapter in the newest edition of the ggplot2 book; again Thomas Lin Pederson's talk; [ggplot2 code on github](https://github.com/tidyverse/ggplot2/blob/main/R/geom-vline.r); and code from other extension packages in the [ggplot2 extension gallery](https://exts.ggplot2.tidyverse.org/gallery/).  
 
-Using those resources, I managed to write the geom_x_mean() functions and friends. And now I'm happy to introduce the [{ggxmean}](https://github.com/EvaMaeRey/ggxmean) package!
+Using those resources, I managed to write the geom_x_mean() function and friends. And now I'm happy to introduce the [{ggxmean}](https://github.com/EvaMaeRey/ggxmean) package!
 
-I'm excited about these functions, because I think the syntax mirrors how a teacher might go about untangling statistical equations and translate them to drawing the representations on a scatter plot --- the classroom chalkboard experience! 
+I'm excited about these functions because I think the syntax mirrors the chalkboard experience.  Naming concepts one at a time, and easily depicting them. 
 
-Moreover, it allows you do this visual storytelling beyond what you might do on a chalkboard: port the work routine to other datasets that your *students* find gripping; work with larger data sets (chalkboard work tends to be super small worked examples); and do *group-wise* computations!   Regarding this last point, in the plot that follows, ggplot instantly recomputes everything for us *by species* when we add the faceting declaration!  ggplot2 is hard at work in the background; being its awesome self.  [footnote: some of these functions aren't exported because I'm not confident of the names and some other considerations. Consider weighing in in the issues at https://github.com/EvaMaeRey/ggxmean]
+Moreover, ggxmean allows you do this visual storytelling beyond what you might do on a chalkboard: port the work routine to other datasets that your *students* find gripping; work with larger data sets (chalkboard work tends to be super small worked examples); and do *group-wise* computations!   Regarding this last point, in the plot that follows on the palmerpinguins data, ggplot instantly recomputes everything for us *by species* when we add the faceting declaration!  ggplot2 is hard at work in the background; being its awesome self.  [footnote: some of these functions aren't exported because I'm not confident of the names and some other considerations. Consider weighing in in the issues at https://github.com/EvaMaeRey/ggxmean]
 
 ```{r, message=F, warning=F}
 library(tidyverse)
@@ -104,7 +104,7 @@ palmerpenguins::penguins %>%
 
 # Way Leads onto Way ...
 
-Another set of geoms that ggxmean offers is targeted at another stats intro topic:  visualizing discussion of ordinary least squares regression.  In stats classes across the world, teachers name various statistical concepts as they teach OLS.  Again, instructors tend to visualize these with toy datasets on the classroom chalk board; this is great!  ggxmean attempts to isolate some of those concepts and package them into geoms to mirror that chalkboard experience:
+Another set of geoms that ggxmean offers is targeted at another stats intro topic:  visualizing discussion of ordinary least squares (OLS) regression.  In stats classes across the world, teachers name various statistical concepts as they teach OLS.  Again, instructors tend to visualize these with toy datasets on the classroom chalkboard; this is great!  ggxmean attempts to isolate some of those concepts and package them into geom_* functions to mirror that chalkboard experience:
 
 
 ```{r ols}
@@ -131,9 +131,9 @@ cars %>%
 
 # Extending the Scope of ggxmean: Student Contributions
 
-The work on OLS was a jumping off point for the most recent additions to the ggxmean package, written Morgan Brown and Madison McGovern, students at West Point for independent studies in the fall AY2022 term.  I'm incredibly excited to show you their contributions. 
+The work on OLS was a jumping off point for the most recent functions to the ggxmean package. Morgan Brown and Madison McGovern, students at West Point, contributed to the package for independent studies in the fall AY2022 term.  I'm incredibly excited to show you their work. 
 
-Brown and McGovern took up the question of data outliers. Here, we apply their work to famous toy datasets: Anscombe's quartet and the datasauRus dozen.  With the functions I'd previously worked on, we can *visualize* the summary statistics (mean, sds, correlation) that are typically the subject of discussions of Anscombe's quartet and the datasauRus Dozen.  This is shown here: 
+Brown and McGovern took up the question of data outliers. Here, we apply their work to famous toy datasets: Anscombe's quartet and the datasauRus dozen.  With the functions I'd worked on, we can *visualize* the summary statistics (mean, sds, correlation) that are typically the subject of discussions of Anscombe's quartet and the datasauRus Dozen.  This is shown here: 
 
 ```{r anscomb1, warning=F}
 # first some data munging
@@ -166,7 +166,7 @@ tidy_anscombe %>%
 
 <!-- This is cool. Usually we are told "and these four datasets all have the same mean, sds, correlation", with the numeric values possibly provided in a nearby table. And now we get to *see* the values right in our plot!  -->
 
-But Anscombe and datasauRus constellations are pretty special. And looking at statistics describing outlyingness also makes sense.  Using Morgan and Madison functions on leverage and influence we can easily highlight outlying observations! In the following plot, Morgan Brown's  function geom_text_leverage() calculates leverage for each observation:
+But Anscombe and datasauRus constellations are pretty special. And looking at statistics describing outlyingness also makes sense.  Using Morgan and Madison functions on leverage and influence we can easily highlight outlying observations! In the following plot, Morgan Brown's function geom_text_leverage() calculates leverage for each observation:
 
 
 ```{r anscomb}
@@ -197,7 +197,7 @@ datasauRus::datasaurus_dozen %>%
 
 # Using {ggxmean}  
 
-In my day-to-day analytic work, I'm glad to have the {ggxmean} functions ready to go.  The function I use most is, not surprisingly, geom_x_mean, for marking the global and group-wise means!  In the classroom, of course, the ggxmean functions are fun to apply to a variety of datasets used in class, after a good, old-fashioned chalkboard walk through.  The package is not yet on CRAN, so to give it a spin yourself, use remotes::install_github("EvaMaeRey/ggxmean").  
+In my day-to-day analytic work, I'm glad to have the {ggxmean} functions ready to go.  The function I use most is, not surprisingly, geom_x_mean(), for marking the global and group-wise means!  In the classroom, of course, the ggxmean functions are fun to apply to a variety of datasets used in class, after a good, old-fashioned chalkboard walk through.  The package is not yet on CRAN, so to give it a spin yourself, use remotes::install_github("EvaMaeRey/ggxmean").  
  We're open to your feedback and contributions on code, computation, and conventions (function names, arguments etc)!
 
 
