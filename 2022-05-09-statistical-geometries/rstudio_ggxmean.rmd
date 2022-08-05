@@ -10,9 +10,14 @@ knitr::opts_chunk$set(echo = TRUE)
 usma = T
 ```
 
+# About
+
+This is a guest post from Gina Reynolds (opens in a new tab) with contributions from 3rd- and 4th-year West Point Math majors Morgan Brown and Madison McGovern. Gina works in data analytics and teaches statistics and probability at West Point. Her work focuses on tools for proximate comparison and translation in data analysis and visualization.
+
+
 # TL;DR
 
-The ggxmean package introduces new geom\_\*s for fluid visual description of some basic statistical concepts. The 'titular character', geom_x\_mean draws a vertical line at the mean of x.  The package provides a number of other geoms\_\*s for quickly adding visual representations of additional statistical concepts to ggplots. 
+The ggxmean package introduces new geom\_\*s for fluid visual description of some basic statistical concepts. The 'titular character', geom_x\_mean draws a vertical line at the mean of x. 
 
 # On the path to {ggxmean}: 
 
@@ -46,7 +51,7 @@ So, math notation and visual representation builds of basic statistics! They co-
 
 But to choreograph this walk-through, there was a lot of prep that happens before starting to visualize. I had to calculate the means, standard deviations etc, all before beginning to plot, and then to feed those calculations into existing geom functions like geom_vline and geom_segment.
 
-This didn't feel like the powerful declarative experience that you have a lot of the time using ggplot2. Compare to the powerful experience that you get with the boxplot.  That goes something like this:
+This didn't feel like the powerful declarative experience that you have a lot of the time using ggplot2. Compare to the experience that you get with the boxplot.  That goes something like this:
 
 a. I want to know about the pattern in this dataset; okay, so `ggplot(data = my_data)`
 
@@ -68,7 +73,7 @@ Thomas' talk and the extension system seemed like the answer to bringing ggplot2
 
 Fast forward a few years.  I consulted great materials on extending ggplot2 like the ['Extending ggplot2' vignette](https://cran.r-project.org/web/packages/ggplot2/vignettes/extending-ggplot2.html); the ['Extension'](https://ggplot2-book.org/extensions.html) chapter in the newest edition of the ggplot2 book; again Thomas Lin Pederson's talk; [ggplot2 code on github](https://github.com/tidyverse/ggplot2/blob/main/R/geom-vline.r); and code from other extension packages in the [ggplot2 extension gallery](https://exts.ggplot2.tidyverse.org/gallery/).  
 
-Using those resourses, I managed to write geom_x_mean() and friends. And now I'm happy to introduce the [{ggxmean}](https://github.com/EvaMaeRey/ggxmean) package!
+Using those resources, I managed to write the geom_x_mean() functions and friends. And now I'm happy to introduce the [{ggxmean}](https://github.com/EvaMaeRey/ggxmean) package!
 
 I'm excited about these functions, because I think the syntax mirrors how a teacher might go about untangling statistical equations and translate them to drawing the representations on a scatter plot --- the classroom chalkboard experience! 
 
@@ -97,9 +102,9 @@ palmerpenguins::penguins %>%
 
 <!-- <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Excited to be working on a ggplot2 extension package!!! 😮🥳🤯 <a href="https://twitter.com/hashtag/ggplot2?src=hash&amp;ref_src=twsrc%5Etfw">#ggplot2</a><br><br>{ggxmean} lets you put a vertical line at the mean of x w/ geom_xmean() and do other stuff! <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a><br><br>In action: <a href="https://t.co/oxzudwlNXn">https://t.co/oxzudwlNXn</a> <br><br>Repo: <a href="https://t.co/7DTxa7n4ye">https://t.co/7DTxa7n4ye</a><br><br>Some thoughts in 🧵 <a href="https://t.co/vRjXFdmAaQ">pic.twitter.com/vRjXFdmAaQ</a></p>&mdash; Gina Reynolds (@EvaMaeRey) <a href="https://twitter.com/EvaMaeRey/status/1353484900385628166?ref_src=twsrc%5Etfw">January 24, 2021</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> -->
 
-# Way leads onto way ...
+# Way Leads onto Way ...
 
-Another set of geoms that ggxmean offers is targeted at another stats intro topic:  visualizing discussion of ordinary least squares regression.  In stats classes across the world, teachers name various statistical concepts as they teach OLS.  And they tend to visualize these with some a toy dataset on the classroom chalk board; this is great!  ggxmean attempts to isolate some of those concepts and package them into geoms to mirror that chalkboard experience:
+Another set of geoms that ggxmean offers is targeted at another stats intro topic:  visualizing discussion of ordinary least squares regression.  In stats classes across the world, teachers name various statistical concepts as they teach OLS.  Again, instructors tend to visualize these with toy datasets on the classroom chalk board; this is great!  ggxmean attempts to isolate some of those concepts and package them into geoms to mirror that chalkboard experience:
 
 
 ```{r ols}
@@ -190,13 +195,9 @@ datasauRus::datasaurus_dozen %>%
   facet_wrap(facets = "dataset")
 ```
 
+# Using {ggxmean}  
 
-
-## Not on CRAN? 
-
-Nope. Not yet, but hopefully soon! We're open to feedback and contributions on code, computation, and conventions (function names, arguments etc), and requests for new geoms in this package on [github](https://github.com/EvaMaeRey/ggxmean). 
-
-
-
+In my day-to-day analytic work, I'm glad to have the {ggxmean} functions ready to go.  The function I use most is, not surprisingly, geom_x_mean, for marking the global and group-wise means!  In the classroom, of course, the ggxmean functions are fun to apply to a variety of datasets used in class, after a good, old-fashioned chalkboard walk through.  The package is not yet on CRAN, so to give it a spin yourself, use remotes::install_github("EvaMaeRey/ggxmean").  
+ We're open to your feedback and contributions on code, computation, and conventions (function names, arguments etc)!
 
 
