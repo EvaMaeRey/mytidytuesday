@@ -1,0 +1,84 @@
+---
+title: "ggseg"
+author: "Evangeline Reynolds"
+date: "8/6/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+```
+
+
+```{r e1}
+library(tidyverse)
+library(ggseg)
+
+ggseg(
+  view = "medial",
+  ) + 
+  theme_darkbrain() + 
+  labs(title = "dk",
+       subtitle = "medial view")
+```
+
+
+
+```{r ex2}
+tibble(region = rep(c("transverse temporal",
+               "insula",
+               "precentral",
+               "superior parietal"), 2),
+       p = sample(seq(0, .5, .001), 8),
+       g = c("A", "B", "C", "D", "B", "A", "C","A"),
+       AgeG = c(rep("Young", 4),
+                rep("Old", 4 ))
+) %>%
+  ggseg(.data = .,
+        atlas = dk,
+        position = "stacked", 
+        show.legend = FALSE) +
+  aes(fill = p) +
+  scale_fill_viridis_c() +
+  aes(color = g) +
+  scale_colour_viridis_d(option = "magma") + 
+  aes(fill = NULL) + 
+  facet_wrap(~AgeG, ncol = 3) +
+  labs(title = "Ungrouped data") 
+
+layer_data(plot = last_plot()) ->
+  hide
+  
+ggseg ->
+  hide
+
+dk ->
+  hide
+
+```
+
+
+```{r ex3}
+ggseg (atlas = aseg) + 
+  aes(fill = region) +
+  theme(legend.justification = c(1, 0)) +
+  theme(legend.position = "bottom") +
+  theme(legend.text = element_text(size = 5)) +
+  guides(fill = guide_legend(ncol = 3)) 
+
+layer_data(plot = last_plot()) ->
+  hide
+
+aseg
+```
+
+
+```{r}
+ggseg (atlas = aseg) + 
+  aes(fill = region) +
+  theme(legend.justification = c(1, 0)) +
+  theme(legend.position = "bottom") +
+  theme(legend.text = element_text(size = 5)) +
+  guides(fill = guide_legend(ncol = 3)) 
+```
+
