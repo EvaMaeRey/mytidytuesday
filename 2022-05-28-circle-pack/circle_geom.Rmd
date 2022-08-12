@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## R Markdown
 
-```{r cars}
+```{r cars, eval = F}
 library(ggplot2)
 library(tidyverse)
 
@@ -123,6 +123,8 @@ ggplot(cars) +
 https://evamaerey.github.io/flipbooks/extending_ggplot2.html#86
 
 ```{r}
+library(ggplot2)
+library(tidyverse)
 create_circle <- function(x0, y0, r = 1, n = 100){
   angels <- seq(
     from = 0,
@@ -217,15 +219,18 @@ geom_circle <- function(mapping = NULL, data = NULL, stat = "circle",
 
 set.seed(1244)
 cars %>% 
-  .[1:15,] %>%
+  .[1:5,] %>%
   ggplot() +
   aes(x = speed, y = dist) +
   geom_point() +
   aes(x0 = speed, y0 = dist, r = dist^.5) +
-  geom_circle(n = 6, alpha = .2) +
+  geom_circle(n = 3, alpha = .2) +
   geom_circle(n = 13, alpha = .2) +
   geom_circle(r = 2, alpha = .2) +
   geom_circle(alpha = .2)
+
+
+layer_data(last_plot(), 2)
 
 ```
 

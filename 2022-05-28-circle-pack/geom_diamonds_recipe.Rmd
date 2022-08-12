@@ -1,0 +1,193 @@
+---
+title: "geom_diamond()"
+author: "Evangeline Reynolds"
+date: "8/6/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(ggplot2)
+library(tidyverse)
+```
+
+
+# step 0: get it done with base ggplot2
+
+```{r}
+create_diamond <- function(x0, y0, width = 1, height = 1){
+  data.frame(
+    x = c(x0 + width, x0, x0 - width, x0, x0 + width),
+    y = c(y0, y0 + height, y0, y0 - height , y0)
+  )
+}
+
+cars %>% 
+  .[1:5,] %>% 
+  mutate(diamond = purrr::map2(speed, dist, create_diamond)) %>% 
+  mutate(group = row_number()) %>% 
+  unnest() %>% 
+  ggplot() + 
+  geom_point(data = cars[1:5,], aes(x = speed, y = dist)) + 
+  geom_path(aes(x = x, y = y, group = group))
+
+```
+
+
+# step 1a:  write set up data function
+
+
+
+```{r cars}
+setup_data_diamonds <- function(data, params) {
+    if (anyDuplicated(data$group)) {
+      data$group <- paste(data$group, seq_len(nrow(data)), sep = "-")
+    }
+    data
+  }
+```
+
+# step 1b: test set up data function
+
+```{r}
+cars %>% 
+  .[1:2,] %>% 
+  mutate(group = row_number()) %>% 
+  setup_data_diamonds()
+```
+
+
+
+# step 2a: write compute panel function
+
+
+# step2a.01 write row processing function
+
+# in this case we write a function to process each row for the data
+
+```{r}
+
+create_diamond <- function(x0, y0, width = 1, height = 1){
+  data.frame(
+    x = c(x0 + width, x0, x0 - width, x0, x0 + width),
+    y = c(y0, y0 + height, y0, y0 - height , y0)
+  )
+}
+```
+
+
+# step2a.02 test row processing function
+
+```{r}
+create_diamond(1, 2)
+```
+
+
+
+# step 2a.03 the compute panel function 
+
+This function takes a full data frame, goes through each of the rows, and uses the row processing function on each, and returns a data frame
+
+```{r}
+compute_panel_diamonds <- function(data, scales) {
+    
+    cols_to_keep <- setdiff(names(data), c("x0", "y0"))
+    
+    diamonds <- lapply(seq_len(nrow(data)), function(i) {
+      
+      diamonds_path <- create_diamond(data$x0[i], data$y0[i])
+      cbind(diamonds_path, unclass(data[i, cols_to_keep]))
+      
+    })
+    
+    do.call(rbind, diamonds)
+}
+```
+
+# step 2b: Test the compute_panel
+
+```{r}
+cars %>% 
+  .[1:2,] %>% 
+  rename(x0 = speed) %>% 
+  rename(y0 = dist) %>% 
+  mutate(group = row_number()) %>% 
+  compute_panel_diamonds()
+```
+
+
+# Step 3: write ggproto
+
+```{r}
+StatDiamond <- ggproto("StatDiamond", Stat, 
+  setup_data = setup_data_diamonds,
+  compute_panel = compute_panel_diamonds,
+  required_aes = c("x0", "y0")
+)
+```
+
+
+
+# Step 4: write c
+
+```{r}
+geom_diamond <- function(mapping = NULL, 
+                        data = NULL, 
+                        stat = "diamond", 
+                        position = "identity", 
+                        ..., 
+                        width = 1, 
+                        height = 1,
+                        arrow = NULL, 
+                        lineend = "butt", 
+                        linejoin = "round", 
+                        na.rm = FALSE, 
+                        show.legend = NA, 
+                        inherit.aes = TRUE) {
+  layer(
+    data = data, 
+    mapping = mapping, 
+    stat = stat, 
+    geom = GeomPolygon, 
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes, 
+    params = list(
+      width = width, 
+      height = height,
+      arrow = arrow, 
+      lineend = lineend, 
+      linejoin = linejoin, 
+      na.rm = na.rm, 
+      ...
+    )
+  )
+}
+```
+
+# Step 5: Enjoy!
+
+```{r}
+
+set.seed(1244)
+cars %>% 
+  .[1:5,] %>%
+  ggplot() +
+  aes(x = speed, y = dist) +
+  geom_point() +
+  aes(x0 = speed, y0 = dist) +
+  geom_diamond(alpha = .2) + 
+  aes(fill = speed > 6) + 
+  geom_diamond(height = 2, alpha = 0, color = "black")
+```
+
+
+
+# Step 6: Post Mordem using layer_data
+
+
+```{r}
+layer_data(last_plot(), 2)
+```
+

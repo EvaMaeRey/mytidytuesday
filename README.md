@@ -23,7 +23,9 @@ to write prose\!
   - [2022-05-30-apply/Untitled/skeleton.html](https://evamaerey.github.io/mytidytuesday/2022-05-30-apply/Untitled/skeleton.html)
   - [2022-05-30-apply/Untitled/Untitled.html](https://evamaerey.github.io/mytidytuesday/2022-05-30-apply/Untitled/Untitled.html)
   - [2022-05-28-circle-pack/how\_geom\_treemap\_works.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/how_geom_treemap_works.html)
+  - [2022-05-28-circle-pack/geom\_diamonds\_recipe.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/geom_diamonds_recipe.html)
   - [2022-05-28-circle-pack/circle\_pack.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/circle_pack.html)
+  - [2022-05-28-circle-pack/circle\_geom\_recipe.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/circle_geom_recipe.html)
   - [2022-05-28-circle-pack/circle\_geom.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/circle_geom.html)
   - [2022-05-23-networks-presentation/networks\_presentation.html](https://evamaerey.github.io/mytidytuesday/2022-05-23-networks-presentation/networks_presentation.html)
   - [2022-05-23-networks-presentation/images\_for\_lecture/federalist\_widget
