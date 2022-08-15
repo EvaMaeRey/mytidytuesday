@@ -1,9 +1,58 @@
 ---
-title: "geom_diamond()"
-author: "Evangeline Reynolds"
-date: "8/6/2022"
-output: html_document
+title: "Exploded code"
+subtitle: "Using flipbookr and xaringan"
+author: "Me"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
 ---
+
+
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, fig.height = 4, message = F, warning = FALSE, comment = "", cache = F)
+
+options(tibble.print_min = 55)
+options(knitr.duplicate.label = "allow")
+options(width=300) # prevents data wrapping
+```
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 70%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+
+
+---
+
+
+`r flipbookr::chunk_reveal("setup", left_assign = "detect")`
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -13,9 +62,17 @@ library(tidyverse)
 ```
 
 
+---
+
 # step 0: get it done with base ggplot2
 
-```{r step0}
+---
+
+
+`r flipbookr::chunk_reveal("step0", left_assign = "detect")`
+
+
+```{r step0, include = FALSE}
 create_diamond <- function(x0, y0, width = 1, height = 1){
   data.frame(
     x = c(x0 + width, x0, x0 - width, x0, x0 + width),
@@ -35,11 +92,19 @@ cars %>%
 ```
 
 
+---
+
 # step 1a:  write set up data function
 
 
 
-```{r cars}
+---
+
+
+`r flipbookr::chunk_reveal("cars", left_assign = "detect")`
+
+
+```{r cars, include = FALSE}
 setup_data_diamonds <- function(data, params) {
     if (anyDuplicated(data$group)) {
       data$group <- paste(data$group, seq_len(nrow(data)), sep = "-")
@@ -48,19 +113,30 @@ setup_data_diamonds <- function(data, params) {
   }
 ```
 
+---
+
 # step 1b: test set up data function
 
-```{r step1b}
+---
+
+
+`r flipbookr::chunk_reveal("step1b", left_assign = "detect")`
+
+
+```{r step1b, include = FALSE}
 cars %>% 
   .[1:2,] %>% 
   mutate(group = row_number()) %>% 
   setup_data_diamonds()
 ```
 
+
 ---
+
 
 # step 2a: write compute panel function
 
+---
 
 # step2a.01 write row processing function
 
@@ -68,7 +144,11 @@ cars %>%
 
 ---
 
-```{r step_2a}
+
+`r flipbookr::chunk_reveal("step_2a", left_assign = "detect")`
+
+
+```{r step_2a, include = FALSE}
 
 create_diamond <- function(x0, y0, width = 1, height = 1){
   data.frame(
@@ -79,21 +159,35 @@ create_diamond <- function(x0, y0, width = 1, height = 1){
 ```
 
 
+---
+
 # step2a.02 test row processing function
 
-```{r 2a2}
+---
+
+
+`r flipbookr::chunk_reveal("2a2", left_assign = "detect")`
+
+
+```{r 2a2, include = FALSE}
 create_diamond(1, 2)
 
 create_diamond(4, 5)
 ```
 
-
+---
 
 # step 2a.03 the compute panel function 
 
 This function takes a full data frame, goes through each of the rows, and uses the row processing function on each, and returns a data frame
 
-```{r 2a3}
+---
+
+
+`r flipbookr::chunk_reveal("2a3", left_assign = "detect")`
+
+
+```{r 2a3, include = FALSE}
 compute_panel_diamonds <- function(data, scales) {
     
     cols_to_keep <- setdiff(names(data), c("x0", "y0"))
@@ -125,9 +219,18 @@ compute_panel_diamonds2 <- function(){
 }
 ```
 
+
+---
+
 # step 2b: Test the compute_panel
 
-```{r 2b}
+---
+
+
+`r flipbookr::chunk_reveal("2b", left_assign = "detect")`
+
+
+```{r 2b, include = FALSE}
 cars %>% 
   .[1:2,] %>% 
   rename(x0 = speed) %>% 
@@ -136,10 +239,18 @@ cars %>%
   compute_panel_diamonds()
 ```
 
+---
+
 
 # Step 3: write ggproto
 
-```{r 3}
+---
+
+
+`r flipbookr::chunk_reveal("3", left_assign = "detect")`
+
+
+```{r 3, include = FALSE}
 StatDiamond <- ggproto("StatDiamond", Stat, 
   setup_data = setup_data_diamonds,
   compute_panel = compute_panel_diamonds,
@@ -147,11 +258,17 @@ StatDiamond <- ggproto("StatDiamond", Stat,
 )
 ```
 
-
+---
 
 # Step 4: write c
 
-```{r 4}
+---
+
+
+`r flipbookr::chunk_reveal("4", left_assign = "detect")`
+
+
+```{r 4, include = FALSE}
 geom_diamond <- function(mapping = NULL, 
                         data = NULL, 
                         stat = "diamond", 
@@ -186,9 +303,17 @@ geom_diamond <- function(mapping = NULL,
 }
 ```
 
+---
+
 # Step 5: Enjoy!
 
-```{r 5}
+---
+
+
+`r flipbookr::chunk_reveal("5", left_assign = "detect")`
+
+
+```{r 5, include = FALSE}
 
 set.seed(1244)
 cars %>% 
@@ -202,12 +327,18 @@ cars %>%
   geom_diamond(height = 2, alpha = 0, color = "black")
 ```
 
-
+---
 
 # Step 6: Post Mordem using layer_data
 
 
-```{r 6}
+---
+
+
+`r flipbookr::chunk_reveal("6", left_assign = "detect")`
+
+
+```{r 6, include = FALSE}
 layer_data(last_plot(), 2)
 
 layer_data(last_plot(), 3)

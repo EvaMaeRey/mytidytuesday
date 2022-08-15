@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>ma206data day 1 demo</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# ma206data day 1 demo
+## prelim_NationalAnthemTimes
+
+---
+
+class: inverse, center, middle
+
+# "Let data tell the story" 
+--
+
+Tintle et al. 
+
+--
+Key idea box #1 of ISI. 
+
+--
+Idea #1.
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 70%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+
+# Hans Rosling Master Storyteller
+
+
+--
+
+&lt;iframe width="767" height="431" src="https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
+https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A
+
+---
+
+Not just animation (overtime)
+
+--
+
+animation of graph set up!!
+
+
+
+
+---
+
+background-image: url(images/paste-A8314E33.png)
+background-size: cover
+
+---
+
+background-image: url(images/paste-D46A77DF.png)
+background-size: cover
+
+---
+
+
+background-image: url(images/paste-CAD8C893.png)
+background-size: cover
+
+---
+
+background-image: url(images/paste-DC46E991.png)
+background-size: cover
+
+
+---
+
+# Hans walks us through how each visual channel that will represent the data!
+
+---
+
+![](https://clauswilke.com/dataviz/aesthetic_mapping_files/figure-html/common-aesthetics-1.png)
+
+
+
+---
+
+# storytelling advice that resonates.
+
+
+![](images/paste-DD5DC294.png)
+Also, see Garr Reynolds 'presentation zen': https://policyviz.com/podcast/episode-62-garr-reynolds/
+???
+'Making the simple complicated is commonplace; making the complicated simple, awesomely simple, that's creativity.'
+— Charles Mingus
+'Cognitive scientists have discovered three important features of the human information processing system that are particularly relevant for PowerPoint users: dual-channels, that is, people have separate information processing channels for visual material and verbal material; limited capacity, that is, people can pay attention to only a few pieces of information in each channel at a time; and active processing, that is, people understand the presented material when they pay attention to the relevant material, organize it into a coherent mental structure, and integrate it with their prior knowledge.'
+— Rich Mayer, in an interview with Sociable Media, Inc.
+
+---
+class: inverse, center, middle
+
+## ggplot2 is all about building up plots and layouts!!
+
+
+---
+
+# Baller/Reynolds MA206 2021
+
+## Let's install the gapminder package...
+
+--
+
+## a package that is totally unrelated to the other course material...
+
+--
+
+# 😣😣😣 Why, why, why? 
+
+---
+
+![](images/ma206datahex.png)
+
+---
+class: inverse, middle, center
+
+`install.packages("remotes")`
+
+`install.github("EvaMaeRey/ma206data")`
+
+
+---
+class: center, middle, inverse
+
+# Figure 2.2
+
+
+---
+
+
+count: false
+ 
+
+.panel1-fig_2_2-auto[
+
+```r
+*library(tidyverse)
+```
+]
+ 
+.panel2-fig_2_2-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-fig_2_2-auto[
+
+```r
+library(tidyverse)
+*library(ma206data)
+```
+]
+ 
+.panel2-fig_2_2-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-fig_2_2-auto[
+
+```r
+library(tidyverse)
+library(ma206data)
+
+*prelim_NationalAnthemTimes
+```
+]
+ 
+.panel2-fig_2_2-auto[
+
+```
+# A tibble: 40 × 4
+    year genre    sex     time
+   &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;dbl&gt;
+ 1  2019 R&amp;B/Soul female   121
+ 2  2018 Pop      female   113
+ 3  2017 Country  male     124
+ 4  2016 Pop      female   129
+ 5  2015 Pop      female   124
+ 6  2014 Other    female   114
+ 7  2013 Pop      female   155
+ 8  2012 Pop      female    94
+ 9  2011 Pop      female   114
+10  2010 Country  female   107
+11  2009 R&amp;B/Soul female   130
+12  2008 Pop      female   114
+13  2007 Pop      male      90
+14  2006 R&amp;B/Soul mixed    128
+15  2005 Other    mixed    112
+16  2004 Pop      female   129
+17  2003 Country  female    96
+18  2002 Pop      female   116
+19  2001 Pop      male     110
+20  2000 Country  female   121
+21  1999 Pop      female   115
+22  1998 Pop      female    87
+23  1997 R&amp;B/Soul male     113
+24  1996 Pop      female    95
+25  1995 Other    female   100
+26  1994 R&amp;B/Soul female   153
+27  1993 Country  male     105
+28  1992 Pop      male     126
+29  1991 Pop      female   116
+30  1990 R&amp;B/Soul male      90
+31  1989 Pop      male      85
+32  1988 Other    male      91
+33  1987 Pop      male      64
+34  1986 Other    male      83
+35  1985 Other    mixed     81
+36  1984 Pop      male     100
+37  1983 Other    female   102
+38  1982 R&amp;B/Soul female    99
+39  1981 Pop      female    86
+40  1980 Pop      female    89
+```
+]
+
+---
+count: false
+ 
+
+.panel1-fig_2_2-auto[
+
+```r
+library(tidyverse)
+library(ma206data)
+
+prelim_NationalAnthemTimes %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-fig_2_2-auto[
+![](ma206data_day1_flipbook_files/figure-html/fig_2_2_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fig_2_2-auto[
+
+```r
+library(tidyverse)
+library(ma206data)
+
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+* aes(x = time)
+```
+]
+ 
+.panel2-fig_2_2-auto[
+![](ma206data_day1_flipbook_files/figure-html/fig_2_2_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fig_2_2-auto[
+
+```r
+library(tidyverse)
+library(ma206data)
+
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+  aes(x = time) +
+* geom_rug()
+```
+]
+ 
+.panel2-fig_2_2-auto[
+![](ma206data_day1_flipbook_files/figure-html/fig_2_2_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fig_2_2-auto[
+
+```r
+library(tidyverse)
+library(ma206data)
+
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+  aes(x = time) +
+  geom_rug() +
+* geom_dotplot()
+```
+]
+ 
+.panel2-fig_2_2-auto[
+![](ma206data_day1_flipbook_files/figure-html/fig_2_2_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fig_2_2-auto[
+
+```r
+library(tidyverse)
+library(ma206data)
+
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+  aes(x = time) +
+  geom_rug() +
+  geom_dotplot() +
+* labs(title = "Superbowl National Anthem Performance Duration")
+```
+]
+ 
+.panel2-fig_2_2-auto[
+![](ma206data_day1_flipbook_files/figure-html/fig_2_2_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fig_2_2-auto[
+
+```r
+library(tidyverse)
+library(ma206data)
+
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+  aes(x = time) +
+  geom_rug() +
+  geom_dotplot() +
+  labs(title = "Superbowl National Anthem Performance Duration") +
+* labs(x = "Duration in Seconds")
+```
+]
+ 
+.panel2-fig_2_2-auto[
+![](ma206data_day1_flipbook_files/figure-html/fig_2_2_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fig_2_2-auto[
+
+```r
+library(tidyverse)
+library(ma206data)
+
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+  aes(x = time) +
+  geom_rug() +
+  geom_dotplot() +
+  labs(title = "Superbowl National Anthem Performance Duration") +
+  labs(x = "Duration in Seconds") +
+* labs(y = "Number of Performances")
+```
+]
+ 
+.panel2-fig_2_2-auto[
+![](ma206data_day1_flipbook_files/figure-html/fig_2_2_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-fig_2_2-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-fig_2_2-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-fig_2_2-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+class: center, middle, inverse
+
+# Figure 2.3-6
+
+---
+
+
+count: false
+ 
+
+.panel1-fig2_3_6-auto[
+
+```r
+*prelim_NationalAnthemTimes
+```
+]
+ 
+.panel2-fig2_3_6-auto[
+
+```
+# A tibble: 40 × 4
+    year genre    sex     time
+   &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;dbl&gt;
+ 1  2019 R&amp;B/Soul female   121
+ 2  2018 Pop      female   113
+ 3  2017 Country  male     124
+ 4  2016 Pop      female   129
+ 5  2015 Pop      female   124
+ 6  2014 Other    female   114
+ 7  2013 Pop      female   155
+ 8  2012 Pop      female    94
+ 9  2011 Pop      female   114
+10  2010 Country  female   107
+11  2009 R&amp;B/Soul female   130
+12  2008 Pop      female   114
+13  2007 Pop      male      90
+14  2006 R&amp;B/Soul mixed    128
+15  2005 Other    mixed    112
+16  2004 Pop      female   129
+17  2003 Country  female    96
+18  2002 Pop      female   116
+19  2001 Pop      male     110
+20  2000 Country  female   121
+21  1999 Pop      female   115
+22  1998 Pop      female    87
+23  1997 R&amp;B/Soul male     113
+24  1996 Pop      female    95
+25  1995 Other    female   100
+26  1994 R&amp;B/Soul female   153
+27  1993 Country  male     105
+28  1992 Pop      male     126
+29  1991 Pop      female   116
+30  1990 R&amp;B/Soul male      90
+31  1989 Pop      male      85
+32  1988 Other    male      91
+33  1987 Pop      male      64
+34  1986 Other    male      83
+35  1985 Other    mixed     81
+36  1984 Pop      male     100
+37  1983 Other    female   102
+38  1982 R&amp;B/Soul female    99
+39  1981 Pop      female    86
+40  1980 Pop      female    89
+```
+]
+
+---
+count: false
+ 
+
+.panel1-fig2_3_6-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+* names()
+```
+]
+ 
+.panel2-fig2_3_6-auto[
+
+```
+[1] "year"  "genre" "sex"   "time" 
+```
+]
+
+---
+count: false
+ 
+
+.panel1-fig2_3_6-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+  names()
+
+*prelim_NationalAnthemTimes
+```
+]
+ 
+.panel2-fig2_3_6-auto[
+
+```
+[1] "year"  "genre" "sex"   "time" 
+```
+
+```
+# A tibble: 40 × 4
+    year genre    sex     time
+   &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;dbl&gt;
+ 1  2019 R&amp;B/Soul female   121
+ 2  2018 Pop      female   113
+ 3  2017 Country  male     124
+ 4  2016 Pop      female   129
+ 5  2015 Pop      female   124
+ 6  2014 Other    female   114
+ 7  2013 Pop      female   155
+ 8  2012 Pop      female    94
+ 9  2011 Pop      female   114
+10  2010 Country  female   107
+11  2009 R&amp;B/Soul female   130
+12  2008 Pop      female   114
+13  2007 Pop      male      90
+14  2006 R&amp;B/Soul mixed    128
+15  2005 Other    mixed    112
+16  2004 Pop      female   129
+17  2003 Country  female    96
+18  2002 Pop      female   116
+19  2001 Pop      male     110
+20  2000 Country  female   121
+21  1999 Pop      female   115
+22  1998 Pop      female    87
+23  1997 R&amp;B/Soul male     113
+24  1996 Pop      female    95
+25  1995 Other    female   100
+26  1994 R&amp;B/Soul female   153
+27  1993 Country  male     105
+28  1992 Pop      male     126
+29  1991 Pop      female   116
+30  1990 R&amp;B/Soul male      90
+31  1989 Pop      male      85
+32  1988 Other    male      91
+33  1987 Pop      male      64
+34  1986 Other    male      83
+35  1985 Other    mixed     81
+36  1984 Pop      male     100
+37  1983 Other    female   102
+38  1982 R&amp;B/Soul female    99
+39  1981 Pop      female    86
+40  1980 Pop      female    89
+```
+]
+
+---
+count: false
+ 
+
+.panel1-fig2_3_6-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+  names()
+
+prelim_NationalAnthemTimes %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-fig2_3_6-auto[
+
+```
+[1] "year"  "genre" "sex"   "time" 
+```
+
+![](ma206data_day1_flipbook_files/figure-html/fig2_3_6_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fig2_3_6-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+  names()
+
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+* aes(x = time)
+```
+]
+ 
+.panel2-fig2_3_6-auto[
+
+```
+[1] "year"  "genre" "sex"   "time" 
+```
+
+![](ma206data_day1_flipbook_files/figure-html/fig2_3_6_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fig2_3_6-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+  names()
+
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+  aes(x = time) +
+* geom_rug()
+```
+]
+ 
+.panel2-fig2_3_6-auto[
+
+```
+[1] "year"  "genre" "sex"   "time" 
+```
+
+![](ma206data_day1_flipbook_files/figure-html/fig2_3_6_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fig2_3_6-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+  names()
+
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+  aes(x = time) +
+  geom_rug() +
+* geom_histogram()
+```
+]
+ 
+.panel2-fig2_3_6-auto[
+
+```
+[1] "year"  "genre" "sex"   "time" 
+```
+
+![](ma206data_day1_flipbook_files/figure-html/fig2_3_6_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fig2_3_6-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+  names()
+
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+  aes(x = time) +
+  geom_rug() +
+  geom_histogram() +
+* ggxmean::geom_x_mean()
+```
+]
+ 
+.panel2-fig2_3_6-auto[
+
+```
+[1] "year"  "genre" "sex"   "time" 
+```
+
+![](ma206data_day1_flipbook_files/figure-html/fig2_3_6_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fig2_3_6-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+  names()
+
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+  aes(x = time) +
+  geom_rug() +
+  geom_histogram() +
+  ggxmean::geom_x_mean() +
+* ggxmean::geom_x_mean_label()
+```
+]
+ 
+.panel2-fig2_3_6-auto[
+
+```
+[1] "year"  "genre" "sex"   "time" 
+```
+
+![](ma206data_day1_flipbook_files/figure-html/fig2_3_6_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fig2_3_6-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+  names()
+
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+  aes(x = time) +
+  geom_rug() +
+  geom_histogram() +
+  ggxmean::geom_x_mean() +
+  ggxmean::geom_x_mean_label() +
+* ggxmean:::geom_x1sd(lty = "dashed")
+```
+]
+ 
+.panel2-fig2_3_6-auto[
+
+```
+[1] "year"  "genre" "sex"   "time" 
+```
+
+![](ma206data_day1_flipbook_files/figure-html/fig2_3_6_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fig2_3_6-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+  names()
+
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+  aes(x = time) +
+  geom_rug() +
+  geom_histogram() +
+  ggxmean::geom_x_mean() +
+  ggxmean::geom_x_mean_label() +
+  ggxmean:::geom_x1sd(lty = "dashed") +
+* facet_wrap(facets = vars(sex), ncol = 1)
+```
+]
+ 
+.panel2-fig2_3_6-auto[
+
+```
+[1] "year"  "genre" "sex"   "time" 
+```
+
+![](ma206data_day1_flipbook_files/figure-html/fig2_3_6_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fig2_3_6-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+  names()
+
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+  aes(x = time) +
+  geom_rug() +
+  geom_histogram() +
+  ggxmean::geom_x_mean() +
+  ggxmean::geom_x_mean_label() +
+  ggxmean:::geom_x1sd(lty = "dashed") +
+  facet_wrap(facets = vars(sex), ncol = 1) +
+* facet_wrap(facets = vars(genre), ncol = 1)
+```
+]
+ 
+.panel2-fig2_3_6-auto[
+
+```
+[1] "year"  "genre" "sex"   "time" 
+```
+
+![](ma206data_day1_flipbook_files/figure-html/fig2_3_6_auto_12_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fig2_3_6-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+  names()
+
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+  aes(x = time) +
+  geom_rug() +
+  geom_histogram() +
+  ggxmean::geom_x_mean() +
+  ggxmean::geom_x_mean_label() +
+  ggxmean:::geom_x1sd(lty = "dashed") +
+  facet_wrap(facets = vars(sex), ncol = 1) +
+  facet_wrap(facets = vars(genre), ncol = 1) +
+* facet_grid(rows = vars(sex), cols = vars(genre))
+```
+]
+ 
+.panel2-fig2_3_6-auto[
+
+```
+[1] "year"  "genre" "sex"   "time" 
+```
+
+![](ma206data_day1_flipbook_files/figure-html/fig2_3_6_auto_13_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fig2_3_6-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+  names()
+
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+  aes(x = time) +
+  geom_rug() +
+  geom_histogram() +
+  ggxmean::geom_x_mean() +
+  ggxmean::geom_x_mean_label() +
+  ggxmean:::geom_x1sd(lty = "dashed") +
+  facet_wrap(facets = vars(sex), ncol = 1) +
+  facet_wrap(facets = vars(genre), ncol = 1) +
+  facet_grid(rows = vars(sex), cols = vars(genre)) +
+* aes(color = sex)
+```
+]
+ 
+.panel2-fig2_3_6-auto[
+
+```
+[1] "year"  "genre" "sex"   "time" 
+```
+
+![](ma206data_day1_flipbook_files/figure-html/fig2_3_6_auto_14_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-fig2_3_6-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-fig2_3_6-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-fig2_3_6-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+# 'The best solution to visual dispay of multivariate data is using small multiples' - Eduard Tufte paraphrase
+
+--
+
+### Small multiple:  One method Tufte encourages to allow quick visual comparison of multiple series is the small multiple, a chart with many series shown on a single pair of axes that can often be easier to read when displayed as several separate pairs of axes placed next to each other. He suggests this is particularly helpful when the series are measured on quite different vertical (y-axis) scales, but over the same range on the horizontal x-axis (usually time) - wikipedia
+
+
+
+---
+class: center, middle, inverse
+
+
+# Figure 2.8
+
+
+---
+
+
+count: false
+ 
+
+.panel1-fig2_8-auto[
+
+```r
+*prelim_NationalAnthemTimes
+```
+]
+ 
+.panel2-fig2_8-auto[
+
+```
+# A tibble: 40 × 4
+    year genre    sex     time
+   &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;dbl&gt;
+ 1  2019 R&amp;B/Soul female   121
+ 2  2018 Pop      female   113
+ 3  2017 Country  male     124
+ 4  2016 Pop      female   129
+ 5  2015 Pop      female   124
+ 6  2014 Other    female   114
+ 7  2013 Pop      female   155
+ 8  2012 Pop      female    94
+ 9  2011 Pop      female   114
+10  2010 Country  female   107
+11  2009 R&amp;B/Soul female   130
+12  2008 Pop      female   114
+13  2007 Pop      male      90
+14  2006 R&amp;B/Soul mixed    128
+15  2005 Other    mixed    112
+16  2004 Pop      female   129
+17  2003 Country  female    96
+18  2002 Pop      female   116
+19  2001 Pop      male     110
+20  2000 Country  female   121
+21  1999 Pop      female   115
+22  1998 Pop      female    87
+23  1997 R&amp;B/Soul male     113
+24  1996 Pop      female    95
+25  1995 Other    female   100
+26  1994 R&amp;B/Soul female   153
+27  1993 Country  male     105
+28  1992 Pop      male     126
+29  1991 Pop      female   116
+30  1990 R&amp;B/Soul male      90
+31  1989 Pop      male      85
+32  1988 Other    male      91
+33  1987 Pop      male      64
+34  1986 Other    male      83
+35  1985 Other    mixed     81
+36  1984 Pop      male     100
+37  1983 Other    female   102
+38  1982 R&amp;B/Soul female    99
+39  1981 Pop      female    86
+40  1980 Pop      female    89
+```
+]
+
+---
+count: false
+ 
+
+.panel1-fig2_8-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+* names()
+```
+]
+ 
+.panel2-fig2_8-auto[
+
+```
+[1] "year"  "genre" "sex"   "time" 
+```
+]
+
+---
+count: false
+ 
+
+.panel1-fig2_8-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+  names()
+
+*prelim_NationalAnthemTimes
+```
+]
+ 
+.panel2-fig2_8-auto[
+
+```
+[1] "year"  "genre" "sex"   "time" 
+```
+
+```
+# A tibble: 40 × 4
+    year genre    sex     time
+   &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;dbl&gt;
+ 1  2019 R&amp;B/Soul female   121
+ 2  2018 Pop      female   113
+ 3  2017 Country  male     124
+ 4  2016 Pop      female   129
+ 5  2015 Pop      female   124
+ 6  2014 Other    female   114
+ 7  2013 Pop      female   155
+ 8  2012 Pop      female    94
+ 9  2011 Pop      female   114
+10  2010 Country  female   107
+11  2009 R&amp;B/Soul female   130
+12  2008 Pop      female   114
+13  2007 Pop      male      90
+14  2006 R&amp;B/Soul mixed    128
+15  2005 Other    mixed    112
+16  2004 Pop      female   129
+17  2003 Country  female    96
+18  2002 Pop      female   116
+19  2001 Pop      male     110
+20  2000 Country  female   121
+21  1999 Pop      female   115
+22  1998 Pop      female    87
+23  1997 R&amp;B/Soul male     113
+24  1996 Pop      female    95
+25  1995 Other    female   100
+26  1994 R&amp;B/Soul female   153
+27  1993 Country  male     105
+28  1992 Pop      male     126
+29  1991 Pop      female   116
+30  1990 R&amp;B/Soul male      90
+31  1989 Pop      male      85
+32  1988 Other    male      91
+33  1987 Pop      male      64
+34  1986 Other    male      83
+35  1985 Other    mixed     81
+36  1984 Pop      male     100
+37  1983 Other    female   102
+38  1982 R&amp;B/Soul female    99
+39  1981 Pop      female    86
+40  1980 Pop      female    89
+```
+]
+
+---
+count: false
+ 
+
+.panel1-fig2_8-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+  names()
+
+prelim_NationalAnthemTimes %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-fig2_8-auto[
+
+```
+[1] "year"  "genre" "sex"   "time" 
+```
+
+![](ma206data_day1_flipbook_files/figure-html/fig2_8_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fig2_8-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+  names()
+
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+* aes(x = year)
+```
+]
+ 
+.panel2-fig2_8-auto[
+
+```
+[1] "year"  "genre" "sex"   "time" 
+```
+
+![](ma206data_day1_flipbook_files/figure-html/fig2_8_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fig2_8-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+  names()
+
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+  aes(x = year) +
+* aes(y = time)
+```
+]
+ 
+.panel2-fig2_8-auto[
+
+```
+[1] "year"  "genre" "sex"   "time" 
+```
+
+![](ma206data_day1_flipbook_files/figure-html/fig2_8_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fig2_8-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+  names()
+
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+  aes(x = year) +
+  aes(y = time) +
+* geom_rug()
+```
+]
+ 
+.panel2-fig2_8-auto[
+
+```
+[1] "year"  "genre" "sex"   "time" 
+```
+
+![](ma206data_day1_flipbook_files/figure-html/fig2_8_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fig2_8-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+  names()
+
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+  aes(x = year) +
+  aes(y = time) +
+  geom_rug() +
+* geom_point()
+```
+]
+ 
+.panel2-fig2_8-auto[
+
+```
+[1] "year"  "genre" "sex"   "time" 
+```
+
+![](ma206data_day1_flipbook_files/figure-html/fig2_8_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fig2_8-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+  names()
+
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+  aes(x = year) +
+  aes(y = time) +
+  geom_rug() +
+  geom_point() +
+* aes(color = sex)
+```
+]
+ 
+.panel2-fig2_8-auto[
+
+```
+[1] "year"  "genre" "sex"   "time" 
+```
+
+![](ma206data_day1_flipbook_files/figure-html/fig2_8_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fig2_8-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+  names()
+
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+  aes(x = year) +
+  aes(y = time) +
+  geom_rug() +
+  geom_point() +
+  aes(color = sex) +
+* aes(shape = sex)
+```
+]
+ 
+.panel2-fig2_8-auto[
+
+```
+[1] "year"  "genre" "sex"   "time" 
+```
+
+![](ma206data_day1_flipbook_files/figure-html/fig2_8_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fig2_8-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+  names()
+
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+  aes(x = year) +
+  aes(y = time) +
+  geom_rug() +
+  geom_point() +
+  aes(color = sex) +
+  aes(shape = sex) +
+* facet_wrap(facets = vars(sex), ncol = 1)
+```
+]
+ 
+.panel2-fig2_8-auto[
+
+```
+[1] "year"  "genre" "sex"   "time" 
+```
+
+![](ma206data_day1_flipbook_files/figure-html/fig2_8_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-fig2_8-auto[
+
+```r
+prelim_NationalAnthemTimes %&gt;%
+  names()
+
+prelim_NationalAnthemTimes %&gt;%
+  ggplot() +
+  aes(x = year) +
+  aes(y = time) +
+  geom_rug() +
+  geom_point() +
+  aes(color = sex) +
+  aes(shape = sex) +
+  facet_wrap(facets = vars(sex), ncol = 1) +
+* geom_smooth()  # just for fun
+```
+]
+ 
+.panel2-fig2_8-auto[
+
+```
+[1] "year"  "genre" "sex"   "time" 
+```
+
+![](ma206data_day1_flipbook_files/figure-html/fig2_8_auto_12_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-fig2_8-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-fig2_8-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-fig2_8-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+# Fluid plotting/storytelling w/ ggplot2
+
+--
+
+Hadley Wickham, ggplot2 author on it's motivation:
+
+&gt; ### And, you know, I'd get a dataset. And, *in my head I could very clearly kind of picture*, I want to put this on the x-axis. Let's put this on the y-axis, draw a line, put some points here, break it up by this variable. 
+
+--
+
+&gt; ### And then, like, getting that vision out of my head, and into reality, it's just really, really hard. Just, like, felt harder than it should be. Like, there's a lot of custom programming involved,
+
+
+---
+
+&gt; ### where I just felt, like, to me, I just wanted to say, like, you know, *this is what I'm thinking, this is how I'm picturing this plot. Like you're the computer 'Go and do it'.* 
+
+--
+
+&gt; ### ... and I'd also been reading about the Grammar of Graphics by Leland Wilkinson, I got to meet him a couple of times and ... I was, like, this book has been, like, written for me. 
+https://www.trifacta.com/podcast/tidy-data-with-hadley-wickham/
+
+---
+
+# Summarizing: 
+--
+Promise of ggplot2?
+
+--
+## Getting the plot form you picture in your head ... 
+
+--
+
+## ... into reality...
+
+--
+## ... by describing it.
+
+
+---
+class: inverse, center, middle
+
+# Intentional data exploration ...
+
+--
+
+# and intentional communication!
+
+--
+
+# give decisions full voice. Move slowly and with intention.  +1 for + aes() editorializing as usual.
+
+---
+
+# ggplot2 is called a 'declarative' graphing system.
+
+--
+# It lets you *'speak your plot into existence'*. (Thomas Lin Pederson?) 
+
+
+---
+
+
+# Other examples:
+
+
+# https://evamaerey.github.io/mytidytuesday/2022-07-22-ma206data-demo/ma206data_package_demo.html
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

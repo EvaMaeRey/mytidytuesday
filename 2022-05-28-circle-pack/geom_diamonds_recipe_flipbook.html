@@ -1,0 +1,2051 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Exploded code</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Me" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Exploded code
+## Using flipbookr and xaringan
+### Me
+
+---
+
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 70%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+&lt;/style&gt;
+
+
+---
+
+
+count: false
+ 
+
+.panel1-setup-auto[
+
+```r
+*knitr::opts_chunk$set(echo = TRUE)
+```
+]
+ 
+.panel2-setup-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-setup-auto[
+
+```r
+knitr::opts_chunk$set(echo = TRUE)
+
+*library(ggplot2)
+```
+]
+ 
+.panel2-setup-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-setup-auto[
+
+```r
+knitr::opts_chunk$set(echo = TRUE)
+
+library(ggplot2)
+*library(tidyverse)
+```
+]
+ 
+.panel2-setup-auto[
+
+]
+
+&lt;style&gt;
+.panel1-setup-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-setup-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-setup-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+# step 0: get it done with base ggplot2
+
+---
+
+
+count: false
+ 
+
+.panel1-step0-auto[
+
+```r
+*create_diamond &lt;- function(x0, y0, width = 1, height = 1){
+* data.frame(
+*   x = c(x0 + width, x0, x0 - width, x0, x0 + width),
+*   y = c(y0, y0 + height, y0, y0 - height , y0)
+* )
+*} 
+```
+]
+ 
+.panel2-step0-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-step0-auto[
+
+```r
+create_diamond &lt;- function(x0, y0, width = 1, height = 1){
+  data.frame(
+    x = c(x0 + width, x0, x0 - width, x0, x0 + width),
+    y = c(y0, y0 + height, y0, y0 - height , y0)
+  )
+}
+
+*cars
+```
+]
+ 
+.panel2-step0-auto[
+
+```
+   speed dist
+1      4    2
+2      4   10
+3      7    4
+4      7   22
+5      8   16
+6      9   10
+7     10   18
+8     10   26
+9     10   34
+10    11   17
+11    11   28
+12    12   14
+13    12   20
+14    12   24
+15    12   28
+16    13   26
+17    13   34
+18    13   34
+19    13   46
+20    14   26
+21    14   36
+22    14   60
+23    14   80
+24    15   20
+25    15   26
+26    15   54
+27    16   32
+28    16   40
+29    17   32
+30    17   40
+31    17   50
+32    18   42
+33    18   56
+34    18   76
+35    18   84
+36    19   36
+37    19   46
+38    19   68
+39    20   32
+40    20   48
+41    20   52
+42    20   56
+43    20   64
+44    22   66
+45    23   54
+46    24   70
+47    24   92
+48    24   93
+49    24  120
+50    25   85
+```
+]
+
+---
+count: false
+ 
+
+.panel1-step0-auto[
+
+```r
+create_diamond &lt;- function(x0, y0, width = 1, height = 1){
+  data.frame(
+    x = c(x0 + width, x0, x0 - width, x0, x0 + width),
+    y = c(y0, y0 + height, y0, y0 - height , y0)
+  )
+}
+
+cars %&gt;%
+* .[1:5,]
+```
+]
+ 
+.panel2-step0-auto[
+
+```
+  speed dist
+1     4    2
+2     4   10
+3     7    4
+4     7   22
+5     8   16
+```
+]
+
+---
+count: false
+ 
+
+.panel1-step0-auto[
+
+```r
+create_diamond &lt;- function(x0, y0, width = 1, height = 1){
+  data.frame(
+    x = c(x0 + width, x0, x0 - width, x0, x0 + width),
+    y = c(y0, y0 + height, y0, y0 - height , y0)
+  )
+}
+
+cars %&gt;%
+  .[1:5,] %&gt;%
+* mutate(diamond = purrr::map2(speed, dist, create_diamond))
+```
+]
+ 
+.panel2-step0-auto[
+
+```
+  speed dist                           diamond
+1     4    2      5, 4, 3, 4, 5, 2, 3, 2, 1, 2
+2     4   10  5, 4, 3, 4, 5, 10, 11, 10, 9, 10
+3     7    4      8, 7, 6, 7, 8, 4, 5, 4, 3, 4
+4     7   22 8, 7, 6, 7, 8, 22, 23, 22, 21, 22
+5     8   16 9, 8, 7, 8, 9, 16, 17, 16, 15, 16
+```
+]
+
+---
+count: false
+ 
+
+.panel1-step0-auto[
+
+```r
+create_diamond &lt;- function(x0, y0, width = 1, height = 1){
+  data.frame(
+    x = c(x0 + width, x0, x0 - width, x0, x0 + width),
+    y = c(y0, y0 + height, y0, y0 - height , y0)
+  )
+}
+
+cars %&gt;%
+  .[1:5,] %&gt;%
+  mutate(diamond = purrr::map2(speed, dist, create_diamond)) %&gt;%
+* mutate(group = row_number())
+```
+]
+ 
+.panel2-step0-auto[
+
+```
+  speed dist                           diamond group
+1     4    2      5, 4, 3, 4, 5, 2, 3, 2, 1, 2     1
+2     4   10  5, 4, 3, 4, 5, 10, 11, 10, 9, 10     2
+3     7    4      8, 7, 6, 7, 8, 4, 5, 4, 3, 4     3
+4     7   22 8, 7, 6, 7, 8, 22, 23, 22, 21, 22     4
+5     8   16 9, 8, 7, 8, 9, 16, 17, 16, 15, 16     5
+```
+]
+
+---
+count: false
+ 
+
+.panel1-step0-auto[
+
+```r
+create_diamond &lt;- function(x0, y0, width = 1, height = 1){
+  data.frame(
+    x = c(x0 + width, x0, x0 - width, x0, x0 + width),
+    y = c(y0, y0 + height, y0, y0 - height , y0)
+  )
+}
+
+cars %&gt;%
+  .[1:5,] %&gt;%
+  mutate(diamond = purrr::map2(speed, dist, create_diamond)) %&gt;%
+  mutate(group = row_number()) %&gt;%
+* unnest()
+```
+]
+ 
+.panel2-step0-auto[
+
+```
+# A tibble: 25 × 5
+   speed  dist     x     y group
+   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+ 1     4     2     5     2     1
+ 2     4     2     4     3     1
+ 3     4     2     3     2     1
+ 4     4     2     4     1     1
+ 5     4     2     5     2     1
+ 6     4    10     5    10     2
+ 7     4    10     4    11     2
+ 8     4    10     3    10     2
+ 9     4    10     4     9     2
+10     4    10     5    10     2
+11     7     4     8     4     3
+12     7     4     7     5     3
+13     7     4     6     4     3
+14     7     4     7     3     3
+15     7     4     8     4     3
+16     7    22     8    22     4
+17     7    22     7    23     4
+18     7    22     6    22     4
+19     7    22     7    21     4
+20     7    22     8    22     4
+21     8    16     9    16     5
+22     8    16     8    17     5
+23     8    16     7    16     5
+24     8    16     8    15     5
+25     8    16     9    16     5
+```
+]
+
+---
+count: false
+ 
+
+.panel1-step0-auto[
+
+```r
+create_diamond &lt;- function(x0, y0, width = 1, height = 1){
+  data.frame(
+    x = c(x0 + width, x0, x0 - width, x0, x0 + width),
+    y = c(y0, y0 + height, y0, y0 - height , y0)
+  )
+}
+
+cars %&gt;%
+  .[1:5,] %&gt;%
+  mutate(diamond = purrr::map2(speed, dist, create_diamond)) %&gt;%
+  mutate(group = row_number()) %&gt;%
+  unnest() %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-step0-auto[
+![](geom_diamonds_recipe_flipbook_files/figure-html/step0_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-step0-auto[
+
+```r
+create_diamond &lt;- function(x0, y0, width = 1, height = 1){
+  data.frame(
+    x = c(x0 + width, x0, x0 - width, x0, x0 + width),
+    y = c(y0, y0 + height, y0, y0 - height , y0)
+  )
+}
+
+cars %&gt;%
+  .[1:5,] %&gt;%
+  mutate(diamond = purrr::map2(speed, dist, create_diamond)) %&gt;%
+  mutate(group = row_number()) %&gt;%
+  unnest() %&gt;%
+  ggplot() +
+* geom_point(data = cars[1:5,], aes(x = speed, y = dist))
+```
+]
+ 
+.panel2-step0-auto[
+![](geom_diamonds_recipe_flipbook_files/figure-html/step0_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-step0-auto[
+
+```r
+create_diamond &lt;- function(x0, y0, width = 1, height = 1){
+  data.frame(
+    x = c(x0 + width, x0, x0 - width, x0, x0 + width),
+    y = c(y0, y0 + height, y0, y0 - height , y0)
+  )
+}
+
+cars %&gt;%
+  .[1:5,] %&gt;%
+  mutate(diamond = purrr::map2(speed, dist, create_diamond)) %&gt;%
+  mutate(group = row_number()) %&gt;%
+  unnest() %&gt;%
+  ggplot() +
+  geom_point(data = cars[1:5,], aes(x = speed, y = dist)) +
+* geom_path(aes(x = x, y = y, group = group))
+```
+]
+ 
+.panel2-step0-auto[
+![](geom_diamonds_recipe_flipbook_files/figure-html/step0_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-step0-auto[
+
+```r
+create_diamond &lt;- function(x0, y0, width = 1, height = 1){
+  data.frame(
+    x = c(x0 + width, x0, x0 - width, x0, x0 + width),
+    y = c(y0, y0 + height, y0, y0 - height , y0)
+  )
+}
+
+cars %&gt;%
+  .[1:5,] %&gt;%
+  mutate(diamond = purrr::map2(speed, dist, create_diamond)) %&gt;%
+  mutate(group = row_number()) %&gt;%
+  unnest() %&gt;%
+  ggplot() +
+  geom_point(data = cars[1:5,], aes(x = speed, y = dist)) +
+  geom_path(aes(x = x, y = y, group = group))
+```
+]
+ 
+.panel2-step0-auto[
+![](geom_diamonds_recipe_flipbook_files/figure-html/step0_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-step0-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-step0-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-step0-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+# step 1a:  write set up data function
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-cars-auto[
+
+```r
+*setup_data_diamonds &lt;- function(data, params) {
+*   if (anyDuplicated(data$group)) {
+*     data$group &lt;- paste(data$group, seq_len(nrow(data)), sep = "-")
+*   }
+*   data
+* }
+```
+]
+ 
+.panel2-cars-auto[
+
+]
+
+&lt;style&gt;
+.panel1-cars-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-cars-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-cars-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+# step 1b: test set up data function
+
+---
+
+
+count: false
+ 
+
+.panel1-step1b-auto[
+
+```r
+*cars
+```
+]
+ 
+.panel2-step1b-auto[
+
+```
+   speed dist
+1      4    2
+2      4   10
+3      7    4
+4      7   22
+5      8   16
+6      9   10
+7     10   18
+8     10   26
+9     10   34
+10    11   17
+11    11   28
+12    12   14
+13    12   20
+14    12   24
+15    12   28
+16    13   26
+17    13   34
+18    13   34
+19    13   46
+20    14   26
+21    14   36
+22    14   60
+23    14   80
+24    15   20
+25    15   26
+26    15   54
+27    16   32
+28    16   40
+29    17   32
+30    17   40
+31    17   50
+32    18   42
+33    18   56
+34    18   76
+35    18   84
+36    19   36
+37    19   46
+38    19   68
+39    20   32
+40    20   48
+41    20   52
+42    20   56
+43    20   64
+44    22   66
+45    23   54
+46    24   70
+47    24   92
+48    24   93
+49    24  120
+50    25   85
+```
+]
+
+---
+count: false
+ 
+
+.panel1-step1b-auto[
+
+```r
+cars %&gt;%
+* .[1:2,]
+```
+]
+ 
+.panel2-step1b-auto[
+
+```
+  speed dist
+1     4    2
+2     4   10
+```
+]
+
+---
+count: false
+ 
+
+.panel1-step1b-auto[
+
+```r
+cars %&gt;%
+  .[1:2,] %&gt;%
+* mutate(group = row_number())
+```
+]
+ 
+.panel2-step1b-auto[
+
+```
+  speed dist group
+1     4    2     1
+2     4   10     2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-step1b-auto[
+
+```r
+cars %&gt;%
+  .[1:2,] %&gt;%
+  mutate(group = row_number()) %&gt;%
+* setup_data_diamonds()
+```
+]
+ 
+.panel2-step1b-auto[
+
+```
+  speed dist group
+1     4    2     1
+2     4   10     2
+```
+]
+
+&lt;style&gt;
+.panel1-step1b-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-step1b-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-step1b-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+
+# step 2a: write compute panel function
+
+---
+
+# step2a.01 write row processing function
+
+# in this case we write a function to process each row for the data
+
+---
+
+
+count: false
+ 
+
+.panel1-step_2a-auto[
+
+```r
+*create_diamond &lt;- function(x0, y0, width = 1, height = 1){
+* data.frame(
+*   x = c(x0 + width, x0, x0 - width, x0, x0 + width),
+*   y = c(y0, y0 + height, y0, y0 - height , y0)
+* )
+*} 
+```
+]
+ 
+.panel2-step_2a-auto[
+
+]
+
+&lt;style&gt;
+.panel1-step_2a-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-step_2a-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-step_2a-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+# step2a.02 test row processing function
+
+---
+
+
+count: false
+ 
+
+.panel1-2a2-auto[
+
+```r
+*create_diamond(1, 2)
+```
+]
+ 
+.panel2-2a2-auto[
+
+```
+  x y
+1 2 2
+2 1 3
+3 0 2
+4 1 1
+5 2 2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-2a2-auto[
+
+```r
+create_diamond(1, 2)
+
+*create_diamond(4, 5)
+```
+]
+ 
+.panel2-2a2-auto[
+
+```
+  x y
+1 2 2
+2 1 3
+3 0 2
+4 1 1
+5 2 2
+```
+
+```
+  x y
+1 5 5
+2 4 6
+3 3 5
+4 4 4
+5 5 5
+```
+]
+
+&lt;style&gt;
+.panel1-2a2-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-2a2-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-2a2-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+# step 2a.03 the compute panel function 
+
+This function takes a full data frame, goes through each of the rows, and uses the row processing function on each, and returns a data frame
+
+---
+
+
+count: false
+ 
+
+.panel1-2a3-auto[
+
+```r
+*compute_panel_diamonds &lt;- function(data, scales) {
+
+*   cols_to_keep &lt;- setdiff(names(data), c("x0", "y0"))
+
+*   diamonds &lt;- lapply(seq_len(nrow(data)), function(i) {
+
+*     diamonds_path &lt;- create_diamond(data$x0[i], data$y0[i])
+*     cbind(diamonds_path, unclass(data[i, cols_to_keep]))
+
+*   })
+
+*   do.call(rbind, diamonds)
+
+*} 
+```
+]
+ 
+.panel2-2a3-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-2a3-auto[
+
+```r
+compute_panel_diamonds &lt;- function(data, scales) {
+
+    cols_to_keep &lt;- setdiff(names(data), c("x0", "y0"))
+
+    diamonds &lt;- lapply(seq_len(nrow(data)), function(i) {
+
+      diamonds_path &lt;- create_diamond(data$x0[i], data$y0[i])
+      cbind(diamonds_path, unclass(data[i, cols_to_keep]))
+
+    })
+
+    do.call(rbind, diamonds)
+
+}
+
+
+*compute_panel_diamonds2 &lt;- function(){
+
+*   cols_to_keep &lt;- setdiff(names(data), c("x0", "y0"))
+
+*   data %&gt;%
+*   select(x0, y0) %&gt;%
+*   mutate(diamond = purrr::map2(x0, y0, create_diamond)) %&gt;%
+*   mutate(group = row_number()) %&gt;%
+*   unnest() %&gt;%
+*   ungroup() %&gt;%
+*   select(x, y, group)
+
+*} 
+```
+]
+ 
+.panel2-2a3-auto[
+
+]
+
+&lt;style&gt;
+.panel1-2a3-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-2a3-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-2a3-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+# step 2b: Test the compute_panel
+
+---
+
+
+count: false
+ 
+
+.panel1-2b-auto[
+
+```r
+*cars
+```
+]
+ 
+.panel2-2b-auto[
+
+```
+   speed dist
+1      4    2
+2      4   10
+3      7    4
+4      7   22
+5      8   16
+6      9   10
+7     10   18
+8     10   26
+9     10   34
+10    11   17
+11    11   28
+12    12   14
+13    12   20
+14    12   24
+15    12   28
+16    13   26
+17    13   34
+18    13   34
+19    13   46
+20    14   26
+21    14   36
+22    14   60
+23    14   80
+24    15   20
+25    15   26
+26    15   54
+27    16   32
+28    16   40
+29    17   32
+30    17   40
+31    17   50
+32    18   42
+33    18   56
+34    18   76
+35    18   84
+36    19   36
+37    19   46
+38    19   68
+39    20   32
+40    20   48
+41    20   52
+42    20   56
+43    20   64
+44    22   66
+45    23   54
+46    24   70
+47    24   92
+48    24   93
+49    24  120
+50    25   85
+```
+]
+
+---
+count: false
+ 
+
+.panel1-2b-auto[
+
+```r
+cars %&gt;%
+* .[1:2,]
+```
+]
+ 
+.panel2-2b-auto[
+
+```
+  speed dist
+1     4    2
+2     4   10
+```
+]
+
+---
+count: false
+ 
+
+.panel1-2b-auto[
+
+```r
+cars %&gt;%
+  .[1:2,] %&gt;%
+* rename(x0 = speed)
+```
+]
+ 
+.panel2-2b-auto[
+
+```
+  x0 dist
+1  4    2
+2  4   10
+```
+]
+
+---
+count: false
+ 
+
+.panel1-2b-auto[
+
+```r
+cars %&gt;%
+  .[1:2,] %&gt;%
+  rename(x0 = speed) %&gt;%
+* rename(y0 = dist)
+```
+]
+ 
+.panel2-2b-auto[
+
+```
+  x0 y0
+1  4  2
+2  4 10
+```
+]
+
+---
+count: false
+ 
+
+.panel1-2b-auto[
+
+```r
+cars %&gt;%
+  .[1:2,] %&gt;%
+  rename(x0 = speed) %&gt;%
+  rename(y0 = dist) %&gt;%
+* mutate(group = row_number())
+```
+]
+ 
+.panel2-2b-auto[
+
+```
+  x0 y0 group
+1  4  2     1
+2  4 10     2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-2b-auto[
+
+```r
+cars %&gt;%
+  .[1:2,] %&gt;%
+  rename(x0 = speed) %&gt;%
+  rename(y0 = dist) %&gt;%
+  mutate(group = row_number()) %&gt;%
+* compute_panel_diamonds()
+```
+]
+ 
+.panel2-2b-auto[
+
+```
+   x  y unclass(data[i, cols_to_keep])
+1  5  2                              1
+2  4  3                              1
+3  3  2                              1
+4  4  1                              1
+5  5  2                              1
+6  5 10                              2
+7  4 11                              2
+8  3 10                              2
+9  4  9                              2
+10 5 10                              2
+```
+]
+
+&lt;style&gt;
+.panel1-2b-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-2b-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-2b-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+
+# Step 3: write ggproto
+
+---
+
+
+count: false
+ 
+
+.panel1-3-auto[
+
+```r
+*StatDiamond &lt;- ggproto("StatDiamond", Stat,
+* setup_data = setup_data_diamonds,
+* compute_panel = compute_panel_diamonds,
+* required_aes = c("x0", "y0")
+*) 
+```
+]
+ 
+.panel2-3-auto[
+
+]
+
+&lt;style&gt;
+.panel1-3-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-3-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-3-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+# Step 4: write c
+
+---
+
+
+count: false
+ 
+
+.panel1-4-auto[
+
+```r
+*geom_diamond &lt;- function(mapping = NULL,
+*                       data = NULL,
+*                       stat = "diamond",
+*                       position = "identity",
+*                       ...,
+*                       width = 1,
+*                       height = 1,
+*                       arrow = NULL,
+*                       lineend = "butt",
+*                       linejoin = "round",
+*                       na.rm = FALSE,
+*                       show.legend = NA,
+*                       inherit.aes = TRUE) {
+* layer(
+*   data = data,
+*   mapping = mapping,
+*   stat = stat,
+*   geom = GeomPolygon,
+*   position = position,
+*   show.legend = show.legend,
+*   inherit.aes = inherit.aes,
+*   params = list(
+*     width = width,
+*     height = height,
+*     arrow = arrow,
+*     lineend = lineend,
+*     linejoin = linejoin,
+*     na.rm = na.rm,
+*     ...
+*   )
+* )
+*} 
+```
+]
+ 
+.panel2-4-auto[
+
+]
+
+&lt;style&gt;
+.panel1-4-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-4-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-4-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+# Step 5: Enjoy!
+
+---
+
+
+count: false
+ 
+
+.panel1-5-auto[
+
+```r
+*set.seed(1244)
+```
+]
+ 
+.panel2-5-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-5-auto[
+
+```r
+set.seed(1244)
+*cars
+```
+]
+ 
+.panel2-5-auto[
+
+```
+   speed dist
+1      4    2
+2      4   10
+3      7    4
+4      7   22
+5      8   16
+6      9   10
+7     10   18
+8     10   26
+9     10   34
+10    11   17
+11    11   28
+12    12   14
+13    12   20
+14    12   24
+15    12   28
+16    13   26
+17    13   34
+18    13   34
+19    13   46
+20    14   26
+21    14   36
+22    14   60
+23    14   80
+24    15   20
+25    15   26
+26    15   54
+27    16   32
+28    16   40
+29    17   32
+30    17   40
+31    17   50
+32    18   42
+33    18   56
+34    18   76
+35    18   84
+36    19   36
+37    19   46
+38    19   68
+39    20   32
+40    20   48
+41    20   52
+42    20   56
+43    20   64
+44    22   66
+45    23   54
+46    24   70
+47    24   92
+48    24   93
+49    24  120
+50    25   85
+```
+]
+
+---
+count: false
+ 
+
+.panel1-5-auto[
+
+```r
+set.seed(1244)
+cars %&gt;%
+* .[1:5,]
+```
+]
+ 
+.panel2-5-auto[
+
+```
+  speed dist
+1     4    2
+2     4   10
+3     7    4
+4     7   22
+5     8   16
+```
+]
+
+---
+count: false
+ 
+
+.panel1-5-auto[
+
+```r
+set.seed(1244)
+cars %&gt;%
+  .[1:5,] %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-5-auto[
+![](geom_diamonds_recipe_flipbook_files/figure-html/5_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-5-auto[
+
+```r
+set.seed(1244)
+cars %&gt;%
+  .[1:5,] %&gt;%
+  ggplot() +
+* aes(x = speed, y = dist)
+```
+]
+ 
+.panel2-5-auto[
+![](geom_diamonds_recipe_flipbook_files/figure-html/5_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-5-auto[
+
+```r
+set.seed(1244)
+cars %&gt;%
+  .[1:5,] %&gt;%
+  ggplot() +
+  aes(x = speed, y = dist) +
+* geom_point()
+```
+]
+ 
+.panel2-5-auto[
+![](geom_diamonds_recipe_flipbook_files/figure-html/5_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-5-auto[
+
+```r
+set.seed(1244)
+cars %&gt;%
+  .[1:5,] %&gt;%
+  ggplot() +
+  aes(x = speed, y = dist) +
+  geom_point() +
+* aes(x0 = speed, y0 = dist)
+```
+]
+ 
+.panel2-5-auto[
+![](geom_diamonds_recipe_flipbook_files/figure-html/5_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-5-auto[
+
+```r
+set.seed(1244)
+cars %&gt;%
+  .[1:5,] %&gt;%
+  ggplot() +
+  aes(x = speed, y = dist) +
+  geom_point() +
+  aes(x0 = speed, y0 = dist) +
+* geom_diamond(alpha = .2)
+```
+]
+ 
+.panel2-5-auto[
+![](geom_diamonds_recipe_flipbook_files/figure-html/5_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-5-auto[
+
+```r
+set.seed(1244)
+cars %&gt;%
+  .[1:5,] %&gt;%
+  ggplot() +
+  aes(x = speed, y = dist) +
+  geom_point() +
+  aes(x0 = speed, y0 = dist) +
+  geom_diamond(alpha = .2) +
+* aes(fill = speed &gt; 6)
+```
+]
+ 
+.panel2-5-auto[
+![](geom_diamonds_recipe_flipbook_files/figure-html/5_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-5-auto[
+
+```r
+set.seed(1244)
+cars %&gt;%
+  .[1:5,] %&gt;%
+  ggplot() +
+  aes(x = speed, y = dist) +
+  geom_point() +
+  aes(x0 = speed, y0 = dist) +
+  geom_diamond(alpha = .2) +
+  aes(fill = speed &gt; 6) +
+* geom_diamond(height = 2, alpha = 0, color = "black")
+```
+]
+ 
+.panel2-5-auto[
+![](geom_diamonds_recipe_flipbook_files/figure-html/5_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-5-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-5-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-5-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+# Step 6: Post Mordem using layer_data
+
+
+---
+
+
+count: false
+ 
+
+.panel1-6-auto[
+
+```r
+*layer_data(last_plot(), 2)
+```
+]
+ 
+.panel2-6-auto[
+
+```
+      fill x  y PANEL group colour size linetype alpha
+1  #F8766D 5  2     1   1-1     NA  0.5        1   0.2
+2  #F8766D 4  3     1   1-1     NA  0.5        1   0.2
+3  #F8766D 3  2     1   1-1     NA  0.5        1   0.2
+4  #F8766D 4  1     1   1-1     NA  0.5        1   0.2
+5  #F8766D 5  2     1   1-1     NA  0.5        1   0.2
+6  #F8766D 5 10     1   1-2     NA  0.5        1   0.2
+7  #F8766D 4 11     1   1-2     NA  0.5        1   0.2
+8  #F8766D 3 10     1   1-2     NA  0.5        1   0.2
+9  #F8766D 4  9     1   1-2     NA  0.5        1   0.2
+10 #F8766D 5 10     1   1-2     NA  0.5        1   0.2
+11 #00BFC4 8  4     1   2-3     NA  0.5        1   0.2
+12 #00BFC4 7  5     1   2-3     NA  0.5        1   0.2
+13 #00BFC4 6  4     1   2-3     NA  0.5        1   0.2
+14 #00BFC4 7  3     1   2-3     NA  0.5        1   0.2
+15 #00BFC4 8  4     1   2-3     NA  0.5        1   0.2
+16 #00BFC4 8 22     1   2-4     NA  0.5        1   0.2
+17 #00BFC4 7 23     1   2-4     NA  0.5        1   0.2
+18 #00BFC4 6 22     1   2-4     NA  0.5        1   0.2
+19 #00BFC4 7 21     1   2-4     NA  0.5        1   0.2
+20 #00BFC4 8 22     1   2-4     NA  0.5        1   0.2
+21 #00BFC4 9 16     1   2-5     NA  0.5        1   0.2
+22 #00BFC4 8 17     1   2-5     NA  0.5        1   0.2
+23 #00BFC4 7 16     1   2-5     NA  0.5        1   0.2
+24 #00BFC4 8 15     1   2-5     NA  0.5        1   0.2
+25 #00BFC4 9 16     1   2-5     NA  0.5        1   0.2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-6-auto[
+
+```r
+layer_data(last_plot(), 2)
+
+*layer_data(last_plot(), 3)
+```
+]
+ 
+.panel2-6-auto[
+
+```
+      fill x  y PANEL group colour size linetype alpha
+1  #F8766D 5  2     1   1-1     NA  0.5        1   0.2
+2  #F8766D 4  3     1   1-1     NA  0.5        1   0.2
+3  #F8766D 3  2     1   1-1     NA  0.5        1   0.2
+4  #F8766D 4  1     1   1-1     NA  0.5        1   0.2
+5  #F8766D 5  2     1   1-1     NA  0.5        1   0.2
+6  #F8766D 5 10     1   1-2     NA  0.5        1   0.2
+7  #F8766D 4 11     1   1-2     NA  0.5        1   0.2
+8  #F8766D 3 10     1   1-2     NA  0.5        1   0.2
+9  #F8766D 4  9     1   1-2     NA  0.5        1   0.2
+10 #F8766D 5 10     1   1-2     NA  0.5        1   0.2
+11 #00BFC4 8  4     1   2-3     NA  0.5        1   0.2
+12 #00BFC4 7  5     1   2-3     NA  0.5        1   0.2
+13 #00BFC4 6  4     1   2-3     NA  0.5        1   0.2
+14 #00BFC4 7  3     1   2-3     NA  0.5        1   0.2
+15 #00BFC4 8  4     1   2-3     NA  0.5        1   0.2
+16 #00BFC4 8 22     1   2-4     NA  0.5        1   0.2
+17 #00BFC4 7 23     1   2-4     NA  0.5        1   0.2
+18 #00BFC4 6 22     1   2-4     NA  0.5        1   0.2
+19 #00BFC4 7 21     1   2-4     NA  0.5        1   0.2
+20 #00BFC4 8 22     1   2-4     NA  0.5        1   0.2
+21 #00BFC4 9 16     1   2-5     NA  0.5        1   0.2
+22 #00BFC4 8 17     1   2-5     NA  0.5        1   0.2
+23 #00BFC4 7 16     1   2-5     NA  0.5        1   0.2
+24 #00BFC4 8 15     1   2-5     NA  0.5        1   0.2
+25 #00BFC4 9 16     1   2-5     NA  0.5        1   0.2
+```
+
+```
+      fill x  y PANEL group colour size linetype alpha
+1  #F8766D 5  2     1   1-1  black  0.5        1     0
+2  #F8766D 4  3     1   1-1  black  0.5        1     0
+3  #F8766D 3  2     1   1-1  black  0.5        1     0
+4  #F8766D 4  1     1   1-1  black  0.5        1     0
+5  #F8766D 5  2     1   1-1  black  0.5        1     0
+6  #F8766D 5 10     1   1-2  black  0.5        1     0
+7  #F8766D 4 11     1   1-2  black  0.5        1     0
+8  #F8766D 3 10     1   1-2  black  0.5        1     0
+9  #F8766D 4  9     1   1-2  black  0.5        1     0
+10 #F8766D 5 10     1   1-2  black  0.5        1     0
+11 #00BFC4 8  4     1   2-3  black  0.5        1     0
+12 #00BFC4 7  5     1   2-3  black  0.5        1     0
+13 #00BFC4 6  4     1   2-3  black  0.5        1     0
+14 #00BFC4 7  3     1   2-3  black  0.5        1     0
+15 #00BFC4 8  4     1   2-3  black  0.5        1     0
+16 #00BFC4 8 22     1   2-4  black  0.5        1     0
+17 #00BFC4 7 23     1   2-4  black  0.5        1     0
+18 #00BFC4 6 22     1   2-4  black  0.5        1     0
+19 #00BFC4 7 21     1   2-4  black  0.5        1     0
+20 #00BFC4 8 22     1   2-4  black  0.5        1     0
+21 #00BFC4 9 16     1   2-5  black  0.5        1     0
+22 #00BFC4 8 17     1   2-5  black  0.5        1     0
+23 #00BFC4 7 16     1   2-5  black  0.5        1     0
+24 #00BFC4 8 15     1   2-5  black  0.5        1     0
+25 #00BFC4 9 16     1   2-5  black  0.5        1     0
+```
+]
+
+---
+count: false
+ 
+
+.panel1-6-auto[
+
+```r
+layer_data(last_plot(), 2)
+
+layer_data(last_plot(), 3)
+```
+]
+ 
+.panel2-6-auto[
+
+```
+      fill x  y PANEL group colour size linetype alpha
+1  #F8766D 5  2     1   1-1     NA  0.5        1   0.2
+2  #F8766D 4  3     1   1-1     NA  0.5        1   0.2
+3  #F8766D 3  2     1   1-1     NA  0.5        1   0.2
+4  #F8766D 4  1     1   1-1     NA  0.5        1   0.2
+5  #F8766D 5  2     1   1-1     NA  0.5        1   0.2
+6  #F8766D 5 10     1   1-2     NA  0.5        1   0.2
+7  #F8766D 4 11     1   1-2     NA  0.5        1   0.2
+8  #F8766D 3 10     1   1-2     NA  0.5        1   0.2
+9  #F8766D 4  9     1   1-2     NA  0.5        1   0.2
+10 #F8766D 5 10     1   1-2     NA  0.5        1   0.2
+11 #00BFC4 8  4     1   2-3     NA  0.5        1   0.2
+12 #00BFC4 7  5     1   2-3     NA  0.5        1   0.2
+13 #00BFC4 6  4     1   2-3     NA  0.5        1   0.2
+14 #00BFC4 7  3     1   2-3     NA  0.5        1   0.2
+15 #00BFC4 8  4     1   2-3     NA  0.5        1   0.2
+16 #00BFC4 8 22     1   2-4     NA  0.5        1   0.2
+17 #00BFC4 7 23     1   2-4     NA  0.5        1   0.2
+18 #00BFC4 6 22     1   2-4     NA  0.5        1   0.2
+19 #00BFC4 7 21     1   2-4     NA  0.5        1   0.2
+20 #00BFC4 8 22     1   2-4     NA  0.5        1   0.2
+21 #00BFC4 9 16     1   2-5     NA  0.5        1   0.2
+22 #00BFC4 8 17     1   2-5     NA  0.5        1   0.2
+23 #00BFC4 7 16     1   2-5     NA  0.5        1   0.2
+24 #00BFC4 8 15     1   2-5     NA  0.5        1   0.2
+25 #00BFC4 9 16     1   2-5     NA  0.5        1   0.2
+```
+
+```
+      fill x  y PANEL group colour size linetype alpha
+1  #F8766D 5  2     1   1-1  black  0.5        1     0
+2  #F8766D 4  3     1   1-1  black  0.5        1     0
+3  #F8766D 3  2     1   1-1  black  0.5        1     0
+4  #F8766D 4  1     1   1-1  black  0.5        1     0
+5  #F8766D 5  2     1   1-1  black  0.5        1     0
+6  #F8766D 5 10     1   1-2  black  0.5        1     0
+7  #F8766D 4 11     1   1-2  black  0.5        1     0
+8  #F8766D 3 10     1   1-2  black  0.5        1     0
+9  #F8766D 4  9     1   1-2  black  0.5        1     0
+10 #F8766D 5 10     1   1-2  black  0.5        1     0
+11 #00BFC4 8  4     1   2-3  black  0.5        1     0
+12 #00BFC4 7  5     1   2-3  black  0.5        1     0
+13 #00BFC4 6  4     1   2-3  black  0.5        1     0
+14 #00BFC4 7  3     1   2-3  black  0.5        1     0
+15 #00BFC4 8  4     1   2-3  black  0.5        1     0
+16 #00BFC4 8 22     1   2-4  black  0.5        1     0
+17 #00BFC4 7 23     1   2-4  black  0.5        1     0
+18 #00BFC4 6 22     1   2-4  black  0.5        1     0
+19 #00BFC4 7 21     1   2-4  black  0.5        1     0
+20 #00BFC4 8 22     1   2-4  black  0.5        1     0
+21 #00BFC4 9 16     1   2-5  black  0.5        1     0
+22 #00BFC4 8 17     1   2-5  black  0.5        1     0
+23 #00BFC4 7 16     1   2-5  black  0.5        1     0
+24 #00BFC4 8 15     1   2-5  black  0.5        1     0
+25 #00BFC4 9 16     1   2-5  black  0.5        1     0
+```
+]
+
+&lt;style&gt;
+.panel1-6-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-6-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-6-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
