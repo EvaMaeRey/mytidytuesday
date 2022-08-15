@@ -11,6 +11,8 @@ The goal of mytidytuesday is to hold little projects. They are like
 blogs posts, but mostly code. In the spirit of \#tidytuesday no pressure
 to write prose\!
 
+  - [2022-08-15-ma206data-day1/ma206data\_day1\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-08-15-ma206data-day1/ma206data_day1_flipbook.html)
+  - [2022-08-15-ma206data-day1/ma206data\_day1.html](https://evamaerey.github.io/mytidytuesday/2022-08-15-ma206data-day1/ma206data_day1.html)
   - [2022-08-06-ggseg/ggseg\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-08-06-ggseg/ggseg_flipbook.html)
   - [2022-08-06-ggseg/ggseg.html](https://evamaerey.github.io/mytidytuesday/2022-08-06-ggseg/ggseg.html)
   - [2022-08-01-dbinom-dgeom/dbinom\_dgeom\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-08-01-dbinom-dgeom/dbinom_dgeom_flipbook.html)
@@ -23,9 +25,9 @@ to write prose\!
   - [2022-05-30-apply/Untitled/skeleton.html](https://evamaerey.github.io/mytidytuesday/2022-05-30-apply/Untitled/skeleton.html)
   - [2022-05-30-apply/Untitled/Untitled.html](https://evamaerey.github.io/mytidytuesday/2022-05-30-apply/Untitled/Untitled.html)
   - [2022-05-28-circle-pack/how\_geom\_treemap\_works.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/how_geom_treemap_works.html)
+  - [2022-05-28-circle-pack/geom\_diamonds\_recipe\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/geom_diamonds_recipe_flipbook.html)
   - [2022-05-28-circle-pack/geom\_diamonds\_recipe.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/geom_diamonds_recipe.html)
   - [2022-05-28-circle-pack/circle\_pack.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/circle_pack.html)
-  - [2022-05-28-circle-pack/circle\_geom\_recipe.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/circle_geom_recipe.html)
   - [2022-05-28-circle-pack/circle\_geom.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/circle_geom.html)
   - [2022-05-23-networks-presentation/networks\_presentation.html](https://evamaerey.github.io/mytidytuesday/2022-05-23-networks-presentation/networks_presentation.html)
   - [2022-05-23-networks-presentation/images\_for\_lecture/federalist\_widget
