@@ -1,0 +1,52 @@
+---
+title: "Lahman "
+author: "example project"
+date: '2022-08-16'
+output: html_document
+---
+
+```{r prep, message=F, warning=F}
+library(tidyverse)
+library(Lahman)
+
+Teams %>%
+  filter(yearID == 2000) %>%
+  select(teamID, franchID,
+         divID, lgID, W, L, R, G, RA) %>% 
+  rename(wins = W, losses = L,
+         runs = R, games = G,
+         runs_opponent = RA) %>%
+  mutate(win_pct = wins/games) %>%
+  mutate(runs_differential = runs - runs_opponent) ->
+my_data
+```
+
+```{r glimpse}
+my_data %>% 
+  head()
+```
+
+
+```{r viz}
+my_data %>%
+  ggplot() +
+  aes(y = wins) +
+  aes(x = runs_differential) +
+  geom_rug() +
+  geom_point() +
+  geom_smooth(method = lm, se = F) +
+  ggxmean::geom_lm_formula() +
+  aes(color = lgID) +
+  facet_wrap(facets = vars(lgID))
+```
+
+
+```{r model}
+my_data %>%
+  lm(formula = wins ~ 
+       runs_differential + lgID +
+       lgID*runs_differential, data = .) %>% 
+  summary
+```
+
+
