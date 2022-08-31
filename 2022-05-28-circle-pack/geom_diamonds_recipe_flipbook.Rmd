@@ -204,7 +204,7 @@ compute_panel_diamonds <- function(data, scales) {
 }
 
 
-compute_panel_diamonds2 <- function(){
+compute_panel_diamonds_purrr <- function(data, scales){
   
     cols_to_keep <- setdiff(names(data), c("x0", "y0"))
 
@@ -214,7 +214,7 @@ compute_panel_diamonds2 <- function(){
     mutate(group = row_number()) %>% 
     unnest() %>% 
     ungroup() %>% 
-    select(x, y, group)
+    data.frame()
   
 }
 ```
@@ -236,7 +236,16 @@ cars %>%
   rename(x0 = speed) %>% 
   rename(y0 = dist) %>% 
   mutate(group = row_number()) %>% 
-  compute_panel_diamonds()
+  compute_panel_diamonds() %>% 
+  str() ->
+hide
+
+cars %>% 
+  .[1:2,] %>% 
+  rename(x0 = speed) %>% 
+  rename(y0 = dist) %>% 
+  compute_panel_diamonds_purrr() %>% 
+  str()
 ```
 
 ---
@@ -256,22 +265,67 @@ StatDiamond <- ggproto("StatDiamond", Stat,
   compute_panel = compute_panel_diamonds,
   required_aes = c("x0", "y0")
 )
+
+StatDiamondpurrr <- ggproto("StatDiamond", Stat, 
+  setup_data = setup_data_diamonds,
+  compute_panel = compute_panel_diamonds_purrr,
+  required_aes = c("x0", "y0")
+)
 ```
 
 ---
 
-# Step 4: write c
+# Step 4: Write function
 
 ---
 
 
-`r flipbookr::chunk_reveal("4", left_assign = "detect")`
 
 
 ```{r 4, include = FALSE}
 geom_diamond <- function(mapping = NULL, 
                         data = NULL, 
                         stat = "diamond", 
+                        position = "identity", 
+                        ..., 
+                        width = 1, 
+                        height = 1,
+                        arrow = NULL, 
+                        lineend = "butt", 
+                        linejoin = "round", 
+                        na.rm = FALSE, 
+                        show.legend = NA, 
+                        inherit.aes = TRUE) {
+  layer(
+    data = data, 
+    mapping = mapping, 
+    stat = stat, 
+    geom = GeomPolygon, 
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes, 
+    params = list(
+      width = width, 
+      height = height,
+      arrow = arrow, 
+      lineend = lineend, 
+      linejoin = linejoin, 
+      na.rm = na.rm, 
+      ...
+    )
+  )
+}
+```
+
+---
+
+
+# a variant where compute group uses purrr
+
+```{r purrr, include = FALSE}
+geom_diamond_purrr <- function(mapping = NULL, 
+                        data = NULL, 
+                        stat = "diamondpurrr", 
                         position = "identity", 
                         ..., 
                         width = 1, 
@@ -318,6 +372,7 @@ geom_diamond <- function(mapping = NULL,
 set.seed(1244)
 cars %>% 
   .[1:5,] %>%
+  data.frame() %>% 
   ggplot() +
   aes(x = speed, y = dist) +
   geom_point() +
@@ -329,16 +384,41 @@ cars %>%
 
 ---
 
+## But Purrr version doesn't work?  Why?  
+
+---
+
+`r flipbookr::chunk_reveal("6", left_assign = "detect")`
+
+
+```{r 6, include = FALSE}
+set.seed(1244)
+cars %>% 
+  .[1:5,] %>%
+  data.frame() %>% 
+  ggplot() +
+  aes(x = speed, y = dist) +
+  geom_point() +
+  aes(x0 = speed, y0 = dist) +
+  geom_diamond_purrr(alpha = .2) + 
+  aes(fill = speed > 6) + 
+  geom_diamond_purrr(height = 2, alpha = 0, color = "black") ->
+purrr_diamonds_plot
+```
+
+
+---
+
 # Step 6: Post Mordem using layer_data
 
 
 ---
 
 
-`r flipbookr::chunk_reveal("6", left_assign = "detect")`
+`r flipbookr::chunk_reveal("7", left_assign = "detect")`
 
 
-```{r 6, include = FALSE}
+```{r 7, include = FALSE}
 layer_data(last_plot(), 2)
 
 layer_data(last_plot(), 3)

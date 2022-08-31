@@ -116,4 +116,41 @@ my_data %>%
   summary
 ```
 
+---
 
+```{r}
+Lahman::Batting %>% 
+  filter(yearID == 2020) %>% 
+  rename(at_bats = AB,
+         runs = R,
+         strike_outs = SO) %>% 
+  mutate(runs_ratio = runs/at_bats) %>%
+  mutate(strike_outs_ratio = strike_outs/at_bats)
+  select(playerID, at_bats, runs, strike_outs, runs_ratio) %>% 
+  filter(at_bats != 0) ->
+batting_2020_runs
+  
+Lahman::People %>% 
+  select(playerID, birthYear, nameGiven, 
+         height, weight, bats) ->
+people_info
+
+batting_2020_runs %>% 
+  left_join(people_info, by = "playerID") ->
+batting_2020_w_player_info
+
+batting_2020_w_player_info %>% 
+  filter(at_bats > 20) %>% 
+  ggplot() + 
+  aes(y = runs_ratio) + 
+  aes(x = weight) + 
+  geom_rug() + 
+  geom_point(alpha = .1) + 
+  geom_smooth(method = lm) + 
+  aes(color = at_bats)
+
+batting_2020_w_player_info %>% 
+  lm(formula = runs_ratio ~ weight + height + birthYear, data = .) %>% 
+  summary()
+
+```

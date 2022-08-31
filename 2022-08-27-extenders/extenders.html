@@ -1,0 +1,3375 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>A minimal flipbook</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="You!" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# A minimal flipbook
+## With flipbookr and xaringan
+### You!
+
+---
+
+
+
+
+
+
+
+count: false
+ 
+
+.panel1-hi-auto[
+
+```r
+*palmerpenguins::penguins
+```
+]
+ 
+.panel2-hi-auto[
+
+```
+# A tibble: 344 × 8
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750
+ 2 Adelie  Torgersen           39.5          17.4               186        3800
+ 3 Adelie  Torgersen           40.3          18                 195        3250
+ 4 Adelie  Torgersen           NA            NA                  NA          NA
+ 5 Adelie  Torgersen           36.7          19.3               193        3450
+ 6 Adelie  Torgersen           39.3          20.6               190        3650
+ 7 Adelie  Torgersen           38.9          17.8               181        3625
+ 8 Adelie  Torgersen           39.2          19.6               195        4675
+ 9 Adelie  Torgersen           34.1          18.1               193        3475
+10 Adelie  Torgersen           42            20.2               190        4250
+# … with 334 more rows, and 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-hi-auto[
+
+```r
+palmerpenguins::penguins %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-hi-auto[
+![](extenders_files/figure-html/hi_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-hi-auto[
+
+```r
+palmerpenguins::penguins %&gt;%
+  ggplot() +
+* aes(x = species)
+```
+]
+ 
+.panel2-hi-auto[
+![](extenders_files/figure-html/hi_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-hi-auto[
+
+```r
+palmerpenguins::penguins %&gt;%
+  ggplot() +
+  aes(x = species) +
+* aes(fill = species)
+```
+]
+ 
+.panel2-hi-auto[
+![](extenders_files/figure-html/hi_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-hi-auto[
+
+```r
+palmerpenguins::penguins %&gt;%
+  ggplot() +
+  aes(x = species) +
+  aes(fill = species) +
+* geom_bar()
+```
+]
+ 
+.panel2-hi-auto[
+![](extenders_files/figure-html/hi_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-hi-auto[
+
+```r
+palmerpenguins::penguins %&gt;%
+  ggplot() +
+  aes(x = species) +
+  aes(fill = species) +
+  geom_bar() -&gt;
+*my_plot
+```
+]
+ 
+.panel2-hi-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-hi-auto[
+
+```r
+palmerpenguins::penguins %&gt;%
+  ggplot() +
+  aes(x = species) +
+  aes(fill = species) +
+  geom_bar() -&gt;
+my_plot
+
+*ggtrace::ggtrace_inspect_args(
+* x = my_plot,
+* method = ggplot2:::Layer$compute_statistic
+*) 
+```
+]
+ 
+.panel2-hi-auto[
+
+```
+$self
+geom_bar: width = NULL, na.rm = FALSE, orientation = NA
+stat_count: width = NULL, na.rm = FALSE, orientation = NA
+position_stack 
+
+$data
+         fill x PANEL group
+1      Adelie 1     1     1
+2      Adelie 1     1     1
+3      Adelie 1     1     1
+4      Adelie 1     1     1
+5      Adelie 1     1     1
+6      Adelie 1     1     1
+7      Adelie 1     1     1
+8      Adelie 1     1     1
+9      Adelie 1     1     1
+10     Adelie 1     1     1
+11     Adelie 1     1     1
+12     Adelie 1     1     1
+13     Adelie 1     1     1
+14     Adelie 1     1     1
+15     Adelie 1     1     1
+16     Adelie 1     1     1
+17     Adelie 1     1     1
+18     Adelie 1     1     1
+19     Adelie 1     1     1
+20     Adelie 1     1     1
+21     Adelie 1     1     1
+22     Adelie 1     1     1
+23     Adelie 1     1     1
+24     Adelie 1     1     1
+25     Adelie 1     1     1
+26     Adelie 1     1     1
+27     Adelie 1     1     1
+28     Adelie 1     1     1
+29     Adelie 1     1     1
+30     Adelie 1     1     1
+31     Adelie 1     1     1
+32     Adelie 1     1     1
+33     Adelie 1     1     1
+34     Adelie 1     1     1
+35     Adelie 1     1     1
+36     Adelie 1     1     1
+37     Adelie 1     1     1
+38     Adelie 1     1     1
+39     Adelie 1     1     1
+40     Adelie 1     1     1
+41     Adelie 1     1     1
+42     Adelie 1     1     1
+43     Adelie 1     1     1
+44     Adelie 1     1     1
+45     Adelie 1     1     1
+46     Adelie 1     1     1
+47     Adelie 1     1     1
+48     Adelie 1     1     1
+49     Adelie 1     1     1
+50     Adelie 1     1     1
+51     Adelie 1     1     1
+52     Adelie 1     1     1
+53     Adelie 1     1     1
+54     Adelie 1     1     1
+55     Adelie 1     1     1
+56     Adelie 1     1     1
+57     Adelie 1     1     1
+58     Adelie 1     1     1
+59     Adelie 1     1     1
+60     Adelie 1     1     1
+61     Adelie 1     1     1
+62     Adelie 1     1     1
+63     Adelie 1     1     1
+64     Adelie 1     1     1
+65     Adelie 1     1     1
+66     Adelie 1     1     1
+67     Adelie 1     1     1
+68     Adelie 1     1     1
+69     Adelie 1     1     1
+70     Adelie 1     1     1
+71     Adelie 1     1     1
+72     Adelie 1     1     1
+73     Adelie 1     1     1
+74     Adelie 1     1     1
+75     Adelie 1     1     1
+76     Adelie 1     1     1
+77     Adelie 1     1     1
+78     Adelie 1     1     1
+79     Adelie 1     1     1
+80     Adelie 1     1     1
+81     Adelie 1     1     1
+82     Adelie 1     1     1
+83     Adelie 1     1     1
+84     Adelie 1     1     1
+85     Adelie 1     1     1
+86     Adelie 1     1     1
+87     Adelie 1     1     1
+88     Adelie 1     1     1
+89     Adelie 1     1     1
+90     Adelie 1     1     1
+91     Adelie 1     1     1
+92     Adelie 1     1     1
+93     Adelie 1     1     1
+94     Adelie 1     1     1
+95     Adelie 1     1     1
+96     Adelie 1     1     1
+97     Adelie 1     1     1
+98     Adelie 1     1     1
+99     Adelie 1     1     1
+100    Adelie 1     1     1
+101    Adelie 1     1     1
+102    Adelie 1     1     1
+103    Adelie 1     1     1
+104    Adelie 1     1     1
+105    Adelie 1     1     1
+106    Adelie 1     1     1
+107    Adelie 1     1     1
+108    Adelie 1     1     1
+109    Adelie 1     1     1
+110    Adelie 1     1     1
+111    Adelie 1     1     1
+112    Adelie 1     1     1
+113    Adelie 1     1     1
+114    Adelie 1     1     1
+115    Adelie 1     1     1
+116    Adelie 1     1     1
+117    Adelie 1     1     1
+118    Adelie 1     1     1
+119    Adelie 1     1     1
+120    Adelie 1     1     1
+121    Adelie 1     1     1
+122    Adelie 1     1     1
+123    Adelie 1     1     1
+124    Adelie 1     1     1
+125    Adelie 1     1     1
+126    Adelie 1     1     1
+127    Adelie 1     1     1
+128    Adelie 1     1     1
+129    Adelie 1     1     1
+130    Adelie 1     1     1
+131    Adelie 1     1     1
+132    Adelie 1     1     1
+133    Adelie 1     1     1
+134    Adelie 1     1     1
+135    Adelie 1     1     1
+136    Adelie 1     1     1
+137    Adelie 1     1     1
+138    Adelie 1     1     1
+139    Adelie 1     1     1
+140    Adelie 1     1     1
+141    Adelie 1     1     1
+142    Adelie 1     1     1
+143    Adelie 1     1     1
+144    Adelie 1     1     1
+145    Adelie 1     1     1
+146    Adelie 1     1     1
+147    Adelie 1     1     1
+148    Adelie 1     1     1
+149    Adelie 1     1     1
+150    Adelie 1     1     1
+151    Adelie 1     1     1
+152    Adelie 1     1     1
+153    Gentoo 3     1     3
+154    Gentoo 3     1     3
+155    Gentoo 3     1     3
+156    Gentoo 3     1     3
+157    Gentoo 3     1     3
+158    Gentoo 3     1     3
+159    Gentoo 3     1     3
+160    Gentoo 3     1     3
+161    Gentoo 3     1     3
+162    Gentoo 3     1     3
+163    Gentoo 3     1     3
+164    Gentoo 3     1     3
+165    Gentoo 3     1     3
+166    Gentoo 3     1     3
+167    Gentoo 3     1     3
+168    Gentoo 3     1     3
+169    Gentoo 3     1     3
+170    Gentoo 3     1     3
+171    Gentoo 3     1     3
+172    Gentoo 3     1     3
+173    Gentoo 3     1     3
+174    Gentoo 3     1     3
+175    Gentoo 3     1     3
+176    Gentoo 3     1     3
+177    Gentoo 3     1     3
+178    Gentoo 3     1     3
+179    Gentoo 3     1     3
+180    Gentoo 3     1     3
+181    Gentoo 3     1     3
+182    Gentoo 3     1     3
+183    Gentoo 3     1     3
+184    Gentoo 3     1     3
+185    Gentoo 3     1     3
+186    Gentoo 3     1     3
+187    Gentoo 3     1     3
+188    Gentoo 3     1     3
+189    Gentoo 3     1     3
+190    Gentoo 3     1     3
+191    Gentoo 3     1     3
+192    Gentoo 3     1     3
+193    Gentoo 3     1     3
+194    Gentoo 3     1     3
+195    Gentoo 3     1     3
+196    Gentoo 3     1     3
+197    Gentoo 3     1     3
+198    Gentoo 3     1     3
+199    Gentoo 3     1     3
+200    Gentoo 3     1     3
+201    Gentoo 3     1     3
+202    Gentoo 3     1     3
+203    Gentoo 3     1     3
+204    Gentoo 3     1     3
+205    Gentoo 3     1     3
+206    Gentoo 3     1     3
+207    Gentoo 3     1     3
+208    Gentoo 3     1     3
+209    Gentoo 3     1     3
+210    Gentoo 3     1     3
+211    Gentoo 3     1     3
+212    Gentoo 3     1     3
+213    Gentoo 3     1     3
+214    Gentoo 3     1     3
+215    Gentoo 3     1     3
+216    Gentoo 3     1     3
+217    Gentoo 3     1     3
+218    Gentoo 3     1     3
+219    Gentoo 3     1     3
+220    Gentoo 3     1     3
+221    Gentoo 3     1     3
+222    Gentoo 3     1     3
+223    Gentoo 3     1     3
+224    Gentoo 3     1     3
+225    Gentoo 3     1     3
+226    Gentoo 3     1     3
+227    Gentoo 3     1     3
+228    Gentoo 3     1     3
+229    Gentoo 3     1     3
+230    Gentoo 3     1     3
+231    Gentoo 3     1     3
+232    Gentoo 3     1     3
+233    Gentoo 3     1     3
+234    Gentoo 3     1     3
+235    Gentoo 3     1     3
+236    Gentoo 3     1     3
+237    Gentoo 3     1     3
+238    Gentoo 3     1     3
+239    Gentoo 3     1     3
+240    Gentoo 3     1     3
+241    Gentoo 3     1     3
+242    Gentoo 3     1     3
+243    Gentoo 3     1     3
+244    Gentoo 3     1     3
+245    Gentoo 3     1     3
+246    Gentoo 3     1     3
+247    Gentoo 3     1     3
+248    Gentoo 3     1     3
+249    Gentoo 3     1     3
+250    Gentoo 3     1     3
+251    Gentoo 3     1     3
+252    Gentoo 3     1     3
+253    Gentoo 3     1     3
+254    Gentoo 3     1     3
+255    Gentoo 3     1     3
+256    Gentoo 3     1     3
+257    Gentoo 3     1     3
+258    Gentoo 3     1     3
+259    Gentoo 3     1     3
+260    Gentoo 3     1     3
+261    Gentoo 3     1     3
+262    Gentoo 3     1     3
+263    Gentoo 3     1     3
+264    Gentoo 3     1     3
+265    Gentoo 3     1     3
+266    Gentoo 3     1     3
+267    Gentoo 3     1     3
+268    Gentoo 3     1     3
+269    Gentoo 3     1     3
+270    Gentoo 3     1     3
+271    Gentoo 3     1     3
+272    Gentoo 3     1     3
+273    Gentoo 3     1     3
+274    Gentoo 3     1     3
+275    Gentoo 3     1     3
+276    Gentoo 3     1     3
+277 Chinstrap 2     1     2
+278 Chinstrap 2     1     2
+279 Chinstrap 2     1     2
+280 Chinstrap 2     1     2
+281 Chinstrap 2     1     2
+282 Chinstrap 2     1     2
+283 Chinstrap 2     1     2
+284 Chinstrap 2     1     2
+285 Chinstrap 2     1     2
+286 Chinstrap 2     1     2
+287 Chinstrap 2     1     2
+288 Chinstrap 2     1     2
+289 Chinstrap 2     1     2
+290 Chinstrap 2     1     2
+291 Chinstrap 2     1     2
+292 Chinstrap 2     1     2
+293 Chinstrap 2     1     2
+294 Chinstrap 2     1     2
+295 Chinstrap 2     1     2
+296 Chinstrap 2     1     2
+297 Chinstrap 2     1     2
+298 Chinstrap 2     1     2
+299 Chinstrap 2     1     2
+300 Chinstrap 2     1     2
+301 Chinstrap 2     1     2
+302 Chinstrap 2     1     2
+303 Chinstrap 2     1     2
+304 Chinstrap 2     1     2
+305 Chinstrap 2     1     2
+306 Chinstrap 2     1     2
+307 Chinstrap 2     1     2
+308 Chinstrap 2     1     2
+309 Chinstrap 2     1     2
+310 Chinstrap 2     1     2
+311 Chinstrap 2     1     2
+312 Chinstrap 2     1     2
+313 Chinstrap 2     1     2
+314 Chinstrap 2     1     2
+315 Chinstrap 2     1     2
+316 Chinstrap 2     1     2
+317 Chinstrap 2     1     2
+318 Chinstrap 2     1     2
+319 Chinstrap 2     1     2
+320 Chinstrap 2     1     2
+321 Chinstrap 2     1     2
+322 Chinstrap 2     1     2
+323 Chinstrap 2     1     2
+324 Chinstrap 2     1     2
+325 Chinstrap 2     1     2
+326 Chinstrap 2     1     2
+327 Chinstrap 2     1     2
+328 Chinstrap 2     1     2
+329 Chinstrap 2     1     2
+330 Chinstrap 2     1     2
+331 Chinstrap 2     1     2
+332 Chinstrap 2     1     2
+333 Chinstrap 2     1     2
+334 Chinstrap 2     1     2
+335 Chinstrap 2     1     2
+336 Chinstrap 2     1     2
+337 Chinstrap 2     1     2
+338 Chinstrap 2     1     2
+339 Chinstrap 2     1     2
+340 Chinstrap 2     1     2
+341 Chinstrap 2     1     2
+342 Chinstrap 2     1     2
+343 Chinstrap 2     1     2
+344 Chinstrap 2     1     2
+
+$layout
+&lt;ggproto object: Class Layout, gg&gt;
+    coord: &lt;ggproto object: Class CoordCartesian, Coord, gg&gt;
+        aspect: function
+        backtransform_range: function
+        clip: on
+        default: TRUE
+        distance: function
+        expand: TRUE
+        is_free: function
+        is_linear: function
+        labels: function
+        limits: list
+        modify_scales: function
+        range: function
+        render_axis_h: function
+        render_axis_v: function
+        render_bg: function
+        render_fg: function
+        setup_data: function
+        setup_layout: function
+        setup_panel_guides: function
+        setup_panel_params: function
+        setup_params: function
+        train_panel_guides: function
+        transform: function
+        super:  &lt;ggproto object: Class CoordCartesian, Coord, gg&gt;
+    coord_params: list
+    facet: &lt;ggproto object: Class FacetNull, Facet, gg&gt;
+        compute_layout: function
+        draw_back: function
+        draw_front: function
+        draw_labels: function
+        draw_panels: function
+        finish_data: function
+        init_scales: function
+        map_data: function
+        params: list
+        setup_data: function
+        setup_params: function
+        shrink: TRUE
+        train_scales: function
+        vars: function
+        super:  &lt;ggproto object: Class FacetNull, Facet, gg&gt;
+    facet_params: list
+    finish_data: function
+    get_scales: function
+    layout: data.frame
+    map_position: function
+    panel_params: list
+    panel_scales_x: list
+    panel_scales_y: list
+    render: function
+    render_labels: function
+    reset_scales: function
+    setup: function
+    setup_panel_guides: function
+    setup_panel_params: function
+    train_position: function
+    xlabel: function
+    ylabel: function
+    super:  &lt;ggproto object: Class Layout, gg&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-hi-auto[
+
+```r
+palmerpenguins::penguins %&gt;%
+  ggplot() +
+  aes(x = species) +
+  aes(fill = species) +
+  geom_bar() -&gt;
+my_plot
+
+ggtrace::ggtrace_inspect_args(
+  x = my_plot,
+  method = ggplot2:::Layer$compute_statistic
+) %&gt;%
+* .$data
+```
+]
+ 
+.panel2-hi-auto[
+
+```
+         fill x PANEL group
+1      Adelie 1     1     1
+2      Adelie 1     1     1
+3      Adelie 1     1     1
+4      Adelie 1     1     1
+5      Adelie 1     1     1
+6      Adelie 1     1     1
+7      Adelie 1     1     1
+8      Adelie 1     1     1
+9      Adelie 1     1     1
+10     Adelie 1     1     1
+11     Adelie 1     1     1
+12     Adelie 1     1     1
+13     Adelie 1     1     1
+14     Adelie 1     1     1
+15     Adelie 1     1     1
+16     Adelie 1     1     1
+17     Adelie 1     1     1
+18     Adelie 1     1     1
+19     Adelie 1     1     1
+20     Adelie 1     1     1
+21     Adelie 1     1     1
+22     Adelie 1     1     1
+23     Adelie 1     1     1
+24     Adelie 1     1     1
+25     Adelie 1     1     1
+26     Adelie 1     1     1
+27     Adelie 1     1     1
+28     Adelie 1     1     1
+29     Adelie 1     1     1
+30     Adelie 1     1     1
+31     Adelie 1     1     1
+32     Adelie 1     1     1
+33     Adelie 1     1     1
+34     Adelie 1     1     1
+35     Adelie 1     1     1
+36     Adelie 1     1     1
+37     Adelie 1     1     1
+38     Adelie 1     1     1
+39     Adelie 1     1     1
+40     Adelie 1     1     1
+41     Adelie 1     1     1
+42     Adelie 1     1     1
+43     Adelie 1     1     1
+44     Adelie 1     1     1
+45     Adelie 1     1     1
+46     Adelie 1     1     1
+47     Adelie 1     1     1
+48     Adelie 1     1     1
+49     Adelie 1     1     1
+50     Adelie 1     1     1
+51     Adelie 1     1     1
+52     Adelie 1     1     1
+53     Adelie 1     1     1
+54     Adelie 1     1     1
+55     Adelie 1     1     1
+56     Adelie 1     1     1
+57     Adelie 1     1     1
+58     Adelie 1     1     1
+59     Adelie 1     1     1
+60     Adelie 1     1     1
+61     Adelie 1     1     1
+62     Adelie 1     1     1
+63     Adelie 1     1     1
+64     Adelie 1     1     1
+65     Adelie 1     1     1
+66     Adelie 1     1     1
+67     Adelie 1     1     1
+68     Adelie 1     1     1
+69     Adelie 1     1     1
+70     Adelie 1     1     1
+71     Adelie 1     1     1
+72     Adelie 1     1     1
+73     Adelie 1     1     1
+74     Adelie 1     1     1
+75     Adelie 1     1     1
+76     Adelie 1     1     1
+77     Adelie 1     1     1
+78     Adelie 1     1     1
+79     Adelie 1     1     1
+80     Adelie 1     1     1
+81     Adelie 1     1     1
+82     Adelie 1     1     1
+83     Adelie 1     1     1
+84     Adelie 1     1     1
+85     Adelie 1     1     1
+86     Adelie 1     1     1
+87     Adelie 1     1     1
+88     Adelie 1     1     1
+89     Adelie 1     1     1
+90     Adelie 1     1     1
+91     Adelie 1     1     1
+92     Adelie 1     1     1
+93     Adelie 1     1     1
+94     Adelie 1     1     1
+95     Adelie 1     1     1
+96     Adelie 1     1     1
+97     Adelie 1     1     1
+98     Adelie 1     1     1
+99     Adelie 1     1     1
+100    Adelie 1     1     1
+101    Adelie 1     1     1
+102    Adelie 1     1     1
+103    Adelie 1     1     1
+104    Adelie 1     1     1
+105    Adelie 1     1     1
+106    Adelie 1     1     1
+107    Adelie 1     1     1
+108    Adelie 1     1     1
+109    Adelie 1     1     1
+110    Adelie 1     1     1
+111    Adelie 1     1     1
+112    Adelie 1     1     1
+113    Adelie 1     1     1
+114    Adelie 1     1     1
+115    Adelie 1     1     1
+116    Adelie 1     1     1
+117    Adelie 1     1     1
+118    Adelie 1     1     1
+119    Adelie 1     1     1
+120    Adelie 1     1     1
+121    Adelie 1     1     1
+122    Adelie 1     1     1
+123    Adelie 1     1     1
+124    Adelie 1     1     1
+125    Adelie 1     1     1
+126    Adelie 1     1     1
+127    Adelie 1     1     1
+128    Adelie 1     1     1
+129    Adelie 1     1     1
+130    Adelie 1     1     1
+131    Adelie 1     1     1
+132    Adelie 1     1     1
+133    Adelie 1     1     1
+134    Adelie 1     1     1
+135    Adelie 1     1     1
+136    Adelie 1     1     1
+137    Adelie 1     1     1
+138    Adelie 1     1     1
+139    Adelie 1     1     1
+140    Adelie 1     1     1
+141    Adelie 1     1     1
+142    Adelie 1     1     1
+143    Adelie 1     1     1
+144    Adelie 1     1     1
+145    Adelie 1     1     1
+146    Adelie 1     1     1
+147    Adelie 1     1     1
+148    Adelie 1     1     1
+149    Adelie 1     1     1
+150    Adelie 1     1     1
+151    Adelie 1     1     1
+152    Adelie 1     1     1
+153    Gentoo 3     1     3
+154    Gentoo 3     1     3
+155    Gentoo 3     1     3
+156    Gentoo 3     1     3
+157    Gentoo 3     1     3
+158    Gentoo 3     1     3
+159    Gentoo 3     1     3
+160    Gentoo 3     1     3
+161    Gentoo 3     1     3
+162    Gentoo 3     1     3
+163    Gentoo 3     1     3
+164    Gentoo 3     1     3
+165    Gentoo 3     1     3
+166    Gentoo 3     1     3
+167    Gentoo 3     1     3
+168    Gentoo 3     1     3
+169    Gentoo 3     1     3
+170    Gentoo 3     1     3
+171    Gentoo 3     1     3
+172    Gentoo 3     1     3
+173    Gentoo 3     1     3
+174    Gentoo 3     1     3
+175    Gentoo 3     1     3
+176    Gentoo 3     1     3
+177    Gentoo 3     1     3
+178    Gentoo 3     1     3
+179    Gentoo 3     1     3
+180    Gentoo 3     1     3
+181    Gentoo 3     1     3
+182    Gentoo 3     1     3
+183    Gentoo 3     1     3
+184    Gentoo 3     1     3
+185    Gentoo 3     1     3
+186    Gentoo 3     1     3
+187    Gentoo 3     1     3
+188    Gentoo 3     1     3
+189    Gentoo 3     1     3
+190    Gentoo 3     1     3
+191    Gentoo 3     1     3
+192    Gentoo 3     1     3
+193    Gentoo 3     1     3
+194    Gentoo 3     1     3
+195    Gentoo 3     1     3
+196    Gentoo 3     1     3
+197    Gentoo 3     1     3
+198    Gentoo 3     1     3
+199    Gentoo 3     1     3
+200    Gentoo 3     1     3
+201    Gentoo 3     1     3
+202    Gentoo 3     1     3
+203    Gentoo 3     1     3
+204    Gentoo 3     1     3
+205    Gentoo 3     1     3
+206    Gentoo 3     1     3
+207    Gentoo 3     1     3
+208    Gentoo 3     1     3
+209    Gentoo 3     1     3
+210    Gentoo 3     1     3
+211    Gentoo 3     1     3
+212    Gentoo 3     1     3
+213    Gentoo 3     1     3
+214    Gentoo 3     1     3
+215    Gentoo 3     1     3
+216    Gentoo 3     1     3
+217    Gentoo 3     1     3
+218    Gentoo 3     1     3
+219    Gentoo 3     1     3
+220    Gentoo 3     1     3
+221    Gentoo 3     1     3
+222    Gentoo 3     1     3
+223    Gentoo 3     1     3
+224    Gentoo 3     1     3
+225    Gentoo 3     1     3
+226    Gentoo 3     1     3
+227    Gentoo 3     1     3
+228    Gentoo 3     1     3
+229    Gentoo 3     1     3
+230    Gentoo 3     1     3
+231    Gentoo 3     1     3
+232    Gentoo 3     1     3
+233    Gentoo 3     1     3
+234    Gentoo 3     1     3
+235    Gentoo 3     1     3
+236    Gentoo 3     1     3
+237    Gentoo 3     1     3
+238    Gentoo 3     1     3
+239    Gentoo 3     1     3
+240    Gentoo 3     1     3
+241    Gentoo 3     1     3
+242    Gentoo 3     1     3
+243    Gentoo 3     1     3
+244    Gentoo 3     1     3
+245    Gentoo 3     1     3
+246    Gentoo 3     1     3
+247    Gentoo 3     1     3
+248    Gentoo 3     1     3
+249    Gentoo 3     1     3
+250    Gentoo 3     1     3
+251    Gentoo 3     1     3
+252    Gentoo 3     1     3
+253    Gentoo 3     1     3
+254    Gentoo 3     1     3
+255    Gentoo 3     1     3
+256    Gentoo 3     1     3
+257    Gentoo 3     1     3
+258    Gentoo 3     1     3
+259    Gentoo 3     1     3
+260    Gentoo 3     1     3
+261    Gentoo 3     1     3
+262    Gentoo 3     1     3
+263    Gentoo 3     1     3
+264    Gentoo 3     1     3
+265    Gentoo 3     1     3
+266    Gentoo 3     1     3
+267    Gentoo 3     1     3
+268    Gentoo 3     1     3
+269    Gentoo 3     1     3
+270    Gentoo 3     1     3
+271    Gentoo 3     1     3
+272    Gentoo 3     1     3
+273    Gentoo 3     1     3
+274    Gentoo 3     1     3
+275    Gentoo 3     1     3
+276    Gentoo 3     1     3
+277 Chinstrap 2     1     2
+278 Chinstrap 2     1     2
+279 Chinstrap 2     1     2
+280 Chinstrap 2     1     2
+281 Chinstrap 2     1     2
+282 Chinstrap 2     1     2
+283 Chinstrap 2     1     2
+284 Chinstrap 2     1     2
+285 Chinstrap 2     1     2
+286 Chinstrap 2     1     2
+287 Chinstrap 2     1     2
+288 Chinstrap 2     1     2
+289 Chinstrap 2     1     2
+290 Chinstrap 2     1     2
+291 Chinstrap 2     1     2
+292 Chinstrap 2     1     2
+293 Chinstrap 2     1     2
+294 Chinstrap 2     1     2
+295 Chinstrap 2     1     2
+296 Chinstrap 2     1     2
+297 Chinstrap 2     1     2
+298 Chinstrap 2     1     2
+299 Chinstrap 2     1     2
+300 Chinstrap 2     1     2
+301 Chinstrap 2     1     2
+302 Chinstrap 2     1     2
+303 Chinstrap 2     1     2
+304 Chinstrap 2     1     2
+305 Chinstrap 2     1     2
+306 Chinstrap 2     1     2
+307 Chinstrap 2     1     2
+308 Chinstrap 2     1     2
+309 Chinstrap 2     1     2
+310 Chinstrap 2     1     2
+311 Chinstrap 2     1     2
+312 Chinstrap 2     1     2
+313 Chinstrap 2     1     2
+314 Chinstrap 2     1     2
+315 Chinstrap 2     1     2
+316 Chinstrap 2     1     2
+317 Chinstrap 2     1     2
+318 Chinstrap 2     1     2
+319 Chinstrap 2     1     2
+320 Chinstrap 2     1     2
+321 Chinstrap 2     1     2
+322 Chinstrap 2     1     2
+323 Chinstrap 2     1     2
+324 Chinstrap 2     1     2
+325 Chinstrap 2     1     2
+326 Chinstrap 2     1     2
+327 Chinstrap 2     1     2
+328 Chinstrap 2     1     2
+329 Chinstrap 2     1     2
+330 Chinstrap 2     1     2
+331 Chinstrap 2     1     2
+332 Chinstrap 2     1     2
+333 Chinstrap 2     1     2
+334 Chinstrap 2     1     2
+335 Chinstrap 2     1     2
+336 Chinstrap 2     1     2
+337 Chinstrap 2     1     2
+338 Chinstrap 2     1     2
+339 Chinstrap 2     1     2
+340 Chinstrap 2     1     2
+341 Chinstrap 2     1     2
+342 Chinstrap 2     1     2
+343 Chinstrap 2     1     2
+344 Chinstrap 2     1     2
+```
+]
+
+&lt;style&gt;
+.panel1-hi-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-hi-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-hi-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+---
+
+count: false
+ 
+
+.panel1-hi-replace[
+
+```r
+palmerpenguins::penguins %&gt;% 
+  ggplot() + 
+  aes(x = species) + 
+  aes(fill = species) +
+  geom_bar() -&gt;
+my_plot
+
+ggtrace::ggtrace_inspect_args(
+  x = my_plot,
+* method = ggplot2:::Layer$compute_statistic
+) %&gt;% 
+  .$data
+```
+]
+ 
+.panel2-hi-replace[
+
+```
+         fill x PANEL group
+1      Adelie 1     1     1
+2      Adelie 1     1     1
+3      Adelie 1     1     1
+4      Adelie 1     1     1
+5      Adelie 1     1     1
+6      Adelie 1     1     1
+7      Adelie 1     1     1
+8      Adelie 1     1     1
+9      Adelie 1     1     1
+10     Adelie 1     1     1
+11     Adelie 1     1     1
+12     Adelie 1     1     1
+13     Adelie 1     1     1
+14     Adelie 1     1     1
+15     Adelie 1     1     1
+16     Adelie 1     1     1
+17     Adelie 1     1     1
+18     Adelie 1     1     1
+19     Adelie 1     1     1
+20     Adelie 1     1     1
+21     Adelie 1     1     1
+22     Adelie 1     1     1
+23     Adelie 1     1     1
+24     Adelie 1     1     1
+25     Adelie 1     1     1
+26     Adelie 1     1     1
+27     Adelie 1     1     1
+28     Adelie 1     1     1
+29     Adelie 1     1     1
+30     Adelie 1     1     1
+31     Adelie 1     1     1
+32     Adelie 1     1     1
+33     Adelie 1     1     1
+34     Adelie 1     1     1
+35     Adelie 1     1     1
+36     Adelie 1     1     1
+37     Adelie 1     1     1
+38     Adelie 1     1     1
+39     Adelie 1     1     1
+40     Adelie 1     1     1
+41     Adelie 1     1     1
+42     Adelie 1     1     1
+43     Adelie 1     1     1
+44     Adelie 1     1     1
+45     Adelie 1     1     1
+46     Adelie 1     1     1
+47     Adelie 1     1     1
+48     Adelie 1     1     1
+49     Adelie 1     1     1
+50     Adelie 1     1     1
+51     Adelie 1     1     1
+52     Adelie 1     1     1
+53     Adelie 1     1     1
+54     Adelie 1     1     1
+55     Adelie 1     1     1
+56     Adelie 1     1     1
+57     Adelie 1     1     1
+58     Adelie 1     1     1
+59     Adelie 1     1     1
+60     Adelie 1     1     1
+61     Adelie 1     1     1
+62     Adelie 1     1     1
+63     Adelie 1     1     1
+64     Adelie 1     1     1
+65     Adelie 1     1     1
+66     Adelie 1     1     1
+67     Adelie 1     1     1
+68     Adelie 1     1     1
+69     Adelie 1     1     1
+70     Adelie 1     1     1
+71     Adelie 1     1     1
+72     Adelie 1     1     1
+73     Adelie 1     1     1
+74     Adelie 1     1     1
+75     Adelie 1     1     1
+76     Adelie 1     1     1
+77     Adelie 1     1     1
+78     Adelie 1     1     1
+79     Adelie 1     1     1
+80     Adelie 1     1     1
+81     Adelie 1     1     1
+82     Adelie 1     1     1
+83     Adelie 1     1     1
+84     Adelie 1     1     1
+85     Adelie 1     1     1
+86     Adelie 1     1     1
+87     Adelie 1     1     1
+88     Adelie 1     1     1
+89     Adelie 1     1     1
+90     Adelie 1     1     1
+91     Adelie 1     1     1
+92     Adelie 1     1     1
+93     Adelie 1     1     1
+94     Adelie 1     1     1
+95     Adelie 1     1     1
+96     Adelie 1     1     1
+97     Adelie 1     1     1
+98     Adelie 1     1     1
+99     Adelie 1     1     1
+100    Adelie 1     1     1
+101    Adelie 1     1     1
+102    Adelie 1     1     1
+103    Adelie 1     1     1
+104    Adelie 1     1     1
+105    Adelie 1     1     1
+106    Adelie 1     1     1
+107    Adelie 1     1     1
+108    Adelie 1     1     1
+109    Adelie 1     1     1
+110    Adelie 1     1     1
+111    Adelie 1     1     1
+112    Adelie 1     1     1
+113    Adelie 1     1     1
+114    Adelie 1     1     1
+115    Adelie 1     1     1
+116    Adelie 1     1     1
+117    Adelie 1     1     1
+118    Adelie 1     1     1
+119    Adelie 1     1     1
+120    Adelie 1     1     1
+121    Adelie 1     1     1
+122    Adelie 1     1     1
+123    Adelie 1     1     1
+124    Adelie 1     1     1
+125    Adelie 1     1     1
+126    Adelie 1     1     1
+127    Adelie 1     1     1
+128    Adelie 1     1     1
+129    Adelie 1     1     1
+130    Adelie 1     1     1
+131    Adelie 1     1     1
+132    Adelie 1     1     1
+133    Adelie 1     1     1
+134    Adelie 1     1     1
+135    Adelie 1     1     1
+136    Adelie 1     1     1
+137    Adelie 1     1     1
+138    Adelie 1     1     1
+139    Adelie 1     1     1
+140    Adelie 1     1     1
+141    Adelie 1     1     1
+142    Adelie 1     1     1
+143    Adelie 1     1     1
+144    Adelie 1     1     1
+145    Adelie 1     1     1
+146    Adelie 1     1     1
+147    Adelie 1     1     1
+148    Adelie 1     1     1
+149    Adelie 1     1     1
+150    Adelie 1     1     1
+151    Adelie 1     1     1
+152    Adelie 1     1     1
+153    Gentoo 3     1     3
+154    Gentoo 3     1     3
+155    Gentoo 3     1     3
+156    Gentoo 3     1     3
+157    Gentoo 3     1     3
+158    Gentoo 3     1     3
+159    Gentoo 3     1     3
+160    Gentoo 3     1     3
+161    Gentoo 3     1     3
+162    Gentoo 3     1     3
+163    Gentoo 3     1     3
+164    Gentoo 3     1     3
+165    Gentoo 3     1     3
+166    Gentoo 3     1     3
+167    Gentoo 3     1     3
+168    Gentoo 3     1     3
+169    Gentoo 3     1     3
+170    Gentoo 3     1     3
+171    Gentoo 3     1     3
+172    Gentoo 3     1     3
+173    Gentoo 3     1     3
+174    Gentoo 3     1     3
+175    Gentoo 3     1     3
+176    Gentoo 3     1     3
+177    Gentoo 3     1     3
+178    Gentoo 3     1     3
+179    Gentoo 3     1     3
+180    Gentoo 3     1     3
+181    Gentoo 3     1     3
+182    Gentoo 3     1     3
+183    Gentoo 3     1     3
+184    Gentoo 3     1     3
+185    Gentoo 3     1     3
+186    Gentoo 3     1     3
+187    Gentoo 3     1     3
+188    Gentoo 3     1     3
+189    Gentoo 3     1     3
+190    Gentoo 3     1     3
+191    Gentoo 3     1     3
+192    Gentoo 3     1     3
+193    Gentoo 3     1     3
+194    Gentoo 3     1     3
+195    Gentoo 3     1     3
+196    Gentoo 3     1     3
+197    Gentoo 3     1     3
+198    Gentoo 3     1     3
+199    Gentoo 3     1     3
+200    Gentoo 3     1     3
+201    Gentoo 3     1     3
+202    Gentoo 3     1     3
+203    Gentoo 3     1     3
+204    Gentoo 3     1     3
+205    Gentoo 3     1     3
+206    Gentoo 3     1     3
+207    Gentoo 3     1     3
+208    Gentoo 3     1     3
+209    Gentoo 3     1     3
+210    Gentoo 3     1     3
+211    Gentoo 3     1     3
+212    Gentoo 3     1     3
+213    Gentoo 3     1     3
+214    Gentoo 3     1     3
+215    Gentoo 3     1     3
+216    Gentoo 3     1     3
+217    Gentoo 3     1     3
+218    Gentoo 3     1     3
+219    Gentoo 3     1     3
+220    Gentoo 3     1     3
+221    Gentoo 3     1     3
+222    Gentoo 3     1     3
+223    Gentoo 3     1     3
+224    Gentoo 3     1     3
+225    Gentoo 3     1     3
+226    Gentoo 3     1     3
+227    Gentoo 3     1     3
+228    Gentoo 3     1     3
+229    Gentoo 3     1     3
+230    Gentoo 3     1     3
+231    Gentoo 3     1     3
+232    Gentoo 3     1     3
+233    Gentoo 3     1     3
+234    Gentoo 3     1     3
+235    Gentoo 3     1     3
+236    Gentoo 3     1     3
+237    Gentoo 3     1     3
+238    Gentoo 3     1     3
+239    Gentoo 3     1     3
+240    Gentoo 3     1     3
+241    Gentoo 3     1     3
+242    Gentoo 3     1     3
+243    Gentoo 3     1     3
+244    Gentoo 3     1     3
+245    Gentoo 3     1     3
+246    Gentoo 3     1     3
+247    Gentoo 3     1     3
+248    Gentoo 3     1     3
+249    Gentoo 3     1     3
+250    Gentoo 3     1     3
+251    Gentoo 3     1     3
+252    Gentoo 3     1     3
+253    Gentoo 3     1     3
+254    Gentoo 3     1     3
+255    Gentoo 3     1     3
+256    Gentoo 3     1     3
+257    Gentoo 3     1     3
+258    Gentoo 3     1     3
+259    Gentoo 3     1     3
+260    Gentoo 3     1     3
+261    Gentoo 3     1     3
+262    Gentoo 3     1     3
+263    Gentoo 3     1     3
+264    Gentoo 3     1     3
+265    Gentoo 3     1     3
+266    Gentoo 3     1     3
+267    Gentoo 3     1     3
+268    Gentoo 3     1     3
+269    Gentoo 3     1     3
+270    Gentoo 3     1     3
+271    Gentoo 3     1     3
+272    Gentoo 3     1     3
+273    Gentoo 3     1     3
+274    Gentoo 3     1     3
+275    Gentoo 3     1     3
+276    Gentoo 3     1     3
+277 Chinstrap 2     1     2
+278 Chinstrap 2     1     2
+279 Chinstrap 2     1     2
+280 Chinstrap 2     1     2
+281 Chinstrap 2     1     2
+282 Chinstrap 2     1     2
+283 Chinstrap 2     1     2
+284 Chinstrap 2     1     2
+285 Chinstrap 2     1     2
+286 Chinstrap 2     1     2
+287 Chinstrap 2     1     2
+288 Chinstrap 2     1     2
+289 Chinstrap 2     1     2
+290 Chinstrap 2     1     2
+291 Chinstrap 2     1     2
+292 Chinstrap 2     1     2
+293 Chinstrap 2     1     2
+294 Chinstrap 2     1     2
+295 Chinstrap 2     1     2
+296 Chinstrap 2     1     2
+297 Chinstrap 2     1     2
+298 Chinstrap 2     1     2
+299 Chinstrap 2     1     2
+300 Chinstrap 2     1     2
+301 Chinstrap 2     1     2
+302 Chinstrap 2     1     2
+303 Chinstrap 2     1     2
+304 Chinstrap 2     1     2
+305 Chinstrap 2     1     2
+306 Chinstrap 2     1     2
+307 Chinstrap 2     1     2
+308 Chinstrap 2     1     2
+309 Chinstrap 2     1     2
+310 Chinstrap 2     1     2
+311 Chinstrap 2     1     2
+312 Chinstrap 2     1     2
+313 Chinstrap 2     1     2
+314 Chinstrap 2     1     2
+315 Chinstrap 2     1     2
+316 Chinstrap 2     1     2
+317 Chinstrap 2     1     2
+318 Chinstrap 2     1     2
+319 Chinstrap 2     1     2
+320 Chinstrap 2     1     2
+321 Chinstrap 2     1     2
+322 Chinstrap 2     1     2
+323 Chinstrap 2     1     2
+324 Chinstrap 2     1     2
+325 Chinstrap 2     1     2
+326 Chinstrap 2     1     2
+327 Chinstrap 2     1     2
+328 Chinstrap 2     1     2
+329 Chinstrap 2     1     2
+330 Chinstrap 2     1     2
+331 Chinstrap 2     1     2
+332 Chinstrap 2     1     2
+333 Chinstrap 2     1     2
+334 Chinstrap 2     1     2
+335 Chinstrap 2     1     2
+336 Chinstrap 2     1     2
+337 Chinstrap 2     1     2
+338 Chinstrap 2     1     2
+339 Chinstrap 2     1     2
+340 Chinstrap 2     1     2
+341 Chinstrap 2     1     2
+342 Chinstrap 2     1     2
+343 Chinstrap 2     1     2
+344 Chinstrap 2     1     2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-hi-replace[
+
+```r
+palmerpenguins::penguins %&gt;% 
+  ggplot() + 
+  aes(x = species) + 
+  aes(fill = species) +
+  geom_bar() -&gt;
+my_plot
+
+ggtrace::ggtrace_inspect_args(
+  x = my_plot,
+* method = ggplot2:::Layer$compute_aesthetics
+) %&gt;% 
+  .$data
+```
+]
+ 
+.panel2-hi-replace[
+
+```
+# A tibble: 344 × 9
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750
+ 2 Adelie  Torgersen           39.5          17.4               186        3800
+ 3 Adelie  Torgersen           40.3          18                 195        3250
+ 4 Adelie  Torgersen           NA            NA                  NA          NA
+ 5 Adelie  Torgersen           36.7          19.3               193        3450
+ 6 Adelie  Torgersen           39.3          20.6               190        3650
+ 7 Adelie  Torgersen           38.9          17.8               181        3625
+ 8 Adelie  Torgersen           39.2          19.6               195        4675
+ 9 Adelie  Torgersen           34.1          18.1               193        3475
+10 Adelie  Torgersen           42            20.2               190        4250
+# … with 334 more rows, and 3 more variables: sex &lt;fct&gt;, year &lt;int&gt;,
+#   PANEL &lt;fct&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-hi-replace[
+
+```r
+palmerpenguins::penguins %&gt;% 
+  ggplot() + 
+  aes(x = species) + 
+  aes(fill = species) +
+  geom_bar() -&gt;
+my_plot
+
+ggtrace::ggtrace_inspect_args(
+  x = my_plot,
+* method = ggplot2:::Layer$compute_position
+) %&gt;% 
+  .$data
+```
+]
+ 
+.panel2-hi-replace[
+
+```
+    y count prop x flipped_aes      fill PANEL group ymin ymax xmin xmax
+1 152   152    1 1       FALSE    Adelie     1     1    0  152 0.55 1.45
+2  68    68    1 2       FALSE Chinstrap     1     2    0   68 1.55 2.45
+3 124   124    1 3       FALSE    Gentoo     1     3    0  124 2.55 3.45
+```
+]
+
+---
+count: false
+ 
+
+.panel1-hi-replace[
+
+```r
+palmerpenguins::penguins %&gt;% 
+  ggplot() + 
+  aes(x = species) + 
+  aes(fill = species) +
+  geom_bar() -&gt;
+my_plot
+
+ggtrace::ggtrace_inspect_args(
+  x = my_plot,
+* method = ggplot2:::Layer$compute_geom_1
+) %&gt;% 
+  .$data
+```
+]
+ 
+.panel2-hi-replace[
+
+```
+    y count prop x width flipped_aes      fill PANEL group
+1 152   152    1 1   0.9       FALSE    Adelie     1     1
+2  68    68    1 2   0.9       FALSE Chinstrap     1     2
+3 124   124    1 3   0.9       FALSE    Gentoo     1     3
+```
+]
+
+---
+count: false
+ 
+
+.panel1-hi-replace[
+
+```r
+palmerpenguins::penguins %&gt;% 
+  ggplot() + 
+  aes(x = species) + 
+  aes(fill = species) +
+  geom_bar() -&gt;
+my_plot
+
+ggtrace::ggtrace_inspect_args(
+  x = my_plot,
+* method = ggplot2:::Layer$compute_geom_2
+) %&gt;% 
+  .$data
+```
+]
+ 
+.panel2-hi-replace[
+
+```
+     fill   y count prop x flipped_aes PANEL group ymin ymax xmin xmax
+1 #F8766D 152   152    1 1       FALSE     1     1    0  152 0.55 1.45
+2 #00BA38  68    68    1 2       FALSE     1     2    0   68 1.55 2.45
+3 #619CFF 124   124    1 3       FALSE     1     3    0  124 2.55 3.45
+```
+]
+
+&lt;style&gt;
+.panel1-hi-replace {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-hi-replace {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-hi-replace {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+&lt;!-- adjust font size in this css code chunk, currently 80 --&gt;
+
+
+
+---
+
+count: false
+ 
+
+.panel1-intro-auto[
+
+```r
+*t &lt;- seq(5, -1, length.out = 1000) * pi
+```
+]
+ 
+.panel2-intro-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-intro-auto[
+
+```r
+t &lt;- seq(5, -1, length.out = 1000) * pi
+
+*paste(
+* "Like a circle in a spiral, like a wheel within a wheel,",
+* "never ending or beginning on an ever spinning reel"
+*) 
+```
+]
+ 
+.panel2-intro-auto[
+
+```
+[1] "Like a circle in a spiral, like a wheel within a wheel, never ending or beginning on an ever spinning reel"
+```
+]
+
+---
+count: false
+ 
+
+.panel1-intro-auto[
+
+```r
+t &lt;- seq(5, -1, length.out = 1000) * pi
+
+paste(
+  "Like a circle in a spiral, like a wheel within a wheel,",
+  "never ending or beginning on an ever spinning reel"
+) -&gt;
+*rhyme
+```
+]
+ 
+.panel2-intro-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-intro-auto[
+
+```r
+t &lt;- seq(5, -1, length.out = 1000) * pi
+
+paste(
+  "Like a circle in a spiral, like a wheel within a wheel,",
+  "never ending or beginning on an ever spinning reel"
+) -&gt;
+rhyme
+
+*data.frame(
+* x = sin(t) * 1000:1,
+* y = cos(t) * 1000:1
+*) 
+```
+]
+ 
+.panel2-intro-auto[
+
+```
+                 x             y
+1     6.123234e-13 -1000.0000000
+2     1.884844e+01  -998.8221746
+3     3.765244e+01  -997.2894735
+4     5.640532e+01  -995.4031542
+5     7.510046e+01  -993.1645994
+6     9.373123e+01  -990.5753164
+7     1.122911e+02  -987.6369365
+8     1.307734e+02  -984.3512138
+9     1.491718e+02  -980.7200249
+10    1.674798e+02  -976.7453672
+11    1.856910e+02  -972.4293586
+12    2.037990e+02  -967.7742362
+13    2.217975e+02  -962.7823554
+14    2.396803e+02  -957.4561885
+15    2.574412e+02  -951.7983240
+16    2.750739e+02  -945.8114651
+17    2.925726e+02  -939.4984287
+18    3.099310e+02  -932.8621441
+19    3.271433e+02  -925.9056514
+20    3.442035e+02  -918.6321010
+21    3.611059e+02  -911.0447511
+22    3.778446e+02  -903.1469673
+23    3.944140e+02  -894.9422206
+24    4.108085e+02  -886.4340862
+25    4.270225e+02  -877.6262417
+26    4.430505e+02  -868.5224661
+27    4.588872e+02  -859.1266375
+28    4.745272e+02  -849.4427321
+29    4.899653e+02  -839.4748222
+30    5.051965e+02  -829.2270748
+31    5.202155e+02  -818.7037495
+32    5.350175e+02  -807.9091973
+33    5.495976e+02  -796.8478585
+34    5.639509e+02  -785.5242608
+35    5.780728e+02  -773.9430177
+36    5.919587e+02  -762.1088267
+37    6.056041e+02  -750.0264672
+38    6.190045e+02  -737.7007987
+39    6.321556e+02  -725.1367591
+40    6.450532e+02  -712.3393621
+41    6.576932e+02  -699.3136962
+42    6.700716e+02  -686.0649216
+43    6.821844e+02  -672.5982690
+44    6.940279e+02  -658.9190374
+45    7.055983e+02  -645.0325917
+46    7.168921e+02  -630.9443608
+47    7.279057e+02  -616.6598358
+48    7.386357e+02  -602.1845672
+49    7.490790e+02  -587.5241636
+50    7.592323e+02  -572.6842887
+51    7.690926e+02  -557.6706597
+52    7.786569e+02  -542.4890450
+53    7.879225e+02  -527.1452618
+54    7.968866e+02  -511.6451740
+55    8.055466e+02  -495.9946902
+56    8.139000e+02  -480.1997610
+57    8.219445e+02  -464.2663771
+58    8.296778e+02  -448.2005668
+59    8.370978e+02  -432.0083940
+60    8.442025e+02  -415.6959557
+61    8.509900e+02  -399.2693797
+62    8.574585e+02  -382.7348226
+63    8.636063e+02  -366.0984670
+64    8.694320e+02  -349.3665197
+65    8.749341e+02  -332.5452090
+66    8.801113e+02  -315.6407827
+67    8.849624e+02  -298.6595055
+68    8.894864e+02  -281.6076570
+69    8.936824e+02  -264.4915289
+70    8.975495e+02  -247.3174232
+71    9.010870e+02  -230.0916496
+72    9.042944e+02  -212.8205233
+73    9.071713e+02  -195.5103626
+74    9.097172e+02  -178.1674864
+75    9.119320e+02  -160.7982125
+76    9.138156e+02  -143.4088547
+77    9.153680e+02  -126.0057207
+78    9.165894e+02  -108.5951098
+79    9.174800e+02   -91.1833109
+80    9.180403e+02   -73.7765998
+81    9.182707e+02   -56.3812370
+82    9.181719e+02   -39.0034657
+83    9.177447e+02   -21.6495096
+84    9.169898e+02    -4.3255702
+85    9.159083e+02    12.9621749
+86    9.145012e+02    30.2075745
+87    9.127699e+02    47.4045061
+88    9.107155e+02    64.5468774
+89    9.083396e+02    81.6286295
+90    9.056436e+02    98.6437380
+91    9.026294e+02   115.5862160
+92    8.992986e+02   132.4501155
+93    8.956531e+02   149.2295299
+94    8.916950e+02   165.9185961
+95    8.874264e+02   182.5114963
+96    8.828494e+02   199.0024601
+97    8.779664e+02   215.3857666
+98    8.727798e+02   231.6557465
+99    8.672922e+02   247.8067835
+100   8.615062e+02   263.8333169
+101   8.554246e+02   279.7298433
+102   8.490501e+02   295.4909183
+103   8.423858e+02   311.1111585
+104   8.354347e+02   326.5852433
+105   8.281998e+02   341.9079167
+106   8.206846e+02   357.0739894
+107   8.128922e+02   372.0783400
+108   8.048261e+02   386.9159169
+109   7.964899e+02   401.5817404
+110   7.878870e+02   416.0709038
+111   7.790214e+02   430.3785754
+112   7.698966e+02   444.5000000
+113   7.605166e+02   458.4305004
+114   7.508853e+02   472.1654791
+115   7.410068e+02   485.7004195
+116   7.308852e+02   499.0308879
+117   7.205247e+02   512.1525345
+118   7.099295e+02   525.0610947
+119   6.991040e+02   537.7523910
+120   6.880526e+02   550.2223340
+121   6.767798e+02   562.4669238
+122   6.652903e+02   574.4822509
+123   6.535885e+02   586.2644982
+124   6.416793e+02   597.8099414
+125   6.295673e+02   609.1149506
+126   6.172574e+02   620.1759915
+127   6.047546e+02   630.9896261
+128   5.920637e+02   641.5525140
+129   5.791897e+02   651.8614134
+130   5.661377e+02   661.9131820
+131   5.529129e+02   671.7047780
+132   5.395204e+02   681.2332609
+133   5.259654e+02   690.4957925
+134   5.122531e+02   699.4896375
+135   4.983889e+02   708.2121645
+136   4.843782e+02   716.6608466
+137   4.702263e+02   724.8332621
+138   4.559386e+02   732.7270951
+139   4.415206e+02   740.3401363
+140   4.269779e+02   747.6702836
+141   4.123160e+02   754.7155421
+142   3.975403e+02   761.4740253
+143   3.826566e+02   767.9439552
+144   3.676704e+02   774.1236626
+145   3.525875e+02   780.0115878
+146   3.374134e+02   785.6062805
+147   3.221538e+02   790.9064006
+148   3.068145e+02   795.9107179
+149   2.914012e+02   800.6181129
+150   2.759196e+02   805.0275763
+151   2.603754e+02   809.1382097
+152   2.447745e+02   812.9492253
+153   2.291226e+02   816.4599461
+154   2.134254e+02   819.6698061
+155   1.976888e+02   822.5783496
+156   1.819185e+02   825.1852319
+157   1.661203e+02   827.4902189
+158   1.502999e+02   829.4931865
+159   1.344631e+02   831.1941211
+160   1.186158e+02   832.5931188
+161   1.027635e+02   833.6903855
+162   8.691215e+01   834.4862363
+163   7.106736e+01   834.9810954
+164   5.523488e+01   835.1754953
+165   3.942038e+01   835.0700769
+166   2.362955e+01   834.6655884
+167   7.868016e+00   833.9628855
+168  -7.858582e+00   832.9629300
+169  -2.354465e+01   831.6667899
+170  -3.918462e+01   830.0756386
+171  -5.477294e+01   828.1907540
+172  -7.030411e+01   826.0135180
+173  -8.577266e+01   823.5454156
+174  -1.011731e+02   820.7880343
+175  -1.165001e+02   817.7430632
+176  -1.317483e+02   814.4122920
+177  -1.469123e+02   810.7976105
+178  -1.619869e+02   806.9010073
+179  -1.769669e+02   802.7245688
+180  -1.918469e+02   798.2704787
+181  -2.066220e+02   793.5410165
+182  -2.212870e+02   788.5385565
+183  -2.358369e+02   783.2655669
+184  -2.502667e+02   777.7246086
+185  -2.645715e+02   771.9183341
+186  -2.787464e+02   765.8494859
+187  -2.927866e+02   759.5208961
+188  -3.066874e+02   752.9354844
+189  -3.204440e+02   746.0962570
+190  -3.340519e+02   739.0063057
+191  -3.475065e+02   731.6688060
+192  -3.608033e+02   724.0870160
+193  -3.739378e+02   716.2642753
+194  -3.869058e+02   708.2040029
+195  -3.997029e+02   699.9096964
+196  -4.123250e+02   691.3849301
+197  -4.247678e+02   682.6333539
+198  -4.370274e+02   673.6586915
+199  -4.490998e+02   664.4647387
+200  -4.609810e+02   655.0553623
+201  -4.726672e+02   645.4344983
+202  -4.841548e+02   635.6061500
+203  -4.954399e+02   625.5743869
+204  -5.065191e+02   615.3433426
+205  -5.173888e+02   604.9172134
+206  -5.280456e+02   594.3002565
+207  -5.384863e+02   583.4967882
+208  -5.487075e+02   572.5111825
+209  -5.587062e+02   561.3478689
+210  -5.684791e+02   550.0113310
+211  -5.780235e+02   538.5061046
+212  -5.873364e+02   526.8367757
+213  -5.964149e+02   515.0079792
+214  -6.052565e+02   503.0243966
+215  -6.138585e+02   490.8907543
+216  -6.222184e+02   478.6118219
+217  -6.303338e+02   466.1924102
+218  -6.382023e+02   453.6373693
+219  -6.458217e+02   440.9515869
+220  -6.531900e+02   428.1399861
+221  -6.603050e+02   415.2075239
+222  -6.671649e+02   402.1591890
+223  -6.737678e+02   389.0000000
+224  -6.801119e+02   375.7350035
+225  -6.861957e+02   362.3692720
+226  -6.920175e+02   348.9079022
+227  -6.975760e+02   335.3560131
+228  -7.028699e+02   321.7187436
+229  -7.078978e+02   308.0012512
+230  -7.126586e+02   294.2087096
+231  -7.171513e+02   280.3463069
+232  -7.213749e+02   266.4192437
+233  -7.253287e+02   252.4327311
+234  -7.290118e+02   238.3919887
+235  -7.324237e+02   224.3022428
+236  -7.355638e+02   210.1687243
+237  -7.384317e+02   195.9966670
+238  -7.410269e+02   181.7913053
+239  -7.433494e+02   167.5578725
+240  -7.453990e+02   153.3015990
+241  -7.471755e+02   139.0277101
+242  -7.486792e+02   124.7414242
+243  -7.499102e+02   110.4479511
+244  -7.508686e+02    96.1524895
+245  -7.515550e+02    81.8602261
+246  -7.519697e+02    67.5763325
+247  -7.521133e+02    53.3059645
+248  -7.519865e+02    39.0542594
+249  -7.515901e+02    24.8263345
+250  -7.509248e+02    10.6272853
+251  -7.499917e+02    -3.5378164
+252  -7.487917e+02   -17.6639245
+253  -7.473260e+02   -31.7460200
+254  -7.455959e+02   -45.7791131
+255  -7.436027e+02   -59.7582448
+256  -7.413477e+02   -73.6784888
+257  -7.388326e+02   -87.5349531
+258  -7.360589e+02  -101.3227819
+259  -7.330283e+02  -115.0371570
+260  -7.297425e+02  -128.6732997
+261  -7.262036e+02  -142.2264724
+262  -7.224133e+02  -155.6919805
+263  -7.183738e+02  -169.0651735
+264  -7.140872e+02  -182.3414471
+265  -7.095558e+02  -195.5162443
+266  -7.047817e+02  -208.5850577
+267  -6.997675e+02  -221.5434300
+268  -6.945155e+02  -234.3869567
+269  -6.890283e+02  -247.1112866
+270  -6.833086e+02  -259.7121237
+271  -6.773590e+02  -272.1852288
+272  -6.711823e+02  -284.5264205
+273  -6.647814e+02  -296.7315770
+274  -6.581593e+02  -308.7966373
+275  -6.513188e+02  -320.7176024
+276  -6.442632e+02  -332.4905368
+277  -6.369955e+02  -344.1115699
+278  -6.295189e+02  -355.5768969
+279  -6.218368e+02  -366.8827804
+280  -6.139525e+02  -378.0255514
+281  -6.058694e+02  -389.0016107
+282  -5.975910e+02  -399.8074295
+283  -5.891208e+02  -410.4395514
+284  -5.804625e+02  -420.8945926
+285  -5.716197e+02  -431.1692436
+286  -5.625961e+02  -441.2602699
+287  -5.533955e+02  -451.1645131
+288  -5.440217e+02  -460.8788919
+289  -5.344787e+02  -470.4004031
+290  -5.247703e+02  -479.7261221
+291  -5.149005e+02  -488.8532044
+292  -5.048734e+02  -497.7788860
+293  -4.946931e+02  -506.5004843
+294  -4.843636e+02  -515.0153992
+295  -4.738892e+02  -523.3211131
+296  -4.632741e+02  -531.4151925
+297  -4.525225e+02  -539.2952880
+298  -4.416387e+02  -546.9591353
+299  -4.306270e+02  -554.4045558
+300  -4.194918e+02  -561.6294569
+301  -4.082375e+02  -568.6318330
+302  -3.968685e+02  -575.4097656
+303  -3.853893e+02  -581.9614239
+304  -3.738043e+02  -588.2850654
+305  -3.621182e+02  -594.3790361
+306  -3.503353e+02  -600.2417710
+307  -3.384603e+02  -605.8717945
+308  -3.264977e+02  -611.2677205
+309  -3.144522e+02  -616.4282529
+310  -3.023284e+02  -621.3521855
+311  -2.901309e+02  -626.0384027
+312  -2.778643e+02  -630.4858793
+313  -2.655333e+02  -634.6936808
+314  -2.531426e+02  -638.6609632
+315  -2.406969e+02  -642.3869738
+316  -2.282008e+02  -645.8710501
+317  -2.156590e+02  -649.1126211
+318  -2.030763e+02  -652.1112061
+319  -1.904573e+02  -654.8664154
+320  -1.778067e+02  -657.3779499
+321  -1.651293e+02  -659.6456010
+322  -1.524297e+02  -661.6692503
+323  -1.397126e+02  -663.4488697
+324  -1.269826e+02  -664.9845210
+325  -1.142446e+02  -666.2763554
+326  -1.015030e+02  -667.3246137
+327  -8.876262e+01  -668.1296255
+328  -7.602805e+01  -668.6918091
+329  -6.330390e+01  -669.0116710
+330  -5.059479e+01  -669.0898054
+331  -3.790528e+01  -668.9268940
+332  -2.523996e+01  -668.5237052
+333  -1.260336e+01  -667.8810937
+334   2.450518e-13  -667.0000000
+335   1.256562e+01  -665.8814497
+336   2.508905e+01  -664.5265530
+337   3.756583e+01  -662.9365039
+338   4.999157e+01  -661.1125797
+339   6.236188e+01  -659.0561401
+340   7.467242e+01  -656.7686268
+341   8.691889e+01  -654.2515621
+342   9.909701e+01  -651.5065488
+343   1.112025e+02  -648.5352690
+344   1.232313e+02  -645.3394834
+345   1.351791e+02  -641.9210303
+346   1.470419e+02  -638.2818247
+347   1.588155e+02  -634.4238574
+348   1.704960e+02  -630.3491943
+349   1.820794e+02  -626.0599749
+350   1.935617e+02  -621.5584117
+351   2.049391e+02  -616.8467891
+352   2.162077e+02  -611.9274621
+353   2.273638e+02  -606.8028557
+354   2.384036e+02  -601.4754632
+355   2.493234e+02  -595.9478456
+356   2.601197e+02  -590.2226301
+357   2.707888e+02  -584.3025092
+358   2.813273e+02  -578.1902392
+359   2.917317e+02  -571.8886392
+360   3.019986e+02  -565.4005900
+361   3.121248e+02  -558.7290324
+362   3.221068e+02  -551.8769665
+363   3.319416e+02  -544.8474497
+364   3.416261e+02  -537.6435963
+365   3.511570e+02  -530.2685753
+366   3.605315e+02  -522.7256096
+367   3.697465e+02  -515.0179745
+368   3.787993e+02  -507.1489961
+369   3.876870e+02  -499.1220502
+370   3.964068e+02  -490.9405610
+371   4.049562e+02  -482.6079992
+372   4.133325e+02  -474.1278809
+373   4.215332e+02  -465.5037663
+374   4.295559e+02  -456.7392578
+375   4.373981e+02  -447.8379989
+376   4.450577e+02  -438.8036724
+377   4.525323e+02  -429.6399993
+378   4.598198e+02  -420.3507371
+379   4.669182e+02  -410.9396779
+380   4.738254e+02  -401.4106478
+381   4.805395e+02  -391.7675044
+382   4.870587e+02  -382.0141358
+383   4.933813e+02  -372.1544589
+384   4.995054e+02  -362.1924179
+385   5.054296e+02  -352.1319828
+386   5.111523e+02  -341.9771477
+387   5.166720e+02  -331.7319291
+388   5.219874e+02  -321.4003648
+389   5.270971e+02  -310.9865119
+390   5.320001e+02  -300.4944454
+391   5.366951e+02  -289.9282564
+392   5.411811e+02  -279.2920509
+393   5.454571e+02  -268.5899480
+394   5.495223e+02  -257.8260782
+395   5.533758e+02  -247.0045820
+396   5.570169e+02  -236.1296082
+397   5.604450e+02  -225.2053126
+398   5.636595e+02  -214.2358558
+399   5.666599e+02  -203.2254023
+400   5.694458e+02  -192.1781187
+401   5.720170e+02  -181.0981717
+402   5.743731e+02  -169.9897273
+403   5.765141e+02  -158.8569485
+404   5.784397e+02  -147.7039944
+405   5.801501e+02  -136.5350182
+406   5.816454e+02  -125.3541656
+407   5.829256e+02  -114.1655738
+408   5.839910e+02  -102.9733694
+409   5.848420e+02   -91.7816670
+410   5.854789e+02   -80.5945681
+411   5.859022e+02   -69.4161591
+412   5.861125e+02   -58.2505099
+413   5.861104e+02   -47.1016728
+414   5.858967e+02   -35.9736805
+415   5.854720e+02   -24.8705451
+416   5.848373e+02   -13.7962561
+417   5.839935e+02    -2.7547797
+418   5.829416e+02     8.2499432
+419   5.816828e+02    19.2139982
+420   5.802180e+02    30.1334989
+421   5.785487e+02    41.0045881
+422   5.766761e+02    51.8234391
+423   5.746016e+02    62.5862575
+424   5.723266e+02    73.2892820
+425   5.698526e+02    83.9287860
+426   5.671812e+02    94.5010790
+427   5.643142e+02   105.0025073
+428   5.612531e+02   115.4294563
+429   5.579998e+02   125.7783505
+430   5.545562e+02   136.0456557
+431   5.509241e+02   146.2278798
+432   5.471056e+02   156.3215740
+433   5.431027e+02   166.3233341
+434   5.389175e+02   176.2298013
+435   5.345521e+02   186.0376638
+436   5.300089e+02   195.7436576
+437   5.252900e+02   205.3445677
+438   5.203979e+02   214.8372289
+439   5.153349e+02   224.2185274
+440   5.101035e+02   233.4854013
+441   5.047062e+02   242.6348415
+442   4.991456e+02   251.6638934
+443   4.934242e+02   260.5696569
+444   4.875448e+02   269.3492882
+445   4.815101e+02   278.0000000
+446   4.753229e+02   286.5190628
+447   4.689859e+02   294.9038054
+448   4.625020e+02   303.1516163
+449   4.558742e+02   311.2599437
+450   4.491053e+02   319.2262969
+451   4.421984e+02   327.0482470
+452   4.351566e+02   334.7234271
+453   4.279828e+02   342.2495336
+454   4.206802e+02   349.6243265
+455   4.132520e+02   356.8456303
+456   4.057013e+02   363.9113343
+457   3.980314e+02   370.8193935
+458   3.902455e+02   377.5678290
+459   3.823469e+02   384.1547285
+460   3.743389e+02   390.5782468
+461   3.662249e+02   396.8366066
+462   3.580083e+02   402.9280984
+463   3.496924e+02   408.8510814
+464   3.412807e+02   414.6039837
+465   3.327767e+02   420.1853025
+466   3.241837e+02   425.5936048
+467   3.155054e+02   430.8275276
+468   3.067452e+02   435.8857779
+469   2.979066e+02   440.7671334
+470   2.889932e+02   445.4704423
+471   2.800086e+02   449.9946239
+472   2.709564e+02   454.3386684
+473   2.618401e+02   458.5016373
+474   2.526634e+02   462.4826636
+475   2.434298e+02   466.2809515
+476   2.341430e+02   469.8957768
+477   2.248067e+02   473.3264868
+478   2.154244e+02   476.5725005
+479   2.059997e+02   479.6333081
+480   1.965364e+02   482.5084716
+481   1.870381e+02   485.1976241
+482   1.775085e+02   487.7004702
+483   1.679510e+02   490.0167856
+484   1.583695e+02   492.1464170
+485   1.487675e+02   494.0892818
+486   1.391487e+02   495.8453682
+487   1.295167e+02   497.4147347
+488   1.198751e+02   498.7975099
+489   1.102275e+02   499.9938920
+490   1.005775e+02   501.0041491
+491   9.092875e+01   501.8286182
+492   8.128472e+01   502.4677050
+493   7.164900e+01   502.9218839
+494   6.202512e+01   503.1916970
+495   5.241662e+01   503.2777540
+496   4.282699e+01   503.1807317
+497   3.325971e+01   502.9013735
+498   2.371825e+01   502.4404889
+499   1.420603e+01   501.7989526
+500   4.726470e+00   500.9777046
+501  -4.717036e+00   499.9777491
+502  -1.412113e+01   498.8001541
+503  -2.348248e+01   497.4460506
+504  -3.279777e+01   495.9166322
+505  -4.206374e+01   494.2131543
+506  -5.127713e+01   492.3369332
+507  -6.043474e+01   490.2893458
+508  -6.953338e+01   488.0718283
+509  -7.856990e+01   485.6858760
+510  -8.754121e+01   483.1330422
+511  -9.644422e+01   480.4149375
+512  -1.052759e+02   477.5332289
+513  -1.140333e+02   474.4896390
+514  -1.227133e+02   471.2859452
+515  -1.313132e+02   467.9239786
+516  -1.398300e+02   464.4056234
+517  -1.482608e+02   460.7328159
+518  -1.566030e+02   456.9075433
+519  -1.648537e+02   452.9318432
+520  -1.730103e+02   448.8078023
+521  -1.810700e+02   444.5375554
+522  -1.890304e+02   440.1232846
+523  -1.968888e+02   435.5672184
+524  -2.046427e+02   430.8716302
+525  -2.122897e+02   426.0388376
+526  -2.198273e+02   421.0712014
+527  -2.272532e+02   415.9711244
+528  -2.345651e+02   410.7410501
+529  -2.417607e+02   405.3834621
+530  -2.488379e+02   399.9008827
+531  -2.557944e+02   394.2958717
+532  -2.626282e+02   388.5710255
+533  -2.693372e+02   382.7289757
+534  -2.759195e+02   376.7723884
+535  -2.823731e+02   370.7039623
+536  -2.886962e+02   364.5264284
+537  -2.948869e+02   358.2425483
+538  -3.009435e+02   351.8551128
+539  -3.068643e+02   345.3669415
+540  -3.126476e+02   338.7808808
+541  -3.182919e+02   332.0998032
+542  -3.237956e+02   325.3266058
+543  -3.291573e+02   318.4642094
+544  -3.343756e+02   311.5155567
+545  -3.394492e+02   304.4836118
+546  -3.443766e+02   297.3713586
+547  -3.491569e+02   290.1817993
+548  -3.537887e+02   282.9179538
+549  -3.582710e+02   275.5828580
+550  -3.626027e+02   268.1795625
+551  -3.667829e+02   260.7111318
+552  -3.708107e+02   253.1806426
+553  -3.746852e+02   245.5911828
+554  -3.784056e+02   237.9458502
+555  -3.819712e+02   230.2477513
+556  -3.853813e+02   222.5000000
+557  -3.886354e+02   214.7057163
+558  -3.917328e+02   206.8680251
+559  -3.946732e+02   198.9900552
+560  -3.974561e+02   191.0749377
+561  -4.000812e+02   183.1258049
+562  -4.025481e+02   175.1457892
+563  -4.048566e+02   167.1380218
+564  -4.070066e+02   159.1056313
+565  -4.089980e+02   151.0517429
+566  -4.108307e+02   142.9794766
+567  -4.125047e+02   134.8919467
+568  -4.140202e+02   126.7922600
+569  -4.153772e+02   118.6835149
+570  -4.165760e+02   110.5688004
+571  -4.176168e+02   102.4511943
+572  -4.184999e+02    94.3337629
+573  -4.192257e+02    86.2195590
+574  -4.197947e+02    78.1116213
+575  -4.202073e+02    70.0129733
+576  -4.204641e+02    61.9266216
+577  -4.205658e+02    53.8555556
+578  -4.205129e+02    45.8027455
+579  -4.203062e+02    37.7711422
+580  -4.199466e+02    29.7636751
+581  -4.194347e+02    21.7832522
+582  -4.187716e+02    13.8327582
+583  -4.179581e+02     5.9150536
+584  -4.169954e+02    -1.9670259
+585  -4.158843e+02    -9.8106710
+586  -4.146261e+02   -17.6130993
+587  -4.132218e+02   -25.3715566
+588  -4.116728e+02   -33.0833178
+589  -4.099802e+02   -40.7456878
+590  -4.081454e+02   -48.3560023
+591  -4.061698e+02   -55.9116293
+592  -4.040547e+02   -63.4099693
+593  -4.018016e+02   -70.8484565
+594  -3.994120e+02   -78.2245598
+595  -3.968874e+02   -85.5357836
+596  -3.942295e+02   -92.7796684
+597  -3.914400e+02   -99.9537919
+598  -3.885203e+02  -107.0557697
+599  -3.854725e+02  -114.0832560
+600  -3.822980e+02  -121.0339447
+601  -3.789989e+02  -127.9055698
+602  -3.755769e+02  -134.6959062
+603  -3.720339e+02  -141.4027705
+604  -3.683719e+02  -148.0240217
+605  -3.645929e+02  -154.5575618
+606  -3.606987e+02  -161.0013364
+607  -3.566915e+02  -167.3533358
+608  -3.525734e+02  -173.6115947
+609  -3.483464e+02  -179.7741937
+610  -3.440127e+02  -185.8392594
+611  -3.395745e+02  -191.8049651
+612  -3.350340e+02  -197.6695313
+613  -3.303933e+02  -203.4312260
+614  -3.256548e+02  -209.0883657
+615  -3.208208e+02  -214.6393154
+616  -3.158935e+02  -220.0824893
+617  -3.108753e+02  -225.4163509
+618  -3.057686e+02  -230.6394138
+619  -3.005758e+02  -235.7502421
+620  -2.952993e+02  -240.7474503
+621  -2.899415e+02  -245.6297040
+622  -2.845048e+02  -250.3957202
+623  -2.789918e+02  -255.0442674
+624  -2.734049e+02  -259.5741663
+625  -2.677467e+02  -263.9842893
+626  -2.620196e+02  -268.2735616
+627  -2.562263e+02  -272.4409608
+628  -2.503692e+02  -276.4855173
+629  -2.444510e+02  -280.4063143
+630  -2.384742e+02  -284.2024884
+631  -2.324414e+02  -287.8732291
+632  -2.263552e+02  -291.4177793
+633  -2.202182e+02  -294.8354353
+634  -2.140331e+02  -298.1255467
+635  -2.078024e+02  -301.2875167
+636  -2.015288e+02  -304.3208019
+637  -1.952149e+02  -307.2249122
+638  -1.888634e+02  -309.9994111
+639  -1.824768e+02  -312.6439153
+640  -1.760579e+02  -315.1580949
+641  -1.696092e+02  -317.5416730
+642  -1.631335e+02  -319.7944260
+643  -1.566332e+02  -321.9161829
+644  -1.501112e+02  -323.9068257
+645  -1.435699e+02  -325.7662889
+646  -1.370121e+02  -327.4945591
+647  -1.304403e+02  -329.0916754
+648  -1.238571e+02  -330.5577285
+649  -1.172652e+02  -331.8928608
+650  -1.106671e+02  -333.0972661
+651  -1.040654e+02  -334.1711891
+652  -9.746275e+01  -335.1149252
+653  -9.086159e+01  -335.9288202
+654  -8.426450e+01  -336.6132699
+655  -7.767403e+01  -337.1687196
+656  -7.109267e+01  -337.5956638
+657  -6.452293e+01  -337.8946458
+658  -5.796728e+01  -338.0662572
+659  -5.142819e+01  -338.1111376
+660  -4.490809e+01  -338.0299737
+661  -3.840942e+01  -337.8234994
+662  -3.193456e+01  -337.4924947
+663  -2.548590e+01  -337.0377857
+664  -1.906579e+01  -336.4602437
+665  -1.267657e+01  -335.7607847
+666  -6.320547e+00  -334.9403688
+667   4.090320e-14  -334.0000000
+668   6.282812e+00  -332.9407249
+669   1.252566e+01  -331.7636325
+670   1.872634e+01  -330.4698536
+671   2.488268e+01  -329.0605600
+672   3.099254e+01  -327.5369639
+673   3.705379e+01  -325.9003171
+674   4.306436e+01  -324.1519103
+675   4.902219e+01  -322.2930727
+676   5.492527e+01  -320.3251709
+677   6.077160e+01  -318.2496083
+678   6.655922e+01  -316.0678244
+679   7.228623e+01  -313.7812940
+680   7.795074e+01  -311.3915263
+681   8.355088e+01  -308.9000646
+682   8.908486e+01  -306.3084846
+683   9.455089e+01  -303.6183946
+684   9.994723e+01  -300.8314340
+685   1.052722e+02  -297.9492728
+686   1.105241e+02  -294.9736104
+687   1.157013e+02  -291.9061753
+688   1.208022e+02  -288.7487240
+689   1.258253e+02  -285.5030397
+690   1.307691e+02  -282.1709322
+691   1.356321e+02  -278.7542366
+692   1.404129e+02  -275.2548123
+693   1.451101e+02  -271.6745425
+694   1.497223e+02  -268.0153327
+695   1.542483e+02  -264.2791107
+696   1.586868e+02  -260.4678247
+697   1.630366e+02  -256.5834431
+698   1.672965e+02  -252.6279533
+699   1.714654e+02  -248.6033608
+700   1.755421e+02  -244.5116882
+701   1.795257e+02  -240.3549744
+702   1.834152e+02  -236.1352738
+703   1.872096e+02  -231.8546548
+704   1.909079e+02  -227.5151996
+705   1.945094e+02  -223.1190028
+706   1.980132e+02  -218.6681705
+707   2.014185e+02  -214.1648195
+708   2.047247e+02  -209.6110761
+709   2.079309e+02  -205.0090757
+710   2.110367e+02  -200.3609612
+711   2.140413e+02  -195.6688824
+712   2.169443e+02  -190.9349951
+713   2.197451e+02  -186.1614599
+714   2.224433e+02  -181.3504415
+715   2.250384e+02  -176.5041080
+716   2.275302e+02  -171.6246291
+717   2.299182e+02  -166.7141762
+718   2.322022e+02  -161.7749207
+719   2.343820e+02  -156.8090336
+720   2.364574e+02  -151.8186842
+721   2.384282e+02  -146.8060394
+722   2.402943e+02  -141.7732628
+723   2.420557e+02  -136.7225136
+724   2.437124e+02  -131.6559459
+725   2.452643e+02  -126.5757078
+726   2.467117e+02  -121.4839403
+727   2.480545e+02  -116.3827766
+728   2.492930e+02  -111.2743414
+729   2.504274e+02  -106.1607495
+730   2.514579e+02  -101.0441055
+731   2.523848e+02   -95.9265026
+732   2.532085e+02   -90.8100220
+733   2.539293e+02   -85.6967318
+734   2.545476e+02   -80.5886864
+735   2.550639e+02   -75.4879256
+736   2.554786e+02   -70.3964738
+737   2.557924e+02   -65.3163393
+738   2.560059e+02   -60.2495131
+739   2.561195e+02   -55.1979687
+740   2.561340e+02   -50.1636612
+741   2.560500e+02   -45.1485262
+742   2.558684e+02   -40.1544793
+743   2.555898e+02   -35.1834155
+744   2.552150e+02   -30.2372083
+745   2.547450e+02   -25.3177089
+746   2.541805e+02   -20.4267459
+747   2.535226e+02   -15.5661241
+748   2.527720e+02   -10.7376244
+749   2.519299e+02    -5.9430026
+750   2.509972e+02    -1.1839892
+751   2.499750e+02     3.5377115
+752   2.488643e+02     8.2204219
+753   2.476662e+02    12.8624918
+754   2.463820e+02    17.4622987
+755   2.450126e+02    22.0182487
+756   2.435595e+02    26.5287770
+757   2.420237e+02    30.9923480
+758   2.404066e+02    35.4074566
+759   2.387093e+02    39.7726280
+760   2.369333e+02    44.0864186
+761   2.350798e+02    48.3474162
+762   2.331503e+02    52.5542408
+763   2.311460e+02    56.7055448
+764   2.290685e+02    60.8000132
+765   2.269190e+02    64.8363646
+766   2.246992e+02    68.8133512
+767   2.224104e+02    72.7297593
+768   2.200541e+02    76.5844093
+769   2.176320e+02    80.3761568
+770   2.151454e+02    84.1038921
+771   2.125959e+02    87.7665411
+772   2.099852e+02    91.3630655
+773   2.073148e+02    94.8924625
+774   2.045863e+02    98.3537661
+775   2.018012e+02   101.7460463
+776   1.989614e+02   105.0684100
+777   1.960683e+02   108.3200010
+778   1.931237e+02   111.5000000
+779   1.901291e+02   114.6076251
+780   1.870864e+02   117.6421318
+781   1.839972e+02   120.6028130
+782   1.808631e+02   123.4889994
+783   1.776859e+02   126.3000594
+784   1.744674e+02   129.0353993
+785   1.712091e+02   131.6944631
+786   1.679130e+02   134.2767331
+787   1.645806e+02   136.7817292
+788   1.612137e+02   139.2090096
+789   1.578141e+02   141.5581704
+790   1.543835e+02   143.8288456
+791   1.509237e+02   146.0207073
+792   1.474363e+02   148.1334654
+793   1.439233e+02   150.1668675
+794   1.403862e+02   152.1206992
+795   1.368269e+02   153.9947834
+796   1.332471e+02   155.7889808
+797   1.296485e+02   157.5031893
+798   1.260330e+02   159.1373440
+799   1.224021e+02   160.6914171
+800   1.187576e+02   162.1654177
+801   1.151014e+02   163.5593913
+802   1.114350e+02   164.8734202
+803   1.077602e+02   166.1076226
+804   1.040787e+02   167.2621526
+805   1.003922e+02   168.3372004
+806   9.670232e+01   169.3329911
+807   9.301081e+01   170.2497851
+808   8.931930e+01   171.0878776
+809   8.562945e+01   171.8475984
+810   8.194289e+01   172.5293110
+811   7.826124e+01   173.1334132
+812   7.458611e+01   173.6603357
+813   7.091910e+01   174.1105425
+814   6.726179e+01   174.4845302
+815   6.361575e+01   174.7828275
+816   5.998251e+01   175.0059949
+817   5.636362e+01   175.1546242
+818   5.276058e+01   175.2293383
+819   4.917489e+01   175.2307903
+820   4.560803e+01   175.1596634
+821   4.206145e+01   175.0166701
+822   3.853658e+01   174.8025521
+823   3.503484e+01   174.5180793
+824   3.155763e+01   174.1640498
+825   2.810631e+01   173.7412890
+826   2.468223e+01   173.2506490
+827   2.128673e+01   172.6930084
+828   1.792110e+01   172.0692716
+829   1.458662e+01   171.3803680
+830   1.128455e+01   170.6272517
+831   8.016107e+00   169.8109008
+832   4.782507e+00   168.9323167
+833   1.584924e+00   167.9925237
+834  -1.575490e+00   166.9925682
+835  -4.697610e+00   165.9335182
+836  -7.780339e+00   164.8164625
+837  -1.082260e+01   163.6425104
+838  -1.382337e+01   162.4127906
+839  -1.678161e+01   161.1284509
+840  -1.969634e+01   159.7906572
+841  -2.256661e+01   158.4005933
+842  -2.539149e+01   156.9594599
+843  -2.817008e+01   155.4684739
+844  -3.090152e+01   153.9288677
+845  -3.358495e+01   152.3418890
+846  -3.621958e+01   150.7087993
+847  -3.880462e+01   149.0308738
+848  -4.133933e+01   147.3094007
+849  -4.382300e+01   145.5456799
+850  -4.625493e+01   143.7410231
+851  -4.863447e+01   141.8967526
+852  -5.096100e+01   140.0142005
+853  -5.323393e+01   138.0947084
+854  -5.545270e+01   136.1396263
+855  -5.761678e+01   134.1503122
+856  -5.972568e+01   132.1281311
+857  -6.177893e+01   130.0744544
+858  -6.377610e+01   127.9906592
+859  -6.571679e+01   125.8781276
+860  -6.760064e+01   123.7382459
+861  -6.942730e+01   121.5724038
+862  -7.119648e+01   119.3819941
+863  -7.290791e+01   117.1684115
+864  -7.456134e+01   114.9330520
+865  -7.615657e+01   112.6773123
+866  -7.769343e+01   110.4025892
+867  -7.917176e+01   108.1102785
+868  -8.059147e+01   105.8017747
+869  -8.195246e+01   103.4784700
+870  -8.325470e+01   101.1417539
+871  -8.449817e+01    98.7930122
+872  -8.568288e+01    96.4336265
+873  -8.680887e+01    94.0649734
+874  -8.787624e+01    91.6884239
+875  -8.888507e+01    89.3053428
+876  -8.983552e+01    86.9170877
+877  -9.072774e+01    84.5250088
+878  -9.156194e+01    82.1304479
+879  -9.233835e+01    79.7347379
+880  -9.305723e+01    77.3392020
+881  -9.371886e+01    74.9451533
+882  -9.432355e+01    72.5538940
+883  -9.487166e+01    70.1667148
+884  -9.536356e+01    67.7848943
+885  -9.579964e+01    65.4096983
+886  -9.618034e+01    63.0423795
+887  -9.650612e+01    60.6841766
+888  -9.677745e+01    58.3363137
+889  -9.699485e+01    56.0000000
+890  -9.715884e+01    53.6764291
+891  -9.727001e+01    51.3667782
+892  -9.732892e+01    49.0722082
+893  -9.733619e+01    46.7938623
+894  -9.729247e+01    44.5328662
+895  -9.719840e+01    42.2903272
+896  -9.705467e+01    40.0673340
+897  -9.686199e+01    37.8649557
+898  -9.662109e+01    35.6842420
+899  -9.633272e+01    33.5262221
+900  -9.599765e+01    31.3919046
+901  -9.561667e+01    29.2822771
+902  -9.519061e+01    27.1983055
+903  -9.472029e+01    25.1409337
+904  -9.420657e+01    23.1110834
+905  -9.365032e+01    21.1096532
+906  -9.305243e+01    19.1375189
+907  -9.241382e+01    17.1955326
+908  -9.173540e+01    15.2845223
+909  -9.101812e+01    13.4052922
+910  -9.026294e+01    11.5586216
+911  -8.947083e+01     9.7452650
+912  -8.864279e+01     7.9659518
+913  -8.777981e+01     6.2213858
+914  -8.688291e+01     4.5122451
+915  -8.595312e+01     2.8391819
+916  -8.499149e+01     1.2028219
+917  -8.399907e+01    -0.3962354
+918  -8.297692e+01    -1.9574175
+919  -8.192612e+01    -3.4801787
+920  -8.084775e+01    -4.9640002
+921  -7.974292e+01    -6.4083909
+922  -7.861271e+01    -7.8128867
+923  -7.745826e+01    -9.1770515
+924  -7.628067e+01   -10.5004767
+925  -7.508106e+01   -11.7827816
+926  -7.386058e+01   -13.0236133
+927  -7.262036e+01   -14.2226472
+928  -7.136153e+01   -15.3795867
+929  -7.008525e+01   -16.4941633
+930  -6.879267e+01   -17.5661367
+931  -6.748492e+01   -18.5952950
+932  -6.616318e+01   -19.5814544
+933  -6.482859e+01   -20.5244595
+934  -6.348232e+01   -21.4241829
+935  -6.212550e+01   -22.2805258
+936  -6.075931e+01   -23.0934173
+937  -5.938490e+01   -23.8628146
+938  -5.800341e+01   -24.5887030
+939  -5.661600e+01   -25.2710958
+940  -5.522382e+01   -25.9100342
+941  -5.382800e+01   -26.5055870
+942  -5.242969e+01   -27.0578506
+943  -5.103002e+01   -27.5669490
+944  -4.963012e+01   -28.0330334
+945  -4.823111e+01   -28.4562821
+946  -4.683410e+01   -28.8369006
+947  -4.544021e+01   -29.1751208
+948  -4.405052e+01   -29.4712013
+949  -4.266613e+01   -29.7254271
+950  -4.128813e+01   -29.9381091
+951  -3.991758e+01   -30.1095841
+952  -3.855554e+01   -30.2402143
+953  -3.720306e+01   -30.3303874
+954  -3.586118e+01   -30.3805160
+955  -3.453093e+01   -30.3910373
+956  -3.321331e+01   -30.3624128
+957  -3.190933e+01   -30.2951282
+958  -3.061997e+01   -30.1896927
+959  -2.934620e+01   -30.0466389
+960  -2.808898e+01   -29.8665224
+961  -2.684925e+01   -29.6499214
+962  -2.562793e+01   -29.3974362
+963  -2.442593e+01   -29.1096888
+964  -2.324414e+01   -28.7873229
+965  -2.208343e+01   -28.4310029
+966  -2.094467e+01   -28.0414137
+967  -1.982868e+01   -27.6192605
+968  -1.873628e+01   -27.1652679
+969  -1.766828e+01   -26.6801799
+970  -1.662544e+01   -26.1647590
+971  -1.560854e+01   -25.6197860
+972  -1.461831e+01   -25.0460595
+973  -1.365546e+01   -24.4443952
+974  -1.272069e+01   -23.8156255
+975  -1.181468e+01   -23.1605991
+976  -1.093808e+01   -22.4801804
+977  -1.009151e+01   -21.7752488
+978  -9.275585e+00   -21.0466984
+979  -8.490890e+00   -20.2954375
+980  -7.737983e+00   -19.5223875
+981  -7.017401e+00   -18.7284832
+982  -6.329656e+00   -17.9146715
+983  -5.675237e+00   -17.0819111
+984  -5.054607e+00   -16.2311720
+985  -4.468206e+00   -15.3634350
+986  -3.916448e+00   -14.4796905
+987  -3.399721e+00   -13.5809388
+988  -2.918388e+00   -12.6681889
+989  -2.472789e+00   -11.7424579
+990  -2.063233e+00   -10.8047707
+991  -1.690008e+00    -9.8561591
+992  -1.353373e+00    -8.8976615
+993  -1.053562e+00    -7.9303220
+994  -7.907821e-01    -6.9551897
+995  -5.652134e-01    -5.9733185
+996  -3.770103e-01    -4.9857661
+997  -2.263002e-01    -3.9935934
+998  -1.131837e-01    -2.9978641
+999  -3.773461e-02    -1.9996440
+1000 -1.224647e-16    -1.0000000
+```
+]
+
+---
+count: false
+ 
+
+.panel1-intro-auto[
+
+```r
+t &lt;- seq(5, -1, length.out = 1000) * pi
+
+paste(
+  "Like a circle in a spiral, like a wheel within a wheel,",
+  "never ending or beginning on an ever spinning reel"
+) -&gt;
+rhyme
+
+data.frame(
+  x = sin(t) * 1000:1,
+  y = cos(t) * 1000:1
+) %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-intro-auto[
+![](extenders_files/figure-html/intro_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-intro-auto[
+
+```r
+t &lt;- seq(5, -1, length.out = 1000) * pi
+
+paste(
+  "Like a circle in a spiral, like a wheel within a wheel,",
+  "never ending or beginning on an ever spinning reel"
+) -&gt;
+rhyme
+
+data.frame(
+  x = sin(t) * 1000:1,
+  y = cos(t) * 1000:1
+) %&gt;%
+  ggplot() +
+* aes(x = x, y = y)
+```
+]
+ 
+.panel2-intro-auto[
+![](extenders_files/figure-html/intro_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-intro-auto[
+
+```r
+t &lt;- seq(5, -1, length.out = 1000) * pi
+
+paste(
+  "Like a circle in a spiral, like a wheel within a wheel,",
+  "never ending or beginning on an ever spinning reel"
+) -&gt;
+rhyme
+
+data.frame(
+  x = sin(t) * 1000:1,
+  y = cos(t) * 1000:1
+) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+* geom_path(alpha = .25)
+```
+]
+ 
+.panel2-intro-auto[
+![](extenders_files/figure-html/intro_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-intro-auto[
+
+```r
+t &lt;- seq(5, -1, length.out = 1000) * pi
+
+paste(
+  "Like a circle in a spiral, like a wheel within a wheel,",
+  "never ending or beginning on an ever spinning reel"
+) -&gt;
+rhyme
+
+data.frame(
+  x = sin(t) * 1000:1,
+  y = cos(t) * 1000:1
+) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_path(alpha = .25) +
+* aes(label = rhyme)
+```
+]
+ 
+.panel2-intro-auto[
+![](extenders_files/figure-html/intro_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-intro-auto[
+
+```r
+t &lt;- seq(5, -1, length.out = 1000) * pi
+
+paste(
+  "Like a circle in a spiral, like a wheel within a wheel,",
+  "never ending or beginning on an ever spinning reel"
+) -&gt;
+rhyme
+
+data.frame(
+  x = sin(t) * 1000:1,
+  y = cos(t) * 1000:1
+) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_path(alpha = .25) +
+  aes(label = rhyme) +
+* coord_equal(xlim = c(-1000, 1000),
+*             ylim = c(-1000, 1000))
+```
+]
+ 
+.panel2-intro-auto[
+![](extenders_files/figure-html/intro_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-intro-auto[
+
+```r
+t &lt;- seq(5, -1, length.out = 1000) * pi
+
+paste(
+  "Like a circle in a spiral, like a wheel within a wheel,",
+  "never ending or beginning on an ever spinning reel"
+) -&gt;
+rhyme
+
+data.frame(
+  x = sin(t) * 1000:1,
+  y = cos(t) * 1000:1
+) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_path(alpha = .25) +
+  aes(label = rhyme) +
+  coord_equal(xlim = c(-1000, 1000),
+              ylim = c(-1000, 1000)) +
+* geomtextpath::geom_textpath(size  = 4,
+*                             hjust = .1,
+*                             )
+```
+]
+ 
+.panel2-intro-auto[
+![](extenders_files/figure-html/intro_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-intro-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-intro-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-intro-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-temps-auto[
+
+```r
+*data.frame(Temperature = c(4.4, 4.6, 6.3, 8.7, 11.6, 14.1, 15.9, 15.5,
+*                                13.1, 9.7, 6.7, 4.3, 3.6, 3.9, 6.4, 9.7, 13.2,
+*                                15.8, 18, 17.8, 15.1, 11.2, 7.2, 4.4),
+*                City = rep(c("Glasgow", "Amsterdam"), each = 12),
+*                Month = factor(rep(month.abb, 2), month.abb))
+```
+]
+ 
+.panel2-temps-auto[
+
+```
+   Temperature      City Month
+1          4.4   Glasgow   Jan
+2          4.6   Glasgow   Feb
+3          6.3   Glasgow   Mar
+4          8.7   Glasgow   Apr
+5         11.6   Glasgow   May
+6         14.1   Glasgow   Jun
+7         15.9   Glasgow   Jul
+8         15.5   Glasgow   Aug
+9         13.1   Glasgow   Sep
+10         9.7   Glasgow   Oct
+11         6.7   Glasgow   Nov
+12         4.3   Glasgow   Dec
+13         3.6 Amsterdam   Jan
+14         3.9 Amsterdam   Feb
+15         6.4 Amsterdam   Mar
+16         9.7 Amsterdam   Apr
+17        13.2 Amsterdam   May
+18        15.8 Amsterdam   Jun
+19        18.0 Amsterdam   Jul
+20        17.8 Amsterdam   Aug
+21        15.1 Amsterdam   Sep
+22        11.2 Amsterdam   Oct
+23         7.2 Amsterdam   Nov
+24         4.4 Amsterdam   Dec
+```
+]
+
+---
+count: false
+ 
+
+.panel1-temps-auto[
+
+```r
+ data.frame(Temperature = c(4.4, 4.6, 6.3, 8.7, 11.6, 14.1, 15.9, 15.5,
+                                 13.1, 9.7, 6.7, 4.3, 3.6, 3.9, 6.4, 9.7, 13.2,
+                                 15.8, 18, 17.8, 15.1, 11.2, 7.2, 4.4),
+                 City = rep(c("Glasgow", "Amsterdam"), each = 12),
+                 Month = factor(rep(month.abb, 2), month.abb)) %&gt;%
+*     ggplot()
+```
+]
+ 
+.panel2-temps-auto[
+![](extenders_files/figure-html/temps_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-temps-auto[
+
+```r
+ data.frame(Temperature = c(4.4, 4.6, 6.3, 8.7, 11.6, 14.1, 15.9, 15.5,
+                                 13.1, 9.7, 6.7, 4.3, 3.6, 3.9, 6.4, 9.7, 13.2,
+                                 15.8, 18, 17.8, 15.1, 11.2, 7.2, 4.4),
+                 City = rep(c("Glasgow", "Amsterdam"), each = 12),
+                 Month = factor(rep(month.abb, 2), month.abb)) %&gt;%
+      ggplot() +
+*     aes(Month, Temperature)
+```
+]
+ 
+.panel2-temps-auto[
+![](extenders_files/figure-html/temps_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-temps-auto[
+
+```r
+ data.frame(Temperature = c(4.4, 4.6, 6.3, 8.7, 11.6, 14.1, 15.9, 15.5,
+                                 13.1, 9.7, 6.7, 4.3, 3.6, 3.9, 6.4, 9.7, 13.2,
+                                 15.8, 18, 17.8, 15.1, 11.2, 7.2, 4.4),
+                 City = rep(c("Glasgow", "Amsterdam"), each = 12),
+                 Month = factor(rep(month.abb, 2), month.abb)) %&gt;%
+      ggplot() +
+      aes(Month, Temperature) +
+*     geom_col(aes(fill = City), position = position_dodge(width = 1))
+```
+]
+ 
+.panel2-temps-auto[
+![](extenders_files/figure-html/temps_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-temps-auto[
+
+```r
+ data.frame(Temperature = c(4.4, 4.6, 6.3, 8.7, 11.6, 14.1, 15.9, 15.5,
+                                 13.1, 9.7, 6.7, 4.3, 3.6, 3.9, 6.4, 9.7, 13.2,
+                                 15.8, 18, 17.8, 15.1, 11.2, 7.2, 4.4),
+                 City = rep(c("Glasgow", "Amsterdam"), each = 12),
+                 Month = factor(rep(month.abb, 2), month.abb)) %&gt;%
+      ggplot() +
+      aes(Month, Temperature) +
+      geom_col(aes(fill = City), position = position_dodge(width = 1)) +
+*     geom_vline(xintercept = 1:13 - 0.5, color = "gray90")
+```
+]
+ 
+.panel2-temps-auto[
+![](extenders_files/figure-html/temps_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-temps-auto[
+
+```r
+ data.frame(Temperature = c(4.4, 4.6, 6.3, 8.7, 11.6, 14.1, 15.9, 15.5,
+                                 13.1, 9.7, 6.7, 4.3, 3.6, 3.9, 6.4, 9.7, 13.2,
+                                 15.8, 18, 17.8, 15.1, 11.2, 7.2, 4.4),
+                 City = rep(c("Glasgow", "Amsterdam"), each = 12),
+                 Month = factor(rep(month.abb, 2), month.abb)) %&gt;%
+      ggplot() +
+      aes(Month, Temperature) +
+      geom_col(aes(fill = City), position = position_dodge(width = 1)) +
+      geom_vline(xintercept = 1:13 - 0.5, color = "gray90") +
+*     geom_hline(yintercept = 0:3 * 5, color = "gray90")
+```
+]
+ 
+.panel2-temps-auto[
+![](extenders_files/figure-html/temps_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-temps-auto[
+
+```r
+ data.frame(Temperature = c(4.4, 4.6, 6.3, 8.7, 11.6, 14.1, 15.9, 15.5,
+                                 13.1, 9.7, 6.7, 4.3, 3.6, 3.9, 6.4, 9.7, 13.2,
+                                 15.8, 18, 17.8, 15.1, 11.2, 7.2, 4.4),
+                 City = rep(c("Glasgow", "Amsterdam"), each = 12),
+                 Month = factor(rep(month.abb, 2), month.abb)) %&gt;%
+      ggplot() +
+      aes(Month, Temperature) +
+      geom_col(aes(fill = City), position = position_dodge(width = 1)) +
+      geom_vline(xintercept = 1:13 - 0.5, color = "gray90") +
+      geom_hline(yintercept = 0:3 * 5, color = "gray90") +
+*     scale_fill_manual(values = c("darkorange", "dodgerblue4"))
+```
+]
+ 
+.panel2-temps-auto[
+![](extenders_files/figure-html/temps_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-temps-auto[
+
+```r
+ data.frame(Temperature = c(4.4, 4.6, 6.3, 8.7, 11.6, 14.1, 15.9, 15.5,
+                                 13.1, 9.7, 6.7, 4.3, 3.6, 3.9, 6.4, 9.7, 13.2,
+                                 15.8, 18, 17.8, 15.1, 11.2, 7.2, 4.4),
+                 City = rep(c("Glasgow", "Amsterdam"), each = 12),
+                 Month = factor(rep(month.abb, 2), month.abb)) %&gt;%
+      ggplot() +
+      aes(Month, Temperature) +
+      geom_col(aes(fill = City), position = position_dodge(width = 1)) +
+      geom_vline(xintercept = 1:13 - 0.5, color = "gray90") +
+      geom_hline(yintercept = 0:3 * 5, color = "gray90") +
+      scale_fill_manual(values = c("darkorange", "dodgerblue4")) +
+*     ggtitle("Average monthly temperature in Amsterdam and Glasgow")
+```
+]
+ 
+.panel2-temps-auto[
+![](extenders_files/figure-html/temps_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-temps-auto[
+
+```r
+ data.frame(Temperature = c(4.4, 4.6, 6.3, 8.7, 11.6, 14.1, 15.9, 15.5,
+                                 13.1, 9.7, 6.7, 4.3, 3.6, 3.9, 6.4, 9.7, 13.2,
+                                 15.8, 18, 17.8, 15.1, 11.2, 7.2, 4.4),
+                 City = rep(c("Glasgow", "Amsterdam"), each = 12),
+                 Month = factor(rep(month.abb, 2), month.abb)) %&gt;%
+      ggplot() +
+      aes(Month, Temperature) +
+      geom_col(aes(fill = City), position = position_dodge(width = 1)) +
+      geom_vline(xintercept = 1:13 - 0.5, color = "gray90") +
+      geom_hline(yintercept = 0:3 * 5, color = "gray90") +
+      scale_fill_manual(values = c("darkorange", "dodgerblue4")) +
+      ggtitle("Average monthly temperature in Amsterdam and Glasgow") +
+*     theme_bw()
+```
+]
+ 
+.panel2-temps-auto[
+![](extenders_files/figure-html/temps_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-temps-auto[
+
+```r
+ data.frame(Temperature = c(4.4, 4.6, 6.3, 8.7, 11.6, 14.1, 15.9, 15.5,
+                                 13.1, 9.7, 6.7, 4.3, 3.6, 3.9, 6.4, 9.7, 13.2,
+                                 15.8, 18, 17.8, 15.1, 11.2, 7.2, 4.4),
+                 City = rep(c("Glasgow", "Amsterdam"), each = 12),
+                 Month = factor(rep(month.abb, 2), month.abb)) %&gt;%
+      ggplot() +
+      aes(Month, Temperature) +
+      geom_col(aes(fill = City), position = position_dodge(width = 1)) +
+      geom_vline(xintercept = 1:13 - 0.5, color = "gray90") +
+      geom_hline(yintercept = 0:3 * 5, color = "gray90") +
+      scale_fill_manual(values = c("darkorange", "dodgerblue4")) +
+      ggtitle("Average monthly temperature in Amsterdam and Glasgow") +
+      theme_bw() +
+*     theme(panel.border = element_blank(),
+*           axis.text.x = element_text(size = 14),
+*           axis.title.x = element_blank(),
+*           panel.grid.major = element_blank())
+```
+]
+ 
+.panel2-temps-auto[
+![](extenders_files/figure-html/temps_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-temps-auto[
+
+```r
+ data.frame(Temperature = c(4.4, 4.6, 6.3, 8.7, 11.6, 14.1, 15.9, 15.5,
+                                 13.1, 9.7, 6.7, 4.3, 3.6, 3.9, 6.4, 9.7, 13.2,
+                                 15.8, 18, 17.8, 15.1, 11.2, 7.2, 4.4),
+                 City = rep(c("Glasgow", "Amsterdam"), each = 12),
+                 Month = factor(rep(month.abb, 2), month.abb)) %&gt;%
+      ggplot() +
+      aes(Month, Temperature) +
+      geom_col(aes(fill = City), position = position_dodge(width = 1)) +
+      geom_vline(xintercept = 1:13 - 0.5, color = "gray90") +
+      geom_hline(yintercept = 0:3 * 5, color = "gray90") +
+      scale_fill_manual(values = c("darkorange", "dodgerblue4")) +
+      ggtitle("Average monthly temperature in Amsterdam and Glasgow") +
+      theme_bw() +
+      theme(panel.border = element_blank(),
+            axis.text.x = element_text(size = 14),
+            axis.title.x = element_blank(),
+            panel.grid.major = element_blank()) +
+* coord_polar()
+```
+]
+ 
+.panel2-temps-auto[
+![](extenders_files/figure-html/temps_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-temps-auto[
+
+```r
+ data.frame(Temperature = c(4.4, 4.6, 6.3, 8.7, 11.6, 14.1, 15.9, 15.5,
+                                 13.1, 9.7, 6.7, 4.3, 3.6, 3.9, 6.4, 9.7, 13.2,
+                                 15.8, 18, 17.8, 15.1, 11.2, 7.2, 4.4),
+                 City = rep(c("Glasgow", "Amsterdam"), each = 12),
+                 Month = factor(rep(month.abb, 2), month.abb)) %&gt;%
+      ggplot() +
+      aes(Month, Temperature) +
+      geom_col(aes(fill = City), position = position_dodge(width = 1)) +
+      geom_vline(xintercept = 1:13 - 0.5, color = "gray90") +
+      geom_hline(yintercept = 0:3 * 5, color = "gray90") +
+      scale_fill_manual(values = c("darkorange", "dodgerblue4")) +
+      ggtitle("Average monthly temperature in Amsterdam and Glasgow") +
+      theme_bw() +
+      theme(panel.border = element_blank(),
+            axis.text.x = element_text(size = 14),
+            axis.title.x = element_blank(),
+            panel.grid.major = element_blank()) +
+  coord_polar() +
+* geomtextpath::coord_curvedpolar()
+```
+]
+ 
+.panel2-temps-auto[
+![](extenders_files/figure-html/temps_auto_12_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-temps-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-temps-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-temps-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+```r
+ data.frame(Temperature = c(4.4, 4.6, 6.3, 8.7, 11.6, 14.1, 15.9, 15.5,
+                                 13.1, 9.7, 6.7, 4.3, 3.6, 3.9, 6.4, 9.7, 13.2,
+                                 15.8, 18, 17.8, 15.1, 11.2, 7.2, 4.4),
+                 City = rep(c("Glasgow", "Amsterdam"), each = 12),
+                 Month = factor(rep(month.abb, 2), month.abb)) %&gt;% 
+      ggplot() +
+      aes(Month, Temperature) +
+      geom_col(aes(fill = City), position = position_dodge(width = 1)) +
+      geom_vline(xintercept = 1:13 - 0.5, color = "gray90") +
+      geom_hline(yintercept = 0:3 * 5, color = "gray90") +
+      scale_fill_manual(values = c("darkorange", "dodgerblue4")) +
+      ggtitle("Average monthly temperature in Amsterdam and Glasgow") +
+      theme_bw() +
+      theme(panel.border = element_blank(),
+            axis.text.x = element_text(size = 14),
+            axis.title.x = element_blank(),
+            panel.grid.major = element_blank()) + 
+  coord_polar() + 
+  geomtextpath::coord_curvedpolar()
+```
+
+![](extenders_files/figure-html/temps-1.png)&lt;!-- --&gt;
+
+
+---
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 60%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

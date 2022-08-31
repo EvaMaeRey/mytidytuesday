@@ -1,0 +1,167 @@
+---
+title: "A minimal flipbook"
+subtitle: "With flipbookr and xaringan"
+author: "You!"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F)
+library(flipbookr)
+library(tidyverse)
+```
+
+
+
+`r chunk_reveal("hi")`
+
+---
+
+`r flipbookr::chunk_reveal("hi", break_type = "replace", replace = "compute_statistic", replacements  = c("compute_statistic","compute_aesthetics","compute_position", "compute_geom_1", "compute_geom_2"))`
+
+```{r hi, include = F}
+palmerpenguins::penguins %>% 
+  ggplot() + 
+  aes(x = species) + 
+  aes(fill = species) +
+  geom_bar() ->
+my_plot
+
+ggtrace::ggtrace_inspect_args(
+  x = my_plot,
+  method = ggplot2:::Layer$compute_statistic
+) %>% 
+  .$data
+```
+
+<!-- adjust font size in this css code chunk, currently 80 -->
+
+
+
+---
+
+`r chunk_reveal("intro")`
+
+```{r intro, include = F}
+t <- seq(5, -1, length.out = 1000) * pi
+
+paste(
+  "Like a circle in a spiral, like a wheel within a wheel,",
+  "never ending or beginning on an ever spinning reel"
+) ->
+rhyme
+
+data.frame(
+  x = sin(t) * 1000:1,
+  y = cos(t) * 1000:1
+) %>% 
+  ggplot() +
+  aes(x = x, y = y) + 
+  geom_path(alpha = .25) +
+  aes(label = rhyme) + 
+  coord_equal(xlim = c(-1000, 1000), 
+              ylim = c(-1000, 1000)) + 
+  geomtextpath::geom_textpath(size  = 4, 
+                              hjust = .1,
+                              )
+```
+
+---
+
+`r chunk_reveal("temps")`
+
+
+```{r temps, include = F}
+ data.frame(Temperature = c(4.4, 4.6, 6.3, 8.7, 11.6, 14.1, 15.9, 15.5,
+                                 13.1, 9.7, 6.7, 4.3, 3.6, 3.9, 6.4, 9.7, 13.2,
+                                 15.8, 18, 17.8, 15.1, 11.2, 7.2, 4.4),
+                 City = rep(c("Glasgow", "Amsterdam"), each = 12),
+                 Month = factor(rep(month.abb, 2), month.abb)) %>% 
+      ggplot() +
+      aes(Month, Temperature) +
+      geom_col(aes(fill = City), position = position_dodge(width = 1)) +
+      geom_vline(xintercept = 1:13 - 0.5, color = "gray90") +
+      geom_hline(yintercept = 0:3 * 5, color = "gray90") +
+      scale_fill_manual(values = c("darkorange", "dodgerblue4")) +
+      ggtitle("Average monthly temperature in Amsterdam and Glasgow") +
+      theme_bw() +
+      theme(panel.border = element_blank(),
+            axis.text.x = element_text(size = 14),
+            axis.title.x = element_blank(),
+            panel.grid.major = element_blank()) + 
+  coord_polar() + 
+  geomtextpath::coord_curvedpolar()
+```
+
+
+---
+
+```{r cool, include = F}
+data.frame(x1 = c(seq(0, 10/6 * pi, pi/3),
+                  seq(0, 10/6 * pi, 2*pi/3)),
+           y1 = c(rep(2, 6), rep(-1, 3)),
+           x2 = c(seq(0, 10/6 * pi, pi/3)  + pi/3,
+                  seq(0, 10/6 * pi, 2*pi/3) + 2*pi/3),
+           y2 = c(rep(4, 6), rep(2, 3)),
+           group = letters[c(1:6, (1:3) * 2)],
+           alpha = c(rep(1, 6), rep(0.4, 3))) %>% 
+  ggplot() +
+  aes(x1, y1) +
+  geom_rect(aes(xmin = x1, xmax = x2, ymin = y1, ymax = y2, fill = group,
+                alpha = alpha),
+            color = "white", size = 2) +
+  geomtextpath::geom_textpath(data = data.frame(x1 = seq(0, 2 * pi, length = 300),
+           y1 = rep(0.5, 300),
+           label = rep(c("stats", "effects", "polar"), each = 100)),
+           aes(label = label), linetype = 0, size = 8,
+           upright = TRUE) +
+  geomtextpath::geom_textpath(data = data.frame(x1 = seq(0, 2 * pi, length = 300),
+           y1 = rep(3, 300),
+           label = rep(c("density", "smooth", "unique", "organic",
+                         "easy to use", "automatic"), 
+                       each = 50)),
+           aes(label = label), linetype = 0, size = 4.6, color = "white",
+           upright = TRUE) +
+  scale_y_continuous(limits = c(-5, 4)) +
+  scale_x_continuous(limits = c(0, 2*pi)) +
+  scale_fill_manual(values = c("deepskyblue3", "deepskyblue4",
+                               "green3", "green4","tomato", "tomato2")) +
+  scale_alpha_identity() +
+  theme_void() +
+  theme(legend.position = "none") + 
+  coord_polar()
+```
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 60%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```

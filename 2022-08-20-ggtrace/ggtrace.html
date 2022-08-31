@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>A minimal flipbook</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="You!" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# A minimal flipbook
+## With flipbookr and xaringan
+### You!
+
+---
+
+
+
+
+
+
+
+
+```r
+palmerpenguins::penguins %&gt;% 
+  ggplot() + 
+  aes(x = species) + 
+  aes(fill = species) +
+  geom_bar() -&gt;
+my_plot
+```
+
+---
+
+count: false
+ 
+
+.panel1-hi-replace[
+
+```r
+ggtrace::ggtrace_inspect_args(
+  x = my_plot,
+* method = ggplot2:::Layer$compute_statistic
+)$data
+```
+]
+ 
+.panel2-hi-replace[
+
+```
+         fill x PANEL group
+1      Adelie 1     1     1
+2      Adelie 1     1     1
+3      Adelie 1     1     1
+4      Adelie 1     1     1
+5      Adelie 1     1     1
+6      Adelie 1     1     1
+7      Adelie 1     1     1
+8      Adelie 1     1     1
+9      Adelie 1     1     1
+10     Adelie 1     1     1
+11     Adelie 1     1     1
+12     Adelie 1     1     1
+13     Adelie 1     1     1
+14     Adelie 1     1     1
+15     Adelie 1     1     1
+16     Adelie 1     1     1
+17     Adelie 1     1     1
+18     Adelie 1     1     1
+19     Adelie 1     1     1
+20     Adelie 1     1     1
+21     Adelie 1     1     1
+22     Adelie 1     1     1
+23     Adelie 1     1     1
+24     Adelie 1     1     1
+25     Adelie 1     1     1
+26     Adelie 1     1     1
+27     Adelie 1     1     1
+28     Adelie 1     1     1
+29     Adelie 1     1     1
+30     Adelie 1     1     1
+31     Adelie 1     1     1
+32     Adelie 1     1     1
+33     Adelie 1     1     1
+34     Adelie 1     1     1
+35     Adelie 1     1     1
+36     Adelie 1     1     1
+37     Adelie 1     1     1
+38     Adelie 1     1     1
+39     Adelie 1     1     1
+40     Adelie 1     1     1
+41     Adelie 1     1     1
+42     Adelie 1     1     1
+43     Adelie 1     1     1
+44     Adelie 1     1     1
+45     Adelie 1     1     1
+46     Adelie 1     1     1
+47     Adelie 1     1     1
+48     Adelie 1     1     1
+49     Adelie 1     1     1
+50     Adelie 1     1     1
+51     Adelie 1     1     1
+52     Adelie 1     1     1
+53     Adelie 1     1     1
+54     Adelie 1     1     1
+55     Adelie 1     1     1
+56     Adelie 1     1     1
+57     Adelie 1     1     1
+58     Adelie 1     1     1
+59     Adelie 1     1     1
+60     Adelie 1     1     1
+61     Adelie 1     1     1
+62     Adelie 1     1     1
+63     Adelie 1     1     1
+64     Adelie 1     1     1
+65     Adelie 1     1     1
+66     Adelie 1     1     1
+67     Adelie 1     1     1
+68     Adelie 1     1     1
+69     Adelie 1     1     1
+70     Adelie 1     1     1
+71     Adelie 1     1     1
+72     Adelie 1     1     1
+73     Adelie 1     1     1
+74     Adelie 1     1     1
+75     Adelie 1     1     1
+76     Adelie 1     1     1
+77     Adelie 1     1     1
+78     Adelie 1     1     1
+79     Adelie 1     1     1
+80     Adelie 1     1     1
+81     Adelie 1     1     1
+82     Adelie 1     1     1
+83     Adelie 1     1     1
+84     Adelie 1     1     1
+85     Adelie 1     1     1
+86     Adelie 1     1     1
+87     Adelie 1     1     1
+88     Adelie 1     1     1
+89     Adelie 1     1     1
+90     Adelie 1     1     1
+91     Adelie 1     1     1
+92     Adelie 1     1     1
+93     Adelie 1     1     1
+94     Adelie 1     1     1
+95     Adelie 1     1     1
+96     Adelie 1     1     1
+97     Adelie 1     1     1
+98     Adelie 1     1     1
+99     Adelie 1     1     1
+100    Adelie 1     1     1
+101    Adelie 1     1     1
+102    Adelie 1     1     1
+103    Adelie 1     1     1
+104    Adelie 1     1     1
+105    Adelie 1     1     1
+106    Adelie 1     1     1
+107    Adelie 1     1     1
+108    Adelie 1     1     1
+109    Adelie 1     1     1
+110    Adelie 1     1     1
+111    Adelie 1     1     1
+112    Adelie 1     1     1
+113    Adelie 1     1     1
+114    Adelie 1     1     1
+115    Adelie 1     1     1
+116    Adelie 1     1     1
+117    Adelie 1     1     1
+118    Adelie 1     1     1
+119    Adelie 1     1     1
+120    Adelie 1     1     1
+121    Adelie 1     1     1
+122    Adelie 1     1     1
+123    Adelie 1     1     1
+124    Adelie 1     1     1
+125    Adelie 1     1     1
+126    Adelie 1     1     1
+127    Adelie 1     1     1
+128    Adelie 1     1     1
+129    Adelie 1     1     1
+130    Adelie 1     1     1
+131    Adelie 1     1     1
+132    Adelie 1     1     1
+133    Adelie 1     1     1
+134    Adelie 1     1     1
+135    Adelie 1     1     1
+136    Adelie 1     1     1
+137    Adelie 1     1     1
+138    Adelie 1     1     1
+139    Adelie 1     1     1
+140    Adelie 1     1     1
+141    Adelie 1     1     1
+142    Adelie 1     1     1
+143    Adelie 1     1     1
+144    Adelie 1     1     1
+145    Adelie 1     1     1
+146    Adelie 1     1     1
+147    Adelie 1     1     1
+148    Adelie 1     1     1
+149    Adelie 1     1     1
+150    Adelie 1     1     1
+151    Adelie 1     1     1
+152    Adelie 1     1     1
+153    Gentoo 3     1     3
+154    Gentoo 3     1     3
+155    Gentoo 3     1     3
+156    Gentoo 3     1     3
+157    Gentoo 3     1     3
+158    Gentoo 3     1     3
+159    Gentoo 3     1     3
+160    Gentoo 3     1     3
+161    Gentoo 3     1     3
+162    Gentoo 3     1     3
+163    Gentoo 3     1     3
+164    Gentoo 3     1     3
+165    Gentoo 3     1     3
+166    Gentoo 3     1     3
+167    Gentoo 3     1     3
+168    Gentoo 3     1     3
+169    Gentoo 3     1     3
+170    Gentoo 3     1     3
+171    Gentoo 3     1     3
+172    Gentoo 3     1     3
+173    Gentoo 3     1     3
+174    Gentoo 3     1     3
+175    Gentoo 3     1     3
+176    Gentoo 3     1     3
+177    Gentoo 3     1     3
+178    Gentoo 3     1     3
+179    Gentoo 3     1     3
+180    Gentoo 3     1     3
+181    Gentoo 3     1     3
+182    Gentoo 3     1     3
+183    Gentoo 3     1     3
+184    Gentoo 3     1     3
+185    Gentoo 3     1     3
+186    Gentoo 3     1     3
+187    Gentoo 3     1     3
+188    Gentoo 3     1     3
+189    Gentoo 3     1     3
+190    Gentoo 3     1     3
+191    Gentoo 3     1     3
+192    Gentoo 3     1     3
+193    Gentoo 3     1     3
+194    Gentoo 3     1     3
+195    Gentoo 3     1     3
+196    Gentoo 3     1     3
+197    Gentoo 3     1     3
+198    Gentoo 3     1     3
+199    Gentoo 3     1     3
+200    Gentoo 3     1     3
+201    Gentoo 3     1     3
+202    Gentoo 3     1     3
+203    Gentoo 3     1     3
+204    Gentoo 3     1     3
+205    Gentoo 3     1     3
+206    Gentoo 3     1     3
+207    Gentoo 3     1     3
+208    Gentoo 3     1     3
+209    Gentoo 3     1     3
+210    Gentoo 3     1     3
+211    Gentoo 3     1     3
+212    Gentoo 3     1     3
+213    Gentoo 3     1     3
+214    Gentoo 3     1     3
+215    Gentoo 3     1     3
+216    Gentoo 3     1     3
+217    Gentoo 3     1     3
+218    Gentoo 3     1     3
+219    Gentoo 3     1     3
+220    Gentoo 3     1     3
+221    Gentoo 3     1     3
+222    Gentoo 3     1     3
+223    Gentoo 3     1     3
+224    Gentoo 3     1     3
+225    Gentoo 3     1     3
+226    Gentoo 3     1     3
+227    Gentoo 3     1     3
+228    Gentoo 3     1     3
+229    Gentoo 3     1     3
+230    Gentoo 3     1     3
+231    Gentoo 3     1     3
+232    Gentoo 3     1     3
+233    Gentoo 3     1     3
+234    Gentoo 3     1     3
+235    Gentoo 3     1     3
+236    Gentoo 3     1     3
+237    Gentoo 3     1     3
+238    Gentoo 3     1     3
+239    Gentoo 3     1     3
+240    Gentoo 3     1     3
+241    Gentoo 3     1     3
+242    Gentoo 3     1     3
+243    Gentoo 3     1     3
+244    Gentoo 3     1     3
+245    Gentoo 3     1     3
+246    Gentoo 3     1     3
+247    Gentoo 3     1     3
+248    Gentoo 3     1     3
+249    Gentoo 3     1     3
+250    Gentoo 3     1     3
+251    Gentoo 3     1     3
+252    Gentoo 3     1     3
+253    Gentoo 3     1     3
+254    Gentoo 3     1     3
+255    Gentoo 3     1     3
+256    Gentoo 3     1     3
+257    Gentoo 3     1     3
+258    Gentoo 3     1     3
+259    Gentoo 3     1     3
+260    Gentoo 3     1     3
+261    Gentoo 3     1     3
+262    Gentoo 3     1     3
+263    Gentoo 3     1     3
+264    Gentoo 3     1     3
+265    Gentoo 3     1     3
+266    Gentoo 3     1     3
+267    Gentoo 3     1     3
+268    Gentoo 3     1     3
+269    Gentoo 3     1     3
+270    Gentoo 3     1     3
+271    Gentoo 3     1     3
+272    Gentoo 3     1     3
+273    Gentoo 3     1     3
+274    Gentoo 3     1     3
+275    Gentoo 3     1     3
+276    Gentoo 3     1     3
+277 Chinstrap 2     1     2
+278 Chinstrap 2     1     2
+279 Chinstrap 2     1     2
+280 Chinstrap 2     1     2
+281 Chinstrap 2     1     2
+282 Chinstrap 2     1     2
+283 Chinstrap 2     1     2
+284 Chinstrap 2     1     2
+285 Chinstrap 2     1     2
+286 Chinstrap 2     1     2
+287 Chinstrap 2     1     2
+288 Chinstrap 2     1     2
+289 Chinstrap 2     1     2
+290 Chinstrap 2     1     2
+291 Chinstrap 2     1     2
+292 Chinstrap 2     1     2
+293 Chinstrap 2     1     2
+294 Chinstrap 2     1     2
+295 Chinstrap 2     1     2
+296 Chinstrap 2     1     2
+297 Chinstrap 2     1     2
+298 Chinstrap 2     1     2
+299 Chinstrap 2     1     2
+300 Chinstrap 2     1     2
+301 Chinstrap 2     1     2
+302 Chinstrap 2     1     2
+303 Chinstrap 2     1     2
+304 Chinstrap 2     1     2
+305 Chinstrap 2     1     2
+306 Chinstrap 2     1     2
+307 Chinstrap 2     1     2
+308 Chinstrap 2     1     2
+309 Chinstrap 2     1     2
+310 Chinstrap 2     1     2
+311 Chinstrap 2     1     2
+312 Chinstrap 2     1     2
+313 Chinstrap 2     1     2
+314 Chinstrap 2     1     2
+315 Chinstrap 2     1     2
+316 Chinstrap 2     1     2
+317 Chinstrap 2     1     2
+318 Chinstrap 2     1     2
+319 Chinstrap 2     1     2
+320 Chinstrap 2     1     2
+321 Chinstrap 2     1     2
+322 Chinstrap 2     1     2
+323 Chinstrap 2     1     2
+324 Chinstrap 2     1     2
+325 Chinstrap 2     1     2
+326 Chinstrap 2     1     2
+327 Chinstrap 2     1     2
+328 Chinstrap 2     1     2
+329 Chinstrap 2     1     2
+330 Chinstrap 2     1     2
+331 Chinstrap 2     1     2
+332 Chinstrap 2     1     2
+333 Chinstrap 2     1     2
+334 Chinstrap 2     1     2
+335 Chinstrap 2     1     2
+336 Chinstrap 2     1     2
+337 Chinstrap 2     1     2
+338 Chinstrap 2     1     2
+339 Chinstrap 2     1     2
+340 Chinstrap 2     1     2
+341 Chinstrap 2     1     2
+342 Chinstrap 2     1     2
+343 Chinstrap 2     1     2
+344 Chinstrap 2     1     2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-hi-replace[
+
+```r
+ggtrace::ggtrace_inspect_args(
+  x = my_plot,
+* method = ggplot2:::Layer$compute_aesthetics
+)$data
+```
+]
+ 
+.panel2-hi-replace[
+
+```
+# A tibble: 344 × 9
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750
+ 2 Adelie  Torgersen           39.5          17.4               186        3800
+ 3 Adelie  Torgersen           40.3          18                 195        3250
+ 4 Adelie  Torgersen           NA            NA                  NA          NA
+ 5 Adelie  Torgersen           36.7          19.3               193        3450
+ 6 Adelie  Torgersen           39.3          20.6               190        3650
+ 7 Adelie  Torgersen           38.9          17.8               181        3625
+ 8 Adelie  Torgersen           39.2          19.6               195        4675
+ 9 Adelie  Torgersen           34.1          18.1               193        3475
+10 Adelie  Torgersen           42            20.2               190        4250
+# … with 334 more rows, and 3 more variables: sex &lt;fct&gt;, year &lt;int&gt;,
+#   PANEL &lt;fct&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-hi-replace[
+
+```r
+ggtrace::ggtrace_inspect_args(
+  x = my_plot,
+* method = ggplot2:::Layer$compute_position
+)$data
+```
+]
+ 
+.panel2-hi-replace[
+
+```
+    y count prop x flipped_aes      fill PANEL group ymin ymax xmin xmax
+1 152   152    1 1       FALSE    Adelie     1     1    0  152 0.55 1.45
+2  68    68    1 2       FALSE Chinstrap     1     2    0   68 1.55 2.45
+3 124   124    1 3       FALSE    Gentoo     1     3    0  124 2.55 3.45
+```
+]
+
+---
+count: false
+ 
+
+.panel1-hi-replace[
+
+```r
+ggtrace::ggtrace_inspect_args(
+  x = my_plot,
+* method = ggplot2:::Layer$compute_geom_1
+)$data
+```
+]
+ 
+.panel2-hi-replace[
+
+```
+    y count prop x width flipped_aes      fill PANEL group
+1 152   152    1 1   0.9       FALSE    Adelie     1     1
+2  68    68    1 2   0.9       FALSE Chinstrap     1     2
+3 124   124    1 3   0.9       FALSE    Gentoo     1     3
+```
+]
+
+---
+count: false
+ 
+
+.panel1-hi-replace[
+
+```r
+ggtrace::ggtrace_inspect_args(
+  x = my_plot,
+* method = ggplot2:::Layer$compute_geom_2
+)$data
+```
+]
+ 
+.panel2-hi-replace[
+
+```
+     fill   y count prop x flipped_aes PANEL group ymin ymax xmin xmax
+1 #F8766D 152   152    1 1       FALSE     1     1    0  152 0.55 1.45
+2 #00BA38  68    68    1 2       FALSE     1     2    0   68 1.55 2.45
+3 #619CFF 124   124    1 3       FALSE     1     3    0  124 2.55 3.45
+```
+]
+
+&lt;style&gt;
+.panel1-hi-replace {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-hi-replace {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-hi-replace {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+&lt;!-- adjust font size in this css code chunk, currently 80 --&gt;
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 60%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

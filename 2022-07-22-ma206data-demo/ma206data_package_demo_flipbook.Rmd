@@ -51,9 +51,6 @@ code.r.hljs.remark-code:hover{
 ---
 
 
-`r flipbookr::chunk_reveal("setup", left_assign = "detect")`
-
-
 ```{r setup, message=F, warning=F, include = FALSE}
 library(tidyverse)
 # remotes::install_github("EvaMaeRey/ma206data")
@@ -140,7 +137,7 @@ chap5_Gilbert %>%
 ---
 
 
-`r flipbookr::chunk_reveal("ch6", left_assign = "detect")`
+`r flipbookr::chunk_reveal("NA", left_assign = "detect")`
 
 
 ```{r ch6, include = FALSE}
@@ -157,10 +154,10 @@ chap6_DungBeetles %>%
 ---
 
 
-`r flipbookr::chunk_reveal("ch7", left_assign = "detect")`
+`r flipbookr::chunk_reveal("NA", left_assign = "detect")`
 
 
-```{r ch7, include = FALSE}
+```{r, include = FALSE}
 chap7_DadJokes %>% 
   pivot_longer(-1) %>% 
   mutate(name = fct_rev(name)) %>% 
@@ -175,16 +172,7 @@ chap7_DadJokes %>%
                   as.numeric())) +
   aes(group = joke) + 
   geom_line(aes(color = outcome_diff > 0))
-```
-
-
----
-
-
-`r flipbookr::chunk_reveal("ch7dad", left_assign = "detect")`
-
-
-```{r ch7dad, include = FALSE}
+  
 chap7_DadJokes %>% 
   mutate(diff = laugh_track - no_laugh_track) %>% 
   ggplot() + 
@@ -199,10 +187,10 @@ chap7_DadJokes %>%
 ---
 
 
-`r flipbookr::chunk_reveal("ch8", left_assign = "detect")`
+`r flipbookr::chunk_reveal("NA", left_assign = "detect")`
 
 
-```{r ch8, include = FALSE}
+```{r, include = FALSE}
 chap8_Goals %>% 
   count(gender, goal) %>% 
   ggplot() + 
@@ -225,10 +213,10 @@ chap8_Goals %>%
 ---
 
 
-`r flipbookr::chunk_reveal("ch9", left_assign = "detect")`
+`r flipbookr::chunk_reveal("NA", left_assign = "detect")`
 
 
-```{r ch9, include = FALSE}
+```{r, include = FALSE}
 chap9_Donation %>% 
   ggplot() + 
   aes(x = state, y = donation) + 
@@ -239,10 +227,10 @@ chap9_Donation %>%
 ---
 
 
-`r flipbookr::chunk_reveal("ch10", left_assign = "detect")`
+`r flipbookr::chunk_reveal("NA", left_assign = "detect")`
 
 
-```{r ch10, include = FALSE}
+```{r, include = FALSE}
 chap10_DraftLottery %>% 
   ggplot() + 
   aes(x = sequential_date, y = draft_number) + 
@@ -263,10 +251,10 @@ chap10_DraftLottery %>%
 ---
 
 
-`r flipbookr::chunk_reveal("ch9comp", left_assign = "detect")`
+`r flipbookr::chunk_reveal("NA", left_assign = "detect")`
 
 
-```{r ch9comp, include = FALSE}
+```{r, include = FALSE}
 chap9_Comprehension %>% 
   ggplot() + 
   aes(x = condition, y = comprehension) + 
@@ -279,10 +267,10 @@ chap9_Comprehension %>%
 ---
 
 
-`r flipbookr::chunk_reveal("ch10wimb", left_assign = "detect")`
+`r flipbookr::chunk_reveal("NA", left_assign = "detect")`
 
 
-```{r ch10wimb, include = FALSE}
+```{r, include = FALSE}
 chap10_WimbledonMF %>% 
   ggplot() + 
   aes(x = year, y = height_cm, color = sex) + 

@@ -983,7 +983,7 @@ compute_panel_diamonds &lt;- function(data, scales) {
 }
 
 
-*compute_panel_diamonds2 &lt;- function(){
+*compute_panel_diamonds_purrr &lt;- function(data, scales){
 
 *   cols_to_keep &lt;- setdiff(names(data), c("x0", "y0"))
 
@@ -993,7 +993,7 @@ compute_panel_diamonds &lt;- function(data, scales) {
 *   mutate(group = row_number()) %&gt;%
 *   unnest() %&gt;%
 *   ungroup() %&gt;%
-*   select(x, y, group)
+*   data.frame()
 
 *} 
 ```
@@ -1233,6 +1233,351 @@ cars %&gt;%
 ```
 ]
 
+---
+count: false
+ 
+
+.panel1-2b-auto[
+
+```r
+cars %&gt;%
+  .[1:2,] %&gt;%
+  rename(x0 = speed) %&gt;%
+  rename(y0 = dist) %&gt;%
+  mutate(group = row_number()) %&gt;%
+  compute_panel_diamonds() %&gt;%
+* str()
+```
+]
+ 
+.panel2-2b-auto[
+
+```
+'data.frame':	10 obs. of  3 variables:
+ $ x                             : num  5 4 3 4 5 5 4 3 4 5
+ $ y                             : num  2 3 2 1 2 10 11 10 9 10
+ $ unclass(data[i, cols_to_keep]): int  1 1 1 1 1 2 2 2 2 2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-2b-auto[
+
+```r
+cars %&gt;%
+  .[1:2,] %&gt;%
+  rename(x0 = speed) %&gt;%
+  rename(y0 = dist) %&gt;%
+  mutate(group = row_number()) %&gt;%
+  compute_panel_diamonds() %&gt;%
+  str() -&gt;
+*hide
+```
+]
+ 
+.panel2-2b-auto[
+
+```
+'data.frame':	10 obs. of  3 variables:
+ $ x                             : num  5 4 3 4 5 5 4 3 4 5
+ $ y                             : num  2 3 2 1 2 10 11 10 9 10
+ $ unclass(data[i, cols_to_keep]): int  1 1 1 1 1 2 2 2 2 2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-2b-auto[
+
+```r
+cars %&gt;%
+  .[1:2,] %&gt;%
+  rename(x0 = speed) %&gt;%
+  rename(y0 = dist) %&gt;%
+  mutate(group = row_number()) %&gt;%
+  compute_panel_diamonds() %&gt;%
+  str() -&gt;
+hide
+
+*cars
+```
+]
+ 
+.panel2-2b-auto[
+
+```
+'data.frame':	10 obs. of  3 variables:
+ $ x                             : num  5 4 3 4 5 5 4 3 4 5
+ $ y                             : num  2 3 2 1 2 10 11 10 9 10
+ $ unclass(data[i, cols_to_keep]): int  1 1 1 1 1 2 2 2 2 2
+```
+
+```
+   speed dist
+1      4    2
+2      4   10
+3      7    4
+4      7   22
+5      8   16
+6      9   10
+7     10   18
+8     10   26
+9     10   34
+10    11   17
+11    11   28
+12    12   14
+13    12   20
+14    12   24
+15    12   28
+16    13   26
+17    13   34
+18    13   34
+19    13   46
+20    14   26
+21    14   36
+22    14   60
+23    14   80
+24    15   20
+25    15   26
+26    15   54
+27    16   32
+28    16   40
+29    17   32
+30    17   40
+31    17   50
+32    18   42
+33    18   56
+34    18   76
+35    18   84
+36    19   36
+37    19   46
+38    19   68
+39    20   32
+40    20   48
+41    20   52
+42    20   56
+43    20   64
+44    22   66
+45    23   54
+46    24   70
+47    24   92
+48    24   93
+49    24  120
+50    25   85
+```
+]
+
+---
+count: false
+ 
+
+.panel1-2b-auto[
+
+```r
+cars %&gt;%
+  .[1:2,] %&gt;%
+  rename(x0 = speed) %&gt;%
+  rename(y0 = dist) %&gt;%
+  mutate(group = row_number()) %&gt;%
+  compute_panel_diamonds() %&gt;%
+  str() -&gt;
+hide
+
+cars %&gt;%
+* .[1:2,]
+```
+]
+ 
+.panel2-2b-auto[
+
+```
+'data.frame':	10 obs. of  3 variables:
+ $ x                             : num  5 4 3 4 5 5 4 3 4 5
+ $ y                             : num  2 3 2 1 2 10 11 10 9 10
+ $ unclass(data[i, cols_to_keep]): int  1 1 1 1 1 2 2 2 2 2
+```
+
+```
+  speed dist
+1     4    2
+2     4   10
+```
+]
+
+---
+count: false
+ 
+
+.panel1-2b-auto[
+
+```r
+cars %&gt;%
+  .[1:2,] %&gt;%
+  rename(x0 = speed) %&gt;%
+  rename(y0 = dist) %&gt;%
+  mutate(group = row_number()) %&gt;%
+  compute_panel_diamonds() %&gt;%
+  str() -&gt;
+hide
+
+cars %&gt;%
+  .[1:2,] %&gt;%
+* rename(x0 = speed)
+```
+]
+ 
+.panel2-2b-auto[
+
+```
+'data.frame':	10 obs. of  3 variables:
+ $ x                             : num  5 4 3 4 5 5 4 3 4 5
+ $ y                             : num  2 3 2 1 2 10 11 10 9 10
+ $ unclass(data[i, cols_to_keep]): int  1 1 1 1 1 2 2 2 2 2
+```
+
+```
+  x0 dist
+1  4    2
+2  4   10
+```
+]
+
+---
+count: false
+ 
+
+.panel1-2b-auto[
+
+```r
+cars %&gt;%
+  .[1:2,] %&gt;%
+  rename(x0 = speed) %&gt;%
+  rename(y0 = dist) %&gt;%
+  mutate(group = row_number()) %&gt;%
+  compute_panel_diamonds() %&gt;%
+  str() -&gt;
+hide
+
+cars %&gt;%
+  .[1:2,] %&gt;%
+  rename(x0 = speed) %&gt;%
+* rename(y0 = dist)
+```
+]
+ 
+.panel2-2b-auto[
+
+```
+'data.frame':	10 obs. of  3 variables:
+ $ x                             : num  5 4 3 4 5 5 4 3 4 5
+ $ y                             : num  2 3 2 1 2 10 11 10 9 10
+ $ unclass(data[i, cols_to_keep]): int  1 1 1 1 1 2 2 2 2 2
+```
+
+```
+  x0 y0
+1  4  2
+2  4 10
+```
+]
+
+---
+count: false
+ 
+
+.panel1-2b-auto[
+
+```r
+cars %&gt;%
+  .[1:2,] %&gt;%
+  rename(x0 = speed) %&gt;%
+  rename(y0 = dist) %&gt;%
+  mutate(group = row_number()) %&gt;%
+  compute_panel_diamonds() %&gt;%
+  str() -&gt;
+hide
+
+cars %&gt;%
+  .[1:2,] %&gt;%
+  rename(x0 = speed) %&gt;%
+  rename(y0 = dist) %&gt;%
+* compute_panel_diamonds_purrr()
+```
+]
+ 
+.panel2-2b-auto[
+
+```
+'data.frame':	10 obs. of  3 variables:
+ $ x                             : num  5 4 3 4 5 5 4 3 4 5
+ $ y                             : num  2 3 2 1 2 10 11 10 9 10
+ $ unclass(data[i, cols_to_keep]): int  1 1 1 1 1 2 2 2 2 2
+```
+
+```
+   x0 y0 x  y group
+1   4  2 5  2     1
+2   4  2 4  3     1
+3   4  2 3  2     1
+4   4  2 4  1     1
+5   4  2 5  2     1
+6   4 10 5 10     2
+7   4 10 4 11     2
+8   4 10 3 10     2
+9   4 10 4  9     2
+10  4 10 5 10     2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-2b-auto[
+
+```r
+cars %&gt;%
+  .[1:2,] %&gt;%
+  rename(x0 = speed) %&gt;%
+  rename(y0 = dist) %&gt;%
+  mutate(group = row_number()) %&gt;%
+  compute_panel_diamonds() %&gt;%
+  str() -&gt;
+hide
+
+cars %&gt;%
+  .[1:2,] %&gt;%
+  rename(x0 = speed) %&gt;%
+  rename(y0 = dist) %&gt;%
+  compute_panel_diamonds_purrr() %&gt;%
+* str()
+```
+]
+ 
+.panel2-2b-auto[
+
+```
+'data.frame':	10 obs. of  3 variables:
+ $ x                             : num  5 4 3 4 5 5 4 3 4 5
+ $ y                             : num  2 3 2 1 2 10 11 10 9 10
+ $ unclass(data[i, cols_to_keep]): int  1 1 1 1 1 2 2 2 2 2
+```
+
+```
+'data.frame':	10 obs. of  5 variables:
+ $ x0   : num  4 4 4 4 4 4 4 4 4 4
+ $ y0   : num  2 2 2 2 2 10 10 10 10 10
+ $ x    : num  5 4 3 4 5 5 4 3 4 5
+ $ y    : num  2 3 2 1 2 10 11 10 9 10
+ $ group: int  1 1 1 1 1 2 2 2 2 2
+```
+]
+
 &lt;style&gt;
 .panel1-2b-auto {
   color: black;
@@ -1291,6 +1636,31 @@ count: false
 
 ]
 
+---
+count: false
+ 
+
+.panel1-3-auto[
+
+```r
+StatDiamond &lt;- ggproto("StatDiamond", Stat,
+  setup_data = setup_data_diamonds,
+  compute_panel = compute_panel_diamonds,
+  required_aes = c("x0", "y0")
+)
+
+*StatDiamondpurrr &lt;- ggproto("StatDiamond", Stat,
+* setup_data = setup_data_diamonds,
+* compute_panel = compute_panel_diamonds_purrr,
+* required_aes = c("x0", "y0")
+*) 
+```
+]
+ 
+.panel2-3-auto[
+
+]
+
 &lt;style&gt;
 .panel1-3-auto {
   color: black;
@@ -1325,85 +1695,19 @@ count: false
 
 ---
 
-# Step 4: write c
+# Step 4: Write function
 
 ---
 
 
-count: false
- 
-
-.panel1-4-auto[
-
-```r
-*geom_diamond &lt;- function(mapping = NULL,
-*                       data = NULL,
-*                       stat = "diamond",
-*                       position = "identity",
-*                       ...,
-*                       width = 1,
-*                       height = 1,
-*                       arrow = NULL,
-*                       lineend = "butt",
-*                       linejoin = "round",
-*                       na.rm = FALSE,
-*                       show.legend = NA,
-*                       inherit.aes = TRUE) {
-* layer(
-*   data = data,
-*   mapping = mapping,
-*   stat = stat,
-*   geom = GeomPolygon,
-*   position = position,
-*   show.legend = show.legend,
-*   inherit.aes = inherit.aes,
-*   params = list(
-*     width = width,
-*     height = height,
-*     arrow = arrow,
-*     lineend = lineend,
-*     linejoin = linejoin,
-*     na.rm = na.rm,
-*     ...
-*   )
-* )
-*} 
-```
-]
- 
-.panel2-4-auto[
-
-]
-
-&lt;style&gt;
-.panel1-4-auto {
-  color: black;
-  width: 38.6060606060606%;
-  hight: 32%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-.panel2-4-auto {
-  color: black;
-  width: 59.3939393939394%;
-  hight: 32%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-.panel3-4-auto {
-  color: black;
-  width: NA%;
-  hight: 33%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-&lt;/style&gt;
 
 
 
+
+---
+
+
+# a variant where compute group uses purrr
 
 
 
@@ -1532,12 +1836,20 @@ count: false
 set.seed(1244)
 cars %&gt;%
   .[1:5,] %&gt;%
-* ggplot()
+* data.frame()
 ```
 ]
  
 .panel2-5-auto[
-![](geom_diamonds_recipe_flipbook_files/figure-html/5_auto_04_output-1.png)&lt;!-- --&gt;
+
+```
+  speed dist
+1     4    2
+2     4   10
+3     7    4
+4     7   22
+5     8   16
+```
 ]
 
 ---
@@ -1550,8 +1862,8 @@ count: false
 set.seed(1244)
 cars %&gt;%
   .[1:5,] %&gt;%
-  ggplot() +
-* aes(x = speed, y = dist)
+  data.frame() %&gt;%
+* ggplot()
 ```
 ]
  
@@ -1569,9 +1881,9 @@ count: false
 set.seed(1244)
 cars %&gt;%
   .[1:5,] %&gt;%
+  data.frame() %&gt;%
   ggplot() +
-  aes(x = speed, y = dist) +
-* geom_point()
+* aes(x = speed, y = dist)
 ```
 ]
  
@@ -1589,10 +1901,10 @@ count: false
 set.seed(1244)
 cars %&gt;%
   .[1:5,] %&gt;%
+  data.frame() %&gt;%
   ggplot() +
   aes(x = speed, y = dist) +
-  geom_point() +
-* aes(x0 = speed, y0 = dist)
+* geom_point()
 ```
 ]
  
@@ -1610,11 +1922,11 @@ count: false
 set.seed(1244)
 cars %&gt;%
   .[1:5,] %&gt;%
+  data.frame() %&gt;%
   ggplot() +
   aes(x = speed, y = dist) +
   geom_point() +
-  aes(x0 = speed, y0 = dist) +
-* geom_diamond(alpha = .2)
+* aes(x0 = speed, y0 = dist)
 ```
 ]
  
@@ -1632,12 +1944,12 @@ count: false
 set.seed(1244)
 cars %&gt;%
   .[1:5,] %&gt;%
+  data.frame() %&gt;%
   ggplot() +
   aes(x = speed, y = dist) +
   geom_point() +
   aes(x0 = speed, y0 = dist) +
-  geom_diamond(alpha = .2) +
-* aes(fill = speed &gt; 6)
+* geom_diamond(alpha = .2)
 ```
 ]
  
@@ -1655,6 +1967,31 @@ count: false
 set.seed(1244)
 cars %&gt;%
   .[1:5,] %&gt;%
+  data.frame() %&gt;%
+  ggplot() +
+  aes(x = speed, y = dist) +
+  geom_point() +
+  aes(x0 = speed, y0 = dist) +
+  geom_diamond(alpha = .2) +
+* aes(fill = speed &gt; 6)
+```
+]
+ 
+.panel2-5-auto[
+![](geom_diamonds_recipe_flipbook_files/figure-html/5_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-5-auto[
+
+```r
+set.seed(1244)
+cars %&gt;%
+  .[1:5,] %&gt;%
+  data.frame() %&gt;%
   ggplot() +
   aes(x = speed, y = dist) +
   geom_point() +
@@ -1666,7 +2003,7 @@ cars %&gt;%
 ]
  
 .panel2-5-auto[
-![](geom_diamonds_recipe_flipbook_files/figure-html/5_auto_10_output-1.png)&lt;!-- --&gt;
+![](geom_diamonds_recipe_flipbook_files/figure-html/5_auto_11_output-1.png)&lt;!-- --&gt;
 ]
 
 &lt;style&gt;
@@ -1703,11 +2040,9 @@ cars %&gt;%
 
 ---
 
-# Step 6: Post Mordem using layer_data
-
+## But Purrr version doesn't work?  Why?  
 
 ---
-
 
 count: false
  
@@ -1715,40 +2050,12 @@ count: false
 .panel1-6-auto[
 
 ```r
-*layer_data(last_plot(), 2)
+*set.seed(1244)
 ```
 ]
  
 .panel2-6-auto[
 
-```
-      fill x  y PANEL group colour size linetype alpha
-1  #F8766D 5  2     1   1-1     NA  0.5        1   0.2
-2  #F8766D 4  3     1   1-1     NA  0.5        1   0.2
-3  #F8766D 3  2     1   1-1     NA  0.5        1   0.2
-4  #F8766D 4  1     1   1-1     NA  0.5        1   0.2
-5  #F8766D 5  2     1   1-1     NA  0.5        1   0.2
-6  #F8766D 5 10     1   1-2     NA  0.5        1   0.2
-7  #F8766D 4 11     1   1-2     NA  0.5        1   0.2
-8  #F8766D 3 10     1   1-2     NA  0.5        1   0.2
-9  #F8766D 4  9     1   1-2     NA  0.5        1   0.2
-10 #F8766D 5 10     1   1-2     NA  0.5        1   0.2
-11 #00BFC4 8  4     1   2-3     NA  0.5        1   0.2
-12 #00BFC4 7  5     1   2-3     NA  0.5        1   0.2
-13 #00BFC4 6  4     1   2-3     NA  0.5        1   0.2
-14 #00BFC4 7  3     1   2-3     NA  0.5        1   0.2
-15 #00BFC4 8  4     1   2-3     NA  0.5        1   0.2
-16 #00BFC4 8 22     1   2-4     NA  0.5        1   0.2
-17 #00BFC4 7 23     1   2-4     NA  0.5        1   0.2
-18 #00BFC4 6 22     1   2-4     NA  0.5        1   0.2
-19 #00BFC4 7 21     1   2-4     NA  0.5        1   0.2
-20 #00BFC4 8 22     1   2-4     NA  0.5        1   0.2
-21 #00BFC4 9 16     1   2-5     NA  0.5        1   0.2
-22 #00BFC4 8 17     1   2-5     NA  0.5        1   0.2
-23 #00BFC4 7 16     1   2-5     NA  0.5        1   0.2
-24 #00BFC4 8 15     1   2-5     NA  0.5        1   0.2
-25 #00BFC4 9 16     1   2-5     NA  0.5        1   0.2
-```
 ]
 
 ---
@@ -1758,70 +2065,65 @@ count: false
 .panel1-6-auto[
 
 ```r
-layer_data(last_plot(), 2)
-
-*layer_data(last_plot(), 3)
+set.seed(1244)
+*cars
 ```
 ]
  
 .panel2-6-auto[
 
 ```
-      fill x  y PANEL group colour size linetype alpha
-1  #F8766D 5  2     1   1-1     NA  0.5        1   0.2
-2  #F8766D 4  3     1   1-1     NA  0.5        1   0.2
-3  #F8766D 3  2     1   1-1     NA  0.5        1   0.2
-4  #F8766D 4  1     1   1-1     NA  0.5        1   0.2
-5  #F8766D 5  2     1   1-1     NA  0.5        1   0.2
-6  #F8766D 5 10     1   1-2     NA  0.5        1   0.2
-7  #F8766D 4 11     1   1-2     NA  0.5        1   0.2
-8  #F8766D 3 10     1   1-2     NA  0.5        1   0.2
-9  #F8766D 4  9     1   1-2     NA  0.5        1   0.2
-10 #F8766D 5 10     1   1-2     NA  0.5        1   0.2
-11 #00BFC4 8  4     1   2-3     NA  0.5        1   0.2
-12 #00BFC4 7  5     1   2-3     NA  0.5        1   0.2
-13 #00BFC4 6  4     1   2-3     NA  0.5        1   0.2
-14 #00BFC4 7  3     1   2-3     NA  0.5        1   0.2
-15 #00BFC4 8  4     1   2-3     NA  0.5        1   0.2
-16 #00BFC4 8 22     1   2-4     NA  0.5        1   0.2
-17 #00BFC4 7 23     1   2-4     NA  0.5        1   0.2
-18 #00BFC4 6 22     1   2-4     NA  0.5        1   0.2
-19 #00BFC4 7 21     1   2-4     NA  0.5        1   0.2
-20 #00BFC4 8 22     1   2-4     NA  0.5        1   0.2
-21 #00BFC4 9 16     1   2-5     NA  0.5        1   0.2
-22 #00BFC4 8 17     1   2-5     NA  0.5        1   0.2
-23 #00BFC4 7 16     1   2-5     NA  0.5        1   0.2
-24 #00BFC4 8 15     1   2-5     NA  0.5        1   0.2
-25 #00BFC4 9 16     1   2-5     NA  0.5        1   0.2
-```
-
-```
-      fill x  y PANEL group colour size linetype alpha
-1  #F8766D 5  2     1   1-1  black  0.5        1     0
-2  #F8766D 4  3     1   1-1  black  0.5        1     0
-3  #F8766D 3  2     1   1-1  black  0.5        1     0
-4  #F8766D 4  1     1   1-1  black  0.5        1     0
-5  #F8766D 5  2     1   1-1  black  0.5        1     0
-6  #F8766D 5 10     1   1-2  black  0.5        1     0
-7  #F8766D 4 11     1   1-2  black  0.5        1     0
-8  #F8766D 3 10     1   1-2  black  0.5        1     0
-9  #F8766D 4  9     1   1-2  black  0.5        1     0
-10 #F8766D 5 10     1   1-2  black  0.5        1     0
-11 #00BFC4 8  4     1   2-3  black  0.5        1     0
-12 #00BFC4 7  5     1   2-3  black  0.5        1     0
-13 #00BFC4 6  4     1   2-3  black  0.5        1     0
-14 #00BFC4 7  3     1   2-3  black  0.5        1     0
-15 #00BFC4 8  4     1   2-3  black  0.5        1     0
-16 #00BFC4 8 22     1   2-4  black  0.5        1     0
-17 #00BFC4 7 23     1   2-4  black  0.5        1     0
-18 #00BFC4 6 22     1   2-4  black  0.5        1     0
-19 #00BFC4 7 21     1   2-4  black  0.5        1     0
-20 #00BFC4 8 22     1   2-4  black  0.5        1     0
-21 #00BFC4 9 16     1   2-5  black  0.5        1     0
-22 #00BFC4 8 17     1   2-5  black  0.5        1     0
-23 #00BFC4 7 16     1   2-5  black  0.5        1     0
-24 #00BFC4 8 15     1   2-5  black  0.5        1     0
-25 #00BFC4 9 16     1   2-5  black  0.5        1     0
+   speed dist
+1      4    2
+2      4   10
+3      7    4
+4      7   22
+5      8   16
+6      9   10
+7     10   18
+8     10   26
+9     10   34
+10    11   17
+11    11   28
+12    12   14
+13    12   20
+14    12   24
+15    12   28
+16    13   26
+17    13   34
+18    13   34
+19    13   46
+20    14   26
+21    14   36
+22    14   60
+23    14   80
+24    15   20
+25    15   26
+26    15   54
+27    16   32
+28    16   40
+29    17   32
+30    17   40
+31    17   50
+32    18   42
+33    18   56
+34    18   76
+35    18   84
+36    19   36
+37    19   46
+38    19   68
+39    20   32
+40    20   48
+41    20   52
+42    20   56
+43    20   64
+44    22   66
+45    23   54
+46    24   70
+47    24   92
+48    24   93
+49    24  120
+50    25   85
 ```
 ]
 
@@ -1832,71 +2134,228 @@ count: false
 .panel1-6-auto[
 
 ```r
-layer_data(last_plot(), 2)
-
-layer_data(last_plot(), 3)
+set.seed(1244)
+cars %&gt;%
+* .[1:5,]
 ```
 ]
  
 .panel2-6-auto[
 
 ```
-      fill x  y PANEL group colour size linetype alpha
-1  #F8766D 5  2     1   1-1     NA  0.5        1   0.2
-2  #F8766D 4  3     1   1-1     NA  0.5        1   0.2
-3  #F8766D 3  2     1   1-1     NA  0.5        1   0.2
-4  #F8766D 4  1     1   1-1     NA  0.5        1   0.2
-5  #F8766D 5  2     1   1-1     NA  0.5        1   0.2
-6  #F8766D 5 10     1   1-2     NA  0.5        1   0.2
-7  #F8766D 4 11     1   1-2     NA  0.5        1   0.2
-8  #F8766D 3 10     1   1-2     NA  0.5        1   0.2
-9  #F8766D 4  9     1   1-2     NA  0.5        1   0.2
-10 #F8766D 5 10     1   1-2     NA  0.5        1   0.2
-11 #00BFC4 8  4     1   2-3     NA  0.5        1   0.2
-12 #00BFC4 7  5     1   2-3     NA  0.5        1   0.2
-13 #00BFC4 6  4     1   2-3     NA  0.5        1   0.2
-14 #00BFC4 7  3     1   2-3     NA  0.5        1   0.2
-15 #00BFC4 8  4     1   2-3     NA  0.5        1   0.2
-16 #00BFC4 8 22     1   2-4     NA  0.5        1   0.2
-17 #00BFC4 7 23     1   2-4     NA  0.5        1   0.2
-18 #00BFC4 6 22     1   2-4     NA  0.5        1   0.2
-19 #00BFC4 7 21     1   2-4     NA  0.5        1   0.2
-20 #00BFC4 8 22     1   2-4     NA  0.5        1   0.2
-21 #00BFC4 9 16     1   2-5     NA  0.5        1   0.2
-22 #00BFC4 8 17     1   2-5     NA  0.5        1   0.2
-23 #00BFC4 7 16     1   2-5     NA  0.5        1   0.2
-24 #00BFC4 8 15     1   2-5     NA  0.5        1   0.2
-25 #00BFC4 9 16     1   2-5     NA  0.5        1   0.2
+  speed dist
+1     4    2
+2     4   10
+3     7    4
+4     7   22
+5     8   16
 ```
+]
+
+---
+count: false
+ 
+
+.panel1-6-auto[
+
+```r
+set.seed(1244)
+cars %&gt;%
+  .[1:5,] %&gt;%
+* data.frame()
+```
+]
+ 
+.panel2-6-auto[
 
 ```
-      fill x  y PANEL group colour size linetype alpha
-1  #F8766D 5  2     1   1-1  black  0.5        1     0
-2  #F8766D 4  3     1   1-1  black  0.5        1     0
-3  #F8766D 3  2     1   1-1  black  0.5        1     0
-4  #F8766D 4  1     1   1-1  black  0.5        1     0
-5  #F8766D 5  2     1   1-1  black  0.5        1     0
-6  #F8766D 5 10     1   1-2  black  0.5        1     0
-7  #F8766D 4 11     1   1-2  black  0.5        1     0
-8  #F8766D 3 10     1   1-2  black  0.5        1     0
-9  #F8766D 4  9     1   1-2  black  0.5        1     0
-10 #F8766D 5 10     1   1-2  black  0.5        1     0
-11 #00BFC4 8  4     1   2-3  black  0.5        1     0
-12 #00BFC4 7  5     1   2-3  black  0.5        1     0
-13 #00BFC4 6  4     1   2-3  black  0.5        1     0
-14 #00BFC4 7  3     1   2-3  black  0.5        1     0
-15 #00BFC4 8  4     1   2-3  black  0.5        1     0
-16 #00BFC4 8 22     1   2-4  black  0.5        1     0
-17 #00BFC4 7 23     1   2-4  black  0.5        1     0
-18 #00BFC4 6 22     1   2-4  black  0.5        1     0
-19 #00BFC4 7 21     1   2-4  black  0.5        1     0
-20 #00BFC4 8 22     1   2-4  black  0.5        1     0
-21 #00BFC4 9 16     1   2-5  black  0.5        1     0
-22 #00BFC4 8 17     1   2-5  black  0.5        1     0
-23 #00BFC4 7 16     1   2-5  black  0.5        1     0
-24 #00BFC4 8 15     1   2-5  black  0.5        1     0
-25 #00BFC4 9 16     1   2-5  black  0.5        1     0
+  speed dist
+1     4    2
+2     4   10
+3     7    4
+4     7   22
+5     8   16
 ```
+]
+
+---
+count: false
+ 
+
+.panel1-6-auto[
+
+```r
+set.seed(1244)
+cars %&gt;%
+  .[1:5,] %&gt;%
+  data.frame() %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-6-auto[
+![](geom_diamonds_recipe_flipbook_files/figure-html/6_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-6-auto[
+
+```r
+set.seed(1244)
+cars %&gt;%
+  .[1:5,] %&gt;%
+  data.frame() %&gt;%
+  ggplot() +
+* aes(x = speed, y = dist)
+```
+]
+ 
+.panel2-6-auto[
+![](geom_diamonds_recipe_flipbook_files/figure-html/6_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-6-auto[
+
+```r
+set.seed(1244)
+cars %&gt;%
+  .[1:5,] %&gt;%
+  data.frame() %&gt;%
+  ggplot() +
+  aes(x = speed, y = dist) +
+* geom_point()
+```
+]
+ 
+.panel2-6-auto[
+![](geom_diamonds_recipe_flipbook_files/figure-html/6_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-6-auto[
+
+```r
+set.seed(1244)
+cars %&gt;%
+  .[1:5,] %&gt;%
+  data.frame() %&gt;%
+  ggplot() +
+  aes(x = speed, y = dist) +
+  geom_point() +
+* aes(x0 = speed, y0 = dist)
+```
+]
+ 
+.panel2-6-auto[
+![](geom_diamonds_recipe_flipbook_files/figure-html/6_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-6-auto[
+
+```r
+set.seed(1244)
+cars %&gt;%
+  .[1:5,] %&gt;%
+  data.frame() %&gt;%
+  ggplot() +
+  aes(x = speed, y = dist) +
+  geom_point() +
+  aes(x0 = speed, y0 = dist) +
+* geom_diamond_purrr(alpha = .2)
+```
+]
+ 
+.panel2-6-auto[
+![](geom_diamonds_recipe_flipbook_files/figure-html/6_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-6-auto[
+
+```r
+set.seed(1244)
+cars %&gt;%
+  .[1:5,] %&gt;%
+  data.frame() %&gt;%
+  ggplot() +
+  aes(x = speed, y = dist) +
+  geom_point() +
+  aes(x0 = speed, y0 = dist) +
+  geom_diamond_purrr(alpha = .2) +
+* aes(fill = speed &gt; 6)
+```
+]
+ 
+.panel2-6-auto[
+![](geom_diamonds_recipe_flipbook_files/figure-html/6_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-6-auto[
+
+```r
+set.seed(1244)
+cars %&gt;%
+  .[1:5,] %&gt;%
+  data.frame() %&gt;%
+  ggplot() +
+  aes(x = speed, y = dist) +
+  geom_point() +
+  aes(x0 = speed, y0 = dist) +
+  geom_diamond_purrr(alpha = .2) +
+  aes(fill = speed &gt; 6) +
+* geom_diamond_purrr(height = 2, alpha = 0, color = "black")
+```
+]
+ 
+.panel2-6-auto[
+![](geom_diamonds_recipe_flipbook_files/figure-html/6_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-6-auto[
+
+```r
+set.seed(1244)
+cars %&gt;%
+  .[1:5,] %&gt;%
+  data.frame() %&gt;%
+  ggplot() +
+  aes(x = speed, y = dist) +
+  geom_point() +
+  aes(x0 = speed, y0 = dist) +
+  geom_diamond_purrr(alpha = .2) +
+  aes(fill = speed &gt; 6) +
+  geom_diamond_purrr(height = 2, alpha = 0, color = "black") -&gt;
+*purrr_diamonds_plot
+```
+]
+ 
+.panel2-6-auto[
+
 ]
 
 &lt;style&gt;
@@ -1917,6 +2376,237 @@ layer_data(last_plot(), 3)
   font-size: 80%
 }
 .panel3-6-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+# Step 6: Post Mordem using layer_data
+
+
+---
+
+
+count: false
+ 
+
+.panel1-7-auto[
+
+```r
+*layer_data(last_plot(), 2)
+```
+]
+ 
+.panel2-7-auto[
+
+```
+   PANEL x x0  y y0 group colour   fill size linetype alpha
+1      1 5  4  2  2     1     NA grey20  0.5        1   0.2
+2      1 4  4  3  2     1     NA grey20  0.5        1   0.2
+3      1 3  4  2  2     1     NA grey20  0.5        1   0.2
+4      1 4  4  1  2     1     NA grey20  0.5        1   0.2
+5      1 5  4  2  2     1     NA grey20  0.5        1   0.2
+6      1 5  4 10 10     2     NA grey20  0.5        1   0.2
+7      1 4  4 11 10     2     NA grey20  0.5        1   0.2
+8      1 3  4 10 10     2     NA grey20  0.5        1   0.2
+9      1 4  4  9 10     2     NA grey20  0.5        1   0.2
+10     1 5  4 10 10     2     NA grey20  0.5        1   0.2
+11     1 8  7  4  4     3     NA grey20  0.5        1   0.2
+12     1 7  7  5  4     3     NA grey20  0.5        1   0.2
+13     1 6  7  4  4     3     NA grey20  0.5        1   0.2
+14     1 7  7  3  4     3     NA grey20  0.5        1   0.2
+15     1 8  7  4  4     3     NA grey20  0.5        1   0.2
+16     1 8  7 22 22     4     NA grey20  0.5        1   0.2
+17     1 7  7 23 22     4     NA grey20  0.5        1   0.2
+18     1 6  7 22 22     4     NA grey20  0.5        1   0.2
+19     1 7  7 21 22     4     NA grey20  0.5        1   0.2
+20     1 8  7 22 22     4     NA grey20  0.5        1   0.2
+21     1 9  8 16 16     5     NA grey20  0.5        1   0.2
+22     1 8  8 17 16     5     NA grey20  0.5        1   0.2
+23     1 7  8 16 16     5     NA grey20  0.5        1   0.2
+24     1 8  8 15 16     5     NA grey20  0.5        1   0.2
+25     1 9  8 16 16     5     NA grey20  0.5        1   0.2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-7-auto[
+
+```r
+layer_data(last_plot(), 2)
+
+*layer_data(last_plot(), 3)
+```
+]
+ 
+.panel2-7-auto[
+
+```
+   PANEL x x0  y y0 group colour   fill size linetype alpha
+1      1 5  4  2  2     1     NA grey20  0.5        1   0.2
+2      1 4  4  3  2     1     NA grey20  0.5        1   0.2
+3      1 3  4  2  2     1     NA grey20  0.5        1   0.2
+4      1 4  4  1  2     1     NA grey20  0.5        1   0.2
+5      1 5  4  2  2     1     NA grey20  0.5        1   0.2
+6      1 5  4 10 10     2     NA grey20  0.5        1   0.2
+7      1 4  4 11 10     2     NA grey20  0.5        1   0.2
+8      1 3  4 10 10     2     NA grey20  0.5        1   0.2
+9      1 4  4  9 10     2     NA grey20  0.5        1   0.2
+10     1 5  4 10 10     2     NA grey20  0.5        1   0.2
+11     1 8  7  4  4     3     NA grey20  0.5        1   0.2
+12     1 7  7  5  4     3     NA grey20  0.5        1   0.2
+13     1 6  7  4  4     3     NA grey20  0.5        1   0.2
+14     1 7  7  3  4     3     NA grey20  0.5        1   0.2
+15     1 8  7  4  4     3     NA grey20  0.5        1   0.2
+16     1 8  7 22 22     4     NA grey20  0.5        1   0.2
+17     1 7  7 23 22     4     NA grey20  0.5        1   0.2
+18     1 6  7 22 22     4     NA grey20  0.5        1   0.2
+19     1 7  7 21 22     4     NA grey20  0.5        1   0.2
+20     1 8  7 22 22     4     NA grey20  0.5        1   0.2
+21     1 9  8 16 16     5     NA grey20  0.5        1   0.2
+22     1 8  8 17 16     5     NA grey20  0.5        1   0.2
+23     1 7  8 16 16     5     NA grey20  0.5        1   0.2
+24     1 8  8 15 16     5     NA grey20  0.5        1   0.2
+25     1 9  8 16 16     5     NA grey20  0.5        1   0.2
+```
+
+```
+   PANEL x x0  y y0 group colour   fill size linetype alpha
+1      1 5  4  2  2     1  black grey20  0.5        1     0
+2      1 4  4  3  2     1  black grey20  0.5        1     0
+3      1 3  4  2  2     1  black grey20  0.5        1     0
+4      1 4  4  1  2     1  black grey20  0.5        1     0
+5      1 5  4  2  2     1  black grey20  0.5        1     0
+6      1 5  4 10 10     2  black grey20  0.5        1     0
+7      1 4  4 11 10     2  black grey20  0.5        1     0
+8      1 3  4 10 10     2  black grey20  0.5        1     0
+9      1 4  4  9 10     2  black grey20  0.5        1     0
+10     1 5  4 10 10     2  black grey20  0.5        1     0
+11     1 8  7  4  4     3  black grey20  0.5        1     0
+12     1 7  7  5  4     3  black grey20  0.5        1     0
+13     1 6  7  4  4     3  black grey20  0.5        1     0
+14     1 7  7  3  4     3  black grey20  0.5        1     0
+15     1 8  7  4  4     3  black grey20  0.5        1     0
+16     1 8  7 22 22     4  black grey20  0.5        1     0
+17     1 7  7 23 22     4  black grey20  0.5        1     0
+18     1 6  7 22 22     4  black grey20  0.5        1     0
+19     1 7  7 21 22     4  black grey20  0.5        1     0
+20     1 8  7 22 22     4  black grey20  0.5        1     0
+21     1 9  8 16 16     5  black grey20  0.5        1     0
+22     1 8  8 17 16     5  black grey20  0.5        1     0
+23     1 7  8 16 16     5  black grey20  0.5        1     0
+24     1 8  8 15 16     5  black grey20  0.5        1     0
+25     1 9  8 16 16     5  black grey20  0.5        1     0
+```
+]
+
+---
+count: false
+ 
+
+.panel1-7-auto[
+
+```r
+layer_data(last_plot(), 2)
+
+layer_data(last_plot(), 3)
+```
+]
+ 
+.panel2-7-auto[
+
+```
+   PANEL x x0  y y0 group colour   fill size linetype alpha
+1      1 5  4  2  2     1     NA grey20  0.5        1   0.2
+2      1 4  4  3  2     1     NA grey20  0.5        1   0.2
+3      1 3  4  2  2     1     NA grey20  0.5        1   0.2
+4      1 4  4  1  2     1     NA grey20  0.5        1   0.2
+5      1 5  4  2  2     1     NA grey20  0.5        1   0.2
+6      1 5  4 10 10     2     NA grey20  0.5        1   0.2
+7      1 4  4 11 10     2     NA grey20  0.5        1   0.2
+8      1 3  4 10 10     2     NA grey20  0.5        1   0.2
+9      1 4  4  9 10     2     NA grey20  0.5        1   0.2
+10     1 5  4 10 10     2     NA grey20  0.5        1   0.2
+11     1 8  7  4  4     3     NA grey20  0.5        1   0.2
+12     1 7  7  5  4     3     NA grey20  0.5        1   0.2
+13     1 6  7  4  4     3     NA grey20  0.5        1   0.2
+14     1 7  7  3  4     3     NA grey20  0.5        1   0.2
+15     1 8  7  4  4     3     NA grey20  0.5        1   0.2
+16     1 8  7 22 22     4     NA grey20  0.5        1   0.2
+17     1 7  7 23 22     4     NA grey20  0.5        1   0.2
+18     1 6  7 22 22     4     NA grey20  0.5        1   0.2
+19     1 7  7 21 22     4     NA grey20  0.5        1   0.2
+20     1 8  7 22 22     4     NA grey20  0.5        1   0.2
+21     1 9  8 16 16     5     NA grey20  0.5        1   0.2
+22     1 8  8 17 16     5     NA grey20  0.5        1   0.2
+23     1 7  8 16 16     5     NA grey20  0.5        1   0.2
+24     1 8  8 15 16     5     NA grey20  0.5        1   0.2
+25     1 9  8 16 16     5     NA grey20  0.5        1   0.2
+```
+
+```
+   PANEL x x0  y y0 group colour   fill size linetype alpha
+1      1 5  4  2  2     1  black grey20  0.5        1     0
+2      1 4  4  3  2     1  black grey20  0.5        1     0
+3      1 3  4  2  2     1  black grey20  0.5        1     0
+4      1 4  4  1  2     1  black grey20  0.5        1     0
+5      1 5  4  2  2     1  black grey20  0.5        1     0
+6      1 5  4 10 10     2  black grey20  0.5        1     0
+7      1 4  4 11 10     2  black grey20  0.5        1     0
+8      1 3  4 10 10     2  black grey20  0.5        1     0
+9      1 4  4  9 10     2  black grey20  0.5        1     0
+10     1 5  4 10 10     2  black grey20  0.5        1     0
+11     1 8  7  4  4     3  black grey20  0.5        1     0
+12     1 7  7  5  4     3  black grey20  0.5        1     0
+13     1 6  7  4  4     3  black grey20  0.5        1     0
+14     1 7  7  3  4     3  black grey20  0.5        1     0
+15     1 8  7  4  4     3  black grey20  0.5        1     0
+16     1 8  7 22 22     4  black grey20  0.5        1     0
+17     1 7  7 23 22     4  black grey20  0.5        1     0
+18     1 6  7 22 22     4  black grey20  0.5        1     0
+19     1 7  7 21 22     4  black grey20  0.5        1     0
+20     1 8  7 22 22     4  black grey20  0.5        1     0
+21     1 9  8 16 16     5  black grey20  0.5        1     0
+22     1 8  8 17 16     5  black grey20  0.5        1     0
+23     1 7  8 16 16     5  black grey20  0.5        1     0
+24     1 8  8 15 16     5  black grey20  0.5        1     0
+25     1 9  8 16 16     5  black grey20  0.5        1     0
+```
+]
+
+&lt;style&gt;
+.panel1-7-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-7-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-7-auto {
   color: black;
   width: NA%;
   hight: 33%;
