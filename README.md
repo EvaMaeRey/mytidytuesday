@@ -11,6 +11,8 @@ The goal of mytidytuesday is to hold little projects. They are like
 blogs posts, but mostly code. In the spirit of \#tidytuesday no pressure
 to write prose\!
 
+  - [2022-08-27-extenders/extenders.html](https://evamaerey.github.io/mytidytuesday/2022-08-27-extenders/extenders.html)
+  - [2022-08-20-ggtrace/ggtrace.html](https://evamaerey.github.io/mytidytuesday/2022-08-20-ggtrace/ggtrace.html)
   - [2022-08-16-lahman-baseball/lahman\_baseball\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-08-16-lahman-baseball/lahman_baseball_flipbook.html)
   - [2022-08-16-lahman-baseball/lahman\_baseball.html](https://evamaerey.github.io/mytidytuesday/2022-08-16-lahman-baseball/lahman_baseball.html)
   - [2022-08-15-ma206data-day1/ma206data\_day1\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-08-15-ma206data-day1/ma206data_day1_flipbook.html)
