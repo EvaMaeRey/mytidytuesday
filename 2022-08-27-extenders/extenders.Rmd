@@ -17,7 +17,7 @@ output:
 ```{r, include = F}
 # This is the recommended set up for flipbooks
 # you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
-knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F)
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = T)
 library(flipbookr)
 library(tidyverse)
 ```
@@ -107,7 +107,9 @@ data.frame(
 
 ---
 
-```{r cool, include = F}
+`r chunk_reveal("itscool")`
+
+```{r itscool, include = F}
 data.frame(x1 = c(seq(0, 10/6 * pi, pi/3),
                   seq(0, 10/6 * pi, 2*pi/3)),
            y1 = c(rep(2, 6), rep(-1, 3)),
@@ -142,6 +144,51 @@ data.frame(x1 = c(seq(0, 10/6 * pi, pi/3),
   theme(legend.position = "none") + 
   coord_polar()
 ```
+
+
+`r chunk_reveal("meet_times")`
+
+```{r meet_times, include = F}
+library(lubridate)
+ymd_hms("2009-08-07 11:00:00", tz = "America/New_York") ->
+  meeting
+
+lubridate::with_tz(meeting, tz = "Europe/London")
+
+time_to_local <- function(x, tz){
+
+  lubridate::with_tz(x, tz = tz) %>%
+    as.character()
+
+}
+
+library(lubridate)
+OlsonNames() %>%
+  tibble(tz = .) %>%
+  filter(tz != "US/Pacific-New") %>%
+  filter(tz %>% str_detect("Amsterdam|Stockholm|US/Eastern|British|Europe/London")) %>%
+  mutate(meeting_ny = meeting) %>%
+  mutate(local_time = purrr::map2(meeting_ny, tz, time_to_local))  %>%
+  unnest(local_time) %>%
+  group_by(local_time) %>%
+  summarise(locations = paste(tz, collapse = "\n")) %>%
+  ggplot() +
+  aes(x = locations %>% paste(local_time, sep = "\n")) +
+  aes(y = 1) +
+  aes(label = locations) +
+  geom_tile(aes(y = 0), fill = c('cadetblue'), alpha = .7, 
+            color = "oldlace") +
+  geom_label(aes(y = 0, 
+                 label = hour(local_time) %>% 
+                   paste0(":00"))) +
+  coord_polar() + 
+  geomtextpath::coord_curvedpolar() + 
+  theme_minimal(base_size = 18) + 
+  theme(axis.text.y = element_blank()) + 
+  labs(y = NULL) + 
+  labs(x = NULL)
+```
+
 
 
 ```{css, eval = TRUE, echo = FALSE}

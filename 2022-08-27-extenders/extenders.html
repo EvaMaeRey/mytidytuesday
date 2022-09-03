@@ -3198,32 +3198,2011 @@ count: false
 
 
 
-```r
- data.frame(Temperature = c(4.4, 4.6, 6.3, 8.7, 11.6, 14.1, 15.9, 15.5,
-                                 13.1, 9.7, 6.7, 4.3, 3.6, 3.9, 6.4, 9.7, 13.2,
-                                 15.8, 18, 17.8, 15.1, 11.2, 7.2, 4.4),
-                 City = rep(c("Glasgow", "Amsterdam"), each = 12),
-                 Month = factor(rep(month.abb, 2), month.abb)) %&gt;% 
-      ggplot() +
-      aes(Month, Temperature) +
-      geom_col(aes(fill = City), position = position_dodge(width = 1)) +
-      geom_vline(xintercept = 1:13 - 0.5, color = "gray90") +
-      geom_hline(yintercept = 0:3 * 5, color = "gray90") +
-      scale_fill_manual(values = c("darkorange", "dodgerblue4")) +
-      ggtitle("Average monthly temperature in Amsterdam and Glasgow") +
-      theme_bw() +
-      theme(panel.border = element_blank(),
-            axis.text.x = element_text(size = 14),
-            axis.title.x = element_blank(),
-            panel.grid.major = element_blank()) + 
-  coord_polar() + 
-  geomtextpath::coord_curvedpolar()
-```
-
-![](extenders_files/figure-html/temps-1.png)&lt;!-- --&gt;
 
 
 ---
+
+count: false
+ 
+
+.panel1-itscool-auto[
+
+```r
+*data.frame(x1 = c(seq(0, 10/6 * pi, pi/3),
+*                 seq(0, 10/6 * pi, 2*pi/3)),
+*          y1 = c(rep(2, 6), rep(-1, 3)),
+*          x2 = c(seq(0, 10/6 * pi, pi/3)  + pi/3,
+*                 seq(0, 10/6 * pi, 2*pi/3) + 2*pi/3),
+*          y2 = c(rep(4, 6), rep(2, 3)),
+*          group = letters[c(1:6, (1:3) * 2)],
+*          alpha = c(rep(1, 6), rep(0.4, 3)))
+```
+]
+ 
+.panel2-itscool-auto[
+
+```
+        x1 y1       x2 y2 group alpha
+1 0.000000  2 1.047198  4     a   1.0
+2 1.047198  2 2.094395  4     b   1.0
+3 2.094395  2 3.141593  4     c   1.0
+4 3.141593  2 4.188790  4     d   1.0
+5 4.188790  2 5.235988  4     e   1.0
+6 5.235988  2 6.283185  4     f   1.0
+7 0.000000 -1 2.094395  2     b   0.4
+8 2.094395 -1 4.188790  2     d   0.4
+9 4.188790 -1 6.283185  2     f   0.4
+```
+]
+
+---
+count: false
+ 
+
+.panel1-itscool-auto[
+
+```r
+data.frame(x1 = c(seq(0, 10/6 * pi, pi/3),
+                  seq(0, 10/6 * pi, 2*pi/3)),
+           y1 = c(rep(2, 6), rep(-1, 3)),
+           x2 = c(seq(0, 10/6 * pi, pi/3)  + pi/3,
+                  seq(0, 10/6 * pi, 2*pi/3) + 2*pi/3),
+           y2 = c(rep(4, 6), rep(2, 3)),
+           group = letters[c(1:6, (1:3) * 2)],
+           alpha = c(rep(1, 6), rep(0.4, 3))) %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-itscool-auto[
+![](extenders_files/figure-html/itscool_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-itscool-auto[
+
+```r
+data.frame(x1 = c(seq(0, 10/6 * pi, pi/3),
+                  seq(0, 10/6 * pi, 2*pi/3)),
+           y1 = c(rep(2, 6), rep(-1, 3)),
+           x2 = c(seq(0, 10/6 * pi, pi/3)  + pi/3,
+                  seq(0, 10/6 * pi, 2*pi/3) + 2*pi/3),
+           y2 = c(rep(4, 6), rep(2, 3)),
+           group = letters[c(1:6, (1:3) * 2)],
+           alpha = c(rep(1, 6), rep(0.4, 3))) %&gt;%
+  ggplot() +
+* aes(x1, y1)
+```
+]
+ 
+.panel2-itscool-auto[
+![](extenders_files/figure-html/itscool_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-itscool-auto[
+
+```r
+data.frame(x1 = c(seq(0, 10/6 * pi, pi/3),
+                  seq(0, 10/6 * pi, 2*pi/3)),
+           y1 = c(rep(2, 6), rep(-1, 3)),
+           x2 = c(seq(0, 10/6 * pi, pi/3)  + pi/3,
+                  seq(0, 10/6 * pi, 2*pi/3) + 2*pi/3),
+           y2 = c(rep(4, 6), rep(2, 3)),
+           group = letters[c(1:6, (1:3) * 2)],
+           alpha = c(rep(1, 6), rep(0.4, 3))) %&gt;%
+  ggplot() +
+  aes(x1, y1) +
+* geom_rect(aes(xmin = x1, xmax = x2, ymin = y1, ymax = y2, fill = group,
+*               alpha = alpha),
+*           color = "white", size = 2)
+```
+]
+ 
+.panel2-itscool-auto[
+![](extenders_files/figure-html/itscool_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-itscool-auto[
+
+```r
+data.frame(x1 = c(seq(0, 10/6 * pi, pi/3),
+                  seq(0, 10/6 * pi, 2*pi/3)),
+           y1 = c(rep(2, 6), rep(-1, 3)),
+           x2 = c(seq(0, 10/6 * pi, pi/3)  + pi/3,
+                  seq(0, 10/6 * pi, 2*pi/3) + 2*pi/3),
+           y2 = c(rep(4, 6), rep(2, 3)),
+           group = letters[c(1:6, (1:3) * 2)],
+           alpha = c(rep(1, 6), rep(0.4, 3))) %&gt;%
+  ggplot() +
+  aes(x1, y1) +
+  geom_rect(aes(xmin = x1, xmax = x2, ymin = y1, ymax = y2, fill = group,
+                alpha = alpha),
+            color = "white", size = 2) +
+* geomtextpath::geom_textpath(data = data.frame(x1 = seq(0, 2 * pi, length = 300),
+*          y1 = rep(0.5, 300),
+*          label = rep(c("stats", "effects", "polar"), each = 100)),
+*          aes(label = label), linetype = 0, size = 8,
+*          upright = TRUE)
+```
+]
+ 
+.panel2-itscool-auto[
+![](extenders_files/figure-html/itscool_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-itscool-auto[
+
+```r
+data.frame(x1 = c(seq(0, 10/6 * pi, pi/3),
+                  seq(0, 10/6 * pi, 2*pi/3)),
+           y1 = c(rep(2, 6), rep(-1, 3)),
+           x2 = c(seq(0, 10/6 * pi, pi/3)  + pi/3,
+                  seq(0, 10/6 * pi, 2*pi/3) + 2*pi/3),
+           y2 = c(rep(4, 6), rep(2, 3)),
+           group = letters[c(1:6, (1:3) * 2)],
+           alpha = c(rep(1, 6), rep(0.4, 3))) %&gt;%
+  ggplot() +
+  aes(x1, y1) +
+  geom_rect(aes(xmin = x1, xmax = x2, ymin = y1, ymax = y2, fill = group,
+                alpha = alpha),
+            color = "white", size = 2) +
+  geomtextpath::geom_textpath(data = data.frame(x1 = seq(0, 2 * pi, length = 300),
+           y1 = rep(0.5, 300),
+           label = rep(c("stats", "effects", "polar"), each = 100)),
+           aes(label = label), linetype = 0, size = 8,
+           upright = TRUE) +
+* geomtextpath::geom_textpath(data = data.frame(x1 = seq(0, 2 * pi, length = 300),
+*          y1 = rep(3, 300),
+*          label = rep(c("density", "smooth", "unique", "organic",
+*                        "easy to use", "automatic"),
+*                      each = 50)),
+*          aes(label = label), linetype = 0, size = 4.6, color = "white",
+*          upright = TRUE)
+```
+]
+ 
+.panel2-itscool-auto[
+![](extenders_files/figure-html/itscool_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-itscool-auto[
+
+```r
+data.frame(x1 = c(seq(0, 10/6 * pi, pi/3),
+                  seq(0, 10/6 * pi, 2*pi/3)),
+           y1 = c(rep(2, 6), rep(-1, 3)),
+           x2 = c(seq(0, 10/6 * pi, pi/3)  + pi/3,
+                  seq(0, 10/6 * pi, 2*pi/3) + 2*pi/3),
+           y2 = c(rep(4, 6), rep(2, 3)),
+           group = letters[c(1:6, (1:3) * 2)],
+           alpha = c(rep(1, 6), rep(0.4, 3))) %&gt;%
+  ggplot() +
+  aes(x1, y1) +
+  geom_rect(aes(xmin = x1, xmax = x2, ymin = y1, ymax = y2, fill = group,
+                alpha = alpha),
+            color = "white", size = 2) +
+  geomtextpath::geom_textpath(data = data.frame(x1 = seq(0, 2 * pi, length = 300),
+           y1 = rep(0.5, 300),
+           label = rep(c("stats", "effects", "polar"), each = 100)),
+           aes(label = label), linetype = 0, size = 8,
+           upright = TRUE) +
+  geomtextpath::geom_textpath(data = data.frame(x1 = seq(0, 2 * pi, length = 300),
+           y1 = rep(3, 300),
+           label = rep(c("density", "smooth", "unique", "organic",
+                         "easy to use", "automatic"),
+                       each = 50)),
+           aes(label = label), linetype = 0, size = 4.6, color = "white",
+           upright = TRUE) +
+* scale_y_continuous(limits = c(-5, 4))
+```
+]
+ 
+.panel2-itscool-auto[
+![](extenders_files/figure-html/itscool_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-itscool-auto[
+
+```r
+data.frame(x1 = c(seq(0, 10/6 * pi, pi/3),
+                  seq(0, 10/6 * pi, 2*pi/3)),
+           y1 = c(rep(2, 6), rep(-1, 3)),
+           x2 = c(seq(0, 10/6 * pi, pi/3)  + pi/3,
+                  seq(0, 10/6 * pi, 2*pi/3) + 2*pi/3),
+           y2 = c(rep(4, 6), rep(2, 3)),
+           group = letters[c(1:6, (1:3) * 2)],
+           alpha = c(rep(1, 6), rep(0.4, 3))) %&gt;%
+  ggplot() +
+  aes(x1, y1) +
+  geom_rect(aes(xmin = x1, xmax = x2, ymin = y1, ymax = y2, fill = group,
+                alpha = alpha),
+            color = "white", size = 2) +
+  geomtextpath::geom_textpath(data = data.frame(x1 = seq(0, 2 * pi, length = 300),
+           y1 = rep(0.5, 300),
+           label = rep(c("stats", "effects", "polar"), each = 100)),
+           aes(label = label), linetype = 0, size = 8,
+           upright = TRUE) +
+  geomtextpath::geom_textpath(data = data.frame(x1 = seq(0, 2 * pi, length = 300),
+           y1 = rep(3, 300),
+           label = rep(c("density", "smooth", "unique", "organic",
+                         "easy to use", "automatic"),
+                       each = 50)),
+           aes(label = label), linetype = 0, size = 4.6, color = "white",
+           upright = TRUE) +
+  scale_y_continuous(limits = c(-5, 4)) +
+* scale_x_continuous(limits = c(0, 2*pi))
+```
+]
+ 
+.panel2-itscool-auto[
+![](extenders_files/figure-html/itscool_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-itscool-auto[
+
+```r
+data.frame(x1 = c(seq(0, 10/6 * pi, pi/3),
+                  seq(0, 10/6 * pi, 2*pi/3)),
+           y1 = c(rep(2, 6), rep(-1, 3)),
+           x2 = c(seq(0, 10/6 * pi, pi/3)  + pi/3,
+                  seq(0, 10/6 * pi, 2*pi/3) + 2*pi/3),
+           y2 = c(rep(4, 6), rep(2, 3)),
+           group = letters[c(1:6, (1:3) * 2)],
+           alpha = c(rep(1, 6), rep(0.4, 3))) %&gt;%
+  ggplot() +
+  aes(x1, y1) +
+  geom_rect(aes(xmin = x1, xmax = x2, ymin = y1, ymax = y2, fill = group,
+                alpha = alpha),
+            color = "white", size = 2) +
+  geomtextpath::geom_textpath(data = data.frame(x1 = seq(0, 2 * pi, length = 300),
+           y1 = rep(0.5, 300),
+           label = rep(c("stats", "effects", "polar"), each = 100)),
+           aes(label = label), linetype = 0, size = 8,
+           upright = TRUE) +
+  geomtextpath::geom_textpath(data = data.frame(x1 = seq(0, 2 * pi, length = 300),
+           y1 = rep(3, 300),
+           label = rep(c("density", "smooth", "unique", "organic",
+                         "easy to use", "automatic"),
+                       each = 50)),
+           aes(label = label), linetype = 0, size = 4.6, color = "white",
+           upright = TRUE) +
+  scale_y_continuous(limits = c(-5, 4)) +
+  scale_x_continuous(limits = c(0, 2*pi)) +
+* scale_fill_manual(values = c("deepskyblue3", "deepskyblue4",
+*                              "green3", "green4","tomato", "tomato2"))
+```
+]
+ 
+.panel2-itscool-auto[
+![](extenders_files/figure-html/itscool_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-itscool-auto[
+
+```r
+data.frame(x1 = c(seq(0, 10/6 * pi, pi/3),
+                  seq(0, 10/6 * pi, 2*pi/3)),
+           y1 = c(rep(2, 6), rep(-1, 3)),
+           x2 = c(seq(0, 10/6 * pi, pi/3)  + pi/3,
+                  seq(0, 10/6 * pi, 2*pi/3) + 2*pi/3),
+           y2 = c(rep(4, 6), rep(2, 3)),
+           group = letters[c(1:6, (1:3) * 2)],
+           alpha = c(rep(1, 6), rep(0.4, 3))) %&gt;%
+  ggplot() +
+  aes(x1, y1) +
+  geom_rect(aes(xmin = x1, xmax = x2, ymin = y1, ymax = y2, fill = group,
+                alpha = alpha),
+            color = "white", size = 2) +
+  geomtextpath::geom_textpath(data = data.frame(x1 = seq(0, 2 * pi, length = 300),
+           y1 = rep(0.5, 300),
+           label = rep(c("stats", "effects", "polar"), each = 100)),
+           aes(label = label), linetype = 0, size = 8,
+           upright = TRUE) +
+  geomtextpath::geom_textpath(data = data.frame(x1 = seq(0, 2 * pi, length = 300),
+           y1 = rep(3, 300),
+           label = rep(c("density", "smooth", "unique", "organic",
+                         "easy to use", "automatic"),
+                       each = 50)),
+           aes(label = label), linetype = 0, size = 4.6, color = "white",
+           upright = TRUE) +
+  scale_y_continuous(limits = c(-5, 4)) +
+  scale_x_continuous(limits = c(0, 2*pi)) +
+  scale_fill_manual(values = c("deepskyblue3", "deepskyblue4",
+                               "green3", "green4","tomato", "tomato2")) +
+* scale_alpha_identity()
+```
+]
+ 
+.panel2-itscool-auto[
+![](extenders_files/figure-html/itscool_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-itscool-auto[
+
+```r
+data.frame(x1 = c(seq(0, 10/6 * pi, pi/3),
+                  seq(0, 10/6 * pi, 2*pi/3)),
+           y1 = c(rep(2, 6), rep(-1, 3)),
+           x2 = c(seq(0, 10/6 * pi, pi/3)  + pi/3,
+                  seq(0, 10/6 * pi, 2*pi/3) + 2*pi/3),
+           y2 = c(rep(4, 6), rep(2, 3)),
+           group = letters[c(1:6, (1:3) * 2)],
+           alpha = c(rep(1, 6), rep(0.4, 3))) %&gt;%
+  ggplot() +
+  aes(x1, y1) +
+  geom_rect(aes(xmin = x1, xmax = x2, ymin = y1, ymax = y2, fill = group,
+                alpha = alpha),
+            color = "white", size = 2) +
+  geomtextpath::geom_textpath(data = data.frame(x1 = seq(0, 2 * pi, length = 300),
+           y1 = rep(0.5, 300),
+           label = rep(c("stats", "effects", "polar"), each = 100)),
+           aes(label = label), linetype = 0, size = 8,
+           upright = TRUE) +
+  geomtextpath::geom_textpath(data = data.frame(x1 = seq(0, 2 * pi, length = 300),
+           y1 = rep(3, 300),
+           label = rep(c("density", "smooth", "unique", "organic",
+                         "easy to use", "automatic"),
+                       each = 50)),
+           aes(label = label), linetype = 0, size = 4.6, color = "white",
+           upright = TRUE) +
+  scale_y_continuous(limits = c(-5, 4)) +
+  scale_x_continuous(limits = c(0, 2*pi)) +
+  scale_fill_manual(values = c("deepskyblue3", "deepskyblue4",
+                               "green3", "green4","tomato", "tomato2")) +
+  scale_alpha_identity() +
+* theme_void()
+```
+]
+ 
+.panel2-itscool-auto[
+![](extenders_files/figure-html/itscool_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-itscool-auto[
+
+```r
+data.frame(x1 = c(seq(0, 10/6 * pi, pi/3),
+                  seq(0, 10/6 * pi, 2*pi/3)),
+           y1 = c(rep(2, 6), rep(-1, 3)),
+           x2 = c(seq(0, 10/6 * pi, pi/3)  + pi/3,
+                  seq(0, 10/6 * pi, 2*pi/3) + 2*pi/3),
+           y2 = c(rep(4, 6), rep(2, 3)),
+           group = letters[c(1:6, (1:3) * 2)],
+           alpha = c(rep(1, 6), rep(0.4, 3))) %&gt;%
+  ggplot() +
+  aes(x1, y1) +
+  geom_rect(aes(xmin = x1, xmax = x2, ymin = y1, ymax = y2, fill = group,
+                alpha = alpha),
+            color = "white", size = 2) +
+  geomtextpath::geom_textpath(data = data.frame(x1 = seq(0, 2 * pi, length = 300),
+           y1 = rep(0.5, 300),
+           label = rep(c("stats", "effects", "polar"), each = 100)),
+           aes(label = label), linetype = 0, size = 8,
+           upright = TRUE) +
+  geomtextpath::geom_textpath(data = data.frame(x1 = seq(0, 2 * pi, length = 300),
+           y1 = rep(3, 300),
+           label = rep(c("density", "smooth", "unique", "organic",
+                         "easy to use", "automatic"),
+                       each = 50)),
+           aes(label = label), linetype = 0, size = 4.6, color = "white",
+           upright = TRUE) +
+  scale_y_continuous(limits = c(-5, 4)) +
+  scale_x_continuous(limits = c(0, 2*pi)) +
+  scale_fill_manual(values = c("deepskyblue3", "deepskyblue4",
+                               "green3", "green4","tomato", "tomato2")) +
+  scale_alpha_identity() +
+  theme_void() +
+* theme(legend.position = "none")
+```
+]
+ 
+.panel2-itscool-auto[
+![](extenders_files/figure-html/itscool_auto_12_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-itscool-auto[
+
+```r
+data.frame(x1 = c(seq(0, 10/6 * pi, pi/3),
+                  seq(0, 10/6 * pi, 2*pi/3)),
+           y1 = c(rep(2, 6), rep(-1, 3)),
+           x2 = c(seq(0, 10/6 * pi, pi/3)  + pi/3,
+                  seq(0, 10/6 * pi, 2*pi/3) + 2*pi/3),
+           y2 = c(rep(4, 6), rep(2, 3)),
+           group = letters[c(1:6, (1:3) * 2)],
+           alpha = c(rep(1, 6), rep(0.4, 3))) %&gt;%
+  ggplot() +
+  aes(x1, y1) +
+  geom_rect(aes(xmin = x1, xmax = x2, ymin = y1, ymax = y2, fill = group,
+                alpha = alpha),
+            color = "white", size = 2) +
+  geomtextpath::geom_textpath(data = data.frame(x1 = seq(0, 2 * pi, length = 300),
+           y1 = rep(0.5, 300),
+           label = rep(c("stats", "effects", "polar"), each = 100)),
+           aes(label = label), linetype = 0, size = 8,
+           upright = TRUE) +
+  geomtextpath::geom_textpath(data = data.frame(x1 = seq(0, 2 * pi, length = 300),
+           y1 = rep(3, 300),
+           label = rep(c("density", "smooth", "unique", "organic",
+                         "easy to use", "automatic"),
+                       each = 50)),
+           aes(label = label), linetype = 0, size = 4.6, color = "white",
+           upright = TRUE) +
+  scale_y_continuous(limits = c(-5, 4)) +
+  scale_x_continuous(limits = c(0, 2*pi)) +
+  scale_fill_manual(values = c("deepskyblue3", "deepskyblue4",
+                               "green3", "green4","tomato", "tomato2")) +
+  scale_alpha_identity() +
+  theme_void() +
+  theme(legend.position = "none") +
+* coord_polar()
+```
+]
+ 
+.panel2-itscool-auto[
+![](extenders_files/figure-html/itscool_auto_13_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-itscool-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-itscool-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-itscool-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+count: false
+ 
+
+.panel1-meet_times-auto[
+
+```r
+*library(lubridate)
+```
+]
+ 
+.panel2-meet_times-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-meet_times-auto[
+
+```r
+library(lubridate)
+*ymd_hms("2009-08-07 11:00:00", tz = "America/New_York")
+```
+]
+ 
+.panel2-meet_times-auto[
+
+```
+[1] "2009-08-07 11:00:00 EDT"
+```
+]
+
+---
+count: false
+ 
+
+.panel1-meet_times-auto[
+
+```r
+library(lubridate)
+ymd_hms("2009-08-07 11:00:00", tz = "America/New_York") -&gt;
+* meeting
+```
+]
+ 
+.panel2-meet_times-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-meet_times-auto[
+
+```r
+library(lubridate)
+ymd_hms("2009-08-07 11:00:00", tz = "America/New_York") -&gt;
+  meeting
+
+*lubridate::with_tz(meeting, tz = "Europe/London")
+```
+]
+ 
+.panel2-meet_times-auto[
+
+```
+[1] "2009-08-07 16:00:00 BST"
+```
+]
+
+---
+count: false
+ 
+
+.panel1-meet_times-auto[
+
+```r
+library(lubridate)
+ymd_hms("2009-08-07 11:00:00", tz = "America/New_York") -&gt;
+  meeting
+
+lubridate::with_tz(meeting, tz = "Europe/London")
+
+*time_to_local &lt;- function(x, tz){
+
+* lubridate::with_tz(x, tz = tz) %&gt;%
+*   as.character()
+
+*} 
+```
+]
+ 
+.panel2-meet_times-auto[
+
+```
+[1] "2009-08-07 16:00:00 BST"
+```
+]
+
+---
+count: false
+ 
+
+.panel1-meet_times-auto[
+
+```r
+library(lubridate)
+ymd_hms("2009-08-07 11:00:00", tz = "America/New_York") -&gt;
+  meeting
+
+lubridate::with_tz(meeting, tz = "Europe/London")
+
+time_to_local &lt;- function(x, tz){
+
+  lubridate::with_tz(x, tz = tz) %&gt;%
+    as.character()
+
+}
+
+*library(lubridate)
+```
+]
+ 
+.panel2-meet_times-auto[
+
+```
+[1] "2009-08-07 16:00:00 BST"
+```
+]
+
+---
+count: false
+ 
+
+.panel1-meet_times-auto[
+
+```r
+library(lubridate)
+ymd_hms("2009-08-07 11:00:00", tz = "America/New_York") -&gt;
+  meeting
+
+lubridate::with_tz(meeting, tz = "Europe/London")
+
+time_to_local &lt;- function(x, tz){
+
+  lubridate::with_tz(x, tz = tz) %&gt;%
+    as.character()
+
+}
+
+library(lubridate)
+*OlsonNames()
+```
+]
+ 
+.panel2-meet_times-auto[
+
+```
+[1] "2009-08-07 16:00:00 BST"
+```
+
+```
+  [1] "Africa/Abidjan"                   "Africa/Accra"                    
+  [3] "Africa/Addis_Ababa"               "Africa/Algiers"                  
+  [5] "Africa/Asmara"                    "Africa/Asmera"                   
+  [7] "Africa/Bamako"                    "Africa/Bangui"                   
+  [9] "Africa/Banjul"                    "Africa/Bissau"                   
+ [11] "Africa/Blantyre"                  "Africa/Brazzaville"              
+ [13] "Africa/Bujumbura"                 "Africa/Cairo"                    
+ [15] "Africa/Casablanca"                "Africa/Ceuta"                    
+ [17] "Africa/Conakry"                   "Africa/Dakar"                    
+ [19] "Africa/Dar_es_Salaam"             "Africa/Djibouti"                 
+ [21] "Africa/Douala"                    "Africa/El_Aaiun"                 
+ [23] "Africa/Freetown"                  "Africa/Gaborone"                 
+ [25] "Africa/Harare"                    "Africa/Johannesburg"             
+ [27] "Africa/Juba"                      "Africa/Kampala"                  
+ [29] "Africa/Khartoum"                  "Africa/Kigali"                   
+ [31] "Africa/Kinshasa"                  "Africa/Lagos"                    
+ [33] "Africa/Libreville"                "Africa/Lome"                     
+ [35] "Africa/Luanda"                    "Africa/Lubumbashi"               
+ [37] "Africa/Lusaka"                    "Africa/Malabo"                   
+ [39] "Africa/Maputo"                    "Africa/Maseru"                   
+ [41] "Africa/Mbabane"                   "Africa/Mogadishu"                
+ [43] "Africa/Monrovia"                  "Africa/Nairobi"                  
+ [45] "Africa/Ndjamena"                  "Africa/Niamey"                   
+ [47] "Africa/Nouakchott"                "Africa/Ouagadougou"              
+ [49] "Africa/Porto-Novo"                "Africa/Sao_Tome"                 
+ [51] "Africa/Timbuktu"                  "Africa/Tripoli"                  
+ [53] "Africa/Tunis"                     "Africa/Windhoek"                 
+ [55] "America/Adak"                     "America/Anchorage"               
+ [57] "America/Anguilla"                 "America/Antigua"                 
+ [59] "America/Araguaina"                "America/Argentina/Buenos_Aires"  
+ [61] "America/Argentina/Catamarca"      "America/Argentina/ComodRivadavia"
+ [63] "America/Argentina/Cordoba"        "America/Argentina/Jujuy"         
+ [65] "America/Argentina/La_Rioja"       "America/Argentina/Mendoza"       
+ [67] "America/Argentina/Rio_Gallegos"   "America/Argentina/Salta"         
+ [69] "America/Argentina/San_Juan"       "America/Argentina/San_Luis"      
+ [71] "America/Argentina/Tucuman"        "America/Argentina/Ushuaia"       
+ [73] "America/Aruba"                    "America/Asuncion"                
+ [75] "America/Atikokan"                 "America/Atka"                    
+ [77] "America/Bahia"                    "America/Bahia_Banderas"          
+ [79] "America/Barbados"                 "America/Belem"                   
+ [81] "America/Belize"                   "America/Blanc-Sablon"            
+ [83] "America/Boa_Vista"                "America/Bogota"                  
+ [85] "America/Boise"                    "America/Buenos_Aires"            
+ [87] "America/Cambridge_Bay"            "America/Campo_Grande"            
+ [89] "America/Cancun"                   "America/Caracas"                 
+ [91] "America/Catamarca"                "America/Cayenne"                 
+ [93] "America/Cayman"                   "America/Chicago"                 
+ [95] "America/Chihuahua"                "America/Coral_Harbour"           
+ [97] "America/Cordoba"                  "America/Costa_Rica"              
+ [99] "America/Creston"                  "America/Cuiaba"                  
+[101] "America/Curacao"                  "America/Danmarkshavn"            
+[103] "America/Dawson"                   "America/Dawson_Creek"            
+[105] "America/Denver"                   "America/Detroit"                 
+[107] "America/Dominica"                 "America/Edmonton"                
+[109] "America/Eirunepe"                 "America/El_Salvador"             
+[111] "America/Ensenada"                 "America/Fort_Nelson"             
+[113] "America/Fort_Wayne"               "America/Fortaleza"               
+[115] "America/Glace_Bay"                "America/Godthab"                 
+[117] "America/Goose_Bay"                "America/Grand_Turk"              
+[119] "America/Grenada"                  "America/Guadeloupe"              
+[121] "America/Guatemala"                "America/Guayaquil"               
+[123] "America/Guyana"                   "America/Halifax"                 
+[125] "America/Havana"                   "America/Hermosillo"              
+[127] "America/Indiana/Indianapolis"     "America/Indiana/Knox"            
+[129] "America/Indiana/Marengo"          "America/Indiana/Petersburg"      
+[131] "America/Indiana/Tell_City"        "America/Indiana/Vevay"           
+[133] "America/Indiana/Vincennes"        "America/Indiana/Winamac"         
+[135] "America/Indianapolis"             "America/Inuvik"                  
+[137] "America/Iqaluit"                  "America/Jamaica"                 
+[139] "America/Jujuy"                    "America/Juneau"                  
+[141] "America/Kentucky/Louisville"      "America/Kentucky/Monticello"     
+[143] "America/Knox_IN"                  "America/Kralendijk"              
+[145] "America/La_Paz"                   "America/Lima"                    
+[147] "America/Los_Angeles"              "America/Louisville"              
+[149] "America/Lower_Princes"            "America/Maceio"                  
+[151] "America/Managua"                  "America/Manaus"                  
+[153] "America/Marigot"                  "America/Martinique"              
+[155] "America/Matamoros"                "America/Mazatlan"                
+[157] "America/Mendoza"                  "America/Menominee"               
+[159] "America/Merida"                   "America/Metlakatla"              
+[161] "America/Mexico_City"              "America/Miquelon"                
+[163] "America/Moncton"                  "America/Monterrey"               
+[165] "America/Montevideo"               "America/Montreal"                
+[167] "America/Montserrat"               "America/Nassau"                  
+[169] "America/New_York"                 "America/Nipigon"                 
+[171] "America/Nome"                     "America/Noronha"                 
+[173] "America/North_Dakota/Beulah"      "America/North_Dakota/Center"     
+[175] "America/North_Dakota/New_Salem"   "America/Ojinaga"                 
+[177] "America/Panama"                   "America/Pangnirtung"             
+[179] "America/Paramaribo"               "America/Phoenix"                 
+[181] "America/Port_of_Spain"            "America/Port-au-Prince"          
+[183] "America/Porto_Acre"               "America/Porto_Velho"             
+[185] "America/Puerto_Rico"              "America/Punta_Arenas"            
+[187] "America/Rainy_River"              "America/Rankin_Inlet"            
+[189] "America/Recife"                   "America/Regina"                  
+[191] "America/Resolute"                 "America/Rio_Branco"              
+[193] "America/Rosario"                  "America/Santa_Isabel"            
+[195] "America/Santarem"                 "America/Santiago"                
+[197] "America/Santo_Domingo"            "America/Sao_Paulo"               
+[199] "America/Scoresbysund"             "America/Shiprock"                
+[201] "America/Sitka"                    "America/St_Barthelemy"           
+[203] "America/St_Johns"                 "America/St_Kitts"                
+[205] "America/St_Lucia"                 "America/St_Thomas"               
+[207] "America/St_Vincent"               "America/Swift_Current"           
+[209] "America/Tegucigalpa"              "America/Thule"                   
+[211] "America/Thunder_Bay"              "America/Tijuana"                 
+[213] "America/Toronto"                  "America/Tortola"                 
+[215] "America/Vancouver"                "America/Virgin"                  
+[217] "America/Whitehorse"               "America/Winnipeg"                
+[219] "America/Yakutat"                  "America/Yellowknife"             
+[221] "Antarctica/Casey"                 "Antarctica/Davis"                
+[223] "Antarctica/DumontDUrville"        "Antarctica/Macquarie"            
+[225] "Antarctica/Mawson"                "Antarctica/McMurdo"              
+[227] "Antarctica/Palmer"                "Antarctica/Rothera"              
+[229] "Antarctica/South_Pole"            "Antarctica/Syowa"                
+[231] "Antarctica/Troll"                 "Antarctica/Vostok"               
+[233] "Arctic/Longyearbyen"              "Asia/Aden"                       
+[235] "Asia/Almaty"                      "Asia/Amman"                      
+[237] "Asia/Anadyr"                      "Asia/Aqtau"                      
+[239] "Asia/Aqtobe"                      "Asia/Ashgabat"                   
+[241] "Asia/Ashkhabad"                   "Asia/Atyrau"                     
+[243] "Asia/Baghdad"                     "Asia/Bahrain"                    
+[245] "Asia/Baku"                        "Asia/Bangkok"                    
+[247] "Asia/Barnaul"                     "Asia/Beirut"                     
+[249] "Asia/Bishkek"                     "Asia/Brunei"                     
+[251] "Asia/Calcutta"                    "Asia/Chita"                      
+[253] "Asia/Choibalsan"                  "Asia/Chongqing"                  
+[255] "Asia/Chungking"                   "Asia/Colombo"                    
+[257] "Asia/Dacca"                       "Asia/Damascus"                   
+[259] "Asia/Dhaka"                       "Asia/Dili"                       
+[261] "Asia/Dubai"                       "Asia/Dushanbe"                   
+[263] "Asia/Famagusta"                   "Asia/Gaza"                       
+[265] "Asia/Harbin"                      "Asia/Hebron"                     
+[267] "Asia/Ho_Chi_Minh"                 "Asia/Hong_Kong"                  
+[269] "Asia/Hovd"                        "Asia/Irkutsk"                    
+[271] "Asia/Istanbul"                    "Asia/Jakarta"                    
+[273] "Asia/Jayapura"                    "Asia/Jerusalem"                  
+[275] "Asia/Kabul"                       "Asia/Kamchatka"                  
+[277] "Asia/Karachi"                     "Asia/Kashgar"                    
+[279] "Asia/Kathmandu"                   "Asia/Katmandu"                   
+[281] "Asia/Khandyga"                    "Asia/Kolkata"                    
+[283] "Asia/Krasnoyarsk"                 "Asia/Kuala_Lumpur"               
+[285] "Asia/Kuching"                     "Asia/Kuwait"                     
+[287] "Asia/Macao"                       "Asia/Macau"                      
+[289] "Asia/Magadan"                     "Asia/Makassar"                   
+[291] "Asia/Manila"                      "Asia/Muscat"                     
+[293] "Asia/Nicosia"                     "Asia/Novokuznetsk"               
+[295] "Asia/Novosibirsk"                 "Asia/Omsk"                       
+[297] "Asia/Oral"                        "Asia/Phnom_Penh"                 
+[299] "Asia/Pontianak"                   "Asia/Pyongyang"                  
+[301] "Asia/Qatar"                       "Asia/Qostanay"                   
+[303] "Asia/Qyzylorda"                   "Asia/Rangoon"                    
+[305] "Asia/Riyadh"                      "Asia/Saigon"                     
+[307] "Asia/Sakhalin"                    "Asia/Samarkand"                  
+[309] "Asia/Seoul"                       "Asia/Shanghai"                   
+[311] "Asia/Singapore"                   "Asia/Srednekolymsk"              
+[313] "Asia/Taipei"                      "Asia/Tashkent"                   
+[315] "Asia/Tbilisi"                     "Asia/Tehran"                     
+[317] "Asia/Tel_Aviv"                    "Asia/Thimbu"                     
+[319] "Asia/Thimphu"                     "Asia/Tokyo"                      
+[321] "Asia/Tomsk"                       "Asia/Ujung_Pandang"              
+[323] "Asia/Ulaanbaatar"                 "Asia/Ulan_Bator"                 
+[325] "Asia/Urumqi"                      "Asia/Ust-Nera"                   
+[327] "Asia/Vientiane"                   "Asia/Vladivostok"                
+[329] "Asia/Yakutsk"                     "Asia/Yangon"                     
+[331] "Asia/Yekaterinburg"               "Asia/Yerevan"                    
+[333] "Atlantic/Azores"                  "Atlantic/Bermuda"                
+[335] "Atlantic/Canary"                  "Atlantic/Cape_Verde"             
+[337] "Atlantic/Faeroe"                  "Atlantic/Faroe"                  
+[339] "Atlantic/Jan_Mayen"               "Atlantic/Madeira"                
+[341] "Atlantic/Reykjavik"               "Atlantic/South_Georgia"          
+[343] "Atlantic/St_Helena"               "Atlantic/Stanley"                
+[345] "Australia/ACT"                    "Australia/Adelaide"              
+[347] "Australia/Brisbane"               "Australia/Broken_Hill"           
+[349] "Australia/Canberra"               "Australia/Currie"                
+[351] "Australia/Darwin"                 "Australia/Eucla"                 
+[353] "Australia/Hobart"                 "Australia/LHI"                   
+[355] "Australia/Lindeman"               "Australia/Lord_Howe"             
+[357] "Australia/Melbourne"              "Australia/North"                 
+[359] "Australia/NSW"                    "Australia/Perth"                 
+[361] "Australia/Queensland"             "Australia/South"                 
+[363] "Australia/Sydney"                 "Australia/Tasmania"              
+[365] "Australia/Victoria"               "Australia/West"                  
+[367] "Australia/Yancowinna"             "Brazil/Acre"                     
+[369] "Brazil/DeNoronha"                 "Brazil/East"                     
+[371] "Brazil/West"                      "Canada/Atlantic"                 
+[373] "Canada/Central"                   "Canada/Eastern"                  
+[375] "Canada/Mountain"                  "Canada/Newfoundland"             
+[377] "Canada/Pacific"                   "Canada/Saskatchewan"             
+[379] "Canada/Yukon"                     "CET"                             
+[381] "Chile/Continental"                "Chile/EasterIsland"              
+[383] "CST6CDT"                          "Cuba"                            
+[385] "EET"                              "Egypt"                           
+[387] "Eire"                             "EST"                             
+[389] "EST5EDT"                          "Etc/GMT"                         
+[391] "Etc/GMT-0"                        "Etc/GMT-1"                       
+[393] "Etc/GMT-10"                       "Etc/GMT-11"                      
+[395] "Etc/GMT-12"                       "Etc/GMT-13"                      
+[397] "Etc/GMT-14"                       "Etc/GMT-2"                       
+[399] "Etc/GMT-3"                        "Etc/GMT-4"                       
+[401] "Etc/GMT-5"                        "Etc/GMT-6"                       
+[403] "Etc/GMT-7"                        "Etc/GMT-8"                       
+[405] "Etc/GMT-9"                        "Etc/GMT+0"                       
+[407] "Etc/GMT+1"                        "Etc/GMT+10"                      
+[409] "Etc/GMT+11"                       "Etc/GMT+12"                      
+[411] "Etc/GMT+2"                        "Etc/GMT+3"                       
+[413] "Etc/GMT+4"                        "Etc/GMT+5"                       
+[415] "Etc/GMT+6"                        "Etc/GMT+7"                       
+[417] "Etc/GMT+8"                        "Etc/GMT+9"                       
+[419] "Etc/GMT0"                         "Etc/Greenwich"                   
+[421] "Etc/UCT"                          "Etc/Universal"                   
+[423] "Etc/UTC"                          "Etc/Zulu"                        
+[425] "Europe/Amsterdam"                 "Europe/Andorra"                  
+[427] "Europe/Astrakhan"                 "Europe/Athens"                   
+[429] "Europe/Belfast"                   "Europe/Belgrade"                 
+[431] "Europe/Berlin"                    "Europe/Bratislava"               
+[433] "Europe/Brussels"                  "Europe/Bucharest"                
+[435] "Europe/Budapest"                  "Europe/Busingen"                 
+[437] "Europe/Chisinau"                  "Europe/Copenhagen"               
+[439] "Europe/Dublin"                    "Europe/Gibraltar"                
+[441] "Europe/Guernsey"                  "Europe/Helsinki"                 
+[443] "Europe/Isle_of_Man"               "Europe/Istanbul"                 
+[445] "Europe/Jersey"                    "Europe/Kaliningrad"              
+[447] "Europe/Kiev"                      "Europe/Kirov"                    
+[449] "Europe/Lisbon"                    "Europe/Ljubljana"                
+[451] "Europe/London"                    "Europe/Luxembourg"               
+[453] "Europe/Madrid"                    "Europe/Malta"                    
+[455] "Europe/Mariehamn"                 "Europe/Minsk"                    
+[457] "Europe/Monaco"                    "Europe/Moscow"                   
+[459] "Europe/Nicosia"                   "Europe/Oslo"                     
+[461] "Europe/Paris"                     "Europe/Podgorica"                
+[463] "Europe/Prague"                    "Europe/Riga"                     
+[465] "Europe/Rome"                      "Europe/Samara"                   
+[467] "Europe/San_Marino"                "Europe/Sarajevo"                 
+[469] "Europe/Saratov"                   "Europe/Simferopol"               
+[471] "Europe/Skopje"                    "Europe/Sofia"                    
+[473] "Europe/Stockholm"                 "Europe/Tallinn"                  
+[475] "Europe/Tirane"                    "Europe/Tiraspol"                 
+[477] "Europe/Ulyanovsk"                 "Europe/Uzhgorod"                 
+[479] "Europe/Vaduz"                     "Europe/Vatican"                  
+[481] "Europe/Vienna"                    "Europe/Vilnius"                  
+[483] "Europe/Volgograd"                 "Europe/Warsaw"                   
+[485] "Europe/Zagreb"                    "Europe/Zaporozhye"               
+[487] "Europe/Zurich"                    "GB"                              
+[489] "GB-Eire"                          "GMT"                             
+[491] "GMT-0"                            "GMT+0"                           
+[493] "GMT0"                             "Greenwich"                       
+[495] "Hongkong"                         "HST"                             
+[497] "Iceland"                          "Indian/Antananarivo"             
+[499] "Indian/Chagos"                    "Indian/Christmas"                
+[501] "Indian/Cocos"                     "Indian/Comoro"                   
+[503] "Indian/Kerguelen"                 "Indian/Mahe"                     
+[505] "Indian/Maldives"                  "Indian/Mauritius"                
+[507] "Indian/Mayotte"                   "Indian/Reunion"                  
+[509] "Iran"                             "Israel"                          
+[511] "Jamaica"                          "Japan"                           
+[513] "Kwajalein"                        "Libya"                           
+[515] "MET"                              "Mexico/BajaNorte"                
+[517] "Mexico/BajaSur"                   "Mexico/General"                  
+[519] "MST"                              "MST7MDT"                         
+[521] "Navajo"                           "NZ"                              
+[523] "NZ-CHAT"                          "Pacific/Apia"                    
+[525] "Pacific/Auckland"                 "Pacific/Bougainville"            
+[527] "Pacific/Chatham"                  "Pacific/Chuuk"                   
+[529] "Pacific/Easter"                   "Pacific/Efate"                   
+[531] "Pacific/Enderbury"                "Pacific/Fakaofo"                 
+[533] "Pacific/Fiji"                     "Pacific/Funafuti"                
+[535] "Pacific/Galapagos"                "Pacific/Gambier"                 
+[537] "Pacific/Guadalcanal"              "Pacific/Guam"                    
+[539] "Pacific/Honolulu"                 "Pacific/Johnston"                
+[541] "Pacific/Kiritimati"               "Pacific/Kosrae"                  
+[543] "Pacific/Kwajalein"                "Pacific/Majuro"                  
+[545] "Pacific/Marquesas"                "Pacific/Midway"                  
+[547] "Pacific/Nauru"                    "Pacific/Niue"                    
+[549] "Pacific/Norfolk"                  "Pacific/Noumea"                  
+[551] "Pacific/Pago_Pago"                "Pacific/Palau"                   
+[553] "Pacific/Pitcairn"                 "Pacific/Pohnpei"                 
+[555] "Pacific/Ponape"                   "Pacific/Port_Moresby"            
+[557] "Pacific/Rarotonga"                "Pacific/Saipan"                  
+[559] "Pacific/Samoa"                    "Pacific/Tahiti"                  
+[561] "Pacific/Tarawa"                   "Pacific/Tongatapu"               
+[563] "Pacific/Truk"                     "Pacific/Wake"                    
+[565] "Pacific/Wallis"                   "Pacific/Yap"                     
+[567] "Poland"                           "Portugal"                        
+[569] "PRC"                              "PST8PDT"                         
+[571] "ROC"                              "ROK"                             
+[573] "Singapore"                        "Turkey"                          
+[575] "UCT"                              "Universal"                       
+[577] "US/Alaska"                        "US/Aleutian"                     
+[579] "US/Arizona"                       "US/Central"                      
+[581] "US/East-Indiana"                  "US/Eastern"                      
+[583] "US/Hawaii"                        "US/Indiana-Starke"               
+[585] "US/Michigan"                      "US/Mountain"                     
+[587] "US/Pacific"                       "US/Pacific-New"                  
+[589] "US/Samoa"                         "UTC"                             
+[591] "W-SU"                             "WET"                             
+[593] "Zulu"                            
+attr(,"Version")
+[1] "2019a"
+```
+]
+
+---
+count: false
+ 
+
+.panel1-meet_times-auto[
+
+```r
+library(lubridate)
+ymd_hms("2009-08-07 11:00:00", tz = "America/New_York") -&gt;
+  meeting
+
+lubridate::with_tz(meeting, tz = "Europe/London")
+
+time_to_local &lt;- function(x, tz){
+
+  lubridate::with_tz(x, tz = tz) %&gt;%
+    as.character()
+
+}
+
+library(lubridate)
+OlsonNames() %&gt;%
+* tibble(tz = .)
+```
+]
+ 
+.panel2-meet_times-auto[
+
+```
+[1] "2009-08-07 16:00:00 BST"
+```
+
+```
+# A tibble: 593 × 1
+   tz                
+   &lt;chr&gt;             
+ 1 Africa/Abidjan    
+ 2 Africa/Accra      
+ 3 Africa/Addis_Ababa
+ 4 Africa/Algiers    
+ 5 Africa/Asmara     
+ 6 Africa/Asmera     
+ 7 Africa/Bamako     
+ 8 Africa/Bangui     
+ 9 Africa/Banjul     
+10 Africa/Bissau     
+# … with 583 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-meet_times-auto[
+
+```r
+library(lubridate)
+ymd_hms("2009-08-07 11:00:00", tz = "America/New_York") -&gt;
+  meeting
+
+lubridate::with_tz(meeting, tz = "Europe/London")
+
+time_to_local &lt;- function(x, tz){
+
+  lubridate::with_tz(x, tz = tz) %&gt;%
+    as.character()
+
+}
+
+library(lubridate)
+OlsonNames() %&gt;%
+  tibble(tz = .) %&gt;%
+* filter(tz != "US/Pacific-New")
+```
+]
+ 
+.panel2-meet_times-auto[
+
+```
+[1] "2009-08-07 16:00:00 BST"
+```
+
+```
+# A tibble: 592 × 1
+   tz                
+   &lt;chr&gt;             
+ 1 Africa/Abidjan    
+ 2 Africa/Accra      
+ 3 Africa/Addis_Ababa
+ 4 Africa/Algiers    
+ 5 Africa/Asmara     
+ 6 Africa/Asmera     
+ 7 Africa/Bamako     
+ 8 Africa/Bangui     
+ 9 Africa/Banjul     
+10 Africa/Bissau     
+# … with 582 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-meet_times-auto[
+
+```r
+library(lubridate)
+ymd_hms("2009-08-07 11:00:00", tz = "America/New_York") -&gt;
+  meeting
+
+lubridate::with_tz(meeting, tz = "Europe/London")
+
+time_to_local &lt;- function(x, tz){
+
+  lubridate::with_tz(x, tz = tz) %&gt;%
+    as.character()
+
+}
+
+library(lubridate)
+OlsonNames() %&gt;%
+  tibble(tz = .) %&gt;%
+  filter(tz != "US/Pacific-New") %&gt;%
+* filter(tz %&gt;% str_detect("Amsterdam|Stockholm|US/Eastern|British|Europe/London"))
+```
+]
+ 
+.panel2-meet_times-auto[
+
+```
+[1] "2009-08-07 16:00:00 BST"
+```
+
+```
+# A tibble: 4 × 1
+  tz              
+  &lt;chr&gt;           
+1 Europe/Amsterdam
+2 Europe/London   
+3 Europe/Stockholm
+4 US/Eastern      
+```
+]
+
+---
+count: false
+ 
+
+.panel1-meet_times-auto[
+
+```r
+library(lubridate)
+ymd_hms("2009-08-07 11:00:00", tz = "America/New_York") -&gt;
+  meeting
+
+lubridate::with_tz(meeting, tz = "Europe/London")
+
+time_to_local &lt;- function(x, tz){
+
+  lubridate::with_tz(x, tz = tz) %&gt;%
+    as.character()
+
+}
+
+library(lubridate)
+OlsonNames() %&gt;%
+  tibble(tz = .) %&gt;%
+  filter(tz != "US/Pacific-New") %&gt;%
+  filter(tz %&gt;% str_detect("Amsterdam|Stockholm|US/Eastern|British|Europe/London")) %&gt;%
+* mutate(meeting_ny = meeting)
+```
+]
+ 
+.panel2-meet_times-auto[
+
+```
+[1] "2009-08-07 16:00:00 BST"
+```
+
+```
+# A tibble: 4 × 2
+  tz               meeting_ny         
+  &lt;chr&gt;            &lt;dttm&gt;             
+1 Europe/Amsterdam 2009-08-07 11:00:00
+2 Europe/London    2009-08-07 11:00:00
+3 Europe/Stockholm 2009-08-07 11:00:00
+4 US/Eastern       2009-08-07 11:00:00
+```
+]
+
+---
+count: false
+ 
+
+.panel1-meet_times-auto[
+
+```r
+library(lubridate)
+ymd_hms("2009-08-07 11:00:00", tz = "America/New_York") -&gt;
+  meeting
+
+lubridate::with_tz(meeting, tz = "Europe/London")
+
+time_to_local &lt;- function(x, tz){
+
+  lubridate::with_tz(x, tz = tz) %&gt;%
+    as.character()
+
+}
+
+library(lubridate)
+OlsonNames() %&gt;%
+  tibble(tz = .) %&gt;%
+  filter(tz != "US/Pacific-New") %&gt;%
+  filter(tz %&gt;% str_detect("Amsterdam|Stockholm|US/Eastern|British|Europe/London")) %&gt;%
+  mutate(meeting_ny = meeting) %&gt;%
+* mutate(local_time = purrr::map2(meeting_ny, tz, time_to_local))
+```
+]
+ 
+.panel2-meet_times-auto[
+
+```
+[1] "2009-08-07 16:00:00 BST"
+```
+
+```
+# A tibble: 4 × 3
+  tz               meeting_ny          local_time
+  &lt;chr&gt;            &lt;dttm&gt;              &lt;list&gt;    
+1 Europe/Amsterdam 2009-08-07 11:00:00 &lt;chr [1]&gt; 
+2 Europe/London    2009-08-07 11:00:00 &lt;chr [1]&gt; 
+3 Europe/Stockholm 2009-08-07 11:00:00 &lt;chr [1]&gt; 
+4 US/Eastern       2009-08-07 11:00:00 &lt;chr [1]&gt; 
+```
+]
+
+---
+count: false
+ 
+
+.panel1-meet_times-auto[
+
+```r
+library(lubridate)
+ymd_hms("2009-08-07 11:00:00", tz = "America/New_York") -&gt;
+  meeting
+
+lubridate::with_tz(meeting, tz = "Europe/London")
+
+time_to_local &lt;- function(x, tz){
+
+  lubridate::with_tz(x, tz = tz) %&gt;%
+    as.character()
+
+}
+
+library(lubridate)
+OlsonNames() %&gt;%
+  tibble(tz = .) %&gt;%
+  filter(tz != "US/Pacific-New") %&gt;%
+  filter(tz %&gt;% str_detect("Amsterdam|Stockholm|US/Eastern|British|Europe/London")) %&gt;%
+  mutate(meeting_ny = meeting) %&gt;%
+  mutate(local_time = purrr::map2(meeting_ny, tz, time_to_local))  %&gt;%
+* unnest(local_time)
+```
+]
+ 
+.panel2-meet_times-auto[
+
+```
+[1] "2009-08-07 16:00:00 BST"
+```
+
+```
+# A tibble: 4 × 3
+  tz               meeting_ny          local_time         
+  &lt;chr&gt;            &lt;dttm&gt;              &lt;chr&gt;              
+1 Europe/Amsterdam 2009-08-07 11:00:00 2009-08-07 17:00:00
+2 Europe/London    2009-08-07 11:00:00 2009-08-07 16:00:00
+3 Europe/Stockholm 2009-08-07 11:00:00 2009-08-07 17:00:00
+4 US/Eastern       2009-08-07 11:00:00 2009-08-07 11:00:00
+```
+]
+
+---
+count: false
+ 
+
+.panel1-meet_times-auto[
+
+```r
+library(lubridate)
+ymd_hms("2009-08-07 11:00:00", tz = "America/New_York") -&gt;
+  meeting
+
+lubridate::with_tz(meeting, tz = "Europe/London")
+
+time_to_local &lt;- function(x, tz){
+
+  lubridate::with_tz(x, tz = tz) %&gt;%
+    as.character()
+
+}
+
+library(lubridate)
+OlsonNames() %&gt;%
+  tibble(tz = .) %&gt;%
+  filter(tz != "US/Pacific-New") %&gt;%
+  filter(tz %&gt;% str_detect("Amsterdam|Stockholm|US/Eastern|British|Europe/London")) %&gt;%
+  mutate(meeting_ny = meeting) %&gt;%
+  mutate(local_time = purrr::map2(meeting_ny, tz, time_to_local))  %&gt;%
+  unnest(local_time) %&gt;%
+* group_by(local_time)
+```
+]
+ 
+.panel2-meet_times-auto[
+
+```
+[1] "2009-08-07 16:00:00 BST"
+```
+
+```
+# A tibble: 4 × 3
+# Groups:   local_time [3]
+  tz               meeting_ny          local_time         
+  &lt;chr&gt;            &lt;dttm&gt;              &lt;chr&gt;              
+1 Europe/Amsterdam 2009-08-07 11:00:00 2009-08-07 17:00:00
+2 Europe/London    2009-08-07 11:00:00 2009-08-07 16:00:00
+3 Europe/Stockholm 2009-08-07 11:00:00 2009-08-07 17:00:00
+4 US/Eastern       2009-08-07 11:00:00 2009-08-07 11:00:00
+```
+]
+
+---
+count: false
+ 
+
+.panel1-meet_times-auto[
+
+```r
+library(lubridate)
+ymd_hms("2009-08-07 11:00:00", tz = "America/New_York") -&gt;
+  meeting
+
+lubridate::with_tz(meeting, tz = "Europe/London")
+
+time_to_local &lt;- function(x, tz){
+
+  lubridate::with_tz(x, tz = tz) %&gt;%
+    as.character()
+
+}
+
+library(lubridate)
+OlsonNames() %&gt;%
+  tibble(tz = .) %&gt;%
+  filter(tz != "US/Pacific-New") %&gt;%
+  filter(tz %&gt;% str_detect("Amsterdam|Stockholm|US/Eastern|British|Europe/London")) %&gt;%
+  mutate(meeting_ny = meeting) %&gt;%
+  mutate(local_time = purrr::map2(meeting_ny, tz, time_to_local))  %&gt;%
+  unnest(local_time) %&gt;%
+  group_by(local_time) %&gt;%
+* summarise(locations = paste(tz, collapse = "\n"))
+```
+]
+ 
+.panel2-meet_times-auto[
+
+```
+[1] "2009-08-07 16:00:00 BST"
+```
+
+```
+# A tibble: 3 × 2
+  local_time          locations                           
+  &lt;chr&gt;               &lt;chr&gt;                               
+1 2009-08-07 11:00:00 "US/Eastern"                        
+2 2009-08-07 16:00:00 "Europe/London"                     
+3 2009-08-07 17:00:00 "Europe/Amsterdam\nEurope/Stockholm"
+```
+]
+
+---
+count: false
+ 
+
+.panel1-meet_times-auto[
+
+```r
+library(lubridate)
+ymd_hms("2009-08-07 11:00:00", tz = "America/New_York") -&gt;
+  meeting
+
+lubridate::with_tz(meeting, tz = "Europe/London")
+
+time_to_local &lt;- function(x, tz){
+
+  lubridate::with_tz(x, tz = tz) %&gt;%
+    as.character()
+
+}
+
+library(lubridate)
+OlsonNames() %&gt;%
+  tibble(tz = .) %&gt;%
+  filter(tz != "US/Pacific-New") %&gt;%
+  filter(tz %&gt;% str_detect("Amsterdam|Stockholm|US/Eastern|British|Europe/London")) %&gt;%
+  mutate(meeting_ny = meeting) %&gt;%
+  mutate(local_time = purrr::map2(meeting_ny, tz, time_to_local))  %&gt;%
+  unnest(local_time) %&gt;%
+  group_by(local_time) %&gt;%
+  summarise(locations = paste(tz, collapse = "\n")) %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-meet_times-auto[
+
+```
+[1] "2009-08-07 16:00:00 BST"
+```
+
+![](extenders_files/figure-html/meet_times_auto_16_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meet_times-auto[
+
+```r
+library(lubridate)
+ymd_hms("2009-08-07 11:00:00", tz = "America/New_York") -&gt;
+  meeting
+
+lubridate::with_tz(meeting, tz = "Europe/London")
+
+time_to_local &lt;- function(x, tz){
+
+  lubridate::with_tz(x, tz = tz) %&gt;%
+    as.character()
+
+}
+
+library(lubridate)
+OlsonNames() %&gt;%
+  tibble(tz = .) %&gt;%
+  filter(tz != "US/Pacific-New") %&gt;%
+  filter(tz %&gt;% str_detect("Amsterdam|Stockholm|US/Eastern|British|Europe/London")) %&gt;%
+  mutate(meeting_ny = meeting) %&gt;%
+  mutate(local_time = purrr::map2(meeting_ny, tz, time_to_local))  %&gt;%
+  unnest(local_time) %&gt;%
+  group_by(local_time) %&gt;%
+  summarise(locations = paste(tz, collapse = "\n")) %&gt;%
+  ggplot() +
+* aes(x = locations %&gt;% paste(local_time, sep = "\n"))
+```
+]
+ 
+.panel2-meet_times-auto[
+
+```
+[1] "2009-08-07 16:00:00 BST"
+```
+
+![](extenders_files/figure-html/meet_times_auto_17_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meet_times-auto[
+
+```r
+library(lubridate)
+ymd_hms("2009-08-07 11:00:00", tz = "America/New_York") -&gt;
+  meeting
+
+lubridate::with_tz(meeting, tz = "Europe/London")
+
+time_to_local &lt;- function(x, tz){
+
+  lubridate::with_tz(x, tz = tz) %&gt;%
+    as.character()
+
+}
+
+library(lubridate)
+OlsonNames() %&gt;%
+  tibble(tz = .) %&gt;%
+  filter(tz != "US/Pacific-New") %&gt;%
+  filter(tz %&gt;% str_detect("Amsterdam|Stockholm|US/Eastern|British|Europe/London")) %&gt;%
+  mutate(meeting_ny = meeting) %&gt;%
+  mutate(local_time = purrr::map2(meeting_ny, tz, time_to_local))  %&gt;%
+  unnest(local_time) %&gt;%
+  group_by(local_time) %&gt;%
+  summarise(locations = paste(tz, collapse = "\n")) %&gt;%
+  ggplot() +
+  aes(x = locations %&gt;% paste(local_time, sep = "\n")) +
+* aes(y = 1)
+```
+]
+ 
+.panel2-meet_times-auto[
+
+```
+[1] "2009-08-07 16:00:00 BST"
+```
+
+![](extenders_files/figure-html/meet_times_auto_18_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meet_times-auto[
+
+```r
+library(lubridate)
+ymd_hms("2009-08-07 11:00:00", tz = "America/New_York") -&gt;
+  meeting
+
+lubridate::with_tz(meeting, tz = "Europe/London")
+
+time_to_local &lt;- function(x, tz){
+
+  lubridate::with_tz(x, tz = tz) %&gt;%
+    as.character()
+
+}
+
+library(lubridate)
+OlsonNames() %&gt;%
+  tibble(tz = .) %&gt;%
+  filter(tz != "US/Pacific-New") %&gt;%
+  filter(tz %&gt;% str_detect("Amsterdam|Stockholm|US/Eastern|British|Europe/London")) %&gt;%
+  mutate(meeting_ny = meeting) %&gt;%
+  mutate(local_time = purrr::map2(meeting_ny, tz, time_to_local))  %&gt;%
+  unnest(local_time) %&gt;%
+  group_by(local_time) %&gt;%
+  summarise(locations = paste(tz, collapse = "\n")) %&gt;%
+  ggplot() +
+  aes(x = locations %&gt;% paste(local_time, sep = "\n")) +
+  aes(y = 1) +
+* aes(label = locations)
+```
+]
+ 
+.panel2-meet_times-auto[
+
+```
+[1] "2009-08-07 16:00:00 BST"
+```
+
+![](extenders_files/figure-html/meet_times_auto_19_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meet_times-auto[
+
+```r
+library(lubridate)
+ymd_hms("2009-08-07 11:00:00", tz = "America/New_York") -&gt;
+  meeting
+
+lubridate::with_tz(meeting, tz = "Europe/London")
+
+time_to_local &lt;- function(x, tz){
+
+  lubridate::with_tz(x, tz = tz) %&gt;%
+    as.character()
+
+}
+
+library(lubridate)
+OlsonNames() %&gt;%
+  tibble(tz = .) %&gt;%
+  filter(tz != "US/Pacific-New") %&gt;%
+  filter(tz %&gt;% str_detect("Amsterdam|Stockholm|US/Eastern|British|Europe/London")) %&gt;%
+  mutate(meeting_ny = meeting) %&gt;%
+  mutate(local_time = purrr::map2(meeting_ny, tz, time_to_local))  %&gt;%
+  unnest(local_time) %&gt;%
+  group_by(local_time) %&gt;%
+  summarise(locations = paste(tz, collapse = "\n")) %&gt;%
+  ggplot() +
+  aes(x = locations %&gt;% paste(local_time, sep = "\n")) +
+  aes(y = 1) +
+  aes(label = locations) +
+* geom_tile(aes(y = 0), fill = c('cadetblue'), alpha = .7,
+*           color = "oldlace")
+```
+]
+ 
+.panel2-meet_times-auto[
+
+```
+[1] "2009-08-07 16:00:00 BST"
+```
+
+![](extenders_files/figure-html/meet_times_auto_20_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meet_times-auto[
+
+```r
+library(lubridate)
+ymd_hms("2009-08-07 11:00:00", tz = "America/New_York") -&gt;
+  meeting
+
+lubridate::with_tz(meeting, tz = "Europe/London")
+
+time_to_local &lt;- function(x, tz){
+
+  lubridate::with_tz(x, tz = tz) %&gt;%
+    as.character()
+
+}
+
+library(lubridate)
+OlsonNames() %&gt;%
+  tibble(tz = .) %&gt;%
+  filter(tz != "US/Pacific-New") %&gt;%
+  filter(tz %&gt;% str_detect("Amsterdam|Stockholm|US/Eastern|British|Europe/London")) %&gt;%
+  mutate(meeting_ny = meeting) %&gt;%
+  mutate(local_time = purrr::map2(meeting_ny, tz, time_to_local))  %&gt;%
+  unnest(local_time) %&gt;%
+  group_by(local_time) %&gt;%
+  summarise(locations = paste(tz, collapse = "\n")) %&gt;%
+  ggplot() +
+  aes(x = locations %&gt;% paste(local_time, sep = "\n")) +
+  aes(y = 1) +
+  aes(label = locations) +
+  geom_tile(aes(y = 0), fill = c('cadetblue'), alpha = .7,
+            color = "oldlace") +
+* geom_label(aes(y = 0,
+*                label = hour(local_time) %&gt;%
+*                  paste0(":00")))
+```
+]
+ 
+.panel2-meet_times-auto[
+
+```
+[1] "2009-08-07 16:00:00 BST"
+```
+
+![](extenders_files/figure-html/meet_times_auto_21_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meet_times-auto[
+
+```r
+library(lubridate)
+ymd_hms("2009-08-07 11:00:00", tz = "America/New_York") -&gt;
+  meeting
+
+lubridate::with_tz(meeting, tz = "Europe/London")
+
+time_to_local &lt;- function(x, tz){
+
+  lubridate::with_tz(x, tz = tz) %&gt;%
+    as.character()
+
+}
+
+library(lubridate)
+OlsonNames() %&gt;%
+  tibble(tz = .) %&gt;%
+  filter(tz != "US/Pacific-New") %&gt;%
+  filter(tz %&gt;% str_detect("Amsterdam|Stockholm|US/Eastern|British|Europe/London")) %&gt;%
+  mutate(meeting_ny = meeting) %&gt;%
+  mutate(local_time = purrr::map2(meeting_ny, tz, time_to_local))  %&gt;%
+  unnest(local_time) %&gt;%
+  group_by(local_time) %&gt;%
+  summarise(locations = paste(tz, collapse = "\n")) %&gt;%
+  ggplot() +
+  aes(x = locations %&gt;% paste(local_time, sep = "\n")) +
+  aes(y = 1) +
+  aes(label = locations) +
+  geom_tile(aes(y = 0), fill = c('cadetblue'), alpha = .7,
+            color = "oldlace") +
+  geom_label(aes(y = 0,
+                 label = hour(local_time) %&gt;%
+                   paste0(":00"))) +
+* coord_polar()
+```
+]
+ 
+.panel2-meet_times-auto[
+
+```
+[1] "2009-08-07 16:00:00 BST"
+```
+
+![](extenders_files/figure-html/meet_times_auto_22_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meet_times-auto[
+
+```r
+library(lubridate)
+ymd_hms("2009-08-07 11:00:00", tz = "America/New_York") -&gt;
+  meeting
+
+lubridate::with_tz(meeting, tz = "Europe/London")
+
+time_to_local &lt;- function(x, tz){
+
+  lubridate::with_tz(x, tz = tz) %&gt;%
+    as.character()
+
+}
+
+library(lubridate)
+OlsonNames() %&gt;%
+  tibble(tz = .) %&gt;%
+  filter(tz != "US/Pacific-New") %&gt;%
+  filter(tz %&gt;% str_detect("Amsterdam|Stockholm|US/Eastern|British|Europe/London")) %&gt;%
+  mutate(meeting_ny = meeting) %&gt;%
+  mutate(local_time = purrr::map2(meeting_ny, tz, time_to_local))  %&gt;%
+  unnest(local_time) %&gt;%
+  group_by(local_time) %&gt;%
+  summarise(locations = paste(tz, collapse = "\n")) %&gt;%
+  ggplot() +
+  aes(x = locations %&gt;% paste(local_time, sep = "\n")) +
+  aes(y = 1) +
+  aes(label = locations) +
+  geom_tile(aes(y = 0), fill = c('cadetblue'), alpha = .7,
+            color = "oldlace") +
+  geom_label(aes(y = 0,
+                 label = hour(local_time) %&gt;%
+                   paste0(":00"))) +
+  coord_polar() +
+* geomtextpath::coord_curvedpolar()
+```
+]
+ 
+.panel2-meet_times-auto[
+
+```
+[1] "2009-08-07 16:00:00 BST"
+```
+
+![](extenders_files/figure-html/meet_times_auto_23_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meet_times-auto[
+
+```r
+library(lubridate)
+ymd_hms("2009-08-07 11:00:00", tz = "America/New_York") -&gt;
+  meeting
+
+lubridate::with_tz(meeting, tz = "Europe/London")
+
+time_to_local &lt;- function(x, tz){
+
+  lubridate::with_tz(x, tz = tz) %&gt;%
+    as.character()
+
+}
+
+library(lubridate)
+OlsonNames() %&gt;%
+  tibble(tz = .) %&gt;%
+  filter(tz != "US/Pacific-New") %&gt;%
+  filter(tz %&gt;% str_detect("Amsterdam|Stockholm|US/Eastern|British|Europe/London")) %&gt;%
+  mutate(meeting_ny = meeting) %&gt;%
+  mutate(local_time = purrr::map2(meeting_ny, tz, time_to_local))  %&gt;%
+  unnest(local_time) %&gt;%
+  group_by(local_time) %&gt;%
+  summarise(locations = paste(tz, collapse = "\n")) %&gt;%
+  ggplot() +
+  aes(x = locations %&gt;% paste(local_time, sep = "\n")) +
+  aes(y = 1) +
+  aes(label = locations) +
+  geom_tile(aes(y = 0), fill = c('cadetblue'), alpha = .7,
+            color = "oldlace") +
+  geom_label(aes(y = 0,
+                 label = hour(local_time) %&gt;%
+                   paste0(":00"))) +
+  coord_polar() +
+  geomtextpath::coord_curvedpolar() +
+* theme_minimal(base_size = 18)
+```
+]
+ 
+.panel2-meet_times-auto[
+
+```
+[1] "2009-08-07 16:00:00 BST"
+```
+
+![](extenders_files/figure-html/meet_times_auto_24_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meet_times-auto[
+
+```r
+library(lubridate)
+ymd_hms("2009-08-07 11:00:00", tz = "America/New_York") -&gt;
+  meeting
+
+lubridate::with_tz(meeting, tz = "Europe/London")
+
+time_to_local &lt;- function(x, tz){
+
+  lubridate::with_tz(x, tz = tz) %&gt;%
+    as.character()
+
+}
+
+library(lubridate)
+OlsonNames() %&gt;%
+  tibble(tz = .) %&gt;%
+  filter(tz != "US/Pacific-New") %&gt;%
+  filter(tz %&gt;% str_detect("Amsterdam|Stockholm|US/Eastern|British|Europe/London")) %&gt;%
+  mutate(meeting_ny = meeting) %&gt;%
+  mutate(local_time = purrr::map2(meeting_ny, tz, time_to_local))  %&gt;%
+  unnest(local_time) %&gt;%
+  group_by(local_time) %&gt;%
+  summarise(locations = paste(tz, collapse = "\n")) %&gt;%
+  ggplot() +
+  aes(x = locations %&gt;% paste(local_time, sep = "\n")) +
+  aes(y = 1) +
+  aes(label = locations) +
+  geom_tile(aes(y = 0), fill = c('cadetblue'), alpha = .7,
+            color = "oldlace") +
+  geom_label(aes(y = 0,
+                 label = hour(local_time) %&gt;%
+                   paste0(":00"))) +
+  coord_polar() +
+  geomtextpath::coord_curvedpolar() +
+  theme_minimal(base_size = 18) +
+* theme(axis.text.y = element_blank())
+```
+]
+ 
+.panel2-meet_times-auto[
+
+```
+[1] "2009-08-07 16:00:00 BST"
+```
+
+![](extenders_files/figure-html/meet_times_auto_25_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meet_times-auto[
+
+```r
+library(lubridate)
+ymd_hms("2009-08-07 11:00:00", tz = "America/New_York") -&gt;
+  meeting
+
+lubridate::with_tz(meeting, tz = "Europe/London")
+
+time_to_local &lt;- function(x, tz){
+
+  lubridate::with_tz(x, tz = tz) %&gt;%
+    as.character()
+
+}
+
+library(lubridate)
+OlsonNames() %&gt;%
+  tibble(tz = .) %&gt;%
+  filter(tz != "US/Pacific-New") %&gt;%
+  filter(tz %&gt;% str_detect("Amsterdam|Stockholm|US/Eastern|British|Europe/London")) %&gt;%
+  mutate(meeting_ny = meeting) %&gt;%
+  mutate(local_time = purrr::map2(meeting_ny, tz, time_to_local))  %&gt;%
+  unnest(local_time) %&gt;%
+  group_by(local_time) %&gt;%
+  summarise(locations = paste(tz, collapse = "\n")) %&gt;%
+  ggplot() +
+  aes(x = locations %&gt;% paste(local_time, sep = "\n")) +
+  aes(y = 1) +
+  aes(label = locations) +
+  geom_tile(aes(y = 0), fill = c('cadetblue'), alpha = .7,
+            color = "oldlace") +
+  geom_label(aes(y = 0,
+                 label = hour(local_time) %&gt;%
+                   paste0(":00"))) +
+  coord_polar() +
+  geomtextpath::coord_curvedpolar() +
+  theme_minimal(base_size = 18) +
+  theme(axis.text.y = element_blank()) +
+* labs(y = NULL)
+```
+]
+ 
+.panel2-meet_times-auto[
+
+```
+[1] "2009-08-07 16:00:00 BST"
+```
+
+![](extenders_files/figure-html/meet_times_auto_26_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meet_times-auto[
+
+```r
+library(lubridate)
+ymd_hms("2009-08-07 11:00:00", tz = "America/New_York") -&gt;
+  meeting
+
+lubridate::with_tz(meeting, tz = "Europe/London")
+
+time_to_local &lt;- function(x, tz){
+
+  lubridate::with_tz(x, tz = tz) %&gt;%
+    as.character()
+
+}
+
+library(lubridate)
+OlsonNames() %&gt;%
+  tibble(tz = .) %&gt;%
+  filter(tz != "US/Pacific-New") %&gt;%
+  filter(tz %&gt;% str_detect("Amsterdam|Stockholm|US/Eastern|British|Europe/London")) %&gt;%
+  mutate(meeting_ny = meeting) %&gt;%
+  mutate(local_time = purrr::map2(meeting_ny, tz, time_to_local))  %&gt;%
+  unnest(local_time) %&gt;%
+  group_by(local_time) %&gt;%
+  summarise(locations = paste(tz, collapse = "\n")) %&gt;%
+  ggplot() +
+  aes(x = locations %&gt;% paste(local_time, sep = "\n")) +
+  aes(y = 1) +
+  aes(label = locations) +
+  geom_tile(aes(y = 0), fill = c('cadetblue'), alpha = .7,
+            color = "oldlace") +
+  geom_label(aes(y = 0,
+                 label = hour(local_time) %&gt;%
+                   paste0(":00"))) +
+  coord_polar() +
+  geomtextpath::coord_curvedpolar() +
+  theme_minimal(base_size = 18) +
+  theme(axis.text.y = element_blank()) +
+  labs(y = NULL) +
+* labs(x = NULL)
+```
+]
+ 
+.panel2-meet_times-auto[
+
+```
+[1] "2009-08-07 16:00:00 BST"
+```
+
+![](extenders_files/figure-html/meet_times_auto_27_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-meet_times-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-meet_times-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-meet_times-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
 
 
 
