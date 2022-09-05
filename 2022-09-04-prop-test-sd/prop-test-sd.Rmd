@@ -1,0 +1,230 @@
+---
+title: "Theory based approach"
+author: "Evangeline Reynolds"
+date: "9/4/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
+```
+
+## Calculating the sd of the null hypothesis.
+
+--
+
+## Theory based method.
+
+---
+
+# Distribution for the null is composed of two parts: 
+
+1. mean
+2. standard deviation
+
+--
+ 
+$$ mean = \pi $$
+
+---
+
+
+
+
+$$ SD = \sqrt{\frac{\pi*(\pi-1)}{n}} $$
+
+---
+
+# Standardized normal distribution function:
+
+```{r standardnormal}
+library(tidyverse)
+ggstamp::ggcanvas() + 
+  geom_vline(xintercept = 0) + 
+  ggxmean::stamp_normal_dist() + 
+  coord_equal(ratio = 4) + 
+  geom_vline(xintercept = c(-1,1),
+             linetype = "dashed") + 
+  geom_vline(xintercept = c(-2,2),
+             linetype = "dotted") + 
+  geom_vline(xintercept = c(-3,3),
+             linetype = 4)
+```
+
+
+---
+
+## Two parts
+
+# $$ \sqrt{\pi * (\pi - 1)}$$
+
+--
+
+# $$ \sqrt{\frac{1}{n}} $$
+
+
+```{r complements}
+library(tidyverse)
+(0:100/100) %>% 
+  tibble(pi = .) %>% 
+  mutate(one_minus_pi = 1 - pi) %>% 
+  mutate(product = pi * one_minus_pi) %>% 
+  mutate(product_sqrt = sqrt(product)) %>% 
+  slice(26) ->
+pi_possibilities
+
+ggplot(data = pi_possibilities) + 
+  scale_y_continuous(limits = 0:1, expand = c(0,0)) + 
+  scale_x_continuous(limits = 0:1, expand = c(0,0)) + 
+  coord_equal()+ 
+  aes(x = pi, y = 0) +
+  geom_segment(aes(xend = 0, yend = 0),
+               color = "cadetblue",
+               size = 3) + 
+  geom_segment(aes(xend = 1, 
+                   yend = 0), 
+               color = "orange", 
+               size = 3) +
+  geom_point() + 
+  aes(xend = 0, yend = one_minus_pi) +
+  theme_minimal() + 
+  labs(title = "Pi and its complement")
+```
+
+
+```{r area}
+ggplot(data = pi_possibilities) + 
+  scale_y_continuous(limits = 0:1, expand = c(0,0)) + 
+  scale_x_continuous(limits = 0:1, expand = c(0,0)) + 
+  coord_equal()+ 
+  aes(x = pi, y = 0) +
+  geom_segment(aes(xend = 0, yend = 0),
+               color = "cadetblue",
+               size = 3) + 
+  geom_segment(aes(xend = pi, 
+                   yend = one_minus_pi),
+               color = "orange",
+               size = 3) +
+  geom_point() + 
+  aes(xend = 0, yend = one_minus_pi) +
+  geom_rect(aes(xmin = 0, ymin = 0, 
+                xmax = pi, ymax = one_minus_pi),
+            alpha = .6) + 
+  aes(fill = product) + 
+  theme_minimal() + 
+  labs(title = "Multiplying the two complements, we get an area")
+```
+
+
+```{r sqrt_area}
+ggplot(data = pi_possibilities) + 
+  scale_y_continuous(limits = 0:1, expand = c(0,0)) + 
+  scale_x_continuous(limits = 0:1, expand = c(0,0)) + 
+  coord_equal()+ 
+  aes(x = product_sqrt, y = 0) +
+  geom_segment(aes(xend = 0, yend = 0), 
+               color = "brown", size = 3) + 
+  geom_segment(aes(xend = product_sqrt, yend = product_sqrt),
+               color = "brown", size = 3) +
+  geom_point() + 
+  aes(xend = 0, 
+      yend = product_sqrt) +
+  geom_rect(aes(xmin = 0, 
+                ymin = 0, 
+                xmax = product_sqrt, 
+                ymax = product_sqrt),
+            alpha = .6) + 
+  aes(fill = product) + 
+  theme_minimal() + 
+  labs(title = "If we make that area a square, the length of the side is the square root, (the Pi defined part of the standard deviation)" %>% 
+         str_wrap(50))
+```
+
+
+
+---
+
+# Numerator
+
+```{r pi_part}
+sqrt(.25 * (1-.25))
+```
+
+---
+
+So we've got the first component of the SD based on the long-run proportion PI
+
+--
+
+What about the the sample size part?  
+
+---
+
+```{r}
+1:250 %>% 
+  tibble(n = .) %>% 
+  mutate(one_over_n = 1/n) %>% 
+  mutate(sqrt_one_over_n = sqrt(one_over_n)) %>% 
+  ggplot() + 
+  scale_y_continuous(limits = 0:1) +
+  aes(x = n) + 
+  aes(y = sqrt_one_over_n) + 
+  geom_line() + 
+  geom_point(size = .75, alpha = .8) +
+  ggstamp::stamp_text(label = "1/sqrt(n)", 
+                      parse = T, 
+                      x = 50, y = .5) + 
+  ggstamp::stamp_text(label = "Each additional observation greatly improves precision where n is small, but when n is already large, the additional observations don't move the needle much." %>% str_wrap(50), 
+                      size = 4, x = 150, y = .75,
+                      ) + 
+  geom_vline(xintercept = 30, 
+             linetype = "dashed") + 
+  geom_hline(yintercept = 1/sqrt(30),
+             linetype = "dotted")
+
+1/sqrt(30)
+```
+
+---
+
+So, what does the null distribution look like for a case where, the long-run probability is .25, and sample size is 30.
+
+---
+
+```{r}
+sqrt(.25 * (1-.25)/ 30) ->
+  my_sd
+
+my_sd
+
+ggstamp::ggcanvas() + 
+  geom_vline(xintercept = .25) + 
+  ggxmean::stamp_normal_dist(mean = .25, sd = my_sd) + 
+  coord_equal(ratio = 4) + 
+  geom_vline(xintercept = c(.25-my_sd,.25 +my_sd),
+             linetype = "dashed", alpha = .2) + 
+  geom_vline(xintercept = c(.25-2*my_sd,.25 +2*my_sd),
+             linetype = "dotted", alpha = .2) + 
+  geom_vline(xintercept = c(.25-3*my_sd,.25 +3*my_sd),
+             linetype = 4, alpha = .2) + 
+  scale_x_continuous(limits = 0:1) + 
+  labs(title = "Theory based approach distribution for null where Pi is .25, and there are 30 observations" %>% str_wrap(30)) + 
+  labs(subtitle = "It's possible to observe a proportion between 0 and 1; What are proportions that are consistent with the null? Which are inconsistent with the null?  Which are boarderline?" %>% str_wrap(50)) + 
+  labs(x = "proportions")
+```
+
+---
+
+# Calculating p-value using pnorm...
+
+Let's say that for a sample of 30, we observe .4 *success* rate.  What is the p-value given the null $$ H_0: \pi = .25 $$
+
+
+```{r}
+pnorm(q = .4, 
+      mean = .25, 
+      sd = 0.079, 
+      lower.tail = F)
+```
+
+What if I had phrased the question another way - not using the word 'success'; instead asking, 'does the outcomes differ from .25 proposed long-run probability'.  What is the p-value?  
