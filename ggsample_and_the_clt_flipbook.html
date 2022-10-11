@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>ggsample and the CLT</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Me" />
+    <script src="libs/header-attrs-2.14/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# ggsample and the CLT
+## Using flipbookr and xaringan
+### Me
+
+---
+
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 70%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+&lt;/style&gt;
+
+
+
+---
+
+
+
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-faithful1-auto[
+
+```r
+# population mean
+*ggplot(data = faithful)
+```
+]
+ 
+.panel2-faithful1-auto[
+![](ggsample_and_the_clt_flipbook_files/figure-html/faithful1_auto_01_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-faithful1-auto[
+
+```r
+# population mean
+ggplot(data = faithful) +
+* aes(x = waiting)
+```
+]
+ 
+.panel2-faithful1-auto[
+![](ggsample_and_the_clt_flipbook_files/figure-html/faithful1_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-faithful1-auto[
+
+```r
+# population mean
+ggplot(data = faithful) +
+  aes(x = waiting) +
+* geom_rug()
+```
+]
+ 
+.panel2-faithful1-auto[
+![](ggsample_and_the_clt_flipbook_files/figure-html/faithful1_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-faithful1-auto[
+
+```r
+# population mean
+ggplot(data = faithful) +
+  aes(x = waiting) +
+  geom_rug() +
+* geom_dotplot(dotsize = .5)
+```
+]
+ 
+.panel2-faithful1-auto[
+![](ggsample_and_the_clt_flipbook_files/figure-html/faithful1_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-faithful1-auto[
+
+```r
+# population mean
+ggplot(data = faithful) +
+  aes(x = waiting) +
+  geom_rug() +
+  geom_dotplot(dotsize = .5) +
+* ggxmean::geom_x_mean()
+```
+]
+ 
+.panel2-faithful1-auto[
+![](ggsample_and_the_clt_flipbook_files/figure-html/faithful1_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-faithful1-auto[
+
+```r
+# population mean
+ggplot(data = faithful) +
+  aes(x = waiting) +
+  geom_rug() +
+  geom_dotplot(dotsize = .5) +
+  ggxmean::geom_x_mean() +
+* ggxmean::geom_x_mean_label()
+```
+]
+ 
+.panel2-faithful1-auto[
+![](ggsample_and_the_clt_flipbook_files/figure-html/faithful1_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-faithful1-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-faithful1-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-faithful1-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-single_sample-10[
+
+```r
+# A single sample mean
+last_plot() +
+  scale_x_continuous(limits = c(40,100)) +
+  ggsample::facet_sample(n_facets = 1, n_sampled = 20)
+```
+]
+ 
+.panel2-single_sample-10[
+![](ggsample_and_the_clt_flipbook_files/figure-html/single_sample_10_01_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-single_sample-10[
+
+```r
+# A single sample mean
+last_plot() +
+  scale_x_continuous(limits = c(40,100)) +
+  ggsample::facet_sample(n_facets = 1, n_sampled = 20)
+```
+]
+ 
+.panel2-single_sample-10[
+![](ggsample_and_the_clt_flipbook_files/figure-html/single_sample_10_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-single_sample-10[
+
+```r
+# A single sample mean
+last_plot() +
+  scale_x_continuous(limits = c(40,100)) +
+  ggsample::facet_sample(n_facets = 1, n_sampled = 20)
+```
+]
+ 
+.panel2-single_sample-10[
+![](ggsample_and_the_clt_flipbook_files/figure-html/single_sample_10_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-single_sample-10[
+
+```r
+# A single sample mean
+last_plot() +
+  scale_x_continuous(limits = c(40,100)) +
+  ggsample::facet_sample(n_facets = 1, n_sampled = 20)
+```
+]
+ 
+.panel2-single_sample-10[
+![](ggsample_and_the_clt_flipbook_files/figure-html/single_sample_10_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-single_sample-10[
+
+```r
+# A single sample mean
+last_plot() +
+  scale_x_continuous(limits = c(40,100)) +
+  ggsample::facet_sample(n_facets = 1, n_sampled = 20)
+```
+]
+ 
+.panel2-single_sample-10[
+![](ggsample_and_the_clt_flipbook_files/figure-html/single_sample_10_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-single_sample-10[
+
+```r
+# A single sample mean
+last_plot() +
+  scale_x_continuous(limits = c(40,100)) +
+  ggsample::facet_sample(n_facets = 1, n_sampled = 20)
+```
+]
+ 
+.panel2-single_sample-10[
+![](ggsample_and_the_clt_flipbook_files/figure-html/single_sample_10_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-single_sample-10[
+
+```r
+# A single sample mean
+last_plot() +
+  scale_x_continuous(limits = c(40,100)) +
+  ggsample::facet_sample(n_facets = 1, n_sampled = 20)
+```
+]
+ 
+.panel2-single_sample-10[
+![](ggsample_and_the_clt_flipbook_files/figure-html/single_sample_10_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-single_sample-10[
+
+```r
+# A single sample mean
+last_plot() +
+  scale_x_continuous(limits = c(40,100)) +
+  ggsample::facet_sample(n_facets = 1, n_sampled = 20)
+```
+]
+ 
+.panel2-single_sample-10[
+![](ggsample_and_the_clt_flipbook_files/figure-html/single_sample_10_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-single_sample-10[
+
+```r
+# A single sample mean
+last_plot() +
+  scale_x_continuous(limits = c(40,100)) +
+  ggsample::facet_sample(n_facets = 1, n_sampled = 20)
+```
+]
+ 
+.panel2-single_sample-10[
+![](ggsample_and_the_clt_flipbook_files/figure-html/single_sample_10_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-single_sample-10[
+
+```r
+# A single sample mean
+last_plot() +
+  scale_x_continuous(limits = c(40,100)) +
+  ggsample::facet_sample(n_facets = 1, n_sampled = 20)
+```
+]
+ 
+.panel2-single_sample-10[
+![](ggsample_and_the_clt_flipbook_files/figure-html/single_sample_10_10_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-single_sample-10 {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-single_sample-10 {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-single_sample-10 {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-bunch_of_samples-auto[
+
+```r
+# A bunch of sample means
+*last_plot()
+```
+]
+ 
+.panel2-bunch_of_samples-auto[
+![](ggsample_and_the_clt_flipbook_files/figure-html/bunch_of_samples_auto_01_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-bunch_of_samples-auto[
+
+```r
+# A bunch of sample means
+last_plot() +
+* ggsample::facet_sample(n_facets = 20, n_sampled = 20)
+```
+]
+ 
+.panel2-bunch_of_samples-auto[
+![](ggsample_and_the_clt_flipbook_files/figure-html/bunch_of_samples_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-bunch_of_samples-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-bunch_of_samples-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-bunch_of_samples-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-make_a_function-auto[
+
+```r
+# How can we take many samples
+*sample_wait_times &lt;- function(x){
+
+* sample(x = faithful$waiting, size = 20)
+
+*} 
+```
+]
+ 
+.panel2-make_a_function-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-make_a_function-auto[
+
+```r
+# How can we take many samples
+sample_wait_times &lt;- function(x){
+
+  sample(x = faithful$waiting, size = 20)
+
+}
+
+# check that function is working
+*sample_wait_times()
+```
+]
+ 
+.panel2-make_a_function-auto[
+
+```
+ [1] 56 89 49 75 79 64 89 82 77 74 48 85 53 45 67 82 54 58 50 82
+```
+]
+
+&lt;style&gt;
+.panel1-make_a_function-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-make_a_function-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-make_a_function-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-normal_dist-auto[
+
+```r
+*set.seed(12345)
+```
+]
+ 
+.panel2-normal_dist-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-normal_dist-auto[
+
+```r
+set.seed(12345)
+*tibble(x = 1:10000)   # for 1000 trials
+```
+]
+ 
+.panel2-normal_dist-auto[
+
+```
+# A tibble: 10,000 x 1
+       x
+   &lt;int&gt;
+ 1     1
+ 2     2
+ 3     3
+ 4     4
+ 5     5
+ 6     6
+ 7     7
+ 8     8
+ 9     9
+10    10
+11    11
+12    12
+13    13
+14    14
+15    15
+16    16
+17    17
+18    18
+19    19
+20    20
+21    21
+22    22
+23    23
+24    24
+25    25
+26    26
+27    27
+28    28
+29    29
+30    30
+31    31
+32    32
+33    33
+34    34
+35    35
+36    36
+37    37
+38    38
+39    39
+40    40
+41    41
+42    42
+43    43
+44    44
+45    45
+46    46
+47    47
+48    48
+49    49
+50    50
+51    51
+52    52
+53    53
+54    54
+55    55
+# ... with 9,945 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-normal_dist-auto[
+
+```r
+set.seed(12345)
+tibble(x = 1:10000) %&gt;%  # for 1000 trials
+* mutate(sample = map(x, sample_wait_times))   # sample
+```
+]
+ 
+.panel2-normal_dist-auto[
+
+```
+# A tibble: 10,000 x 2
+       x sample    
+   &lt;int&gt; &lt;list&gt;    
+ 1     1 &lt;dbl [20]&gt;
+ 2     2 &lt;dbl [20]&gt;
+ 3     3 &lt;dbl [20]&gt;
+ 4     4 &lt;dbl [20]&gt;
+ 5     5 &lt;dbl [20]&gt;
+ 6     6 &lt;dbl [20]&gt;
+ 7     7 &lt;dbl [20]&gt;
+ 8     8 &lt;dbl [20]&gt;
+ 9     9 &lt;dbl [20]&gt;
+10    10 &lt;dbl [20]&gt;
+11    11 &lt;dbl [20]&gt;
+12    12 &lt;dbl [20]&gt;
+13    13 &lt;dbl [20]&gt;
+14    14 &lt;dbl [20]&gt;
+15    15 &lt;dbl [20]&gt;
+16    16 &lt;dbl [20]&gt;
+17    17 &lt;dbl [20]&gt;
+18    18 &lt;dbl [20]&gt;
+19    19 &lt;dbl [20]&gt;
+20    20 &lt;dbl [20]&gt;
+21    21 &lt;dbl [20]&gt;
+22    22 &lt;dbl [20]&gt;
+23    23 &lt;dbl [20]&gt;
+24    24 &lt;dbl [20]&gt;
+25    25 &lt;dbl [20]&gt;
+26    26 &lt;dbl [20]&gt;
+27    27 &lt;dbl [20]&gt;
+28    28 &lt;dbl [20]&gt;
+29    29 &lt;dbl [20]&gt;
+30    30 &lt;dbl [20]&gt;
+31    31 &lt;dbl [20]&gt;
+32    32 &lt;dbl [20]&gt;
+33    33 &lt;dbl [20]&gt;
+34    34 &lt;dbl [20]&gt;
+35    35 &lt;dbl [20]&gt;
+36    36 &lt;dbl [20]&gt;
+37    37 &lt;dbl [20]&gt;
+38    38 &lt;dbl [20]&gt;
+39    39 &lt;dbl [20]&gt;
+40    40 &lt;dbl [20]&gt;
+41    41 &lt;dbl [20]&gt;
+42    42 &lt;dbl [20]&gt;
+43    43 &lt;dbl [20]&gt;
+44    44 &lt;dbl [20]&gt;
+45    45 &lt;dbl [20]&gt;
+46    46 &lt;dbl [20]&gt;
+47    47 &lt;dbl [20]&gt;
+48    48 &lt;dbl [20]&gt;
+49    49 &lt;dbl [20]&gt;
+50    50 &lt;dbl [20]&gt;
+51    51 &lt;dbl [20]&gt;
+52    52 &lt;dbl [20]&gt;
+53    53 &lt;dbl [20]&gt;
+54    54 &lt;dbl [20]&gt;
+55    55 &lt;dbl [20]&gt;
+# ... with 9,945 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-normal_dist-auto[
+
+```r
+set.seed(12345)
+tibble(x = 1:10000) %&gt;%  # for 1000 trials
+  mutate(sample = map(x, sample_wait_times)) %&gt;%  # sample
+* mutate(sample_mean = map_dbl(sample, mean))   # and compute means
+```
+]
+ 
+.panel2-normal_dist-auto[
+
+```
+# A tibble: 10,000 x 3
+       x sample     sample_mean
+   &lt;int&gt; &lt;list&gt;           &lt;dbl&gt;
+ 1     1 &lt;dbl [20]&gt;        71.0
+ 2     2 &lt;dbl [20]&gt;        65.4
+ 3     3 &lt;dbl [20]&gt;        69.6
+ 4     4 &lt;dbl [20]&gt;        76.8
+ 5     5 &lt;dbl [20]&gt;        71.3
+ 6     6 &lt;dbl [20]&gt;        68.7
+ 7     7 &lt;dbl [20]&gt;        73.1
+ 8     8 &lt;dbl [20]&gt;        77.5
+ 9     9 &lt;dbl [20]&gt;        73.3
+10    10 &lt;dbl [20]&gt;        68.9
+11    11 &lt;dbl [20]&gt;        76.0
+12    12 &lt;dbl [20]&gt;        68.0
+13    13 &lt;dbl [20]&gt;        71.6
+14    14 &lt;dbl [20]&gt;        71.4
+15    15 &lt;dbl [20]&gt;        67.6
+16    16 &lt;dbl [20]&gt;        67.0
+17    17 &lt;dbl [20]&gt;        75  
+18    18 &lt;dbl [20]&gt;        71.2
+19    19 &lt;dbl [20]&gt;        72.7
+20    20 &lt;dbl [20]&gt;        70.4
+21    21 &lt;dbl [20]&gt;        72.6
+22    22 &lt;dbl [20]&gt;        69  
+23    23 &lt;dbl [20]&gt;        71.8
+24    24 &lt;dbl [20]&gt;        70.2
+25    25 &lt;dbl [20]&gt;        65.9
+26    26 &lt;dbl [20]&gt;        70.5
+27    27 &lt;dbl [20]&gt;        77.6
+28    28 &lt;dbl [20]&gt;        70.8
+29    29 &lt;dbl [20]&gt;        72.8
+30    30 &lt;dbl [20]&gt;        73.6
+31    31 &lt;dbl [20]&gt;        69.4
+32    32 &lt;dbl [20]&gt;        75.4
+33    33 &lt;dbl [20]&gt;        70.6
+34    34 &lt;dbl [20]&gt;        71.8
+35    35 &lt;dbl [20]&gt;        67.3
+36    36 &lt;dbl [20]&gt;        68.3
+37    37 &lt;dbl [20]&gt;        63.6
+38    38 &lt;dbl [20]&gt;        71.4
+39    39 &lt;dbl [20]&gt;        65.9
+40    40 &lt;dbl [20]&gt;        75.2
+41    41 &lt;dbl [20]&gt;        65.4
+42    42 &lt;dbl [20]&gt;        66.2
+43    43 &lt;dbl [20]&gt;        75.2
+44    44 &lt;dbl [20]&gt;        71.3
+45    45 &lt;dbl [20]&gt;        71.4
+46    46 &lt;dbl [20]&gt;        77.3
+47    47 &lt;dbl [20]&gt;        68.9
+48    48 &lt;dbl [20]&gt;        71.8
+49    49 &lt;dbl [20]&gt;        69.4
+50    50 &lt;dbl [20]&gt;        65.2
+51    51 &lt;dbl [20]&gt;        65.8
+52    52 &lt;dbl [20]&gt;        76.4
+53    53 &lt;dbl [20]&gt;        75.0
+54    54 &lt;dbl [20]&gt;        69  
+55    55 &lt;dbl [20]&gt;        72.0
+# ... with 9,945 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-normal_dist-auto[
+
+```r
+set.seed(12345)
+tibble(x = 1:10000) %&gt;%  # for 1000 trials
+  mutate(sample = map(x, sample_wait_times)) %&gt;%  # sample
+  mutate(sample_mean = map_dbl(sample, mean)) %&gt;%  # and compute means
+* ggplot()
+```
+]
+ 
+.panel2-normal_dist-auto[
+![](ggsample_and_the_clt_flipbook_files/figure-html/normal_dist_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-normal_dist-auto[
+
+```r
+set.seed(12345)
+tibble(x = 1:10000) %&gt;%  # for 1000 trials
+  mutate(sample = map(x, sample_wait_times)) %&gt;%  # sample
+  mutate(sample_mean = map_dbl(sample, mean)) %&gt;%  # and compute means
+  ggplot() +
+* aes(x = sample_mean)
+```
+]
+ 
+.panel2-normal_dist-auto[
+![](ggsample_and_the_clt_flipbook_files/figure-html/normal_dist_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-normal_dist-auto[
+
+```r
+set.seed(12345)
+tibble(x = 1:10000) %&gt;%  # for 1000 trials
+  mutate(sample = map(x, sample_wait_times)) %&gt;%  # sample
+  mutate(sample_mean = map_dbl(sample, mean)) %&gt;%  # and compute means
+  ggplot() +
+  aes(x = sample_mean) +
+* geom_rug()
+```
+]
+ 
+.panel2-normal_dist-auto[
+![](ggsample_and_the_clt_flipbook_files/figure-html/normal_dist_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-normal_dist-auto[
+
+```r
+set.seed(12345)
+tibble(x = 1:10000) %&gt;%  # for 1000 trials
+  mutate(sample = map(x, sample_wait_times)) %&gt;%  # sample
+  mutate(sample_mean = map_dbl(sample, mean)) %&gt;%  # and compute means
+  ggplot() +
+  aes(x = sample_mean) +
+  geom_rug() +
+* geom_histogram()
+```
+]
+ 
+.panel2-normal_dist-auto[
+![](ggsample_and_the_clt_flipbook_files/figure-html/normal_dist_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-normal_dist-auto[
+
+```r
+set.seed(12345)
+tibble(x = 1:10000) %&gt;%  # for 1000 trials
+  mutate(sample = map(x, sample_wait_times)) %&gt;%  # sample
+  mutate(sample_mean = map_dbl(sample, mean)) %&gt;%  # and compute means
+  ggplot() +
+  aes(x = sample_mean) +
+  geom_rug() +
+  geom_histogram() +
+* ggxmean::geom_normal_dist(fill = "magenta",
+*                           height = 7000)
+```
+]
+ 
+.panel2-normal_dist-auto[
+![](ggsample_and_the_clt_flipbook_files/figure-html/normal_dist_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-normal_dist-auto[
+
+```r
+set.seed(12345)
+tibble(x = 1:10000) %&gt;%  # for 1000 trials
+  mutate(sample = map(x, sample_wait_times)) %&gt;%  # sample
+  mutate(sample_mean = map_dbl(sample, mean)) %&gt;%  # and compute means
+  ggplot() +
+  aes(x = sample_mean) +
+  geom_rug() +
+  geom_histogram() +
+  ggxmean::geom_normal_dist(fill = "magenta",
+                            height = 7000) +
+* ggxmean::geom_normal_dist_zlines(color = "magenta",
+*                           height = 7000)
+```
+]
+ 
+.panel2-normal_dist-auto[
+![](ggsample_and_the_clt_flipbook_files/figure-html/normal_dist_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-normal_dist-auto[
+
+```r
+set.seed(12345)
+tibble(x = 1:10000) %&gt;%  # for 1000 trials
+  mutate(sample = map(x, sample_wait_times)) %&gt;%  # sample
+  mutate(sample_mean = map_dbl(sample, mean)) %&gt;%  # and compute means
+  ggplot() +
+  aes(x = sample_mean) +
+  geom_rug() +
+  geom_histogram() +
+  ggxmean::geom_normal_dist(fill = "magenta",
+                            height = 7000) +
+  ggxmean::geom_normal_dist_zlines(color = "magenta",
+                            height = 7000) +
+* ggxmean::geom_x_mean()
+```
+]
+ 
+.panel2-normal_dist-auto[
+![](ggsample_and_the_clt_flipbook_files/figure-html/normal_dist_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-normal_dist-auto[
+
+```r
+set.seed(12345)
+tibble(x = 1:10000) %&gt;%  # for 1000 trials
+  mutate(sample = map(x, sample_wait_times)) %&gt;%  # sample
+  mutate(sample_mean = map_dbl(sample, mean)) %&gt;%  # and compute means
+  ggplot() +
+  aes(x = sample_mean) +
+  geom_rug() +
+  geom_histogram() +
+  ggxmean::geom_normal_dist(fill = "magenta",
+                            height = 7000) +
+  ggxmean::geom_normal_dist_zlines(color = "magenta",
+                            height = 7000) +
+  ggxmean::geom_x_mean() +
+* ggxmean::geom_x_mean_label()
+```
+]
+ 
+.panel2-normal_dist-auto[
+![](ggsample_and_the_clt_flipbook_files/figure-html/normal_dist_auto_12_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-normal_dist-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-normal_dist-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-normal_dist-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-faithfulsamples-auto[
+
+```r
+# And so
+*set.seed(123456)
+```
+]
+ 
+.panel2-faithfulsamples-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-faithfulsamples-auto[
+
+```r
+# And so
+set.seed(123456)
+*ggplot(data = faithful)
+```
+]
+ 
+.panel2-faithfulsamples-auto[
+![](ggsample_and_the_clt_flipbook_files/figure-html/faithfulsamples_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-faithfulsamples-auto[
+
+```r
+# And so
+set.seed(123456)
+ggplot(data = faithful) +
+* aes(x = waiting)
+```
+]
+ 
+.panel2-faithfulsamples-auto[
+![](ggsample_and_the_clt_flipbook_files/figure-html/faithfulsamples_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-faithfulsamples-auto[
+
+```r
+# And so
+set.seed(123456)
+ggplot(data = faithful) +
+  aes(x = waiting) +
+* geom_rug()
+```
+]
+ 
+.panel2-faithfulsamples-auto[
+![](ggsample_and_the_clt_flipbook_files/figure-html/faithfulsamples_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-faithfulsamples-auto[
+
+```r
+# And so
+set.seed(123456)
+ggplot(data = faithful) +
+  aes(x = waiting) +
+  geom_rug() +
+* geom_vline(xintercept = rep(71, 20), color = "red")
+```
+]
+ 
+.panel2-faithfulsamples-auto[
+![](ggsample_and_the_clt_flipbook_files/figure-html/faithfulsamples_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-faithfulsamples-auto[
+
+```r
+# And so
+set.seed(123456)
+ggplot(data = faithful) +
+  aes(x = waiting) +
+  geom_rug() +
+  geom_vline(xintercept = rep(71, 20), color = "red") +
+* geom_dotplot(dotsize = .5)
+```
+]
+ 
+.panel2-faithfulsamples-auto[
+![](ggsample_and_the_clt_flipbook_files/figure-html/faithfulsamples_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-faithfulsamples-auto[
+
+```r
+# And so
+set.seed(123456)
+ggplot(data = faithful) +
+  aes(x = waiting) +
+  geom_rug() +
+  geom_vline(xintercept = rep(71, 20), color = "red") +
+  geom_dotplot(dotsize = .5) +
+* ggxmean::geom_x_mean(linetype = "dashed")
+```
+]
+ 
+.panel2-faithfulsamples-auto[
+![](ggsample_and_the_clt_flipbook_files/figure-html/faithfulsamples_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-faithfulsamples-auto[
+
+```r
+# And so
+set.seed(123456)
+ggplot(data = faithful) +
+  aes(x = waiting) +
+  geom_rug() +
+  geom_vline(xintercept = rep(71, 20), color = "red") +
+  geom_dotplot(dotsize = .5) +
+  ggxmean::geom_x_mean(linetype = "dashed") +
+* ggxmean::geom_x_mean_label()
+```
+]
+ 
+.panel2-faithfulsamples-auto[
+![](ggsample_and_the_clt_flipbook_files/figure-html/faithfulsamples_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-faithfulsamples-auto[
+
+```r
+# And so
+set.seed(123456)
+ggplot(data = faithful) +
+  aes(x = waiting) +
+  geom_rug() +
+  geom_vline(xintercept = rep(71, 20), color = "red") +
+  geom_dotplot(dotsize = .5) +
+  ggxmean::geom_x_mean(linetype = "dashed") +
+  ggxmean::geom_x_mean_label() +
+* ggsample::facet_sample(n_facets = 16,
+*                        n_sampled = 20)
+```
+]
+ 
+.panel2-faithfulsamples-auto[
+![](ggsample_and_the_clt_flipbook_files/figure-html/faithfulsamples_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-faithfulsamples-auto[
+
+```r
+# And so
+set.seed(123456)
+ggplot(data = faithful) +
+  aes(x = waiting) +
+  geom_rug() +
+  geom_vline(xintercept = rep(71, 20), color = "red") +
+  geom_dotplot(dotsize = .5) +
+  ggxmean::geom_x_mean(linetype = "dashed") +
+  ggxmean::geom_x_mean_label() +
+  ggsample::facet_sample(n_facets = 16,
+                         n_sampled = 20) +
+* ggxmean:::geom_tdist(height = 7, fill = "goldenrod")
+```
+]
+ 
+.panel2-faithfulsamples-auto[
+![](ggsample_and_the_clt_flipbook_files/figure-html/faithfulsamples_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-faithfulsamples-auto[
+
+```r
+# And so
+set.seed(123456)
+ggplot(data = faithful) +
+  aes(x = waiting) +
+  geom_rug() +
+  geom_vline(xintercept = rep(71, 20), color = "red") +
+  geom_dotplot(dotsize = .5) +
+  ggxmean::geom_x_mean(linetype = "dashed") +
+  ggxmean::geom_x_mean_label() +
+  ggsample::facet_sample(n_facets = 16,
+                         n_sampled = 20) +
+  ggxmean:::geom_tdist(height = 7, fill = "goldenrod") +
+* ggxmean:::geom_ttestconf(color = "darkgreen",
+*                          alpha = 1)
+```
+]
+ 
+.panel2-faithfulsamples-auto[
+![](ggsample_and_the_clt_flipbook_files/figure-html/faithfulsamples_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-faithfulsamples-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-faithfulsamples-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-faithfulsamples-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+&lt;!-- adjust font size in this css code chunk, currently 80 --&gt;
+
+---
+
+
+
+
+
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

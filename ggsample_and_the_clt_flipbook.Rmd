@@ -1,0 +1,213 @@
+---
+title: "ggsample and the CLT"
+subtitle: "Using flipbookr and xaringan"
+author: "Me"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = F, warning = FALSE, comment = "", cache = F)
+
+options(tibble.print_min = 55)
+options(knitr.duplicate.label = "allow")
+options(width=300) # prevents data wrapping 
+```
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 70%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+
+
+
+---
+
+
+
+
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F)
+library(flipbookr)
+library(tidyverse)
+```
+
+
+
+---
+
+`r flipbookr::chunk_reveal("faithful1", left_assign = "detect")`
+
+
+
+```{r faithful1, warning=FALSE, include = FALSE}
+# population mean
+ggplot(data = faithful) + 
+  aes(x = waiting) + 
+  geom_rug() + 
+  geom_dotplot(dotsize = .5) + 
+  ggxmean::geom_x_mean() + 
+  ggxmean::geom_x_mean_label() 
+```
+
+
+
+---
+
+`r flipbookr::chunk_reveal("single_sample", break_type = 10, left_assign = "detect")`
+
+
+
+```{r single_sample, include = FALSE}
+# A single sample mean
+last_plot() + 
+  scale_x_continuous(limits = c(40,100)) +
+  ggsample::facet_sample(n_facets = 1, n_sampled = 20)
+```
+
+
+
+---
+
+`r flipbookr::chunk_reveal("bunch_of_samples", left_assign = "detect")`
+
+
+
+```{r bunch_of_samples, include = FALSE}
+# A bunch of sample means
+last_plot() + 
+  ggsample::facet_sample(n_facets = 20, n_sampled = 20)
+```
+
+
+
+---
+
+`r flipbookr::chunk_reveal("make_a_function", left_assign = "detect")`
+
+
+
+```{r make_a_function, include = FALSE}
+# How can we take many samples
+sample_wait_times <- function(x){
+  
+  sample(x = faithful$waiting, size = 20)
+  
+}
+
+# check that function is working
+sample_wait_times()
+```
+
+
+
+---
+
+`r flipbookr::chunk_reveal("normal_dist", left_assign = "detect")`
+
+
+
+```{r normal_dist, include = FALSE}
+set.seed(12345)
+tibble(x = 1:10000) %>% # for 1000 trials
+  mutate(sample = map(x, sample_wait_times)) %>% # sample
+  mutate(sample_mean = map_dbl(sample, mean)) %>% # and compute means
+  ggplot() + 
+  aes(x = sample_mean) + 
+  geom_rug() + 
+  geom_histogram() + 
+  ggxmean::geom_normal_dist(fill = "magenta",
+                            height = 7000) + 
+  ggxmean::geom_normal_dist_zlines(color = "magenta",
+                            height = 7000) +
+  ggxmean::geom_x_mean() + 
+  ggxmean::geom_x_mean_label() 
+```
+
+
+---
+
+`r flipbookr::chunk_reveal("faithfulsamples", left_assign = "detect")`
+
+
+
+```{r faithfulsamples, include = FALSE}
+# And so 
+set.seed(123456)
+ggplot(data = faithful) + 
+  aes(x = waiting) + 
+  geom_rug() +
+  geom_vline(xintercept = rep(71, 20), color = "red") +
+  geom_dotplot(dotsize = .5) + 
+  ggxmean::geom_x_mean(linetype = "dashed") + 
+  ggxmean::geom_x_mean_label() +
+  ggsample::facet_sample(n_facets = 16, 
+                         n_sampled = 20) + 
+  ggxmean:::geom_tdist(height = 7, fill = "goldenrod") + 
+  ggxmean:::geom_ttestconf(color = "darkgreen",
+                           alpha = 1)
+```
+
+
+<!-- adjust font size in this css code chunk, currently 80 -->
+
+---
+
+
+
+
+```{css, eval = TRUE, echo = FALSE, include = FALSE}
+.remark-code{line-height: 1.5; font-size: 100%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+
+
+
+
