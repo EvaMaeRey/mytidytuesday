@@ -1,0 +1,188 @@
+---
+title: "Untitled"
+author: "Dean Data Cell"
+date: "5/6/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Step 0: Use base ggplo2 to get the job done
+
+```{r cars}
+library(tidyverse)
+library(gapminder)
+gapminder %>%  
+  filter(continent == "Americas") %>%  
+  filter(year == 2002) %>%  
+  select(country, pop) ->  
+prep  
+
+packcircles::circleProgressiveLayout(prep$pop,  
+                                         sizetype = 'area') ->  
+pack  
+
+cbind(prep, pack) %>%
+  mutate(id = row_number())
+
+
+pack %>%  
+  packcircles::circleLayoutVertices(npoints = 50) ->  
+circle_outlines  
+
+
+circle_outlines %>%  
+  ggplot() +  
+  aes(x = x, y = y) +  
+  geom_polygon(colour = "black", alpha = 0.6) +  
+  aes(group = id) +  
+  aes(fill = factor(id)) +  
+  geom_text(data = cbind(prep, pack),  
+            aes(x, y, size = pop, label = country,  
+                group = NULL, fill = NULL)) +  
+  theme(legend.position = "none") +  
+  coord_equal()
+```
+
+
+
+
+
+
+
+---
+
+## Step 1: computation
+
+- define computation that ggplot2 should do for you, before plotting
+  - here it's computing a variable with labels for each observation
+- test that functionality!
+
+```{r}
+# you won't use the scales argument, but ggplot will later
+compute_panel_circle_pack <- function(data, scales){
+ 
+  data %>%
+    mutate(id = row_number()) ->
+  data1
+ 
+  if(is.null(data$area)){
+    
+    data1 %>% 
+      mutate(area = 1) ->
+    data1
+    
+  }
+  
+  data1 %>%  
+    pull(area) %>%
+    packcircles::circleProgressiveLayout(
+                                         sizetype = 'area') %>%
+    packcircles::circleLayoutVertices(npoints = 300) %>%
+    left_join(data1) #%>%
+    # rename(group = id)
+   
+}
+
+
+# step 1b test the computation function
+gapminder::gapminder %>%
+  filter(continent == "Americas") %>%  
+  filter(year == 2002) %>%  
+  # input must have required aesthetic inputs as columns
+  rename(area = pop) %>%
+  compute_panel_circle_pack() %>%
+  head()
+
+
+# step 1b test the computation function
+gapminder::gapminder %>%
+  filter(continent == "Americas") %>%  
+  filter(year == 2002) %>%  
+  # input must have required aesthetic inputs as columns
+  rename(area = pop) %>%
+  compute_panel_circle_pack() %>% 
+  ggplot() + 
+  aes(x = x, y = y, fill = country) + 
+  geom_polygon()
+
+my_setup_data <- function(data, params){
+                                    if(data$group[1] == -1){
+                                      nrows <- nrow(data)
+                                      data$group <- seq_len(nrows)
+                                    }
+                                    data
+                                  }
+
+```
+
+---
+
+## Step 2: define ggproto
+
+- what's the naming convention for the proto object?
+- which aesthetics are required as inputs?
+- where does the function from above go?
+
+```{r}
+StatCirclepack <- ggplot2::ggproto(`_class` = "StatCirclepack",
+                                  `_inherit` = ggplot2::Stat,
+                                  # setup_data = my_setup_data,
+                                  required_aes = c("id"),
+                                  compute_panel = compute_panel_circle_pack#,
+                                  # default_aes = aes(fill = after_stat(area))
+                                  )
+```
+
+
+---
+
+## Step 3: define geom_* function
+
+```{r}
+geom_polygon_circlepack <- function(mapping = NULL, data = NULL,
+                           position = "identity", na.rm = FALSE,
+                           show.legend = NA,
+                           inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatCirclepack, # proto object from Step 2
+    geom = ggplot2::GeomPoint, # inherit other behavior
+    data = data,
+    mapping = mapping,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+```
+
+
+
+---
+
+## Step 4: Enjoy! Use your function
+
+```{r}
+gapminder::gapminder %>%
+  filter(year == 2002) %>%
+  ggplot() +
+  aes(id = country) + 
+  geom_polygon_circlepack(alpha = .5, size = .002)
+
+last_plot() + 
+  aes(color = continent)
+
+last_plot() + 
+  aes(area = pop)
+
+last_plot() +
+  aes(color = continent) +
+  facet_wrap(facets = vars(continent)) 
+
+```
+
+
+
