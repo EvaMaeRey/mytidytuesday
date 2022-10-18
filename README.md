@@ -11,6 +11,7 @@ The goal of mytidytuesday is to hold little projects. They are like
 blogs posts, but mostly code. In the spirit of \#tidytuesday no pressure
 to write prose\!
 
+  - [2022-10-11-ggsample-clt/ggsample\_and\_the\_clt\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-10-11-ggsample-clt/ggsample_and_the_clt_flipbook.html)
   - [2022-09-04-prop-test-sd/prop-test-sd.html](https://evamaerey.github.io/mytidytuesday/2022-09-04-prop-test-sd/prop-test-sd.html)
   - [2022-08-27-extenders/extenders.html](https://evamaerey.github.io/mytidytuesday/2022-08-27-extenders/extenders.html)
   - [2022-08-20-ggtrace/ggtrace.html](https://evamaerey.github.io/mytidytuesday/2022-08-20-ggtrace/ggtrace.html)
@@ -32,6 +33,7 @@ to write prose\!
   - [2022-05-28-circle-pack/how\_geom\_treemap\_works.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/how_geom_treemap_works.html)
   - [2022-05-28-circle-pack/geom\_diamonds\_recipe\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/geom_diamonds_recipe_flipbook.html)
   - [2022-05-28-circle-pack/geom\_diamonds\_recipe.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/geom_diamonds_recipe.html)
+  - [2022-05-28-circle-pack/circle\_pack\_stipple.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/circle_pack_stipple.html)
   - [2022-05-28-circle-pack/circle\_pack.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/circle_pack.html)
   - [2022-05-28-circle-pack/circle\_geom.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/circle_geom.html)
   - [2022-05-23-networks-presentation/networks\_presentation.html](https://evamaerey.github.io/mytidytuesday/2022-05-23-networks-presentation/networks_presentation.html)
