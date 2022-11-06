@@ -98,25 +98,44 @@ library(maps)
 MainStates <- map_data("state")
 StatePopulation <- read.csv("https://raw.githubusercontent.com/ds4stats/r-tutorials/master/intro-maps/data/StatePopulation.csv", as.is = TRUE)
 
-compute_group_state <- function(data, scales){
+compute_state <- function(data, scales){
  
   data %>% 
-    inner_join(MainStates) %>% 
+    inner_join(map_data("state")) %>% 
     mutate(x = long, y = lat) %>% 
-    mutate(group = group) %>% 
-    select(x, y) %>% 
-    data.frame()
+    mutate(group = group) 
+  
+  map_data("state") %>% 
+    mutate(x = long, y = lat) 
   
 }
 
-
 StatePopulation %>% 
-  compute_group_state()
+  compute_group_state() ->
+computed
+
+str(computed)
+
+
+computed %>% 
+  ggplot() + 
+  aes(x = x, y = y) + 
+  geom_point()
+
+my_setup_data <- function(data, params){
+                                    if(data$group[1] == -1){
+                                      nrows <- nrow(data)
+                                      data$group <- seq_len(nrows)
+                                    }
+                                    data
+                                  }
 
 StatPolygonstate <- ggplot2::ggproto(`_class` = "StatPolygonstate",
                                   `_inherit` = ggplot2::Stat,
                                   required_aes = c("region"),
-                                  compute_group = compute_group_state
+                                  compute_panel = compute_state#,
+                                   # setup_data = my_setup_data
+                                  # default_aes = aes(fill = after_stat(area))
                                   )
 
 geom_point_xy_medians <- function(
@@ -138,12 +157,107 @@ geom_point_xy_medians <- function(
   )
 }
 
-
-ggplot(data = StatePopulation) + 
+StatePopulation %>% 
+  data.frame() %>% 
+ggplot(data = .) + 
   aes(region = region) + 
   geom_point_xy_medians()
 
 layer_data(last_plot(), 1)
 
 
+```
+
+
+```{r}
+# you won't use the scales argument, but ggplot will later
+compute_panel_circle_pack <- function(data, scales){
+ 
+  data %>%
+    mutate(id = row_number()) ->
+  data1
+ 
+  if(is.null(data$area)){
+    
+    data1 %>% 
+      mutate(area = 1) ->
+    data1
+    
+  }
+  
+  data1 %>%  
+    pull(area) %>%
+    packcircles::circleProgressiveLayout(
+                                         sizetype = 'area') %>%
+    packcircles::circleLayoutVertices(npoints = 300) %>%
+    left_join(data1) #%>%
+    # rename(group = id)
+   
+}
+
+
+
+my_setup_data <- function(data, params){
+                                    if(data$group[1] == -1){
+                                      nrows <- nrow(data)
+                                      data$group <- seq_len(nrows)
+                                    }
+                                    data
+                                  }
+
+```
+
+---
+
+## Step 2: define ggproto
+
+- what's the naming convention for the proto object?
+- which aesthetics are required as inputs?
+- where does the function from above go?
+
+```{r}
+StatCirclepack <- ggplot2::ggproto(`_class` = "StatCirclepack",
+                                  `_inherit` = ggplot2::Stat,
+                                  required_aes = c("id"),
+                                  compute_panel = compute_panel_circle_pack#,
+                                  # setup_data = my_setup_data,
+                                  # default_aes = aes(fill = after_stat(area))
+                                  )
+```
+
+
+---
+
+## Step 3: define geom_* function
+
+```{r}
+geom_polygon_circlepack <- function(mapping = NULL, data = NULL,
+                           position = "identity", na.rm = FALSE,
+                           show.legend = NA,
+                           inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatCirclepack, # proto object from Step 2
+    geom = ggplot2::GeomPoint, # inherit other behavior
+    data = data,
+    mapping = mapping,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+```
+
+
+
+---
+
+## Step 4: Enjoy! Use your function
+
+```{r}
+gapminder::gapminder %>%
+  filter(year == 2002) %>%
+  ggplot() +
+  aes(id = country) + 
+  geom_polygon_circlepack(alpha = .5, size = .002)
 ```

@@ -97,6 +97,14 @@ gapminder::gapminder %>%
   head()
 
 
+gapminder::gapminder %>%
+  filter(continent == "Americas") %>%  
+  filter(year == 2002) %>%  
+  # input must have required aesthetic inputs as columns
+  rename(area = pop) %>%
+  compute_panel_circle_pack() %>% 
+  str()
+
 # step 1b test the computation function
 gapminder::gapminder %>%
   filter(continent == "Americas") %>%  
