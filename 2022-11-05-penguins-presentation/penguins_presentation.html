@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>1. Snappy Title: Predictive Power and the Palmer Penguins</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="3. Authors: Dr. Reynolds" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# 1. Snappy Title: Predictive Power and the Palmer Penguins
+## 2. Descriptive title: Does bill length predict bill depth?
+### 3. Authors: Dr. Reynolds
+
+---
+
+
+
+
+
+## 4. A compelling visual that has to do with your question:
+
+![](https://allisonhorst.github.io/palmerpenguins/reference/figures/culmen_depth.png)
+
+---
+
+![](https://allisonhorst.github.io/palmerpenguins/reference/figures/lter_penguins.png)
+
+---
+
+### 5. Background summary paragraph and data origins:
+
+### This study seeks to explore the relationship between features of the 'Palmer Penguins'.  
+--
+There are 344 penguins whose measurements we have.  
+--
+We will look at the relationships between the following four variables using linear regression modeling.  
+--
+The data was originally published in 'Gorman KB, Williams TD, Fraser WR (2014).
+--
+Ecological sexual dimorphism and environmental variability within a community of Antarctic penguins';
+--
+and we are using the cleaned data available in the Palmer Penguin R package (Horst AM, Hill AP, Gorman KB (2020)).
+
+
+---
+
+
+
+## 6. Snapshot of the variables of interest...
+
+
+```r
+palmerpenguins::penguins %&gt;%
+  select(bill_length_mm,
+         bill_depth_mm,
+         species,
+         sex)
+```
+
+```
+# A tibble: 344 × 4
+   bill_length_mm bill_depth_mm species sex   
+            &lt;dbl&gt;         &lt;dbl&gt; &lt;fct&gt;   &lt;fct&gt; 
+ 1           39.1          18.7 Adelie  male  
+ 2           39.5          17.4 Adelie  female
+ 3           40.3          18   Adelie  female
+ 4           NA            NA   Adelie  &lt;NA&gt;  
+ 5           36.7          19.3 Adelie  female
+ 6           39.3          20.6 Adelie  male  
+ 7           38.9          17.8 Adelie  female
+ 8           39.2          19.6 Adelie  male  
+ 9           34.1          18.1 Adelie  &lt;NA&gt;  
+10           42            20.2 Adelie  &lt;NA&gt;  
+# … with 334 more rows
+```
+
+
+---
+
+## 7. What other research finds (2 sources):
+
+--
+
+### a. Other researchers (Gorman et al 2014) found that there was a relationship between flipper length and body mass within species. Given this finding, it is plausible that relationships between other features exist.
+
+--
+
+### b. Furthermore, it is well known (Fracis 2002; Miller 2010) that animal sex can impact the size of animal features.
+
+
+---
+
+## 8. Univariate distributions (1 for each of 4 variables)
+
+### Distributions in dataset for categorical variables:
+
+
+```r
+palmerpenguins::penguins %&gt;%
+  ggplot() +
+  aes(x = species) +
+  geom_bar()
+```
+
+![](penguins_presentation_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+
+---
+
+### Distributions in dataset for categorical variables:
+
+
+```r
+palmerpenguins::penguins %&gt;%
+  ggplot() +
+  aes(x = sex) +
+  geom_bar()
+```
+
+![](penguins_presentation_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+
+---
+
+### Distributions in dataset for continuous variables:
+
+
+```r
+palmerpenguins::penguins %&gt;%
+  ggplot() +
+  aes(x = bill_length_mm) +
+  geom_histogram()
+```
+
+![](penguins_presentation_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
+
+---
+
+### Distributions in dataset for continuous variables:
+
+
+```r
+palmerpenguins::penguins %&gt;%
+  ggplot() +
+  aes(x = bill_depth_mm) +
+  geom_histogram()
+```
+
+![](penguins_presentation_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+
+
+---
+
+#### 9. Bivariate relationship.  Just show relationship of two *variables of interest.*
+
+
+```r
+palmerpenguins::penguins %&gt;%
+  ggplot() +
+  aes(y = bill_depth_mm,
+      x = bill_length_mm) +
+  geom_point()
+```
+
+![](penguins_presentation_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+
+
+
+---
+
+
+#### 10. Multivariate relationship
+
+Try to visualize all variables of interest using various visual channels (x and y position, color, shape, etc)
+
+
+```r
+palmerpenguins::penguins %&gt;%
+  ggplot() +
+  aes(y = bill_depth_mm,
+      x = bill_length_mm,
+      color = species,
+      shape = sex
+      ) +
+  geom_point()
+```
+
+![](penguins_presentation_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
+
+
+
+---
+
+#### 11.a Estimate model...
+
+
+```r
+palmerpenguins::penguins %&gt;%
+  lm(bill_depth_mm ~ bill_length_mm + sex + species, data = .) -&gt;
+lrmodel
+
+print(lrmodel)
+```
+
+```
+
+Call:
+lm(formula = bill_depth_mm ~ bill_length_mm + sex + species, 
+    data = .)
+
+Coefficients:
+     (Intercept)    bill_length_mm           sexmale  speciesChinstrap  
+        15.07161           0.06824           1.25285          -0.60971  
+   speciesGentoo  
+        -3.96308  
+```
+
+---
+
+#### 11.b Modeling
+
+Write out model specification (use betas):
+
+
+
+`$$\hat{y} = \beta_0 + \beta_1*bill_length_mm + \beta_2*male + \beta_3*Chinstrap + \beta_1*Gentoo$$`
+---
+
+#### 11.c Rewrite model with numerical values:
+
+`$$bill\_depth = 15.0716  + 0.0682*bill\_length\_mm + 1.2528*male + -0.6097*Chinstrap + -3.9631*Gentoo$$`
+
+
+---
+
+#### 11.d Discussion of model relationships
+
+### There is a positive association between bill depth and bill length when controlling for sex and species.  
+--
+For every 1 mm increase in bill depth, we expect a .068 mm increase in bill depth.  
+--
+For male birds vs. the baseline category (female) birds, holding everything else equal, we expect the bill length to be 1.25 mm longer.
+--
+Gentoo's bill depth are expected to be shortest among these animals, w/ an expected decrease of 3.96 mm greater length expected relative to Adelie Penguin's (baseline category) of same characteristics otherwise (i.e. same bill depth, same sex).  Chinstraps are also expected to have shorter bill depths by .609 compared with baseline category (Adelie).
+
+
+---
+
+#### 12.a Full model summary
+
+
+```r
+summary(lrmodel)
+```
+
+```
+
+Call:
+lm(formula = bill_depth_mm ~ bill_length_mm + sex + species, 
+    data = .)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-2.10170 -0.54971 -0.07144  0.49233  2.92621 
+
+Coefficients:
+                 Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      15.07161    0.72264  20.856  &lt; 2e-16 ***
+bill_length_mm    0.06824    0.01942   3.514 0.000504 ***
+sexmale           1.25285    0.11489  10.904  &lt; 2e-16 ***
+speciesChinstrap -0.60971    0.22855  -2.668 0.008015 ** 
+speciesGentoo    -3.96308    0.19686 -20.132  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.8188 on 328 degrees of freedom
+  (11 observations deleted due to missingness)
+Multiple R-squared:  0.8292,	Adjusted R-squared:  0.8271 
+F-statistic: 398.1 on 4 and 328 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+
+# 12.b Discussion of variance explained and statistical significance
+
+## Given the model summary output, we see that the R-squared .82; much of the variance for bill length is explained by this model!  
+--
+Looking at the p-values associated with the modeling coefficients, we see very small p-values in every Beta coefficient .  
+--
+The coefficients are statistically significant at the alpha = .05 level (they are inconsistent with being the value zero).  
+
+
+
+---
+
+# 13 Validity conditions
+
+
+
+
+```r
+lrmodel %&gt;%
+  fortify(lrmodel$model) %&gt;%
+  ggplot(aes(x = .fitted,
+             y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  labs( x = "Predicted Values",
+        y = "Residuals",
+        title = "Residuals vs. predicted values")
+```
+
+![](penguins_presentation_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+
+13a Linearity and equal variance: residuals don't show signs of non-linearity (aren't above the line then below then above).  However, residuals variance does increase as prediction values increase; a bit of concern for equal variance requirement.
+
+---
+
+### 13b Independance condition
+
+#### seeing some waves here... Hints at a problem
+
+
+```r
+lrmodel%&gt;%
+  fortify(lrmodel$model) %&gt;%
+  mutate(row = row_number()) %&gt;%
+  ggplot(aes(x = row,
+             y = .resid))+
+  geom_point()+
+  geom_hline(yintercept = 0)+
+  labs(x = "Order of Occurence",
+       y = "Residuals",
+       title = "Residuals in Order of Occurence")
+```
+
+![](penguins_presentation_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+
+---
+
+## 13.c Normality of residuals
+
+
+
+```r
+lrmodel%&gt;%
+  fortify(lrmodel$model)%&gt;%
+  ggplot(aes(x = .resid))+
+  geom_histogram()+
+  labs(x = "Residuals",
+       title = "Histogram of residuals")
+```
+
+![](penguins_presentation_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+
+
+### Looks pretty bell shaped. Not worried about this one.
+
+
+&lt;!-- adjust font size in this css code chunk, currently 80 --&gt;
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 60%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

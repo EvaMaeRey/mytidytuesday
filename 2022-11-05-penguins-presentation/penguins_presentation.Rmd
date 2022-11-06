@@ -1,0 +1,305 @@
+---
+title: "1. Snappy Title: Predictive Power and the Palmer Penguins"
+subtitle: "2. Descriptive title: Does bill length predict bill depth?"
+author: "3. Authors: Dr. Reynolds"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, fig.height = 3, message = FALSE, warning = FALSE, comment = "", cache = F)
+library(flipbookr)
+library(tidyverse)
+```
+
+## 4. A compelling visual that has to do with your question:
+
+![](https://allisonhorst.github.io/palmerpenguins/reference/figures/culmen_depth.png)
+
+---
+
+![](https://allisonhorst.github.io/palmerpenguins/reference/figures/lter_penguins.png)
+
+---
+
+### 5. Background summary paragraph and data origins:
+
+### This study seeks to explore the relationship between features of the 'Palmer Penguins'.  
+--
+There are 344 penguins whose measurements we have.  
+--
+We will look at the relationships between the following four variables using linear regression modeling.  
+--
+The data was originally published in 'Gorman KB, Williams TD, Fraser WR (2014).
+--
+Ecological sexual dimorphism and environmental variability within a community of Antarctic penguins';
+--
+and we are using the cleaned data available in the Palmer Penguin R package (Horst AM, Hill AP, Gorman KB (2020)).
+
+
+---
+
+
+
+## 6. Snapshot of the variables of interest...
+
+```{r}
+palmerpenguins::penguins %>%
+  select(bill_length_mm,
+         bill_depth_mm,
+         species,
+         sex)
+```
+
+
+---
+
+## 7. What other research finds (2 sources):
+
+--
+
+### a. Other researchers (Gorman et al 2014) found that there was a relationship between flipper length and body mass within species. Given this finding, it is plausible that relationships between other features exist.
+
+--
+
+### b. Furthermore, it is well known (Fracis 2002; Miller 2010) that animal sex can impact the size of animal features.
+
+
+---
+
+## 8. Univariate distributions (1 for each of 4 variables)
+
+### Distributions in dataset for categorical variables:
+
+```{r}
+palmerpenguins::penguins %>%
+  ggplot() +
+  aes(x = species) +
+  geom_bar()
+```
+
+---
+
+### Distributions in dataset for categorical variables:
+
+```{r}
+palmerpenguins::penguins %>%
+  ggplot() +
+  aes(x = sex) +
+  geom_bar()
+```
+
+---
+
+### Distributions in dataset for continuous variables:
+
+```{r}
+palmerpenguins::penguins %>%
+  ggplot() +
+  aes(x = bill_length_mm) +
+  geom_histogram()
+```
+
+
+---
+
+### Distributions in dataset for continuous variables:
+
+```{r}
+palmerpenguins::penguins %>%
+  ggplot() +
+  aes(x = bill_depth_mm) +
+  geom_histogram()
+```
+
+
+---
+
+#### 9. Bivariate relationship.  Just show relationship of two *variables of interest.*
+
+```{r}
+palmerpenguins::penguins %>%
+  ggplot() +
+  aes(y = bill_depth_mm,
+      x = bill_length_mm) +
+  geom_point()
+```
+
+
+
+---
+
+
+#### 10. Multivariate relationship
+
+Try to visualize all variables of interest using various visual channels (x and y position, color, shape, etc)
+
+```{r}
+palmerpenguins::penguins %>%
+  ggplot() +
+  aes(y = bill_depth_mm,
+      x = bill_length_mm,
+      color = species,
+      shape = sex
+      ) +
+  geom_point()
+```
+
+
+
+
+---
+
+#### 11.a Estimate model...
+
+```{r}
+palmerpenguins::penguins %>%
+  lm(bill_depth_mm ~ bill_length_mm + sex + species, data = .) ->
+lrmodel
+
+print(lrmodel)
+```
+
+---
+
+#### 11.b Modeling
+
+Write out model specification (use betas):
+
+
+
+$$\hat{y} = \beta_0 + \beta_1*bill_length_mm + \beta_2*male + \beta_3*Chinstrap + \beta_1*Gentoo$$
+---
+
+#### 11.c Rewrite model with numerical values:
+
+$$bill\_depth = 15.0716  + 0.0682*bill\_length\_mm + 1.2528*male + -0.6097*Chinstrap + -3.9631*Gentoo$$
+
+
+---
+
+#### 11.d Discussion of model relationships
+
+### There is a positive association between bill depth and bill length when controlling for sex and species.  
+--
+For every 1 mm increase in bill depth, we expect a .068 mm increase in bill depth.  
+--
+For male birds vs. the baseline category (female) birds, holding everything else equal, we expect the bill length to be 1.25 mm longer.
+--
+Gentoo's bill depth are expected to be shortest among these animals, w/ an expected decrease of 3.96 mm greater length expected relative to Adelie Penguin's (baseline category) of same characteristics otherwise (i.e. same bill depth, same sex).  Chinstraps are also expected to have shorter bill depths by .609 compared with baseline category (Adelie).
+
+
+---
+
+#### 12.a Full model summary
+
+```{r}
+summary(lrmodel)
+```
+
+---
+
+# 12.b Discussion of variance explained and statistical significance
+
+## Given the model summary output, we see that the R-squared .82; much of the variance for bill length is explained by this model!  
+--
+Looking at the p-values associated with the modeling coefficients, we see very small p-values in every Beta coefficient .  
+--
+The coefficients are statistically significant at the alpha = .05 level (they are inconsistent with being the value zero).  
+
+
+
+---
+
+# 13 Validity conditions
+
+
+
+```{r}
+lrmodel %>%
+  fortify(lrmodel$model) %>%
+  ggplot(aes(x = .fitted,
+             y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  labs( x = "Predicted Values",
+        y = "Residuals",
+        title = "Residuals vs. predicted values")
+```
+
+13a Linearity and equal variance: residuals don't show signs of non-linearity (aren't above the line then below then above).  However, residuals variance does increase as prediction values increase; a bit of concern for equal variance requirement.
+
+---
+
+### 13b Independance condition
+
+#### seeing some waves here... Hints at a problem
+
+```{r}
+lrmodel%>%
+  fortify(lrmodel$model) %>%
+  mutate(row = row_number()) %>%
+  ggplot(aes(x = row,
+             y = .resid))+
+  geom_point()+
+  geom_hline(yintercept = 0)+
+  labs(x = "Order of Occurence",
+       y = "Residuals",
+       title = "Residuals in Order of Occurence")
+```
+
+---
+
+## 13.c Normality of residuals
+
+
+```{r}
+lrmodel%>%
+  fortify(lrmodel$model)%>%
+  ggplot(aes(x = .resid))+
+  geom_histogram()+
+  labs(x = "Residuals",
+       title = "Histogram of residuals")
+
+```
+
+
+### Looks pretty bell shaped. Not worried about this one.
+
+
+<!-- adjust font size in this css code chunk, currently 80 -->
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 60%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+
+
+

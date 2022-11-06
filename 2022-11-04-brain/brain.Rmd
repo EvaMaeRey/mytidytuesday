@@ -1,0 +1,149 @@
+---
+title: "brain"
+author: "Evangeline Reynolds"
+date: "11/4/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+
+```
+
+## Problem
+
+```{r}
+library(tidyverse)
+nato_names <- c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary",  
+                "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")  
+library(gapminder)  
+gapminder %>%  
+  filter(year == 2002) %>%  
+  rename(name = country) ->  
+gapminder_2002_prepped  
+
+rnaturalearth::ne_countries(scale = "medium", returnclass = "sf") %>%  
+  select(name, pop_est, gdp_md_est,  
+         continent, geometry) %>%  
+  filter(name %in% nato_names) %>%  
+  left_join(gapminder_2002_prepped, by = "name") ->  
+  nato_countries  
+
+ggplot(data = nato_countries) +  
+  ggplot2::geom_sf(data = nato_countries) +  
+    aes(fill = lifeExp) +  
+    scale_fill_viridis_c(option = "magma", direction = -1) +  
+  ggplot2::coord_sf(xlim = c(-175, 47.5),  
+           ylim = c(23, 85),  
+           expand = FALSE) +  
+  labs(title = "Life Expectancy, 2002",  
+         subtitle = "NATO Member States",  
+         fill = "Share of GDP (%)") +  
+  theme_bw() +  
+  theme(plot.title =  
+            element_text(hjust = 0.5)) +  
+  theme(plot.subtitle =
+            element_text(hjust = 0.5))
+
+library(maps)
+MainStates <- map_data("state")
+StatePopulation <- read.csv("https://raw.githubusercontent.com/ds4stats/r-tutorials/master/intro-maps/data/StatePopulation.csv", as.is = TRUE)
+
+ggplot() + 
+  geom_polygon( data=MainStates, aes(x=long, y=lat, group=group),
+                color="black", fill="lightblue" )
+
+MergedStates <- inner_join(MainStates, StatePopulation, by = "region")
+p <- ggplot()
+p <- p + geom_polygon( data=MergedStates, 
+          aes(x=long, y=lat, group=group, fill = population/1000000), 
+          color="white", size = 0.2) 
+p
+
+```
+
+
+
+## A different way?
+
+```{r, eval = F}
+ggworld(data = gapminder_2002, projection = 'a good one') + 
+  aes(country = country, # positioning aesthetic
+      fill = lifeExp) + 
+  geom_polygon_country()
+```
+
+
+```{r}
+ggplot() + 
+  geom_polygon(data = MainStates, aes(x=long, y=lat, group=group),
+                color="black", fill="lightblue" )
+
+StatePopulation %>% # becomes ggus()
+  right_join(MainStates) %>% # becomes ggus()
+  ggplot() + # becomes ggus()
+  geom_polygon() + # becomes geom_polygon state
+  aes(x = long, # becomes state = region
+      y = lat, # becomes state = region
+      group = group, # becomes state = region
+      fill = population/1000000)
+```
+
+
+
+
+```{r}
+library(maps)
+MainStates <- map_data("state")
+StatePopulation <- read.csv("https://raw.githubusercontent.com/ds4stats/r-tutorials/master/intro-maps/data/StatePopulation.csv", as.is = TRUE)
+
+compute_group_state <- function(data, scales){
+ 
+  data %>% 
+    inner_join(MainStates) %>% 
+    mutate(x = long, y = lat) %>% 
+    mutate(group = group) %>% 
+    select(x, y) %>% 
+    data.frame()
+  
+}
+
+
+StatePopulation %>% 
+  compute_group_state()
+
+StatPolygonstate <- ggplot2::ggproto(`_class` = "StatPolygonstate",
+                                  `_inherit` = ggplot2::Stat,
+                                  required_aes = c("region"),
+                                  compute_group = compute_group_state
+                                  )
+
+geom_point_xy_medians <- function(
+  mapping = NULL,
+  data = NULL,
+  position = "identity",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatPolygonstate,  # proto object from step 2
+    geom = ggplot2::GeomPoint,  # inherit other behavior
+    data = data,
+    mapping = mapping,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+
+
+ggplot(data = StatePopulation) + 
+  aes(region = region) + 
+  geom_point_xy_medians()
+
+layer_data(last_plot(), 1)
+
+
+```

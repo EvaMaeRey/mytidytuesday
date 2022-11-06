@@ -7,9 +7,9 @@
 
 <!-- badges: end -->
 
-The goal of mytidytuesday is to hold little projects. They are like
-blogs posts, but mostly code. In the spirit of \#tidytuesday no pressure
-to write prose\!
+The goal of mytidytuesday is to hold small projects. They are like blogs
+posts, but mostly code. In the spirit of \#tidytuesday no pressure to
+write prose\!
 
   - [2022-10-11-ggsample-clt/ggsample\_and\_the\_clt\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-10-11-ggsample-clt/ggsample_and_the_clt_flipbook.html)
   - [2022-09-04-prop-test-sd/prop-test-sd.html](https://evamaerey.github.io/mytidytuesday/2022-09-04-prop-test-sd/prop-test-sd.html)
