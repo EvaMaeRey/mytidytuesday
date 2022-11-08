@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>1. Snappy Title: Predictive Power and the Palmer Penguins</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="3. Authors: Dr. Reynolds" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# 1. Snappy Title: Predictive Power and the Palmer Penguins
+## 2. Descriptive title: Does bill length predict bill depth?
+### 3. Authors: Dr. Reynolds
+
+---
+
+
+
+
+
+## 4. A compelling visual that has to do with your question:
+
+![](https://allisonhorst.github.io/palmerpenguins/reference/figures/culmen_depth.png)
+
+---
+
+![](https://allisonhorst.github.io/palmerpenguins/reference/figures/lter_penguins.png)
+
+---
+
+``` r
+install.packages("ggols")
+```
+
+And the development version from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("EvaMaeRey/ggols")
+```
+
+---
+
+## ggxmean gives us all the geom_lm_* functions
+
+---
+
+
+count: false
+ 
+
+.panel1-null-auto[
+
+```r
+*library(tidyverse)
+```
+]
+ 
+.panel2-null-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-null-auto[
+
+```r
+library(tidyverse)
+*library(ggxmean)
+```
+]
+ 
+.panel2-null-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-null-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+*ggplot(palmerpenguins::penguins)
+```
+]
+ 
+.panel2-null-auto[
+![](penguins_presentation_ggols_files/figure-html/null_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-null-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+* aes(x = bill_length_mm, y = bill_depth_mm)
+```
+]
+ 
+.panel2-null-auto[
+![](penguins_presentation_ggols_files/figure-html/null_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-null-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm) +
+* geom_point()
+```
+]
+ 
+.panel2-null-auto[
+![](penguins_presentation_ggols_files/figure-html/null_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-null-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm) +
+  geom_point() +
+* geom_y_mean()
+```
+]
+ 
+.panel2-null-auto[
+![](penguins_presentation_ggols_files/figure-html/null_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-null-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm) +
+  geom_point() +
+  geom_y_mean() +
+* ggxmean:::geom_ydiff(color = "red")
+```
+]
+ 
+.panel2-null-auto[
+![](penguins_presentation_ggols_files/figure-html/null_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-null-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm) +
+  geom_point() +
+  geom_y_mean() +
+  ggxmean:::geom_ydiff(color = "red") +
+* geom_y_mean_label()
+```
+]
+ 
+.panel2-null-auto[
+![](penguins_presentation_ggols_files/figure-html/null_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-null-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-null-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-null-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-x-auto[
+
+```r
+*library(tidyverse)
+```
+]
+ 
+.panel2-x-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-x-auto[
+
+```r
+library(tidyverse)
+*library(ggxmean)
+```
+]
+ 
+.panel2-x-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-x-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+*ggplot(palmerpenguins::penguins)
+```
+]
+ 
+.panel2-x-auto[
+![](penguins_presentation_ggols_files/figure-html/x_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-x-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+* aes(y = bill_depth_mm,
+*     x = bill_length_mm)
+```
+]
+ 
+.panel2-x-auto[
+![](penguins_presentation_ggols_files/figure-html/x_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-x-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm,
+      x = bill_length_mm) +
+* geom_point()
+```
+]
+ 
+.panel2-x-auto[
+![](penguins_presentation_ggols_files/figure-html/x_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-x-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm,
+      x = bill_length_mm) +
+  geom_point() +
+* geom_lm()
+```
+]
+ 
+.panel2-x-auto[
+![](penguins_presentation_ggols_files/figure-html/x_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-x-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm,
+      x = bill_length_mm) +
+  geom_point() +
+  geom_lm() +
+* geom_lm_conf_int()
+```
+]
+ 
+.panel2-x-auto[
+![](penguins_presentation_ggols_files/figure-html/x_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-x-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm,
+      x = bill_length_mm) +
+  geom_point() +
+  geom_lm() +
+  geom_lm_conf_int() +
+* geom_lm_residuals(color = "red")
+```
+]
+ 
+.panel2-x-auto[
+![](penguins_presentation_ggols_files/figure-html/x_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-x-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm,
+      x = bill_length_mm) +
+  geom_point() +
+  geom_lm() +
+  geom_lm_conf_int() +
+  geom_lm_residuals(color = "red") +
+* geom_lm_fitted()
+```
+]
+ 
+.panel2-x-auto[
+![](penguins_presentation_ggols_files/figure-html/x_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-x-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm,
+      x = bill_length_mm) +
+  geom_point() +
+  geom_lm() +
+  geom_lm_conf_int() +
+  geom_lm_residuals(color = "red") +
+  geom_lm_fitted() +
+* geom_lm_formula()
+```
+]
+ 
+.panel2-x-auto[
+![](penguins_presentation_ggols_files/figure-html/x_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-x-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm,
+      x = bill_length_mm) +
+  geom_point() +
+  geom_lm() +
+  geom_lm_conf_int() +
+  geom_lm_residuals(color = "red") +
+  geom_lm_fitted() +
+  geom_lm_formula() +
+* geom_lm_intercept_label(hjust = -.2)
+```
+]
+ 
+.panel2-x-auto[
+![](penguins_presentation_ggols_files/figure-html/x_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-x-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm,
+      x = bill_length_mm) +
+  geom_point() +
+  geom_lm() +
+  geom_lm_conf_int() +
+  geom_lm_residuals(color = "red") +
+  geom_lm_fitted() +
+  geom_lm_formula() +
+  geom_lm_intercept_label(hjust = -.2)
+* geom_lm_intercept(color = "blue")
+```
+]
+ 
+.panel2-x-auto[
+![](penguins_presentation_ggols_files/figure-html/x_auto_12_output-1.png)&lt;!-- --&gt;
+
+```
+geom_point: na.rm = FALSE
+stat_olsintercept: na.rm = FALSE
+position_identity 
+```
+]
+
+&lt;style&gt;
+.panel1-x-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-x-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-x-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+# Visualization, adding indicator var
+
+---
+
+
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+*library(ggols)
+```
+]
+ 
+.panel2-indicator-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+library(ggols)
+
+*ggplot(palmerpenguins::penguins)
+```
+]
+ 
+.panel2-indicator-auto[
+![](penguins_presentation_ggols_files/figure-html/indicator_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+library(ggols)
+
+ggplot(palmerpenguins::penguins) +
+* aes(y = bill_depth_mm, x = bill_length_mm)
+```
+]
+ 
+.panel2-indicator-auto[
+![](penguins_presentation_ggols_files/figure-html/indicator_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+library(ggols)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+* geom_point()
+```
+]
+ 
+.panel2-indicator-auto[
+![](penguins_presentation_ggols_files/figure-html/indicator_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+library(ggols)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+* aes(color = species)
+```
+]
+ 
+.panel2-indicator-auto[
+![](penguins_presentation_ggols_files/figure-html/indicator_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+library(ggols)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+* aes(indicator = species)
+```
+]
+ 
+.panel2-indicator-auto[
+![](penguins_presentation_ggols_files/figure-html/indicator_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+library(ggols)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+* geom_lm_indicator()
+```
+]
+ 
+.panel2-indicator-auto[
+![](penguins_presentation_ggols_files/figure-html/indicator_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+library(ggols)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_indicator() +
+* geom_lm_indicator_conf_int()
+```
+]
+ 
+.panel2-indicator-auto[
+![](penguins_presentation_ggols_files/figure-html/indicator_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+library(ggols)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_indicator() +
+  geom_lm_indicator_conf_int() +
+* geom_lm_indicator_residuals(color = "red")
+```
+]
+ 
+.panel2-indicator-auto[
+![](penguins_presentation_ggols_files/figure-html/indicator_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+library(ggols)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_indicator() +
+  geom_lm_indicator_conf_int() +
+  geom_lm_indicator_residuals(color = "red") +
+* geom_lm_indicator_fitted()
+```
+]
+ 
+.panel2-indicator-auto[
+![](penguins_presentation_ggols_files/figure-html/indicator_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+library(ggols)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_indicator() +
+  geom_lm_indicator_conf_int() +
+  geom_lm_indicator_residuals(color = "red") +
+  geom_lm_indicator_fitted() +
+* geom_lm_indicator_formula()
+```
+]
+ 
+.panel2-indicator-auto[
+![](penguins_presentation_ggols_files/figure-html/indicator_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+library(ggols)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_indicator() +
+  geom_lm_indicator_conf_int() +
+  geom_lm_indicator_residuals(color = "red") +
+  geom_lm_indicator_fitted() +
+  geom_lm_indicator_formula() +
+* geom_lm_indicator_rsquared()
+```
+]
+ 
+.panel2-indicator-auto[
+![](penguins_presentation_ggols_files/figure-html/indicator_auto_12_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+library(ggols)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_indicator() +
+  geom_lm_indicator_conf_int() +
+  geom_lm_indicator_residuals(color = "red") +
+  geom_lm_indicator_fitted() +
+  geom_lm_indicator_formula() +
+  geom_lm_indicator_rsquared() +
+* geom_lm_indicator_intercept(color = "blue")
+```
+]
+ 
+.panel2-indicator-auto[
+![](penguins_presentation_ggols_files/figure-html/indicator_auto_13_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+library(ggols)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_indicator() +
+  geom_lm_indicator_conf_int() +
+  geom_lm_indicator_residuals(color = "red") +
+  geom_lm_indicator_fitted() +
+  geom_lm_indicator_formula() +
+  geom_lm_indicator_rsquared() +
+  geom_lm_indicator_intercept(color = "blue") +
+* geom_lm_indicator_intercept_label(hjust = -.2)
+```
+]
+ 
+.panel2-indicator-auto[
+![](penguins_presentation_ggols_files/figure-html/indicator_auto_14_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-indicator-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-indicator-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-indicator-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+# Visualization, adding indicator interaction
+
+
+---
+
+
+count: false
+ 
+
+.panel1-interaction-auto[
+
+```r
+*ggplot(palmerpenguins::penguins)
+```
+]
+ 
+.panel2-interaction-auto[
+![](penguins_presentation_ggols_files/figure-html/interaction_auto_01_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-interaction-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+* aes(y = bill_depth_mm, x = bill_length_mm)
+```
+]
+ 
+.panel2-interaction-auto[
+![](penguins_presentation_ggols_files/figure-html/interaction_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-interaction-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+* geom_point()
+```
+]
+ 
+.panel2-interaction-auto[
+![](penguins_presentation_ggols_files/figure-html/interaction_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-interaction-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+* aes(color = species)
+```
+]
+ 
+.panel2-interaction-auto[
+![](penguins_presentation_ggols_files/figure-html/interaction_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-interaction-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+* aes(indicator = species)
+```
+]
+ 
+.panel2-interaction-auto[
+![](penguins_presentation_ggols_files/figure-html/interaction_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-interaction-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+* geom_lm_interaction()
+```
+]
+ 
+.panel2-interaction-auto[
+![](penguins_presentation_ggols_files/figure-html/interaction_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-interaction-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_interaction() +
+* geom_lm_interaction_conf_int()
+```
+]
+ 
+.panel2-interaction-auto[
+![](penguins_presentation_ggols_files/figure-html/interaction_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-interaction-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_interaction() +
+  geom_lm_interaction_conf_int() +
+* geom_lm_interaction_residuals(color = "red")
+```
+]
+ 
+.panel2-interaction-auto[
+![](penguins_presentation_ggols_files/figure-html/interaction_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-interaction-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_interaction() +
+  geom_lm_interaction_conf_int() +
+  geom_lm_interaction_residuals(color = "red") +
+* geom_lm_interaction_fitted()
+```
+]
+ 
+.panel2-interaction-auto[
+![](penguins_presentation_ggols_files/figure-html/interaction_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-interaction-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_interaction() +
+  geom_lm_interaction_conf_int() +
+  geom_lm_interaction_residuals(color = "red") +
+  geom_lm_interaction_fitted() +
+* geom_lm_interaction_formula()
+```
+]
+ 
+.panel2-interaction-auto[
+![](penguins_presentation_ggols_files/figure-html/interaction_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-interaction-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_interaction() +
+  geom_lm_interaction_conf_int() +
+  geom_lm_interaction_residuals(color = "red") +
+  geom_lm_interaction_fitted() +
+  geom_lm_interaction_formula() +
+* geom_lm_interaction_rsquared()
+```
+]
+ 
+.panel2-interaction-auto[
+![](penguins_presentation_ggols_files/figure-html/interaction_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-interaction-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_interaction() +
+  geom_lm_interaction_conf_int() +
+  geom_lm_interaction_residuals(color = "red") +
+  geom_lm_interaction_fitted() +
+  geom_lm_interaction_formula() +
+  geom_lm_interaction_rsquared() +
+* geom_lm_interaction_intercept(color = "blue")
+```
+]
+ 
+.panel2-interaction-auto[
+![](penguins_presentation_ggols_files/figure-html/interaction_auto_12_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-interaction-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_interaction() +
+  geom_lm_interaction_conf_int() +
+  geom_lm_interaction_residuals(color = "red") +
+  geom_lm_interaction_fitted() +
+  geom_lm_interaction_formula() +
+  geom_lm_interaction_rsquared() +
+  geom_lm_interaction_intercept(color = "blue") +
+* geom_lm_interaction_intercept_label(hjust = -.2)
+```
+]
+ 
+.panel2-interaction-auto[
+![](penguins_presentation_ggols_files/figure-html/interaction_auto_13_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-interaction-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-interaction-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-interaction-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+# Visualization, and two indicator variables
+
+
+---
+
+
+count: false
+ 
+
+.panel1-int2-auto[
+
+```r
+*ggplot(palmerpenguins::penguins)
+```
+]
+ 
+.panel2-int2-auto[
+![](penguins_presentation_ggols_files/figure-html/int2_auto_01_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-int2-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+* aes(x = bill_length_mm, y = bill_depth_mm,
+*     indicator = species, indicator2 = sex,
+*     color = species, shape = sex)
+```
+]
+ 
+.panel2-int2-auto[
+![](penguins_presentation_ggols_files/figure-html/int2_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-int2-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm,
+      indicator = species, indicator2 = sex,
+      color = species, shape = sex) +
+* geom_point()
+```
+]
+ 
+.panel2-int2-auto[
+![](penguins_presentation_ggols_files/figure-html/int2_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-int2-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm,
+      indicator = species, indicator2 = sex,
+      color = species, shape = sex) +
+  geom_point() +
+* geom_lm_indicator2()
+```
+]
+ 
+.panel2-int2-auto[
+![](penguins_presentation_ggols_files/figure-html/int2_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-int2-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm,
+      indicator = species, indicator2 = sex,
+      color = species, shape = sex) +
+  geom_point() +
+  geom_lm_indicator2() +
+* geom_lm_indicator2_conf_int()
+```
+]
+ 
+.panel2-int2-auto[
+![](penguins_presentation_ggols_files/figure-html/int2_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-int2-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm,
+      indicator = species, indicator2 = sex,
+      color = species, shape = sex) +
+  geom_point() +
+  geom_lm_indicator2() +
+  geom_lm_indicator2_conf_int() +
+* geom_lm_indicator2_residuals(color = "red")
+```
+]
+ 
+.panel2-int2-auto[
+![](penguins_presentation_ggols_files/figure-html/int2_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-int2-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm,
+      indicator = species, indicator2 = sex,
+      color = species, shape = sex) +
+  geom_point() +
+  geom_lm_indicator2() +
+  geom_lm_indicator2_conf_int() +
+  geom_lm_indicator2_residuals(color = "red") +
+* geom_lm_indicator2_fitted()
+```
+]
+ 
+.panel2-int2-auto[
+![](penguins_presentation_ggols_files/figure-html/int2_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-int2-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm,
+      indicator = species, indicator2 = sex,
+      color = species, shape = sex) +
+  geom_point() +
+  geom_lm_indicator2() +
+  geom_lm_indicator2_conf_int() +
+  geom_lm_indicator2_residuals(color = "red") +
+  geom_lm_indicator2_fitted() +
+* geom_lm_indicator2_formula()
+```
+]
+ 
+.panel2-int2-auto[
+![](penguins_presentation_ggols_files/figure-html/int2_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-int2-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm,
+      indicator = species, indicator2 = sex,
+      color = species, shape = sex) +
+  geom_point() +
+  geom_lm_indicator2() +
+  geom_lm_indicator2_conf_int() +
+  geom_lm_indicator2_residuals(color = "red") +
+  geom_lm_indicator2_fitted() +
+  geom_lm_indicator2_formula() +
+* geom_lm_indicator2_rsquared()
+```
+]
+ 
+.panel2-int2-auto[
+![](penguins_presentation_ggols_files/figure-html/int2_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-int2-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm,
+      indicator = species, indicator2 = sex,
+      color = species, shape = sex) +
+  geom_point() +
+  geom_lm_indicator2() +
+  geom_lm_indicator2_conf_int() +
+  geom_lm_indicator2_residuals(color = "red") +
+  geom_lm_indicator2_fitted() +
+  geom_lm_indicator2_formula() +
+  geom_lm_indicator2_rsquared() +
+* geom_lm_indicator2_intercept(color = "blue")
+```
+]
+ 
+.panel2-int2-auto[
+![](penguins_presentation_ggols_files/figure-html/int2_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-int2-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm,
+      indicator = species, indicator2 = sex,
+      color = species, shape = sex) +
+  geom_point() +
+  geom_lm_indicator2() +
+  geom_lm_indicator2_conf_int() +
+  geom_lm_indicator2_residuals(color = "red") +
+  geom_lm_indicator2_fitted() +
+  geom_lm_indicator2_formula() +
+  geom_lm_indicator2_rsquared() +
+  geom_lm_indicator2_intercept(color = "blue") +
+* geom_lm_indicator2_intercept_label(hjust = -.2)
+```
+]
+ 
+.panel2-int2-auto[
+![](penguins_presentation_ggols_files/figure-html/int2_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-int2-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-int2-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-int2-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+
+
+---
+
+# big picture
+
+---
+
+![](penguins_presentation_ggols_files/figure-html/null2-1.png)&lt;!-- --&gt;
+
+
+---
+
+
+
+
+![](penguins_presentation_ggols_files/figure-html/x2-1.png)&lt;!-- --&gt;
+
+---
+
+
+![](penguins_presentation_ggols_files/figure-html/indicator2-1.png)&lt;!-- --&gt;
+
+
+---
+
+
+
+
+![](penguins_presentation_ggols_files/figure-html/interaction2-1.png)&lt;!-- --&gt;
+
+
+
+
+---
+
+
+
+
+![](penguins_presentation_ggols_files/figure-html/int22-1.png)&lt;!-- --&gt;
+
+
+---
+
+
+
+
+
+---
+
+
+&lt;!-- adjust font size in this css code chunk, currently 80 --&gt;
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 60%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
