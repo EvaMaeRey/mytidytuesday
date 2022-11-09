@@ -467,7 +467,7 @@ ggplot(palmerpenguins::penguins) +
   geom_lm_residuals(color = "red") +
   geom_lm_fitted() +
   geom_lm_formula() +
-* geom_lm_intercept_label(hjust = -.2)
+* ggols:::geom_lm_rsquared()   #should be moved to ggxmean
 ```
 ]
  
@@ -494,19 +494,42 @@ ggplot(palmerpenguins::penguins) +
   geom_lm_residuals(color = "red") +
   geom_lm_fitted() +
   geom_lm_formula() +
-  geom_lm_intercept_label(hjust = -.2)
-* geom_lm_intercept(color = "blue")
+  ggols:::geom_lm_rsquared() +  #should be moved to ggxmean
+* geom_lm_intercept_label(hjust = -.2)
 ```
 ]
  
 .panel2-x-auto[
 ![](penguins_presentation_ggols_files/figure-html/x_auto_12_output-1.png)&lt;!-- --&gt;
+]
 
+---
+count: false
+ 
+
+.panel1-x-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm,
+      x = bill_length_mm) +
+  geom_point() +
+  geom_lm() +
+  geom_lm_conf_int() +
+  geom_lm_residuals(color = "red") +
+  geom_lm_fitted() +
+  geom_lm_formula() +
+  ggols:::geom_lm_rsquared() +  #should be moved to ggxmean
+  geom_lm_intercept_label(hjust = -.2) +
+* geom_lm_intercept(color = "blue")
 ```
-geom_point: na.rm = FALSE
-stat_olsintercept: na.rm = FALSE
-position_identity 
-```
+]
+ 
+.panel2-x-auto[
+![](penguins_presentation_ggols_files/figure-html/x_auto_13_output-1.png)&lt;!-- --&gt;
 ]
 
 &lt;style&gt;
