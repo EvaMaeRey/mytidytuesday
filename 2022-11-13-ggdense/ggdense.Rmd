@@ -58,6 +58,16 @@ spotify_songs %>%
 ```
 
 
+```{r}
+library(tidyverse)
+spotify_songs %>% 
+  ggplot() + 
+  aes(x = danceability, y = valence) + 
+  geom_density_2d_filled(alpha = .5) +  
+  scale_color_viridis_c()
+```
+
+
 ---
 
 ## Row and column sketching

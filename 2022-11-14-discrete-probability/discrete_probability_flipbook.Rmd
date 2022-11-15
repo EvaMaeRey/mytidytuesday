@@ -1,0 +1,127 @@
+---
+title: "discrete probability"
+subtitle: "Using flipbookr and xaringan"
+author: "Me"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, fig.height = 4, message = F, warning = FALSE, comment = "", cache = F)
+
+options(tibble.print_min = 55)
+options(knitr.duplicate.label = "allow")
+options(width=300) # prevents data wrapping
+```
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 70%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+
+
+---
+
+
+`r flipbookr::chunk_reveal("setup", left_assign = "detect")`
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+---
+
+
+`r flipbookr::chunk_reveal("roulette", left_assign = "detect")`
+
+
+```{r roulette, include = FALSE}
+library(tidyverse)
+c(3800, 200, 0, -100, - 300) %>% 
+  data.frame(payout = .) %>% 
+  mutate(prob = c(1/38, 5/38, 6/38, 12/38, 14/38)) %>% 
+  mutate(ev_contribution = prob*payout) %>% 
+  mutate(ev = sum(ev_contribution)) %>% 
+  mutate(var_contribution = (payout - ev)^2 * prob ) %>%
+  mutate(variance = sum(var_contribution)) %>% 
+  mutate(sd = sqrt(variance)) ->
+roulette_example
+
+
+roulette_example %>% 
+  ggplot() + 
+  aes(x = payout, y = prob) + 
+  geom_point() + 
+  geom_segment(aes(xend = payout, yend = 0)) + 
+  geom_rect(aes(xmin = 0, xmax = payout, 
+                ymin = 0, ymax = prob),
+            alpha = .2) + 
+  geom_vline(xintercept = -15.789, linetype = "dashed") ->
+picture_ev
+
+roulette_example %>% 
+  ggplot() + 
+  aes(x = payout - ev, y = payout - ev) + 
+  geom_point() + 
+  coord_equal() +
+  geom_segment(aes(xend = payout - ev, yend = 0)) + 
+  geom_rect(aes(xmin = ev, xmax = payout - ev, 
+                ymin = 0, ymax = payout - ev,
+            alpha = prob)) +
+  geom_rect(aes(xmin = 0, ymin = 0, xmax = sd, ymax = sd),
+            fill = "darkred") ->
+picture_variance
+```
+
+
+
+
+---
+
+
+`r flipbookr::chunk_reveal("insurance", left_assign = "detect")`
+
+
+```{r insurance, include = FALSE}
+c(20000, 5000, 0) %>% 
+  data.frame(payout = .) %>% 
+  mutate(situation = c("car totaled", 
+                       "car repairs", 
+                       "no accidents")) %>% 
+  mutate(prob = c(1/100, 9/100, 90/100))  %>%
+  mutate(ev_contribution = prob*payout) %>% 
+  mutate(ev = sum(ev_contribution)) %>% 
+  mutate(var_contribution = (payout - ev)^2 * prob ) %>%
+  mutate(variance = sum(var_contribution)) %>% 
+  mutate(sd = sqrt(variance)) ->
+insurance_example
+```
