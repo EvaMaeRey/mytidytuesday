@@ -11,6 +11,7 @@ The goal of mytidytuesday is to hold small projects. They are like blogs
 posts, but mostly code. In the spirit of \#tidytuesday no pressure to
 write prose\!
 
+  - [2022-11-14-discrete-probability/discrete\_probability\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-11-14-discrete-probability/discrete_probability_flipbook.html)
   - [2022-11-13-ggdense/ggdense.html](https://evamaerey.github.io/mytidytuesday/2022-11-13-ggdense/ggdense.html)
   - [2022-11-05-penguins-presentation/penguins\_presentation\_ggols.html](https://evamaerey.github.io/mytidytuesday/2022-11-05-penguins-presentation/penguins_presentation_ggols.html)
   - [2022-11-05-penguins-presentation/penguins\_presentation.html](https://evamaerey.github.io/mytidytuesday/2022-11-05-penguins-presentation/penguins_presentation.html)
