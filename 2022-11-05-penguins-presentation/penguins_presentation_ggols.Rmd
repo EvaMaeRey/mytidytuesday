@@ -371,8 +371,10 @@ ggplot(data = NHANES) +
   aes(y = Pulse, 
       x = Age) + 
   geom_point(alpha = .05) + 
-  geom_point(data = . %>% 
-               slice_sample(prop = .1)) + 
+  geom_jitter(data = . %>% 
+               slice_sample(prop = .1),
+             shape = 21, fill = "white",
+             height = .25, width = 0) + 
   aes(color = SleepTrouble, indicator = SleepTrouble)  + 
   geom_lm_interaction() + 
   geom_lm_interaction_conf_int() +
