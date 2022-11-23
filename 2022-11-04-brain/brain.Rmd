@@ -7,11 +7,19 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-
-
 ```
 
-## Problem
+## Problem: positioning with SF feels spooky and data prep can feel effortful
+
+W/ ggplot2, we are able to say 'where' with x and y.  These are positional aesthetics.  With SF the where is implied with the geometry column. This feels non-declarative and spooky to me. 
+
+Also, it often requires preprocessing to work with data you'd like to represent.
+
+When we ask the question 'where' about maps, the answer is often a named region (polygon), and not x and y; it is the geometry.  Is it possible to create an interface where you define 'where' with these named geometries?  In other words: `aes(country = my_countries_variable)` to be used with a geom/stat like geom_polygon_countries().
+
+
+
+
 
 ```{r}
 library(tidyverse)
@@ -31,6 +39,7 @@ rnaturalearth::ne_countries(scale = "medium", returnclass = "sf") %>%
   nato_countries  
 
 ggplot(data = nato_countries) +  
+  # This part feels spooky to me 
   ggplot2::geom_sf(data = nato_countries) +  
     aes(fill = lifeExp) +  
     scale_fill_viridis_c(option = "magma", direction = -1) +  
@@ -45,40 +54,50 @@ ggplot(data = nato_countries) +
             element_text(hjust = 0.5)) +  
   theme(plot.subtitle =
             element_text(hjust = 0.5))
-
-library(maps)
-MainStates <- map_data("state")
-StatePopulation <- read.csv("https://raw.githubusercontent.com/ds4stats/r-tutorials/master/intro-maps/data/StatePopulation.csv", as.is = TRUE)
-
-ggplot() + 
-  geom_polygon( data=MainStates, aes(x=long, y=lat, group=group),
-                color="black", fill="lightblue" )
-
-MergedStates <- inner_join(MainStates, StatePopulation, by = "region")
-p <- ggplot()
-p <- p + geom_polygon( data=MergedStates, 
-          aes(x=long, y=lat, group=group, fill = population/1000000), 
-          color="white", size = 0.2) 
-p
-
 ```
 
+See step-by-step:
+https://evamaerey.github.io/ggplot2_grammar_guide/geom_sf.html#1
+
+# Wait, why is this project called 'brain'?
+
+One inspiration for this is ggseg too. Very cool project that uses sf spatial approach.  I wonder if there'd be a version where regions of the brain could be simply named, and other aesthetics defined. Motivated by how I'd like to learn more about the regions of the brain!  :-)
 
 
-## A different way?
+## A different API?
 
-```{r, eval = F}
+Here is what I think might be an easy to use API.
+
+```
 ggworld(data = gapminder_2002, projection = 'a good one') + 
   aes(country = country, # positioning aesthetic
       fill = lifeExp) + 
   geom_polygon_country()
 ```
 
+Note: country names are really hard. Other codes could be used.  One could try to use the wonderful countrycodes as well when 
+
+# Proof of concept? (without SF)
+
+Because of my limited knowledge of SF, let's start w/ the x and y inputs approach to mapping with ggplot2 and see if we can cook something up. 
+
+## Step 00: See how someone gets it done
+
+I was here:
+https://remiller1450.github.io/s230s19/Intro_maps.html
+
+## Step 0: get it done w/ ggplot2
+
+Look at mapping w/ ggplot2, no sf, we use geom_polygon and the x, y and group aesthetics).  It is not very efficient (lots of redundant info in the ), but we won't worry about that for this demonstration.  A little rewrite to get inspired.
 
 ```{r}
-ggplot() + 
-  geom_polygon(data = MainStates, aes(x=long, y=lat, group=group),
-                color="black", fill="lightblue" )
+library(ggplot2) 
+library(dplyr)
+library(maps)
+MainStates <- map_data("state")
+StatePopulation <- read.csv("https://raw.githubusercontent.com/ds4stats/r-tutorials/master/intro-maps/data/StatePopulation.csv", as.is = TRUE)
+
+MergedStates <- inner_join(MainStates, StatePopulation, by = "region")
 
 StatePopulation %>% # becomes ggus()
   right_join(MainStates) %>% # becomes ggus()
@@ -87,30 +106,33 @@ StatePopulation %>% # becomes ggus()
   aes(x = long, # becomes state = region
       y = lat, # becomes state = region
       group = group, # becomes state = region
-      fill = population/1000000)
+      fill = population/1000000) + 
+  coord_map(projection = "orthographic", 
+            orientation = c(41, -74, 0))
 ```
 
 
-
+# Step 1: compute group function and test
 
 ```{r}
 library(maps)
 MainStates <- map_data("state")
+# AllCounty <- map_data("county")
+# MainCities <- filter(us.cities, long>=-130)
+
 StatePopulation <- read.csv("https://raw.githubusercontent.com/ds4stats/r-tutorials/master/intro-maps/data/StatePopulation.csv", as.is = TRUE)
 
 compute_state <- function(data, scales){
  
   data %>% 
-    inner_join(map_data("state")) %>% 
+    inner_join(map_data("state") %>% rename(state = region)) %>% 
     mutate(x = long, y = lat) %>% 
     mutate(group = group) 
-  
-  map_data("state") %>% 
-    mutate(x = long, y = lat) 
-  
+
 }
 
 StatePopulation %>% 
+  rename(state = region) %>% 
   compute_state() ->
 computed
 
@@ -128,17 +150,29 @@ my_setup_data <- function(data, params){
                                       data$group <- seq_len(nrows)
                                     }
                                     data
-                                  }
+}
+```
+
+
+# Step 2: pass to ggproto
+
+```{r}
+
 
 StatPolygonstate <- ggplot2::ggproto(`_class` = "StatPolygonstate",
                                   `_inherit` = ggplot2::Stat,
-                                  required_aes = c("region"),
+                                  required_aes = c("state"),
                                   compute_panel = compute_state#,
                                    # setup_data = my_setup_data
-                                  # default_aes = aes(fill = after_stat(area))
+                                  # default_aes = aes(group = after_stat(state))
                                   )
+```
 
-geom_points_state <- function(
+
+# Step 3: write geom_* function
+
+```{r}
+geom_polygon_state <- function(
   mapping = NULL,
   data = NULL,
   position = "identity",
@@ -147,7 +181,7 @@ geom_points_state <- function(
   inherit.aes = TRUE, ...) {
   ggplot2::layer(
     stat = StatPolygonstate,  # proto object from step 2
-    geom = ggplot2::GeomPoint,  # inherit other behavior
+    geom = ggplot2::GeomPolygon,  # inherit other behavior
     data = data,
     mapping = mapping,
     position = position,
@@ -158,107 +192,38 @@ geom_points_state <- function(
 }
 ```
 
+# step 4: test geom_* function, celebrate!
 
-```{r, eval = F}
+```{r, eval = T}
 StatePopulation %>% 
-  data.frame() %>% 
+  mutate(region = as.factor(region)) %>% 
 ggplot(data = .) + 
-  aes(region = region) + 
-  geom_points_state()
-
-layer_data(last_plot(), 1)
+  aes(state = region, # state indicates position instead of x and y 
+      fill = population) +
+  geom_polygon_state() + 
+  coord_map() + 
+  geom_polygon_state(data = . %>% 
+                       filter(region == "alabama"),
+                     fill = "darkred" ) + 
+  coord_map(projection = "orthographic", 
+            orientation = c(41, -74, 0))
 ```
 
+
+# Step 5: What's not working and taking a break.
+
+1. Not sure what's going on w/ merge so that we only get the 4 states.  
+2. state = var, var must be factor (not character).  I've seen this before and I'd like that not to be the case, but fine for now. 
+3. We are celebrating in spite of 1 and 2!  And putting aside.
 
 ```{r}
-# you won't use the scales argument, but ggplot will later
-compute_panel_circle_pack <- function(data, scales){
- 
-  data %>%
-    mutate(id = row_number()) ->
-  data1
- 
-  if(is.null(data$area)){
-    
-    data1 %>% 
-      mutate(area = 1) ->
-    data1
-    
-  }
-  
-  data1 %>%  
-    pull(area) %>%
-    packcircles::circleProgressiveLayout(
-                                         sizetype = 'area') %>%
-    packcircles::circleLayoutVertices(npoints = 300) %>%
-    left_join(data1) #%>%
-    # rename(group = id)
-   
-}
-
-
-
-my_setup_data <- function(data, params){
-                                    if(data$group[1] == -1){
-                                      nrows <- nrow(data)
-                                      data$group <- seq_len(nrows)
-                                    }
-                                    data
-                                  }
-
-```
-
----
-
-## Step 2: define ggproto
-
-- what's the naming convention for the proto object?
-- which aesthetics are required as inputs?
-- where does the function from above go?
-
-```{r}
-StatCirclepack <- ggplot2::ggproto(`_class` = "StatCirclepack",
-                                  `_inherit` = ggplot2::Stat,
-                                  required_aes = c("id"),
-                                  compute_panel = compute_panel_circle_pack#,
-                                  # setup_data = my_setup_data,
-                                  # default_aes = aes(fill = after_stat(area))
-                                  )
-```
-
-
----
-
-## Step 3: define geom_* function
-
-```{r}
-geom_polygon_circlepack <- function(mapping = NULL, data = NULL,
-                           position = "identity", na.rm = FALSE,
-                           show.legend = NA,
-                           inherit.aes = TRUE, ...) {
-  ggplot2::layer(
-    stat = StatCirclepack, # proto object from Step 2
-    geom = ggplot2::GeomPoint, # inherit other behavior
-    data = data,
-    mapping = mapping,
-    position = position,
-    show.legend = show.legend,
-    inherit.aes = inherit.aes,
-    params = list(na.rm = na.rm, ...)
-  )
-}
+StatePopulation %>% distinct(region) %>% pull()
 ```
 
 
 
----
+# Circle pack seems similar...
 
-## Step 4: Enjoy! Use your function
 
-```{r}
-gapminder::gapminder %>%
-  filter(year == 2002) %>%
-  ggplot() +
-  aes(id = country) + 
-  geom_polygon_circlepack(alpha = .5, size = .002)
-```
+https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/circle_pack_stipple.html
+
