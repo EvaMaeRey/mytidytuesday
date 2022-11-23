@@ -111,7 +111,7 @@ compute_state <- function(data, scales){
 }
 
 StatePopulation %>% 
-  compute_group_state() ->
+  compute_state() ->
 computed
 
 str(computed)
@@ -138,7 +138,7 @@ StatPolygonstate <- ggplot2::ggproto(`_class` = "StatPolygonstate",
                                   # default_aes = aes(fill = after_stat(area))
                                   )
 
-geom_point_xy_medians <- function(
+geom_points_state <- function(
   mapping = NULL,
   data = NULL,
   position = "identity",
@@ -156,16 +156,17 @@ geom_point_xy_medians <- function(
     params = list(na.rm = na.rm, ...)
   )
 }
+```
 
+
+```{r, eval = F}
 StatePopulation %>% 
   data.frame() %>% 
 ggplot(data = .) + 
   aes(region = region) + 
-  geom_point_xy_medians()
+  geom_points_state()
 
 layer_data(last_plot(), 1)
-
-
 ```
 
 

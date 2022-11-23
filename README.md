@@ -15,6 +15,7 @@ write prose\!
   - [2022-11-13-ggdense/ggdense.html](https://evamaerey.github.io/mytidytuesday/2022-11-13-ggdense/ggdense.html)
   - [2022-11-05-penguins-presentation/penguins\_presentation\_ggols.html](https://evamaerey.github.io/mytidytuesday/2022-11-05-penguins-presentation/penguins_presentation_ggols.html)
   - [2022-11-05-penguins-presentation/penguins\_presentation.html](https://evamaerey.github.io/mytidytuesday/2022-11-05-penguins-presentation/penguins_presentation.html)
+  - [2022-11-04-brain/brain.html](https://evamaerey.github.io/mytidytuesday/2022-11-04-brain/brain.html)
   - [2022-10-11-ggsample-clt/ggsample\_and\_the\_clt\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-10-11-ggsample-clt/ggsample_and_the_clt_flipbook.html)
   - [2022-09-04-prop-test-sd/prop-test-sd.html](https://evamaerey.github.io/mytidytuesday/2022-09-04-prop-test-sd/prop-test-sd.html)
   - [2022-08-27-extenders/extenders.html](https://evamaerey.github.io/mytidytuesday/2022-08-27-extenders/extenders.html)
