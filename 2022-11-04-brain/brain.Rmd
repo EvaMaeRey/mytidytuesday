@@ -11,11 +11,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Problem: positioning with SF feels spooky and data prep can feel effortful
 
-W/ ggplot2, we are able to say 'where' with x and y.  These are positional aesthetics.  With SF the where is implied with the geometry column. This feels non-declarative and spooky to me. 
+W/ ggplot2, we are able to say 'where' with x and y.  These are positional aesthetics.  With SF the 'where' is implied with the geometry column. This feels non-declarative and spooky to me. 
 
-Also, it often requires preprocessing to work with data you'd like to represent.
+Also, it often requires pre-processing to work with data you'd like to represent.
 
-When we ask the question 'where' about maps, the answer is often a named region (polygon), and not x and y; it is the geometry.  Is it possible to create an interface where you define 'where' with these named geometries?  In other words: `aes(country = my_countries_variable)` to be used with a geom/stat like geom_polygon_countries().
+When we ask the question 'where' in a geographical context, a human being will respond with the name of a region; not coordinates and not a set of coordinates that define a region.  Is it possible to create an interface where you define 'where' with geographical names or other ids?  For example: `aes(country = my_countries_variable)` could be used with a geom/stat like geom_polygon_countries().
 
 
 
@@ -112,7 +112,7 @@ StatePopulation %>% # becomes ggus()
 ```
 
 
-# Step 1: compute group function and test
+# Step 1: compute function and test
 
 ```{r}
 library(maps)
@@ -221,6 +221,18 @@ StatePopulation %>% distinct(region) %>% pull()
 ```
 
 
+---
+
+# 0 County
+
+```{r}
+AllCounty <- map_data("county")
+ggplot() + geom_polygon( data=AllCounty, aes(x=long, y=lat, group=group),
+                color="darkblue", fill="lightblue", size = .1 ) +
+  
+          geom_polygon( data=MainStates, aes(x=long, y=lat, group=group),
+                color="black", fill="lightblue",  size = 1, alpha = .3)
+```
 
 # Circle pack seems similar...
 
