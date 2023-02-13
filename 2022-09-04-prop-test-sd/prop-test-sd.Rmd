@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
 ```
 
-## Calculating the sd of the null hypothesis.
+## Calculating the mean and sd of the null hypothesis.
 
 --
 
@@ -54,14 +54,29 @@ ggstamp::ggcanvas() +
 
 ---
 
-## Two parts
-
-# $$ \sqrt{\pi * (\pi - 1)}$$
+# Okay, so we know the mean is at $$ \pi $$
 
 --
 
+## We can decompose the stardard deviation into 
+
+### 1. the numerator (determined by pi), 
+
+# $$ \sqrt{\pi * (\pi - 1)}$$
+
+
+--
+
+### and 2. the denominator (determined by the sample size, n)
+
 # $$ \sqrt{\frac{1}{n}} $$
 
+
+# What does the numerator look like?
+
+- ## the square root of the proportion $$ \pi $$ and it's complement multiplied
+
+## So starting with ...
 
 ```{r complements}
 library(tidyverse)
@@ -112,7 +127,7 @@ ggplot(data = pi_possibilities) +
             alpha = .6) + 
   aes(fill = product) + 
   theme_minimal() + 
-  labs(title = "Multiplying the two complements, we get an area")
+  labs(title = "Multiplying pi and it's complements, we get an area")
 ```
 
 
@@ -144,7 +159,7 @@ ggplot(data = pi_possibilities) +
 
 ---
 
-# Numerator
+# Okay, so the numerator is exactly how big?
 
 ```{r pi_part}
 sqrt(.25 * (1-.25))
