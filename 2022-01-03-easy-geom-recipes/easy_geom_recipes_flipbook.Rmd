@@ -96,6 +96,40 @@ code.r.hljs.remark-code:hover{
 
 ---
 
+# Preview
+
+Our recipes will take form:
+
+--
+
+**Step 0. Get the job done with 'base' ggplot2.**  
+--
+It's a good idea to clarify what needs to happen without getting into the extension architecture
+
+--
+
+**Step 1. Write a computation function.** 
+--
+Wrap the necessary computation into a function that your target geom_*() function will perform.
+
+--
+
+**Step 2. Define a ggproto object.** 
+--
+ggproto objects allow your extension  to work together with base ggplot2 functions!  You'll use the computation function from step 1 to help define it.
+
+--
+
+**Step 3. Write your geom function!** 
+--
+You're ready to write your function.  You will incorporate the ggproto from step 2.  
+
+--
+
+**Step 4. Test/Enjoy!** 
+--
+Take your new geom for a spin! Check out group-wise computation behavior!
+
 
 
 ```{r setup, include=FALSE}
@@ -114,6 +148,7 @@ class: inverse, middle, center
 --
 
 - This will be a point at the median of x and y
+
 
 ---
 class: inverse, middle, center

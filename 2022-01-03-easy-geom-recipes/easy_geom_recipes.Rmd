@@ -11,11 +11,30 @@ Using ggplot2 has been described as writing 'graphical poems'.
 <!-- and a system that lets us 'speak our plot into existence'.  -->
 But we may feel at a loss for 'words' when functions we'd like to have don't exist.  The ggplot2 extension system allows us to build new 'vocabulary' for fluent expression.  
 
-An exciting extension mechanism is inheriting from existing geoms.  Particularly important to statisticians and mathematicians is writing new geom_* that perform and visualize calculations.  
+An exciting extension mechanism is inheriting from existing geoms.  Particularly important to statisticians and mathematicians is writing new geom_*s that perform and visualize calculations.  
 
-To get your feet wet in this world and give you a taste of patterns for geom extension, we provide three basic examples of the geoms_ that inherit from *existing* geoms (point, text, segment, etc) along with practice exercises.  With such geoms, calculation is done under the hood by the ggplot2 system; with these geom, you can write new graphical poems with exciting new graphical 'words'! 
+To get your feet wet in this world and give you a taste of patterns for geom extension, we provide three basic examples of the geoms_ that inherit from *existing* geoms (point, text, segment, etc) along with practice exercises.  With such geoms, calculation is done under the hood by the ggplot2 system; with these geom, you can write *new* graphical poems with exciting new graphical 'words'! 
 
-This tutorial is intended for individuals who already have a working knowledge of the grammar of ggplot2, but may like to build a richer vocabulary for themselves.  
+This tutorial is intended for individuals who already have a working knowledge of the grammar of ggplot2, but may like to build a richer vocabulary for themselves.
+
+# Preview
+
+Our recipes will take form:
+
+- *Step 0. Get the job done with 'base' ggplot2.* 
+It's a good idea to clarify what needs to happen without getting into the extension architecture
+- *Step 1. Write a computation function.* 
+Wrap the necessary computation into a function that your target geom_*() function will perform.
+- *Step 2. Define a ggproto object.* 
+ggproto objects allow your extension  to work together with base ggplot2 functions!  You'll use the computation function from step 1 to help define it.
+
+- *Step 3. Write your geom function!* 
+You're ready to write your function.  You will incorporate the ggproto from step 2.  
+
+- *Step 4. Test/Enjoy!*
+Take your new geom for a spin! Check out group-wise computation behavior!
+
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
