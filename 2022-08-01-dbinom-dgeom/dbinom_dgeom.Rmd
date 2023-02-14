@@ -1,15 +1,60 @@
 ---
 title: "discrete distributions"
-author: "Evangeline Reynolds"
+author: ""
 date: "8/1/2022"
 output: html_document
 ---
+
+```{r base1, warning = F, message = F}
+library(tidyverse)
+
+single_trial_prob <- .5
+
+num_trials <- 2
+
+0:num_trials ->
+  possible_outcomes
+
+dbinom(x = possible_outcomes, 
+       size = 2,
+       prob = single_trial_prob) ->
+  probs
+
+tibble(possible_outcomes, probs) %>% 
+  ggplot() + 
+  aes(x = possible_outcomes) +
+  scale_x_continuous(breaks = possible_outcomes) +
+  aes(y = probs) + 
+  geom_point() + 
+  aes(xend = possible_outcomes,
+      yend = 0) + 
+  geom_segment(lty = "dotted") + 
+  labs(title = "Binomial Distribution of for ten events where probability of success for each event is .85  (success/failure probability is independent)" %>% 
+         str_wrap()) + 
+  geom_text(aes(label = probs %>% round(4)),
+            nudge_y = .01) + 
+  annotate(geom = "text", 
+           x = 1.5,
+           y = .2,
+           label = "nCk(pi^k)*(1-pi)^(n-k)",
+           parse = TRUE,
+           size = 5)
+```
+
+
+Board Problems for Lesson 27: Binomial, Geometric, and Normal Distributions 
+
+1. Michael Jordan, Hall of Fame basketball player, made about 85% of his free throws during his prime years with the Chicago Bulls. During a free throw contest, he will attempt 10 shots. Assume all of his free throws are independent of one another. 
+
+a. What is the probability that Jordan makes exactly 7 of his attempts? 
+b. What is the probability that Jordan makes more than 7 free throws? 
+c. What is the probability that Jordan makes at least 7 of his attempts? 
 
 
 ```{r base, warning = F, message = F}
 library(tidyverse)
 
-single_trial_prob <- .5
+single_trial_prob <- .85
 
 num_trials <- 10
 
@@ -30,14 +75,14 @@ tibble(possible_outcomes, probs) %>%
   aes(xend = possible_outcomes,
       yend = 0) + 
   geom_segment(lty = "dotted") + 
-  labs(title = "Binomial Distribution of for ten events where probability of success for each event is .5  (success/failure probability is independent)" %>% 
+  labs(title = "Binomial Distribution of for ten events where probability of success for each event is .85  (success/failure probability is independent)" %>% 
          str_wrap()) + 
   geom_text(aes(label = probs %>% round(4)),
             nudge_y = .01) + 
   annotate(geom = "text", 
            x = 1.5,
            y = .2,
-           label = "P(n==k) == {Pi}",
+           label = "nCk(pi^k)*(1-pi)^(n-k)",
            parse = TRUE,
            size = 5)
 ```
@@ -52,16 +97,123 @@ tibble(possible_outcomes, probs) %>%
          prob = .8) %>% 
   sum()
 
-# or 
-dbinom(8, 10, .8) + 
+# or probabilities associated with single outcome
+dbinom(x = 8, size = 10, .8) + 
   dbinom(9, 10, .8) +
   dbinom(10, 10, .8)
 ```
 
 ```{r more2}
 # what is the probability of exactly 5 successes in 10 trials
-# when each trial is chance event with probility .5 success
+# when each trial is chance event with probability .5 success
 dbinom(5, 10, .5)
+
+
+
+
+```
+
+
+
+
+---
+
+$$\binom{n}k(\pi^k)(1-\pi)^{n-k}$$
+
+--
+
+Where n choose k (first part)
+
+$$\frac{n!}{(n-k)!k!}  $$ 
+
+---
+
+
+```{r}
+choose(5,2) *
+  .341^2 *
+  (1 - .341)^3
+
+dbinom(2, 5, .341)
+```
+
+
+2. Historically, a Soldier hits a target at 50 meters 80% of the time. Assume shots are independent of one another. 
+
+a. What is the probability that the Soldier misses on the first two shots? 
+b. What is the probability that the Soldier misses a few in a row, and then hits the target on the 4th shot? 
+c. What is the probability that the Soldier requires at least 4 shots before hitting the target? 
+
+
+```{r}
+library(tidyverse)
+
+single_trial_prob <- .8
+
+num_trials <- 10
+
+0:num_trials ->
+  possible_outcomes
+
+dgeom(x = possible_outcomes, 
+       prob = single_trial_prob) ->
+  probs
+
+tibble(possible_outcomes, probs) %>% 
+  ggplot() + 
+  aes(x = possible_outcomes) +
+  scale_x_continuous(breaks = possible_outcomes) +
+  aes(y = probs) + 
+  geom_point() + 
+  aes(xend = possible_outcomes,
+      yend = 0) + 
+  geom_segment(lty = "dotted") + 
+  labs(title = "Geometric Distribution success by events where probability of success for each event is .8  (success/failure probability is independent)" %>% 
+         str_wrap()) + 
+  geom_text(aes(label = probs %>% round(4)),
+            nudge_y = .01) + 
+  annotate(geom = "text", 
+           x = 1.5,
+           y = 1,
+           label = "(pi^k)*(1-pi)^(n-k)",
+           parse = TRUE,
+           size = 5)
+
+```
+
+
+---
+
+3. The weekly amount of diesel fuel your unit uses was observed, over a long period of time, to be approximately normally distributed with a mean of 400 gallons and a variance of 400 gallons^2. 
+
+a. If 420 gallons are budgeted for next week, what is the probability that the actual amount consumed will be within the budget? 
+b. If 450 gallons are budgeted for next week, what is the probability that the actual amount consumed will exceed the budgeted amount? 
+c. What is the probability your unit uses between 390 and 425 gallons of fuel 
+
+
+```{r}
+library(ggxmean)
+ggxmean:::stamp_space() +
+  stamp_normal_dist(sd = 400^.5, mean = 400) + 
+  stamp_normal_dist_zlines(sd = 400^.5, # sd = 20
+                           mean = 400,
+                           height = 20) ->
+basenormal
+
+basenormal
+
+basenormal +
+  geom_vline(xintercept = 420, color = "green")
+
+
+basenormal + 
+  geom_vline(xintercept = 450, color = "blue")
+
+basenormal + 
+  geom_vline(xintercept = c(390, 425), 
+             linetype = "dotted",
+             color = "red")
+
 
 
 ```

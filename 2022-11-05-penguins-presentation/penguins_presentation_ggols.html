@@ -1,0 +1,3261 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>1. Snappy Title: Predictive Power and the Palmer Penguins</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="3. Authors: Dr. Reynolds" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# 1. Snappy Title: Predictive Power and the Palmer Penguins
+## 2. Descriptive title: Does bill length predict bill depth?
+### 3. Authors: Dr. Reynolds
+
+---
+
+
+
+
+
+## 4. A compelling visual that has to do with your question:
+
+![](https://allisonhorst.github.io/palmerpenguins/reference/figures/culmen_depth.png)
+
+---
+
+![](https://allisonhorst.github.io/palmerpenguins/reference/figures/lter_penguins.png)
+
+---
+
+``` r
+install.packages("ggols")
+```
+
+And the development version from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("EvaMaeRey/ggols")
+```
+
+---
+
+## ggxmean gives us all the geom_lm_* functions
+
+---
+
+
+count: false
+ 
+
+.panel1-null-auto[
+
+```r
+*library(tidyverse)
+```
+]
+ 
+.panel2-null-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-null-auto[
+
+```r
+library(tidyverse)
+*library(ggxmean)
+```
+]
+ 
+.panel2-null-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-null-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+*ggplot(palmerpenguins::penguins)
+```
+]
+ 
+.panel2-null-auto[
+![](penguins_presentation_ggols_files/figure-html/null_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-null-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+* aes(x = bill_length_mm, y = bill_depth_mm)
+```
+]
+ 
+.panel2-null-auto[
+![](penguins_presentation_ggols_files/figure-html/null_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-null-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm) +
+* geom_point()
+```
+]
+ 
+.panel2-null-auto[
+![](penguins_presentation_ggols_files/figure-html/null_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-null-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm) +
+  geom_point() +
+* geom_y_mean()
+```
+]
+ 
+.panel2-null-auto[
+![](penguins_presentation_ggols_files/figure-html/null_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-null-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm) +
+  geom_point() +
+  geom_y_mean() +
+* ggxmean:::geom_ydiff(color = "darkred")
+```
+]
+ 
+.panel2-null-auto[
+![](penguins_presentation_ggols_files/figure-html/null_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-null-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm) +
+  geom_point() +
+  geom_y_mean() +
+  ggxmean:::geom_ydiff(color = "darkred") +
+* geom_y_mean_label()
+```
+]
+ 
+.panel2-null-auto[
+![](penguins_presentation_ggols_files/figure-html/null_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-null-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-null-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-null-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-x-auto[
+
+```r
+*library(tidyverse)
+```
+]
+ 
+.panel2-x-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-x-auto[
+
+```r
+library(tidyverse)
+*library(ggxmean)
+```
+]
+ 
+.panel2-x-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-x-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+*ggplot(palmerpenguins::penguins)
+```
+]
+ 
+.panel2-x-auto[
+![](penguins_presentation_ggols_files/figure-html/x_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-x-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+* aes(y = bill_depth_mm,
+*     x = bill_length_mm)
+```
+]
+ 
+.panel2-x-auto[
+![](penguins_presentation_ggols_files/figure-html/x_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-x-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm,
+      x = bill_length_mm) +
+* geom_point()
+```
+]
+ 
+.panel2-x-auto[
+![](penguins_presentation_ggols_files/figure-html/x_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-x-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm,
+      x = bill_length_mm) +
+  geom_point() +
+* geom_lm()
+```
+]
+ 
+.panel2-x-auto[
+![](penguins_presentation_ggols_files/figure-html/x_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-x-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm,
+      x = bill_length_mm) +
+  geom_point() +
+  geom_lm() +
+* geom_lm_conf_int()
+```
+]
+ 
+.panel2-x-auto[
+![](penguins_presentation_ggols_files/figure-html/x_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-x-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm,
+      x = bill_length_mm) +
+  geom_point() +
+  geom_lm() +
+  geom_lm_conf_int() +
+* geom_lm_residuals(color = "darkred")
+```
+]
+ 
+.panel2-x-auto[
+![](penguins_presentation_ggols_files/figure-html/x_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-x-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm,
+      x = bill_length_mm) +
+  geom_point() +
+  geom_lm() +
+  geom_lm_conf_int() +
+  geom_lm_residuals(color = "darkred") +
+* geom_lm_fitted()
+```
+]
+ 
+.panel2-x-auto[
+![](penguins_presentation_ggols_files/figure-html/x_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-x-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm,
+      x = bill_length_mm) +
+  geom_point() +
+  geom_lm() +
+  geom_lm_conf_int() +
+  geom_lm_residuals(color = "darkred") +
+  geom_lm_fitted() +
+* geom_lm_formula()
+```
+]
+ 
+.panel2-x-auto[
+![](penguins_presentation_ggols_files/figure-html/x_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-x-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm,
+      x = bill_length_mm) +
+  geom_point() +
+  geom_lm() +
+  geom_lm_conf_int() +
+  geom_lm_residuals(color = "darkred") +
+  geom_lm_fitted() +
+  geom_lm_formula() +
+* ggols:::geom_lm_rsquared()   #should be moved to ggxmean
+```
+]
+ 
+.panel2-x-auto[
+![](penguins_presentation_ggols_files/figure-html/x_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-x-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm,
+      x = bill_length_mm) +
+  geom_point() +
+  geom_lm() +
+  geom_lm_conf_int() +
+  geom_lm_residuals(color = "darkred") +
+  geom_lm_fitted() +
+  geom_lm_formula() +
+  ggols:::geom_lm_rsquared() +  #should be moved to ggxmean
+* geom_lm_intercept_label(hjust = -.2)
+```
+]
+ 
+.panel2-x-auto[
+![](penguins_presentation_ggols_files/figure-html/x_auto_12_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-x-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm,
+      x = bill_length_mm) +
+  geom_point() +
+  geom_lm() +
+  geom_lm_conf_int() +
+  geom_lm_residuals(color = "darkred") +
+  geom_lm_fitted() +
+  geom_lm_formula() +
+  ggols:::geom_lm_rsquared() +  #should be moved to ggxmean
+  geom_lm_intercept_label(hjust = -.2) +
+* geom_lm_intercept(color = "blue")
+```
+]
+ 
+.panel2-x-auto[
+![](penguins_presentation_ggols_files/figure-html/x_auto_13_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-x-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-x-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-x-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+class: inverse, center, middle
+
+# Visualization, adding indicator var
+
+---
+
+
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+*library(ggols)
+```
+]
+ 
+.panel2-indicator-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+library(ggols)
+
+*ggplot(palmerpenguins::penguins)
+```
+]
+ 
+.panel2-indicator-auto[
+![](penguins_presentation_ggols_files/figure-html/indicator_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+library(ggols)
+
+ggplot(palmerpenguins::penguins) +
+* aes(y = bill_depth_mm, x = bill_length_mm)
+```
+]
+ 
+.panel2-indicator-auto[
+![](penguins_presentation_ggols_files/figure-html/indicator_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+library(ggols)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+* geom_point()
+```
+]
+ 
+.panel2-indicator-auto[
+![](penguins_presentation_ggols_files/figure-html/indicator_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+library(ggols)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+* aes(color = species)
+```
+]
+ 
+.panel2-indicator-auto[
+![](penguins_presentation_ggols_files/figure-html/indicator_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+library(ggols)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+* aes(indicator = species)
+```
+]
+ 
+.panel2-indicator-auto[
+![](penguins_presentation_ggols_files/figure-html/indicator_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+library(ggols)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+* geom_lm_indicator()
+```
+]
+ 
+.panel2-indicator-auto[
+![](penguins_presentation_ggols_files/figure-html/indicator_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+library(ggols)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_indicator() +
+* geom_lm_indicator_conf_int()
+```
+]
+ 
+.panel2-indicator-auto[
+![](penguins_presentation_ggols_files/figure-html/indicator_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+library(ggols)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_indicator() +
+  geom_lm_indicator_conf_int() +
+* geom_lm_indicator_residuals(color = "darkred")
+```
+]
+ 
+.panel2-indicator-auto[
+![](penguins_presentation_ggols_files/figure-html/indicator_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+library(ggols)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_indicator() +
+  geom_lm_indicator_conf_int() +
+  geom_lm_indicator_residuals(color = "darkred") +
+* geom_lm_indicator_fitted()
+```
+]
+ 
+.panel2-indicator-auto[
+![](penguins_presentation_ggols_files/figure-html/indicator_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+library(ggols)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_indicator() +
+  geom_lm_indicator_conf_int() +
+  geom_lm_indicator_residuals(color = "darkred") +
+  geom_lm_indicator_fitted() +
+* geom_lm_indicator_formula()
+```
+]
+ 
+.panel2-indicator-auto[
+![](penguins_presentation_ggols_files/figure-html/indicator_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+library(ggols)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_indicator() +
+  geom_lm_indicator_conf_int() +
+  geom_lm_indicator_residuals(color = "darkred") +
+  geom_lm_indicator_fitted() +
+  geom_lm_indicator_formula() +
+* geom_lm_indicator_rsquared()
+```
+]
+ 
+.panel2-indicator-auto[
+![](penguins_presentation_ggols_files/figure-html/indicator_auto_12_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+library(ggols)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_indicator() +
+  geom_lm_indicator_conf_int() +
+  geom_lm_indicator_residuals(color = "darkred") +
+  geom_lm_indicator_fitted() +
+  geom_lm_indicator_formula() +
+  geom_lm_indicator_rsquared() +
+* geom_lm_indicator_intercept(color = "blue")
+```
+]
+ 
+.panel2-indicator-auto[
+![](penguins_presentation_ggols_files/figure-html/indicator_auto_13_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-indicator-auto[
+
+```r
+library(ggols)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_indicator() +
+  geom_lm_indicator_conf_int() +
+  geom_lm_indicator_residuals(color = "darkred") +
+  geom_lm_indicator_fitted() +
+  geom_lm_indicator_formula() +
+  geom_lm_indicator_rsquared() +
+  geom_lm_indicator_intercept(color = "blue") +
+* geom_lm_indicator_intercept_label(hjust = -.2)
+```
+]
+ 
+.panel2-indicator-auto[
+![](penguins_presentation_ggols_files/figure-html/indicator_auto_14_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-indicator-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-indicator-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-indicator-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+class: inverse, center, middle
+
+# Visualization, adding indicator interaction
+
+
+---
+
+
+count: false
+ 
+
+.panel1-interaction-auto[
+
+```r
+*ggplot(palmerpenguins::penguins)
+```
+]
+ 
+.panel2-interaction-auto[
+![](penguins_presentation_ggols_files/figure-html/interaction_auto_01_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-interaction-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+* aes(y = bill_depth_mm, x = bill_length_mm)
+```
+]
+ 
+.panel2-interaction-auto[
+![](penguins_presentation_ggols_files/figure-html/interaction_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-interaction-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+* geom_point()
+```
+]
+ 
+.panel2-interaction-auto[
+![](penguins_presentation_ggols_files/figure-html/interaction_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-interaction-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+* aes(color = species)
+```
+]
+ 
+.panel2-interaction-auto[
+![](penguins_presentation_ggols_files/figure-html/interaction_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-interaction-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+* aes(indicator = species)
+```
+]
+ 
+.panel2-interaction-auto[
+![](penguins_presentation_ggols_files/figure-html/interaction_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-interaction-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+* geom_lm_interaction()
+```
+]
+ 
+.panel2-interaction-auto[
+![](penguins_presentation_ggols_files/figure-html/interaction_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-interaction-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_interaction() +
+* geom_lm_interaction_conf_int()
+```
+]
+ 
+.panel2-interaction-auto[
+![](penguins_presentation_ggols_files/figure-html/interaction_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-interaction-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_interaction() +
+  geom_lm_interaction_conf_int() +
+* geom_lm_interaction_residuals(color = "darkred")
+```
+]
+ 
+.panel2-interaction-auto[
+![](penguins_presentation_ggols_files/figure-html/interaction_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-interaction-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_interaction() +
+  geom_lm_interaction_conf_int() +
+  geom_lm_interaction_residuals(color = "darkred") +
+* geom_lm_interaction_fitted()
+```
+]
+ 
+.panel2-interaction-auto[
+![](penguins_presentation_ggols_files/figure-html/interaction_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-interaction-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_interaction() +
+  geom_lm_interaction_conf_int() +
+  geom_lm_interaction_residuals(color = "darkred") +
+  geom_lm_interaction_fitted() +
+* geom_lm_interaction_formula()
+```
+]
+ 
+.panel2-interaction-auto[
+![](penguins_presentation_ggols_files/figure-html/interaction_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-interaction-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_interaction() +
+  geom_lm_interaction_conf_int() +
+  geom_lm_interaction_residuals(color = "darkred") +
+  geom_lm_interaction_fitted() +
+  geom_lm_interaction_formula() +
+* geom_lm_interaction_rsquared()
+```
+]
+ 
+.panel2-interaction-auto[
+![](penguins_presentation_ggols_files/figure-html/interaction_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-interaction-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_interaction() +
+  geom_lm_interaction_conf_int() +
+  geom_lm_interaction_residuals(color = "darkred") +
+  geom_lm_interaction_fitted() +
+  geom_lm_interaction_formula() +
+  geom_lm_interaction_rsquared() +
+* geom_lm_interaction_intercept(color = "blue")
+```
+]
+ 
+.panel2-interaction-auto[
+![](penguins_presentation_ggols_files/figure-html/interaction_auto_12_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-interaction-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_interaction() +
+  geom_lm_interaction_conf_int() +
+  geom_lm_interaction_residuals(color = "darkred") +
+  geom_lm_interaction_fitted() +
+  geom_lm_interaction_formula() +
+  geom_lm_interaction_rsquared() +
+  geom_lm_interaction_intercept(color = "blue") +
+* geom_lm_interaction_intercept_label(hjust = -.2)
+```
+]
+ 
+.panel2-interaction-auto[
+![](penguins_presentation_ggols_files/figure-html/interaction_auto_13_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-interaction-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-interaction-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-interaction-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+class: inverse, center, middle
+
+# Visualization, and two indicator variables
+
+
+---
+
+
+count: false
+ 
+
+.panel1-int2-auto[
+
+```r
+*ggplot(palmerpenguins::penguins)
+```
+]
+ 
+.panel2-int2-auto[
+![](penguins_presentation_ggols_files/figure-html/int2_auto_01_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-int2-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+* aes(x = bill_length_mm, y = bill_depth_mm,
+*     indicator = species, indicator2 = sex,
+*     color = species, shape = sex)
+```
+]
+ 
+.panel2-int2-auto[
+![](penguins_presentation_ggols_files/figure-html/int2_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-int2-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm,
+      indicator = species, indicator2 = sex,
+      color = species, shape = sex) +
+* geom_point()
+```
+]
+ 
+.panel2-int2-auto[
+![](penguins_presentation_ggols_files/figure-html/int2_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-int2-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm,
+      indicator = species, indicator2 = sex,
+      color = species, shape = sex) +
+  geom_point() +
+* geom_lm_indicator2()
+```
+]
+ 
+.panel2-int2-auto[
+![](penguins_presentation_ggols_files/figure-html/int2_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-int2-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm,
+      indicator = species, indicator2 = sex,
+      color = species, shape = sex) +
+  geom_point() +
+  geom_lm_indicator2() +
+* geom_lm_indicator2_conf_int()
+```
+]
+ 
+.panel2-int2-auto[
+![](penguins_presentation_ggols_files/figure-html/int2_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-int2-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm,
+      indicator = species, indicator2 = sex,
+      color = species, shape = sex) +
+  geom_point() +
+  geom_lm_indicator2() +
+  geom_lm_indicator2_conf_int() +
+* geom_lm_indicator2_residuals(color = "darkred")
+```
+]
+ 
+.panel2-int2-auto[
+![](penguins_presentation_ggols_files/figure-html/int2_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-int2-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm,
+      indicator = species, indicator2 = sex,
+      color = species, shape = sex) +
+  geom_point() +
+  geom_lm_indicator2() +
+  geom_lm_indicator2_conf_int() +
+  geom_lm_indicator2_residuals(color = "darkred") +
+* geom_lm_indicator2_fitted()
+```
+]
+ 
+.panel2-int2-auto[
+![](penguins_presentation_ggols_files/figure-html/int2_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-int2-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm,
+      indicator = species, indicator2 = sex,
+      color = species, shape = sex) +
+  geom_point() +
+  geom_lm_indicator2() +
+  geom_lm_indicator2_conf_int() +
+  geom_lm_indicator2_residuals(color = "darkred") +
+  geom_lm_indicator2_fitted() +
+* geom_lm_indicator2_formula()
+```
+]
+ 
+.panel2-int2-auto[
+![](penguins_presentation_ggols_files/figure-html/int2_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-int2-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm,
+      indicator = species, indicator2 = sex,
+      color = species, shape = sex) +
+  geom_point() +
+  geom_lm_indicator2() +
+  geom_lm_indicator2_conf_int() +
+  geom_lm_indicator2_residuals(color = "darkred") +
+  geom_lm_indicator2_fitted() +
+  geom_lm_indicator2_formula() +
+* geom_lm_indicator2_rsquared()
+```
+]
+ 
+.panel2-int2-auto[
+![](penguins_presentation_ggols_files/figure-html/int2_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-int2-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm,
+      indicator = species, indicator2 = sex,
+      color = species, shape = sex) +
+  geom_point() +
+  geom_lm_indicator2() +
+  geom_lm_indicator2_conf_int() +
+  geom_lm_indicator2_residuals(color = "darkred") +
+  geom_lm_indicator2_fitted() +
+  geom_lm_indicator2_formula() +
+  geom_lm_indicator2_rsquared() +
+* geom_lm_indicator2_intercept(color = "blue")
+```
+]
+ 
+.panel2-int2-auto[
+![](penguins_presentation_ggols_files/figure-html/int2_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-int2-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm,
+      indicator = species, indicator2 = sex,
+      color = species, shape = sex) +
+  geom_point() +
+  geom_lm_indicator2() +
+  geom_lm_indicator2_conf_int() +
+  geom_lm_indicator2_residuals(color = "darkred") +
+  geom_lm_indicator2_fitted() +
+  geom_lm_indicator2_formula() +
+  geom_lm_indicator2_rsquared() +
+  geom_lm_indicator2_intercept(color = "blue") +
+* geom_lm_indicator2_intercept_label(hjust = -.2)
+```
+]
+ 
+.panel2-int2-auto[
+![](penguins_presentation_ggols_files/figure-html/int2_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-int2-auto[
+
+```r
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm,
+      indicator = species, indicator2 = sex,
+      color = species, shape = sex) +
+  geom_point() +
+  geom_lm_indicator2() +
+  geom_lm_indicator2_conf_int() +
+  geom_lm_indicator2_residuals(color = "darkred") +
+  geom_lm_indicator2_fitted() +
+  geom_lm_indicator2_formula() +
+  geom_lm_indicator2_rsquared() +
+  geom_lm_indicator2_intercept(color = "blue") +
+  geom_lm_indicator2_intercept_label(hjust = -.2) +
+* labs(title = "Penguins!")
+```
+]
+ 
+.panel2-int2-auto[
+![](penguins_presentation_ggols_files/figure-html/int2_auto_12_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-int2-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-int2-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-int2-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+
+
+---
+class: inverse, center, middle
+
+# big picture walk through
+
+---
+
+![](penguins_presentation_ggols_files/figure-html/null2-1.png)&lt;!-- --&gt;
+
+
+---
+
+
+
+
+![](penguins_presentation_ggols_files/figure-html/x2-1.png)&lt;!-- --&gt;
+
+---
+
+
+![](penguins_presentation_ggols_files/figure-html/indicator2-1.png)&lt;!-- --&gt;
+
+
+---
+
+
+
+
+![](penguins_presentation_ggols_files/figure-html/interaction2-1.png)&lt;!-- --&gt;
+
+
+
+
+---
+
+
+
+
+![](penguins_presentation_ggols_files/figure-html/int22-1.png)&lt;!-- --&gt;
+
+
+
+---
+class: inverse, center, middle
+
+# beyond penguins:  are we portable?
+
+---
+
+
+```r
+spotify_songs &lt;- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-21/spotify_songs.csv')
+```
+
+---
+
+count: false
+ 
+
+.panel1-spot-auto[
+
+```r
+*spotify_songs
+```
+]
+ 
+.panel2-spot-auto[
+
+```
+# A tibble: 32,833 × 23
+   track_id              track_name track_artist track_popularity track_album_id
+   &lt;chr&gt;                 &lt;chr&gt;      &lt;chr&gt;                   &lt;dbl&gt; &lt;chr&gt;         
+ 1 6f807x0ima9a1j3VPbc7… I Don't C… Ed Sheeran                 66 2oCs0DGTsRO98…
+ 2 0r7CVbZTWZgbTCYdfa2P… Memories … Maroon 5                   67 63rPSO264uRjW…
+ 3 1z1Hg7Vb0AhHDiEmnDE7… All the T… Zara Larsson               70 1HoSmj2eLcsrR…
+ 4 75FpbthrwQmzHlBJLuGd… Call You … The Chainsm…               60 1nqYsOef1yKKu…
+ 5 1e8PAfcKUYoKkxPhrHqw… Someone Y… Lewis Capal…               69 7m7vv9wlQ4i0L…
+ 6 7fvUMiyapMsRRxr07cU8… Beautiful… Ed Sheeran                 67 2yiy9cd2QktrN…
+ 7 2OAylPUDDfwRGfe0lYql… Never Rea… Katy Perry                 62 7INHYSeusaFly…
+ 8 6b1RNvAcJjQH73eZO4BL… Post Malo… Sam Feldt                  69 6703SRPsLkS4b…
+ 9 7bF6tCO3gFb8INrEDcjN… Tough Lov… Avicii                     68 7CvAfGvq4RlIw…
+10 1IXGILkPm0tOCNeq00kC… If I Can'… Shawn Mendes               67 4QxzbfSsVryEQ…
+# … with 32,823 more rows, and 18 more variables: track_album_name &lt;chr&gt;,
+#   track_album_release_date &lt;chr&gt;, playlist_name &lt;chr&gt;, playlist_id &lt;chr&gt;,
+#   playlist_genre &lt;chr&gt;, playlist_subgenre &lt;chr&gt;, danceability &lt;dbl&gt;,
+#   energy &lt;dbl&gt;, key &lt;dbl&gt;, loudness &lt;dbl&gt;, mode &lt;dbl&gt;, speechiness &lt;dbl&gt;,
+#   acousticness &lt;dbl&gt;, instrumentalness &lt;dbl&gt;, liveness &lt;dbl&gt;, valence &lt;dbl&gt;,
+#   tempo &lt;dbl&gt;, duration_ms &lt;dbl&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-spot-auto[
+
+```r
+spotify_songs %&gt;%
+* filter(track_popularity &gt; 0)
+```
+]
+ 
+.panel2-spot-auto[
+
+```
+# A tibble: 30,130 × 23
+   track_id              track_name track_artist track_popularity track_album_id
+   &lt;chr&gt;                 &lt;chr&gt;      &lt;chr&gt;                   &lt;dbl&gt; &lt;chr&gt;         
+ 1 6f807x0ima9a1j3VPbc7… I Don't C… Ed Sheeran                 66 2oCs0DGTsRO98…
+ 2 0r7CVbZTWZgbTCYdfa2P… Memories … Maroon 5                   67 63rPSO264uRjW…
+ 3 1z1Hg7Vb0AhHDiEmnDE7… All the T… Zara Larsson               70 1HoSmj2eLcsrR…
+ 4 75FpbthrwQmzHlBJLuGd… Call You … The Chainsm…               60 1nqYsOef1yKKu…
+ 5 1e8PAfcKUYoKkxPhrHqw… Someone Y… Lewis Capal…               69 7m7vv9wlQ4i0L…
+ 6 7fvUMiyapMsRRxr07cU8… Beautiful… Ed Sheeran                 67 2yiy9cd2QktrN…
+ 7 2OAylPUDDfwRGfe0lYql… Never Rea… Katy Perry                 62 7INHYSeusaFly…
+ 8 6b1RNvAcJjQH73eZO4BL… Post Malo… Sam Feldt                  69 6703SRPsLkS4b…
+ 9 7bF6tCO3gFb8INrEDcjN… Tough Lov… Avicii                     68 7CvAfGvq4RlIw…
+10 1IXGILkPm0tOCNeq00kC… If I Can'… Shawn Mendes               67 4QxzbfSsVryEQ…
+# … with 30,120 more rows, and 18 more variables: track_album_name &lt;chr&gt;,
+#   track_album_release_date &lt;chr&gt;, playlist_name &lt;chr&gt;, playlist_id &lt;chr&gt;,
+#   playlist_genre &lt;chr&gt;, playlist_subgenre &lt;chr&gt;, danceability &lt;dbl&gt;,
+#   energy &lt;dbl&gt;, key &lt;dbl&gt;, loudness &lt;dbl&gt;, mode &lt;dbl&gt;, speechiness &lt;dbl&gt;,
+#   acousticness &lt;dbl&gt;, instrumentalness &lt;dbl&gt;, liveness &lt;dbl&gt;, valence &lt;dbl&gt;,
+#   tempo &lt;dbl&gt;, duration_ms &lt;dbl&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-spot-auto[
+
+```r
+spotify_songs %&gt;%
+  filter(track_popularity &gt; 0) %&gt;%
+* mutate(latin = case_when(playlist_genre == "latin" ~ "Latin",
+*                              TRUE ~"not Latin"))
+```
+]
+ 
+.panel2-spot-auto[
+
+```
+# A tibble: 30,130 × 24
+   track_id              track_name track_artist track_popularity track_album_id
+   &lt;chr&gt;                 &lt;chr&gt;      &lt;chr&gt;                   &lt;dbl&gt; &lt;chr&gt;         
+ 1 6f807x0ima9a1j3VPbc7… I Don't C… Ed Sheeran                 66 2oCs0DGTsRO98…
+ 2 0r7CVbZTWZgbTCYdfa2P… Memories … Maroon 5                   67 63rPSO264uRjW…
+ 3 1z1Hg7Vb0AhHDiEmnDE7… All the T… Zara Larsson               70 1HoSmj2eLcsrR…
+ 4 75FpbthrwQmzHlBJLuGd… Call You … The Chainsm…               60 1nqYsOef1yKKu…
+ 5 1e8PAfcKUYoKkxPhrHqw… Someone Y… Lewis Capal…               69 7m7vv9wlQ4i0L…
+ 6 7fvUMiyapMsRRxr07cU8… Beautiful… Ed Sheeran                 67 2yiy9cd2QktrN…
+ 7 2OAylPUDDfwRGfe0lYql… Never Rea… Katy Perry                 62 7INHYSeusaFly…
+ 8 6b1RNvAcJjQH73eZO4BL… Post Malo… Sam Feldt                  69 6703SRPsLkS4b…
+ 9 7bF6tCO3gFb8INrEDcjN… Tough Lov… Avicii                     68 7CvAfGvq4RlIw…
+10 1IXGILkPm0tOCNeq00kC… If I Can'… Shawn Mendes               67 4QxzbfSsVryEQ…
+# … with 30,120 more rows, and 19 more variables: track_album_name &lt;chr&gt;,
+#   track_album_release_date &lt;chr&gt;, playlist_name &lt;chr&gt;, playlist_id &lt;chr&gt;,
+#   playlist_genre &lt;chr&gt;, playlist_subgenre &lt;chr&gt;, danceability &lt;dbl&gt;,
+#   energy &lt;dbl&gt;, key &lt;dbl&gt;, loudness &lt;dbl&gt;, mode &lt;dbl&gt;, speechiness &lt;dbl&gt;,
+#   acousticness &lt;dbl&gt;, instrumentalness &lt;dbl&gt;, liveness &lt;dbl&gt;, valence &lt;dbl&gt;,
+#   tempo &lt;dbl&gt;, duration_ms &lt;dbl&gt;, latin &lt;chr&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-spot-auto[
+
+```r
+spotify_songs %&gt;%
+  filter(track_popularity &gt; 0) %&gt;%
+  mutate(latin = case_when(playlist_genre == "latin" ~ "Latin",
+                               TRUE ~"not Latin")) %&gt;%
+* mutate(latin = fct_rev(latin))
+```
+]
+ 
+.panel2-spot-auto[
+
+```
+# A tibble: 30,130 × 24
+   track_id              track_name track_artist track_popularity track_album_id
+   &lt;chr&gt;                 &lt;chr&gt;      &lt;chr&gt;                   &lt;dbl&gt; &lt;chr&gt;         
+ 1 6f807x0ima9a1j3VPbc7… I Don't C… Ed Sheeran                 66 2oCs0DGTsRO98…
+ 2 0r7CVbZTWZgbTCYdfa2P… Memories … Maroon 5                   67 63rPSO264uRjW…
+ 3 1z1Hg7Vb0AhHDiEmnDE7… All the T… Zara Larsson               70 1HoSmj2eLcsrR…
+ 4 75FpbthrwQmzHlBJLuGd… Call You … The Chainsm…               60 1nqYsOef1yKKu…
+ 5 1e8PAfcKUYoKkxPhrHqw… Someone Y… Lewis Capal…               69 7m7vv9wlQ4i0L…
+ 6 7fvUMiyapMsRRxr07cU8… Beautiful… Ed Sheeran                 67 2yiy9cd2QktrN…
+ 7 2OAylPUDDfwRGfe0lYql… Never Rea… Katy Perry                 62 7INHYSeusaFly…
+ 8 6b1RNvAcJjQH73eZO4BL… Post Malo… Sam Feldt                  69 6703SRPsLkS4b…
+ 9 7bF6tCO3gFb8INrEDcjN… Tough Lov… Avicii                     68 7CvAfGvq4RlIw…
+10 1IXGILkPm0tOCNeq00kC… If I Can'… Shawn Mendes               67 4QxzbfSsVryEQ…
+# … with 30,120 more rows, and 19 more variables: track_album_name &lt;chr&gt;,
+#   track_album_release_date &lt;chr&gt;, playlist_name &lt;chr&gt;, playlist_id &lt;chr&gt;,
+#   playlist_genre &lt;chr&gt;, playlist_subgenre &lt;chr&gt;, danceability &lt;dbl&gt;,
+#   energy &lt;dbl&gt;, key &lt;dbl&gt;, loudness &lt;dbl&gt;, mode &lt;dbl&gt;, speechiness &lt;dbl&gt;,
+#   acousticness &lt;dbl&gt;, instrumentalness &lt;dbl&gt;, liveness &lt;dbl&gt;, valence &lt;dbl&gt;,
+#   tempo &lt;dbl&gt;, duration_ms &lt;dbl&gt;, latin &lt;fct&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-spot-auto[
+
+```r
+spotify_songs %&gt;%
+  filter(track_popularity &gt; 0) %&gt;%
+  mutate(latin = case_when(playlist_genre == "latin" ~ "Latin",
+                               TRUE ~"not Latin")) %&gt;%
+  mutate(latin = fct_rev(latin)) -&gt;
+*prep
+```
+]
+ 
+.panel2-spot-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-spot-auto[
+
+```r
+spotify_songs %&gt;%
+  filter(track_popularity &gt; 0) %&gt;%
+  mutate(latin = case_when(playlist_genre == "latin" ~ "Latin",
+                               TRUE ~"not Latin")) %&gt;%
+  mutate(latin = fct_rev(latin)) -&gt;
+prep
+
+*set.seed(12345)
+```
+]
+ 
+.panel2-spot-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-spot-auto[
+
+```r
+spotify_songs %&gt;%
+  filter(track_popularity &gt; 0) %&gt;%
+  mutate(latin = case_when(playlist_genre == "latin" ~ "Latin",
+                               TRUE ~"not Latin")) %&gt;%
+  mutate(latin = fct_rev(latin)) -&gt;
+prep
+
+set.seed(12345)
+*prep
+```
+]
+ 
+.panel2-spot-auto[
+
+```
+# A tibble: 30,130 × 24
+   track_id              track_name track_artist track_popularity track_album_id
+   &lt;chr&gt;                 &lt;chr&gt;      &lt;chr&gt;                   &lt;dbl&gt; &lt;chr&gt;         
+ 1 6f807x0ima9a1j3VPbc7… I Don't C… Ed Sheeran                 66 2oCs0DGTsRO98…
+ 2 0r7CVbZTWZgbTCYdfa2P… Memories … Maroon 5                   67 63rPSO264uRjW…
+ 3 1z1Hg7Vb0AhHDiEmnDE7… All the T… Zara Larsson               70 1HoSmj2eLcsrR…
+ 4 75FpbthrwQmzHlBJLuGd… Call You … The Chainsm…               60 1nqYsOef1yKKu…
+ 5 1e8PAfcKUYoKkxPhrHqw… Someone Y… Lewis Capal…               69 7m7vv9wlQ4i0L…
+ 6 7fvUMiyapMsRRxr07cU8… Beautiful… Ed Sheeran                 67 2yiy9cd2QktrN…
+ 7 2OAylPUDDfwRGfe0lYql… Never Rea… Katy Perry                 62 7INHYSeusaFly…
+ 8 6b1RNvAcJjQH73eZO4BL… Post Malo… Sam Feldt                  69 6703SRPsLkS4b…
+ 9 7bF6tCO3gFb8INrEDcjN… Tough Lov… Avicii                     68 7CvAfGvq4RlIw…
+10 1IXGILkPm0tOCNeq00kC… If I Can'… Shawn Mendes               67 4QxzbfSsVryEQ…
+# … with 30,120 more rows, and 19 more variables: track_album_name &lt;chr&gt;,
+#   track_album_release_date &lt;chr&gt;, playlist_name &lt;chr&gt;, playlist_id &lt;chr&gt;,
+#   playlist_genre &lt;chr&gt;, playlist_subgenre &lt;chr&gt;, danceability &lt;dbl&gt;,
+#   energy &lt;dbl&gt;, key &lt;dbl&gt;, loudness &lt;dbl&gt;, mode &lt;dbl&gt;, speechiness &lt;dbl&gt;,
+#   acousticness &lt;dbl&gt;, instrumentalness &lt;dbl&gt;, liveness &lt;dbl&gt;, valence &lt;dbl&gt;,
+#   tempo &lt;dbl&gt;, duration_ms &lt;dbl&gt;, latin &lt;fct&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-spot-auto[
+
+```r
+spotify_songs %&gt;%
+  filter(track_popularity &gt; 0) %&gt;%
+  mutate(latin = case_when(playlist_genre == "latin" ~ "Latin",
+                               TRUE ~"not Latin")) %&gt;%
+  mutate(latin = fct_rev(latin)) -&gt;
+prep
+
+set.seed(12345)
+prep %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-spot-auto[
+![](penguins_presentation_ggols_files/figure-html/spot_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-spot-auto[
+
+```r
+spotify_songs %&gt;%
+  filter(track_popularity &gt; 0) %&gt;%
+  mutate(latin = case_when(playlist_genre == "latin" ~ "Latin",
+                               TRUE ~"not Latin")) %&gt;%
+  mutate(latin = fct_rev(latin)) -&gt;
+prep
+
+set.seed(12345)
+prep %&gt;%
+  ggplot() +
+* aes(y = track_popularity,
+*     x = danceability,
+*     indicator = latin,
+*     color = latin)
+```
+]
+ 
+.panel2-spot-auto[
+![](penguins_presentation_ggols_files/figure-html/spot_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-spot-auto[
+
+```r
+spotify_songs %&gt;%
+  filter(track_popularity &gt; 0) %&gt;%
+  mutate(latin = case_when(playlist_genre == "latin" ~ "Latin",
+                               TRUE ~"not Latin")) %&gt;%
+  mutate(latin = fct_rev(latin)) -&gt;
+prep
+
+set.seed(12345)
+prep %&gt;%
+  ggplot() +
+  aes(y = track_popularity,
+      x = danceability,
+      indicator = latin,
+      color = latin) +
+* geom_point(alpha = .05)
+```
+]
+ 
+.panel2-spot-auto[
+![](penguins_presentation_ggols_files/figure-html/spot_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-spot-auto[
+
+```r
+spotify_songs %&gt;%
+  filter(track_popularity &gt; 0) %&gt;%
+  mutate(latin = case_when(playlist_genre == "latin" ~ "Latin",
+                               TRUE ~"not Latin")) %&gt;%
+  mutate(latin = fct_rev(latin)) -&gt;
+prep
+
+set.seed(12345)
+prep %&gt;%
+  ggplot() +
+  aes(y = track_popularity,
+      x = danceability,
+      indicator = latin,
+      color = latin) +
+  geom_point(alpha = .05) +
+* geom_point(data = . %&gt;% slice_sample(prop = .02),
+*            shape = 21, fill = "white")
+```
+]
+ 
+.panel2-spot-auto[
+![](penguins_presentation_ggols_files/figure-html/spot_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-spot-auto[
+
+```r
+spotify_songs %&gt;%
+  filter(track_popularity &gt; 0) %&gt;%
+  mutate(latin = case_when(playlist_genre == "latin" ~ "Latin",
+                               TRUE ~"not Latin")) %&gt;%
+  mutate(latin = fct_rev(latin)) -&gt;
+prep
+
+set.seed(12345)
+prep %&gt;%
+  ggplot() +
+  aes(y = track_popularity,
+      x = danceability,
+      indicator = latin,
+      color = latin) +
+  geom_point(alpha = .05) +
+  geom_point(data = . %&gt;% slice_sample(prop = .02),
+             shape = 21, fill = "white") +
+* geom_lm_indicator()
+```
+]
+ 
+.panel2-spot-auto[
+![](penguins_presentation_ggols_files/figure-html/spot_auto_12_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-spot-auto[
+
+```r
+spotify_songs %&gt;%
+  filter(track_popularity &gt; 0) %&gt;%
+  mutate(latin = case_when(playlist_genre == "latin" ~ "Latin",
+                               TRUE ~"not Latin")) %&gt;%
+  mutate(latin = fct_rev(latin)) -&gt;
+prep
+
+set.seed(12345)
+prep %&gt;%
+  ggplot() +
+  aes(y = track_popularity,
+      x = danceability,
+      indicator = latin,
+      color = latin) +
+  geom_point(alpha = .05) +
+  geom_point(data = . %&gt;% slice_sample(prop = .02),
+             shape = 21, fill = "white") +
+  geom_lm_indicator() +
+* geom_lm_indicator_conf_int()
+```
+]
+ 
+.panel2-spot-auto[
+![](penguins_presentation_ggols_files/figure-html/spot_auto_13_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-spot-auto[
+
+```r
+spotify_songs %&gt;%
+  filter(track_popularity &gt; 0) %&gt;%
+  mutate(latin = case_when(playlist_genre == "latin" ~ "Latin",
+                               TRUE ~"not Latin")) %&gt;%
+  mutate(latin = fct_rev(latin)) -&gt;
+prep
+
+set.seed(12345)
+prep %&gt;%
+  ggplot() +
+  aes(y = track_popularity,
+      x = danceability,
+      indicator = latin,
+      color = latin) +
+  geom_point(alpha = .05) +
+  geom_point(data = . %&gt;% slice_sample(prop = .02),
+             shape = 21, fill = "white") +
+  geom_lm_indicator() +
+  geom_lm_indicator_conf_int() +
+* geom_lm_indicator_formula()
+```
+]
+ 
+.panel2-spot-auto[
+![](penguins_presentation_ggols_files/figure-html/spot_auto_14_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-spot-auto[
+
+```r
+spotify_songs %&gt;%
+  filter(track_popularity &gt; 0) %&gt;%
+  mutate(latin = case_when(playlist_genre == "latin" ~ "Latin",
+                               TRUE ~"not Latin")) %&gt;%
+  mutate(latin = fct_rev(latin)) -&gt;
+prep
+
+set.seed(12345)
+prep %&gt;%
+  ggplot() +
+  aes(y = track_popularity,
+      x = danceability,
+      indicator = latin,
+      color = latin) +
+  geom_point(alpha = .05) +
+  geom_point(data = . %&gt;% slice_sample(prop = .02),
+             shape = 21, fill = "white") +
+  geom_lm_indicator() +
+  geom_lm_indicator_conf_int() +
+  geom_lm_indicator_formula() +
+* labs(title = "Songs!",
+*      subtitle = "Among songs w/ &gt;0 in track popularity")
+```
+]
+ 
+.panel2-spot-auto[
+![](penguins_presentation_ggols_files/figure-html/spot_auto_15_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-spot-auto[
+
+```r
+spotify_songs %&gt;%
+  filter(track_popularity &gt; 0) %&gt;%
+  mutate(latin = case_when(playlist_genre == "latin" ~ "Latin",
+                               TRUE ~"not Latin")) %&gt;%
+  mutate(latin = fct_rev(latin)) -&gt;
+prep
+
+set.seed(12345)
+prep %&gt;%
+  ggplot() +
+  aes(y = track_popularity,
+      x = danceability,
+      indicator = latin,
+      color = latin) +
+  geom_point(alpha = .05) +
+  geom_point(data = . %&gt;% slice_sample(prop = .02),
+             shape = 21, fill = "white") +
+  geom_lm_indicator() +
+  geom_lm_indicator_conf_int() +
+  geom_lm_indicator_formula() +
+  labs(title = "Songs!",
+       subtitle = "Among songs w/ &gt;0 in track popularity") +
+* labs(color = NULL)
+```
+]
+ 
+.panel2-spot-auto[
+![](penguins_presentation_ggols_files/figure-html/spot_auto_16_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-spot-auto[
+
+```r
+spotify_songs %&gt;%
+  filter(track_popularity &gt; 0) %&gt;%
+  mutate(latin = case_when(playlist_genre == "latin" ~ "Latin",
+                               TRUE ~"not Latin")) %&gt;%
+  mutate(latin = fct_rev(latin)) -&gt;
+prep
+
+set.seed(12345)
+prep %&gt;%
+  ggplot() +
+  aes(y = track_popularity,
+      x = danceability,
+      indicator = latin,
+      color = latin) +
+  geom_point(alpha = .05) +
+  geom_point(data = . %&gt;% slice_sample(prop = .02),
+             shape = 21, fill = "white") +
+  geom_lm_indicator() +
+  geom_lm_indicator_conf_int() +
+  geom_lm_indicator_formula() +
+  labs(title = "Songs!",
+       subtitle = "Among songs w/ &gt;0 in track popularity") +
+  labs(color = NULL) +
+* geom_lm_indicator_intercept()
+```
+]
+ 
+.panel2-spot-auto[
+![](penguins_presentation_ggols_files/figure-html/spot_auto_17_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-spot-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-spot-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-spot-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-cats-auto[
+
+```r
+*ma206data::chap10_CatJumpingFull
+```
+]
+ 
+.panel2-cats-auto[
+
+```
+# A tibble: 18 × 7
+   cat_id body_mass_g hind_limb_length_cm muscle_mass_g percent_body_fat
+    &lt;dbl&gt;       &lt;dbl&gt;               &lt;dbl&gt;         &lt;dbl&gt;            &lt;dbl&gt;
+ 1      1        3640                29.1          51.2               29
+ 2      2        2670                28.6          46.0               17
+ 3      3        5600                31.7          95.9               31
+ 4      4        4130                26.9          55.6               39
+ 5      5        3020                26.1          57.2               15
+ 6      6        2660                26.7          48.7               11
+ 7      7        3240                26.7          64.6               21
+ 8      8        5140                27.7          78.8               35
+ 9      9        3690                25.5          54.6               33
+10     10        3620                28.2          55.5               15
+11     11        5310                28.4          68.8               42
+12     12        5560                28.6          79.8               37
+13     13        3970                29.8          69.4               20
+14     14        3770                26.7          60.2               26
+15     15        5100                27.8          60.7               41
+16     16        2950                27.9          55.6               25
+17     17        7930                30.6          99.0               48
+18     18        3550                28.1          79.2               16
+# … with 2 more variables: takeoff_velocity_cm_sec &lt;dbl&gt;, sex_0_f_1_m &lt;dbl&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-cats-auto[
+
+```r
+ma206data::chap10_CatJumpingFull %&gt;%
+* mutate(sex = case_when(sex_0_f_1_m == 0 ~ "Female",
+*                        sex_0_f_1_m == 1 ~ "Male"))
+```
+]
+ 
+.panel2-cats-auto[
+
+```
+# A tibble: 18 × 8
+   cat_id body_mass_g hind_limb_length_cm muscle_mass_g percent_body_fat
+    &lt;dbl&gt;       &lt;dbl&gt;               &lt;dbl&gt;         &lt;dbl&gt;            &lt;dbl&gt;
+ 1      1        3640                29.1          51.2               29
+ 2      2        2670                28.6          46.0               17
+ 3      3        5600                31.7          95.9               31
+ 4      4        4130                26.9          55.6               39
+ 5      5        3020                26.1          57.2               15
+ 6      6        2660                26.7          48.7               11
+ 7      7        3240                26.7          64.6               21
+ 8      8        5140                27.7          78.8               35
+ 9      9        3690                25.5          54.6               33
+10     10        3620                28.2          55.5               15
+11     11        5310                28.4          68.8               42
+12     12        5560                28.6          79.8               37
+13     13        3970                29.8          69.4               20
+14     14        3770                26.7          60.2               26
+15     15        5100                27.8          60.7               41
+16     16        2950                27.9          55.6               25
+17     17        7930                30.6          99.0               48
+18     18        3550                28.1          79.2               16
+# … with 3 more variables: takeoff_velocity_cm_sec &lt;dbl&gt;, sex_0_f_1_m &lt;dbl&gt;,
+#   sex &lt;chr&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-cats-auto[
+
+```r
+ma206data::chap10_CatJumpingFull %&gt;%
+  mutate(sex = case_when(sex_0_f_1_m == 0 ~ "Female",
+                         sex_0_f_1_m == 1 ~ "Male")) %&gt;%
+* mutate(sex = factor(sex))
+```
+]
+ 
+.panel2-cats-auto[
+
+```
+# A tibble: 18 × 8
+   cat_id body_mass_g hind_limb_length_cm muscle_mass_g percent_body_fat
+    &lt;dbl&gt;       &lt;dbl&gt;               &lt;dbl&gt;         &lt;dbl&gt;            &lt;dbl&gt;
+ 1      1        3640                29.1          51.2               29
+ 2      2        2670                28.6          46.0               17
+ 3      3        5600                31.7          95.9               31
+ 4      4        4130                26.9          55.6               39
+ 5      5        3020                26.1          57.2               15
+ 6      6        2660                26.7          48.7               11
+ 7      7        3240                26.7          64.6               21
+ 8      8        5140                27.7          78.8               35
+ 9      9        3690                25.5          54.6               33
+10     10        3620                28.2          55.5               15
+11     11        5310                28.4          68.8               42
+12     12        5560                28.6          79.8               37
+13     13        3970                29.8          69.4               20
+14     14        3770                26.7          60.2               26
+15     15        5100                27.8          60.7               41
+16     16        2950                27.9          55.6               25
+17     17        7930                30.6          99.0               48
+18     18        3550                28.1          79.2               16
+# … with 3 more variables: takeoff_velocity_cm_sec &lt;dbl&gt;, sex_0_f_1_m &lt;dbl&gt;,
+#   sex &lt;fct&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-cats-auto[
+
+```r
+ma206data::chap10_CatJumpingFull %&gt;%
+  mutate(sex = case_when(sex_0_f_1_m == 0 ~ "Female",
+                         sex_0_f_1_m == 1 ~ "Male")) %&gt;%
+  mutate(sex = factor(sex)) %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-cats-auto[
+![](penguins_presentation_ggols_files/figure-html/cats_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cats-auto[
+
+```r
+ma206data::chap10_CatJumpingFull %&gt;%
+  mutate(sex = case_when(sex_0_f_1_m == 0 ~ "Female",
+                         sex_0_f_1_m == 1 ~ "Male")) %&gt;%
+  mutate(sex = factor(sex)) %&gt;%
+  ggplot() +
+* aes(y = muscle_mass_g,
+*     x = body_mass_g)
+```
+]
+ 
+.panel2-cats-auto[
+![](penguins_presentation_ggols_files/figure-html/cats_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cats-auto[
+
+```r
+ma206data::chap10_CatJumpingFull %&gt;%
+  mutate(sex = case_when(sex_0_f_1_m == 0 ~ "Female",
+                         sex_0_f_1_m == 1 ~ "Male")) %&gt;%
+  mutate(sex = factor(sex)) %&gt;%
+  ggplot() +
+  aes(y = muscle_mass_g,
+      x = body_mass_g) +
+* geom_point(shape = 21, fill = "white", size = 1,
+*            stroke = 1)
+```
+]
+ 
+.panel2-cats-auto[
+![](penguins_presentation_ggols_files/figure-html/cats_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cats-auto[
+
+```r
+ma206data::chap10_CatJumpingFull %&gt;%
+  mutate(sex = case_when(sex_0_f_1_m == 0 ~ "Female",
+                         sex_0_f_1_m == 1 ~ "Male")) %&gt;%
+  mutate(sex = factor(sex)) %&gt;%
+  ggplot() +
+  aes(y = muscle_mass_g,
+      x = body_mass_g) +
+  geom_point(shape = 21, fill = "white", size = 1,
+             stroke = 1) +
+* aes(color = sex,
+*     indicator = sex)
+```
+]
+ 
+.panel2-cats-auto[
+![](penguins_presentation_ggols_files/figure-html/cats_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cats-auto[
+
+```r
+ma206data::chap10_CatJumpingFull %&gt;%
+  mutate(sex = case_when(sex_0_f_1_m == 0 ~ "Female",
+                         sex_0_f_1_m == 1 ~ "Male")) %&gt;%
+  mutate(sex = factor(sex)) %&gt;%
+  ggplot() +
+  aes(y = muscle_mass_g,
+      x = body_mass_g) +
+  geom_point(shape = 21, fill = "white", size = 1,
+             stroke = 1) +
+  aes(color = sex,
+      indicator = sex) +
+* geom_lm_indicator()
+```
+]
+ 
+.panel2-cats-auto[
+![](penguins_presentation_ggols_files/figure-html/cats_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cats-auto[
+
+```r
+ma206data::chap10_CatJumpingFull %&gt;%
+  mutate(sex = case_when(sex_0_f_1_m == 0 ~ "Female",
+                         sex_0_f_1_m == 1 ~ "Male")) %&gt;%
+  mutate(sex = factor(sex)) %&gt;%
+  ggplot() +
+  aes(y = muscle_mass_g,
+      x = body_mass_g) +
+  geom_point(shape = 21, fill = "white", size = 1,
+             stroke = 1) +
+  aes(color = sex,
+      indicator = sex) +
+  geom_lm_indicator() +
+* geom_lm_indicator_conf_int()
+```
+]
+ 
+.panel2-cats-auto[
+![](penguins_presentation_ggols_files/figure-html/cats_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cats-auto[
+
+```r
+ma206data::chap10_CatJumpingFull %&gt;%
+  mutate(sex = case_when(sex_0_f_1_m == 0 ~ "Female",
+                         sex_0_f_1_m == 1 ~ "Male")) %&gt;%
+  mutate(sex = factor(sex)) %&gt;%
+  ggplot() +
+  aes(y = muscle_mass_g,
+      x = body_mass_g) +
+  geom_point(shape = 21, fill = "white", size = 1,
+             stroke = 1) +
+  aes(color = sex,
+      indicator = sex) +
+  geom_lm_indicator() +
+  geom_lm_indicator_conf_int() +
+* geom_lm_indicator_formula()
+```
+]
+ 
+.panel2-cats-auto[
+![](penguins_presentation_ggols_files/figure-html/cats_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cats-auto[
+
+```r
+ma206data::chap10_CatJumpingFull %&gt;%
+  mutate(sex = case_when(sex_0_f_1_m == 0 ~ "Female",
+                         sex_0_f_1_m == 1 ~ "Male")) %&gt;%
+  mutate(sex = factor(sex)) %&gt;%
+  ggplot() +
+  aes(y = muscle_mass_g,
+      x = body_mass_g) +
+  geom_point(shape = 21, fill = "white", size = 1,
+             stroke = 1) +
+  aes(color = sex,
+      indicator = sex) +
+  geom_lm_indicator() +
+  geom_lm_indicator_conf_int() +
+  geom_lm_indicator_formula() +
+* labs(title = "Cats!")
+```
+]
+ 
+.panel2-cats-auto[
+![](penguins_presentation_ggols_files/figure-html/cats_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cats-auto[
+
+```r
+ma206data::chap10_CatJumpingFull %&gt;%
+  mutate(sex = case_when(sex_0_f_1_m == 0 ~ "Female",
+                         sex_0_f_1_m == 1 ~ "Male")) %&gt;%
+  mutate(sex = factor(sex)) %&gt;%
+  ggplot() +
+  aes(y = muscle_mass_g,
+      x = body_mass_g) +
+  geom_point(shape = 21, fill = "white", size = 1,
+             stroke = 1) +
+  aes(color = sex,
+      indicator = sex) +
+  geom_lm_indicator() +
+  geom_lm_indicator_conf_int() +
+  geom_lm_indicator_formula() +
+  labs(title = "Cats!") +
+* geom_lm_indicator_fitted(alpha = .2)
+```
+]
+ 
+.panel2-cats-auto[
+![](penguins_presentation_ggols_files/figure-html/cats_auto_12_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cats-auto[
+
+```r
+ma206data::chap10_CatJumpingFull %&gt;%
+  mutate(sex = case_when(sex_0_f_1_m == 0 ~ "Female",
+                         sex_0_f_1_m == 1 ~ "Male")) %&gt;%
+  mutate(sex = factor(sex)) %&gt;%
+  ggplot() +
+  aes(y = muscle_mass_g,
+      x = body_mass_g) +
+  geom_point(shape = 21, fill = "white", size = 1,
+             stroke = 1) +
+  aes(color = sex,
+      indicator = sex) +
+  geom_lm_indicator() +
+  geom_lm_indicator_conf_int() +
+  geom_lm_indicator_formula() +
+  labs(title = "Cats!") +
+  geom_lm_indicator_fitted(alpha = .2) +
+* geom_lm_indicator_residuals(alpha = .2)
+```
+]
+ 
+.panel2-cats-auto[
+![](penguins_presentation_ggols_files/figure-html/cats_auto_13_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cats-auto[
+
+```r
+ma206data::chap10_CatJumpingFull %&gt;%
+  mutate(sex = case_when(sex_0_f_1_m == 0 ~ "Female",
+                         sex_0_f_1_m == 1 ~ "Male")) %&gt;%
+  mutate(sex = factor(sex)) %&gt;%
+  ggplot() +
+  aes(y = muscle_mass_g,
+      x = body_mass_g) +
+  geom_point(shape = 21, fill = "white", size = 1,
+             stroke = 1) +
+  aes(color = sex,
+      indicator = sex) +
+  geom_lm_indicator() +
+  geom_lm_indicator_conf_int() +
+  geom_lm_indicator_formula() +
+  labs(title = "Cats!") +
+  geom_lm_indicator_fitted(alpha = .2) +
+  geom_lm_indicator_residuals(alpha = .2) +
+* geom_lm_indicator_intercept()
+```
+]
+ 
+.panel2-cats-auto[
+![](penguins_presentation_ggols_files/figure-html/cats_auto_14_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cats-auto[
+
+```r
+ma206data::chap10_CatJumpingFull %&gt;%
+  mutate(sex = case_when(sex_0_f_1_m == 0 ~ "Female",
+                         sex_0_f_1_m == 1 ~ "Male")) %&gt;%
+  mutate(sex = factor(sex)) %&gt;%
+  ggplot() +
+  aes(y = muscle_mass_g,
+      x = body_mass_g) +
+  geom_point(shape = 21, fill = "white", size = 1,
+             stroke = 1) +
+  aes(color = sex,
+      indicator = sex) +
+  geom_lm_indicator() +
+  geom_lm_indicator_conf_int() +
+  geom_lm_indicator_formula() +
+  labs(title = "Cats!") +
+  geom_lm_indicator_fitted(alpha = .2) +
+  geom_lm_indicator_residuals(alpha = .2) +
+  geom_lm_indicator_intercept() +
+* geom_lm_indicator_intercept_label(hjust = -.1)
+```
+]
+ 
+.panel2-cats-auto[
+![](penguins_presentation_ggols_files/figure-html/cats_auto_15_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cats-auto[
+
+```r
+ma206data::chap10_CatJumpingFull %&gt;%
+  mutate(sex = case_when(sex_0_f_1_m == 0 ~ "Female",
+                         sex_0_f_1_m == 1 ~ "Male")) %&gt;%
+  mutate(sex = factor(sex)) %&gt;%
+  ggplot() +
+  aes(y = muscle_mass_g,
+      x = body_mass_g) +
+  geom_point(shape = 21, fill = "white", size = 1,
+             stroke = 1) +
+  aes(color = sex,
+      indicator = sex) +
+  geom_lm_indicator() +
+  geom_lm_indicator_conf_int() +
+  geom_lm_indicator_formula() +
+  labs(title = "Cats!") +
+  geom_lm_indicator_fitted(alpha = .2) +
+  geom_lm_indicator_residuals(alpha = .2) +
+  geom_lm_indicator_intercept() +
+  geom_lm_indicator_intercept_label(hjust = -.1)
+```
+]
+ 
+.panel2-cats-auto[
+![](penguins_presentation_ggols_files/figure-html/cats_auto_16_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-cats-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-cats-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-cats-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-nhanes-auto[
+
+```r
+*library(NHANES)
+```
+]
+ 
+.panel2-nhanes-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-nhanes-auto[
+
+```r
+library(NHANES)
+
+*set.seed(123985)
+```
+]
+ 
+.panel2-nhanes-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-nhanes-auto[
+
+```r
+library(NHANES)
+
+set.seed(123985)
+*ggplot(data = NHANES)
+```
+]
+ 
+.panel2-nhanes-auto[
+![](penguins_presentation_ggols_files/figure-html/nhanes_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-nhanes-auto[
+
+```r
+library(NHANES)
+
+set.seed(123985)
+ggplot(data = NHANES) +
+* aes(y = Pulse,
+*     x = Age)
+```
+]
+ 
+.panel2-nhanes-auto[
+![](penguins_presentation_ggols_files/figure-html/nhanes_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-nhanes-auto[
+
+```r
+library(NHANES)
+
+set.seed(123985)
+ggplot(data = NHANES) +
+  aes(y = Pulse,
+      x = Age) +
+* geom_point(alpha = .05)
+```
+]
+ 
+.panel2-nhanes-auto[
+![](penguins_presentation_ggols_files/figure-html/nhanes_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-nhanes-auto[
+
+```r
+library(NHANES)
+
+set.seed(123985)
+ggplot(data = NHANES) +
+  aes(y = Pulse,
+      x = Age) +
+  geom_point(alpha = .05) +
+* geom_jitter(data = . %&gt;%
+*              slice_sample(prop = .1),
+*            shape = 21, fill = "white",
+*            height = .25, width = 0)
+```
+]
+ 
+.panel2-nhanes-auto[
+![](penguins_presentation_ggols_files/figure-html/nhanes_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-nhanes-auto[
+
+```r
+library(NHANES)
+
+set.seed(123985)
+ggplot(data = NHANES) +
+  aes(y = Pulse,
+      x = Age) +
+  geom_point(alpha = .05) +
+  geom_jitter(data = . %&gt;%
+               slice_sample(prop = .1),
+             shape = 21, fill = "white",
+             height = .25, width = 0) +
+* aes(color = SleepTrouble, indicator = SleepTrouble)
+```
+]
+ 
+.panel2-nhanes-auto[
+![](penguins_presentation_ggols_files/figure-html/nhanes_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-nhanes-auto[
+
+```r
+library(NHANES)
+
+set.seed(123985)
+ggplot(data = NHANES) +
+  aes(y = Pulse,
+      x = Age) +
+  geom_point(alpha = .05) +
+  geom_jitter(data = . %&gt;%
+               slice_sample(prop = .1),
+             shape = 21, fill = "white",
+             height = .25, width = 0) +
+  aes(color = SleepTrouble, indicator = SleepTrouble)  +
+* geom_lm_interaction()
+```
+]
+ 
+.panel2-nhanes-auto[
+![](penguins_presentation_ggols_files/figure-html/nhanes_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-nhanes-auto[
+
+```r
+library(NHANES)
+
+set.seed(123985)
+ggplot(data = NHANES) +
+  aes(y = Pulse,
+      x = Age) +
+  geom_point(alpha = .05) +
+  geom_jitter(data = . %&gt;%
+               slice_sample(prop = .1),
+             shape = 21, fill = "white",
+             height = .25, width = 0) +
+  aes(color = SleepTrouble, indicator = SleepTrouble)  +
+  geom_lm_interaction() +
+* geom_lm_interaction_conf_int()
+```
+]
+ 
+.panel2-nhanes-auto[
+![](penguins_presentation_ggols_files/figure-html/nhanes_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-nhanes-auto[
+
+```r
+library(NHANES)
+
+set.seed(123985)
+ggplot(data = NHANES) +
+  aes(y = Pulse,
+      x = Age) +
+  geom_point(alpha = .05) +
+  geom_jitter(data = . %&gt;%
+               slice_sample(prop = .1),
+             shape = 21, fill = "white",
+             height = .25, width = 0) +
+  aes(color = SleepTrouble, indicator = SleepTrouble)  +
+  geom_lm_interaction() +
+  geom_lm_interaction_conf_int() +
+* geom_lm_interaction_formula()
+```
+]
+ 
+.panel2-nhanes-auto[
+![](penguins_presentation_ggols_files/figure-html/nhanes_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-nhanes-auto[
+
+```r
+library(NHANES)
+
+set.seed(123985)
+ggplot(data = NHANES) +
+  aes(y = Pulse,
+      x = Age) +
+  geom_point(alpha = .05) +
+  geom_jitter(data = . %&gt;%
+               slice_sample(prop = .1),
+             shape = 21, fill = "white",
+             height = .25, width = 0) +
+  aes(color = SleepTrouble, indicator = SleepTrouble)  +
+  geom_lm_interaction() +
+  geom_lm_interaction_conf_int() +
+  geom_lm_interaction_formula() +
+* labs(title = "Pulse!")
+```
+]
+ 
+.panel2-nhanes-auto[
+![](penguins_presentation_ggols_files/figure-html/nhanes_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-nhanes-auto[
+
+```r
+library(NHANES)
+
+set.seed(123985)
+ggplot(data = NHANES) +
+  aes(y = Pulse,
+      x = Age) +
+  geom_point(alpha = .05) +
+  geom_jitter(data = . %&gt;%
+               slice_sample(prop = .1),
+             shape = 21, fill = "white",
+             height = .25, width = 0) +
+  aes(color = SleepTrouble, indicator = SleepTrouble)  +
+  geom_lm_interaction() +
+  geom_lm_interaction_conf_int() +
+  geom_lm_interaction_formula() +
+  labs(title = "Pulse!") +
+* geom_lm_interaction_intercept()
+```
+]
+ 
+.panel2-nhanes-auto[
+![](penguins_presentation_ggols_files/figure-html/nhanes_auto_12_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-nhanes-auto[
+
+```r
+library(NHANES)
+
+set.seed(123985)
+ggplot(data = NHANES) +
+  aes(y = Pulse,
+      x = Age) +
+  geom_point(alpha = .05) +
+  geom_jitter(data = . %&gt;%
+               slice_sample(prop = .1),
+             shape = 21, fill = "white",
+             height = .25, width = 0) +
+  aes(color = SleepTrouble, indicator = SleepTrouble)  +
+  geom_lm_interaction() +
+  geom_lm_interaction_conf_int() +
+  geom_lm_interaction_formula() +
+  labs(title = "Pulse!") +
+  geom_lm_interaction_intercept() +
+* geom_lm_interaction_rsquared()
+```
+]
+ 
+.panel2-nhanes-auto[
+![](penguins_presentation_ggols_files/figure-html/nhanes_auto_13_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-nhanes-auto[
+
+```r
+library(NHANES)
+
+set.seed(123985)
+ggplot(data = NHANES) +
+  aes(y = Pulse,
+      x = Age) +
+  geom_point(alpha = .05) +
+  geom_jitter(data = . %&gt;%
+               slice_sample(prop = .1),
+             shape = 21, fill = "white",
+             height = .25, width = 0) +
+  aes(color = SleepTrouble, indicator = SleepTrouble)  +
+  geom_lm_interaction() +
+  geom_lm_interaction_conf_int() +
+  geom_lm_interaction_formula() +
+  labs(title = "Pulse!") +
+  geom_lm_interaction_intercept() +
+  geom_lm_interaction_rsquared() +
+* coord_cartesian(ylim = c(65,85))
+```
+]
+ 
+.panel2-nhanes-auto[
+![](penguins_presentation_ggols_files/figure-html/nhanes_auto_14_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-nhanes-auto[
+
+```r
+library(NHANES)
+
+set.seed(123985)
+ggplot(data = NHANES) +
+  aes(y = Pulse,
+      x = Age) +
+  geom_point(alpha = .05) +
+  geom_jitter(data = . %&gt;%
+               slice_sample(prop = .1),
+             shape = 21, fill = "white",
+             height = .25, width = 0) +
+  aes(color = SleepTrouble, indicator = SleepTrouble)  +
+  geom_lm_interaction() +
+  geom_lm_interaction_conf_int() +
+  geom_lm_interaction_formula() +
+  labs(title = "Pulse!") +
+  geom_lm_interaction_intercept() +
+  geom_lm_interaction_rsquared() +
+  coord_cartesian(ylim = c(65,85))
+```
+]
+ 
+.panel2-nhanes-auto[
+![](penguins_presentation_ggols_files/figure-html/nhanes_auto_15_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-nhanes-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-nhanes-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-nhanes-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+&lt;!-- adjust font size in this css code chunk, currently 80 --&gt;
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 60%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

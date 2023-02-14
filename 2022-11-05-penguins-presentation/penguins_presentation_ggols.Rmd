@@ -1,0 +1,407 @@
+---
+title: "1. Snappy Title: Predictive Power and the Palmer Penguins"
+subtitle: "2. Descriptive title: Does bill length predict bill depth?"
+author: "3. Authors: Dr. Reynolds"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = T)
+library(flipbookr)
+library(tidyverse)
+```
+
+## 4. A compelling visual that has to do with your question:
+
+![](https://allisonhorst.github.io/palmerpenguins/reference/figures/culmen_depth.png)
+
+---
+
+![](https://allisonhorst.github.io/palmerpenguins/reference/figures/lter_penguins.png)
+
+---
+
+``` r
+install.packages("ggols")
+```
+
+And the development version from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("EvaMaeRey/ggols")
+```
+
+---
+
+## ggxmean gives us all the geom_lm_* functions
+
+---
+
+
+`r flipbookr::chunk_reveal("null", left_assign = "detect")`
+
+
+```{r null, include = FALSE}
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm) +
+  geom_point() +
+  geom_y_mean() + 
+  ggxmean:::geom_ydiff(color = "darkred") + 
+  geom_y_mean_label()
+```
+
+
+---
+
+
+`r flipbookr::chunk_reveal("x", left_assign = "detect")`
+
+
+```{r x, include = FALSE}
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, 
+      x = bill_length_mm) +
+  geom_point() +
+  geom_lm() +
+  geom_lm_conf_int() +
+  geom_lm_residuals(color = "darkred") +
+  geom_lm_fitted() +
+  geom_lm_formula() +
+  ggols:::geom_lm_rsquared() + #should be moved to ggxmean
+  geom_lm_intercept_label(hjust = -.2) +
+  geom_lm_intercept(color = "blue") 
+```
+
+---
+class: inverse, center, middle
+
+# Visualization, adding indicator var
+
+---
+
+
+`r flipbookr::chunk_reveal("indicator", left_assign = "detect")`
+
+
+```{r indicator, include = FALSE}
+library(ggols)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_indicator() +
+  geom_lm_indicator_conf_int() +
+  geom_lm_indicator_residuals(color = "darkred") +
+  geom_lm_indicator_fitted() +
+  geom_lm_indicator_formula() +
+  geom_lm_indicator_rsquared() + 
+  geom_lm_indicator_intercept(color = "blue") +
+  geom_lm_indicator_intercept_label(hjust = -.2) 
+```
+
+---
+class: inverse, center, middle
+
+# Visualization, adding indicator interaction
+
+
+---
+
+
+`r flipbookr::chunk_reveal("interaction", left_assign = "detect")`
+
+
+```{r interaction, include = FALSE}
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  aes(indicator = species) +
+  geom_lm_interaction() +
+  geom_lm_interaction_conf_int() +
+  geom_lm_interaction_residuals(color = "darkred") +
+  geom_lm_interaction_fitted() +
+  geom_lm_interaction_formula() +
+  geom_lm_interaction_rsquared() + 
+  geom_lm_interaction_intercept(color = "blue") +
+  geom_lm_interaction_intercept_label(hjust = -.2) 
+```
+
+---
+class: inverse, center, middle
+
+# Visualization, and two indicator variables
+
+
+---
+
+
+`r flipbookr::chunk_reveal("int2", left_assign = "detect")`
+
+
+```{r int2, include = FALSE}
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm, 
+      indicator = species, indicator2 = sex,
+      color = species, shape = sex) +
+  geom_point() +
+  geom_lm_indicator2() +
+  geom_lm_indicator2_conf_int() + 
+  geom_lm_indicator2_residuals(color = "darkred") +
+  geom_lm_indicator2_fitted() +
+  geom_lm_indicator2_formula() +
+  geom_lm_indicator2_rsquared() +
+  geom_lm_indicator2_intercept(color = "blue") +
+  geom_lm_indicator2_intercept_label(hjust = -.2) + 
+  labs(title = "Penguins!")
+```
+
+
+
+
+
+---
+class: inverse, center, middle
+
+# big picture walk through
+
+---
+
+```{r null2, echo = FALSE}
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm) +
+  geom_point() +
+  geom_y_mean() + 
+  ggxmean:::geom_ydiff(color = "darkred") + 
+  geom_y_mean_label()
+```
+
+
+---
+
+
+
+
+```{r x2, echo = FALSE}
+library(tidyverse)
+library(ggxmean)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, 
+      x = bill_length_mm) +
+  geom_point() +
+  geom_lm() +
+  geom_lm_conf_int() +
+  geom_lm_residuals(color = "darkred") +
+  geom_lm_fitted() +
+  geom_lm_formula()
+```
+
+---
+
+
+```{r indicator2, echo = FALSE}
+library(ggols)
+
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point(show.legend = F) +
+  aes(color = species) +
+  guides(color = "none") +
+  aes(indicator = species) +
+  geom_lm_indicator() +
+  geom_lm_indicator_conf_int() +
+  geom_lm_indicator_residuals(color = "darkred") +
+  geom_lm_indicator_fitted() +
+  geom_lm_indicator_formula() +
+  geom_lm_indicator_rsquared() 
+```
+
+
+---
+
+
+
+
+```{r interaction2, echo = FALSE}
+ggplot(palmerpenguins::penguins) +
+  aes(y = bill_depth_mm, x = bill_length_mm) +
+  geom_point() +
+  aes(color = species) +
+  guides(color = "none") +
+  aes(indicator = species) +
+  geom_lm_interaction() +
+  geom_lm_interaction_conf_int() +
+  geom_lm_interaction_residuals(color = "darkred") +
+  geom_lm_interaction_fitted() +
+  geom_lm_interaction_formula() +
+  geom_lm_interaction_rsquared()
+```
+
+
+
+
+---
+
+
+
+
+```{r int22, echo = FALSE}
+ggplot(palmerpenguins::penguins) +
+  aes(x = bill_length_mm, y = bill_depth_mm, 
+      indicator = species, indicator2 = sex,
+      color = species, shape = sex) +
+  guides(color = "none") +
+  guides(shape = "none") +
+  geom_point() +
+  geom_lm_indicator2() +
+  geom_lm_indicator2_conf_int() + 
+  geom_lm_indicator2_residuals(color = "darkred") +
+  geom_lm_indicator2_fitted() +
+  geom_lm_indicator2_formula() +
+  geom_lm_indicator2_rsquared()
+```
+
+
+
+---
+class: inverse, center, middle
+
+# beyond penguins:  are we portable?
+
+---
+
+```{r}
+spotify_songs <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-21/spotify_songs.csv')
+```
+
+---
+
+`r chunk_reveal("spot")`
+
+```{r spot, include = F}
+spotify_songs %>% 
+  filter(track_popularity > 0) %>% 
+  mutate(latin = case_when(playlist_genre == "latin" ~ "Latin",
+                               TRUE ~"not Latin")) %>% 
+  mutate(latin = fct_rev(latin)) ->
+prep
+
+set.seed(12345)
+prep %>% 
+  ggplot() + 
+  aes(y = track_popularity, 
+      x = danceability, 
+      indicator = latin, 
+      color = latin) + 
+  geom_point(alpha = .05) + 
+  geom_point(data = . %>% slice_sample(prop = .02),
+             shape = 21, fill = "white") + 
+  geom_lm_indicator() + 
+  geom_lm_indicator_conf_int() + 
+  geom_lm_indicator_formula() + 
+  labs(title = "Songs!",
+       subtitle = "Among songs w/ >0 in track popularity") + 
+  labs(color = NULL) + 
+  geom_lm_indicator_intercept()
+```
+
+---
+
+`r chunk_reveal("cats")`
+
+```{r cats, include = F}
+ma206data::chap10_CatJumpingFull %>%
+  mutate(sex = case_when(sex_0_f_1_m == 0 ~ "Female", 
+                         sex_0_f_1_m == 1 ~ "Male")) %>% 
+  mutate(sex = factor(sex)) %>% 
+  ggplot() + 
+  aes(y = muscle_mass_g, 
+      x = body_mass_g) +
+  geom_point(shape = 21, fill = "white", size = 1,
+             stroke = 1) + 
+  aes(color = sex, 
+      indicator = sex) + 
+  geom_lm_indicator() + 
+  geom_lm_indicator_conf_int() +
+  geom_lm_indicator_formula() + 
+  labs(title = "Cats!") + 
+  geom_lm_indicator_fitted(alpha = .2) +
+  geom_lm_indicator_residuals(alpha = .2) + 
+  geom_lm_indicator_intercept() + 
+  geom_lm_indicator_intercept_label(hjust = -.1)
+  
+```
+
+
+
+
+---
+
+`r chunk_reveal('nhanes')`
+
+```{r nhanes, include = F}
+library(NHANES)
+
+set.seed(123985)
+ggplot(data = NHANES) +
+  aes(y = Pulse, 
+      x = Age) + 
+  geom_point(alpha = .05) + 
+  geom_jitter(data = . %>% 
+               slice_sample(prop = .1),
+             shape = 21, fill = "white",
+             height = .25, width = 0) + 
+  aes(color = SleepTrouble, indicator = SleepTrouble)  + 
+  geom_lm_interaction() + 
+  geom_lm_interaction_conf_int() +
+  geom_lm_interaction_formula() + 
+  labs(title = "Pulse!") +
+  geom_lm_interaction_intercept() + 
+  geom_lm_interaction_rsquared() + 
+  coord_cartesian(ylim = c(65,85))
+
+```
+
+
+<!-- adjust font size in this css code chunk, currently 80 -->
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 60%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+
+```
+
+
+
+
+

@@ -1,0 +1,97 @@
+---
+title: "Untitled"
+author: "Evangeline Reynolds"
+date: "11/13/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+library(tidyverse)
+spotify_songs <- read.csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-21/spotify_songs.csv')
+
+spotify_songs %>% head()
+
+spotify_songs %>% skimr::skim()
+```
+
+## The problem
+
+```{r}
+library(tidyverse)
+spotify_songs %>% 
+  arrange(acousticness) %>% 
+  ggplot() + 
+  aes(x = danceability, y = valence, color = acousticness) + 
+  geom_point()
+
+library(tidyverse)
+spotify_songs %>% 
+  arrange(acousticness) %>% 
+  ggplot() + 
+  aes(x = danceability, y = valence, color = acousticness) + 
+  geom_point() +
+  facet_wrap(~cut_number(acousticness,6), nrow = 1)
+```
+
+# randomly sampled exemplars
+
+```{r}
+library(tidyverse)
+spotify_songs %>% 
+  ggplot() + 
+  aes(x = danceability, y = valence) + 
+  geom_point(alpha = .04) + 
+  geom_point(data = . %>% sample_frac(.03)) # exemplars
+```
+
+
+# ggpointdensity solution.  Color as a third dimension.
+
+```{r}
+library(tidyverse)
+spotify_songs %>% 
+  ggplot() + 
+  aes(x = danceability, y = valence) + 
+  ggpointdensity::geom_pointdensity() +  
+  scale_color_viridis_c()
+```
+
+
+
+```{r}
+library(tidyverse)
+spotify_songs %>% 
+  ggplot() + 
+  aes(x = danceability, y = valence) + 
+  geom_density_2d_filled(alpha = .5) +  
+  scale_color_viridis_c()
+```
+
+
+---
+
+## Row and column sketching
+
+https://arxiv.org/abs/2009.03979
+Journal of Computational and Graphical Statistics, 2022
+
+
+> Visualizing very large matrices involves many formidable problems. Various popular solutions to these problems involve sampling, clustering, projection, or feature selection to reduce the size and complexity of the original task. An important aspect of these methods is how to preserve relative distances between points in the higher-dimensional space after reducing rows and columns to fit in a lower dimensional space. This aspect is important because conclusions based on faulty visual reasoning can be harmful. Judging dissimilar points as similar or similar points as dissimilar on the basis of a visualization can lead to false conclusions. To ameliorate this bias and to make visualizations of very large datasets feasible, we introduce two new algorithms that respectively select a subset of rows and columns of a rectangular matrix. This selection is designed to preserve relative distances as closely as possible. We compare our matrix sketch to more traditional alternatives on a variety of artificial and real datasets.
+
+Leland Wilkinson, Hengrui Luo
+
+
+```{r}
+
+
+```

@@ -1,0 +1,84 @@
+---
+title: "ma206 storyboards"
+author: "Evangeline Reynolds"
+date: "11/22/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r cars}
+library(ma206data)
+library(ggxmean) 
+library(ggols)
+library(tidyverse)
+```
+
+
+
+```{r}
+source("https://raw.githubusercontent.com/EvaMaeRey/ggchalkboard/master/R/theme_chalkboard.R")
+geoms_chalk()
+
+```
+
+
+---
+
+```{r}
+ma206data::chap3_MaleTemp %>% 
+  ggplot(data = .) + 
+  theme_chalkboard() +
+  aes(x = male_temp) + 
+  geom_rug() + 
+  geom_histogram(fill = "oldlace",
+                 alpha = .8) + 
+  geom_x_mean(color = "cadetblue1") + 
+  geom_x_mean_label(color = "cadetblue4") + 
+  geom_vline(xintercept = 97.5,
+             linetype = 'dashed',
+             color = "pink") + 
+  ggxmean:::geom_tdist(height = 5, 
+                       fill = "cadetblue",
+                       color = "cadetblue") +  
+  ggxmean:::geom_ttestconf(color = "plum4", 
+                           alpha = 1) + 
+  annotate(geom = "text", label = "A friend proposes that average male body temperature is 97.5.  You collect data from a random sample of men, and calculate the mean.  Is the data consistent with your friend's conjecture?" %>% str_wrap(25), x = 96.25, y = 5.75, color = "oldlace", fontface = "italic", hjust = 0)
+```
+
+
+
+
+```{r}
+ma206data::chap6_OldFaithful %>% 
+  ggplot() +
+  aes(x = time) + 
+  facet_grid(year ~ .) + 
+  geom_rug() + 
+  geom_histogram() + 
+  geom_x_mean() + 
+  geom_x_mean_label() + 
+  theme_chalkboard_slate()
+```
+
+
+
+
+```{r}
+ma206data::chap5_Smoking %>% 
+  mutate(ind_boy = as.numeric(child == "boy")) %>% 
+  ggplot() +
+  aes(x = ind_boy) + 
+  facet_grid(parents ~ .) + 
+  geom_rug() + 
+  geom_bar(width = .1) + 
+  geom_x_mean() + 
+  geom_x_mean_label() + 
+  ggdirect::geom_text_count_percent(size = 3) + 
+  theme_chalkboard_slate()
+```
+

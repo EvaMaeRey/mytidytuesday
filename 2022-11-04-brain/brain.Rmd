@@ -1,0 +1,241 @@
+---
+title: "brain"
+author: "Evangeline Reynolds"
+date: "11/4/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Problem: positioning with SF feels spooky and data prep can feel effortful
+
+W/ ggplot2, we are able to say 'where' with x and y.  These are positional aesthetics.  With SF the 'where' is implied with the geometry column. This feels non-declarative and spooky to me. 
+
+Also, it often requires pre-processing to work with data you'd like to represent.
+
+When we ask the question 'where' in a geographical context, a human being will respond with the name of a region; not coordinates and not a set of coordinates that define a region.  Is it possible to create an interface where you define 'where' with geographical names or other ids?  For example: `aes(country = my_countries_variable)` could be used with a geom/stat like geom_polygon_countries().
+
+
+
+
+
+```{r}
+library(tidyverse)
+nato_names <- c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary",  
+                "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")  
+library(gapminder)  
+gapminder %>%  
+  filter(year == 2002) %>%  
+  rename(name = country) ->  
+gapminder_2002_prepped  
+
+rnaturalearth::ne_countries(scale = "medium", returnclass = "sf") %>%  
+  select(name, pop_est, gdp_md_est,  
+         continent, geometry) %>%  
+  filter(name %in% nato_names) %>%  
+  left_join(gapminder_2002_prepped, by = "name") ->  
+  nato_countries  
+
+ggplot(data = nato_countries) +  
+  # This part feels spooky to me 
+  ggplot2::geom_sf(data = nato_countries) +  
+    aes(fill = lifeExp) +  
+    scale_fill_viridis_c(option = "magma", direction = -1) +  
+  ggplot2::coord_sf(xlim = c(-175, 47.5),  
+           ylim = c(23, 85),  
+           expand = FALSE) +  
+  labs(title = "Life Expectancy, 2002",  
+         subtitle = "NATO Member States",  
+         fill = "Share of GDP (%)") +  
+  theme_bw() +  
+  theme(plot.title =  
+            element_text(hjust = 0.5)) +  
+  theme(plot.subtitle =
+            element_text(hjust = 0.5))
+```
+
+See step-by-step:
+https://evamaerey.github.io/ggplot2_grammar_guide/geom_sf.html#1
+
+# Wait, why is this project called 'brain'?
+
+One inspiration for this is ggseg too. Very cool project that uses sf spatial approach.  I wonder if there'd be a version where regions of the brain could be simply named, and other aesthetics defined. Motivated by how I'd like to learn more about the regions of the brain!  :-)
+
+
+## A different API?
+
+Here is what I think might be an easy to use API.
+
+```
+ggworld(data = gapminder_2002, projection = 'a good one') + 
+  aes(country = country, # positioning aesthetic
+      fill = lifeExp) + 
+  geom_polygon_country()
+```
+
+Note: country names are really hard. Other codes could be used.  One could try to use the wonderful countrycodes as well when 
+
+# Proof of concept? (without SF)
+
+Because of my limited knowledge of SF, let's start w/ the x and y inputs approach to mapping with ggplot2 and see if we can cook something up. 
+
+## Step 00: See how someone gets it done
+
+I was here:
+https://remiller1450.github.io/s230s19/Intro_maps.html
+
+## Step 0: get it done w/ ggplot2
+
+Look at mapping w/ ggplot2, no sf, we use geom_polygon and the x, y and group aesthetics).  It is not very efficient (lots of redundant info in the ), but we won't worry about that for this demonstration.  A little rewrite to get inspired.
+
+```{r}
+library(ggplot2) 
+library(dplyr)
+library(maps)
+MainStates <- map_data("state")
+StatePopulation <- read.csv("https://raw.githubusercontent.com/ds4stats/r-tutorials/master/intro-maps/data/StatePopulation.csv", as.is = TRUE)
+
+MergedStates <- inner_join(MainStates, StatePopulation, by = "region")
+
+StatePopulation %>% # becomes ggus()
+  right_join(MainStates) %>% # becomes ggus()
+  ggplot() + # becomes ggus()
+  geom_polygon() + # becomes geom_polygon state
+  aes(x = long, # becomes state = region
+      y = lat, # becomes state = region
+      group = group, # becomes state = region
+      fill = population/1000000) + 
+  coord_map(projection = "orthographic", 
+            orientation = c(41, -74, 0))
+```
+
+
+# Step 1: compute function and test
+
+```{r}
+library(maps)
+MainStates <- map_data("state")
+# AllCounty <- map_data("county")
+# MainCities <- filter(us.cities, long>=-130)
+
+StatePopulation <- read.csv("https://raw.githubusercontent.com/ds4stats/r-tutorials/master/intro-maps/data/StatePopulation.csv", as.is = TRUE)
+
+compute_state <- function(data, scales){
+ 
+  data %>% 
+    inner_join(map_data("state") %>% rename(state = region)) %>% 
+    mutate(x = long, y = lat) %>% 
+    mutate(group = group) 
+
+}
+
+StatePopulation %>% 
+  rename(state = region) %>% 
+  compute_state() ->
+computed
+
+str(computed)
+
+
+computed %>% 
+  ggplot() + 
+  aes(x = x, y = y) + 
+  geom_point()
+
+my_setup_data <- function(data, params){
+                                    if(data$group[1] == -1){
+                                      nrows <- nrow(data)
+                                      data$group <- seq_len(nrows)
+                                    }
+                                    data
+}
+```
+
+
+# Step 2: pass to ggproto
+
+```{r}
+
+
+StatPolygonstate <- ggplot2::ggproto(`_class` = "StatPolygonstate",
+                                  `_inherit` = ggplot2::Stat,
+                                  required_aes = c("state"),
+                                  compute_panel = compute_state#,
+                                   # setup_data = my_setup_data
+                                  # default_aes = aes(group = after_stat(state))
+                                  )
+```
+
+
+# Step 3: write geom_* function
+
+```{r}
+geom_polygon_state <- function(
+  mapping = NULL,
+  data = NULL,
+  position = "identity",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatPolygonstate,  # proto object from step 2
+    geom = ggplot2::GeomPolygon,  # inherit other behavior
+    data = data,
+    mapping = mapping,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+```
+
+# step 4: test geom_* function, celebrate!
+
+```{r, eval = T}
+StatePopulation %>% 
+  mutate(region = as.factor(region)) %>% 
+ggplot(data = .) + 
+  aes(state = region, # state indicates position instead of x and y 
+      fill = population) +
+  geom_polygon_state() + 
+  coord_map() + 
+  geom_polygon_state(data = . %>% 
+                       filter(region == "alabama"),
+                     fill = "darkred" ) + 
+  coord_map(projection = "orthographic", 
+            orientation = c(41, -74, 0))
+```
+
+
+# Step 5: What's not working and taking a break.
+
+1. Not sure what's going on w/ merge so that we only get the 4 states.  
+2. state = var, var must be factor (not character).  I've seen this before and I'd like that not to be the case, but fine for now. 
+3. We are celebrating in spite of 1 and 2!  And putting aside.
+
+```{r}
+StatePopulation %>% distinct(region) %>% pull()
+```
+
+
+---
+
+# 0 County
+
+```{r}
+AllCounty <- map_data("county")
+ggplot() + geom_polygon( data=AllCounty, aes(x=long, y=lat, group=group),
+                color="darkblue", fill="lightblue", size = .1 ) +
+  
+          geom_polygon( data=MainStates, aes(x=long, y=lat, group=group),
+                color="black", fill="lightblue",  size = 1, alpha = .3)
+```
+
+# Circle pack seems similar...
+
+
+https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/circle_pack_stipple.html
+
