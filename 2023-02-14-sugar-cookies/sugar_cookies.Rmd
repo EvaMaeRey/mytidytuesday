@@ -1,0 +1,142 @@
+---
+title: "Sugar Cookie Recipe"
+subtitle: "Using flipbookr and xaringan"
+author: ""
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    seal: false
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+class: inverse, middle
+background-image: url(https://images.unsplash.com/photo-1592173376801-185310a68dea?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1286&q=80)
+background-size: cover
+
+
+
+
+# Sugar Cookies
+
+###Gina Reynolds
+based on
+https://sallysbakingaddiction.com/best-sugar-cookies/
+
+<br>
+<br>
+<br>
+
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 7, fig.height = 5, message = F, warning = FALSE, comment = "", cache = T)
+
+options(tibble.print_min = 55)
+options(knitr.duplicate.label = "allow")
+options(width=300) # prevents data wrapping
+```
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 90%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+
+```
+
+
+---
+
+
+`r flipbookr::chunk_reveal("penguins", display = "code")`
+
+
+```{r penguins, eval = FALSE, echo = F}
+library(tidyverse)
+
+"2.25 cups all-purpose flour (spoon & leveled)" %>% 
+  add(".5 teaspoon baking powder") %>% 
+  add(".25 teaspoon salt") %>% 
+  whisk() ->
+dry_ingredients
+
+
+"1.5 sticks unsalted butter" %>% 
+  softened_to_room_temperature() %>% 
+  add(".75 cup granulated sugar") %>% 
+  beat(speed = 'high', time = '2min') %>% 
+  add("1 large egg at room temperature") %>% 
+  add("2 teaspoons pure vanilla extract") %>% 
+  add("1/4 or 1/2 teaspoon almond extract") %>% 
+  beat(speed = 'high', time = '1min') %>% 
+  scrape() %>% 
+  beat() ->
+wet_ingredients
+```
+
+---
+
+`r flipbookr::chunk_reveal("together", display = "code")`
+
+
+```{r together, eval = F, echo = F}
+wet_ingredients %>% 
+  add(dry_ingredients) %>% 
+  mix(speed = "low") %>% 
+  add_if(condition = "too sticky", 
+         add = "1 more Tablespoon of flour") ->
+dough
+
+dough %>% 
+  divide(num_parts = 2) %>% 
+  place(where = '2 parchment paper lightly floured') %>% 
+  roll_out(with = "rolling pin lightly floured",
+           thickness = ".25 inch") %>% 
+  stack() %>% 
+  refrigerate(min = "1 hour",
+               max = "2 days") ->
+dough_rolled_chilled
+```
+
+
+---
+
+`r flipbookr::chunk_reveal("baking", display = "code")`
+
+
+```{r baking, echo = F, eval = F}
+"baking sheets" %>% 
+  line_with("parchment paper") ->
+prepped_baking_sheets
+
+dough_rolled_chilled %>% 
+  cut(with = "cookie cutters") %>% 
+  arrange(where = prepped_baking_sheets) %>% 
+  bake(where = "oven",
+       temp = "350 F",
+       length = "11 to 12 minutes or until lightly browned around the edges") %>% 
+  cool(where = "bake sheet",
+       length = "5 minutes") %>% 
+  cool(where = "wire rack",
+       length = "until room temp") %>% 
+  decorate() ->
+valentines_day_cookies
+```
+

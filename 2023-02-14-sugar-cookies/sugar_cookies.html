@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Sugar Cookie Recipe</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+class: inverse, middle
+background-image: url(https://images.unsplash.com/photo-1592173376801-185310a68dea?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1286&amp;q=80)
+background-size: cover
+
+
+
+
+# Sugar Cookies
+
+###Gina Reynolds
+based on
+https://sallysbakingaddiction.com/best-sugar-cookies/
+
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 90%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+
+&lt;/style&gt;
+
+
+---
+
+
+count: false
+
+
+```r
+*library(tidyverse)
+```
+
+---
+count: false
+
+
+```r
+library(tidyverse)
+
+*"2.25 cups all-purpose flour (spoon &amp; leveled)"
+```
+
+---
+count: false
+
+
+```r
+library(tidyverse)
+
+"2.25 cups all-purpose flour (spoon &amp; leveled)" %&gt;%
+* add(".5 teaspoon baking powder")
+```
+
+---
+count: false
+
+
+```r
+library(tidyverse)
+
+"2.25 cups all-purpose flour (spoon &amp; leveled)" %&gt;%
+  add(".5 teaspoon baking powder") %&gt;%
+* add(".25 teaspoon salt")
+```
+
+---
+count: false
+
+
+```r
+library(tidyverse)
+
+"2.25 cups all-purpose flour (spoon &amp; leveled)" %&gt;%
+  add(".5 teaspoon baking powder") %&gt;%
+  add(".25 teaspoon salt") %&gt;%
+* whisk()
+```
+
+---
+count: false
+
+
+```r
+library(tidyverse)
+
+"2.25 cups all-purpose flour (spoon &amp; leveled)" %&gt;%
+  add(".5 teaspoon baking powder") %&gt;%
+  add(".25 teaspoon salt") %&gt;%
+  whisk() -&gt;
+*dry_ingredients
+```
+
+---
+count: false
+
+
+```r
+library(tidyverse)
+
+"2.25 cups all-purpose flour (spoon &amp; leveled)" %&gt;%
+  add(".5 teaspoon baking powder") %&gt;%
+  add(".25 teaspoon salt") %&gt;%
+  whisk() -&gt;
+dry_ingredients
+
+
+*"1.5 sticks unsalted butter"
+```
+
+---
+count: false
+
+
+```r
+library(tidyverse)
+
+"2.25 cups all-purpose flour (spoon &amp; leveled)" %&gt;%
+  add(".5 teaspoon baking powder") %&gt;%
+  add(".25 teaspoon salt") %&gt;%
+  whisk() -&gt;
+dry_ingredients
+
+
+"1.5 sticks unsalted butter" %&gt;%
+* softened_to_room_temperature()
+```
+
+---
+count: false
+
+
+```r
+library(tidyverse)
+
+"2.25 cups all-purpose flour (spoon &amp; leveled)" %&gt;%
+  add(".5 teaspoon baking powder") %&gt;%
+  add(".25 teaspoon salt") %&gt;%
+  whisk() -&gt;
+dry_ingredients
+
+
+"1.5 sticks unsalted butter" %&gt;%
+  softened_to_room_temperature() %&gt;%
+* add(".75 cup granulated sugar")
+```
+
+---
+count: false
+
+
+```r
+library(tidyverse)
+
+"2.25 cups all-purpose flour (spoon &amp; leveled)" %&gt;%
+  add(".5 teaspoon baking powder") %&gt;%
+  add(".25 teaspoon salt") %&gt;%
+  whisk() -&gt;
+dry_ingredients
+
+
+"1.5 sticks unsalted butter" %&gt;%
+  softened_to_room_temperature() %&gt;%
+  add(".75 cup granulated sugar") %&gt;%
+* beat(speed = 'high', time = '2min')
+```
+
+---
+count: false
+
+
+```r
+library(tidyverse)
+
+"2.25 cups all-purpose flour (spoon &amp; leveled)" %&gt;%
+  add(".5 teaspoon baking powder") %&gt;%
+  add(".25 teaspoon salt") %&gt;%
+  whisk() -&gt;
+dry_ingredients
+
+
+"1.5 sticks unsalted butter" %&gt;%
+  softened_to_room_temperature() %&gt;%
+  add(".75 cup granulated sugar") %&gt;%
+  beat(speed = 'high', time = '2min') %&gt;%
+* add("1 large egg at room temperature")
+```
+
+---
+count: false
+
+
+```r
+library(tidyverse)
+
+"2.25 cups all-purpose flour (spoon &amp; leveled)" %&gt;%
+  add(".5 teaspoon baking powder") %&gt;%
+  add(".25 teaspoon salt") %&gt;%
+  whisk() -&gt;
+dry_ingredients
+
+
+"1.5 sticks unsalted butter" %&gt;%
+  softened_to_room_temperature() %&gt;%
+  add(".75 cup granulated sugar") %&gt;%
+  beat(speed = 'high', time = '2min') %&gt;%
+  add("1 large egg at room temperature") %&gt;%
+* add("2 teaspoons pure vanilla extract")
+```
+
+---
+count: false
+
+
+```r
+library(tidyverse)
+
+"2.25 cups all-purpose flour (spoon &amp; leveled)" %&gt;%
+  add(".5 teaspoon baking powder") %&gt;%
+  add(".25 teaspoon salt") %&gt;%
+  whisk() -&gt;
+dry_ingredients
+
+
+"1.5 sticks unsalted butter" %&gt;%
+  softened_to_room_temperature() %&gt;%
+  add(".75 cup granulated sugar") %&gt;%
+  beat(speed = 'high', time = '2min') %&gt;%
+  add("1 large egg at room temperature") %&gt;%
+  add("2 teaspoons pure vanilla extract") %&gt;%
+* add("1/4 or 1/2 teaspoon almond extract")
+```
+
+---
+count: false
+
+
+```r
+library(tidyverse)
+
+"2.25 cups all-purpose flour (spoon &amp; leveled)" %&gt;%
+  add(".5 teaspoon baking powder") %&gt;%
+  add(".25 teaspoon salt") %&gt;%
+  whisk() -&gt;
+dry_ingredients
+
+
+"1.5 sticks unsalted butter" %&gt;%
+  softened_to_room_temperature() %&gt;%
+  add(".75 cup granulated sugar") %&gt;%
+  beat(speed = 'high', time = '2min') %&gt;%
+  add("1 large egg at room temperature") %&gt;%
+  add("2 teaspoons pure vanilla extract") %&gt;%
+  add("1/4 or 1/2 teaspoon almond extract") %&gt;%
+* beat(speed = 'high', time = '1min')
+```
+
+---
+count: false
+
+
+```r
+library(tidyverse)
+
+"2.25 cups all-purpose flour (spoon &amp; leveled)" %&gt;%
+  add(".5 teaspoon baking powder") %&gt;%
+  add(".25 teaspoon salt") %&gt;%
+  whisk() -&gt;
+dry_ingredients
+
+
+"1.5 sticks unsalted butter" %&gt;%
+  softened_to_room_temperature() %&gt;%
+  add(".75 cup granulated sugar") %&gt;%
+  beat(speed = 'high', time = '2min') %&gt;%
+  add("1 large egg at room temperature") %&gt;%
+  add("2 teaspoons pure vanilla extract") %&gt;%
+  add("1/4 or 1/2 teaspoon almond extract") %&gt;%
+  beat(speed = 'high', time = '1min') %&gt;%
+* scrape()
+```
+
+---
+count: false
+
+
+```r
+library(tidyverse)
+
+"2.25 cups all-purpose flour (spoon &amp; leveled)" %&gt;%
+  add(".5 teaspoon baking powder") %&gt;%
+  add(".25 teaspoon salt") %&gt;%
+  whisk() -&gt;
+dry_ingredients
+
+
+"1.5 sticks unsalted butter" %&gt;%
+  softened_to_room_temperature() %&gt;%
+  add(".75 cup granulated sugar") %&gt;%
+  beat(speed = 'high', time = '2min') %&gt;%
+  add("1 large egg at room temperature") %&gt;%
+  add("2 teaspoons pure vanilla extract") %&gt;%
+  add("1/4 or 1/2 teaspoon almond extract") %&gt;%
+  beat(speed = 'high', time = '1min') %&gt;%
+  scrape() %&gt;%
+* beat()
+```
+
+---
+count: false
+
+
+```r
+library(tidyverse)
+
+"2.25 cups all-purpose flour (spoon &amp; leveled)" %&gt;%
+  add(".5 teaspoon baking powder") %&gt;%
+  add(".25 teaspoon salt") %&gt;%
+  whisk() -&gt;
+dry_ingredients
+
+
+"1.5 sticks unsalted butter" %&gt;%
+  softened_to_room_temperature() %&gt;%
+  add(".75 cup granulated sugar") %&gt;%
+  beat(speed = 'high', time = '2min') %&gt;%
+  add("1 large egg at room temperature") %&gt;%
+  add("2 teaspoons pure vanilla extract") %&gt;%
+  add("1/4 or 1/2 teaspoon almond extract") %&gt;%
+  beat(speed = 'high', time = '1min') %&gt;%
+  scrape() %&gt;%
+  beat() -&gt;
+*wet_ingredients
+```
+
+&lt;style&gt;
+.panel1-penguins-auto {
+  color: black;
+  width: 99%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-penguins-auto {
+  color: black;
+  width: NA%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-penguins-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+count: false
+
+
+```r
+*wet_ingredients
+```
+
+---
+count: false
+
+
+```r
+wet_ingredients %&gt;%
+* add(dry_ingredients)
+```
+
+---
+count: false
+
+
+```r
+wet_ingredients %&gt;%
+  add(dry_ingredients) %&gt;%
+* mix(speed = "low")
+```
+
+---
+count: false
+
+
+```r
+wet_ingredients %&gt;%
+  add(dry_ingredients) %&gt;%
+  mix(speed = "low") %&gt;%
+* add_if(condition = "too sticky",
+*        add = "1 more Tablespoon of flour")
+```
+
+---
+count: false
+
+
+```r
+wet_ingredients %&gt;%
+  add(dry_ingredients) %&gt;%
+  mix(speed = "low") %&gt;%
+  add_if(condition = "too sticky",
+         add = "1 more Tablespoon of flour") -&gt;
+*dough
+```
+
+---
+count: false
+
+
+```r
+wet_ingredients %&gt;%
+  add(dry_ingredients) %&gt;%
+  mix(speed = "low") %&gt;%
+  add_if(condition = "too sticky",
+         add = "1 more Tablespoon of flour") -&gt;
+dough
+
+*dough
+```
+
+---
+count: false
+
+
+```r
+wet_ingredients %&gt;%
+  add(dry_ingredients) %&gt;%
+  mix(speed = "low") %&gt;%
+  add_if(condition = "too sticky",
+         add = "1 more Tablespoon of flour") -&gt;
+dough
+
+dough %&gt;%
+* divide(num_parts = 2)
+```
+
+---
+count: false
+
+
+```r
+wet_ingredients %&gt;%
+  add(dry_ingredients) %&gt;%
+  mix(speed = "low") %&gt;%
+  add_if(condition = "too sticky",
+         add = "1 more Tablespoon of flour") -&gt;
+dough
+
+dough %&gt;%
+  divide(num_parts = 2) %&gt;%
+* place(where = '2 parchment paper lightly floured')
+```
+
+---
+count: false
+
+
+```r
+wet_ingredients %&gt;%
+  add(dry_ingredients) %&gt;%
+  mix(speed = "low") %&gt;%
+  add_if(condition = "too sticky",
+         add = "1 more Tablespoon of flour") -&gt;
+dough
+
+dough %&gt;%
+  divide(num_parts = 2) %&gt;%
+  place(where = '2 parchment paper lightly floured') %&gt;%
+* roll_out(with = "rolling pin lightly floured",
+*          thickness = ".25 inch")
+```
+
+---
+count: false
+
+
+```r
+wet_ingredients %&gt;%
+  add(dry_ingredients) %&gt;%
+  mix(speed = "low") %&gt;%
+  add_if(condition = "too sticky",
+         add = "1 more Tablespoon of flour") -&gt;
+dough
+
+dough %&gt;%
+  divide(num_parts = 2) %&gt;%
+  place(where = '2 parchment paper lightly floured') %&gt;%
+  roll_out(with = "rolling pin lightly floured",
+           thickness = ".25 inch") %&gt;%
+* stack()
+```
+
+---
+count: false
+
+
+```r
+wet_ingredients %&gt;%
+  add(dry_ingredients) %&gt;%
+  mix(speed = "low") %&gt;%
+  add_if(condition = "too sticky",
+         add = "1 more Tablespoon of flour") -&gt;
+dough
+
+dough %&gt;%
+  divide(num_parts = 2) %&gt;%
+  place(where = '2 parchment paper lightly floured') %&gt;%
+  roll_out(with = "rolling pin lightly floured",
+           thickness = ".25 inch") %&gt;%
+  stack() %&gt;%
+* refrigerate(min = "1 hour",
+*              max = "2 days")
+```
+
+---
+count: false
+
+
+```r
+wet_ingredients %&gt;%
+  add(dry_ingredients) %&gt;%
+  mix(speed = "low") %&gt;%
+  add_if(condition = "too sticky",
+         add = "1 more Tablespoon of flour") -&gt;
+dough
+
+dough %&gt;%
+  divide(num_parts = 2) %&gt;%
+  place(where = '2 parchment paper lightly floured') %&gt;%
+  roll_out(with = "rolling pin lightly floured",
+           thickness = ".25 inch") %&gt;%
+  stack() %&gt;%
+  refrigerate(min = "1 hour",
+               max = "2 days") -&gt;
+*dough_rolled_chilled
+```
+
+&lt;style&gt;
+.panel1-together-auto {
+  color: black;
+  width: 99%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-together-auto {
+  color: black;
+  width: NA%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-together-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+count: false
+
+
+```r
+*"baking sheets"
+```
+
+---
+count: false
+
+
+```r
+"baking sheets" %&gt;%
+* line_with("parchment paper")
+```
+
+---
+count: false
+
+
+```r
+"baking sheets" %&gt;%
+  line_with("parchment paper") -&gt;
+*prepped_baking_sheets
+```
+
+---
+count: false
+
+
+```r
+"baking sheets" %&gt;%
+  line_with("parchment paper") -&gt;
+prepped_baking_sheets
+
+*dough_rolled_chilled
+```
+
+---
+count: false
+
+
+```r
+"baking sheets" %&gt;%
+  line_with("parchment paper") -&gt;
+prepped_baking_sheets
+
+dough_rolled_chilled %&gt;%
+* cut(with = "cookie cutters")
+```
+
+---
+count: false
+
+
+```r
+"baking sheets" %&gt;%
+  line_with("parchment paper") -&gt;
+prepped_baking_sheets
+
+dough_rolled_chilled %&gt;%
+  cut(with = "cookie cutters") %&gt;%
+* arrange(where = prepped_baking_sheets)
+```
+
+---
+count: false
+
+
+```r
+"baking sheets" %&gt;%
+  line_with("parchment paper") -&gt;
+prepped_baking_sheets
+
+dough_rolled_chilled %&gt;%
+  cut(with = "cookie cutters") %&gt;%
+  arrange(where = prepped_baking_sheets) %&gt;%
+* bake(where = "oven",
+*      temp = "350 F",
+*      length = "11 to 12 minutes or until lightly browned around the edges")
+```
+
+---
+count: false
+
+
+```r
+"baking sheets" %&gt;%
+  line_with("parchment paper") -&gt;
+prepped_baking_sheets
+
+dough_rolled_chilled %&gt;%
+  cut(with = "cookie cutters") %&gt;%
+  arrange(where = prepped_baking_sheets) %&gt;%
+  bake(where = "oven",
+       temp = "350 F",
+       length = "11 to 12 minutes or until lightly browned around the edges") %&gt;%
+* cool(where = "bake sheet",
+*      length = "5 minutes")
+```
+
+---
+count: false
+
+
+```r
+"baking sheets" %&gt;%
+  line_with("parchment paper") -&gt;
+prepped_baking_sheets
+
+dough_rolled_chilled %&gt;%
+  cut(with = "cookie cutters") %&gt;%
+  arrange(where = prepped_baking_sheets) %&gt;%
+  bake(where = "oven",
+       temp = "350 F",
+       length = "11 to 12 minutes or until lightly browned around the edges") %&gt;%
+  cool(where = "bake sheet",
+       length = "5 minutes") %&gt;%
+* cool(where = "wire rack",
+*      length = "until room temp")
+```
+
+---
+count: false
+
+
+```r
+"baking sheets" %&gt;%
+  line_with("parchment paper") -&gt;
+prepped_baking_sheets
+
+dough_rolled_chilled %&gt;%
+  cut(with = "cookie cutters") %&gt;%
+  arrange(where = prepped_baking_sheets) %&gt;%
+  bake(where = "oven",
+       temp = "350 F",
+       length = "11 to 12 minutes or until lightly browned around the edges") %&gt;%
+  cool(where = "bake sheet",
+       length = "5 minutes") %&gt;%
+  cool(where = "wire rack",
+       length = "until room temp") %&gt;%
+* decorate()
+```
+
+---
+count: false
+
+
+```r
+"baking sheets" %&gt;%
+  line_with("parchment paper") -&gt;
+prepped_baking_sheets
+
+dough_rolled_chilled %&gt;%
+  cut(with = "cookie cutters") %&gt;%
+  arrange(where = prepped_baking_sheets) %&gt;%
+  bake(where = "oven",
+       temp = "350 F",
+       length = "11 to 12 minutes or until lightly browned around the edges") %&gt;%
+  cool(where = "bake sheet",
+       length = "5 minutes") %&gt;%
+  cool(where = "wire rack",
+       length = "until room temp") %&gt;%
+  decorate() -&gt;
+*valentines_day_cookies
+```
+
+&lt;style&gt;
+.panel1-baking-auto {
+  color: black;
+  width: 99%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-baking-auto {
+  color: black;
+  width: NA%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-baking-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

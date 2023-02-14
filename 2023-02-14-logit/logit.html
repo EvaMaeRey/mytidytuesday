@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Logit fun</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+class: inverse, middle
+background-image: url(https://images.unsplash.com/photo-1586165368502-1bad197a6461?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=958&amp;q=80)
+background-size: cover
+
+
+
+
+# Logit
+
+### Gina Reynolds
+
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-hotel-auto[
+
+```r
+*library(tidyverse)
+```
+]
+ 
+.panel2-hotel-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-hotel-auto[
+
+```r
+library(tidyverse)
+*library(broom)
+```
+]
+ 
+.panel2-hotel-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-hotel-auto[
+
+```r
+library(tidyverse)
+library(broom)
+
+*read_csv('https://tidymodels.org/start/case-study/hotels.csv')
+```
+]
+ 
+.panel2-hotel-auto[
+
+```
+# A tibble: 50,000 × 23
+   hotel        lead_time stays_in_weeken… stays_in_week_n… adults children meal  country market_segment distribution_ch… is_repeated_gue… previous_cancel… previous_bookin… reserved_room_t… assigned_room_t… booking_changes deposit_type days_in_waiting… customer_type average_daily_r… required_car_pa…
+   &lt;chr&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;          &lt;chr&gt;                       &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;                      &lt;dbl&gt; &lt;chr&gt;                   &lt;dbl&gt; &lt;chr&gt;                    &lt;dbl&gt; &lt;chr&gt;           
+ 1 City_Hotel         217                1                3      2 none     BB    DEU     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…             80.8 none            
+ 2 City_Hotel           2                0                1      2 none     BB    PRT     Direct         Direct                          0                0                0 D                K                              0 No_Deposit                  0 Transient                170   none            
+ 3 Resort_Hotel        95                2                5      2 none     BB    GBR     Online_TA      TA/TO                           0                0                0 A                A                              2 No_Deposit                  0 Transient                  8   none            
+ 4 Resort_Hotel       143                2                6      2 none     HB    ROU     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 81   none            
+ 5 Resort_Hotel       136                1                4      2 none     HB    PRT     Direct         Direct                          0                0                0 F                F                              0 No_Deposit                  0 Transient                158.  none            
+ 6 City_Hotel          67                2                2      2 none     SC    GBR     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 49.1 none            
+ 7 Resort_Hotel        47                0                2      2 children BB    ESP     Direct         Direct                          0                0                0 C                C                              0 No_Deposit                  0 Transient                289   none            
+ 8 City_Hotel          56                0                3      0 children BB    ESP     Online_TA      TA/TO                           0                0                0 B                A                              0 No_Deposit                  0 Transient                 82.4 none            
+ 9 City_Hotel          80                0                4      2 none     BB    FRA     Online_TA      TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                135   none            
+10 City_Hotel           6                2                2      2 children BB    FRA     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                180   none            
+11 City_Hotel         130                1                2      2 none     BB    FRA     Offline_TA/TO  TA/TO                           0                0                0 A                D                              0 No_Deposit                  0 Transient                 71   none            
+12 City_Hotel          27                0                1      1 none     BB    NLD     Online_TA      TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                120.  none            
+13 Resort_Hotel        16                1                2      2 none     BB    GBR     Corporate      Corporate                       0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…             40   none            
+14 Resort_Hotel        46                0                2      2 none     BB    PRT     Offline_TA/TO  TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                162   none            
+15 City_Hotel         297                1                1      2 none     BB    FRA     Groups         TA/TO                           0                0                0 A                A                              0 No_Deposit                236 Transient-Pa…             65   none            
+16 City_Hotel         423                1                1      2 none     HB    DEU     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…            122.  none            
+17 City_Hotel          22                1                2      2 none     BB    FRA     Online_TA      TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                121.  none            
+18 Resort_Hotel        96                4                7      2 none     HB    GBR     Groups         TA/TO                           0                0                0 A                A                              4 No_Deposit                  0 Transient-Pa…             74.2 none            
+19 City_Hotel           0                1                0      1 none     BB    PRT     Corporate      Corporate                       0                0                0 E                E                              0 No_Deposit                  0 Transient                139   parking         
+20 Resort_Hotel         7                1                2      2 none     HB    NULL    Online_TA      TA/TO                           0                0                1 E                I                              1 No_Deposit                  0 Transient                 78.4 parking         
+21 Resort_Hotel       209                2                5      2 none     BB    GBR     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 76.2 none            
+22 City_Hotel           1                1                0      2 none     SC    CN      Online_TA      TA/TO                           0                0                0 A                B                              0 No_Deposit                  0 Transient                 98   none            
+23 City_Hotel         205                0                5      2 none     BB    GBR     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 70.0 none            
+24 Resort_Hotel        45                0                1      2 none     BB    PRT     Online_TA      TA/TO                           0                0                0 A                D                              1 No_Deposit                  0 Transient-Pa…             65   none            
+25 City_Hotel         134                0                1      1 none     BB    PRT     Groups         TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…             75   none            
+26 City_Hotel         179                2                5      2 none     BB    DEU     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                107.  none            
+27 City_Hotel           0                1                3      1 none     BB    DEU     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Contract                  91   none            
+28 City_Hotel          72                0                2      2 none     BB    DEU     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                121.  parking         
+29 City_Hotel          39                0                3      1 none     BB    PRT     Online_TA      TA/TO                           0                0                0 A                A                              1 No_Deposit                  0 Transient                 94.5 none            
+30 City_Hotel           5                2                5      1 none     BB    ITA     Aviation       Corporate                       0                0                0 D                D                              0 No_Deposit                  0 Transient                110   none            
+31 City_Hotel          43                1                2      2 none     BB    NLD     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 68   none            
+32 City_Hotel         157                0                2      2 children BB    BEL     Online_TA      TA/TO                           0                0                0 A                D                              0 No_Deposit                  0 Transient-Pa…            122.  none            
+33 City_Hotel           0                0                1      2 none     BB    FRA     Groups         TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                124   none            
+34 Resort_Hotel       230                2                3      2 none     BB    GBR     Offline_TA/TO  TA/TO                           0                0                0 E                E                              0 No_Deposit                  0 Transient                 46.8 none            
+35 Resort_Hotel        48                1                1      2 none     BB    ESP     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                206   none            
+36 Resort_Hotel       151                3                6      2 none     HB    GBR     Online_TA      TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                167.  none            
+37 Resort_Hotel       171                2                5      2 none     BB    GBR     Online_TA      TA/TO                           0                0                0 D                D                              2 No_Deposit                  0 Transient-Pa…            183.  none            
+38 City_Hotel           1                0                1      2 none     SC    PRT     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                139   none            
+39 Resort_Hotel        39                2                3      2 none     BB    PRT     Online_TA      TA/TO                           0                0                0 A                B                              0 No_Deposit                  0 Transient                180.  none            
+40 City_Hotel          61                2                0      2 none     BB    FRA     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…             91   none            
+41 Resort_Hotel       127                2                5      2 children HB    PRT     Direct         Direct                          0                0                0 E                E                              4 No_Deposit                  0 Transient                334.  parking         
+42 Resort_Hotel       244                1                0      2 none     BB    HRV     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 84   parking         
+43 Resort_Hotel         4                0                1      1 none     BB    PRT     Offline_TA/TO  TA/TO                           1                0                2 A                D                              0 No_Deposit                  0 Transient                 30   none            
+44 Resort_Hotel         4                1                1      1 none     BB    ESP     Offline_TA/TO  TA/TO                           0                0                0 A                D                              0 No_Deposit                  0 Transient                 25   none            
+45 City_Hotel         134                0                1      1 none     BB    PRT     Groups         TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…             75   none            
+46 Resort_Hotel       161                2                5      3 none     BB    IRL     Online_TA      TA/TO                           0                0                0 E                E                              0 No_Deposit                  0 Transient-Pa…             81.6 none            
+47 Resort_Hotel       210                4               10      2 none     BB    NOR     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 61.9 none            
+48 Resort_Hotel        96                2                5      2 none     HB    DEU     Online_TA      TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                 78.4 none            
+49 Resort_Hotel        83                2                5      1 none     BB    GBR     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Contract                  34.2 none            
+50 Resort_Hotel       232                2                5      1 none     BB    AUT     Offline_TA/TO  TA/TO                           0                0                0 A                A                              2 No_Deposit                  0 Transient                 25.5 none            
+51 City_Hotel          17                2                2      2 none     BB    DEU     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                108.  none            
+52 City_Hotel          40                0                4      2 none     BB    AUT     Online_TA      TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                 96.9 none            
+53 City_Hotel         141                1                0      2 none     BB    CN      Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…             90   none            
+54 Resort_Hotel         0                1                0      2 none     BB    BEL     Direct         Direct                          0                0                0 G                G                              0 No_Deposit                  0 Transient                116   parking         
+55 City_Hotel         181                0                2      1 none     BB    FRA     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…            120   none            
+# … with 49,945 more rows, and 2 more variables: total_of_special_requests &lt;dbl&gt;, arrival_date &lt;date&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-hotel-auto[
+
+```r
+library(tidyverse)
+library(broom)
+
+read_csv('https://tidymodels.org/start/case-study/hotels.csv') %&gt;%
+* mutate(across(where(is.character), as.factor))
+```
+]
+ 
+.panel2-hotel-auto[
+
+```
+# A tibble: 50,000 × 23
+   hotel        lead_time stays_in_weeken… stays_in_week_n… adults children meal  country market_segment distribution_ch… is_repeated_gue… previous_cancel… previous_bookin… reserved_room_t… assigned_room_t… booking_changes deposit_type days_in_waiting… customer_type average_daily_r… required_car_pa…
+   &lt;fct&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;  &lt;dbl&gt; &lt;fct&gt;    &lt;fct&gt; &lt;fct&gt;   &lt;fct&gt;          &lt;fct&gt;                       &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt; &lt;fct&gt;            &lt;fct&gt;                      &lt;dbl&gt; &lt;fct&gt;                   &lt;dbl&gt; &lt;fct&gt;                    &lt;dbl&gt; &lt;fct&gt;           
+ 1 City_Hotel         217                1                3      2 none     BB    DEU     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…             80.8 none            
+ 2 City_Hotel           2                0                1      2 none     BB    PRT     Direct         Direct                          0                0                0 D                K                              0 No_Deposit                  0 Transient                170   none            
+ 3 Resort_Hotel        95                2                5      2 none     BB    GBR     Online_TA      TA/TO                           0                0                0 A                A                              2 No_Deposit                  0 Transient                  8   none            
+ 4 Resort_Hotel       143                2                6      2 none     HB    ROU     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 81   none            
+ 5 Resort_Hotel       136                1                4      2 none     HB    PRT     Direct         Direct                          0                0                0 F                F                              0 No_Deposit                  0 Transient                158.  none            
+ 6 City_Hotel          67                2                2      2 none     SC    GBR     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 49.1 none            
+ 7 Resort_Hotel        47                0                2      2 children BB    ESP     Direct         Direct                          0                0                0 C                C                              0 No_Deposit                  0 Transient                289   none            
+ 8 City_Hotel          56                0                3      0 children BB    ESP     Online_TA      TA/TO                           0                0                0 B                A                              0 No_Deposit                  0 Transient                 82.4 none            
+ 9 City_Hotel          80                0                4      2 none     BB    FRA     Online_TA      TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                135   none            
+10 City_Hotel           6                2                2      2 children BB    FRA     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                180   none            
+11 City_Hotel         130                1                2      2 none     BB    FRA     Offline_TA/TO  TA/TO                           0                0                0 A                D                              0 No_Deposit                  0 Transient                 71   none            
+12 City_Hotel          27                0                1      1 none     BB    NLD     Online_TA      TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                120.  none            
+13 Resort_Hotel        16                1                2      2 none     BB    GBR     Corporate      Corporate                       0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…             40   none            
+14 Resort_Hotel        46                0                2      2 none     BB    PRT     Offline_TA/TO  TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                162   none            
+15 City_Hotel         297                1                1      2 none     BB    FRA     Groups         TA/TO                           0                0                0 A                A                              0 No_Deposit                236 Transient-Pa…             65   none            
+16 City_Hotel         423                1                1      2 none     HB    DEU     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…            122.  none            
+17 City_Hotel          22                1                2      2 none     BB    FRA     Online_TA      TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                121.  none            
+18 Resort_Hotel        96                4                7      2 none     HB    GBR     Groups         TA/TO                           0                0                0 A                A                              4 No_Deposit                  0 Transient-Pa…             74.2 none            
+19 City_Hotel           0                1                0      1 none     BB    PRT     Corporate      Corporate                       0                0                0 E                E                              0 No_Deposit                  0 Transient                139   parking         
+20 Resort_Hotel         7                1                2      2 none     HB    NULL    Online_TA      TA/TO                           0                0                1 E                I                              1 No_Deposit                  0 Transient                 78.4 parking         
+21 Resort_Hotel       209                2                5      2 none     BB    GBR     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 76.2 none            
+22 City_Hotel           1                1                0      2 none     SC    CN      Online_TA      TA/TO                           0                0                0 A                B                              0 No_Deposit                  0 Transient                 98   none            
+23 City_Hotel         205                0                5      2 none     BB    GBR     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 70.0 none            
+24 Resort_Hotel        45                0                1      2 none     BB    PRT     Online_TA      TA/TO                           0                0                0 A                D                              1 No_Deposit                  0 Transient-Pa…             65   none            
+25 City_Hotel         134                0                1      1 none     BB    PRT     Groups         TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…             75   none            
+26 City_Hotel         179                2                5      2 none     BB    DEU     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                107.  none            
+27 City_Hotel           0                1                3      1 none     BB    DEU     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Contract                  91   none            
+28 City_Hotel          72                0                2      2 none     BB    DEU     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                121.  parking         
+29 City_Hotel          39                0                3      1 none     BB    PRT     Online_TA      TA/TO                           0                0                0 A                A                              1 No_Deposit                  0 Transient                 94.5 none            
+30 City_Hotel           5                2                5      1 none     BB    ITA     Aviation       Corporate                       0                0                0 D                D                              0 No_Deposit                  0 Transient                110   none            
+31 City_Hotel          43                1                2      2 none     BB    NLD     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 68   none            
+32 City_Hotel         157                0                2      2 children BB    BEL     Online_TA      TA/TO                           0                0                0 A                D                              0 No_Deposit                  0 Transient-Pa…            122.  none            
+33 City_Hotel           0                0                1      2 none     BB    FRA     Groups         TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                124   none            
+34 Resort_Hotel       230                2                3      2 none     BB    GBR     Offline_TA/TO  TA/TO                           0                0                0 E                E                              0 No_Deposit                  0 Transient                 46.8 none            
+35 Resort_Hotel        48                1                1      2 none     BB    ESP     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                206   none            
+36 Resort_Hotel       151                3                6      2 none     HB    GBR     Online_TA      TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                167.  none            
+37 Resort_Hotel       171                2                5      2 none     BB    GBR     Online_TA      TA/TO                           0                0                0 D                D                              2 No_Deposit                  0 Transient-Pa…            183.  none            
+38 City_Hotel           1                0                1      2 none     SC    PRT     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                139   none            
+39 Resort_Hotel        39                2                3      2 none     BB    PRT     Online_TA      TA/TO                           0                0                0 A                B                              0 No_Deposit                  0 Transient                180.  none            
+40 City_Hotel          61                2                0      2 none     BB    FRA     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…             91   none            
+41 Resort_Hotel       127                2                5      2 children HB    PRT     Direct         Direct                          0                0                0 E                E                              4 No_Deposit                  0 Transient                334.  parking         
+42 Resort_Hotel       244                1                0      2 none     BB    HRV     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 84   parking         
+43 Resort_Hotel         4                0                1      1 none     BB    PRT     Offline_TA/TO  TA/TO                           1                0                2 A                D                              0 No_Deposit                  0 Transient                 30   none            
+44 Resort_Hotel         4                1                1      1 none     BB    ESP     Offline_TA/TO  TA/TO                           0                0                0 A                D                              0 No_Deposit                  0 Transient                 25   none            
+45 City_Hotel         134                0                1      1 none     BB    PRT     Groups         TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…             75   none            
+46 Resort_Hotel       161                2                5      3 none     BB    IRL     Online_TA      TA/TO                           0                0                0 E                E                              0 No_Deposit                  0 Transient-Pa…             81.6 none            
+47 Resort_Hotel       210                4               10      2 none     BB    NOR     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 61.9 none            
+48 Resort_Hotel        96                2                5      2 none     HB    DEU     Online_TA      TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                 78.4 none            
+49 Resort_Hotel        83                2                5      1 none     BB    GBR     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Contract                  34.2 none            
+50 Resort_Hotel       232                2                5      1 none     BB    AUT     Offline_TA/TO  TA/TO                           0                0                0 A                A                              2 No_Deposit                  0 Transient                 25.5 none            
+51 City_Hotel          17                2                2      2 none     BB    DEU     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                108.  none            
+52 City_Hotel          40                0                4      2 none     BB    AUT     Online_TA      TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                 96.9 none            
+53 City_Hotel         141                1                0      2 none     BB    CN      Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…             90   none            
+54 Resort_Hotel         0                1                0      2 none     BB    BEL     Direct         Direct                          0                0                0 G                G                              0 No_Deposit                  0 Transient                116   parking         
+55 City_Hotel         181                0                2      1 none     BB    FRA     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…            120   none            
+# … with 49,945 more rows, and 2 more variables: total_of_special_requests &lt;dbl&gt;, arrival_date &lt;date&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-hotel-auto[
+
+```r
+library(tidyverse)
+library(broom)
+
+read_csv('https://tidymodels.org/start/case-study/hotels.csv') %&gt;%
+  mutate(across(where(is.character), as.factor)) -&gt;
+*hotels
+```
+]
+ 
+.panel2-hotel-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-hotel-auto[
+
+```r
+library(tidyverse)
+library(broom)
+
+read_csv('https://tidymodels.org/start/case-study/hotels.csv') %&gt;%
+  mutate(across(where(is.character), as.factor)) -&gt;
+hotels
+
+*dim(hotels)
+```
+]
+ 
+.panel2-hotel-auto[
+
+```
+[1] 50000    23
+```
+]
+
+---
+count: false
+ 
+
+.panel1-hotel-auto[
+
+```r
+library(tidyverse)
+library(broom)
+
+read_csv('https://tidymodels.org/start/case-study/hotels.csv') %&gt;%
+  mutate(across(where(is.character), as.factor)) -&gt;
+hotels
+
+dim(hotels)
+
+*hotels
+```
+]
+ 
+.panel2-hotel-auto[
+
+```
+[1] 50000    23
+```
+
+```
+# A tibble: 50,000 × 23
+   hotel        lead_time stays_in_weeken… stays_in_week_n… adults children meal  country market_segment distribution_ch… is_repeated_gue… previous_cancel… previous_bookin… reserved_room_t… assigned_room_t… booking_changes deposit_type days_in_waiting… customer_type average_daily_r… required_car_pa…
+   &lt;fct&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;  &lt;dbl&gt; &lt;fct&gt;    &lt;fct&gt; &lt;fct&gt;   &lt;fct&gt;          &lt;fct&gt;                       &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt; &lt;fct&gt;            &lt;fct&gt;                      &lt;dbl&gt; &lt;fct&gt;                   &lt;dbl&gt; &lt;fct&gt;                    &lt;dbl&gt; &lt;fct&gt;           
+ 1 City_Hotel         217                1                3      2 none     BB    DEU     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…             80.8 none            
+ 2 City_Hotel           2                0                1      2 none     BB    PRT     Direct         Direct                          0                0                0 D                K                              0 No_Deposit                  0 Transient                170   none            
+ 3 Resort_Hotel        95                2                5      2 none     BB    GBR     Online_TA      TA/TO                           0                0                0 A                A                              2 No_Deposit                  0 Transient                  8   none            
+ 4 Resort_Hotel       143                2                6      2 none     HB    ROU     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 81   none            
+ 5 Resort_Hotel       136                1                4      2 none     HB    PRT     Direct         Direct                          0                0                0 F                F                              0 No_Deposit                  0 Transient                158.  none            
+ 6 City_Hotel          67                2                2      2 none     SC    GBR     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 49.1 none            
+ 7 Resort_Hotel        47                0                2      2 children BB    ESP     Direct         Direct                          0                0                0 C                C                              0 No_Deposit                  0 Transient                289   none            
+ 8 City_Hotel          56                0                3      0 children BB    ESP     Online_TA      TA/TO                           0                0                0 B                A                              0 No_Deposit                  0 Transient                 82.4 none            
+ 9 City_Hotel          80                0                4      2 none     BB    FRA     Online_TA      TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                135   none            
+10 City_Hotel           6                2                2      2 children BB    FRA     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                180   none            
+11 City_Hotel         130                1                2      2 none     BB    FRA     Offline_TA/TO  TA/TO                           0                0                0 A                D                              0 No_Deposit                  0 Transient                 71   none            
+12 City_Hotel          27                0                1      1 none     BB    NLD     Online_TA      TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                120.  none            
+13 Resort_Hotel        16                1                2      2 none     BB    GBR     Corporate      Corporate                       0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…             40   none            
+14 Resort_Hotel        46                0                2      2 none     BB    PRT     Offline_TA/TO  TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                162   none            
+15 City_Hotel         297                1                1      2 none     BB    FRA     Groups         TA/TO                           0                0                0 A                A                              0 No_Deposit                236 Transient-Pa…             65   none            
+16 City_Hotel         423                1                1      2 none     HB    DEU     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…            122.  none            
+17 City_Hotel          22                1                2      2 none     BB    FRA     Online_TA      TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                121.  none            
+18 Resort_Hotel        96                4                7      2 none     HB    GBR     Groups         TA/TO                           0                0                0 A                A                              4 No_Deposit                  0 Transient-Pa…             74.2 none            
+19 City_Hotel           0                1                0      1 none     BB    PRT     Corporate      Corporate                       0                0                0 E                E                              0 No_Deposit                  0 Transient                139   parking         
+20 Resort_Hotel         7                1                2      2 none     HB    NULL    Online_TA      TA/TO                           0                0                1 E                I                              1 No_Deposit                  0 Transient                 78.4 parking         
+21 Resort_Hotel       209                2                5      2 none     BB    GBR     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 76.2 none            
+22 City_Hotel           1                1                0      2 none     SC    CN      Online_TA      TA/TO                           0                0                0 A                B                              0 No_Deposit                  0 Transient                 98   none            
+23 City_Hotel         205                0                5      2 none     BB    GBR     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 70.0 none            
+24 Resort_Hotel        45                0                1      2 none     BB    PRT     Online_TA      TA/TO                           0                0                0 A                D                              1 No_Deposit                  0 Transient-Pa…             65   none            
+25 City_Hotel         134                0                1      1 none     BB    PRT     Groups         TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…             75   none            
+26 City_Hotel         179                2                5      2 none     BB    DEU     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                107.  none            
+27 City_Hotel           0                1                3      1 none     BB    DEU     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Contract                  91   none            
+28 City_Hotel          72                0                2      2 none     BB    DEU     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                121.  parking         
+29 City_Hotel          39                0                3      1 none     BB    PRT     Online_TA      TA/TO                           0                0                0 A                A                              1 No_Deposit                  0 Transient                 94.5 none            
+30 City_Hotel           5                2                5      1 none     BB    ITA     Aviation       Corporate                       0                0                0 D                D                              0 No_Deposit                  0 Transient                110   none            
+31 City_Hotel          43                1                2      2 none     BB    NLD     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 68   none            
+32 City_Hotel         157                0                2      2 children BB    BEL     Online_TA      TA/TO                           0                0                0 A                D                              0 No_Deposit                  0 Transient-Pa…            122.  none            
+33 City_Hotel           0                0                1      2 none     BB    FRA     Groups         TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                124   none            
+34 Resort_Hotel       230                2                3      2 none     BB    GBR     Offline_TA/TO  TA/TO                           0                0                0 E                E                              0 No_Deposit                  0 Transient                 46.8 none            
+35 Resort_Hotel        48                1                1      2 none     BB    ESP     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                206   none            
+36 Resort_Hotel       151                3                6      2 none     HB    GBR     Online_TA      TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                167.  none            
+37 Resort_Hotel       171                2                5      2 none     BB    GBR     Online_TA      TA/TO                           0                0                0 D                D                              2 No_Deposit                  0 Transient-Pa…            183.  none            
+38 City_Hotel           1                0                1      2 none     SC    PRT     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                139   none            
+39 Resort_Hotel        39                2                3      2 none     BB    PRT     Online_TA      TA/TO                           0                0                0 A                B                              0 No_Deposit                  0 Transient                180.  none            
+40 City_Hotel          61                2                0      2 none     BB    FRA     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…             91   none            
+41 Resort_Hotel       127                2                5      2 children HB    PRT     Direct         Direct                          0                0                0 E                E                              4 No_Deposit                  0 Transient                334.  parking         
+42 Resort_Hotel       244                1                0      2 none     BB    HRV     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 84   parking         
+43 Resort_Hotel         4                0                1      1 none     BB    PRT     Offline_TA/TO  TA/TO                           1                0                2 A                D                              0 No_Deposit                  0 Transient                 30   none            
+44 Resort_Hotel         4                1                1      1 none     BB    ESP     Offline_TA/TO  TA/TO                           0                0                0 A                D                              0 No_Deposit                  0 Transient                 25   none            
+45 City_Hotel         134                0                1      1 none     BB    PRT     Groups         TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…             75   none            
+46 Resort_Hotel       161                2                5      3 none     BB    IRL     Online_TA      TA/TO                           0                0                0 E                E                              0 No_Deposit                  0 Transient-Pa…             81.6 none            
+47 Resort_Hotel       210                4               10      2 none     BB    NOR     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 61.9 none            
+48 Resort_Hotel        96                2                5      2 none     HB    DEU     Online_TA      TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                 78.4 none            
+49 Resort_Hotel        83                2                5      1 none     BB    GBR     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Contract                  34.2 none            
+50 Resort_Hotel       232                2                5      1 none     BB    AUT     Offline_TA/TO  TA/TO                           0                0                0 A                A                              2 No_Deposit                  0 Transient                 25.5 none            
+51 City_Hotel          17                2                2      2 none     BB    DEU     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                108.  none            
+52 City_Hotel          40                0                4      2 none     BB    AUT     Online_TA      TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                 96.9 none            
+53 City_Hotel         141                1                0      2 none     BB    CN      Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…             90   none            
+54 Resort_Hotel         0                1                0      2 none     BB    BEL     Direct         Direct                          0                0                0 G                G                              0 No_Deposit                  0 Transient                116   parking         
+55 City_Hotel         181                0                2      1 none     BB    FRA     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…            120   none            
+# … with 49,945 more rows, and 2 more variables: total_of_special_requests &lt;dbl&gt;, arrival_date &lt;date&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-hotel-auto[
+
+```r
+library(tidyverse)
+library(broom)
+
+read_csv('https://tidymodels.org/start/case-study/hotels.csv') %&gt;%
+  mutate(across(where(is.character), as.factor)) -&gt;
+hotels
+
+dim(hotels)
+
+hotels %&gt;%
+* mutate(ind_children = as.numeric(children == "children") )
+```
+]
+ 
+.panel2-hotel-auto[
+
+```
+[1] 50000    23
+```
+
+```
+# A tibble: 50,000 × 24
+   hotel        lead_time stays_in_weeken… stays_in_week_n… adults children meal  country market_segment distribution_ch… is_repeated_gue… previous_cancel… previous_bookin… reserved_room_t… assigned_room_t… booking_changes deposit_type days_in_waiting… customer_type average_daily_r… required_car_pa…
+   &lt;fct&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;  &lt;dbl&gt; &lt;fct&gt;    &lt;fct&gt; &lt;fct&gt;   &lt;fct&gt;          &lt;fct&gt;                       &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt; &lt;fct&gt;            &lt;fct&gt;                      &lt;dbl&gt; &lt;fct&gt;                   &lt;dbl&gt; &lt;fct&gt;                    &lt;dbl&gt; &lt;fct&gt;           
+ 1 City_Hotel         217                1                3      2 none     BB    DEU     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…             80.8 none            
+ 2 City_Hotel           2                0                1      2 none     BB    PRT     Direct         Direct                          0                0                0 D                K                              0 No_Deposit                  0 Transient                170   none            
+ 3 Resort_Hotel        95                2                5      2 none     BB    GBR     Online_TA      TA/TO                           0                0                0 A                A                              2 No_Deposit                  0 Transient                  8   none            
+ 4 Resort_Hotel       143                2                6      2 none     HB    ROU     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 81   none            
+ 5 Resort_Hotel       136                1                4      2 none     HB    PRT     Direct         Direct                          0                0                0 F                F                              0 No_Deposit                  0 Transient                158.  none            
+ 6 City_Hotel          67                2                2      2 none     SC    GBR     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 49.1 none            
+ 7 Resort_Hotel        47                0                2      2 children BB    ESP     Direct         Direct                          0                0                0 C                C                              0 No_Deposit                  0 Transient                289   none            
+ 8 City_Hotel          56                0                3      0 children BB    ESP     Online_TA      TA/TO                           0                0                0 B                A                              0 No_Deposit                  0 Transient                 82.4 none            
+ 9 City_Hotel          80                0                4      2 none     BB    FRA     Online_TA      TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                135   none            
+10 City_Hotel           6                2                2      2 children BB    FRA     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                180   none            
+11 City_Hotel         130                1                2      2 none     BB    FRA     Offline_TA/TO  TA/TO                           0                0                0 A                D                              0 No_Deposit                  0 Transient                 71   none            
+12 City_Hotel          27                0                1      1 none     BB    NLD     Online_TA      TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                120.  none            
+13 Resort_Hotel        16                1                2      2 none     BB    GBR     Corporate      Corporate                       0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…             40   none            
+14 Resort_Hotel        46                0                2      2 none     BB    PRT     Offline_TA/TO  TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                162   none            
+15 City_Hotel         297                1                1      2 none     BB    FRA     Groups         TA/TO                           0                0                0 A                A                              0 No_Deposit                236 Transient-Pa…             65   none            
+16 City_Hotel         423                1                1      2 none     HB    DEU     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…            122.  none            
+17 City_Hotel          22                1                2      2 none     BB    FRA     Online_TA      TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                121.  none            
+18 Resort_Hotel        96                4                7      2 none     HB    GBR     Groups         TA/TO                           0                0                0 A                A                              4 No_Deposit                  0 Transient-Pa…             74.2 none            
+19 City_Hotel           0                1                0      1 none     BB    PRT     Corporate      Corporate                       0                0                0 E                E                              0 No_Deposit                  0 Transient                139   parking         
+20 Resort_Hotel         7                1                2      2 none     HB    NULL    Online_TA      TA/TO                           0                0                1 E                I                              1 No_Deposit                  0 Transient                 78.4 parking         
+21 Resort_Hotel       209                2                5      2 none     BB    GBR     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 76.2 none            
+22 City_Hotel           1                1                0      2 none     SC    CN      Online_TA      TA/TO                           0                0                0 A                B                              0 No_Deposit                  0 Transient                 98   none            
+23 City_Hotel         205                0                5      2 none     BB    GBR     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 70.0 none            
+24 Resort_Hotel        45                0                1      2 none     BB    PRT     Online_TA      TA/TO                           0                0                0 A                D                              1 No_Deposit                  0 Transient-Pa…             65   none            
+25 City_Hotel         134                0                1      1 none     BB    PRT     Groups         TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…             75   none            
+26 City_Hotel         179                2                5      2 none     BB    DEU     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                107.  none            
+27 City_Hotel           0                1                3      1 none     BB    DEU     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Contract                  91   none            
+28 City_Hotel          72                0                2      2 none     BB    DEU     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                121.  parking         
+29 City_Hotel          39                0                3      1 none     BB    PRT     Online_TA      TA/TO                           0                0                0 A                A                              1 No_Deposit                  0 Transient                 94.5 none            
+30 City_Hotel           5                2                5      1 none     BB    ITA     Aviation       Corporate                       0                0                0 D                D                              0 No_Deposit                  0 Transient                110   none            
+31 City_Hotel          43                1                2      2 none     BB    NLD     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 68   none            
+32 City_Hotel         157                0                2      2 children BB    BEL     Online_TA      TA/TO                           0                0                0 A                D                              0 No_Deposit                  0 Transient-Pa…            122.  none            
+33 City_Hotel           0                0                1      2 none     BB    FRA     Groups         TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                124   none            
+34 Resort_Hotel       230                2                3      2 none     BB    GBR     Offline_TA/TO  TA/TO                           0                0                0 E                E                              0 No_Deposit                  0 Transient                 46.8 none            
+35 Resort_Hotel        48                1                1      2 none     BB    ESP     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                206   none            
+36 Resort_Hotel       151                3                6      2 none     HB    GBR     Online_TA      TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                167.  none            
+37 Resort_Hotel       171                2                5      2 none     BB    GBR     Online_TA      TA/TO                           0                0                0 D                D                              2 No_Deposit                  0 Transient-Pa…            183.  none            
+38 City_Hotel           1                0                1      2 none     SC    PRT     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                139   none            
+39 Resort_Hotel        39                2                3      2 none     BB    PRT     Online_TA      TA/TO                           0                0                0 A                B                              0 No_Deposit                  0 Transient                180.  none            
+40 City_Hotel          61                2                0      2 none     BB    FRA     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…             91   none            
+41 Resort_Hotel       127                2                5      2 children HB    PRT     Direct         Direct                          0                0                0 E                E                              4 No_Deposit                  0 Transient                334.  parking         
+42 Resort_Hotel       244                1                0      2 none     BB    HRV     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 84   parking         
+43 Resort_Hotel         4                0                1      1 none     BB    PRT     Offline_TA/TO  TA/TO                           1                0                2 A                D                              0 No_Deposit                  0 Transient                 30   none            
+44 Resort_Hotel         4                1                1      1 none     BB    ESP     Offline_TA/TO  TA/TO                           0                0                0 A                D                              0 No_Deposit                  0 Transient                 25   none            
+45 City_Hotel         134                0                1      1 none     BB    PRT     Groups         TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…             75   none            
+46 Resort_Hotel       161                2                5      3 none     BB    IRL     Online_TA      TA/TO                           0                0                0 E                E                              0 No_Deposit                  0 Transient-Pa…             81.6 none            
+47 Resort_Hotel       210                4               10      2 none     BB    NOR     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                 61.9 none            
+48 Resort_Hotel        96                2                5      2 none     HB    DEU     Online_TA      TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                 78.4 none            
+49 Resort_Hotel        83                2                5      1 none     BB    GBR     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Contract                  34.2 none            
+50 Resort_Hotel       232                2                5      1 none     BB    AUT     Offline_TA/TO  TA/TO                           0                0                0 A                A                              2 No_Deposit                  0 Transient                 25.5 none            
+51 City_Hotel          17                2                2      2 none     BB    DEU     Online_TA      TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient                108.  none            
+52 City_Hotel          40                0                4      2 none     BB    AUT     Online_TA      TA/TO                           0                0                0 D                D                              0 No_Deposit                  0 Transient                 96.9 none            
+53 City_Hotel         141                1                0      2 none     BB    CN      Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…             90   none            
+54 Resort_Hotel         0                1                0      2 none     BB    BEL     Direct         Direct                          0                0                0 G                G                              0 No_Deposit                  0 Transient                116   parking         
+55 City_Hotel         181                0                2      1 none     BB    FRA     Offline_TA/TO  TA/TO                           0                0                0 A                A                              0 No_Deposit                  0 Transient-Pa…            120   none            
+# … with 49,945 more rows, and 3 more variables: total_of_special_requests &lt;dbl&gt;, arrival_date &lt;date&gt;, ind_children &lt;dbl&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-hotel-auto[
+
+```r
+library(tidyverse)
+library(broom)
+
+read_csv('https://tidymodels.org/start/case-study/hotels.csv') %&gt;%
+  mutate(across(where(is.character), as.factor)) -&gt;
+hotels
+
+dim(hotels)
+
+hotels %&gt;%
+  mutate(ind_children = as.numeric(children == "children") ) %&gt;%
+* glm(ind_children ~ lead_time,
+* family = binomial(link = "logit"),
+* data = .)
+```
+]
+ 
+.panel2-hotel-auto[
+
+```
+[1] 50000    23
+```
+
+```
+
+Call:  glm(formula = ind_children ~ lead_time, family = binomial(link = "logit"), 
+    data = .)
+
+Coefficients:
+(Intercept)    lead_time  
+ -2.3906349   -0.0005293  
+
+Degrees of Freedom: 49999 Total (i.e. Null);  49998 Residual
+Null Deviance:	    28060 
+Residual Deviance: 28050 	AIC: 28060
+```
+]
+
+---
+count: false
+ 
+
+.panel1-hotel-auto[
+
+```r
+library(tidyverse)
+library(broom)
+
+read_csv('https://tidymodels.org/start/case-study/hotels.csv') %&gt;%
+  mutate(across(where(is.character), as.factor)) -&gt;
+hotels
+
+dim(hotels)
+
+hotels %&gt;%
+  mutate(ind_children = as.numeric(children == "children") ) %&gt;%
+  glm(ind_children ~ lead_time,
+  family = binomial(link = "logit"),
+  data = .) %&gt;%
+* augment()
+```
+]
+ 
+.panel2-hotel-auto[
+
+```
+[1] 50000    23
+```
+
+```
+# A tibble: 50,000 × 8
+   ind_children lead_time .fitted .resid .std.resid      .hat .sigma     .cooksd
+          &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt;
+ 1            0       217   -2.51 -0.396     -0.396 0.0000663  0.749 0.00000271 
+ 2            0         2   -2.39 -0.418     -0.418 0.0000354  0.749 0.00000162 
+ 3            0        95   -2.44 -0.409     -0.409 0.0000207  0.749 0.000000902
+ 4            0       143   -2.47 -0.404     -0.404 0.0000304  0.749 0.00000129 
+ 5            0       136   -2.46 -0.404     -0.404 0.0000283  0.749 0.00000121 
+ 6            0        67   -2.43 -0.412     -0.412 0.0000203  0.749 0.000000899
+ 7            1        47   -2.42  2.24       2.24  0.0000225  0.749 0.000126   
+ 8            1        56   -2.42  2.24       2.24  0.0000213  0.749 0.000120   
+ 9            0        80   -2.43 -0.410     -0.410 0.0000200  0.749 0.000000879
+10            1         6   -2.39  2.23       2.23  0.0000338  0.749 0.000185   
+11            0       130   -2.46 -0.405     -0.405 0.0000267  0.749 0.00000114 
+12            0        27   -2.40 -0.416     -0.416 0.0000269  0.749 0.00000121 
+13            0        16   -2.40 -0.417     -0.417 0.0000302  0.749 0.00000137 
+14            0        46   -2.41 -0.414     -0.414 0.0000227  0.749 0.00000101 
+15            0       297   -2.55 -0.388     -0.388 0.000131   0.749 0.00000512 
+16            0       423   -2.61 -0.376     -0.376 0.000280   0.749 0.0000103  
+17            0        22   -2.40 -0.416     -0.416 0.0000283  0.749 0.00000128 
+18            0        96   -2.44 -0.409     -0.409 0.0000208  0.749 0.000000906
+19            0         0   -2.39 -0.419     -0.419 0.0000362  0.749 0.00000166 
+20            0         7   -2.39 -0.418     -0.418 0.0000334  0.749 0.00000152 
+21            0       209   -2.50 -0.397     -0.397 0.0000613  0.749 0.00000251 
+22            0         1   -2.39 -0.419     -0.419 0.0000358  0.749 0.00000164 
+23            0       205   -2.50 -0.397     -0.397 0.0000588  0.749 0.00000242 
+24            0        45   -2.41 -0.414     -0.414 0.0000229  0.749 0.00000102 
+25            0       134   -2.46 -0.405     -0.405 0.0000278  0.749 0.00000118 
+26            0       179   -2.49 -0.400     -0.400 0.0000448  0.749 0.00000187 
+27            0         0   -2.39 -0.419     -0.419 0.0000362  0.749 0.00000166 
+28            0        72   -2.43 -0.411     -0.411 0.0000201  0.749 0.000000886
+29            0        39   -2.41 -0.414     -0.415 0.0000240  0.749 0.00000108 
+30            0         5   -2.39 -0.418     -0.418 0.0000342  0.749 0.00000156 
+31            0        43   -2.41 -0.414     -0.414 0.0000232  0.749 0.00000104 
+32            1       157   -2.47  2.26       2.26  0.0000353  0.749 0.000210   
+33            0         0   -2.39 -0.419     -0.419 0.0000362  0.749 0.00000166 
+34            0       230   -2.51 -0.395     -0.395 0.0000750  0.749 0.00000304 
+35            0        48   -2.42 -0.414     -0.414 0.0000224  0.749 0.000000999
+36            0       151   -2.47 -0.403     -0.403 0.0000331  0.749 0.00000140 
+37            0       171   -2.48 -0.401     -0.401 0.0000411  0.749 0.00000172 
+38            0         1   -2.39 -0.419     -0.419 0.0000358  0.749 0.00000164 
+39            0        39   -2.41 -0.414     -0.415 0.0000240  0.749 0.00000108 
+40            0        61   -2.42 -0.412     -0.412 0.0000208  0.749 0.000000921
+41            1       127   -2.46  2.25       2.25  0.0000260  0.749 0.000152   
+42            0       244   -2.52 -0.393     -0.393 0.0000852  0.749 0.00000343 
+43            0         4   -2.39 -0.418     -0.418 0.0000346  0.749 0.00000158 
+44            0         4   -2.39 -0.418     -0.418 0.0000346  0.749 0.00000158 
+45            0       134   -2.46 -0.405     -0.405 0.0000278  0.749 0.00000118 
+46            0       161   -2.48 -0.402     -0.402 0.0000369  0.749 0.00000155 
+47            0       210   -2.50 -0.397     -0.397 0.0000619  0.749 0.00000253 
+48            0        96   -2.44 -0.409     -0.409 0.0000208  0.749 0.000000906
+49            0        83   -2.43 -0.410     -0.410 0.0000201  0.749 0.000000879
+50            0       232   -2.51 -0.395     -0.395 0.0000764  0.749 0.00000310 
+51            0        17   -2.40 -0.417     -0.417 0.0000299  0.749 0.00000135 
+52            0        40   -2.41 -0.414     -0.414 0.0000238  0.749 0.00000107 
+53            0       141   -2.47 -0.404     -0.404 0.0000298  0.749 0.00000127 
+54            0         0   -2.39 -0.419     -0.419 0.0000362  0.749 0.00000166 
+55            0       181   -2.49 -0.400     -0.400 0.0000458  0.749 0.00000191 
+# … with 49,945 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-hotel-auto[
+
+```r
+library(tidyverse)
+library(broom)
+
+read_csv('https://tidymodels.org/start/case-study/hotels.csv') %&gt;%
+  mutate(across(where(is.character), as.factor)) -&gt;
+hotels
+
+dim(hotels)
+
+hotels %&gt;%
+  mutate(ind_children = as.numeric(children == "children") ) %&gt;%
+  glm(ind_children ~ lead_time,
+  family = binomial(link = "logit"),
+  data = .) %&gt;%
+  augment() %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-hotel-auto[
+
+```
+[1] 50000    23
+```
+
+![](logit_files/figure-html/hotel_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-hotel-auto[
+
+```r
+library(tidyverse)
+library(broom)
+
+read_csv('https://tidymodels.org/start/case-study/hotels.csv') %&gt;%
+  mutate(across(where(is.character), as.factor)) -&gt;
+hotels
+
+dim(hotels)
+
+hotels %&gt;%
+  mutate(ind_children = as.numeric(children == "children") ) %&gt;%
+  glm(ind_children ~ lead_time,
+  family = binomial(link = "logit"),
+  data = .) %&gt;%
+  augment() %&gt;%
+  ggplot() +
+* aes(x = lead_time, y = ind_children)
+```
+]
+ 
+.panel2-hotel-auto[
+
+```
+[1] 50000    23
+```
+
+![](logit_files/figure-html/hotel_auto_12_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-hotel-auto[
+
+```r
+library(tidyverse)
+library(broom)
+
+read_csv('https://tidymodels.org/start/case-study/hotels.csv') %&gt;%
+  mutate(across(where(is.character), as.factor)) -&gt;
+hotels
+
+dim(hotels)
+
+hotels %&gt;%
+  mutate(ind_children = as.numeric(children == "children") ) %&gt;%
+  glm(ind_children ~ lead_time,
+  family = binomial(link = "logit"),
+  data = .) %&gt;%
+  augment() %&gt;%
+  ggplot() +
+  aes(x = lead_time, y = ind_children) +
+* geom_jitter(height = .1)
+```
+]
+ 
+.panel2-hotel-auto[
+
+```
+[1] 50000    23
+```
+
+![](logit_files/figure-html/hotel_auto_13_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-hotel-auto[
+
+```r
+library(tidyverse)
+library(broom)
+
+read_csv('https://tidymodels.org/start/case-study/hotels.csv') %&gt;%
+  mutate(across(where(is.character), as.factor)) -&gt;
+hotels
+
+dim(hotels)
+
+hotels %&gt;%
+  mutate(ind_children = as.numeric(children == "children") ) %&gt;%
+  glm(ind_children ~ lead_time,
+  family = binomial(link = "logit"),
+  data = .) %&gt;%
+  augment() %&gt;%
+  ggplot() +
+  aes(x = lead_time, y = ind_children) +
+  geom_jitter(height = .1) +
+* geom_point(aes(y = exp(.fitted)/(1+exp(.fitted))), alpha = .01, color = "blue")
+```
+]
+ 
+.panel2-hotel-auto[
+
+```
+[1] 50000    23
+```
+
+![](logit_files/figure-html/hotel_auto_14_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-hotel-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-hotel-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-hotel-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-mtcars-auto[
+
+```r
+*library(tidyverse)
+```
+]
+ 
+.panel2-mtcars-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-mtcars-auto[
+
+```r
+library(tidyverse)
+*library(broom)
+```
+]
+ 
+.panel2-mtcars-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-mtcars-auto[
+
+```r
+library(tidyverse)
+library(broom)
+
+*glm(am ~ disp,
+* family = binomial(link = "logit"),
+* data = mtcars
+*) 
+```
+]
+ 
+.panel2-mtcars-auto[
+
+```
+
+Call:  glm(formula = am ~ disp, family = binomial(link = "logit"), data = mtcars)
+
+Coefficients:
+(Intercept)         disp  
+     2.6308      -0.0146  
+
+Degrees of Freedom: 31 Total (i.e. Null);  30 Residual
+Null Deviance:	    43.23 
+Residual Deviance: 29.73 	AIC: 33.73
+```
+]
+
+---
+count: false
+ 
+
+.panel1-mtcars-auto[
+
+```r
+library(tidyverse)
+library(broom)
+
+glm(am ~ disp,
+  family = binomial(link = "logit"),
+  data = mtcars
+) %&gt;%
+* augment()
+```
+]
+ 
+.panel2-mtcars-auto[
+
+```
+# A tibble: 32 × 9
+   .rownames              am  disp .fitted .resid .std.resid   .hat .sigma  .cooksd
+   &lt;chr&gt;               &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;
+ 1 Mazda RX4               1 160     0.294  1.06       1.08  0.0539  0.992 0.0224  
+ 2 Mazda RX4 Wag           1 160     0.294  1.06       1.08  0.0539  0.992 0.0224  
+ 3 Datsun 710              1 108     1.05   0.773      0.801 0.0685  1.00  0.0138  
+ 4 Hornet 4 Drive          0 258    -1.14  -0.746     -0.772 0.0653  1.00  0.0120  
+ 5 Hornet Sportabout       0 360    -2.63  -0.374     -0.387 0.0654  1.01  0.00271 
+ 6 Valiant                 0 225    -0.655 -0.915     -0.942 0.0568  0.997 0.0166  
+ 7 Duster 360              0 360    -2.63  -0.374     -0.387 0.0654  1.01  0.00271 
+ 8 Merc 240D               0 147.    0.488 -1.39      -1.43  0.0569  0.977 0.0522  
+ 9 Merc 230                0 141.    0.575 -1.43      -1.47  0.0586  0.975 0.0587  
+10 Merc 280                0 168.    0.183 -1.26      -1.29  0.0527  0.984 0.0352  
+11 Merc 280C               0 168.    0.183 -1.26      -1.29  0.0527  0.984 0.0352  
+12 Merc 450SE              0 276.   -1.40  -0.665     -0.689 0.0691  1.00  0.00986 
+13 Merc 450SL              0 276.   -1.40  -0.665     -0.689 0.0691  1.00  0.00986 
+14 Merc 450SLC             0 276.   -1.40  -0.665     -0.689 0.0691  1.00  0.00986 
+15 Cadillac Fleetwood      0 472    -4.26  -0.167     -0.170 0.0333  1.01  0.000251
+16 Lincoln Continental     0 460    -4.09  -0.182     -0.186 0.0366  1.01  0.000331
+17 Chrysler Imperial       0 440    -3.80  -0.211     -0.215 0.0423  1.01  0.000518
+18 Fiat 128                1  78.7   1.48   0.640      0.666 0.0751  1.00  0.00998 
+19 Honda Civic             1  75.7   1.53   0.627      0.653 0.0756  1.01  0.00962 
+20 Toyota Corolla          1  71.1   1.59   0.609      0.633 0.0761  1.01  0.00907 
+21 Toyota Corona           0 120.    0.877 -1.57      -1.62  0.0648  0.967 0.0891  
+22 Dodge Challenger        0 318    -2.01  -0.501     -0.520 0.0718  1.01  0.00556 
+23 AMC Javelin             0 304    -1.81  -0.551     -0.572 0.0720  1.01  0.00685 
+24 Camaro Z28              0 350    -2.48  -0.401     -0.415 0.0676  1.01  0.00325 
+25 Pontiac Firebird        0 400    -3.21  -0.281     -0.289 0.0544  1.01  0.00123 
+26 Fiat X1-9               1  79     1.48   0.641      0.667 0.0751  1.00  0.0100  
+27 Porsche 914-2           1 120.    0.874  0.835      0.864 0.0648  1.00  0.0155  
+28 Lotus Europa            1  95.1   1.24   0.712      0.739 0.0719  1.00  0.0121  
+29 Ford Pantera L          1 351    -2.50   2.27       2.35  0.0674  0.914 0.470   
+30 Ferrari Dino            1 145     0.513  0.969      0.998 0.0574  0.995 0.0193  
+31 Maserati Bora           1 301    -1.77   1.96       2.04  0.0719  0.939 0.244   
+32 Volvo 142E              1 121     0.864  0.839      0.867 0.0646  1.00  0.0156  
+```
+]
+
+---
+count: false
+ 
+
+.panel1-mtcars-auto[
+
+```r
+library(tidyverse)
+library(broom)
+
+glm(am ~ disp,
+  family = binomial(link = "logit"),
+  data = mtcars
+) %&gt;%
+  augment() %&gt;%
+* mutate(linked = exp(.fitted)/(1+exp(.fitted)))
+```
+]
+ 
+.panel2-mtcars-auto[
+
+```
+# A tibble: 32 × 10
+   .rownames              am  disp .fitted .resid .std.resid   .hat .sigma  .cooksd linked
+   &lt;chr&gt;               &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;
+ 1 Mazda RX4               1 160     0.294  1.06       1.08  0.0539  0.992 0.0224   0.573 
+ 2 Mazda RX4 Wag           1 160     0.294  1.06       1.08  0.0539  0.992 0.0224   0.573 
+ 3 Datsun 710              1 108     1.05   0.773      0.801 0.0685  1.00  0.0138   0.741 
+ 4 Hornet 4 Drive          0 258    -1.14  -0.746     -0.772 0.0653  1.00  0.0120   0.243 
+ 5 Hornet Sportabout       0 360    -2.63  -0.374     -0.387 0.0654  1.01  0.00271  0.0674
+ 6 Valiant                 0 225    -0.655 -0.915     -0.942 0.0568  0.997 0.0166   0.342 
+ 7 Duster 360              0 360    -2.63  -0.374     -0.387 0.0654  1.01  0.00271  0.0674
+ 8 Merc 240D               0 147.    0.488 -1.39      -1.43  0.0569  0.977 0.0522   0.620 
+ 9 Merc 230                0 141.    0.575 -1.43      -1.47  0.0586  0.975 0.0587   0.640 
+10 Merc 280                0 168.    0.183 -1.26      -1.29  0.0527  0.984 0.0352   0.546 
+11 Merc 280C               0 168.    0.183 -1.26      -1.29  0.0527  0.984 0.0352   0.546 
+12 Merc 450SE              0 276.   -1.40  -0.665     -0.689 0.0691  1.00  0.00986  0.198 
+13 Merc 450SL              0 276.   -1.40  -0.665     -0.689 0.0691  1.00  0.00986  0.198 
+14 Merc 450SLC             0 276.   -1.40  -0.665     -0.689 0.0691  1.00  0.00986  0.198 
+15 Cadillac Fleetwood      0 472    -4.26  -0.167     -0.170 0.0333  1.01  0.000251 0.0139
+16 Lincoln Continental     0 460    -4.09  -0.182     -0.186 0.0366  1.01  0.000331 0.0165
+17 Chrysler Imperial       0 440    -3.80  -0.211     -0.215 0.0423  1.01  0.000518 0.0220
+18 Fiat 128                1  78.7   1.48   0.640      0.666 0.0751  1.00  0.00998  0.815 
+19 Honda Civic             1  75.7   1.53   0.627      0.653 0.0756  1.01  0.00962  0.821 
+20 Toyota Corolla          1  71.1   1.59   0.609      0.633 0.0761  1.01  0.00907  0.831 
+21 Toyota Corona           0 120.    0.877 -1.57      -1.62  0.0648  0.967 0.0891   0.706 
+22 Dodge Challenger        0 318    -2.01  -0.501     -0.520 0.0718  1.01  0.00556  0.118 
+23 AMC Javelin             0 304    -1.81  -0.551     -0.572 0.0720  1.01  0.00685  0.141 
+24 Camaro Z28              0 350    -2.48  -0.401     -0.415 0.0676  1.01  0.00325  0.0772
+25 Pontiac Firebird        0 400    -3.21  -0.281     -0.289 0.0544  1.01  0.00123  0.0388
+26 Fiat X1-9               1  79     1.48   0.641      0.667 0.0751  1.00  0.0100   0.814 
+27 Porsche 914-2           1 120.    0.874  0.835      0.864 0.0648  1.00  0.0155   0.706 
+28 Lotus Europa            1  95.1   1.24   0.712      0.739 0.0719  1.00  0.0121   0.776 
+29 Ford Pantera L          1 351    -2.50   2.27       2.35  0.0674  0.914 0.470    0.0762
+30 Ferrari Dino            1 145     0.513  0.969      0.998 0.0574  0.995 0.0193   0.626 
+31 Maserati Bora           1 301    -1.77   1.96       2.04  0.0719  0.939 0.244    0.146 
+32 Volvo 142E              1 121     0.864  0.839      0.867 0.0646  1.00  0.0156   0.703 
+```
+]
+
+---
+count: false
+ 
+
+.panel1-mtcars-auto[
+
+```r
+library(tidyverse)
+library(broom)
+
+glm(am ~ disp,
+  family = binomial(link = "logit"),
+  data = mtcars
+) %&gt;%
+  augment() %&gt;%
+  mutate(linked = exp(.fitted)/(1+exp(.fitted))) %&gt;%
+* mutate(force = (linked &gt; .5) %&gt;% as.numeric())
+```
+]
+ 
+.panel2-mtcars-auto[
+
+```
+# A tibble: 32 × 11
+   .rownames              am  disp .fitted .resid .std.resid   .hat .sigma  .cooksd linked force
+   &lt;chr&gt;               &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+ 1 Mazda RX4               1 160     0.294  1.06       1.08  0.0539  0.992 0.0224   0.573      1
+ 2 Mazda RX4 Wag           1 160     0.294  1.06       1.08  0.0539  0.992 0.0224   0.573      1
+ 3 Datsun 710              1 108     1.05   0.773      0.801 0.0685  1.00  0.0138   0.741      1
+ 4 Hornet 4 Drive          0 258    -1.14  -0.746     -0.772 0.0653  1.00  0.0120   0.243      0
+ 5 Hornet Sportabout       0 360    -2.63  -0.374     -0.387 0.0654  1.01  0.00271  0.0674     0
+ 6 Valiant                 0 225    -0.655 -0.915     -0.942 0.0568  0.997 0.0166   0.342      0
+ 7 Duster 360              0 360    -2.63  -0.374     -0.387 0.0654  1.01  0.00271  0.0674     0
+ 8 Merc 240D               0 147.    0.488 -1.39      -1.43  0.0569  0.977 0.0522   0.620      1
+ 9 Merc 230                0 141.    0.575 -1.43      -1.47  0.0586  0.975 0.0587   0.640      1
+10 Merc 280                0 168.    0.183 -1.26      -1.29  0.0527  0.984 0.0352   0.546      1
+11 Merc 280C               0 168.    0.183 -1.26      -1.29  0.0527  0.984 0.0352   0.546      1
+12 Merc 450SE              0 276.   -1.40  -0.665     -0.689 0.0691  1.00  0.00986  0.198      0
+13 Merc 450SL              0 276.   -1.40  -0.665     -0.689 0.0691  1.00  0.00986  0.198      0
+14 Merc 450SLC             0 276.   -1.40  -0.665     -0.689 0.0691  1.00  0.00986  0.198      0
+15 Cadillac Fleetwood      0 472    -4.26  -0.167     -0.170 0.0333  1.01  0.000251 0.0139     0
+16 Lincoln Continental     0 460    -4.09  -0.182     -0.186 0.0366  1.01  0.000331 0.0165     0
+17 Chrysler Imperial       0 440    -3.80  -0.211     -0.215 0.0423  1.01  0.000518 0.0220     0
+18 Fiat 128                1  78.7   1.48   0.640      0.666 0.0751  1.00  0.00998  0.815      1
+19 Honda Civic             1  75.7   1.53   0.627      0.653 0.0756  1.01  0.00962  0.821      1
+20 Toyota Corolla          1  71.1   1.59   0.609      0.633 0.0761  1.01  0.00907  0.831      1
+21 Toyota Corona           0 120.    0.877 -1.57      -1.62  0.0648  0.967 0.0891   0.706      1
+22 Dodge Challenger        0 318    -2.01  -0.501     -0.520 0.0718  1.01  0.00556  0.118      0
+23 AMC Javelin             0 304    -1.81  -0.551     -0.572 0.0720  1.01  0.00685  0.141      0
+24 Camaro Z28              0 350    -2.48  -0.401     -0.415 0.0676  1.01  0.00325  0.0772     0
+25 Pontiac Firebird        0 400    -3.21  -0.281     -0.289 0.0544  1.01  0.00123  0.0388     0
+26 Fiat X1-9               1  79     1.48   0.641      0.667 0.0751  1.00  0.0100   0.814      1
+27 Porsche 914-2           1 120.    0.874  0.835      0.864 0.0648  1.00  0.0155   0.706      1
+28 Lotus Europa            1  95.1   1.24   0.712      0.739 0.0719  1.00  0.0121   0.776      1
+29 Ford Pantera L          1 351    -2.50   2.27       2.35  0.0674  0.914 0.470    0.0762     0
+30 Ferrari Dino            1 145     0.513  0.969      0.998 0.0574  0.995 0.0193   0.626      1
+31 Maserati Bora           1 301    -1.77   1.96       2.04  0.0719  0.939 0.244    0.146      0
+32 Volvo 142E              1 121     0.864  0.839      0.867 0.0646  1.00  0.0156   0.703      1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-mtcars-auto[
+
+```r
+library(tidyverse)
+library(broom)
+
+glm(am ~ disp,
+  family = binomial(link = "logit"),
+  data = mtcars
+) %&gt;%
+  augment() %&gt;%
+  mutate(linked = exp(.fitted)/(1+exp(.fitted))) %&gt;%
+  mutate(force = (linked &gt; .5) %&gt;% as.numeric()) -&gt;
+*logistic_augmented
+```
+]
+ 
+.panel2-mtcars-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-mtcars-auto[
+
+```r
+library(tidyverse)
+library(broom)
+
+glm(am ~ disp,
+  family = binomial(link = "logit"),
+  data = mtcars
+) %&gt;%
+  augment() %&gt;%
+  mutate(linked = exp(.fitted)/(1+exp(.fitted))) %&gt;%
+  mutate(force = (linked &gt; .5) %&gt;% as.numeric()) -&gt;
+logistic_augmented
+
+*logistic_augmented
+```
+]
+ 
+.panel2-mtcars-auto[
+
+```
+# A tibble: 32 × 11
+   .rownames              am  disp .fitted .resid .std.resid   .hat .sigma  .cooksd linked force
+   &lt;chr&gt;               &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+ 1 Mazda RX4               1 160     0.294  1.06       1.08  0.0539  0.992 0.0224   0.573      1
+ 2 Mazda RX4 Wag           1 160     0.294  1.06       1.08  0.0539  0.992 0.0224   0.573      1
+ 3 Datsun 710              1 108     1.05   0.773      0.801 0.0685  1.00  0.0138   0.741      1
+ 4 Hornet 4 Drive          0 258    -1.14  -0.746     -0.772 0.0653  1.00  0.0120   0.243      0
+ 5 Hornet Sportabout       0 360    -2.63  -0.374     -0.387 0.0654  1.01  0.00271  0.0674     0
+ 6 Valiant                 0 225    -0.655 -0.915     -0.942 0.0568  0.997 0.0166   0.342      0
+ 7 Duster 360              0 360    -2.63  -0.374     -0.387 0.0654  1.01  0.00271  0.0674     0
+ 8 Merc 240D               0 147.    0.488 -1.39      -1.43  0.0569  0.977 0.0522   0.620      1
+ 9 Merc 230                0 141.    0.575 -1.43      -1.47  0.0586  0.975 0.0587   0.640      1
+10 Merc 280                0 168.    0.183 -1.26      -1.29  0.0527  0.984 0.0352   0.546      1
+11 Merc 280C               0 168.    0.183 -1.26      -1.29  0.0527  0.984 0.0352   0.546      1
+12 Merc 450SE              0 276.   -1.40  -0.665     -0.689 0.0691  1.00  0.00986  0.198      0
+13 Merc 450SL              0 276.   -1.40  -0.665     -0.689 0.0691  1.00  0.00986  0.198      0
+14 Merc 450SLC             0 276.   -1.40  -0.665     -0.689 0.0691  1.00  0.00986  0.198      0
+15 Cadillac Fleetwood      0 472    -4.26  -0.167     -0.170 0.0333  1.01  0.000251 0.0139     0
+16 Lincoln Continental     0 460    -4.09  -0.182     -0.186 0.0366  1.01  0.000331 0.0165     0
+17 Chrysler Imperial       0 440    -3.80  -0.211     -0.215 0.0423  1.01  0.000518 0.0220     0
+18 Fiat 128                1  78.7   1.48   0.640      0.666 0.0751  1.00  0.00998  0.815      1
+19 Honda Civic             1  75.7   1.53   0.627      0.653 0.0756  1.01  0.00962  0.821      1
+20 Toyota Corolla          1  71.1   1.59   0.609      0.633 0.0761  1.01  0.00907  0.831      1
+21 Toyota Corona           0 120.    0.877 -1.57      -1.62  0.0648  0.967 0.0891   0.706      1
+22 Dodge Challenger        0 318    -2.01  -0.501     -0.520 0.0718  1.01  0.00556  0.118      0
+23 AMC Javelin             0 304    -1.81  -0.551     -0.572 0.0720  1.01  0.00685  0.141      0
+24 Camaro Z28              0 350    -2.48  -0.401     -0.415 0.0676  1.01  0.00325  0.0772     0
+25 Pontiac Firebird        0 400    -3.21  -0.281     -0.289 0.0544  1.01  0.00123  0.0388     0
+26 Fiat X1-9               1  79     1.48   0.641      0.667 0.0751  1.00  0.0100   0.814      1
+27 Porsche 914-2           1 120.    0.874  0.835      0.864 0.0648  1.00  0.0155   0.706      1
+28 Lotus Europa            1  95.1   1.24   0.712      0.739 0.0719  1.00  0.0121   0.776      1
+29 Ford Pantera L          1 351    -2.50   2.27       2.35  0.0674  0.914 0.470    0.0762     0
+30 Ferrari Dino            1 145     0.513  0.969      0.998 0.0574  0.995 0.0193   0.626      1
+31 Maserati Bora           1 301    -1.77   1.96       2.04  0.0719  0.939 0.244    0.146      0
+32 Volvo 142E              1 121     0.864  0.839      0.867 0.0646  1.00  0.0156   0.703      1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-mtcars-auto[
+
+```r
+library(tidyverse)
+library(broom)
+
+glm(am ~ disp,
+  family = binomial(link = "logit"),
+  data = mtcars
+) %&gt;%
+  augment() %&gt;%
+  mutate(linked = exp(.fitted)/(1+exp(.fitted))) %&gt;%
+  mutate(force = (linked &gt; .5) %&gt;% as.numeric()) -&gt;
+logistic_augmented
+
+logistic_augmented %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-mtcars-auto[
+![](logit_files/figure-html/mtcars_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-mtcars-auto[
+
+```r
+library(tidyverse)
+library(broom)
+
+glm(am ~ disp,
+  family = binomial(link = "logit"),
+  data = mtcars
+) %&gt;%
+  augment() %&gt;%
+  mutate(linked = exp(.fitted)/(1+exp(.fitted))) %&gt;%
+  mutate(force = (linked &gt; .5) %&gt;% as.numeric()) -&gt;
+logistic_augmented
+
+logistic_augmented %&gt;%
+  ggplot() +
+* aes(x = disp, y = am, color = am)
+```
+]
+ 
+.panel2-mtcars-auto[
+![](logit_files/figure-html/mtcars_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-mtcars-auto[
+
+```r
+library(tidyverse)
+library(broom)
+
+glm(am ~ disp,
+  family = binomial(link = "logit"),
+  data = mtcars
+) %&gt;%
+  augment() %&gt;%
+  mutate(linked = exp(.fitted)/(1+exp(.fitted))) %&gt;%
+  mutate(force = (linked &gt; .5) %&gt;% as.numeric()) -&gt;
+logistic_augmented
+
+logistic_augmented %&gt;%
+  ggplot() +
+  aes(x = disp, y = am, color = am) +
+* geom_point()
+```
+]
+ 
+.panel2-mtcars-auto[
+![](logit_files/figure-html/mtcars_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-mtcars-auto[
+
+```r
+library(tidyverse)
+library(broom)
+
+glm(am ~ disp,
+  family = binomial(link = "logit"),
+  data = mtcars
+) %&gt;%
+  augment() %&gt;%
+  mutate(linked = exp(.fitted)/(1+exp(.fitted))) %&gt;%
+  mutate(force = (linked &gt; .5) %&gt;% as.numeric()) -&gt;
+logistic_augmented
+
+logistic_augmented %&gt;%
+  ggplot() +
+  aes(x = disp, y = am, color = am) +
+  geom_point() +
+* geom_point(aes(y = linked,
+*                shape = am == force))
+```
+]
+ 
+.panel2-mtcars-auto[
+![](logit_files/figure-html/mtcars_auto_12_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-mtcars-auto[
+
+```r
+library(tidyverse)
+library(broom)
+
+glm(am ~ disp,
+  family = binomial(link = "logit"),
+  data = mtcars
+) %&gt;%
+  augment() %&gt;%
+  mutate(linked = exp(.fitted)/(1+exp(.fitted))) %&gt;%
+  mutate(force = (linked &gt; .5) %&gt;% as.numeric()) -&gt;
+logistic_augmented
+
+logistic_augmented %&gt;%
+  ggplot() +
+  aes(x = disp, y = am, color = am) +
+  geom_point() +
+  geom_point(aes(y = linked,
+                 shape = am == force)) +
+* scale_shape_manual(values = c(4, 1))
+```
+]
+ 
+.panel2-mtcars-auto[
+![](logit_files/figure-html/mtcars_auto_13_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-mtcars-auto[
+
+```r
+library(tidyverse)
+library(broom)
+
+glm(am ~ disp,
+  family = binomial(link = "logit"),
+  data = mtcars
+) %&gt;%
+  augment() %&gt;%
+  mutate(linked = exp(.fitted)/(1+exp(.fitted))) %&gt;%
+  mutate(force = (linked &gt; .5) %&gt;% as.numeric()) -&gt;
+logistic_augmented
+
+logistic_augmented %&gt;%
+  ggplot() +
+  aes(x = disp, y = am, color = am) +
+  geom_point() +
+  geom_point(aes(y = linked,
+                 shape = am == force)) +
+  scale_shape_manual(values = c(4, 1)) +
+* scale_color_viridis_c(end = .7)
+```
+]
+ 
+.panel2-mtcars-auto[
+![](logit_files/figure-html/mtcars_auto_14_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-mtcars-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-mtcars-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-mtcars-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
