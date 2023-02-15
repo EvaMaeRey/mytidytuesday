@@ -11,6 +11,10 @@ The goal of mytidytuesday is to hold small projects. They are like blogs
 posts, but mostly code. In the spirit of \#tidytuesday no pressure to
 write prose\!
 
+  - [2023-02-14-sugar-cookies/sugar\_cookies.html](https://evamaerey.github.io/mytidytuesday/2023-02-14-sugar-cookies/sugar_cookies.html)
+  - [2023-02-14-logit/logit.html](https://evamaerey.github.io/mytidytuesday/2023-02-14-logit/logit.html)
+  - [2023-02-13-broom-viz/broom\_viz\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2023-02-13-broom-viz/broom_viz_flipbook.html)
+  - [2023-02-13-broom-viz/broom\_viz.html](https://evamaerey.github.io/mytidytuesday/2023-02-13-broom-viz/broom_viz.html)
   - [2022-11-14-discrete-probability/discrete\_probability\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-11-14-discrete-probability/discrete_probability_flipbook.html)
   - [2022-11-13-ggdense/ggdense.html](https://evamaerey.github.io/mytidytuesday/2022-11-13-ggdense/ggdense.html)
   - [2022-11-05-penguins-presentation/penguins\_presentation\_ggols.html](https://evamaerey.github.io/mytidytuesday/2022-11-05-penguins-presentation/penguins_presentation_ggols.html)
