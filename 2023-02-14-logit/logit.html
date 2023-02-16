@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Logit fun</title>
+    <title>Logit</title>
     <meta charset="utf-8" />
     <meta name="author" content="" />
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
@@ -902,7 +902,8 @@ glm(am ~ disp,
   data = mtcars
 ) %&gt;%
   augment() %&gt;%
-* mutate(linked = exp(.fitted)/(1+exp(.fitted)))
+* mutate(linked =
+*          exp(.fitted)/(1+exp(.fitted)))
 ```
 ]
  
@@ -962,8 +963,10 @@ glm(am ~ disp,
   data = mtcars
 ) %&gt;%
   augment() %&gt;%
-  mutate(linked = exp(.fitted)/(1+exp(.fitted))) %&gt;%
-* mutate(force = (linked &gt; .5) %&gt;% as.numeric())
+  mutate(linked =
+           exp(.fitted)/(1+exp(.fitted))) %&gt;%
+* mutate(force = (linked &gt; .5) %&gt;%
+*          as.numeric())
 ```
 ]
  
@@ -1023,8 +1026,10 @@ glm(am ~ disp,
   data = mtcars
 ) %&gt;%
   augment() %&gt;%
-  mutate(linked = exp(.fitted)/(1+exp(.fitted))) %&gt;%
-  mutate(force = (linked &gt; .5) %&gt;% as.numeric()) -&gt;
+  mutate(linked =
+           exp(.fitted)/(1+exp(.fitted))) %&gt;%
+  mutate(force = (linked &gt; .5) %&gt;%
+           as.numeric()) -&gt;
 *logistic_augmented
 ```
 ]
@@ -1048,8 +1053,10 @@ glm(am ~ disp,
   data = mtcars
 ) %&gt;%
   augment() %&gt;%
-  mutate(linked = exp(.fitted)/(1+exp(.fitted))) %&gt;%
-  mutate(force = (linked &gt; .5) %&gt;% as.numeric()) -&gt;
+  mutate(linked =
+           exp(.fitted)/(1+exp(.fitted))) %&gt;%
+  mutate(force = (linked &gt; .5) %&gt;%
+           as.numeric()) -&gt;
 logistic_augmented
 
 *logistic_augmented
@@ -1112,8 +1119,10 @@ glm(am ~ disp,
   data = mtcars
 ) %&gt;%
   augment() %&gt;%
-  mutate(linked = exp(.fitted)/(1+exp(.fitted))) %&gt;%
-  mutate(force = (linked &gt; .5) %&gt;% as.numeric()) -&gt;
+  mutate(linked =
+           exp(.fitted)/(1+exp(.fitted))) %&gt;%
+  mutate(force = (linked &gt; .5) %&gt;%
+           as.numeric()) -&gt;
 logistic_augmented
 
 logistic_augmented %&gt;%
@@ -1140,8 +1149,10 @@ glm(am ~ disp,
   data = mtcars
 ) %&gt;%
   augment() %&gt;%
-  mutate(linked = exp(.fitted)/(1+exp(.fitted))) %&gt;%
-  mutate(force = (linked &gt; .5) %&gt;% as.numeric()) -&gt;
+  mutate(linked =
+           exp(.fitted)/(1+exp(.fitted))) %&gt;%
+  mutate(force = (linked &gt; .5) %&gt;%
+           as.numeric()) -&gt;
 logistic_augmented
 
 logistic_augmented %&gt;%
@@ -1169,8 +1180,10 @@ glm(am ~ disp,
   data = mtcars
 ) %&gt;%
   augment() %&gt;%
-  mutate(linked = exp(.fitted)/(1+exp(.fitted))) %&gt;%
-  mutate(force = (linked &gt; .5) %&gt;% as.numeric()) -&gt;
+  mutate(linked =
+           exp(.fitted)/(1+exp(.fitted))) %&gt;%
+  mutate(force = (linked &gt; .5) %&gt;%
+           as.numeric()) -&gt;
 logistic_augmented
 
 logistic_augmented %&gt;%
@@ -1199,8 +1212,10 @@ glm(am ~ disp,
   data = mtcars
 ) %&gt;%
   augment() %&gt;%
-  mutate(linked = exp(.fitted)/(1+exp(.fitted))) %&gt;%
-  mutate(force = (linked &gt; .5) %&gt;% as.numeric()) -&gt;
+  mutate(linked =
+           exp(.fitted)/(1+exp(.fitted))) %&gt;%
+  mutate(force = (linked &gt; .5) %&gt;%
+           as.numeric()) -&gt;
 logistic_augmented
 
 logistic_augmented %&gt;%
@@ -1231,8 +1246,10 @@ glm(am ~ disp,
   data = mtcars
 ) %&gt;%
   augment() %&gt;%
-  mutate(linked = exp(.fitted)/(1+exp(.fitted))) %&gt;%
-  mutate(force = (linked &gt; .5) %&gt;% as.numeric()) -&gt;
+  mutate(linked =
+           exp(.fitted)/(1+exp(.fitted))) %&gt;%
+  mutate(force = (linked &gt; .5) %&gt;%
+           as.numeric()) -&gt;
 logistic_augmented
 
 logistic_augmented %&gt;%
@@ -1264,8 +1281,10 @@ glm(am ~ disp,
   data = mtcars
 ) %&gt;%
   augment() %&gt;%
-  mutate(linked = exp(.fitted)/(1+exp(.fitted))) %&gt;%
-  mutate(force = (linked &gt; .5) %&gt;% as.numeric()) -&gt;
+  mutate(linked =
+           exp(.fitted)/(1+exp(.fitted))) %&gt;%
+  mutate(force = (linked &gt; .5) %&gt;%
+           as.numeric()) -&gt;
 logistic_augmented
 
 logistic_augmented %&gt;%

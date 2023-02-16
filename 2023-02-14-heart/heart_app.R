@@ -16,27 +16,49 @@ library(tidyverse)
 ui <- fluidPage(
 
   # Application title
-  titlePanel("What does pnorm(x = z) do?" ),
+  titlePanel("When your heart has some rough edges..." ),
 
-  titlePanel("Integrates under the normal from -infinity to Z" ),
-
-
+  titlePanel("... add vertices!" ),
 
   # Sidebar with a slider input for number of bins
   sidebarLayout(
     sidebarPanel(
-      sliderInput("z",step = .02,
-                  "Z:",
-                  min = -5,
-                  max = 5,
-                  value = 0)
+      sliderInput("z", step = 1,
+                  "Num Vertices:",
+                  min = 1,
+                  max = 150,
+                  value = 16),
+      selectInput("color", label = "color",
+                  choices = colors(),
+                  selected = "magenta"
+                  ),
+      selectInput("fill", label = "fill",
+                  choices = colors(),
+                  selected = "darkred"
+      ),
+      radioButtons("linetype",
+                   label = "linetype",
+                   selected = "dashed",
+                   choices = c("dashed", "dotted", "solid")
+      ),
+      sliderInput("alpha",step = .02,
+                  "alpha",
+                  min = 0,
+                  max = 1,
+                  value = .8),
+      sliderInput("size",step = 1,
+                  "size",
+                  min = 1,
+                  max = 10,
+                  value = 4),
 
     ),
 
     # Show a plot of the generated distribution
     mainPanel(
+      verbatimTextOutput("distText"),
       plotOutput("distPlot"),
-      verbatimTextOutput("distText")
+      tableOutput("distDf")
     )
   ),
 
@@ -48,44 +70,40 @@ ui <- fluidPage(
 
 
 
-'
-x0 = 0
-y0 = 0
-n_vertices = 40
-rotation = 0
-radius = .5
-size = 4
-linetype = "dashed"
-color = "magenta"
-fill = "darkred"
-alpha = .8
+
+x0 = 0; y0 = 0; rotation = 3
+radius = .5;
 
 groups <- max(c(length(x0), length(y0)))
+
+return_heart_df <- function(n_vertices){
 
   tibble::tibble(x0, y0, group = 1:groups) %>%
     tidyr::crossing(the_n = 2*pi*(1:n_vertices)/n_vertices) %>%
   dplyr::mutate(
     y = y0 + radius * (
-      .95 * cos(the_n)
+      .85 * cos(the_n)
       - .35 * cos(2 * the_n)
       - .25 * cos(3 * the_n)
       - .05 * cos(4 * the_n)
       ) - rotation * pi,
-    x = x0 + radius * (sin(the_n)^3) - rotation * pi) ->
-  df
-df
+    x = x0 + radius * (sin(the_n)^3) - rotation * pi)
+}
 
-ggplot() +
-  annotate(geom = "polygon",
-           x = df$x,
-           y = df$y,
-           size = size,
-           fill = fill,
-           alpha = alpha,
-           linetype = linetype,
-           color = color,
-           group = df$group
-           )
+
+'
+return_heart_df(n_vertices = input$z) %>%
+  ggplot() +
+  aes(x = x, y = y, group = group) +
+  geom_polygon(
+           fill = input$fill,
+           color = input$color,
+           size = input$size,
+           alpha = input$alpha,
+           linetype = input$linetype
+           ) +
+  coord_equal()
+
 ' ->
   for_shiny
 
@@ -94,6 +112,18 @@ ggplot() +
 server <- function(input, output) {
 
 
+  output$distText <- renderText({
+
+    for_shiny %>%
+      str_replace_all("input\\$z", as.character(input$z)) %>%
+      str_replace_all("input\\$color", as.character(input$color) %>% paste0('\\"', ., '\\"')) %>%
+      str_replace_all("input\\$linetype", as.character(input$linetype) %>% paste0('\\"', ., '\\"')) %>%
+      str_replace_all("input\\$fill", as.character(input$fill) %>% paste0('\\"', ., '\\"')) %>%
+      str_replace_all("input\\$alpha", as.character(input$alpha)) %>%
+      str_replace_all("input\\$size", as.character(input$size))
+
+
+  })
 
 
 
@@ -106,13 +136,13 @@ server <- function(input, output) {
 
   })
 
-  output$distText <- renderText({
 
-    for_shiny %>%
-      str_replace_all("input\\$z", as.character(input$z))
+
+  output$distDf <- renderTable({
+
+    df
 
   })
-
 
 }
 
