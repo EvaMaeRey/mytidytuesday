@@ -1,0 +1,44 @@
+---
+title: "Likelihood for binomial observations"
+author: "Evangeline Reynolds"
+date: "2/16/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(likelihoodExplore)
+
+
+tidy_likbinom <- function(x = 8, size = 10){
+probs <- 0:1000/1000
+
+likelihood <- likbinom(8, 10, prob = probs, log = F)
+
+log_likelihood <- likbinom(8, 10, prob = probs, log = T)
+
+tibble::tibble(probs, likelihood, log_likelihood, num_successes = 8, num_trials = 10) 
+
+}
+
+library(tidyverse)
+library(patchwork)
+(ggplot(tidy_likbinom(8,10)) + 
+  aes(probs, likelihood) + 
+  geom_area() + 
+  geom_vline(xintercept = .5,
+             linetype = "dashed"))/
+ggplot(tidy_likbinom(8,10)) + 
+  aes(probs, log_likelihood) + 
+  geom_line() + 
+  geom_vline(xintercept = .5,
+             linetype = "dashed") + 
+  patchwork::plot_annotation(title = "Likelihood and log likelihood of observing given 8 successes observed in 10 Bernoulli trails" %>% str_wrap(50))
+```
+
+
+

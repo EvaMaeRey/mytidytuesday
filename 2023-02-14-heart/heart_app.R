@@ -23,10 +23,10 @@ ui <- fluidPage(
   # Sidebar with a slider input for number of bins
   sidebarLayout(
     sidebarPanel(
-      sliderInput("z", step = 1,
+      sliderInput("z",step = 1,
                   "Num Vertices:",
-                  min = 1,
-                  max = 150,
+                  min = 10,
+                  max = 200,
                   value = 16),
       selectInput("color", label = "color",
                   choices = colors(),
@@ -49,18 +49,17 @@ ui <- fluidPage(
       sliderInput("size",step = 1,
                   "size",
                   min = 1,
-                  max = 10,
-                  value = 4),
+                  max = 5,
+                  value = 4)
 
     ),
 
     # Show a plot of the generated distribution
     mainPanel(
       verbatimTextOutput("distText"),
-      plotOutput("distPlot"),
-      tableOutput("distDf")
+      plotOutput("distPlot")
     )
-  ),
+  )
 
   # titlePanel(x_mod)
 
@@ -137,12 +136,12 @@ server <- function(input, output) {
   })
 
 
-
-  output$distDf <- renderTable({
-
-    df
-
-  })
+#
+#   output$distDf <- renderTable({
+#
+#     df
+#
+#   })
 
 }
 
