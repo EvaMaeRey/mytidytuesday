@@ -40,8 +40,9 @@ ui <- fluidPage(
 
     # Show a plot of the generated distribution
     mainPanel(
+      plotOutput("distPlot"),
       verbatimTextOutput("distText"),
-      plotOutput("distPlot")
+      tableOutput("distDF")
     )
   )
 
@@ -56,7 +57,7 @@ library(likelihoodExplore)
 
 
 tidy_likbinom <- function(x = 8, size = 10){
-  probs <- 0:1000/1000
+  probs <- 0:200/200
 
   likelihood <- likbinom(x, size, prob = probs, log = F)
 
@@ -69,7 +70,7 @@ tidy_likbinom <- function(x = 8, size = 10){
 '
 library(tidyverse)
 library(patchwork)
-# library(tidylikbinomial)
+# library(du_tidylikbinomial_teaching_package)
 
 (ggplot(tidy_likbinom(input$num_successes,input$num_trials)) +
   aes(probs, likelihood) +
@@ -101,7 +102,11 @@ server <- function(input, output) {
 
   })
 
+  output$distDF <- renderTable(digits = 3, {
 
+    tidy_likbinom(8, 10)
+
+  })
 
   output$distPlot <- renderPlot({
 
