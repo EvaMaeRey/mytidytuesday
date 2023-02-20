@@ -7,12 +7,98 @@
 #    http://shiny.rstudio.com/
 #
 
-#'
+##### R Stuff in the background ######
+
+x0 = 0; y0 = 0; rotation = 3
+radius = .5;
+
+groups <- max(c(length(x0), length(y0)))
+
+return_heart_df <- function(n_vertices){
+
+  tibble::tibble(x0, y0, group = 1:groups) %>%
+    tidyr::crossing(the_n = 2*pi*(1:n_vertices)/n_vertices) %>%
+    dplyr::mutate(
+      y = y0 + radius * (
+        .85 * cos(the_n)
+        - .35 * cos(2 * the_n)
+        - .25 * cos(3 * the_n)
+        - .05 * cos(4 * the_n)
+      ) - rotation * pi,
+      x = x0 + radius * (sin(the_n)^3) - rotation * pi)
+}
+
+
+### Design code to be featured in app ####
+return_heart_df(n_vertices = 16) %>%
+  ggplot() +
+  aes(x = x, y = y, group = group) +
+  geom_polygon(
+    fill = "darkred",
+    color = "magenta",
+    size = 4,
+    alpha = 0.8,
+    linetype = "dashed"
+  ) +
+  coord_equal()
+
+
+
+### What we need 'for shiny' translation of above
+'
+# library(my_return_heart_package)
+
+return_heart_df(n_vertices = input$z) %>%
+  ggplot() +
+  aes(x = x, y = y, group = group) +
+  geom_polygon(
+           fill = input$fill,
+           color = input$color,
+           size = input$size,
+           alpha = input$alpha,
+           linetype = input$linetype
+           ) +
+  coord_equal()
+
+' ->
+  for_shiny
+
+
+####### Shiny Stuff ####
 
 library(shiny)
 library(tidyverse)
 
-# Define UI for application that draws a histogram
+
+
+##### Define server logic ###
+#
+
+server <- function(input, output) {
+
+
+  output$distText <- renderText({
+
+    for_shiny %>%
+      str_replace_all("input\\$z", as.character(input$z)) %>%
+      str_replace_all("input\\$color", as.character(input$color) %>% paste0('\\"', ., '\\"')) %>%
+      str_replace_all("input\\$linetype", as.character(input$linetype) %>% paste0('\\"', ., '\\"')) %>%
+      str_replace_all("input\\$fill", as.character(input$fill) %>% paste0('\\"', ., '\\"')) %>%
+      str_replace_all("input\\$alpha", as.character(input$alpha)) %>%
+      str_replace_all("input\\$size", as.character(input$size))
+
+
+  })
+
+  output$distPlot <- renderPlot({
+
+    eval(parse(text = for_shiny))
+
+  })
+
+}
+
+## Define UI for application that draws a histogram ##
 ui <- fluidPage(
 
   # Application title
@@ -31,7 +117,7 @@ ui <- fluidPage(
       selectInput("color", label = "color",
                   choices = colors(),
                   selected = "magenta"
-                  ),
+      ),
       selectInput("fill", label = "fill",
                   choices = colors(),
                   selected = "darkred"
@@ -65,85 +151,6 @@ ui <- fluidPage(
 
 
 )
-
-
-
-
-
-x0 = 0; y0 = 0; rotation = 3
-radius = .5;
-
-groups <- max(c(length(x0), length(y0)))
-
-return_heart_df <- function(n_vertices){
-
-  tibble::tibble(x0, y0, group = 1:groups) %>%
-    tidyr::crossing(the_n = 2*pi*(1:n_vertices)/n_vertices) %>%
-  dplyr::mutate(
-    y = y0 + radius * (
-      .85 * cos(the_n)
-      - .35 * cos(2 * the_n)
-      - .25 * cos(3 * the_n)
-      - .05 * cos(4 * the_n)
-      ) - rotation * pi,
-    x = x0 + radius * (sin(the_n)^3) - rotation * pi)
-}
-
-
-'
-return_heart_df(n_vertices = input$z) %>%
-  ggplot() +
-  aes(x = x, y = y, group = group) +
-  geom_polygon(
-           fill = input$fill,
-           color = input$color,
-           size = input$size,
-           alpha = input$alpha,
-           linetype = input$linetype
-           ) +
-  coord_equal()
-
-' ->
-  for_shiny
-
-
-# Define server logic required to draw a histogram
-server <- function(input, output) {
-
-
-  output$distText <- renderText({
-
-    for_shiny %>%
-      str_replace_all("input\\$z", as.character(input$z)) %>%
-      str_replace_all("input\\$color", as.character(input$color) %>% paste0('\\"', ., '\\"')) %>%
-      str_replace_all("input\\$linetype", as.character(input$linetype) %>% paste0('\\"', ., '\\"')) %>%
-      str_replace_all("input\\$fill", as.character(input$fill) %>% paste0('\\"', ., '\\"')) %>%
-      str_replace_all("input\\$alpha", as.character(input$alpha)) %>%
-      str_replace_all("input\\$size", as.character(input$size))
-
-
-  })
-
-
-
-  output$distPlot <- renderPlot({
-
-    # generate bins based on input$bins from ui.R
-
-
-    eval(parse(text = for_shiny))
-
-  })
-
-
-#
-#   output$distDf <- renderTable({
-#
-#     df
-#
-#   })
-
-}
 
 # Run the application
 shinyApp(ui = ui, server = server)
