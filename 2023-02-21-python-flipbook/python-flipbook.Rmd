@@ -1,0 +1,125 @@
+---
+title: "A Python Flipbook"
+subtitle: "With {flipbookr} and xaringan"
+author: "Gina Reynolds, March 2020"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+This is pretty experimental work.  The python "parser" (basically no parsing) means there are strong constraints on code.  Each new line must yield complete code statement...  
+
+
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F, dev = "svg", fig.ext = "svg")
+library(flipbookr)
+library(tidyverse)
+```
+
+
+<!-- This next chunk is just for the developer -- working w/ local code -->
+
+```{r just_for_evamaerey, cache = FALSE, echo = FALSE, eval = T}
+try(source("../../../../../R/a_create_test_code.R"))
+try(source("../../../../../R/b_parsing.R"))
+try(source("../../../../../R/c_prep_sequences.R"))
+try(source("../../../../../R/d_prep_rmd_chunks.R"))
+try(source("../../../../../R/e_define_css.R"))
+try(source("../../../../../R/f_chunk_expand.R"))
+try(source("../../../../../R/g_exported_functions.R"))
+try(source("../../../../../R/h_write_instant_flipbook.R.R"))
+```
+
+
+---
+
+`r chunk_reveal("hello_python", lang = "python")`
+
+
+```{python hello_python, include = F}
+[1, 4] * 8
+
+3 + 4 * 8 
+
+2 + 6
+
+4 * 8
+
+[1,2] + [3,4,5,6]
+
+["hello", "world!", 1, 2, 3] * 2
+
+import numpy as np
+
+np.reshape(np.arange(1,25), 
+    (4,3,2), "F")
+```
+
+---
+
+`r chunk_reveal("simple_plot", lang = "python", widths = c(59,40))`
+
+
+```{python simple_plot, include = F}
+import matplotlib.pyplot as plt
+year = [1950, 1970, 
+  1990, 2010]
+pop = [2.519, 3, 5, 6]
+plt.plot(year, pop); plt.show()
+```
+
+
+
+
+---
+
+`r chunk_reveal("numpy", lang = "python")`
+
+
+```{python numpy, include = F}
+# import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+t = np.arange(0, 2, .05)
+t
+s = np.sin(2*np.pi*t)
+s
+```
+
+
+---
+
+`r chunk_reveal("numpy2", lang = "python")`
+
+
+```{python numpy2, include = F}
+plt.plot(t, s)
+plt.xlabel('time (s)')
+plt.ylabel('voltage (mV)')
+plt.grid(True); plt.show()
+```
+
+
+
+
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 80%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+```
