@@ -1,0 +1,87 @@
+---
+title: "tables w ggplot2"
+author: "Evangeline Reynolds"
+date: "2/21/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r pressure}
+library(tidyverse)
+tidytitanic::tidy_titanic %>%
+  count(sex, survived) %>% 
+  ggplot() + 
+  aes(sex, survived) + 
+  geom_text(aes(label = n))
+  
+tidytitanic::tidy_titanic %>%
+  count(sex, survived) %>% 
+  ggplot() + 
+  aes(x = 0, y = 0) + 
+  facet_grid(rows = vars(sex), cols =  vars(survived)) +
+  geom_text(aes(label = n))
+
+last_plot() %>% layer_data()
+
+tidytitanic::tidy_titanic %>%
+  count(sex, survived, age) %>% 
+  ggplot() + 
+  aes(x = 0, y = 0) + 
+  facet_grid(rows = vars(sex, age), cols =  vars(survived)) +
+  geom_text(aes(label = n))
+
+
+compute_layer_count_table <- function(data, scales){
+  
+  data %>% 
+    mutate(label = n(),
+           x = 0,
+           y = 0 ) %>% 
+    distinct()
+  
+}
+
+StatLayercount <- ggplot2::ggproto(
+  `_class` = "StatLayercount",
+  `_inherit` = ggplot2::Stat,
+  required_aes = c("x", "y"),
+  compute_group = compute_layer_count_table
+  )
+
+geom_text_layer_count <- function(
+  mapping = NULL,
+  data = NULL,
+  position = "identity",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatLayercount,  # proto object from step 2
+    geom = ggplot2::GeomText,  # inherit other behavior
+    data = data,
+    mapping = mapping,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+
+tidytitanic::tidy_titanic %>%
+  ggplot() + 
+  aes(x=0, y= 0) +
+  facet_grid(rows = vars(sex, age), cols =  vars(survived)) +
+  geom_text_layer_count( ) 
+
+last_plot() -> g
+
+g
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
