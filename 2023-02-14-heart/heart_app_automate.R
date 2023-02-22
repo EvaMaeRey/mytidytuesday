@@ -39,7 +39,7 @@ return_heart_df(n_vertices = 16) %>%
   geom_polygon(
     fill = "darkred",
     color = "magenta",
-    size = 4,
+    linewidth = 4,
     alpha = 0.8,
     linetype = "dashed"
   ) +
@@ -52,7 +52,7 @@ return_heart_df(n_vertices = 16) %>%
 input_num_vertices <- 16
 input_char_fill <-"darkred"
 input_char_color <- "magenta"
-input_num_size <- 4
+input_num_linewidth <- 4
 input_num_alpha <- 0.8
 input_char_linetype <- "dashed"
 
@@ -61,30 +61,140 @@ input_char_linetype <- "dashed"
 'input_num_vertices <- 16
 input_char_fill <-"darkred"
 input_char_color <- "magenta"
-input_num_size <- 4
+input_num_linewidth <- 4
 input_num_alpha <- 0.8
 input_char_linetype <- "dashed"' ->
   var_defs_string
 
+#' Title
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' return_var_defs_string_example()
+return_var_defs_string_example <- function(){
+
+'input_num_vertices <- 16
+input_char_fill <-"darkred"
+input_char_color <- "magenta"
+input_num_linewidth <- 4
+input_num_alpha <- 0.8
+input_char_linetype <- "dashed"'
+
+}
+
+
+
+#' Title
+#'
+#' @param var_defs_string
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' return_var_defs_string_example() %>%
+#' var_defs_data_frame()
 var_defs_data_frame <- function(var_defs_string){
 
   var_defs_string %>%
     read_lines() %>%
     tibble(x = .) %>%
-    tidyr::separate(x, sep = "\\s?<-\\s?|\\s?=\\s?", into = c("input","value"))
-
+    tidyr::separate(x, sep = "\\s?<-\\s?|\\s?=\\s?", into = c("input","value")) %>%
+    mutate(input = str_remove(input, "input_")) %>%
+    mutate(input_type = str_extract(input, "num|char")) %>%
+    mutate(short_input = str_remove(input, ".+_.+_"))
 
 }
 
+
+#' Title
+#'
+#' @param input
+#' @param short_input
+#' @param value
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' write_input_code_numeric("num_verticies", "vertices", 16) %>% cat()
+write_input_code_numeric <- function(input = "", short_input, value){
+  paste0(
+'sliderInput(inputId = "', input, '",
+             label = "', short_input, '",
+             step = 1,
+             min = 10,
+             max = 200,
+             value = ', value, '
+             )')
+
+  }
+
+#' Title
+#'
+#' @param input
+#' @param short_input
+#' @param value
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' write_input_code_character("char_color", "color", "magenta") %>% cat()
+write_input_code_character <- function(input, short_input, value){
+  paste0(
+'selectInput(inputId = "', input, '",
+             label = "', short_input, '",
+             selected = ', value, ',
+             choices = ', value, '
+             )')
+         }
 
 # scaffolding for inputs
-vars_write_shiny_panel <- function(input_names){
+#' Title
+#'
+#' @param var_data_frame
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' return_var_defs_string_example() %>%
+#' var_defs_data_frame() %>%
+#' var_data_frame_write_shiny_panel()
+var_data_frame_write_shiny_panel <- function(var_data_frame){
 
-
+  var_data_frame %>%
+    mutate(input_type = str_extract(input, "num|char")) %>%
+    mutate(input_code = ifelse(input_type == "num",
+                               write_input_code_numeric(input, short_input, value),
+                               write_input_code_character(input, short_input, value))
+           )
 
 }
 
+#' Title
+#'
+#' @param var_defs_string
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' return_var_defs_string_example() %>%
+#' var_defs_to_shiny_code %>%
+#' cat()
+var_defs_to_shiny_code <- function(var_defs_string){
 
+    var_defs_string %>%
+    var_defs_data_frame() %>%
+    var_data_frame_write_shiny_panel() %>%
+    pull(input_code) %>%
+    paste(collapse = ",\n")
+
+}
 
 #### Server ish ####
 return_heart_df(n_vertices = input_num_vertices) %>%
@@ -93,7 +203,7 @@ return_heart_df(n_vertices = input_num_vertices) %>%
   geom_polygon(
     fill = input_char_fill,
     color = input_char_color,
-    size = input_num_size,
+    linewidth = input_num_linewidth,
     alpha = input_num_alpha,
     linetype = input_char_linetype
   ) +
@@ -103,7 +213,7 @@ return_heart_df(n_vertices = input_num_vertices) %>%
 
 ### What we need 'for shiny' translation of above  Original approach for reference
 '
-# library(my_return_heart_package)
+# library(returnheart)
 
 return_heart_df(n_vertices = input$num_vertices) %>%
   ggplot() +
@@ -111,7 +221,7 @@ return_heart_df(n_vertices = input$num_vertices) %>%
   geom_polygon(
            fill = input$char_fill,
            color = input$char_color,
-           size = input$num_size,
+           linewidth = input$num_linewidth,
            alpha = input$num_alpha,
            linetype = input$char_linetype
            ) +
@@ -132,7 +242,7 @@ return_heart_df(n_vertices = input_num_vertices) %>%
   geom_polygon(
            fill = input_char_fill,
            color = input_char_color,
-           size = input_num_size,
+           linewidth = input_num_linewidth,
            alpha = input_num_alpha,
            linetype = input_char_linetype
            ) +
@@ -165,7 +275,7 @@ server <- function(input, output) {
       # numeric
       str_replace_all("input\\$num_vertices", as.character(input$num_vertices)) %>%
       str_replace_all("input\\$num_alpha", as.character(input$num_alpha)) %>%
-      str_replace_all("input\\$num_size", as.character(input$num_size)) %>%
+      str_replace_all("input\\$num_linewidth", as.character(input$num_linewidth)) %>%
       # character
       str_replace_all("input\\$char_color", as.character(input$char_color) %>% paste0('\\"', ., '\\"')) %>%
       str_replace_all("input\\$char_linetype", as.character(input$char_linetype) %>% paste0('\\"', ., '\\"')) %>%
@@ -221,8 +331,8 @@ ui <- fluidPage(
                   max = 1,
                   step = .02
                   ),
-      sliderInput(inputId = "num_size",
-                  label = "size",
+      sliderInput(inputId = "num_linewidth",
+                  label = "linewidth",
                   value = 4,
                   min = 1,
                   max = 5,
