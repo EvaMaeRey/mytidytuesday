@@ -1,0 +1,94 @@
+---
+title: "classes"
+author: "Evangeline Reynolds"
+date: "2/27/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+setClass("pt", 
+         slots = list(source = "data.frame", 
+                    fun = "character",
+                    rows = "character",
+                    cols = "character",
+                    filter = "character",
+                    out = "data.frame"
+                    ))
+
+obj <- new("pt", 
+           source = cars, 
+           fun = "None",
+           rows = "None",
+           cols = "None", 
+           filter = "None",
+           out = cars)
+
+obj
+
+modify_obj <- function(obj){
+  
+  obj@out <- cars[1, ]
+  
+  return(obj)
+  
+}
+
+
+library(tidyverse)
+obj %>% 
+  modify_obj() %>% 
+  modify_obj()
+
+
+
+library(gt)
+library(tidyverse)
+library(glue)
+
+# Define the start and end dates for the data range
+start_date <- "2010-06-07"
+end_date <- "2010-06-14"
+
+# Create a gt table based on preprocessed
+# `sp500` table data
+sp500 %>%
+  filter(date >= start_date & date <= end_date) %>%
+  select(-adj_close) %>% 
+  gt() %>% str
+  tab_header(
+    title = "S&P 500",
+    subtitle = glue("{start_date} to {end_date}")
+  ) %>%
+  fmt_date(
+    columns = date,
+    date_style = 3
+  ) %>%
+  fmt_currency(
+    columns = c(open, high, low, close),
+    currency = "USD"
+  ) %>%
+  fmt_number(
+    columns = volume,
+    suffixing = TRUE
+  )
+  
+  
+studentBio <- list(studentName = "Harry Potter", studentAge = 19, studentContact="London")
+class(studentBio) <- "StudentInfo"
+studentBio
+
+contact <- function(object) {
+UseMethod("contact")
+}
+
+contact.StudentInfo <- function(object) {
+cat("Your contact is", object$studentContact, "\n")
+}
+contact(studentBio)
+
+```
+
