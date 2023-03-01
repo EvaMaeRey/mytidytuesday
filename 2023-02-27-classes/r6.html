@@ -372,18 +372,18 @@ Accumulator &lt;- R6Class(&quot;Accumulator&quot;,
                            
                          }
                        )
-)
+)</code></pre>
+<pre class="r"><code>x &lt;- Accumulator$new()
 
-Accumulator$new() -&gt;
-  x
-
-x$refresh()
-
-x$refresh(); x$add(4); x$sum</code></pre>
+x$add(4)
+x$sum</code></pre>
 <pre><code>## [1] 4</code></pre>
-<pre class="r"><code>x$refresh(); x$add(10)$add(12) ; x$sum                                    </code></pre>
+<pre class="r"><code>x$refresh()
+x$add(10)$add(12)
+x$sum                                    </code></pre>
 <pre><code>## [1] 22</code></pre>
-<pre class="r"><code>x$refresh(); x$sum</code></pre>
+<pre class="r"><code>x$refresh()
+x$sum</code></pre>
 <pre><code>## [1] 0</code></pre>
 <pre class="r"><code>library(R6)
 
@@ -403,10 +403,8 @@ Person &lt;- R6Class(&quot;Person&quot;,
       cat(paste0(&quot;Hello, my name is &quot;, self$name, &quot;.\n&quot;))
     }
   )
-)
-
-
-ann &lt;- Person$new(name = &quot;Ann&quot;, hair = &quot;black&quot;)</code></pre>
+)</code></pre>
+<pre class="r"><code>ann &lt;- Person$new(name = &quot;Ann&quot;, hair = &quot;black&quot;)</code></pre>
 <pre><code>## Hello, my name is Ann.</code></pre>
 <pre class="r"><code>ann</code></pre>
 <pre><code>## &lt;Person&gt;
@@ -424,7 +422,9 @@ ann &lt;- Person$new(name = &quot;Ann&quot;, hair = &quot;black&quot;)</code></p
 <pre class="r"><code>ann$set_hair(&quot;red&quot;)
 ann$hair</code></pre>
 <pre><code>## [1] &quot;red&quot;</code></pre>
-<pre class="r"><code>Queue &lt;- R6Class(&quot;Queue&quot;,
+<pre class="r"><code>library(R6)
+
+Queue &lt;- R6Class(&quot;Queue&quot;,
   public = list(
     initialize = function(...) {
       for (item in list(...)) {
@@ -437,7 +437,6 @@ ann$hair</code></pre>
     },
     remove = function() {
       if (private$length() == 0) return(NULL)
-      # Can use private$queue for explicit access
       head &lt;- private$queue[[1]]
       private$queue &lt;- private$queue[-1]
       head
@@ -470,6 +469,7 @@ q$remove()</code></pre>
 <pre class="r"><code>q$remove()</code></pre>
 <pre><code>## [1] 6</code></pre>
 <pre class="r"><code>library(R6)
+library(magrittr)
 TPSpecify &lt;- R6Class(&quot;TPSpecify&quot;,
       public = list(
           
@@ -485,19 +485,14 @@ TPSpecify &lt;- R6Class(&quot;TPSpecify&quot;,
         set_fun = function(cols){ self$fun &lt;- fun},
         out_data = NULL,
         set_out_data = function(){ 
-          self$out_data &lt;- self$source_data |&gt; 
-            # group_by(rows, cols) %&gt;% 
-            dplyr::count()
+          self$out_data &lt;- self$source_data %&gt;% dplyr::count()
           },
         refresh = function(x){
           self$source_data &lt;-  NULL
-          # invisible(self) #returns
                          }
                        )
-)
-
-
-TPSpecify$new() -&gt;
+)</code></pre>
+<pre class="r"><code>TPSpecify$new() -&gt;
   df_plus
 
 df_plus$set_source_data(df = cars); df_plus</code></pre>

@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Exploded code</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Me" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Exploded code
+]
+.subtitle[
+## Using flipbookr and xaringan
+]
+.author[
+### Me
+]
+
+---
+
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 70%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+&lt;/style&gt;
+
+
+
+- https://www.datacamp.com/tutorial/r-objects-and-classes
+- https://adv-r.hadley.nz/oo.html
+- https://www.youtube.com/watch?v=3GEFd8rZQgY Winston Chang
+
+
+---
+
+
+count: false
+ 
+
+.panel1-AccumulatorNew0-auto[
+
+```r
+*library(R6)
+
+NA
+```
+]
+ 
+.panel2-AccumulatorNew0-auto[
+
+```
+[1] NA
+```
+]
+
+---
+count: false
+ 
+
+.panel1-AccumulatorNew0-auto[
+
+```r
+library(R6)
+*Accumulator &lt;- R6Class("Accumulator",
+*                      public = list(
+*                        sum = 0,  # value that can evolve
+*                        add = function(x){  # a method
+
+*                          self$sum &lt;- self$sum + x
+*                          invisible(self)  #returns
+
+*                                    },
+*                        refresh = function(x){
+
+*                          self$sum &lt;- 0
+*                          invisible(self)  #returns
+
+
+*                        }
+*                      )
+*) 
+
+NA
+```
+]
+ 
+.panel2-AccumulatorNew0-auto[
+
+```
+[1] NA
+```
+]
+
+&lt;style&gt;
+.panel1-AccumulatorNew0-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-AccumulatorNew0-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-AccumulatorNew0-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-AccumulatorNew-auto[
+
+```r
+*x &lt;- Accumulator$new()
+```
+]
+ 
+.panel2-AccumulatorNew-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-AccumulatorNew-auto[
+
+```r
+x &lt;- Accumulator$new()
+
+*x$add(4)
+```
+]
+ 
+.panel2-AccumulatorNew-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-AccumulatorNew-auto[
+
+```r
+x &lt;- Accumulator$new()
+
+x$add(4)
+*x$sum
+```
+]
+ 
+.panel2-AccumulatorNew-auto[
+
+```
+[1] 4
+```
+]
+
+---
+count: false
+ 
+
+.panel1-AccumulatorNew-auto[
+
+```r
+x &lt;- Accumulator$new()
+
+x$add(4)
+x$sum
+*x$refresh()
+```
+]
+ 
+.panel2-AccumulatorNew-auto[
+
+```
+[1] 4
+```
+]
+
+---
+count: false
+ 
+
+.panel1-AccumulatorNew-auto[
+
+```r
+x &lt;- Accumulator$new()
+
+x$add(4)
+x$sum
+x$refresh()
+*x$add(10)$add(12)
+```
+]
+ 
+.panel2-AccumulatorNew-auto[
+
+```
+[1] 4
+```
+]
+
+---
+count: false
+ 
+
+.panel1-AccumulatorNew-auto[
+
+```r
+x &lt;- Accumulator$new()
+
+x$add(4)
+x$sum
+x$refresh()
+x$add(10)$add(12)
+*x$sum
+```
+]
+ 
+.panel2-AccumulatorNew-auto[
+
+```
+[1] 4
+```
+
+```
+[1] 22
+```
+]
+
+---
+count: false
+ 
+
+.panel1-AccumulatorNew-auto[
+
+```r
+x &lt;- Accumulator$new()
+
+x$add(4)
+x$sum
+x$refresh()
+x$add(10)$add(12)
+x$sum
+*x$refresh()
+```
+]
+ 
+.panel2-AccumulatorNew-auto[
+
+```
+[1] 4
+```
+
+```
+[1] 22
+```
+]
+
+---
+count: false
+ 
+
+.panel1-AccumulatorNew-auto[
+
+```r
+x &lt;- Accumulator$new()
+
+x$add(4)
+x$sum
+x$refresh()
+x$add(10)$add(12)
+x$sum
+x$refresh()
+*x$sum
+```
+]
+ 
+.panel2-AccumulatorNew-auto[
+
+```
+[1] 4
+```
+
+```
+[1] 22
+```
+
+```
+[1] 0
+```
+]
+
+&lt;style&gt;
+.panel1-AccumulatorNew-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-AccumulatorNew-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-AccumulatorNew-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-example2-auto[
+
+```r
+*library(R6)
+
+NA
+```
+]
+ 
+.panel2-example2-auto[
+
+```
+[1] NA
+```
+]
+
+---
+count: false
+ 
+
+.panel1-example2-auto[
+
+```r
+library(R6)
+
+*Person &lt;- R6Class("Person",
+* public = list(
+*   name = NULL,
+*   hair = NULL,
+*   initialize = function(name = NA, hair = NA) {
+*     self$name &lt;- name
+*     self$hair &lt;- hair
+*     self$greet()
+*   },
+*   set_hair = function(val) {
+*     self$hair &lt;- val
+*   },
+*   greet = function() {
+*     cat(paste0("Hello, my name is ", self$name, ".\n"))
+*   }
+* )
+*) 
+
+NA
+```
+]
+ 
+.panel2-example2-auto[
+
+```
+[1] NA
+```
+]
+
+&lt;style&gt;
+.panel1-example2-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-example2-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-example2-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-example2demo-auto[
+
+```r
+*ann &lt;- Person$new(name = "Ann", hair = "black")
+```
+]
+ 
+.panel2-example2demo-auto[
+
+```
+Hello, my name is Ann.
+```
+]
+
+---
+count: false
+ 
+
+.panel1-example2demo-auto[
+
+```r
+ann &lt;- Person$new(name = "Ann", hair = "black")
+*ann
+```
+]
+ 
+.panel2-example2demo-auto[
+
+```
+Hello, my name is Ann.
+```
+
+```
+&lt;Person&gt;
+  Public:
+    clone: function (deep = FALSE) 
+    greet: function () 
+    hair: black
+    initialize: function (name = NA, hair = NA) 
+    name: Ann
+    set_hair: function (val) 
+```
+]
+
+---
+count: false
+ 
+
+.panel1-example2demo-auto[
+
+```r
+ann &lt;- Person$new(name = "Ann", hair = "black")
+ann
+*ann$hair
+```
+]
+ 
+.panel2-example2demo-auto[
+
+```
+Hello, my name is Ann.
+```
+
+```
+&lt;Person&gt;
+  Public:
+    clone: function (deep = FALSE) 
+    greet: function () 
+    hair: black
+    initialize: function (name = NA, hair = NA) 
+    name: Ann
+    set_hair: function (val) 
+```
+
+```
+[1] "black"
+```
+]
+
+---
+count: false
+ 
+
+.panel1-example2demo-auto[
+
+```r
+ann &lt;- Person$new(name = "Ann", hair = "black")
+ann
+ann$hair
+*ann$greet()
+```
+]
+ 
+.panel2-example2demo-auto[
+
+```
+Hello, my name is Ann.
+```
+
+```
+&lt;Person&gt;
+  Public:
+    clone: function (deep = FALSE) 
+    greet: function () 
+    hair: black
+    initialize: function (name = NA, hair = NA) 
+    name: Ann
+    set_hair: function (val) 
+```
+
+```
+[1] "black"
+```
+
+```
+Hello, my name is Ann.
+```
+]
+
+---
+count: false
+ 
+
+.panel1-example2demo-auto[
+
+```r
+ann &lt;- Person$new(name = "Ann", hair = "black")
+ann
+ann$hair
+ann$greet()
+*ann$set_hair("red")
+```
+]
+ 
+.panel2-example2demo-auto[
+
+```
+Hello, my name is Ann.
+```
+
+```
+&lt;Person&gt;
+  Public:
+    clone: function (deep = FALSE) 
+    greet: function () 
+    hair: black
+    initialize: function (name = NA, hair = NA) 
+    name: Ann
+    set_hair: function (val) 
+```
+
+```
+[1] "black"
+```
+
+```
+Hello, my name is Ann.
+```
+]
+
+---
+count: false
+ 
+
+.panel1-example2demo-auto[
+
+```r
+ann &lt;- Person$new(name = "Ann", hair = "black")
+ann
+ann$hair
+ann$greet()
+ann$set_hair("red")
+*ann$hair
+```
+]
+ 
+.panel2-example2demo-auto[
+
+```
+Hello, my name is Ann.
+```
+
+```
+&lt;Person&gt;
+  Public:
+    clone: function (deep = FALSE) 
+    greet: function () 
+    hair: black
+    initialize: function (name = NA, hair = NA) 
+    name: Ann
+    set_hair: function (val) 
+```
+
+```
+[1] "black"
+```
+
+```
+Hello, my name is Ann.
+```
+
+```
+[1] "red"
+```
+]
+
+&lt;style&gt;
+.panel1-example2demo-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-example2demo-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-example2demo-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+
+
+
+```r
+library(R6)
+library(magrittr)
+TPSpecify &lt;- R6Class("TPSpecify",
+      public = list(
+          
+        sum = 0, # value that can evolve
+        add = function(x){ self$sum &lt;- self$sum + x ; invisible(self)},
+        source_data = NULL,
+        set_source_data = function(df) { self$source_data &lt;- df },
+        rows = NULL,
+        set_rows = function(rows){ self$rows &lt;- rows},
+        cols = NULL,
+        set_cols = function(cols){ self$cols &lt;- cols},
+        fun = NULL,
+        set_fun = function(cols){ self$fun &lt;- fun},
+        out_data = NULL,
+        compute_out_data = function(){ 
+          self$out_data &lt;- self$source_data %&gt;% dplyr::count()
+          },
+        refresh = function(x){
+          self$source_data &lt;-  NULL
+                         }
+                       )
+)
+```
+
+
+---
+
+
+count: false
+ 
+
+.panel1-tpspecify2-auto[
+
+```r
+*df_plus &lt;- TPSpecify$new()
+
+df_plus
+```
+]
+ 
+.panel2-tpspecify2-auto[
+
+```
+&lt;TPSpecify&gt;
+  Public:
+    add: function (x) 
+    clone: function (deep = FALSE) 
+    cols: NULL
+    compute_out_data: function () 
+    fun: NULL
+    out_data: NULL
+    refresh: function (x) 
+    rows: NULL
+    set_cols: function (cols) 
+    set_fun: function (cols) 
+    set_rows: function (rows) 
+    set_source_data: function (df) 
+    source_data: NULL
+    sum: 0
+```
+]
+
+---
+count: false
+ 
+
+.panel1-tpspecify2-auto[
+
+```r
+df_plus &lt;- TPSpecify$new()
+
+*df_plus$set_source_data(df = cars)
+
+df_plus
+```
+]
+ 
+.panel2-tpspecify2-auto[
+
+```
+&lt;TPSpecify&gt;
+  Public:
+    add: function (x) 
+    clone: function (deep = FALSE) 
+    cols: NULL
+    compute_out_data: function () 
+    fun: NULL
+    out_data: NULL
+    refresh: function (x) 
+    rows: NULL
+    set_cols: function (cols) 
+    set_fun: function (cols) 
+    set_rows: function (rows) 
+    set_source_data: function (df) 
+    source_data: data.frame
+    sum: 0
+```
+]
+
+---
+count: false
+ 
+
+.panel1-tpspecify2-auto[
+
+```r
+df_plus &lt;- TPSpecify$new()
+
+df_plus$set_source_data(df = cars)
+*df_plus$compute_out_data()
+
+df_plus
+```
+]
+ 
+.panel2-tpspecify2-auto[
+
+```
+&lt;TPSpecify&gt;
+  Public:
+    add: function (x) 
+    clone: function (deep = FALSE) 
+    cols: NULL
+    compute_out_data: function () 
+    fun: NULL
+    out_data: data.frame
+    refresh: function (x) 
+    rows: NULL
+    set_cols: function (cols) 
+    set_fun: function (cols) 
+    set_rows: function (rows) 
+    set_source_data: function (df) 
+    source_data: data.frame
+    sum: 0
+```
+]
+
+---
+count: false
+ 
+
+.panel1-tpspecify2-auto[
+
+```r
+df_plus &lt;- TPSpecify$new()
+
+df_plus$set_source_data(df = cars)
+df_plus$compute_out_data()
+*df_plus$refresh()
+
+df_plus
+```
+]
+ 
+.panel2-tpspecify2-auto[
+
+```
+&lt;TPSpecify&gt;
+  Public:
+    add: function (x) 
+    clone: function (deep = FALSE) 
+    cols: NULL
+    compute_out_data: function () 
+    fun: NULL
+    out_data: data.frame
+    refresh: function (x) 
+    rows: NULL
+    set_cols: function (cols) 
+    set_fun: function (cols) 
+    set_rows: function (rows) 
+    set_source_data: function (df) 
+    source_data: NULL
+    sum: 0
+```
+]
+
+&lt;style&gt;
+.panel1-tpspecify2-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-tpspecify2-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-tpspecify2-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

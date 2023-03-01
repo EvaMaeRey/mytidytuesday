@@ -1,9 +1,52 @@
 ---
-title: "r6"
-author: "Evangeline Reynolds"
-date: "2/27/2023"
-output: html_document
+title: "Exploded code"
+subtitle: "Using flipbookr and xaringan"
+author: "Me"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
 ---
+
+
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, fig.height = 4, message = F, warning = FALSE, comment = "", cache = F)
+
+options(tibble.print_min = 55)
+options(knitr.duplicate.label = "allow")
+options(width=300) # prevents data wrapping
+```
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 70%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+
 
 
 - https://www.datacamp.com/tutorial/r-objects-and-classes
@@ -11,7 +54,13 @@ output: html_document
 - https://www.youtube.com/watch?v=3GEFd8rZQgY Winston Chang
 
 
-```{r AccumulatorNew0}
+---
+
+
+`r flipbookr::chunk_reveal("AccumulatorNew0", left_assign = "detect")`
+
+
+```{r AccumulatorNew0, include = FALSE}
 library(R6)
 Accumulator <- R6Class("Accumulator",
                        public = list(
@@ -34,7 +83,13 @@ Accumulator <- R6Class("Accumulator",
 ```
 
 
-```{r AccumulatorNew}
+---
+
+
+`r flipbookr::chunk_reveal("AccumulatorNew")`
+
+
+```{r AccumulatorNew, include = FALSE}
 x <- Accumulator$new()
 
 x$add(4)
@@ -48,7 +103,13 @@ x$sum
 
 
 
-```{r example2}
+---
+
+
+`r flipbookr::chunk_reveal("example2", left_assign = "detect")`
+
+
+```{r example2, include = FALSE}
 library(R6)
 
 Person <- R6Class("Person",
@@ -70,7 +131,13 @@ Person <- R6Class("Person",
 )
 ```
 
-```{r example2demo}
+---
+
+
+`r flipbookr::chunk_reveal("example2demo")`
+
+
+```{r example2demo, include = FALSE}
 ann <- Person$new(name = "Ann", hair = "black")
 ann
 ann$hair
@@ -78,6 +145,10 @@ ann$greet()
 ann$set_hair("red")
 ann$hair
 ```
+
+
+---
+
 
 
 ```{r tpspecify}
@@ -97,7 +168,7 @@ TPSpecify <- R6Class("TPSpecify",
         fun = NULL,
         set_fun = function(cols){ self$fun <- fun},
         out_data = NULL,
-        set_out_data = function(){ 
+        compute_out_data = function(){ 
           self$out_data <- self$source_data %>% dplyr::count()
           },
         refresh = function(x){
@@ -108,12 +179,16 @@ TPSpecify <- R6Class("TPSpecify",
 ```
 
 
-```{r tpspecify2}
-TPSpecify$new() ->
-  df_plus
+---
 
-df_plus$set_source_data(df = cars); df_plus
-df_plus$set_out_data(); df_plus$out_data
-df_plus$source_data
-df_plus$refresh() ; df_plus
+
+`r flipbookr::chunk_reveal("tpspecify2", left_assign = "detect")`
+
+
+```{r tpspecify2, include = FALSE}
+df_plus <- TPSpecify$new()
+  
+df_plus$set_source_data(df = cars)
+df_plus$compute_out_data()
+df_plus$refresh()
 ```
