@@ -1,0 +1,164 @@
+---
+title: "r6"
+author: "Evangeline Reynolds"
+date: "2/27/2023"
+output: html_document
+---
+
+
+- https://www.datacamp.com/tutorial/r-objects-and-classes
+- https://adv-r.hadley.nz/oo.html
+- https://www.youtube.com/watch?v=3GEFd8rZQgY Winston Chang
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(R6)
+Accumulator <- R6Class("Accumulator",
+                       public = list(
+                         sum = 0, # value that can evolve
+                         add = function(x){ # a method
+                           
+                           self$sum <- self$sum + x
+                           invisible(self) #returns
+                           
+                                     },
+                         refresh = function(x){
+                           
+                           self$sum <- 0
+                           invisible(self) #returns
+
+                           
+                         }
+                       )
+)
+
+Accumulator$new() ->
+  x
+
+x$refresh()
+
+x$refresh(); x$add(4); x$sum
+
+x$refresh(); x$add(10)$add(12) ; x$sum                                    
+                                    
+x$refresh(); x$sum
+```
+
+
+
+```{r}
+
+library(R6)
+
+Person <- R6Class("Person",
+  public = list(
+    name = NULL,
+    hair = NULL,
+    initialize = function(name = NA, hair = NA) {
+      self$name <- name
+      self$hair <- hair
+      self$greet()
+    },
+    set_hair = function(val) {
+      self$hair <- val
+    },
+    greet = function() {
+      cat(paste0("Hello, my name is ", self$name, ".\n"))
+    }
+  )
+)
+
+
+ann <- Person$new(name = "Ann", hair = "black")
+ann
+ann$hair
+ann$greet()
+ann$set_hair("red")
+ann$hair
+```
+
+
+```{r}
+Queue <- R6Class("Queue",
+  public = list(
+    initialize = function(...) {
+      for (item in list(...)) {
+        self$add(item)
+      }
+    },
+    add = function(x) {
+      private$queue <- c(private$queue, list(x))
+      invisible(self)
+    },
+    remove = function() {
+      if (private$length() == 0) return(NULL)
+      # Can use private$queue for explicit access
+      head <- private$queue[[1]]
+      private$queue <- private$queue[-1]
+      head
+    }
+  ),
+  private = list(
+    queue = list(),
+    length = function() base::length(private$queue)
+  )
+)
+
+q <- Queue$new(5, 6, "foo")
+
+q
+
+
+# Add and remove items
+q$add("something")
+q$add("another thing")
+q$add(17)
+q$remove()
+q$remove()
+```
+
+
+```{r}
+library(R6)
+TPSpecify <- R6Class("TPSpecify",
+      public = list(
+          
+        sum = 0, # value that can evolve
+        add = function(x){ self$sum <- self$sum + x ; invisible(self)},
+        source_data = NULL,
+        set_source_data = function(df) { self$source_data <- df },
+        rows = NULL,
+        set_rows = function(rows){ self$rows <- rows},
+        cols = NULL,
+        set_cols = function(cols){ self$cols <- cols},
+        fun = NULL,
+        set_fun = function(cols){ self$fun <- fun},
+        out_data = NULL,
+        set_out_data = function(){ 
+          self$out_data <- self$source_data |> 
+            # group_by(rows, cols) %>% 
+            dplyr::count()
+          },
+        refresh = function(x){
+          self$source_data <-  NULL
+          # invisible(self) #returns
+                         }
+                       )
+)
+
+
+TPSpecify$new() ->
+  df_plus
+
+df_plus$set_source_data(df = cars); df_plus
+df_plus$set_out_data(); df_plus$out_data
+df_plus$source_data
+df_plus$refresh() ; df_plus
+
+
+
+
+```

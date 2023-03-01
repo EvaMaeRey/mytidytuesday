@@ -5,8 +5,15 @@ date: "2/27/2023"
 output: html_document
 ---
 
+
+- https://www.datacamp.com/tutorial/r-objects-and-classes
+- https://adv-r.hadley.nz/oo.html
+- https://www.youtube.com/watch?v=3GEFd8rZQgY Winston Chang
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+
 ```
 
 ```{r}
@@ -55,10 +62,11 @@ end_date <- "2010-06-14"
 
 # Create a gt table based on preprocessed
 # `sp500` table data
+library(gtsummary)
 sp500 %>%
   filter(date >= start_date & date <= end_date) %>%
   select(-adj_close) %>% 
-  gt() %>% str
+  gt() %>% 
   tab_header(
     title = "S&P 500",
     subtitle = glue("{start_date} to {end_date}")
@@ -78,6 +86,7 @@ sp500 %>%
   
   
 studentBio <- list(studentName = "Harry Potter", studentAge = 19, studentContact="London")
+
 class(studentBio) <- "StudentInfo"
 studentBio
 
