@@ -88,7 +88,7 @@ TPSpecify <- R6Class("TPSpecify",
           
         sum = 0, # value that can evolve
         add = function(x){ self$sum <- self$sum + x ; invisible(self)},
-        source_data = NULL,
+        source_data = data.frame(),
         set_source_data = function(df) { self$source_data <- df },
         rows = NULL,
         set_rows = function(rows){ self$rows <- rows},
@@ -97,7 +97,7 @@ TPSpecify <- R6Class("TPSpecify",
         fun = NULL,
         set_fun = function(cols){ self$fun <- fun},
         out_data = NULL,
-        set_out_data = function(){ 
+        compute_out_data = function(){ 
           self$out_data <- self$source_data %>% dplyr::count()
           },
         refresh = function(x){
@@ -113,7 +113,39 @@ TPSpecify$new() ->
   df_plus
 
 df_plus$set_source_data(df = cars); df_plus
-df_plus$set_out_data(); df_plus$out_data
+df_plus$compute_out_data(); df_plus$out_data
 df_plus$source_data
 df_plus$refresh() ; df_plus
+
+
+tp <- function(nothing = NULL, data){
+  
+  df_plus$set_source_data(df = data)
+  df_plus$compute_out_data()
+  
+  
+  print(df_plus$out_data)
+  
+}
+
+
+tp_init <- function(){
+  
+df_plus <<- TPSpecify$new()
+  
+    df_plus$compute_out_data()
+    print(df_plus$source_data)
+    
+}
+
+
+tp_init() %>% 
+  tp(data = mtcars)  
+
+
+tp(data = cars)
+tp(rows = speed, cols = )
+
+
+
 ```

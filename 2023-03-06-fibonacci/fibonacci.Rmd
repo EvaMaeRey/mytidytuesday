@@ -1,0 +1,62 @@
+---
+title: "fibonacci"
+author: "Evangeline Reynolds"
+date: "3/6/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+
+
+
+library(tidyverse)
+
+tidy_fibonacci <- function(max_index = 10){
+
+fibonacci = vector()
+fibonacci[1] = 1
+fibonacci[2] = 1
+for (i in 3:max_index) { 
+  fibonacci[i] = fibonacci[i-1] + fibonacci[i-2]
+} 
+  
+tibble::tibble(index = 1:max_index, fibonacci, 
+           ydir = rep( c(1, 1, -1, -1), max_index)[1:max_index],
+           xdir = rep(c(1,-1, -1, 1),max_index)[1:max_index],
+           ymov = ydir * fibonacci,
+           xmov = xdir * fibonacci,
+           ypos = cumsum(ymov),
+           xpos = cumsum(xmov),
+           yprev = lag(ypos),
+           xprev = lag(xpos)
+           ) %>% 
+  mutate(yprev = replace_na(yprev, 0),
+         xprev = replace_na(xprev, 0)) 
+  
+}  
+
+tidy_fibonacci(max_index = 30) ->
+  tf30
+
+tf30 %>% 
+  slice(1:20) %>% 
+  ggplot() + 
+  aes(x = xpos, y = ypos) +
+  geom_point() + 
+  geom_rect(aes(xmin = xprev, xmax = xpos,
+                ymin = yprev, ymax = ypos, fill = fibonacci), alpha = .8, color = "white", linewidth = .2) + 
+  scale_fill_viridis_c(limits = c(1, 7000), trans = "sqrt") +
+  coord_equal(expand = .2)
+
+```
+

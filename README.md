@@ -11,6 +11,9 @@ The goal of mytidytuesday is to hold small projects. They are like blogs
 posts, but mostly code. In the spirit of \#tidytuesday no pressure to
 write prose\!
 
+  - [2023-03-06-fibonacci/fibonacci.html](https://evamaerey.github.io/mytidytuesday/2023-03-06-fibonacci/fibonacci.html)
+  - [2023-02-27-classes/r6\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2023-02-27-classes/r6_flipbook.html)
+  - [2023-02-27-classes/r6.html](https://evamaerey.github.io/mytidytuesday/2023-02-27-classes/r6.html)
   - [2023-02-21-tables-w-ggplot2/tables\_with\_ggplot2.html](https://evamaerey.github.io/mytidytuesday/2023-02-21-tables-w-ggplot2/tables_with_ggplot2.html)
   - [2023-02-21-python-flipbook/python-flipbook.html](https://evamaerey.github.io/mytidytuesday/2023-02-21-python-flipbook/python-flipbook.html)
   - [2023-02-16-likelihood/likelihood.html](https://evamaerey.github.io/mytidytuesday/2023-02-16-likelihood/likelihood.html)
