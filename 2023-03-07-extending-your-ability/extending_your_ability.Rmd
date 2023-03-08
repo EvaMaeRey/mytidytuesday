@@ -1,0 +1,249 @@
+---
+title: 'Companion Guide: "Extending your Ability to Extend" by Thomas Lin Pederson'
+author: "Evangeline Reynolds"
+date: "3/7/2023"
+output: 
+  html_document:
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Step 00: Press play on 'Extending your Ability to Extend' https://www.youtube.com/watch?v=uj7A3i2fi54
+
+Step 0: Do it with ggplot2.
+
+# Step 0: get it done with base ggplot2/tidyverse
+
+```{r step0}
+library(tidyverse)
+create_circle <- function(x0, y0, r = 1, n = 7){
+  
+    angles <- seq(from = 0,
+                to = 2 * pi,
+                length.out = n)
+
+  data.frame(
+    x = c(x0 + r * cos(angles)),
+    y = c(y0 + r * sin(angles))
+  )
+}
+
+cars %>% 
+  .[1:5,] ->
+five_cars
+
+five_cars %>% 
+  mutate(diamond = 
+           purrr::map2(.x = speed,
+                       .y = dist, 
+                       create_circle)) %>% 
+  mutate(group = row_number()) %>% 
+  unnest() ->
+five_cars_circles
+  
+five_cars %>% 
+  ggplot() + 
+  aes(x = speed, dist) +
+  geom_point() + 
+  geom_polygon(data = five_cars_circles, 
+            aes(x = x, y = y, group = group),
+            alpha = .5) + 
+  coord_equal()
+```
+
+# step 1a:  write `setup_data` function
+
+```{r cars}
+setup_data_circle <- function(data, params) {
+  
+    if (data$group[1] == -1) {
+      nrows <- nrow(data)
+      data$group <- seq_len(nrows)
+    }
+  
+    data  # return data with a group variable
+
+}
+```
+
+# step 1b: test `setup_data` data function
+
+```{r step1b}
+cars %>% 
+  slice(1:5) %>% 
+  mutate(group = -1) %>% # no grouping neg one is default in ggplot2
+  setup_data_circle() # setup makes each row defines a group
+
+cars %>% 
+  slice(5:20) %>% 
+  mutate(group = 2) %>% # if a group is already defined
+  setup_data_circle() # setup data does not do anything
+```
+
+---
+
+# step 2a: write a `compute_group` function
+
+We write a routine that will act on each group in the data (in this case each row)
+
+---
+
+```{r step_2a}
+compute_group_circle <- function(data, scales, n = 5){
+
+  angles <- seq(from = 0, 
+                to = 2 * pi,
+                length.out = n)
+
+  data.frame(
+    x = c(data$x0 + data$r * cos(angles)),
+    y = c(data$y0 + data$r * sin(angles)),
+    data
+  )
+
+}
+```
+
+
+# step 2b: test `compute_group` row processing function
+
+```{r 2a2}
+cars %>%
+  rename(x0 = dist, y0 = speed) %>% 
+  mutate(r = x0) %>% 
+  .[1,] %>% 
+  compute_group_circle(n = 6)
+
+cars %>%
+  rename(x0 = dist, y0 = speed) %>% 
+  mutate(r = x0) %>%
+  .[5,] %>% 
+  compute_group_circle(n = 6) %>% 
+  ggplot() + 
+  aes(x = x, y = y) +
+  geom_polygon(alpha = .5) + 
+  coord_equal()
+
+```
+
+
+
+# Step 3: write ggproto to create StatCircle; `setup_data` and `compute_group` functions will be inputs
+
+```{r 3}
+StatCircle <- ggproto(`_class` = "StatCircle", 
+                      `_inherit` = Stat, 
+                      setup_data = setup_data_circle,
+                      compute_group = compute_group_circle,
+                      required_aes = c("x0", "y0", "r")
+                      )
+```
+
+
+
+# Step 4: write `geom_circle`, inheriting from `GeomPolygon`
+
+```{r 4}
+geom_circle <- function(mapping = NULL, 
+                        data = NULL, 
+                        stat = "circle", 
+                        position = "identity", 
+                        ..., 
+                        n = 8, 
+                        lineend = "butt", 
+                        linejoin = "round", 
+                        na.rm = FALSE, 
+                        show.legend = NA, 
+                        inherit.aes = TRUE) {
+  layer(
+    data = data, 
+    mapping = mapping, 
+    stat = stat, 
+    geom = GeomPolygon, 
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes, 
+    params = list(
+      n = n, 
+      lineend = lineend, 
+      linejoin = linejoin, 
+      na.rm = na.rm, 
+      ...
+    )
+  )
+}
+```
+
+# Step 5: Enjoy! Test out `geom_circle`
+
+```{r 5}
+test_df <- data.frame(
+  
+  x0 = c(-5, 5),
+  y0 = c(5, -5),
+  r = c(5, 4),
+  class = c("a", "b")
+  
+)
+
+
+cars %>% 
+  slice(1:5) %>% 
+  ggplot() + 
+  aes(x = speed, y = dist) +
+  geom_point() +
+  aes(x0 = speed, 
+      y0 = dist, 
+      r = speed/6) + 
+  coord_equal() ->
+baseplot
+
+baseplot +
+  geom_circle(n = 7, alpha = .2)
+```
+
+# Keep testing; second guess everything; dispare
+
+```{r}
+baseplot + 
+  aes(fill = speed == 6) +
+  geom_circle(n = 7, alpha = .2)
+
+baseplot + 
+  aes(fill = speed > 6) +
+  geom_circle(n = 7, alpha = .2)
+```
+
+
+# Look at `geom_circle` from ggforce; hope renewed
+
+```{r}
+baseplot + 
+  aes(fill = speed > 6) +
+  ggforce::geom_circle(n = 5)
+```
+
+
+
+# Step 6: Post Mordem using `layer_data` to look at the data frame
+
+
+```{r 6}
+baseplot +
+  geom_circle(n = 7, alpha = .2) ->
+p1
+
+layer_data(p1, 2)
+
+baseplot + 
+  aes(fill = speed > 6) +
+  geom_circle(n = 7, alpha = .2) ->
+p2
+
+layer_data(p2, 2)
+```
+
+
