@@ -137,6 +137,7 @@ compute_state <- function(data, scales){
     mutate(x = long, y = lat) %>% 
     arrange(order) %>%
     # mutate(group = paste(group, ".", which_polygon)) %>%
+    # group_by(which_polygon) %>%
     data.frame()
 
 }
@@ -169,14 +170,12 @@ my_setup_data <- function(data, params){
 # Step 2: pass to ggproto
 
 ```{r}
-
-
 StatPolygonstate <- ggplot2::ggproto(`_class` = "StatPolygonstate",
                                   `_inherit` = ggplot2::Stat,
                                   required_aes = c("state"),
                                   # setup_data = my_setup_data,
-                                  compute_panel = compute_state#,
-                                  # default_aes = aes(group = after_stat(state))
+                                  compute_panel = compute_state,
+                                  default_aes = aes(group = after_stat(which_polygon))
                                   )
 ```
 
@@ -255,3 +254,5 @@ ggplot() + geom_polygon(data=AllCounty, aes(x=long, y=lat, group=group),
 
 
 https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/circle_pack_stipple.html
+
+
