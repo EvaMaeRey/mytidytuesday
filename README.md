@@ -11,6 +11,7 @@ The goal of mytidytuesday is to hold small projects. They are like blogs
 posts, but mostly code. In the spirit of \#tidytuesday no pressure to
 write prose\!
 
+  - [2023-03-10-brain2/brain2.html](https://evamaerey.github.io/mytidytuesday/2023-03-10-brain2/brain2.html)
   - [2023-03-09-nc-fips/nc-fips.html](https://evamaerey.github.io/mytidytuesday/2023-03-09-nc-fips/nc-fips.html)
   - [2023-03-07-extending-your-ability/extending\_your\_ability.html](https://evamaerey.github.io/mytidytuesday/2023-03-07-extending-your-ability/extending_your_ability.html)
   - [2023-03-06-us-states/us\_states.html](https://evamaerey.github.io/mytidytuesday/2023-03-06-us-states/us_states.html)
