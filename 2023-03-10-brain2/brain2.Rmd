@@ -1,0 +1,197 @@
+---
+title: "brain2 with sf manipulation"
+author: "Evangeline Reynolds"
+date: "3/9/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Example simple feature to data frame...
+
+```{r}
+library(ggseg)
+library(tidyverse)
+
+dk_geometries_frame <- ggseg::dk$data
+aseg_geometries_frame <- ggseg::aseg$data
+
+
+aseg_df <- ggseg::aseg$data
+aseg_df$geometry <- NULL
+aseg_df <- aseg_df %>% data.frame() %>% remove_missing()
+
+
+aseg_df %>% count(label)
+#
+
+# imagine you only have nc_df
+
+```
+
+
+```{r}
+#' Title
+#'
+#' @param geometries_frame 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' geometries_frame_to_id_group()
+geometries_frame_to_id_group <- function(geometries_frame){
+
+    nsubgroup <- geometries_frame$geometry %>% purrr::map_dbl(.f = length)
+
+    tibble(nsubgroup) %>% 
+      mutate(major_group = 1:n()) %>% # row number 
+      uncount(weights = nsubgroup) %>% 
+      group_by(major_group) %>% 
+      mutate(subgroup = 1:n()) %>% 
+      mutate(major_and_minor = paste0(major_group,'.', subgroup)) %>% 
+      ungroup() %>% 
+      mutate(polygon = 1:n()) %>% 
+      ungroup()
+
+}
+
+
+
+#' Title
+#'
+#' @param geometries_frame 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' geometries_frame_to_df(nc) 
+geometries_frame_to_df <- function(geometries_frame){
+
+      polygons_flat <- data.frame()
+    
+      polygons <- geometries_frame$geometry %>% purrr::flatten() %>% purrr::flatten()
+      
+    for (i in 1:length(polygons)){
+      
+      temp <- polygons[[i]] %>% 
+        data.frame() %>% 
+        mutate(polygon = i)
+      
+      polygons_flat = bind_rows(polygons_flat, temp)
+  
+
+  }
+
+  names(polygons_flat)[1] <- "x"
+  names(polygons_flat)[2] <- "y"
+
+  polygons_flat
+  
+}
+  
+
+
+#' Title
+#'
+#' @param geometries_frame 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' geometries_frame_to_id_group(nc) %>% 
+#' count(mgroup)
+geometries_frame_to_ggplot_reference <- function(geometries_frame = aseg_geometries_frame){
+  
+  keep_frame <- geometries_frame
+  
+  keep_frame$geometry = NULL
+  
+  keep_frame %>% 
+    data.frame() %>% 
+    janitor::clean_names() %>% 
+    mutate(major_group = row_number()) %>% 
+    left_join(geometries_frame_to_id_group(geometries_frame)) %>% 
+    left_join(geometries_frame_to_df(geometries_frame))
+  
+}
+  
+
+
+  
+aseg_ggplot2_reference <- aseg_geometries_frame %>% 
+  filter(!is.na(label)) %>% 
+  geometries_frame_to_ggplot_reference()  
+
+  
+compute_seg <- function(data, scales){
+ 
+  data %>% 
+    inner_join(aseg_ggplot2_reference, multiple = "all") 
+
+}
+
+
+```
+
+
+# Step 2: pass to ggproto
+
+```{r}
+StatSeg <- ggplot2::ggproto(`_class` = "StatSeg",
+                                  `_inherit` = ggplot2::Stat,
+                                  # required_aes = c("fips"),
+                                  # setup_data = my_setup_data,
+                                  compute_panel = compute_seg,
+                                  default_aes = aes(group = after_stat(polygon))
+                                  )
+```
+
+
+# Step 3: write geom_* function
+
+```{r}
+geom_polygon_seg <- function(
+  mapping = NULL,
+  data = NULL,
+  position = "identity",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatSeg,  # proto object from step 2
+    geom = ggplot2::GeomPolygon,  # inherit other behavior
+    data = data,
+    mapping = mapping,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+```
+
+# step 4: test geom_* function, celebrate!
+
+```{r, eval = T}
+aseg_df %>% #count(region)
+  # mutate(label = label %>% as.factor()) %>% 
+  ggplot(data = .) + 
+  aes(label = label) +  # name indicates position instead of x and y 
+  geom_sf(data = ggseg::aseg$data) +
+  geom_polygon_seg() + 
+  aes(fill = label) + 
+  geom_polygon_seg(data = . %>% filter(str_detect(label, "Amygdala")), 
+                                       color = "red") + 
+  theme(legend.position = "none")
+
+ggplot() + 
+  geom_sf(data = ggseg::aseg$data)
+
+ggplot() + 
+  geom_sf(data = ggseg::dk$data)
+```

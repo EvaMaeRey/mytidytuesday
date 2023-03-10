@@ -19,7 +19,6 @@ library(tidyverse)
 ## using a MULTIPOLYGON data set supplied with library(sf)
 nc <- sf::st_read(system.file("shape/nc.shp", package="sf"))
 
-
 nc %>% 
   ggplot() + 
   geom_sf(aes(fill = AREA))
@@ -40,12 +39,10 @@ tibble(nsubgroup) %>%
   mutate(polygon = 1:n()) ->
 groups_and_polygons_nc
 
-
 nc_df <- nc
 nc_df$geometry <- NULL
 str(nc_df)
 nc_df$group <- 1:nrow(nc_df)
-
 
 polygons_out <- data.frame()
 
