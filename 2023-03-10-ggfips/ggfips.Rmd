@@ -73,7 +73,7 @@ geometries_frame_to_id_group <- function(geometries_frame){
 #'
 #' @examples
 #' geometries_frame_to_df(nc) 
-geometries_frame_to_df <- function(geometries_frame){
+geometries_frame_to_df <- function(geometries_frame = ){
 
       polygons_flat <- data.frame()
     
@@ -88,7 +88,8 @@ geometries_frame_to_df <- function(geometries_frame){
       polygons_flat = bind_rows(polygons_flat, temp)
   
 
-  }
+    }
+      
 
   names(polygons_flat)[1] <- "x"
   names(polygons_flat)[2] <- "y"
@@ -98,7 +99,47 @@ geometries_frame_to_df <- function(geometries_frame){
 }
   
 
+geometries_frame_to_df <- function(geometries_frame){
 
+      polygons_flat <- data.frame()
+    
+      geometries_list <- geometries_frame$geometry
+      
+    for (i in 1:length(geometries_list)){
+      
+      polygons_list <- geometries_list[[i]][[1]]
+      fips <- geometries_frame$FIPS[i]
+      
+      for (j in 1:length(polygons_list)){
+      temp <- polygons_list[[j]] %>% 
+        data.frame() %>% 
+        mutate(major_group = i) %>% 
+        mutate(subgroup = j) %>% 
+        mutate(fips = fips)
+      
+      polygons_flat = bind_rows(polygons_flat, temp)
+  
+      }
+      
+    }
+
+  names(polygons_flat)[1] <- "x"
+  names(polygons_flat)[2] <- "y"
+
+  polygons_flat %>% 
+    mutate(polygon = paste0(major_group, ".", subgroup))
+  
+}
+
+
+fips_geometries %>% geometries_frame_to_df() -> reference
+
+
+```  
+
+
+
+```{r}
 #' Title
 #'
 #' @param geometries_frame 
@@ -118,8 +159,7 @@ geometries_frame_to_ggplot_reference <- function(geometries_frame = aseg_geometr
   keep_frame %>% 
     data.frame() %>% 
     janitor::clean_names() %>% 
-    mutate(major_group = row_number()) %>% 
-    left_join(geometries_frame_to_id_group(geometries_frame)) %>% 
+    # mutate(major_group = row_number()) %>% 
     left_join(geometries_frame_to_df(geometries_frame))
   
 }
@@ -130,11 +170,21 @@ geometries_frame_to_ggplot_reference <- function(geometries_frame = aseg_geometr
 fips_ggplot2_reference <- fips_geometries %>% select(FIPS, geometry) %>% 
   geometries_frame_to_ggplot_reference()  
 
-  
+# 3142 fips_geometries %>% count(FIPS)
+# geometries_frame_to_id_group(geometries_frame = fips_geometries) %>% count(major_group)
+# 3225 geometries_frame_to_id_group(geometries_frame = fips_geometries) %>% count(polygon) 
+# 3239 geometries_frame_to_df(geometries_frame = fips_geometries)  %>% count(polygon)
+geometries_frame_to_df(geometries_frame = fips_geometries)  %>% count(major_group)
+
+fips_ggplot2_reference %>% count(polygon)
+fips_ggplot2_reference %>% count(fips)
+
+
 compute_county <- function(data, scales){
  
   data %>% 
-    inner_join(fips_ggplot2_reference, multiple = "all") 
+    # inner_join(fips_ggplot2_reference, multiple = "all") 
+    inner_join(reference)
 
 }
 
@@ -192,9 +242,17 @@ us_census %>%
   aes(fill = mean_work_travel) + 
   scale_fill_viridis_c(option = "magma")
 
+layer_data(last_plot())
+
 fips_geometries %>%
   left_join(US_census, by = "FIPS") %>%
   ggplot() +
   geom_sf(aes(fill = mean_work_travel), linewidth = .1) + 
   scale_fill_viridis_c(option = "magma")
+
+layer_data(last_plot())
+
+geom_sf
+
+
 ```

@@ -1,0 +1,127 @@
+---
+title: "brain2 with sf manipulation"
+author: "Evangeline Reynolds"
+date: "3/9/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Example simple feature to data frame...
+
+```{r}
+library(tidyverse)
+library(sf)
+#> Linking to GEOS 3.8.1, GDAL 3.2.1, PROJ 7.2.1
+
+fips_geometries <- readRDS(url("https://wilkelab.org/SDS375/datasets/US_counties.rds")) %>%
+  rename(FIPS = GEOID)
+
+US_census <- read_csv("https://wilkelab.org/SDS375/datasets/US_census.csv",
+                      col_types = cols(FIPS = "c")
+          )
+
+# works
+fips_geometries %>%
+  left_join(US_census, by = "FIPS") %>%
+  ggplot() +
+  geom_sf(aes(fill = home_ownership)) + 
+  scale_fill_viridis_c()
+
+# from Claus Wilke on ggplot2
+
+fips_geometries %>%
+  left_join(US_census, by = "FIPS") %>%
+  ggplot() +
+  geom_sf(aes(fill = mean_work_travel), linewidth = .1) + 
+  scale_fill_viridis_c(option = "magma") ->
+classic_plot_sf_layer
+
+classic_plot_sf_layer
+
+layer_data(classic_plot_sf_layer) %>% 
+  select(geometry, xmin, xmax, ymin, ymax) %>% 
+  bind_cols(tibble(FIPS = fips_geometries$FIPS)) %>% 
+  rename(fips = FIPS) ->
+reference
+
+
+```
+
+
+
+```{r}
+compute_county <- function(data, scales){
+ 
+  data %>% 
+    # inner_join(fips_ggplot2_reference, multiple = "all") 
+    inner_join(reference) %>% 
+    mutate(group = -1)
+
+}
+
+
+```
+
+
+# Step 2: pass to ggproto
+
+```{r}
+StatCounty <- ggplot2::ggproto(`_class` = "StatCounty",
+                                  `_inherit` = ggplot2::Stat,
+                                  # required_aes = c("fips"),
+                                  # setup_data = my_setup_data,
+                                  compute_panel = compute_county,
+                                  default_aes = aes(geometry = after_stat(geometry))
+                                  )
+```
+
+
+# Step 3: write geom_* function
+
+```{r}
+geom_sf_county <- function(
+  mapping = NULL,
+  data = NULL,
+  position = "identity",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatCounty,  # proto object from step 2
+    geom = ggplot2::GeomSf,  # inherit other behavior
+    data = data,
+    mapping = mapping,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+```
+
+# step 4: test geom_* function, celebrate!
+
+```{r, eval = T}
+us_census <- read_csv("https://wilkelab.org/SDS375/datasets/US_census.csv",
+                      col_types = cols(FIPS = "c")
+          )  
+
+us_census %>% 
+  # slice(1340) %>% 
+  ggplot() + 
+  aes(fips = FIPS) +
+  geom_sf_county(linewidth = .02, 
+                      color = "darkgrey") +
+  aes(fill = mean_work_travel) + 
+  coord_sf() +
+  scale_fill_viridis_c(option = "magma")
+
+
+
+
+
+
+```
