@@ -31,19 +31,16 @@ aseg_df %>% count(label)
 # aseg_df %>% #count(region)
   # mutate(label = label %>% as.factor()) %>% 
 ggplot() + 
-  aes(label = label) +  # name indicates position instead of x and y 
+  aes(seg_label = label) +  # name indicates position instead of x and y 
   geom_sf(data = ggseg::aseg$data)
 
-last_plot() %>% layer_data() %>% select(label, geometry, xmin, xmax, ymin, ymax) %>% filter(!is.na(label)) ->
+last_plot() %>% layer_data() %>% select(seg_label, geometry, xmin, xmax, ymin, ymax) %>% filter(!is.na(seg_label)) ->
   reference
 
 
 ```
 
 
-```{r}
-
-```
 
 
 
@@ -106,16 +103,15 @@ c("Left-Thalamus-Proper",
 "Right-Putamen"	,
 "Right-Amygdala") %>% tibble(my_segs = .) %>% 
   ggplot() + 
-  aes(label = my_segs) +
+  aes(seg_label = my_segs) +
   coord_sf() +
   geom_sf(data = aseg$data, 
-          aes(label = NULL) # huh?  required?
+          aes(seg_label = NULL) # huh?  required?
           ) +
-  geom_sf_brainsegs(fill = "darkred")
-
-
-
-
-
-
+  geom_sf_brainsegs(fill = "darkred", alpha = .5) + 
+  geom_sf_text(aes(label = label, seg_label = NULL), 
+               data = aseg$data, size = 2, color = "blue", angle = 20)
 ```
+
+
+
