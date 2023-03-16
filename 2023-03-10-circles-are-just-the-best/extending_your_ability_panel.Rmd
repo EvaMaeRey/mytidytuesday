@@ -35,23 +35,25 @@ create_circle <- function(n = 10){
 
 
 
-five_cars %>% 
+mtcars %>%
+  .[1:5,] %>% 
   mutate(which_car = row_number()) %>% 
   crossing(create_circle() %>%
              mutate(order = row_number())) %>% 
   arrange(which_car, order) %>% 
   # scaling
-  mutate(x = speed * x) %>% 
-  mutate(y = speed * y) %>%  
+  mutate(x = hp * x) %>% 
+  mutate(y = hp * y) %>%  
   # centering
-  mutate(x = x + speed) %>%
-  mutate(y = y + dist) %>%
+  mutate(x = x + mpg) %>%
+  mutate(y = y + disp) %>%
   ungroup() ->
 five_cars_circles
   
-five_cars %>% 
+mtcars %>%
+  .[1:5,] %>%  
   ggplot() + 
-  aes(x = speed, dist) +
+  aes(x = mpg, disp) +
   geom_point() + 
   geom_polygon(data = five_cars_circles, 
             aes(x = x, y = y, group = which_car),
@@ -100,34 +102,37 @@ We write a routine that will act on each group in the data (in this case each ro
 ---
 
 ```{r step_2a}
-compute_panel_circles <- function(data, scales, n = 5){
 
-  create_circle <- function(n = 10){
+create_circle <- function(n = 10){
   
     angles <- seq(from = 0,
                 to = 2 * pi,
                 length.out = n)
 
   data.frame(
-    x = c(cos(angles)),
-    y = c(sin(angles))
+    x_on_zero = c(cos(angles)),
+    y_on_zero = c(sin(angles))
   )
   
 }
 
+compute_panel_circle <- function(data, scales, n = 5){
+
+
+single_circle <- create_circle()
 
 
 data %>% 
   # mutate(which_car = row_number()) %>% 
-  crossing(create_circle() %>%
-             mutate(order = row_number())) %>% 
-  arrange(order) %>% 
+  crossing(single_circle %>%
+             mutate(the_order = row_number())) %>% 
+  arrange(the_order) %>% 
   # scaling
-  mutate(x = r * x) %>% 
-  mutate(y = r * y) %>%  
+  mutate(x_sized = r * x_on_zero) %>% 
+  mutate(y_sized = r * y_on_zero) %>%  
   # centering
-  mutate(x = x + x0) %>%
-  mutate(y = y + y0)
+  mutate(x = x_sized + x0) %>%
+  mutate(y = y_sized + y0)
   
   
 }
@@ -157,7 +162,7 @@ data %>%
 mtcars %>%
   select(disp, mpg, cyl) %>% 
   rename(x0 = disp, y0 = mpg, r = cyl) %>% 
-  compute_panel_circles(n = 6)
+  compute_panel_circle(n = 6)
 
 cars %>%
   rename(x0 = dist, y0 = speed) %>% 
@@ -178,8 +183,8 @@ cars %>%
 ```{r 3}
 StatCircle <- ggproto(`_class` = "StatCircle", 
                       `_inherit` = Stat, 
-                      # setup_data = setup_data_circle,
-                      compute_panel = compute_panel_circles,
+                      setup_data = setup_data_circle,
+                      compute_panel = compute_panel_circle,
                       required_aes = c("x0", "y0", "r")
                       )
 ```
@@ -241,7 +246,8 @@ cars %>%
       y0 = dist, 
       r = speed/6) + 
   geom_circle() +
-  coord_equal() 
+  coord_equal() + 
+  aes(fill = speed > 4)
 ```
 
 # Keep testing; second guess everything; dispare
