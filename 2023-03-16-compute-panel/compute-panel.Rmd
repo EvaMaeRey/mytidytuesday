@@ -9,12 +9,23 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## 
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+In 'Easy Geom Recipes' the computation we did was within groups, specifying the compute_group parameter within ggproto.  
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+Grouping variables in ggplot2 are character, factor or logical variables.
 
+If we use the compute_group parameter in our ggproto function to define our stat, computation will happen in a group-wise basis if aesthetics-variable pairing happens with such variables.  
+
+In other words, our target layer geom_* will divide up our data set by any character, factor, or logical categories, and then do computation before returning a data frame for plotting.  
+
+This is not always the desired behavior.  Sometimes computation has to happen across groups.  The examples that follow are such cases.  
+
+First we'll see a regression model that has an indicator variable as one of its inputs.  We want the model to be computed holistically; geom_smooth(), which you may have used, computes groupwise; i.e. one model for each group.  We'll use panel-level computation to display across group model results.
+
+The second example is circle packing.  We can use the {circlepack} library to visualize quantities for entities. To wrap this work up into a geom function, we need the computation that positions the circles to happen at the panel level -- it shouldn't do the computation within groups. 
+
+Finally, we look at sf data.  Here, I think it may be possible to use set compute_group or compute_panel and get similar visual results.  However, computing and plotting a panel (we'll do this with an inner join of an input data set and an sf reference data frame) is much faster than computing  group-wise.  (just some guesses, need to try with sf w/ fewer geometries than fips.)
 
 ---
 class: inverse, middle, center
@@ -23,11 +34,11 @@ class: inverse, middle, center
 
 --
 
-##`geom_point_xy_medians()`
+##`geom_lm_indicator()`
 
 --
 
-- This will be a point at the median of x and y
+- This will be a layer that which by default shows the ols model y = x + indicator
 
 
 ---
@@ -164,7 +175,6 @@ ggplot(palmerpenguins::penguins) +
   aes(indicator = species) +
   geom_lm_indicator()
 
-
 ggplot(palmerpenguins::penguins) +
   aes(x = flipper_length_mm ) +
   aes(y = body_mass_g ) +
@@ -214,11 +224,9 @@ pack
 cbind(prep, pack) %>%
   mutate(id = row_number())
 
-
 pack %>%  
   packcircles::circleLayoutVertices(npoints = 50) ->  
 circle_outlines  
-
 
 circle_outlines %>%  
   ggplot() +  
@@ -415,14 +423,13 @@ classic_plot_sf_layer
 # Step 1: computation
 
 
-```{r}
 
+```{r}
 layer_data(classic_plot_sf_layer) %>% 
   select(geometry, xmin, xmax, ymin, ymax) %>% 
   bind_cols(tibble(FIPS = fips_geometries$FIPS)) %>% 
   rename(fips = FIPS) ->
 reference
-
 
 compute_panel_county <- function(data, scales){
  
