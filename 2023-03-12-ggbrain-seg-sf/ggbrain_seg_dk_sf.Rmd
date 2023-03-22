@@ -1,0 +1,114 @@
+---
+title: "brain2 with sf manipulation"
+author: "Evangeline Reynolds"
+date: "3/9/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Example simple feature to data frame...
+
+```{r}
+library(sf)
+
+library(ggseg)
+library(tidyverse)
+
+dk_geometries_frame <- ggseg::dk$data
+aseg_geometries_frame <- ggseg::aseg$data
+
+
+aseg_df <- ggseg::aseg$data
+aseg_df$geometry <- NULL
+aseg_df <- aseg_df %>% data.frame() %>% remove_missing()
+
+
+aseg_df %>% count(label)
+
+# aseg_df %>% #count(region)
+  # mutate(label = label %>% as.factor()) %>% 
+ggplot() + 
+  aes(hemi = hemi, side = side, region = region, label = label, roi = roi) +  # name indicates position instead of x and y 
+  geom_sf(data = ggseg::dk$data)
+
+last_plot() %>% layer_data() %>% select(hemi, side, region, label, roi, geometry, xmin, xmax, ymin, ymax) %>% filter(!is.na(label)) ->
+  reference
+
+
+```
+
+
+
+
+
+```{r}
+compute_brain_dk <- function(data, scales){
+ 
+  data %>% 
+    inner_join(reference)
+  
+}
+
+
+```
+
+
+# Step 2: pass to ggproto
+
+```{r}
+StatBdkseg <- ggplot2::ggproto(`_class` = "StatBdkseg",
+                                  `_inherit` = ggplot2::Stat,
+                                  compute_panel = compute_brain_dk,
+                                  default_aes = aes(geometry = after_stat(geometry))
+                                  )
+```
+
+
+# Step 3: write geom_* function
+
+```{r}
+geom_sf_brainsegs <- function(
+  mapping = NULL,
+  data = NULL,
+  position = "identity",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatBdkseg,  # proto object from step 2
+    geom = ggplot2::GeomSf,  # inherit other behavior
+    data = data,
+    mapping = mapping,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+```
+
+# step 4: test geom_* function, celebrate!
+
+```{r, eval = T}
+c("fusiform",
+"inferior parietal"	,
+"insula", "precentral"
+) %>% tibble(my_region = .) %>%
+  mutate(value = 1:4) %>%
+  # mutate(name = letters[1:4]) %>% 
+  ggplot() + 
+  aes(region = my_region, fill = value) +
+  coord_sf() +
+  geom_sf(data = dk$data, 
+          aes(region = NULL, fill = NULL) # huh?  required?
+          ) +
+  geom_sf_brainsegs(alpha = .5) + 
+  scale_fill_viridis_c()
+  
+```
+
+
+

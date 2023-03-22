@@ -231,7 +231,7 @@ StatePopulation %>% #count(region)
 
 1. Solved!  "Not sure what's going on w/ merge so that we only get the 4 states," now much better!  there was a grouping variable in the polygons data set named 'group' - this really messed with things because ggplot2 uses that var internally.  We renamed!
 2. state = var, var must be factor (not character).  I've seen this before and I'd like that not to be the case, but fine for now. 
-3. There are subregions.  You can see the tell tail-signs. Seems like setup_data should help w/ group management
+3. There are subregion.  You can see the tell tail signs. Seems like setup_data should help w/ group management
 4. Take a break! 
 
 
@@ -256,3 +256,193 @@ ggplot() + geom_polygon(data=AllCounty, aes(x=long, y=lat, group=group),
 https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/circle_pack_stipple.html
 
 
+# Example simple feature to data frame...
+
+```{r}
+library(sf)
+library(sp)
+library(tidyverse)
+
+## using a MULTIPOLYGON data set supplied with library(sf)
+nc <- sf::st_read(system.file("shape/nc.shp", package="sf"))
+
+
+nc %>% 
+  ggplot() + 
+  geom_sf(aes(fill = AREA))
+
+# pull out all the data frames that define polygons
+nc_polygons <- nc$geometry %>% purrr::flatten() %>% purrr::flatten()
+# There's sometimes multiple polygons associated with a row
+# 
+nsubgroup <- nc$geometry %>% purrr::map_dbl(.f = length)
+
+tibble(nsubgroup) %>% 
+  mutate(group = 1:n()) %>% 
+  uncount(weights = nsubgroup) %>% 
+  group_by(group) %>% 
+  mutate(subgroup = 1:n()) %>% 
+  mutate(region = paste0(group,'.', subgroup)) %>% 
+  ungroup() %>% 
+  mutate(polygon = 1:n()) ->
+groups_and_polygons_nc
+
+
+nc_df <- nc
+nc_df$geometry <- NULL
+str(nc_df)
+nc_df$group <- 1:nrow(nc_df)
+
+
+polygons_out <- data.frame()
+
+for (i in 1:length(nc_polygons)){
+  
+  temp <- nc_polygons[[i]] %>% 
+    data.frame() %>% 
+    mutate(polygon = i)
+  
+  polygons_out = bind_rows(polygons_out, temp)
+  }
+
+polygons_out %>% 
+  left_join(groups_and_polygons_nc) %>% 
+  left_join(nc_df) %>% 
+  ggplot() + 
+  aes(x = X1, y = X2 , group = polygon, fill = AREA) +
+  geom_polygon() + 
+  coord_map(projection = "orthographic", 
+            orientation = c(31, -74, -3)) 
+```
+# Write functions for ggnorthcarolina
+
+```{r}
+# imagine you only have nc_df
+nc_df %>% head()
+
+geometries_frame_to_id_group <- function(geometries_frame){
+
+    nsubgroup <- geometries_frame$geometry %>% purrr::map_dbl(.f = length)
+
+    tibble(nsubgroup) %>% 
+      mutate(mgroup = 1:n()) %>% # row number 
+      uncount(weights = nsubgroup) %>% 
+      group_by(mgroup) %>% 
+      mutate(subgroup = 1:n()) %>% 
+      mutate(region = paste0(mgroup,'.', subgroup)) %>% 
+      ungroup() %>% 
+      mutate(polygon = 1:n()) %>% 
+      ungroup()
+
+}
+
+geometries_frame_to_id_group(nc)
+
+geometries_frame_to_df <- function(geometries_frame){
+
+      polygons_flat <- data.frame()
+    
+      polygons <- geometries_frame$geometry %>% purrr::flatten() %>% purrr::flatten()
+      
+    for (i in 1:length(nc_polygons)){
+      
+      temp <- nc_polygons[[i]] %>% 
+        data.frame() %>% 
+        mutate(polygon = i)
+      
+      polygons_flat = bind_rows(polygons_flat, temp)
+  
+
+}
+
+  polygons_flat %>% 
+    rename(x = X1, 
+           y = X2)
+}
+  
+geometries_frame_to_df(nc)
+
+geometries_frame_to_ggplot_reference <- function(geometries_frame = nc){
+  
+  keep_frame <- geometries_frame
+  
+  keep_frame$geometry = NULL
+  
+  keep_frame %>% 
+    data.frame() %>% 
+    janitor::clean_names() %>% 
+    mutate(mgroup = row_number()) %>% 
+    left_join(geometries_frame_to_id_group(nc)) %>% 
+    left_join(geometries_frame_to_df(nc))
+  
+}
+  
+
+geometries_frame_to_id_group(nc) %>% 
+  count(mgroup)
+  
+nc_ggplot2_reference <- geometries_frame_to_ggplot_reference(nc)
+  
+
+compute_county_nc <- function(data, scales){
+ 
+  data %>% 
+    inner_join(nc_ggplot2_reference, multiple = "all") 
+
+}
+
+nc_df %>% 
+  rename(fips = FIPS) %>% 
+  compute_county_nc()
+
+```
+
+
+# Step 2: pass to ggproto
+
+```{r}
+StatPolygonnccounty <- ggplot2::ggproto(`_class` = "StatPolygonnccounty",
+                                  `_inherit` = ggplot2::Stat,
+                                  required_aes = c("fips"),
+                                  # setup_data = my_setup_data,
+                                  compute_panel = compute_county_nc,
+                                  default_aes = aes(group = after_stat(polygon))
+                                  )
+```
+
+
+# Step 3: write geom_* function
+
+```{r}
+geom_polygon_nccounty <- function(
+  mapping = NULL,
+  data = NULL,
+  position = "identity",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatPolygonnccounty,  # proto object from step 2
+    geom = ggplot2::GeomPolygon,  # inherit other behavior
+    data = data,
+    mapping = mapping,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+```
+
+# step 4: test geom_* function, celebrate!
+
+```{r, eval = T}
+nc_df %>% #count(region)
+  mutate(FIPS = FIPS %>% as.factor()) %>% 
+  ggplot(data = .) + 
+  aes(fips = FIPS, # state indicates position instead of x and y 
+      fill = PERIMETER) +
+  geom_polygon_nccounty() + 
+  coord_map(projection = "orthographic", 
+            orientation = c(41, -74, 0))
+```

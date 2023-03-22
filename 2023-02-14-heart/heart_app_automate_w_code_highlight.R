@@ -7,8 +7,8 @@
 #    http://shiny.rstudio.com/
 #
 
-remotes::install_github("statistikat/codeModules")
-
+# remotes::install_github("statistikat/codeModules")
+library(codeModules)
 
 ##### R Stuff in the background ######
 
@@ -269,10 +269,10 @@ library(tidyverse)
 
 ##### Define server logic ########
 
-server <- function(input, output) {
+server <- function(input, output, session) {
 
 
-  output$distText <- renderText({
+  output$code_out <- renderCode({
 
     for_shiny_interactivity %>%
       # numeric
@@ -285,7 +285,10 @@ server <- function(input, output) {
       str_replace_all("input\\$char_fill", as.character(input$char_fill) %>% paste0('\\"', ., '\\"'))
 
 
+    # paste('1 + 1')
+
   })
+
 
   output$distPlot <- renderPlot({
 
@@ -346,7 +349,7 @@ ui <- fluidPage(
 
     # Show a plot of the generated distribution
     mainPanel(
-      verbatimTextOutput("distText"),
+      codeOutput("code_out"),
       plotOutput("distPlot")
     )
 
@@ -367,3 +370,25 @@ shinyApp(ui = ui, server = server)
 
 #eval(parse(text = my_shiny_app))
 
+shinyApp(
+  fluidPage(
+    mainPanel(
+    codeOutput("code_out"),
+    plotOutput("plot_out")
+    )
+  ),
+
+  function(input, output, session){
+
+
+    output$code_out <- renderCode({
+      "1+1"
+    })
+
+
+    output$plot_out <- renderPlot({
+      ggplot(cars) + aes(speed, dist) + geom_point()
+
+    })
+  }
+)
