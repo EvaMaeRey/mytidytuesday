@@ -34,7 +34,8 @@ ggplot() +
   aes(hemi = hemi, side = side, region = region, label = label, roi = roi) +  # name indicates position instead of x and y 
   geom_sf(data = ggseg::dk$data)
 
-last_plot() %>% layer_data() %>% select(hemi, side, region, label, roi, geometry, xmin, xmax, ymin, ymax) %>% filter(!is.na(label)) ->
+last_plot() %>% layer_data() %>% select(hemi, side, region, label, 
+                                        roi, geometry, xmin, xmax, ymin, ymax) %>% filter(!is.na(label)) ->
   reference
 
 
@@ -98,16 +99,25 @@ c("fusiform",
 "insula", "precentral"
 ) %>% tibble(my_region = .) %>%
   mutate(value = 1:4) %>%
-  # mutate(name = letters[1:4]) %>% 
+  mutate(name = letters[1:4] %>% as.factor()) %>%
   ggplot() + 
   aes(region = my_region, fill = value) +
   coord_sf() +
   geom_sf(data = dk$data, 
           aes(region = NULL, fill = NULL) # huh?  required?
           ) +
-  geom_sf_brainsegs(alpha = .5) + 
-  scale_fill_viridis_c()
+  geom_sf_brainsegs(alpha = .5)
+
+# does not work
+# last_plot() + 
+#   aes(fill = name)
   
+
+  ggplot() + 
+  coord_sf() +
+  geom_sf(data = dk$data, 
+          aes(region = NULL, fill = region) # huh?  required?
+          )
 ```
 
 

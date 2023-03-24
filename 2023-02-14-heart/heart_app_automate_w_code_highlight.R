@@ -287,7 +287,7 @@ server <- function(input, output, session) {
 
     # paste('1 + 1')
 
-  })
+  }, delay = c(.1, 2, 500, 1000, 2000))
 
 
   output$distPlot <- renderPlot({
@@ -367,28 +367,27 @@ shinyApp(ui = ui, server = server)
 #' ->
 #my_shiny_app
 
-
-#eval(parse(text = my_shiny_app))
-
-shinyApp(
-  fluidPage(
-    mainPanel(
-    codeOutput("code_out"),
-    plotOutput("plot_out")
-    )
-  ),
-
-  function(input, output, session){
-
-
-    output$code_out <- renderCode({
-      "1+1"
-    })
-
-
-    output$plot_out <- renderPlot({
-      ggplot(cars) + aes(speed, dist) + geom_point()
-
-    })
-  }
-)
+#
+# # eval(parse(text = my_shiny_app))
+#  shinyApp(
+#    fluidPage(
+#      mainPanel(
+#      codeOutput("code_out"),
+#      plotOutput("plot_out")
+#      )
+#    ),
+#
+#    function(input, output, session){
+#
+#
+#      output$code_out <- renderCode({
+#        "1+1"
+#      }, delay = c(100, 500, 1000))
+#
+#
+#      output$plot_out <- renderPlot({
+#        ggplot(cars) + aes(speed, dist) + geom_point()
+#
+#      })
+#    }
+#  )

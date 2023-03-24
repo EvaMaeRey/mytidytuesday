@@ -6,41 +6,40 @@ output: html_document
 ---
 
 
+Using ggplot2 has been described as writing 'graphical poems'.  But we may feel at a loss for 'words' when functions we'd like to have don't exist.  The ggplot2 extension system allows us to build new 'vocabulary' for fluent expression.  
 
-Using ggplot2 has been described as writing 'graphical poems'.
-<!-- and a system that lets us 'speak our plot into existence'.  -->
-But we may feel at a loss for 'words' when functions we'd like to have don't exist.  The ggplot2 extension system allows us to build new 'vocabulary' for fluent expression.  
+An exciting extension mechanism is that of inheriting from existing, more primitive geoms after performing some calculation.  
 
-An exciting extension mechanism is inheriting from existing geoms.  Particularly important to statisticians and mathematicians is writing new geom_*s that perform and visualize calculations.  
+To get your feet wet in this world and give you a taste of patterns for geom extension, we provide three basic examples of the geoms_ that inherit from *existing* geoms (point, text, segment, etc) along with a practice exercise.  With such geoms, calculation is done under the hood by the ggplot2 system.
 
-To get your feet wet in this world and give you a taste of patterns for geom extension, we provide three basic examples of the geoms_ that inherit from *existing* geoms (point, text, segment, etc) along with practice exercises.  With such geoms, calculation is done under the hood by the ggplot2 system; with these geom, you can write *new* graphical poems with exciting new graphical 'words'! 
+With these geom, you can write *new* graphical poems with exciting new graphical 'words'! 
 
 This tutorial is intended for individuals who already have a working knowledge of the grammar of ggplot2, but may like to build a richer vocabulary for themselves.
 
 # Preview
 
-Our recipes will take form:
+Our recipes take the form:
 
 - *Step 0. Get the job done with 'base' ggplot2.* 
 It's a good idea to clarify what needs to happen without getting into the extension architecture
 - *Step 1. Write a computation function.* 
-Wrap the necessary computation into a function that your target geom_*() function will perform.
+Wrap the necessary computation into a function that your target geom_*() function will perform. We focus on 'compute_group' computation only in this tutorial.
 - *Step 2. Define a ggproto object.* 
 ggproto objects allow your extension  to work together with base ggplot2 functions!  You'll use the computation function from step 1 to help define it.
-
 - *Step 3. Write your geom function!* 
-You're ready to write your function.  You will incorporate the ggproto from step 2.  
-
+You're ready to write your function.  You will incorporate the ggproto from step 2 and also define which more primitive geom (point, text, segment etc) you want other behaviors to inherit from. 
 - *Step 4. Test/Enjoy!*
 Take your new geom for a spin! Check out group-wise computation behavior!
 
+Below, you'll see 1. A completely worked example and then 2. a target geom_*() to build.
 
+---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
 ```
 
-# Recipe #1: `geom_point_xy_medians()`
+# Example recipe #1: `geom_point_xy_medians()`
 
 --
 
@@ -74,22 +73,27 @@ penguins %>%
 
 - define computation that ggplot2 should do for you, before plotting
   - here it's computing a variable with labels for each observation
-- test that functionality!
+- test that functionality Step 1.b
 
 ```{r compute_group_xy_medians}
-compute_group_xy_medians <- function(data, scales){
+# Step 1.a
+compute_group_xy_medians <- function(data, scales){ #  scales is used internally in ggplot2
   data %>% 
     summarize(x = median(x),
             y = median(y))
 }
+
+# Step 1.b
 penguins %>%
-  rename(x = bill_depth_mm, 
-         y = bill_length_mm) %>%
+  rename(x = bill_depth_mm,       # ggplot2 will work with 'aes' column names
+         y = bill_length_mm) %>%  # therefore rename is required to used the compute function
   compute_group_xy_medians()
 ```
 
 
 ## Step 2: define ggproto
+
+Things to notice
 
 - what's the naming convention for the proto object?
 - which aesthetics are required as inputs?
@@ -105,6 +109,10 @@ StatXYMedians <- ggplot2::ggproto(`_class` = "StatXYMedians",
 
 ## Step 3: define geom_* function
 
+Things to notice
+
+- Where does our work up to this point enter in?
+- What more primitive geom will we inherit behavior from?
 
 ```{r geom_point_xy_medians} 
 geom_point_xy_medians <- function(mapping = NULL, data = NULL,
@@ -112,8 +120,8 @@ geom_point_xy_medians <- function(mapping = NULL, data = NULL,
                            show.legend = NA,
                            inherit.aes = TRUE, ...) {
   ggplot2::layer(
-    stat = StatXYMedians, # proto object from step 2
-    geom = ggplot2::GeomPoint, # inherit other behavior
+    stat = StatXYMedians,        # proto object from step 2
+    geom = ggplot2::GeomPoint,   # inherit other behavior
     data = data, 
     mapping = mapping,
     position = position, 
@@ -147,13 +155,27 @@ penguins %>%
   geom_point_xy_medians(size = 4)
 ```
 
-## Now you ...
+# Task #1: create the function `geom_point_xy_means()`
 
-### Create the function `geom_point_xy_means()`.  
+Using recipe #1 as a reference, try to create the function `geom_point_xy_means()`
 
 
+```{r}
+# step 0: use base ggplot2
 
-# Recipe #2:  `geom_label_id()`
+# step 1: write your compute_group function (and test)
+
+# step 2: write ggproto with compute_group as an input
+
+# step 3: write your geom_*() function with ggproto as an input
+
+# step 4: enjoy!
+
+
+```
+
+
+# Example recipe #2:  `geom_label_id()`
 
 ---
 
@@ -238,6 +260,8 @@ geom_label_row_number <- function(mapping = NULL, data = NULL,
 
 
 
+
+
 ---
 
 ## Step 4: Enjoy! Use your function
@@ -262,11 +286,9 @@ last_plot() +
 
 ---
 
-## Now you...
+# Task #2: create `geom_text_coordinates()`
 
---
-
-### Create the function `geom_text_coordinates()`.  
+Using recipe #2 as a reference, can you create the function `geom_text_coordinates()`.  
 
 --
 
@@ -281,9 +303,26 @@ paste0("(", 1, ", ",3., ")")
 ```
 
 
+
+
+```{r}
+# step 0: use base ggplot2
+
+# step 1: write your compute_group function (and test)
+
+# step 2: write ggproto with compute_group as an input
+
+# step 3: write your geom_*() function with ggproto as an input
+
+# step 4: enjoy!
+
+
+```
+
+
 ---
 
-# Recipe #3:  `geom_point_lm_fitted()`
+# Example recipe #3:  `geom_point_lm_fitted()`
 
 ---
 
@@ -381,13 +420,16 @@ penguins %>%
 
 ---
 
-## Now you... Create the function `geom_segment_lm_residuals()`. 
+# Task #3 create `geom_segment_lm_residuals()`
 
-### Hint: read about what aesthetics are required for segments.  We'll give you Step 0 this time...
+Create the function `geom_segment_lm_residuals()`. 
+
+### Hint: consider what aesthetics are required for segments.  We'll give you Step 0 this time...
 
 ## Step 0: use base ggplot2 to get the job done
 
 ```{r}
+# step 0: use base ggplot2
 model <- lm(formula = bill_length_mm ~ bill_depth_mm, 
             data = penguins) 
 
@@ -402,6 +444,16 @@ penguins %>%
   geom_segment(data = penguins_w_fitted,
              aes(yend = fitted, xend = bill_depth_mm),
              color = "blue")
+
+# step 1: write your compute_group function (and test)
+
+# step 2: write ggproto with compute_group as an input
+
+# step 3: write your geom_*() function with ggproto as an input
+
+# step 4: enjoy!
+
+
 ```
 
 ---
