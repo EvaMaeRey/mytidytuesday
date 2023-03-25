@@ -80,7 +80,7 @@ ann$hair
 ```
 
 
-```{r tpspecify}
+```{r tpspecify, eval = F}
 library(R6)
 library(magrittr)
 TPSpecify <- R6Class("TPSpecify",
@@ -108,7 +108,7 @@ TPSpecify <- R6Class("TPSpecify",
 ```
 
 
-```{r tpspecify2}
+```{r tpspecify2, eval = F}
 TPSpecify$new() ->
   df_plus
 
@@ -148,5 +148,100 @@ tp(data = cars)
 tp(rows = speed, cols = )
 
 
+
+```
+
+
+
+
+```{r}
+library(R6)
+Fibonnacci <- R6Class("Fibonnacci",
+                       public = list(
+                         
+                         # objects
+                         init = c(0, 1),
+                         last = 1,
+                         current = 1,
+
+                         # functions
+                         fib_next = function(){ # a method
+                           
+                           x <- self$last
+                           y <- self$current
+                           
+                           self$last <- y
+                           self$current <- x + y
+                           invisible(self)          #returns
+                           
+                                     },
+                         
+                         fib_init = function(x1, x2){
+                           
+                           self$init <- c(x1, x2)
+                           self$last <- x2
+                           self$current <- x1 + x2
+                           invisible(self)            #returns
+                           
+                         },
+                         print = function() {  # print method; default is to print everything
+                           
+                           cat(self$current)
+                           
+                         }
+                       )
+                      
+                  
+)
+
+my_fib <- Fibonnacci$new(); my_fib
+my_fib$fib_next(); my_fib
+my_fib$fib_next() ; my_fib
+my_fib$fib_next() ; my_fib
+my_fib$fib_next() ; my_fib
+my_fib$fib_next() ; my_fib
+my_fib$fib_next() ; my_fib
+my_fib$fib_next() ; my_fib
+my_fib$fib_init(5,4) ; my_fib
+my_fib$fib_next() ; my_fib
+my_fib$fib_next() ; my_fib
+my_fib$fib_next() ; my_fib
+my_fib$fib_next() ; my_fib
+
+my_fib$current
+```
+
+
+
+```{r}
+## wrap and pipe
+fibi_init <- function(x1 = 0, x2 = 1){
+  
+  my_fib <- Fibonnacci$new()
+  
+  my_fib$fib_init(x1,x2)
+  
+  my_fib
+  
+}
+
+fibi_advance <- function(my_fib){
+  
+  my_fib <- my_fib
+  
+  my_fib$fib_next()
+  
+  my_fib
+  
+}
+
+
+fibi_init() |>
+  fibi_advance() |>
+  fibi_advance() |>
+  fibi_advance() |>
+  fibi_advance() |>
+  fibi_advance() |>
+  fibi_advance()
 
 ```

@@ -423,59 +423,13 @@ Person &lt;- R6Class(&quot;Person&quot;,
 ann$hair</code></pre>
 <pre><code>## [1] &quot;red&quot;</code></pre>
 <pre class="r"><code>library(R6)
-
-Queue &lt;- R6Class(&quot;Queue&quot;,
-  public = list(
-    initialize = function(...) {
-      for (item in list(...)) {
-        self$add(item)
-      }
-    },
-    add = function(x) {
-      private$queue &lt;- c(private$queue, list(x))
-      invisible(self)
-    },
-    remove = function() {
-      if (private$length() == 0) return(NULL)
-      head &lt;- private$queue[[1]]
-      private$queue &lt;- private$queue[-1]
-      head
-    }
-  ),
-  private = list(
-    queue = list(),
-    length = function() base::length(private$queue)
-  )
-)
-
-q &lt;- Queue$new(5, 6, &quot;foo&quot;)
-
-q</code></pre>
-<pre><code>## &lt;Queue&gt;
-##   Public:
-##     add: function (x) 
-##     clone: function (deep = FALSE) 
-##     initialize: function (...) 
-##     remove: function () 
-##   Private:
-##     length: function () 
-##     queue: list</code></pre>
-<pre class="r"><code># Add and remove items
-q$add(&quot;something&quot;)
-q$add(&quot;another thing&quot;)
-q$add(17)
-q$remove()</code></pre>
-<pre><code>## [1] 5</code></pre>
-<pre class="r"><code>q$remove()</code></pre>
-<pre><code>## [1] 6</code></pre>
-<pre class="r"><code>library(R6)
 library(magrittr)
 TPSpecify &lt;- R6Class(&quot;TPSpecify&quot;,
       public = list(
           
         sum = 0, # value that can evolve
         add = function(x){ self$sum &lt;- self$sum + x ; invisible(self)},
-        source_data = NULL,
+        source_data = data.frame(),
         set_source_data = function(df) { self$source_data &lt;- df },
         rows = NULL,
         set_rows = function(rows){ self$rows &lt;- rows},
@@ -484,7 +438,7 @@ TPSpecify &lt;- R6Class(&quot;TPSpecify&quot;,
         fun = NULL,
         set_fun = function(cols){ self$fun &lt;- fun},
         out_data = NULL,
-        set_out_data = function(){ 
+        compute_out_data = function(){ 
           self$out_data &lt;- self$source_data %&gt;% dplyr::count()
           },
         refresh = function(x){
@@ -495,95 +449,137 @@ TPSpecify &lt;- R6Class(&quot;TPSpecify&quot;,
 <pre class="r"><code>TPSpecify$new() -&gt;
   df_plus
 
-df_plus$set_source_data(df = cars); df_plus</code></pre>
-<pre><code>## &lt;TPSpecify&gt;
-##   Public:
-##     add: function (x) 
-##     clone: function (deep = FALSE) 
-##     cols: NULL
-##     fun: NULL
-##     out_data: NULL
-##     refresh: function (x) 
-##     rows: NULL
-##     set_cols: function (cols) 
-##     set_fun: function (cols) 
-##     set_out_data: function () 
-##     set_rows: function (rows) 
-##     set_source_data: function (df) 
-##     source_data: data.frame
-##     sum: 0</code></pre>
-<pre class="r"><code>df_plus$set_out_data(); df_plus$out_data</code></pre>
-<pre><code>##    n
-## 1 50</code></pre>
-<pre class="r"><code>df_plus$source_data</code></pre>
-<pre><code>##    speed dist
-## 1      4    2
-## 2      4   10
-## 3      7    4
-## 4      7   22
-## 5      8   16
-## 6      9   10
-## 7     10   18
-## 8     10   26
-## 9     10   34
-## 10    11   17
-## 11    11   28
-## 12    12   14
-## 13    12   20
-## 14    12   24
-## 15    12   28
-## 16    13   26
-## 17    13   34
-## 18    13   34
-## 19    13   46
-## 20    14   26
-## 21    14   36
-## 22    14   60
-## 23    14   80
-## 24    15   20
-## 25    15   26
-## 26    15   54
-## 27    16   32
-## 28    16   40
-## 29    17   32
-## 30    17   40
-## 31    17   50
-## 32    18   42
-## 33    18   56
-## 34    18   76
-## 35    18   84
-## 36    19   36
-## 37    19   46
-## 38    19   68
-## 39    20   32
-## 40    20   48
-## 41    20   52
-## 42    20   56
-## 43    20   64
-## 44    22   66
-## 45    23   54
-## 46    24   70
-## 47    24   92
-## 48    24   93
-## 49    24  120
-## 50    25   85</code></pre>
-<pre class="r"><code>df_plus$refresh() ; df_plus</code></pre>
-<pre><code>## &lt;TPSpecify&gt;
-##   Public:
-##     add: function (x) 
-##     clone: function (deep = FALSE) 
-##     cols: NULL
-##     fun: NULL
-##     out_data: data.frame
-##     refresh: function (x) 
-##     rows: NULL
-##     set_cols: function (cols) 
-##     set_fun: function (cols) 
-##     set_out_data: function () 
-##     set_rows: function (rows) 
-##     set_source_data: function (df) 
-##     source_data: NULL
-##     sum: 0</code></pre>
+df_plus$set_source_data(df = cars); df_plus
+df_plus$compute_out_data(); df_plus$out_data
+df_plus$source_data
+df_plus$refresh() ; df_plus
+
+
+tidypivot:::pivot_helper
+
+tp &lt;- function(nothing = NULL, data){
+  
+  df_plus$set_source_data(df = data)
+  df_plus$compute_out_data()
+  
+  print(df_plus$out_data)
+  
+}
+
+
+tp_init &lt;- function(){
+  
+df_plus &lt;&lt;- TPSpecify$new()
+  
+    df_plus$compute_out_data()
+    print(df_plus$source_data)
+    
+}
+
+
+tp_init() %&gt;% 
+  tp(data = mtcars)  
+
+
+tp(data = cars)
+tp(rows = speed, cols = )</code></pre>
+<pre class="r"><code>library(R6)
+Fibonnacci &lt;- R6Class(&quot;Fibonnacci&quot;,
+                       public = list(
+                         
+                         # objects
+                         init = c(0, 1),
+                         last = 1,
+                         current = 1,
+
+                         # functions
+                         fib_next = function(){ # a method
+                           
+                           x &lt;- self$last
+                           y &lt;- self$current
+                           
+                           self$last &lt;- y
+                           self$current &lt;- x + y
+                           invisible(self)          #returns
+                           
+                                     },
+                         
+                         fib_init = function(x1, x2){
+                           
+                           self$init &lt;- c(x1, x2)
+                           self$last &lt;- x2
+                           self$current &lt;- x1 + x2
+                           invisible(self)            #returns
+                           
+                         },
+                         print = function() {  # print method; default is to print everything
+                           
+                           cat(self$current)
+                           
+                         }
+                       )
+                      
+                  
+)
+
+my_fib &lt;- Fibonnacci$new(); my_fib</code></pre>
+<pre><code>## 1</code></pre>
+<pre class="r"><code>my_fib$fib_next(); my_fib</code></pre>
+<pre><code>## 2</code></pre>
+<pre class="r"><code>my_fib$fib_next() ; my_fib</code></pre>
+<pre><code>## 3</code></pre>
+<pre class="r"><code>my_fib$fib_next() ; my_fib</code></pre>
+<pre><code>## 5</code></pre>
+<pre class="r"><code>my_fib$fib_next() ; my_fib</code></pre>
+<pre><code>## 8</code></pre>
+<pre class="r"><code>my_fib$fib_next() ; my_fib</code></pre>
+<pre><code>## 13</code></pre>
+<pre class="r"><code>my_fib$fib_next() ; my_fib</code></pre>
+<pre><code>## 21</code></pre>
+<pre class="r"><code>my_fib$fib_next() ; my_fib</code></pre>
+<pre><code>## 34</code></pre>
+<pre class="r"><code>my_fib$fib_init(5,4) ; my_fib</code></pre>
+<pre><code>## 9</code></pre>
+<pre class="r"><code>my_fib$fib_next() ; my_fib</code></pre>
+<pre><code>## 13</code></pre>
+<pre class="r"><code>my_fib$fib_next() ; my_fib</code></pre>
+<pre><code>## 22</code></pre>
+<pre class="r"><code>my_fib$fib_next() ; my_fib</code></pre>
+<pre><code>## 35</code></pre>
+<pre class="r"><code>my_fib$fib_next() ; my_fib</code></pre>
+<pre><code>## 57</code></pre>
+<pre class="r"><code>my_fib$current</code></pre>
+<pre><code>## [1] 57</code></pre>
+<pre class="r"><code>## wrap and pipe
+fibi_init &lt;- function(x1 = 0, x2 = 1){
+  
+  my_fib &lt;- Fibonnacci$new()
+  
+  my_fib$fib_init(x1,x2)
+  
+  my_fib
+  
+}
+
+fibi_advance &lt;- function(my_fib){
+  
+  my_fib &lt;- my_fib
+  
+  my_fib$fib_next()
+  
+  my_fib
+  
+}
+
+
+fibi_init() |&gt;
+  fibi_advance() |&gt;
+  fibi_advance() |&gt;
+  fibi_advance() |&gt;
+  fibi_advance() |&gt;
+  fibi_advance() |&gt;
+  fibi_advance()</code></pre>
+<pre><code>## 21</code></pre>
 
 
 

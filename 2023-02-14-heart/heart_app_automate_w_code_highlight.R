@@ -367,27 +367,33 @@ shinyApp(ui = ui, server = server)
 #' ->
 #my_shiny_app
 
-#
-# # eval(parse(text = my_shiny_app))
-#  shinyApp(
-#    fluidPage(
-#      mainPanel(
-#      codeOutput("code_out"),
-#      plotOutput("plot_out")
-#      )
-#    ),
-#
-#    function(input, output, session){
-#
-#
-#      output$code_out <- renderCode({
-#        "1+1"
-#      }, delay = c(100, 500, 1000))
-#
-#
-#      output$plot_out <- renderPlot({
-#        ggplot(cars) + aes(speed, dist) + geom_point()
-#
-#      })
-#    }
-#  )
+
+# eval(parse(text = my_shiny_app))
+ # shinyApp(
+ #   fluidPage(
+ #     sidebarPanel(
+ #     selectInput(inputId = "char_color",
+ #                               label = "color",
+ #                               selected = "magenta",
+ #                               choices = colors()
+ #   )),
+ #     mainPanel(
+ #     codeOutput("code_out"),
+ #     plotOutput("plot_out")
+ #     )
+ #   ),
+ #
+ #   function(input, output, session){
+ #
+ #
+ #     output$code_out <- renderCode({
+ #       paste0("1+1 +'", input$char_color, "'")
+ #     }, delay = c(100, 500, 1000))
+ #
+ #
+ #     output$plot_out <- renderPlot({
+ #       ggplot(cars) + aes(speed, dist) + geom_point(color = input$char_color)
+ #
+ #     })
+ #   }
+ # )
