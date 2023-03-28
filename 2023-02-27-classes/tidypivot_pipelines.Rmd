@@ -1,0 +1,169 @@
+---
+title: "r6"
+author: "Evangeline Reynolds"
+date: "2/27/2023"
+output: html_document
+---
+
+
+```{r newclass}
+library(R6)
+
+pivot_helper <- function (data, rows = NULL, cols = NULL, value = NULL, wt = NULL, 
+    within = NULL, withinfun = NULL, fun = NULL, pivot = T, wrap = F) 
+{
+    # cols_quo <- rlang::enquo(cols)
+    # value_quo <- rlang::enquo(value)
+    # wt_quo <- rlang::enquo(wt)
+    # within_quo <- rlang::enquo(within)
+    if (is.null(fun)) {
+        fun <- sum
+    }
+    grouped <- data %>% dplyr::group_by(dplyr::across(c({
+        {
+            cols
+        }
+    }, {
+        {
+            rows
+        }
+    })), .drop = FALSE)
+    if (is.null(value)) {
+        summarized <- grouped %>% dplyr::mutate(value = 1) %>% 
+            dplyr::summarise(value = fun(value))
+    }
+    else {
+        summarized <- grouped %>% dplyr::summarise(value = fun({
+            {
+                value
+            }
+        }))
+    }
+    if (is.null(within)) {
+        withined <- summarized
+    }
+    else {
+        withined <- summarized %>% dplyr::group_by(dplyr::across(c({
+            {
+                within
+            }
+        })), .drop = FALSE)
+    }
+    arranged <- withined
+    ungrouped <- arranged %>% dplyr::ungroup()
+    tidy <- ungrouped
+    if (pivot == F | is.null(cols)) {
+        tidy
+    }
+    else {
+        tidy %>% tidyr::pivot_wider(names_from = {
+            {
+                cols
+            }
+        })
+    }
+}
+
+
+Tidypivot <- R6Class("Tidypivot",
+                       public = list(
+                         
+                         # objects
+                         data = NULL,
+                         rows = NULL,
+                         cols = NULL,
+                         fun = NULL,
+                         out = NULL,
+                       
+                         
+
+                         # functions
+                         update = function(data = NULL, rows = NULL, cols = NULL, fun = NULL){ # a method
+                           
+                           # updating
+                           if(!is.null(data)){self$data <- data}
+                           if(!is.null(rows)){self$rows <- rows}
+                           if(!is.null(cols)){self$cols <- cols}
+                           if(!is.null(fun)){self$fun <- fun}
+                           
+                           
+                           
+                          # displaying
+                          self$out <- tidypivot::pivot_helper(data = self$data,
+                                                              rows = self$rows,
+                                                              cols = self$cols,
+                                                              fun = self$fun)
+                           
+                           invisible(self)          #returns
+                           
+                                     },
+                         
+                         print = function() {  # print method; default is to print everything
+
+                           # str(self)
+                           print(self$out)
+
+                         }
+                       )
+)
+                      
+                
+```
+
+
+```{r}
+
+
+```
+
+
+```{r}
+library(tidytitanic)
+library(magrittr)
+tidy_titanic %>% 
+  tidypivot::pivot_helper(cols = sex)
+
+
+my_tp <- Tidypivot$new() 
+
+my_tp
+
+my_tp$update(data = tidy_titanic, cols = "sex")
+my_tp$out
+my_tp$update(rows = "class")
+my_tp$out
+
+```
+
+
+
+```{r wrapandpipe}
+# wrap and pipe
+tp_init <- function(data = NULL, rows = NULL, cols = NULL, fun = NULL){
+  
+  my_pivot <- Tidypivot$new()
+  
+  
+  my_pivot$update(data = data, rows = rows, cols = cols, fun = fun)
+  
+  my_pivot
+  
+}
+
+tp_advance <- function(pivot, data = NULL, rows = NULL, cols = NULL, fun = NULL){
+  
+  my_pivot <- pivot
+  
+  my_pivot$update(data = data, rows = rows, cols = cols, fun = fun)
+  
+  my_pivot
+  
+}
+```
+
+
+```{r}
+tp_init(data = tidy_titanic, 
+        cols = "sex") %>% 
+  tp_advance(rows = "class") 
+```
