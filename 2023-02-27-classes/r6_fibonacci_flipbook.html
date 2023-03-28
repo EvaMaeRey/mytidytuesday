@@ -1,0 +1,1644 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Using R6 under the hood</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gina Reynolds" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Using R6 under the hood
+]
+.subtitle[
+## piping more than is printed
+]
+.author[
+### Gina Reynolds
+]
+
+---
+
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 70%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+&lt;/style&gt;
+
+
+
+---
+
+
+
+
+
+```r
+library(R6)
+library(magrittr)
+Fibonnacci &lt;- R6Class("Fibonnacci",
+                       public = list(
+                         
+                         # objects
+                         init = c(0, 1),
+                         last = 1,
+                         current = 1,
+
+                         # functions
+                         fib_next = function(){ # a method
+                           
+                           x &lt;- self$last
+                           y &lt;- self$current
+                           
+                           self$last &lt;- y
+                           self$current &lt;- x + y
+                           invisible(self)          #returns
+                           
+                                     },
+                         
+                         fib_init = function(x1, x2){
+                           
+                           self$init &lt;- c(x1, x2)
+                           self$last &lt;- x2
+                           self$current &lt;- x1 + x2
+                           invisible(self)            #returns
+                           
+                         }
+                      
+                       )
+                      
+                  
+)
+```
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-r6-auto[
+
+```r
+*my_fib &lt;- Fibonnacci$new()
+
+my_fib
+```
+]
+ 
+.panel2-r6-auto[
+
+```
+&lt;Fibonnacci&gt;
+  Public:
+    clone: function (deep = FALSE) 
+    current: 1
+    fib_init: function (x1, x2) 
+    fib_next: function () 
+    init: 0 1
+    last: 1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-r6-auto[
+
+```r
+my_fib &lt;- Fibonnacci$new()
+*my_fib$fib_next()
+
+my_fib
+```
+]
+ 
+.panel2-r6-auto[
+
+```
+&lt;Fibonnacci&gt;
+  Public:
+    clone: function (deep = FALSE) 
+    current: 2
+    fib_init: function (x1, x2) 
+    fib_next: function () 
+    init: 0 1
+    last: 1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-r6-auto[
+
+```r
+my_fib &lt;- Fibonnacci$new()
+my_fib$fib_next()
+*my_fib$fib_next()
+
+my_fib
+```
+]
+ 
+.panel2-r6-auto[
+
+```
+&lt;Fibonnacci&gt;
+  Public:
+    clone: function (deep = FALSE) 
+    current: 3
+    fib_init: function (x1, x2) 
+    fib_next: function () 
+    init: 0 1
+    last: 2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-r6-auto[
+
+```r
+my_fib &lt;- Fibonnacci$new()
+my_fib$fib_next()
+my_fib$fib_next()
+*my_fib$fib_next()
+
+my_fib
+```
+]
+ 
+.panel2-r6-auto[
+
+```
+&lt;Fibonnacci&gt;
+  Public:
+    clone: function (deep = FALSE) 
+    current: 5
+    fib_init: function (x1, x2) 
+    fib_next: function () 
+    init: 0 1
+    last: 3
+```
+]
+
+---
+count: false
+ 
+
+.panel1-r6-auto[
+
+```r
+my_fib &lt;- Fibonnacci$new()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+*my_fib$fib_next()
+
+my_fib
+```
+]
+ 
+.panel2-r6-auto[
+
+```
+&lt;Fibonnacci&gt;
+  Public:
+    clone: function (deep = FALSE) 
+    current: 8
+    fib_init: function (x1, x2) 
+    fib_next: function () 
+    init: 0 1
+    last: 5
+```
+]
+
+---
+count: false
+ 
+
+.panel1-r6-auto[
+
+```r
+my_fib &lt;- Fibonnacci$new()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+*my_fib$fib_next()
+
+my_fib
+```
+]
+ 
+.panel2-r6-auto[
+
+```
+&lt;Fibonnacci&gt;
+  Public:
+    clone: function (deep = FALSE) 
+    current: 13
+    fib_init: function (x1, x2) 
+    fib_next: function () 
+    init: 0 1
+    last: 8
+```
+]
+
+---
+count: false
+ 
+
+.panel1-r6-auto[
+
+```r
+my_fib &lt;- Fibonnacci$new()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+*my_fib$fib_next()
+
+my_fib
+```
+]
+ 
+.panel2-r6-auto[
+
+```
+&lt;Fibonnacci&gt;
+  Public:
+    clone: function (deep = FALSE) 
+    current: 21
+    fib_init: function (x1, x2) 
+    fib_next: function () 
+    init: 0 1
+    last: 13
+```
+]
+
+---
+count: false
+ 
+
+.panel1-r6-auto[
+
+```r
+my_fib &lt;- Fibonnacci$new()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+*my_fib$fib_next()
+
+my_fib
+```
+]
+ 
+.panel2-r6-auto[
+
+```
+&lt;Fibonnacci&gt;
+  Public:
+    clone: function (deep = FALSE) 
+    current: 34
+    fib_init: function (x1, x2) 
+    fib_next: function () 
+    init: 0 1
+    last: 21
+```
+]
+
+---
+count: false
+ 
+
+.panel1-r6-auto[
+
+```r
+my_fib &lt;- Fibonnacci$new()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+*my_fib$fib_init(5,4)
+
+my_fib
+```
+]
+ 
+.panel2-r6-auto[
+
+```
+&lt;Fibonnacci&gt;
+  Public:
+    clone: function (deep = FALSE) 
+    current: 9
+    fib_init: function (x1, x2) 
+    fib_next: function () 
+    init: 5 4
+    last: 4
+```
+]
+
+---
+count: false
+ 
+
+.panel1-r6-auto[
+
+```r
+my_fib &lt;- Fibonnacci$new()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_init(5,4)
+*my_fib$fib_next()
+
+my_fib
+```
+]
+ 
+.panel2-r6-auto[
+
+```
+&lt;Fibonnacci&gt;
+  Public:
+    clone: function (deep = FALSE) 
+    current: 13
+    fib_init: function (x1, x2) 
+    fib_next: function () 
+    init: 5 4
+    last: 9
+```
+]
+
+---
+count: false
+ 
+
+.panel1-r6-auto[
+
+```r
+my_fib &lt;- Fibonnacci$new()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_init(5,4)
+my_fib$fib_next()
+*my_fib$fib_next()
+
+my_fib
+```
+]
+ 
+.panel2-r6-auto[
+
+```
+&lt;Fibonnacci&gt;
+  Public:
+    clone: function (deep = FALSE) 
+    current: 22
+    fib_init: function (x1, x2) 
+    fib_next: function () 
+    init: 5 4
+    last: 13
+```
+]
+
+---
+count: false
+ 
+
+.panel1-r6-auto[
+
+```r
+my_fib &lt;- Fibonnacci$new()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_init(5,4)
+my_fib$fib_next()
+my_fib$fib_next()
+*my_fib$fib_next()
+
+my_fib
+```
+]
+ 
+.panel2-r6-auto[
+
+```
+&lt;Fibonnacci&gt;
+  Public:
+    clone: function (deep = FALSE) 
+    current: 35
+    fib_init: function (x1, x2) 
+    fib_next: function () 
+    init: 5 4
+    last: 22
+```
+]
+
+---
+count: false
+ 
+
+.panel1-r6-auto[
+
+```r
+my_fib &lt;- Fibonnacci$new()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_init(5,4)
+my_fib$fib_next()
+my_fib$fib_next()
+my_fib$fib_next()
+*my_fib$fib_next()
+
+my_fib
+```
+]
+ 
+.panel2-r6-auto[
+
+```
+&lt;Fibonnacci&gt;
+  Public:
+    clone: function (deep = FALSE) 
+    current: 57
+    fib_init: function (x1, x2) 
+    fib_next: function () 
+    init: 5 4
+    last: 35
+```
+]
+
+&lt;style&gt;
+.panel1-r6-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-r6-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-r6-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+---
+
+
+
+```r
+library(R6)
+library(magrittr)
+Fibonnacci_quiet &lt;- R6Class("Fibonnacci_quiet",
+                       public = list(
+                         
+                         # objects
+                         init = c(0, 1),
+                         last = 1,
+                         current = 1,
+
+                         # functions
+                         fib_next = function(){ # a method
+                           
+                           x &lt;- self$last
+                           y &lt;- self$current
+                           
+                           self$last &lt;- y
+                           self$current &lt;- x + y
+                           invisible(self)          #returns
+                           
+                                     },
+                         
+                         fib_init = function(x1, x2){
+                           
+                           self$init &lt;- c(x1, x2)
+                           self$last &lt;- x2
+                           self$current &lt;- x1 + x2
+                           invisible(self)            #returns
+                           
+                         },
+                         
+                         # print method; default is to print everything
+                         print = function() { print(self$current) }
+                       )
+                      
+                  
+)
+```
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-r6quiet-auto[
+
+```r
+*my_fib_quiet &lt;- Fibonnacci_quiet$new()
+
+my_fib_quiet
+```
+]
+ 
+.panel2-r6quiet-auto[
+
+```
+[1] 1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-r6quiet-auto[
+
+```r
+my_fib_quiet &lt;- Fibonnacci_quiet$new()
+*my_fib_quiet$fib_next()
+
+my_fib_quiet
+```
+]
+ 
+.panel2-r6quiet-auto[
+
+```
+[1] 2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-r6quiet-auto[
+
+```r
+my_fib_quiet &lt;- Fibonnacci_quiet$new()
+my_fib_quiet$fib_next()
+*my_fib_quiet$fib_next()
+
+my_fib_quiet
+```
+]
+ 
+.panel2-r6quiet-auto[
+
+```
+[1] 3
+```
+]
+
+---
+count: false
+ 
+
+.panel1-r6quiet-auto[
+
+```r
+my_fib_quiet &lt;- Fibonnacci_quiet$new()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+*my_fib_quiet$fib_next()
+
+my_fib_quiet
+```
+]
+ 
+.panel2-r6quiet-auto[
+
+```
+[1] 5
+```
+]
+
+---
+count: false
+ 
+
+.panel1-r6quiet-auto[
+
+```r
+my_fib_quiet &lt;- Fibonnacci_quiet$new()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+*my_fib_quiet$fib_next()
+
+my_fib_quiet
+```
+]
+ 
+.panel2-r6quiet-auto[
+
+```
+[1] 8
+```
+]
+
+---
+count: false
+ 
+
+.panel1-r6quiet-auto[
+
+```r
+my_fib_quiet &lt;- Fibonnacci_quiet$new()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+*my_fib_quiet$fib_next()
+
+my_fib_quiet
+```
+]
+ 
+.panel2-r6quiet-auto[
+
+```
+[1] 13
+```
+]
+
+---
+count: false
+ 
+
+.panel1-r6quiet-auto[
+
+```r
+my_fib_quiet &lt;- Fibonnacci_quiet$new()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+*my_fib_quiet$fib_next()
+
+my_fib_quiet
+```
+]
+ 
+.panel2-r6quiet-auto[
+
+```
+[1] 21
+```
+]
+
+---
+count: false
+ 
+
+.panel1-r6quiet-auto[
+
+```r
+my_fib_quiet &lt;- Fibonnacci_quiet$new()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+*my_fib_quiet$fib_next()
+
+my_fib_quiet
+```
+]
+ 
+.panel2-r6quiet-auto[
+
+```
+[1] 34
+```
+]
+
+---
+count: false
+ 
+
+.panel1-r6quiet-auto[
+
+```r
+my_fib_quiet &lt;- Fibonnacci_quiet$new()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+*my_fib_quiet$fib_init(5,4)
+
+my_fib_quiet
+```
+]
+ 
+.panel2-r6quiet-auto[
+
+```
+[1] 9
+```
+]
+
+---
+count: false
+ 
+
+.panel1-r6quiet-auto[
+
+```r
+my_fib_quiet &lt;- Fibonnacci_quiet$new()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_init(5,4)
+*my_fib_quiet$fib_next()
+
+my_fib_quiet
+```
+]
+ 
+.panel2-r6quiet-auto[
+
+```
+[1] 13
+```
+]
+
+---
+count: false
+ 
+
+.panel1-r6quiet-auto[
+
+```r
+my_fib_quiet &lt;- Fibonnacci_quiet$new()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_init(5,4)
+my_fib_quiet$fib_next()
+*my_fib_quiet$fib_next()
+
+my_fib_quiet
+```
+]
+ 
+.panel2-r6quiet-auto[
+
+```
+[1] 22
+```
+]
+
+---
+count: false
+ 
+
+.panel1-r6quiet-auto[
+
+```r
+my_fib_quiet &lt;- Fibonnacci_quiet$new()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_init(5,4)
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+*my_fib_quiet$fib_next()
+
+my_fib_quiet
+```
+]
+ 
+.panel2-r6quiet-auto[
+
+```
+[1] 35
+```
+]
+
+---
+count: false
+ 
+
+.panel1-r6quiet-auto[
+
+```r
+my_fib_quiet &lt;- Fibonnacci_quiet$new()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_init(5,4)
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+my_fib_quiet$fib_next()
+*my_fib_quiet$fib_next()
+
+my_fib_quiet
+```
+]
+ 
+.panel2-r6quiet-auto[
+
+```
+[1] 57
+```
+]
+
+&lt;style&gt;
+.panel1-r6quiet-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-r6quiet-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-r6quiet-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-wrapandpipe-auto[
+
+```r
+## wrap and pipe
+*fibi_init &lt;- function(x1 = 0, x2 = 1){
+
+* my_fib &lt;- Fibonnacci_quiet$new()
+
+* my_fib$fib_init(x1,x2)
+
+* my_fib
+
+*} 
+```
+]
+ 
+.panel2-wrapandpipe-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-wrapandpipe-auto[
+
+```r
+## wrap and pipe
+fibi_init &lt;- function(x1 = 0, x2 = 1){
+
+  my_fib &lt;- Fibonnacci_quiet$new()
+
+  my_fib$fib_init(x1,x2)
+
+  my_fib
+
+}
+
+*fibi_advance &lt;- function(my_fib){
+
+* my_fib &lt;- my_fib
+
+* my_fib$fib_next()
+
+* my_fib
+
+*} 
+```
+]
+ 
+.panel2-wrapandpipe-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-wrapandpipe-auto[
+
+```r
+## wrap and pipe
+fibi_init &lt;- function(x1 = 0, x2 = 1){
+
+  my_fib &lt;- Fibonnacci_quiet$new()
+
+  my_fib$fib_init(x1,x2)
+
+  my_fib
+
+}
+
+fibi_advance &lt;- function(my_fib){
+
+  my_fib &lt;- my_fib
+
+  my_fib$fib_next()
+
+  my_fib
+
+}
+
+*fibi_collect &lt;- function(my_fib){
+
+* my_fib &lt;- my_fib
+
+* my_fib$current
+
+
+*} 
+```
+]
+ 
+.panel2-wrapandpipe-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-wrapandpipe-auto[
+
+```r
+## wrap and pipe
+fibi_init &lt;- function(x1 = 0, x2 = 1){
+
+  my_fib &lt;- Fibonnacci_quiet$new()
+
+  my_fib$fib_init(x1,x2)
+
+  my_fib
+
+}
+
+fibi_advance &lt;- function(my_fib){
+
+  my_fib &lt;- my_fib
+
+  my_fib$fib_next()
+
+  my_fib
+
+}
+
+fibi_collect &lt;- function(my_fib){
+
+  my_fib &lt;- my_fib
+
+  my_fib$current
+
+
+}
+```
+]
+ 
+.panel2-wrapandpipe-auto[
+
+]
+
+&lt;style&gt;
+.panel1-wrapandpipe-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-wrapandpipe-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-wrapandpipe-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-chain-auto[
+
+```r
+*fibi_init()
+```
+]
+ 
+.panel2-chain-auto[
+
+```
+[1] 1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-chain-auto[
+
+```r
+fibi_init() %&gt;%
+* fibi_advance()
+```
+]
+ 
+.panel2-chain-auto[
+
+```
+[1] 2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-chain-auto[
+
+```r
+fibi_init() %&gt;%
+  fibi_advance() %&gt;%
+* fibi_advance()
+```
+]
+ 
+.panel2-chain-auto[
+
+```
+[1] 3
+```
+]
+
+---
+count: false
+ 
+
+.panel1-chain-auto[
+
+```r
+fibi_init() %&gt;%
+  fibi_advance() %&gt;%
+  fibi_advance() %&gt;%
+* fibi_advance()
+```
+]
+ 
+.panel2-chain-auto[
+
+```
+[1] 5
+```
+]
+
+---
+count: false
+ 
+
+.panel1-chain-auto[
+
+```r
+fibi_init() %&gt;%
+  fibi_advance() %&gt;%
+  fibi_advance() %&gt;%
+  fibi_advance() %&gt;%
+* fibi_advance()
+```
+]
+ 
+.panel2-chain-auto[
+
+```
+[1] 8
+```
+]
+
+---
+count: false
+ 
+
+.panel1-chain-auto[
+
+```r
+fibi_init() %&gt;%
+  fibi_advance() %&gt;%
+  fibi_advance() %&gt;%
+  fibi_advance() %&gt;%
+  fibi_advance() %&gt;%
+* fibi_advance()
+```
+]
+ 
+.panel2-chain-auto[
+
+```
+[1] 13
+```
+]
+
+---
+count: false
+ 
+
+.panel1-chain-auto[
+
+```r
+fibi_init() %&gt;%
+  fibi_advance() %&gt;%
+  fibi_advance() %&gt;%
+  fibi_advance() %&gt;%
+  fibi_advance() %&gt;%
+  fibi_advance() %&gt;%
+* fibi_advance()
+```
+]
+ 
+.panel2-chain-auto[
+
+```
+[1] 21
+```
+]
+
+---
+count: false
+ 
+
+.panel1-chain-auto[
+
+```r
+fibi_init() %&gt;%
+  fibi_advance() %&gt;%
+  fibi_advance() %&gt;%
+  fibi_advance() %&gt;%
+  fibi_advance() %&gt;%
+  fibi_advance() %&gt;%
+  fibi_advance() %&gt;%
+* fibi_collect()
+```
+]
+ 
+.panel2-chain-auto[
+
+```
+[1] 21
+```
+]
+
+&lt;style&gt;
+.panel1-chain-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-chain-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-chain-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-collect-2[
+
+```r
+fibi_init() %&gt;%
+  str()
+
+
+fibi_init() %&gt;%
+  fibi_advance() %&gt;%
+  str()
+
+
+fibi_init() %&gt;%
+  fibi_advance() %&gt;%
+  fibi_collect() %&gt;%
+  str()
+```
+]
+ 
+.panel2-collect-2[
+
+```
+Classes 'Fibonnacci_quiet', 'R6' &lt;Fibonnacci_quiet&gt;
+  Public:
+    clone: function (deep = FALSE) 
+    current: 1
+    fib_init: function (x1, x2) 
+    fib_next: function () 
+    init: 0 1
+    last: 1
+    print: function ()  
+```
+
+```
+Classes 'Fibonnacci_quiet', 'R6' &lt;Fibonnacci_quiet&gt;
+  Public:
+    clone: function (deep = FALSE) 
+    current: 2
+    fib_init: function (x1, x2) 
+    fib_next: function () 
+    init: 0 1
+    last: 1
+    print: function ()  
+```
+
+```
+ num 2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-collect-2[
+
+```r
+fibi_init() %&gt;%
+  str()
+
+
+fibi_init() %&gt;%
+  fibi_advance() %&gt;%
+  str()
+
+
+fibi_init() %&gt;%
+  fibi_advance() %&gt;%
+  fibi_collect() %&gt;%
+  str()
+```
+]
+ 
+.panel2-collect-2[
+
+```
+Classes 'Fibonnacci_quiet', 'R6' &lt;Fibonnacci_quiet&gt;
+  Public:
+    clone: function (deep = FALSE) 
+    current: 1
+    fib_init: function (x1, x2) 
+    fib_next: function () 
+    init: 0 1
+    last: 1
+    print: function ()  
+```
+
+```
+Classes 'Fibonnacci_quiet', 'R6' &lt;Fibonnacci_quiet&gt;
+  Public:
+    clone: function (deep = FALSE) 
+    current: 2
+    fib_init: function (x1, x2) 
+    fib_next: function () 
+    init: 0 1
+    last: 1
+    print: function ()  
+```
+
+```
+ num 2
+```
+]
+
+&lt;style&gt;
+.panel1-collect-2 {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-collect-2 {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-collect-2 {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
