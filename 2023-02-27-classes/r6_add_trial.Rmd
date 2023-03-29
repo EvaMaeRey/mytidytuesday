@@ -1,0 +1,162 @@
+---
+title: "r6 Bernoulli trials"
+author: "Evangeline Reynolds"
+date: "2/27/2023"
+output: html_document
+---
+
+
+```{r newclass}
+library(R6)
+
+
+cross_trials <- function(trial = prize_wheel, num_trials = 2){
+
+  df <- trial
+  names(df) <- paste0("t", 1,"_", names(df))
+
+  if(num_trials > 1){
+  for (i in 2:num_trials){
+
+    temp <- trial
+    names(temp) <- paste0("t", i,"_", names(trial))
+
+    df <- tidyr::crossing(df, temp)
+
+  }
+  }
+
+  df
+
+}
+
+
+bernoulli_trial <- function(prob = .25){
+
+  tibble::tibble(outcome = 0:1, prob = c(1-prob, prob))
+
+}
+
+library(magrittr)
+bernoulli_trial() %>% 
+  cross_trials(num_trials = 3)
+
+
+Trials <- R6Class("Trials",
+                       public = list(
+                         
+                         # objects
+                         trial = NULL,
+                         index = NULL,
+                         out = NULL,
+                         
+
+                         # functions
+                         init = function(trial = NULL){
+                           
+                           self$trial <- trial
+                           self$index <- 1
+                           
+                           self$out <- cross_trials(self$trial, num_trials = self$index)
+                           
+                           invisible(self)          #returns
+
+                           
+                         },
+                         
+                         update = function(increment = 1){ # a method
+                           
+                           self$index <- self$index + increment
+                           
+                           # displaying
+                           self$out <- cross_trials(self$trial, num_trials = self$index)
+                          
+                           invisible(self)          #returns
+                           
+                                     },
+                         
+                         print = function() {  # print method; default is to print everything
+
+                           print(self$out)
+
+                         }
+                       )
+)
+                      
+                
+```
+
+
+
+
+
+```{r, eval = T}
+
+my_trials <- Trials$new() 
+
+my_trials
+
+my_trials$init(trial = bernoulli_trial())
+my_trials$out
+my_trials$update()
+my_trials$out
+
+```
+
+
+
+```{r wrapandpipe, eval = T}
+# wrap and pipe
+trial_init <- function(trial = NULL
+                    ){
+  
+  my_trials <- Trials$new()
+  
+  
+  my_trials$init(trial = trial)
+  
+  my_trials
+  
+}
+
+bernoulli_trial() %>% trial_init()
+
+trial_advance <- function(trials, increment = 1){
+  
+  my_trials <- trials
+  
+  my_trials$update(increment = increment)
+  
+  my_trials
+  
+}
+
+add_trials <- function(trials, increment = 1){
+  
+  
+  if(!is.R6(trials)){my_trials <- trial_init(trial = trials)}
+  if(is.R6(trials)){my_trials <- trial_advance(trials = trials, 
+                                       increment = increment)}
+  
+  my_trials
+  
+}
+
+
+bernoulli_trial() %>%
+  trial_init() %>% 
+  trial_advance() %>% 
+  trial_advance(2)
+
+library(dplyr)
+bernoulli_trial(prob = .4) %>% 
+  add_trials() %>% 
+  add_trials() %>% 
+  add_trials(2) %>% 
+  .$out %>% 
+  dplyr::mutate(sum = rowSums(dplyr::across(dplyr::contains("outcome")))) %>% 
+  rename(num_successes = sum) %>% 
+  dplyr::mutate(prods = matrixStats::rowProds(dplyr::across(dplyr::contains("prob") %>% as.matrix)))
+
+```
+

@@ -73,26 +73,40 @@ Tidypivot <- R6Class("Tidypivot",
                          rows = NULL,
                          cols = NULL,
                          fun = NULL,
+                         value = NULL, 
+                         wt = NULL, 
+                         within = NULL, 
+                         withinfun = NULL, 
+                         pivot = T, 
+                         wrap = F, 
+                         
                          out = NULL,
                        
                          
 
                          # functions
-                         update = function(data = NULL, rows = NULL, cols = NULL, fun = NULL){ # a method
+                         update = function(data = NULL, rows = NULL, cols = NULL, 
+                                           fun = NULL, value = NULL, wt = NULL){ # a method
                            
                            # updating
                            if(!is.null(data)){self$data <- data}
                            if(!is.null(rows)){self$rows <- rows}
                            if(!is.null(cols)){self$cols <- cols}
                            if(!is.null(fun)){self$fun <- fun}
-                           
+                           # if(!is.null(wt)){self$wt <- wt}
+                           if(!is.null(value)){self$value <- value}
+
                            
                            
                           # displaying
-                          self$out <- tidypivot::pivot_helper(data = self$data,
+                          self$out <- pivot_helper(data = self$data,
                                                               rows = self$rows,
                                                               cols = self$cols,
-                                                              fun = self$fun)
+                                                              # ,
+                                                              fun = self$fun,
+                                                              # wt = self$wt,
+                                                              # value = self$value
+                                                              )
                            
                            invisible(self)          #returns
                            
@@ -111,10 +125,7 @@ Tidypivot <- R6Class("Tidypivot",
 ```
 
 
-```{r}
 
-
-```
 
 
 ```{r}
@@ -123,6 +134,9 @@ library(magrittr)
 tidy_titanic %>% 
   tidypivot::pivot_helper(cols = sex)
 
+
+flat_titanic %>% 
+  tidypivot::pivot_helper(cols = sex, value = freq, fun = sum)
 
 my_tp <- Tidypivot$new() 
 
@@ -139,22 +153,27 @@ my_tp$out
 
 ```{r wrapandpipe}
 # wrap and pipe
-tp_init <- function(data = NULL, rows = NULL, cols = NULL, fun = NULL){
+tp_init <- function(data = NULL, rows = NULL, cols = NULL, fun = NULL,
+                    value = NULL, wt = NULL
+                    ){
   
   my_pivot <- Tidypivot$new()
   
   
-  my_pivot$update(data = data, rows = rows, cols = cols, fun = fun)
+  my_pivot$update(data = data, rows = rows, cols = cols, fun = fun, 
+                  value = value, wt = wt)
   
   my_pivot
   
 }
 
-tp_advance <- function(pivot, data = NULL, rows = NULL, cols = NULL, fun = NULL){
+tp_advance <- function(pivot, data = NULL, rows = NULL, cols = NULL, fun = NULL,
+                       value = NULL, wt = NULL){
   
   my_pivot <- pivot
   
-  my_pivot$update(data = data, rows = rows, cols = cols, fun = fun)
+  my_pivot$update(data = data, rows = rows, cols = cols, fun = fun, 
+                  value = value, wt = wt)
   
   my_pivot
   
@@ -165,5 +184,13 @@ tp_advance <- function(pivot, data = NULL, rows = NULL, cols = NULL, fun = NULL)
 ```{r}
 tp_init(data = tidy_titanic, 
         cols = "sex") %>% 
-  tp_advance(rows = "class") 
+  tp_advance(rows = "class") %>% 
+  tp_advance(fun = mean)
+
+
+tp_init(data = flat_titanic, cols = "sex", value = "freq", fun = sum) %>% 
+  tp_advance(value = "freq")
+
+
+
 ```
