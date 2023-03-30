@@ -352,7 +352,7 @@ pre code {
 <pre class="r"><code>library(R6)
 
 pivot_helper &lt;- function (data, rows = NULL, cols = NULL, value = NULL, wt = NULL, 
-    within = NULL, withinfun = NULL, fun = NULL, pivot = T, wrap = F) 
+    within = NULL, withinfun = NULL, fun = NULL, pivot = NULL, wrap = F) 
 {
     # cols_quo &lt;- rlang::enquo(cols)
     # value_quo &lt;- rlang::enquo(value)
@@ -361,25 +361,17 @@ pivot_helper &lt;- function (data, rows = NULL, cols = NULL, value = NULL, wt = 
     if (is.null(fun)) {
         fun &lt;- sum
     }
-    grouped &lt;- data %&gt;% dplyr::group_by(dplyr::across(c({
-        {
-            cols
-        }
-    }, {
-        {
-            rows
-        }
-    })), .drop = FALSE)
+    grouped &lt;- data %&gt;% dplyr::group_by(dplyr::across(c({{cols}}, {{rows}})), .drop = FALSE)
     if (is.null(value)) {
         summarized &lt;- grouped %&gt;% dplyr::mutate(value = 1) %&gt;% 
             dplyr::summarise(value = fun(value))
     }
     else {
-        summarized &lt;- grouped %&gt;% dplyr::summarise(value = fun({
-            {
-                value
-            }
-        }))
+      if(is.numeric(value)){
+        summarized &lt;- grouped %&gt;% dplyr::summarise(value = fun(value))}else{
+          summarized &lt;- grouped %&gt;% dplyr::summarise(value = fun(grouped[value]))
+          
+        }
     }
     if (is.null(within)) {
         withined &lt;- summarized
@@ -394,10 +386,11 @@ pivot_helper &lt;- function (data, rows = NULL, cols = NULL, value = NULL, wt = 
     arranged &lt;- withined
     ungrouped &lt;- arranged %&gt;% dplyr::ungroup()
     tidy &lt;- ungrouped
+    if(is.null(pivot)){pivot &lt;- TRUE}
     if (pivot == F | is.null(cols)) {
         tidy
     }
-    else {
+    else { 
         tidy %&gt;% tidyr::pivot_wider(names_from = {
             {
                 cols
@@ -419,15 +412,15 @@ Tidypivot &lt;- R6Class(&quot;Tidypivot&quot;,
                          wt = NULL, 
                          within = NULL, 
                          withinfun = NULL, 
-                         pivot = T, 
-                         wrap = F, 
+                         pivot = NULL, 
+                         wrap = NULL, 
                          out = NULL,
                        
                          
 
                          # functions
                          update = function(data = NULL, rows = NULL, cols = NULL, 
-                                           fun = NULL, value = NULL, wt = NULL){ # a method
+                                           fun = NULL, value = NULL, wt = NULL, pivot = NULL){ # a method
                            
                            # updating
                            if(!is.null(data)){self$data &lt;- data}
@@ -436,17 +429,19 @@ Tidypivot &lt;- R6Class(&quot;Tidypivot&quot;,
                            if(!is.null(fun)){self$fun &lt;- fun}
                            # if(!is.null(wt)){self$wt &lt;- wt}
                            if(!is.null(value)){self$value &lt;- value}
+                           if(!is.null(pivot)){self$pivot &lt;- pivot}
 
                            
                            
                           # displaying
                           self$out &lt;- pivot_helper(data = self$data,
-                                                              rows = self$rows,
-                                                              cols = self$cols,
-                                                              # ,
-                                                              fun = self$fun,
-                                                              # wt = self$wt,
-                                                              # value = self$value
+                                                   rows = self$rows,
+                                                   cols = self$cols,
+                                                   fun = self$fun,
+                                                   # wt = self$wt,
+                                                   value = self$value,
+                                                   pivot = self$pivot
+                                         
                                                               )
                            
                            invisible(self)          #returns
@@ -464,17 +459,19 @@ Tidypivot &lt;- R6Class(&quot;Tidypivot&quot;,
 <pre class="r"><code>library(tidytitanic)
 library(magrittr)
 tidy_titanic %&gt;% 
-  tidypivot::pivot_helper(cols = sex)</code></pre>
-<pre><code>## # A tibble: 1 × 2
-##    Male Female
-##   &lt;dbl&gt;  &lt;dbl&gt;
-## 1  1731    470</code></pre>
+  tidypivot::pivot_helper(cols = sex, pivot = F)</code></pre>
+<pre><code>## # A tibble: 2 × 2
+##   sex    value
+##   &lt;fct&gt;  &lt;dbl&gt;
+## 1 Male    1731
+## 2 Female   470</code></pre>
 <pre class="r"><code>flat_titanic %&gt;% 
-  tidypivot::pivot_helper(cols = sex, value = freq, fun = sum)</code></pre>
-<pre><code>## # A tibble: 1 × 2
-##    Male Female
-##   &lt;dbl&gt;  &lt;dbl&gt;
-## 1  1731    470</code></pre>
+  tidypivot::pivot_helper(cols = sex, value = freq, fun = sum, pivot = F)</code></pre>
+<pre><code>## # A tibble: 2 × 2
+##   sex    value
+##   &lt;fct&gt;  &lt;dbl&gt;
+## 1 Male    1731
+## 2 Female   470</code></pre>
 <pre class="r"><code>my_tp &lt;- Tidypivot$new() 
 
 my_tp</code></pre>
@@ -498,51 +495,155 @@ my_tp$out</code></pre>
 ## 4 Crew    862     23</code></pre>
 <pre class="r"><code># wrap and pipe
 tp_init &lt;- function(data = NULL, rows = NULL, cols = NULL, fun = NULL,
-                    value = NULL, wt = NULL
+                    value = NULL, wt = NULL, pivot = NULL
                     ){
   
   my_pivot &lt;- Tidypivot$new()
   
   
   my_pivot$update(data = data, rows = rows, cols = cols, fun = fun, 
-                  value = value, wt = wt)
+                  value = value, wt = wt, pivot = pivot)
   
   my_pivot
   
 }
 
-tp_advance &lt;- function(pivot, data = NULL, rows = NULL, cols = NULL, fun = NULL,
-                       value = NULL, wt = NULL){
+tp_advance &lt;- function(pivot_input, data = NULL, rows = NULL, cols = NULL, fun = NULL,
+                       value = NULL, wt = NULL, pivot = NULL){
   
-  my_pivot &lt;- pivot
+  my_pivot &lt;- pivot_input
   
   my_pivot$update(data = data, rows = rows, cols = cols, fun = fun, 
-                  value = value, wt = wt)
+                  value = value, wt = wt, pivot = pivot)
   
   my_pivot
   
 }</code></pre>
-<pre class="r"><code>tp_init(data = tidy_titanic, 
-        cols = &quot;sex&quot;) %&gt;% 
+<pre class="r"><code>tp_init(data = tidy_titanic) %&gt;%  
+  tp_advance(cols = &quot;sex&quot;) %&gt;% 
   tp_advance(rows = &quot;class&quot;) %&gt;% 
+  tp_advance(cols = c(&quot;sex&quot;, &quot;age&quot;)) %&gt;% 
+  tp_advance(pivot = F) %&gt;% 
   tp_advance(fun = mean)</code></pre>
 <pre><code>## `summarise()` has grouped output by &#39;sex&#39;. You can override using the `.groups`
 ## argument.
-## `summarise()` has grouped output by &#39;sex&#39;. You can override using the `.groups`
-## argument.</code></pre>
-<pre><code>## # A tibble: 4 × 3
-##   class  Male Female
-##   &lt;fct&gt; &lt;dbl&gt;  &lt;dbl&gt;
-## 1 1st       1      1
-## 2 2nd       1      1
-## 3 3rd       1      1
-## 4 Crew      1      1</code></pre>
-<pre class="r"><code>tp_init(data = flat_titanic, cols = &quot;sex&quot;, value = &quot;freq&quot;, fun = sum) %&gt;% 
-  tp_advance(value = &quot;freq&quot;)</code></pre>
-<pre><code>## # A tibble: 1 × 2
-##    Male Female
-##   &lt;dbl&gt;  &lt;dbl&gt;
-## 1    16     16</code></pre>
+## `summarise()` has grouped output by &#39;sex&#39;, &#39;age&#39;. You can override using the
+## `.groups` argument.
+## `summarise()` has grouped output by &#39;sex&#39;, &#39;age&#39;. You can override using the
+## `.groups` argument.
+## `summarise()` has grouped output by &#39;sex&#39;, &#39;age&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre><code>## # A tibble: 16 × 4
+##    sex    age   class value
+##    &lt;fct&gt;  &lt;fct&gt; &lt;fct&gt; &lt;dbl&gt;
+##  1 Male   Child 1st       1
+##  2 Male   Child 2nd       1
+##  3 Male   Child 3rd       1
+##  4 Male   Child Crew    NaN
+##  5 Male   Adult 1st       1
+##  6 Male   Adult 2nd       1
+##  7 Male   Adult 3rd       1
+##  8 Male   Adult Crew      1
+##  9 Female Child 1st       1
+## 10 Female Child 2nd       1
+## 11 Female Child 3rd       1
+## 12 Female Child Crew    NaN
+## 13 Female Adult 1st       1
+## 14 Female Adult 2nd       1
+## 15 Female Adult 3rd       1
+## 16 Female Adult Crew      1</code></pre>
+<pre class="r"><code>tp_init(data = flat_titanic)</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   value
+##   &lt;dbl&gt;
+## 1    32</code></pre>
+<pre class="r"><code>tp_init(data = flat_titanic) %&gt;%
+  tp_advance(cols = &quot;sex&quot;) %&gt;% 
+  tp_advance(value = &quot;freq&quot;) %&gt;% 
+  tp_advance(rows = &quot;class&quot;) %&gt;% 
+  tp_advance(cols = c(&quot;sex&quot;, &quot;age&quot;)) %&gt;% 
+  tp_advance(pivot = F)</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;sex&#39;. You can override using the `.groups`
+## argument.
+## `summarise()` has grouped output by &#39;sex&#39;, &#39;age&#39;. You can override using the
+## `.groups` argument.
+## `summarise()` has grouped output by &#39;sex&#39;, &#39;age&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre><code>## # A tibble: 16 × 4
+##    sex    age   class value
+##    &lt;fct&gt;  &lt;fct&gt; &lt;fct&gt; &lt;dbl&gt;
+##  1 Male   Child 1st    2201
+##  2 Male   Child 2nd    2201
+##  3 Male   Child 3rd    2201
+##  4 Male   Child Crew   2201
+##  5 Male   Adult 1st    2201
+##  6 Male   Adult 2nd    2201
+##  7 Male   Adult 3rd    2201
+##  8 Male   Adult Crew   2201
+##  9 Female Child 1st    2201
+## 10 Female Child 2nd    2201
+## 11 Female Child 3rd    2201
+## 12 Female Child Crew   2201
+## 13 Female Adult 1st    2201
+## 14 Female Adult 2nd    2201
+## 15 Female Adult 3rd    2201
+## 16 Female Adult Crew   2201</code></pre>
+<pre class="r"><code>Tidypivot2 &lt;- R6Class(&quot;Tidypivot2&quot;,
+                       public = list(
+                         
+                         # objects
+                         data = NULL,
+                         rows = NULL,
+                         cols = NULL,
+                         fun = NULL,
+                         value = NULL, 
+                         wt = NULL, 
+                         within = NULL, 
+                         withinfun = NULL, 
+                         pivot = T, 
+                         wrap = F, 
+                         
+                         out = NULL,
+                       
+                         
+
+                         # functions
+                         update = function(data = NULL, rows = NULL, cols = NULL, 
+                                           fun = NULL, value = NULL, wt = NULL){ # a method
+                           
+                           # updating
+                           if(!is.null(data)){self$data &lt;- data}
+                           # if(!is.null(rows)){self$rows &lt;- rows}
+                           if(!is.null(cols)){self$cols &lt;- cols}
+                           # if(!is.null(fun)){self$fun &lt;- fun}
+                           # if(!is.null(wt)){self$wt &lt;- wt}
+                           # if(!is.null(value)){self$value &lt;- value}
+
+                           
+                           
+                          # displaying
+                          self$out &lt;- tidypivot::pivot_helper(data = self$data,
+                                                              # rows = self$rows,
+                                                              cols = self$cols#,
+                                                              # ,
+                                                              # fun = self$fun,
+                                                              # wt = self$wt,
+                                                              # value = self$value
+                                                              )
+                           
+                           invisible(self)          #returns
+                           
+                                     },
+                         
+                         print = function() {  # print method; default is to print everything
+
+                           # str(self)
+                           print(self$out)
+
+                         }
+                       )
+)</code></pre>
+<p>```</p>
 
 
 

@@ -1,12 +1,62 @@
 ---
-title: "r6 Bernoulli trials"
-author: "Evangeline Reynolds"
-date: "2/27/2023"
-output: html_document
+title: "ma206distributions and ma206equations"
+subtitle: "independent studies"
+author: "ER, IF, MJ"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
 ---
 
 
-```{r newclass}
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, fig.height = 4, message = F, warning = FALSE, comment = "", cache = F)
+
+options(scipen = 8, digits = 3)
+
+options(tibble.print_min = 55)
+options(knitr.duplicate.label = "allow")
+options(width=300) # prevents data wrapping
+```
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 90%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+
+
+
+---
+
+
+
+
+```{r newclass, include = FALSE}
 library(R6)
 
 
@@ -90,7 +140,12 @@ Trials <- R6Class("Trials",
 
 
 
-```{r trialtest, eval = T}
+
+
+
+
+
+```{r trialtest, eval = T, include = FALSE}
 
 my_trials <- Trials$new() 
 
@@ -105,7 +160,12 @@ my_trials$out
 
 
 
-```{r wrapandpipe, eval = T}
+
+
+
+
+
+```{r wrapandpipe, eval = T, include = FALSE}
 # wrap and pipe
 trial_init <- function(trial = NULL
                     ){
@@ -137,7 +197,7 @@ add_trials <- function(trials, increment = 1){
   if(!is.R6(trials)){my_trials <- trial_init(trial = trials)
   
   my_trials <- trial_advance(trials = my_trials, 
-                                       increment = increment -1)
+                                       increment = increment)
   
   }
   if(is.R6(trials)){my_trials <- trial_advance(trials = trials, 
@@ -187,13 +247,63 @@ prod_across <- function(data, var_key = "prob"){
 }
 ```
 
+---
 
-```{r pipeline}
+### Mathematical fluency involves frequent use of probability distributions. However, visualizing these distributions can be tedious.   In a well-defined statistics and probability curriculum, the set of distributions to be mastered is known and limited.  In such settings having shortcuts to produce or ingest these distributions in analytic software for display and analysis could be beneficial for students and instructors alike.  The goal of this project is to provide ready-to-use objects (data frames) and functions that will make it easier to engage computationally with these distributions.  We make these objects and functions available in the R package `ma206distributions`.  In this independent study, we've focus especially on the binomial and geometric distributions as targets to be used and mastered to explore the potential for ma206distributions. 
+
+---
+
+`r flipbookr::chunk_reveal("tidy_dbinom", title = "# tidy_dbinom()")`
+
+```{r tidy_dbinom, include = F}
+library(ma206distributions)
+
+tidy_dbinom(single_trial_prob = 1/6, 
+            num_trials = 8)
+```
+
+---
+
+`r flipbookr::chunk_reveal("tidy_dbinom_plot", title = "# tidy_dbinom() plotted")`
+
+```{r tidy_dbinom_plot, include = F}
+library(ma206distributions)
+library(tidyverse)
+tidy_dbinom(single_trial_prob = 1/6, num_trials = 6) %>% # from ma206distributions
+  ggplot() + 
+  aes(x = num_successes, 
+      y = probability) + 
+  geom_lollipop(annotate = T, 
+                round_digits = 2) +  # from ma206distributions
+  scale_x_counting()                 # from ma206distributions
+
+```
+
+
+---
+
+`r flipbookr::chunk_reveal("tidy_dbinom_stamp", title = "# tidy_dbinom() stamp()")`
+
+```{r tidy_dbinom_stamp, include = F}
+ggplot() + 
+  stamp_dbinom(single_trial_prob = 1/6, 
+               num_trials = 10) +    # from ma206distributions
+  scale_x_counting() +                                        # from ma206distributions
+  labs(title = "Probability of rolling 0,1,2,...10 sixes when rolling a fair die 10 times")
+```
+
+
+---
+
+`r flipbookr::chunk_reveal("pipeline")`
+
+
+```{r pipeline, include = FALSE}
 library(dplyr)
 bernoulli_trial(prob = .5) %>% 
   add_trials() %>% 
   add_trials() %>% 
-  add_trials(5) %>% 
+  add_trials() %>% 
   .$out %>% 
   sum_across() %>% 
   prod_across() %>% 
@@ -202,8 +312,14 @@ bernoulli_trial(prob = .5) %>%
 ```
 
 
-```{r pipeline2}
-bernoulli_trial(prob = .5) %>% 
+---
+
+
+`r flipbookr::chunk_reveal("pipeline2")`
+
+
+```{r pipeline2, include = FALSE}
+bernoulli_trial(prob = .25) %>% 
   add_trials(3) %>% 
   .$out %>% 
   seq_across() %>% 

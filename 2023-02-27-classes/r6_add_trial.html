@@ -485,7 +485,12 @@ bernoulli_trial() %&gt;% trial_init()</code></pre>
 add_trials &lt;- function(trials, increment = 1){
   
   
-  if(!is.R6(trials)){my_trials &lt;- trial_init(trial = trials)}
+  if(!is.R6(trials)){my_trials &lt;- trial_init(trial = trials)
+  
+  my_trials &lt;- trial_advance(trials = my_trials, 
+                                       increment = increment -1)
+  
+  }
   if(is.R6(trials)){my_trials &lt;- trial_advance(trials = trials, 
                                        increment = increment)}
   
@@ -517,7 +522,38 @@ bernoulli_trial() %&gt;%
 ## 14          1    0.25          1    0.25          0    0.75          1    0.25
 ## 15          1    0.25          1    0.25          1    0.25          0    0.75
 ## 16          1    0.25          1    0.25          1    0.25          1    0.25</code></pre>
-<pre class="r"><code>library(dplyr)</code></pre>
+<pre class="r"><code>sum_across &lt;- function(data, var_key = &quot;outcome&quot;){
+  
+  dplyr::mutate(.data = data, 
+                global_outcome =
+                  rowSums(dplyr::across(dplyr::contains(var_key)))) 
+  
+}
+
+seq_across &lt;- function(data, var_key = &quot;outcome&quot;){
+  
+  col_list &lt;- names(data)[names(data) %&gt;% stringr::str_detect(var_key)]
+  
+  paste_collapse &lt;- function(x){paste(x, collapse = &quot;, &quot;)}
+  
+  data$global_outcome  &lt;- apply(data[,col_list], MARGIN = 1, FUN = paste_collapse)
+  
+  data
+  
+}
+
+
+prod_across &lt;- function(data, var_key = &quot;prob&quot;){
+  
+  col_list &lt;- names(data)[names(data) %&gt;% stringr::str_detect(var_key)]
+  
+  data$global_probs  &lt;- apply(data[,col_list], MARGIN = 1, FUN = prod)
+  
+  data
+  
+}
+
+library(dplyr)</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;dplyr&#39;</code></pre>
 <pre><code>## The following objects are masked from &#39;package:stats&#39;:
@@ -526,33 +562,44 @@ bernoulli_trial() %&gt;%
 <pre><code>## The following objects are masked from &#39;package:base&#39;:
 ## 
 ##     intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code>bernoulli_trial(prob = .4) %&gt;% 
+<pre class="r"><code>bernoulli_trial(prob = .5) %&gt;% 
   add_trials() %&gt;% 
   add_trials() %&gt;% 
-  add_trials(2) %&gt;% 
+  add_trials(5) %&gt;% 
   .$out %&gt;% 
-  dplyr::mutate(sum = rowSums(dplyr::across(dplyr::contains(&quot;outcome&quot;))), .keep =) %&gt;% 
-  rename(num_successes = sum)</code></pre>
-<pre><code>## # A tibble: 16 × 9
-##    t1_outcome t1_prob t2_outcome t2_prob t3_ou…¹ t3_prob t4_ou…² t4_prob num_s…³
-##         &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;   &lt;int&gt;   &lt;dbl&gt;   &lt;int&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-##  1          0     0.6          0     0.6       0     0.6       0     0.6       0
-##  2          0     0.6          0     0.6       0     0.6       1     0.4       1
-##  3          0     0.6          0     0.6       1     0.4       0     0.6       1
-##  4          0     0.6          0     0.6       1     0.4       1     0.4       2
-##  5          0     0.6          1     0.4       0     0.6       0     0.6       1
-##  6          0     0.6          1     0.4       0     0.6       1     0.4       2
-##  7          0     0.6          1     0.4       1     0.4       0     0.6       2
-##  8          0     0.6          1     0.4       1     0.4       1     0.4       3
-##  9          1     0.4          0     0.6       0     0.6       0     0.6       1
-## 10          1     0.4          0     0.6       0     0.6       1     0.4       2
-## 11          1     0.4          0     0.6       1     0.4       0     0.6       2
-## 12          1     0.4          0     0.6       1     0.4       1     0.4       3
-## 13          1     0.4          1     0.4       0     0.6       0     0.6       2
-## 14          1     0.4          1     0.4       0     0.6       1     0.4       3
-## 15          1     0.4          1     0.4       1     0.4       0     0.6       3
-## 16          1     0.4          1     0.4       1     0.4       1     0.4       4
-## # … with abbreviated variable names ¹​t3_outcome, ²​t4_outcome, ³​num_successes</code></pre>
+  sum_across() %&gt;% 
+  prod_across() %&gt;% 
+  group_by(global_outcome) %&gt;% 
+  summarize(probs = sum(global_probs))</code></pre>
+<pre><code>## # A tibble: 8 × 2
+##   global_outcome   probs
+##            &lt;dbl&gt;   &lt;dbl&gt;
+## 1              0 0.00781
+## 2              1 0.0547 
+## 3              2 0.164  
+## 4              3 0.273  
+## 5              4 0.273  
+## 6              5 0.164  
+## 7              6 0.0547 
+## 8              7 0.00781</code></pre>
+<pre class="r"><code>bernoulli_trial(prob = .5) %&gt;% 
+  add_trials(3) %&gt;% 
+  .$out %&gt;% 
+  seq_across() %&gt;% 
+  prod_across() %&gt;% 
+  group_by(global_outcome) %&gt;% 
+  summarize(probs = sum(global_probs))</code></pre>
+<pre><code>## # A tibble: 8 × 2
+##   global_outcome probs
+##   &lt;chr&gt;          &lt;dbl&gt;
+## 1 0, 0, 0        0.125
+## 2 0, 0, 1        0.125
+## 3 0, 1, 0        0.125
+## 4 0, 1, 1        0.125
+## 5 1, 0, 0        0.125
+## 6 1, 0, 1        0.125
+## 7 1, 1, 0        0.125
+## 8 1, 1, 1        0.125</code></pre>
 
 
 

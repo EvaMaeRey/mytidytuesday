@@ -10,7 +10,7 @@ output: html_document
 library(R6)
 
 pivot_helper <- function (data, rows = NULL, cols = NULL, value = NULL, wt = NULL, 
-    within = NULL, withinfun = NULL, fun = NULL, pivot = T, wrap = F) 
+    within = NULL, withinfun = NULL, fun = NULL, pivot = NULL, wrap = F) 
 {
     # cols_quo <- rlang::enquo(cols)
     # value_quo <- rlang::enquo(value)
@@ -19,25 +19,17 @@ pivot_helper <- function (data, rows = NULL, cols = NULL, value = NULL, wt = NUL
     if (is.null(fun)) {
         fun <- sum
     }
-    grouped <- data %>% dplyr::group_by(dplyr::across(c({
-        {
-            cols
-        }
-    }, {
-        {
-            rows
-        }
-    })), .drop = FALSE)
+    grouped <- data %>% dplyr::group_by(dplyr::across(c({{cols}}, {{rows}})), .drop = FALSE)
     if (is.null(value)) {
         summarized <- grouped %>% dplyr::mutate(value = 1) %>% 
             dplyr::summarise(value = fun(value))
     }
     else {
-        summarized <- grouped %>% dplyr::summarise(value = fun({
-            {
-                value
-            }
-        }))
+      if(is.numeric(value)){
+        summarized <- grouped %>% dplyr::summarise(value = fun(value))}else{
+          summarized <- grouped %>% dplyr::summarise(value = fun(grouped[value]))
+          
+        }
     }
     if (is.null(within)) {
         withined <- summarized
@@ -52,10 +44,11 @@ pivot_helper <- function (data, rows = NULL, cols = NULL, value = NULL, wt = NUL
     arranged <- withined
     ungrouped <- arranged %>% dplyr::ungroup()
     tidy <- ungrouped
+    if(is.null(pivot)){pivot <- TRUE}
     if (pivot == F | is.null(cols)) {
         tidy
     }
-    else {
+    else { 
         tidy %>% tidyr::pivot_wider(names_from = {
             {
                 cols
@@ -77,16 +70,15 @@ Tidypivot <- R6Class("Tidypivot",
                          wt = NULL, 
                          within = NULL, 
                          withinfun = NULL, 
-                         pivot = T, 
-                         wrap = F, 
-                         
+                         pivot = NULL, 
+                         wrap = NULL, 
                          out = NULL,
                        
                          
 
                          # functions
                          update = function(data = NULL, rows = NULL, cols = NULL, 
-                                           fun = NULL, value = NULL, wt = NULL){ # a method
+                                           fun = NULL, value = NULL, wt = NULL, pivot = NULL){ # a method
                            
                            # updating
                            if(!is.null(data)){self$data <- data}
@@ -95,17 +87,19 @@ Tidypivot <- R6Class("Tidypivot",
                            if(!is.null(fun)){self$fun <- fun}
                            # if(!is.null(wt)){self$wt <- wt}
                            if(!is.null(value)){self$value <- value}
+                           if(!is.null(pivot)){self$pivot <- pivot}
 
                            
                            
                           # displaying
                           self$out <- pivot_helper(data = self$data,
-                                                              rows = self$rows,
-                                                              cols = self$cols,
-                                                              # ,
-                                                              fun = self$fun,
-                                                              # wt = self$wt,
-                                                              # value = self$value
+                                                   rows = self$rows,
+                                                   cols = self$cols,
+                                                   fun = self$fun,
+                                                   # wt = self$wt,
+                                                   value = self$value,
+                                                   pivot = self$pivot
+                                         
                                                               )
                            
                            invisible(self)          #returns
@@ -132,11 +126,11 @@ Tidypivot <- R6Class("Tidypivot",
 library(tidytitanic)
 library(magrittr)
 tidy_titanic %>% 
-  tidypivot::pivot_helper(cols = sex)
+  tidypivot::pivot_helper(cols = sex, pivot = F)
 
 
 flat_titanic %>% 
-  tidypivot::pivot_helper(cols = sex, value = freq, fun = sum)
+  tidypivot::pivot_helper(cols = sex, value = freq, fun = sum, pivot = F)
 
 my_tp <- Tidypivot$new() 
 
@@ -154,8 +148,126 @@ my_tp$out
 ```{r wrapandpipe}
 # wrap and pipe
 tp_init <- function(data = NULL, rows = NULL, cols = NULL, fun = NULL,
+                    value = NULL, wt = NULL, pivot = NULL
+                    ){
+  
+  my_pivot <- Tidypivot$new()
+  
+  
+  my_pivot$update(data = data, rows = rows, cols = cols, fun = fun, 
+                  value = value, wt = wt, pivot = pivot)
+  
+  my_pivot
+  
+}
+
+tp_advance <- function(pivot_input, data = NULL, rows = NULL, cols = NULL, fun = NULL,
+                       value = NULL, wt = NULL, pivot = NULL){
+  
+  my_pivot <- pivot_input
+  
+  my_pivot$update(data = data, rows = rows, cols = cols, fun = fun, 
+                  value = value, wt = wt, pivot = pivot)
+  
+  my_pivot
+  
+}
+```
+
+
+```{r}
+tp_init(data = tidy_titanic) %>%  
+  tp_advance(cols = "sex") %>% 
+  tp_advance(rows = "class") %>% 
+  tp_advance(cols = c("sex", "age")) %>% 
+  tp_advance(pivot = F) %>% 
+  tp_advance(fun = mean)
+
+
+tp_init(data = flat_titanic)
+
+tp_init(data = flat_titanic) %>%
+  tp_advance(cols = "sex") %>% 
+  tp_advance(value = "freq") %>% 
+  tp_advance(rows = "class") %>% 
+  tp_advance(cols = c("sex", "age")) %>% 
+  tp_advance(pivot = F)
+
+
+
+```
+
+
+
+
+
+```{r, eval = F}
+Tidypivot2 <- R6Class("Tidypivot2",
+                       public = list(
+                         
+                         # objects
+                         data = NULL,
+                         rows = NULL,
+                         cols = NULL,
+                         fun = NULL,
+                         value = NULL, 
+                         wt = NULL, 
+                         within = NULL, 
+                         withinfun = NULL, 
+                         pivot = T, 
+                         wrap = F, 
+                         
+                         out = NULL,
+                       
+                         
+
+                         # functions
+                         update = function(data = NULL, rows = NULL, cols = NULL, 
+                                           fun = NULL, value = NULL, wt = NULL){ # a method
+                           
+                           # updating
+                           if(!is.null(data)){self$data <- data}
+                           # if(!is.null(rows)){self$rows <- rows}
+                           if(!is.null(cols)){self$cols <- cols}
+                           # if(!is.null(fun)){self$fun <- fun}
+                           # if(!is.null(wt)){self$wt <- wt}
+                           # if(!is.null(value)){self$value <- value}
+
+                           
+                           
+                          # displaying
+                          self$out <- tidypivot::pivot_helper(data = self$data,
+                                                              # rows = self$rows,
+                                                              cols = self$cols#,
+                                                              # ,
+                                                              # fun = self$fun,
+                                                              # wt = self$wt,
+                                                              # value = self$value
+                                                              )
+                           
+                           invisible(self)          #returns
+                           
+                                     },
+                         
+                         print = function() {  # print method; default is to print everything
+
+                           # str(self)
+                           print(self$out)
+
+                         }
+                       )
+)
+
+```
+
+```{r wrapandpipe2, include = F}
+# wrap and pipe
+tp_init <- function(data = NULL, rows = NULL, cols = NULL, fun = NULL,
                     value = NULL, wt = NULL
                     ){
+  
+      cols_enquo <- rlang::enquo(cols)
+      cols_quoname <- rlang::quo_name(cols_enquo)
   
   my_pivot <- Tidypivot$new()
   
@@ -179,18 +291,5 @@ tp_advance <- function(pivot, data = NULL, rows = NULL, cols = NULL, fun = NULL,
   
 }
 ```
-
-
-```{r}
-tp_init(data = tidy_titanic, 
-        cols = "sex") %>% 
-  tp_advance(rows = "class") %>% 
-  tp_advance(fun = mean)
-
-
-tp_init(data = flat_titanic, cols = "sex", value = "freq", fun = sum) %>% 
-  tp_advance(value = "freq")
-
-
 
 ```
