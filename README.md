@@ -11,8 +11,10 @@ The goal of mytidytuesday is to hold small projects. They are like blogs
 posts, but mostly code. In the spirit of \#tidytuesday no pressure to
 write prose\!
 
+  - [2023-03-21-ggwhere/ggwhere-.html](https://evamaerey.github.io/mytidytuesday/2023-03-21-ggwhere/ggwhere-.html)
   - [2023-03-16-compute-panel/compute-panel.html](https://evamaerey.github.io/mytidytuesday/2023-03-16-compute-panel/compute-panel.html)
   - [2023-03-12-ggbrain-seg-sf/ggbrain\_seg\_sf.html](https://evamaerey.github.io/mytidytuesday/2023-03-12-ggbrain-seg-sf/ggbrain_seg_sf.html)
+  - [2023-03-12-ggbrain-seg-sf/ggbrain\_seg\_dk\_sf.html](https://evamaerey.github.io/mytidytuesday/2023-03-12-ggbrain-seg-sf/ggbrain_seg_dk_sf.html)
   - [2023-03-10-ggfips/ggfips\_w\_sf.html](https://evamaerey.github.io/mytidytuesday/2023-03-10-ggfips/ggfips_w_sf.html)
   - [2023-03-10-ggfips/ggfips.html](https://evamaerey.github.io/mytidytuesday/2023-03-10-ggfips/ggfips.html)
   - [2023-03-10-brain2/brain2.html](https://evamaerey.github.io/mytidytuesday/2023-03-10-brain2/brain2.html)
@@ -20,8 +22,14 @@ write prose\!
   - [2023-03-07-extending-your-ability/extending\_your\_ability.html](https://evamaerey.github.io/mytidytuesday/2023-03-07-extending-your-ability/extending_your_ability.html)
   - [2023-03-06-us-states/us\_states.html](https://evamaerey.github.io/mytidytuesday/2023-03-06-us-states/us_states.html)
   - [2023-03-06-fibonacci/fibonacci.html](https://evamaerey.github.io/mytidytuesday/2023-03-06-fibonacci/fibonacci.html)
+  - [2023-02-27-classes/tidypivot\_pipelines.html](https://evamaerey.github.io/mytidytuesday/2023-02-27-classes/tidypivot_pipelines.html)
   - [2023-02-27-classes/r6\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2023-02-27-classes/r6_flipbook.html)
+  - [2023-02-27-classes/r6\_fibonacci\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2023-02-27-classes/r6_fibonacci_flipbook.html)
+  - [2023-02-27-classes/r6\_fibonacci.html](https://evamaerey.github.io/mytidytuesday/2023-02-27-classes/r6_fibonacci.html)
+  - [2023-02-27-classes/r6\_add\_trial\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2023-02-27-classes/r6_add_trial_flipbook.html)
+  - [2023-02-27-classes/r6\_add\_trial.html](https://evamaerey.github.io/mytidytuesday/2023-02-27-classes/r6_add_trial.html)
   - [2023-02-27-classes/r6.html](https://evamaerey.github.io/mytidytuesday/2023-02-27-classes/r6.html)
+  - [2023-02-27-classes/ma206dist\_and\_equa.html](https://evamaerey.github.io/mytidytuesday/2023-02-27-classes/ma206dist_and_equa.html)
   - [2023-02-21-tables-w-ggplot2/tables\_with\_ggplot2.html](https://evamaerey.github.io/mytidytuesday/2023-02-21-tables-w-ggplot2/tables_with_ggplot2.html)
   - [2023-02-21-python-flipbook/python-flipbook.html](https://evamaerey.github.io/mytidytuesday/2023-02-21-python-flipbook/python-flipbook.html)
   - [2023-02-16-likelihood/likelihood.html](https://evamaerey.github.io/mytidytuesday/2023-02-16-likelihood/likelihood.html)
