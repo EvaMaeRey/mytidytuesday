@@ -175,20 +175,32 @@ tp_advance <- function(pivot_input, data = NULL, rows = NULL, cols = NULL, fun =
 ```
 
 
-```{r}
-tp_init(data = tidy_titanic) %>%  
-  tp_advance(cols = "sex") %>% 
-  tp_advance(rows = "class") %>% 
-  tp_advance(cols = c("sex", "age")) %>% 
-  tp_advance(pivot = F) %>% 
-  tp_advance(fun = mean)
+```{r, message =F}
+tp_init(data = tidy_titanic) ->
+pivot0; pivot0
+
+pivot0 %>% 
+  tp_advance(cols = "sex") ->
+pivot1; pivot1
+
+pivot1 %>% 
+  tp_advance(rows = "class") ->
+pivot2; pivot2
+
+pivot2 %>% 
+  tp_advance(cols = c("sex", "age")) ->
+pivot3; pivot3
+
+pivot3 %>% 
+  tp_advance(pivot = F) ->
+pivot4; pivot4
 
 
 tp_init(data = flat_titanic)
 
 tp_init(data = flat_titanic) %>%
   tp_advance(cols = "sex") %>% 
-  tp_advance(value = "freq") %>% 
+  # tp_advance(value = "freq") %>% 
   tp_advance(rows = "class") %>% 
   tp_advance(cols = c("sex", "age")) %>% 
   tp_advance(pivot = F)
