@@ -6,6 +6,7 @@ output:
   xaringan::moon_reader:
     lib_dir: libs
     css: [default, hygge, ninjutsu]
+    seal: FALSE
     nature:
       ratio: 16:9
       highlightStyle: github
@@ -13,6 +14,50 @@ output:
       countIncrementalSlides: false
 ---
 
+
+class: inverse, center, middle
+background-image: url(https://images.unsplash.com/photo-1509081438789-63838f150db7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80)
+background-size: cover
+
+# ma206distributions and ma206equations
+
+
+
+
+
+
+---
+class: inverse, middle, center
+
+# Hello!
+
+---
+class: inverse, middle, center
+
+#   Thank you for your willingess to have a look at some of the work we are doing in `ma206distributions` and `ma206equations`!
+
+---
+class: inverse, middle, center
+
+#  Mathematical fluency involves frequent use of probability distributions and of course equations.
+
+---
+class: inverse, middle, center
+#  However, visualizing these distributions with software and typing equations can be tedious.
+
+---
+class: inverse, middle, center
+#    In a well-defined statistics and probability curriculum, the set of distributions and equations to be mastered is known and limited.
+---
+class: inverse, middle, center
+#   The goal of this project is to provide ready-to-use functions that will make it easier to engage computationally with these distributions.
+---
+class: inverse, middle, center
+#   Your feedback is on this work is greatly appreciated.
+
+---
+class: inverse, middle, center
+#   Without further ado...
 
 ```{r, include = F}
 # This is the recommended set up for flipbooks
@@ -30,28 +75,13 @@ options(width=300) # prevents data wrapping
 ```{css, eval = TRUE, echo = FALSE}
 .remark-code{line-height: 1.5; font-size: 90%}
 
-@media print {
-  .has-continuation {
-    display: block;
-  }
-}
-
-code.r.hljs.remark-code{
-  position: relative;
-  overflow-x: hidden;
-}
 
 
-code.r.hljs.remark-code:hover{
-  overflow-x:visible;
-  width: 500px;
-  border-style: solid;
-}
 ```
 
 
 
----
+
 
 
 
@@ -248,23 +278,47 @@ prod_across <- function(data, var_key = "prob"){
 ```
 
 ---
+class: inverse, center, middle
 
-### Mathematical fluency involves frequent use of probability distributions. However, visualizing these distributions can be tedious.   In a well-defined statistics and probability curriculum, the set of distributions to be mastered is known and limited.  In such settings having shortcuts to produce or ingest these distributions in analytic software for display and analysis could be beneficial for students and instructors alike.  The goal of this project is to provide ready-to-use objects (data frames) and functions that will make it easier to engage computationally with these distributions.  We make these objects and functions available in the R package `ma206distributions`.  In this independent study, we've focus especially on the binomial and geometric distributions as targets to be used and mastered to explore the potential for ma206distributions. 
+# tidy_dbinom() 
+
+## The function tidy_dbinom() returns a dataframe that pairs outcomes and probabilities, using just two inputs. 
+
 
 ---
 
-`r flipbookr::chunk_reveal("tidy_dbinom", title = "# tidy_dbinom()")`
+`r flipbookr::chunk_reveal("tidy_dbinom", title = "### tidy_dbinom() usage")`
 
 ```{r tidy_dbinom, include = F}
+library(tidyverse)
 library(ma206distributions)
+library(ma206equations)
 
 tidy_dbinom(single_trial_prob = 1/6, 
-            num_trials = 8)
+            num_trials = 8) ->
+eight_die_rolls
+
+tidy_dbinom(single_trial_prob = .5, 
+            num_trials = 10) ->
+ten_coin_flips
+
+tidy_dbinom(single_trial_prob = 1/38, 
+            num_trials = 3) ->
+three_roulette_spins
+
 ```
 
 ---
+class: inverse, center, middle
 
-`r flipbookr::chunk_reveal("tidy_dbinom_plot", title = "# tidy_dbinom() plotted")`
+# geom_lollipop() and scale_x_counting() 
+
+## Visualization functions geom_lollipop() and scale_x_counting() help concisely visualize discrete probability data frames like that produced with tidy_dbinom()  
+
+
+---
+
+`r flipbookr::chunk_reveal("tidy_dbinom_plot", title = "### geom_lollipop() and scale_x_counting() usage")`
 
 ```{r tidy_dbinom_plot, include = F}
 library(ma206distributions)
@@ -273,58 +327,83 @@ tidy_dbinom(single_trial_prob = 1/6, num_trials = 6) %>% # from ma206distributio
   ggplot() + 
   aes(x = num_successes, 
       y = probability) + 
-  geom_lollipop(annotate = T, 
-                round_digits = 2) +  # from ma206distributions
-  scale_x_counting()                 # from ma206distributions
+  geom_lollipop() ->
+die_roll_viz
+
+tidy_dbinom(single_trial_prob = .5, num_trials = 10) %>% # from ma206distributions
+  ggplot() + 
+  aes(x = num_successes, 
+      y = probability) + 
+  geom_lollipop() ->
+coin_flip_viz
 
 ```
+
+---
+class: inverse, center, middle
+
+# stamp_dbinom()
+
+## For convenience stamp_dbinom() wraps up the dataframe together with the plotting functionality. 
 
 
 ---
 
-`r flipbookr::chunk_reveal("tidy_dbinom_stamp", title = "# tidy_dbinom() stamp()")`
+`r flipbookr::chunk_reveal("tidy_dbinom_stamp", title = "###  stamp_dbinom() usage")`
 
 ```{r tidy_dbinom_stamp, include = F}
 ggplot() + 
   stamp_dbinom(single_trial_prob = 1/6, 
-               num_trials = 10) +    # from ma206distributions
-  scale_x_counting() +                                        # from ma206distributions
-  labs(title = "Probability of rolling 0,1,2,...10 sixes when rolling a fair die 10 times")
+               num_trials = 10) +    
+  scale_x_counting() +                                        
+  labs(title = "Probability of rolling 0,1,2,...10 sixes when rolling a fair die 10 times") ->
+die_roll_viz_w_stamp
+
+
+ggplot() + 
+  stamp_dbinom(single_trial_prob = .5, 
+               num_trials = 5) +    
+  labs(title = "Probability of flipping 0,1,2,3,4 or 5 heads\n when flipping a coin five times") ->
+coin_flip_viz_w_stamp
+
 ```
 
 
 ---
+class: inverse, center, middle
 
-`r flipbookr::chunk_reveal("pipeline")`
+# To be added:  layer stamp_eq_binom()
 
 
-```{r pipeline, include = FALSE}
-library(dplyr)
-bernoulli_trial(prob = .5) %>% 
-  add_trials() %>% 
+---
+class: inverse, center, middle
+
+# bernoulli_trial() and adding trials()
+
+## You can also build up binomial distributions from first principles uising bernoulli_trial() and adding trials().  
+
+
+---
+
+
+`r flipbookr::chunk_reveal("pipeline2", title = "## bernoulli_trial() and add_trials() usage", widths = c(1.2,3))`
+
+
+```{r pipeline2, include = FALSE}
+bernoulli_trial(prob = .25) %>% 
   add_trials() %>% 
   add_trials() %>% 
   .$out %>% 
   sum_across() %>% 
   prod_across() %>% 
   group_by(global_outcome) %>% 
-  summarize(probs = sum(global_probs))
-```
+  summarize(probs = 
+              sum(global_probs))
 
-
----
-
-
-`r flipbookr::chunk_reveal("pipeline2")`
-
-
-```{r pipeline2, include = FALSE}
-bernoulli_trial(prob = .25) %>% 
-  add_trials(3) %>% 
-  .$out %>% 
-  seq_across() %>% 
-  prod_across() %>% 
-  group_by(global_outcome) %>% 
-  summarize(probs = sum(global_probs))
+# check consistency with 
+# our automated computation
+tidy_dbinom(
+  single_trial_pro = .25,
+  num_trials = 3)
 ```
 

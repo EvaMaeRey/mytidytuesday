@@ -10,21 +10,52 @@
   </head>
   <body>
     <textarea id="source">
-class: center, middle, inverse, title-slide
 
-.title[
+
+
+class: inverse, center, middle
+background-image: url(https://images.unsplash.com/photo-1509081438789-63838f150db7?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=387&amp;q=80)
+background-size: cover
+
 # ma206distributions and ma206equations
-]
-.subtitle[
-## independent studies
-]
-.author[
-### ER, IF, MJ
-]
+
+
+
+
+
 
 ---
+class: inverse, middle, center
 
+# Hello!
 
+---
+class: inverse, middle, center
+
+#   Thank you for your willingess to have a look at some of the work we are doing in `ma206distributions` and `ma206equations`!
+
+---
+class: inverse, middle, center
+
+#  Mathematical fluency involves frequent use of probability distributions and of course equations.
+
+---
+class: inverse, middle, center
+#  However, visualizing these distributions with software and typing equations can be tedious.
+
+---
+class: inverse, middle, center
+#    In a well-defined statistics and probability curriculum, the set of distributions and equations to be mastered is known and limited.
+---
+class: inverse, middle, center
+#   The goal of this project is to provide ready-to-use functions that will make it easier to engage computationally with these distributions.
+---
+class: inverse, middle, center
+#   Your feedback is on this work is greatly appreciated.
+
+---
+class: inverse, middle, center
+#   Without further ado...
 
 
 
@@ -32,66 +63,71 @@ class: center, middle, inverse, title-slide
 &lt;style type="text/css"&gt;
 .remark-code{line-height: 1.5; font-size: 90%}
 
-@media print {
-  .has-continuation {
-    display: block;
-  }
-}
-
-code.r.hljs.remark-code{
-  position: relative;
-  overflow-x: hidden;
-}
 
 
-code.r.hljs.remark-code:hover{
-  overflow-x:visible;
-  width: 500px;
-  border-style: solid;
-}
 &lt;/style&gt;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ---
+class: inverse, center, middle
 
+# tidy_dbinom() 
 
+## The function tidy_dbinom() returns a dataframe that pairs outcomes and probabilities, using just two inputs. 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
----
-
-### Mathematical fluency involves frequent use of probability distributions. However, visualizing these distributions can be tedious.   In a well-defined statistics and probability curriculum, the set of distributions to be mastered is known and limited.  In such settings having shortcuts to produce or ingest these distributions in analytic software for display and analysis could be beneficial for students and instructors alike.  The goal of this project is to provide ready-to-use objects (data frames) and functions that will make it easier to engage computationally with these distributions.  We make these objects and functions available in the R package `ma206distributions`.  In this independent study, we've focus especially on the binomial and geometric distributions as targets to be used and mastered to explore the potential for ma206distributions. 
 
 ---
 
 count: false
  
-# tidy_dbinom()
+### tidy_dbinom() usage
 .panel1-tidy_dbinom-auto[
 
 ```r
+*library(tidyverse)
+```
+]
+ 
+.panel2-tidy_dbinom-auto[
+
+]
+
+---
+count: false
+ 
+### tidy_dbinom() usage
+.panel1-tidy_dbinom-auto[
+
+```r
+library(tidyverse)
 *library(ma206distributions)
 ```
 ]
@@ -103,11 +139,30 @@ count: false
 ---
 count: false
  
-# tidy_dbinom()
+### tidy_dbinom() usage
 .panel1-tidy_dbinom-auto[
 
 ```r
+library(tidyverse)
 library(ma206distributions)
+*library(ma206equations)
+```
+]
+ 
+.panel2-tidy_dbinom-auto[
+
+]
+
+---
+count: false
+ 
+### tidy_dbinom() usage
+.panel1-tidy_dbinom-auto[
+
+```r
+library(tidyverse)
+library(ma206distributions)
+library(ma206equations)
 
 *tidy_dbinom(single_trial_prob = 1/6,
 *           num_trials = 8)
@@ -130,6 +185,187 @@ library(ma206distributions)
 8             7 0.0000238               0.167          8
 9             8 0.000000595             0.167          8
 ```
+]
+
+---
+count: false
+ 
+### tidy_dbinom() usage
+.panel1-tidy_dbinom-auto[
+
+```r
+library(tidyverse)
+library(ma206distributions)
+library(ma206equations)
+
+tidy_dbinom(single_trial_prob = 1/6,
+            num_trials = 8) -&gt;
+*eight_die_rolls
+```
+]
+ 
+.panel2-tidy_dbinom-auto[
+
+]
+
+---
+count: false
+ 
+### tidy_dbinom() usage
+.panel1-tidy_dbinom-auto[
+
+```r
+library(tidyverse)
+library(ma206distributions)
+library(ma206equations)
+
+tidy_dbinom(single_trial_prob = 1/6,
+            num_trials = 8) -&gt;
+eight_die_rolls
+
+*tidy_dbinom(single_trial_prob = .5,
+*           num_trials = 10)
+```
+]
+ 
+.panel2-tidy_dbinom-auto[
+
+```
+# A tibble: 11 × 4
+   num_successes probability single_trial_prob num_trials
+           &lt;int&gt;       &lt;dbl&gt;             &lt;dbl&gt;      &lt;dbl&gt;
+ 1             0    0.000977               0.5         10
+ 2             1    0.00977                0.5         10
+ 3             2    0.0439                 0.5         10
+ 4             3    0.117                  0.5         10
+ 5             4    0.205                  0.5         10
+ 6             5    0.246                  0.5         10
+ 7             6    0.205                  0.5         10
+ 8             7    0.117                  0.5         10
+ 9             8    0.0439                 0.5         10
+10             9    0.00977                0.5         10
+11            10    0.000977               0.5         10
+```
+]
+
+---
+count: false
+ 
+### tidy_dbinom() usage
+.panel1-tidy_dbinom-auto[
+
+```r
+library(tidyverse)
+library(ma206distributions)
+library(ma206equations)
+
+tidy_dbinom(single_trial_prob = 1/6,
+            num_trials = 8) -&gt;
+eight_die_rolls
+
+tidy_dbinom(single_trial_prob = .5,
+            num_trials = 10) -&gt;
+*ten_coin_flips
+```
+]
+ 
+.panel2-tidy_dbinom-auto[
+
+]
+
+---
+count: false
+ 
+### tidy_dbinom() usage
+.panel1-tidy_dbinom-auto[
+
+```r
+library(tidyverse)
+library(ma206distributions)
+library(ma206equations)
+
+tidy_dbinom(single_trial_prob = 1/6,
+            num_trials = 8) -&gt;
+eight_die_rolls
+
+tidy_dbinom(single_trial_prob = .5,
+            num_trials = 10) -&gt;
+ten_coin_flips
+
+*tidy_dbinom(single_trial_prob = 1/38,
+*           num_trials = 3)
+```
+]
+ 
+.panel2-tidy_dbinom-auto[
+
+```
+# A tibble: 4 × 4
+  num_successes probability single_trial_prob num_trials
+          &lt;int&gt;       &lt;dbl&gt;             &lt;dbl&gt;      &lt;dbl&gt;
+1             0   0.923                0.0263          3
+2             1   0.0748               0.0263          3
+3             2   0.00202              0.0263          3
+4             3   0.0000182            0.0263          3
+```
+]
+
+---
+count: false
+ 
+### tidy_dbinom() usage
+.panel1-tidy_dbinom-auto[
+
+```r
+library(tidyverse)
+library(ma206distributions)
+library(ma206equations)
+
+tidy_dbinom(single_trial_prob = 1/6,
+            num_trials = 8) -&gt;
+eight_die_rolls
+
+tidy_dbinom(single_trial_prob = .5,
+            num_trials = 10) -&gt;
+ten_coin_flips
+
+tidy_dbinom(single_trial_prob = 1/38,
+            num_trials = 3) -&gt;
+*three_roulette_spins
+```
+]
+ 
+.panel2-tidy_dbinom-auto[
+
+]
+
+---
+count: false
+ 
+### tidy_dbinom() usage
+.panel1-tidy_dbinom-auto[
+
+```r
+library(tidyverse)
+library(ma206distributions)
+library(ma206equations)
+
+tidy_dbinom(single_trial_prob = 1/6,
+            num_trials = 8) -&gt;
+eight_die_rolls
+
+tidy_dbinom(single_trial_prob = .5,
+            num_trials = 10) -&gt;
+ten_coin_flips
+
+tidy_dbinom(single_trial_prob = 1/38,
+            num_trials = 3) -&gt;
+three_roulette_spins
+```
+]
+ 
+.panel2-tidy_dbinom-auto[
+
 ]
 
 &lt;style&gt;
@@ -164,10 +400,18 @@ library(ma206distributions)
 
 
 ---
+class: inverse, center, middle
+
+# geom_lollipop() and scale_x_counting() 
+
+## Visualization functions geom_lollipop() and scale_x_counting() help concisely visualize discrete probability data frames like that produced with tidy_dbinom()  
+
+
+---
 
 count: false
  
-# tidy_dbinom() plotted
+### geom_lollipop() and scale_x_counting() usage
 .panel1-tidy_dbinom_plot-auto[
 
 ```r
@@ -182,7 +426,7 @@ count: false
 ---
 count: false
  
-# tidy_dbinom() plotted
+### geom_lollipop() and scale_x_counting() usage
 .panel1-tidy_dbinom_plot-auto[
 
 ```r
@@ -198,7 +442,7 @@ library(ma206distributions)
 ---
 count: false
  
-# tidy_dbinom() plotted
+### geom_lollipop() and scale_x_counting() usage
 .panel1-tidy_dbinom_plot-auto[
 
 ```r
@@ -227,7 +471,7 @@ library(tidyverse)
 ---
 count: false
  
-# tidy_dbinom() plotted
+### geom_lollipop() and scale_x_counting() usage
 .panel1-tidy_dbinom_plot-auto[
 
 ```r
@@ -245,7 +489,7 @@ tidy_dbinom(single_trial_prob = 1/6, num_trials = 6) %&gt;%  # from ma206distrib
 ---
 count: false
  
-# tidy_dbinom() plotted
+### geom_lollipop() and scale_x_counting() usage
 .panel1-tidy_dbinom_plot-auto[
 
 ```r
@@ -265,7 +509,7 @@ tidy_dbinom(single_trial_prob = 1/6, num_trials = 6) %&gt;%  # from ma206distrib
 ---
 count: false
  
-# tidy_dbinom() plotted
+### geom_lollipop() and scale_x_counting() usage
 .panel1-tidy_dbinom_plot-auto[
 
 ```r
@@ -275,8 +519,7 @@ tidy_dbinom(single_trial_prob = 1/6, num_trials = 6) %&gt;%  # from ma206distrib
   ggplot() +
   aes(x = num_successes,
       y = probability) +
-* geom_lollipop(annotate = T,
-*               round_digits = 2)   # from ma206distributions
+* geom_lollipop()
 ```
 ]
  
@@ -287,7 +530,7 @@ tidy_dbinom(single_trial_prob = 1/6, num_trials = 6) %&gt;%  # from ma206distrib
 ---
 count: false
  
-# tidy_dbinom() plotted
+### geom_lollipop() and scale_x_counting() usage
 .panel1-tidy_dbinom_plot-auto[
 
 ```r
@@ -297,20 +540,19 @@ tidy_dbinom(single_trial_prob = 1/6, num_trials = 6) %&gt;%  # from ma206distrib
   ggplot() +
   aes(x = num_successes,
       y = probability) +
-  geom_lollipop(annotate = T,
-                round_digits = 2) +  # from ma206distributions
-* scale_x_counting()  # from ma206distributions
+  geom_lollipop() -&gt;
+*die_roll_viz
 ```
 ]
  
 .panel2-tidy_dbinom_plot-auto[
-![](ma206dist_and_equa_files/figure-html/tidy_dbinom_plot_auto_07_output-1.png)&lt;!-- --&gt;
+
 ]
 
 ---
 count: false
  
-# tidy_dbinom() plotted
+### geom_lollipop() and scale_x_counting() usage
 .panel1-tidy_dbinom_plot-auto[
 
 ```r
@@ -320,14 +562,169 @@ tidy_dbinom(single_trial_prob = 1/6, num_trials = 6) %&gt;%  # from ma206distrib
   ggplot() +
   aes(x = num_successes,
       y = probability) +
-  geom_lollipop(annotate = T,
-                round_digits = 2) +  # from ma206distributions
-  scale_x_counting()  # from ma206distributions
+  geom_lollipop() -&gt;
+die_roll_viz
+
+*tidy_dbinom(single_trial_prob = .5, num_trials = 10)   # from ma206distributions
 ```
 ]
  
 .panel2-tidy_dbinom_plot-auto[
-![](ma206dist_and_equa_files/figure-html/tidy_dbinom_plot_auto_08_output-1.png)&lt;!-- --&gt;
+
+```
+# A tibble: 11 × 4
+   num_successes probability single_trial_prob num_trials
+           &lt;int&gt;       &lt;dbl&gt;             &lt;dbl&gt;      &lt;dbl&gt;
+ 1             0    0.000977               0.5         10
+ 2             1    0.00977                0.5         10
+ 3             2    0.0439                 0.5         10
+ 4             3    0.117                  0.5         10
+ 5             4    0.205                  0.5         10
+ 6             5    0.246                  0.5         10
+ 7             6    0.205                  0.5         10
+ 8             7    0.117                  0.5         10
+ 9             8    0.0439                 0.5         10
+10             9    0.00977                0.5         10
+11            10    0.000977               0.5         10
+```
+]
+
+---
+count: false
+ 
+### geom_lollipop() and scale_x_counting() usage
+.panel1-tidy_dbinom_plot-auto[
+
+```r
+library(ma206distributions)
+library(tidyverse)
+tidy_dbinom(single_trial_prob = 1/6, num_trials = 6) %&gt;%  # from ma206distributions
+  ggplot() +
+  aes(x = num_successes,
+      y = probability) +
+  geom_lollipop() -&gt;
+die_roll_viz
+
+tidy_dbinom(single_trial_prob = .5, num_trials = 10) %&gt;%  # from ma206distributions
+* ggplot()
+```
+]
+ 
+.panel2-tidy_dbinom_plot-auto[
+![](ma206dist_and_equa_files/figure-html/tidy_dbinom_plot_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+### geom_lollipop() and scale_x_counting() usage
+.panel1-tidy_dbinom_plot-auto[
+
+```r
+library(ma206distributions)
+library(tidyverse)
+tidy_dbinom(single_trial_prob = 1/6, num_trials = 6) %&gt;%  # from ma206distributions
+  ggplot() +
+  aes(x = num_successes,
+      y = probability) +
+  geom_lollipop() -&gt;
+die_roll_viz
+
+tidy_dbinom(single_trial_prob = .5, num_trials = 10) %&gt;%  # from ma206distributions
+  ggplot() +
+* aes(x = num_successes,
+*     y = probability)
+```
+]
+ 
+.panel2-tidy_dbinom_plot-auto[
+![](ma206dist_and_equa_files/figure-html/tidy_dbinom_plot_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+### geom_lollipop() and scale_x_counting() usage
+.panel1-tidy_dbinom_plot-auto[
+
+```r
+library(ma206distributions)
+library(tidyverse)
+tidy_dbinom(single_trial_prob = 1/6, num_trials = 6) %&gt;%  # from ma206distributions
+  ggplot() +
+  aes(x = num_successes,
+      y = probability) +
+  geom_lollipop() -&gt;
+die_roll_viz
+
+tidy_dbinom(single_trial_prob = .5, num_trials = 10) %&gt;%  # from ma206distributions
+  ggplot() +
+  aes(x = num_successes,
+      y = probability) +
+* geom_lollipop()
+```
+]
+ 
+.panel2-tidy_dbinom_plot-auto[
+![](ma206dist_and_equa_files/figure-html/tidy_dbinom_plot_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+### geom_lollipop() and scale_x_counting() usage
+.panel1-tidy_dbinom_plot-auto[
+
+```r
+library(ma206distributions)
+library(tidyverse)
+tidy_dbinom(single_trial_prob = 1/6, num_trials = 6) %&gt;%  # from ma206distributions
+  ggplot() +
+  aes(x = num_successes,
+      y = probability) +
+  geom_lollipop() -&gt;
+die_roll_viz
+
+tidy_dbinom(single_trial_prob = .5, num_trials = 10) %&gt;%  # from ma206distributions
+  ggplot() +
+  aes(x = num_successes,
+      y = probability) +
+  geom_lollipop() -&gt;
+*coin_flip_viz
+```
+]
+ 
+.panel2-tidy_dbinom_plot-auto[
+
+]
+
+---
+count: false
+ 
+### geom_lollipop() and scale_x_counting() usage
+.panel1-tidy_dbinom_plot-auto[
+
+```r
+library(ma206distributions)
+library(tidyverse)
+tidy_dbinom(single_trial_prob = 1/6, num_trials = 6) %&gt;%  # from ma206distributions
+  ggplot() +
+  aes(x = num_successes,
+      y = probability) +
+  geom_lollipop() -&gt;
+die_roll_viz
+
+tidy_dbinom(single_trial_prob = .5, num_trials = 10) %&gt;%  # from ma206distributions
+  ggplot() +
+  aes(x = num_successes,
+      y = probability) +
+  geom_lollipop() -&gt;
+coin_flip_viz
+```
+]
+ 
+.panel2-tidy_dbinom_plot-auto[
+
 ]
 
 &lt;style&gt;
@@ -361,12 +758,19 @@ tidy_dbinom(single_trial_prob = 1/6, num_trials = 6) %&gt;%  # from ma206distrib
 
 
 
+---
+class: inverse, center, middle
+
+# stamp_dbinom()
+
+## For convenience stamp_dbinom() wraps up the dataframe together with the plotting functionality. 
+
 
 ---
 
 count: false
  
-# tidy_dbinom() stamp()
+###  stamp_dbinom() usage
 .panel1-tidy_dbinom_stamp-auto[
 
 ```r
@@ -381,13 +785,13 @@ count: false
 ---
 count: false
  
-# tidy_dbinom() stamp()
+###  stamp_dbinom() usage
 .panel1-tidy_dbinom_stamp-auto[
 
 ```r
 ggplot() +
 * stamp_dbinom(single_trial_prob = 1/6,
-*              num_trials = 10)   # from ma206distributions
+*              num_trials = 10)
 ```
 ]
  
@@ -398,14 +802,14 @@ ggplot() +
 ---
 count: false
  
-# tidy_dbinom() stamp()
+###  stamp_dbinom() usage
 .panel1-tidy_dbinom_stamp-auto[
 
 ```r
 ggplot() +
   stamp_dbinom(single_trial_prob = 1/6,
-               num_trials = 10) +  # from ma206distributions
-* scale_x_counting()   # from ma206distributions
+               num_trials = 10) +
+* scale_x_counting()
 ```
 ]
  
@@ -416,20 +820,168 @@ ggplot() +
 ---
 count: false
  
-# tidy_dbinom() stamp()
+###  stamp_dbinom() usage
 .panel1-tidy_dbinom_stamp-auto[
 
 ```r
 ggplot() +
   stamp_dbinom(single_trial_prob = 1/6,
-               num_trials = 10) +  # from ma206distributions
-  scale_x_counting() +  # from ma206distributions
+               num_trials = 10) +
+  scale_x_counting() +
 * labs(title = "Probability of rolling 0,1,2,...10 sixes when rolling a fair die 10 times")
 ```
 ]
  
 .panel2-tidy_dbinom_stamp-auto[
 ![](ma206dist_and_equa_files/figure-html/tidy_dbinom_stamp_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+###  stamp_dbinom() usage
+.panel1-tidy_dbinom_stamp-auto[
+
+```r
+ggplot() +
+  stamp_dbinom(single_trial_prob = 1/6,
+               num_trials = 10) +
+  scale_x_counting() +
+  labs(title = "Probability of rolling 0,1,2,...10 sixes when rolling a fair die 10 times") -&gt;
+*die_roll_viz_w_stamp
+```
+]
+ 
+.panel2-tidy_dbinom_stamp-auto[
+
+]
+
+---
+count: false
+ 
+###  stamp_dbinom() usage
+.panel1-tidy_dbinom_stamp-auto[
+
+```r
+ggplot() +
+  stamp_dbinom(single_trial_prob = 1/6,
+               num_trials = 10) +
+  scale_x_counting() +
+  labs(title = "Probability of rolling 0,1,2,...10 sixes when rolling a fair die 10 times") -&gt;
+die_roll_viz_w_stamp
+
+
+*ggplot()
+```
+]
+ 
+.panel2-tidy_dbinom_stamp-auto[
+![](ma206dist_and_equa_files/figure-html/tidy_dbinom_stamp_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+###  stamp_dbinom() usage
+.panel1-tidy_dbinom_stamp-auto[
+
+```r
+ggplot() +
+  stamp_dbinom(single_trial_prob = 1/6,
+               num_trials = 10) +
+  scale_x_counting() +
+  labs(title = "Probability of rolling 0,1,2,...10 sixes when rolling a fair die 10 times") -&gt;
+die_roll_viz_w_stamp
+
+
+ggplot() +
+* stamp_dbinom(single_trial_prob = .5,
+*              num_trials = 5)
+```
+]
+ 
+.panel2-tidy_dbinom_stamp-auto[
+![](ma206dist_and_equa_files/figure-html/tidy_dbinom_stamp_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+###  stamp_dbinom() usage
+.panel1-tidy_dbinom_stamp-auto[
+
+```r
+ggplot() +
+  stamp_dbinom(single_trial_prob = 1/6,
+               num_trials = 10) +
+  scale_x_counting() +
+  labs(title = "Probability of rolling 0,1,2,...10 sixes when rolling a fair die 10 times") -&gt;
+die_roll_viz_w_stamp
+
+
+ggplot() +
+  stamp_dbinom(single_trial_prob = .5,
+               num_trials = 5) +
+* labs(title = "Probability of flipping 0,1,2,3,4 or 5 heads\n when flipping a coin five times")
+```
+]
+ 
+.panel2-tidy_dbinom_stamp-auto[
+![](ma206dist_and_equa_files/figure-html/tidy_dbinom_stamp_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+###  stamp_dbinom() usage
+.panel1-tidy_dbinom_stamp-auto[
+
+```r
+ggplot() +
+  stamp_dbinom(single_trial_prob = 1/6,
+               num_trials = 10) +
+  scale_x_counting() +
+  labs(title = "Probability of rolling 0,1,2,...10 sixes when rolling a fair die 10 times") -&gt;
+die_roll_viz_w_stamp
+
+
+ggplot() +
+  stamp_dbinom(single_trial_prob = .5,
+               num_trials = 5) +
+  labs(title = "Probability of flipping 0,1,2,3,4 or 5 heads\n when flipping a coin five times") -&gt;
+*coin_flip_viz_w_stamp
+```
+]
+ 
+.panel2-tidy_dbinom_stamp-auto[
+
+]
+
+---
+count: false
+ 
+###  stamp_dbinom() usage
+.panel1-tidy_dbinom_stamp-auto[
+
+```r
+ggplot() +
+  stamp_dbinom(single_trial_prob = 1/6,
+               num_trials = 10) +
+  scale_x_counting() +
+  labs(title = "Probability of rolling 0,1,2,...10 sixes when rolling a fair die 10 times") -&gt;
+die_roll_viz_w_stamp
+
+
+ggplot() +
+  stamp_dbinom(single_trial_prob = .5,
+               num_trials = 5) +
+  labs(title = "Probability of flipping 0,1,2,3,4 or 5 heads\n when flipping a coin five times") -&gt;
+coin_flip_viz_w_stamp
+```
+]
+ 
+.panel2-tidy_dbinom_stamp-auto[
+
 ]
 
 &lt;style&gt;
@@ -465,377 +1017,17 @@ ggplot() +
 
 
 ---
+class: inverse, center, middle
 
-count: false
- 
+# To be added:  layer stamp_eq_binom()
 
-.panel1-pipeline-auto[
-
-```r
-*library(dplyr)
-```
-]
- 
-.panel2-pipeline-auto[
-
-]
 
 ---
-count: false
- 
+class: inverse, center, middle
 
-.panel1-pipeline-auto[
+# bernoulli_trial() and adding trials()
 
-```r
-library(dplyr)
-*bernoulli_trial(prob = .5)
-```
-]
- 
-.panel2-pipeline-auto[
-
-```
-# A tibble: 2 × 2
-  outcome  prob
-    &lt;int&gt; &lt;dbl&gt;
-1       0   0.5
-2       1   0.5
-```
-]
-
----
-count: false
- 
-
-.panel1-pipeline-auto[
-
-```r
-library(dplyr)
-bernoulli_trial(prob = .5) %&gt;%
-* add_trials()
-```
-]
- 
-.panel2-pipeline-auto[
-
-```
-# A tibble: 4 × 4
-  t1_outcome t1_prob t2_outcome t2_prob
-       &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;
-1          0     0.5          0     0.5
-2          0     0.5          1     0.5
-3          1     0.5          0     0.5
-4          1     0.5          1     0.5
-```
-]
-
----
-count: false
- 
-
-.panel1-pipeline-auto[
-
-```r
-library(dplyr)
-bernoulli_trial(prob = .5) %&gt;%
-  add_trials() %&gt;%
-* add_trials()
-```
-]
- 
-.panel2-pipeline-auto[
-
-```
-# A tibble: 8 × 6
-  t1_outcome t1_prob t2_outcome t2_prob t3_outcome t3_prob
-       &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;
-1          0     0.5          0     0.5          0     0.5
-2          0     0.5          0     0.5          1     0.5
-3          0     0.5          1     0.5          0     0.5
-4          0     0.5          1     0.5          1     0.5
-5          1     0.5          0     0.5          0     0.5
-6          1     0.5          0     0.5          1     0.5
-7          1     0.5          1     0.5          0     0.5
-8          1     0.5          1     0.5          1     0.5
-```
-]
-
----
-count: false
- 
-
-.panel1-pipeline-auto[
-
-```r
-library(dplyr)
-bernoulli_trial(prob = .5) %&gt;%
-  add_trials() %&gt;%
-  add_trials() %&gt;%
-* add_trials()
-```
-]
- 
-.panel2-pipeline-auto[
-
-```
-# A tibble: 16 × 8
-   t1_outcome t1_prob t2_outcome t2_prob t3_outcome t3_prob t4_outcome t4_prob
-        &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;
- 1          0     0.5          0     0.5          0     0.5          0     0.5
- 2          0     0.5          0     0.5          0     0.5          1     0.5
- 3          0     0.5          0     0.5          1     0.5          0     0.5
- 4          0     0.5          0     0.5          1     0.5          1     0.5
- 5          0     0.5          1     0.5          0     0.5          0     0.5
- 6          0     0.5          1     0.5          0     0.5          1     0.5
- 7          0     0.5          1     0.5          1     0.5          0     0.5
- 8          0     0.5          1     0.5          1     0.5          1     0.5
- 9          1     0.5          0     0.5          0     0.5          0     0.5
-10          1     0.5          0     0.5          0     0.5          1     0.5
-11          1     0.5          0     0.5          1     0.5          0     0.5
-12          1     0.5          0     0.5          1     0.5          1     0.5
-13          1     0.5          1     0.5          0     0.5          0     0.5
-14          1     0.5          1     0.5          0     0.5          1     0.5
-15          1     0.5          1     0.5          1     0.5          0     0.5
-16          1     0.5          1     0.5          1     0.5          1     0.5
-```
-]
-
----
-count: false
- 
-
-.panel1-pipeline-auto[
-
-```r
-library(dplyr)
-bernoulli_trial(prob = .5) %&gt;%
-  add_trials() %&gt;%
-  add_trials() %&gt;%
-  add_trials() %&gt;%
-* .$out
-```
-]
- 
-.panel2-pipeline-auto[
-
-```
-# A tibble: 16 × 8
-   t1_outcome t1_prob t2_outcome t2_prob t3_outcome t3_prob t4_outcome t4_prob
-        &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;
- 1          0     0.5          0     0.5          0     0.5          0     0.5
- 2          0     0.5          0     0.5          0     0.5          1     0.5
- 3          0     0.5          0     0.5          1     0.5          0     0.5
- 4          0     0.5          0     0.5          1     0.5          1     0.5
- 5          0     0.5          1     0.5          0     0.5          0     0.5
- 6          0     0.5          1     0.5          0     0.5          1     0.5
- 7          0     0.5          1     0.5          1     0.5          0     0.5
- 8          0     0.5          1     0.5          1     0.5          1     0.5
- 9          1     0.5          0     0.5          0     0.5          0     0.5
-10          1     0.5          0     0.5          0     0.5          1     0.5
-11          1     0.5          0     0.5          1     0.5          0     0.5
-12          1     0.5          0     0.5          1     0.5          1     0.5
-13          1     0.5          1     0.5          0     0.5          0     0.5
-14          1     0.5          1     0.5          0     0.5          1     0.5
-15          1     0.5          1     0.5          1     0.5          0     0.5
-16          1     0.5          1     0.5          1     0.5          1     0.5
-```
-]
-
----
-count: false
- 
-
-.panel1-pipeline-auto[
-
-```r
-library(dplyr)
-bernoulli_trial(prob = .5) %&gt;%
-  add_trials() %&gt;%
-  add_trials() %&gt;%
-  add_trials() %&gt;%
-  .$out %&gt;%
-* sum_across()
-```
-]
- 
-.panel2-pipeline-auto[
-
-```
-# A tibble: 16 × 9
-   t1_outcome t1_prob t2_outcome t2_prob t3_outcome t3_prob t4_outcome t4_prob global_outcome
-        &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;          &lt;dbl&gt;
- 1          0     0.5          0     0.5          0     0.5          0     0.5              0
- 2          0     0.5          0     0.5          0     0.5          1     0.5              1
- 3          0     0.5          0     0.5          1     0.5          0     0.5              1
- 4          0     0.5          0     0.5          1     0.5          1     0.5              2
- 5          0     0.5          1     0.5          0     0.5          0     0.5              1
- 6          0     0.5          1     0.5          0     0.5          1     0.5              2
- 7          0     0.5          1     0.5          1     0.5          0     0.5              2
- 8          0     0.5          1     0.5          1     0.5          1     0.5              3
- 9          1     0.5          0     0.5          0     0.5          0     0.5              1
-10          1     0.5          0     0.5          0     0.5          1     0.5              2
-11          1     0.5          0     0.5          1     0.5          0     0.5              2
-12          1     0.5          0     0.5          1     0.5          1     0.5              3
-13          1     0.5          1     0.5          0     0.5          0     0.5              2
-14          1     0.5          1     0.5          0     0.5          1     0.5              3
-15          1     0.5          1     0.5          1     0.5          0     0.5              3
-16          1     0.5          1     0.5          1     0.5          1     0.5              4
-```
-]
-
----
-count: false
- 
-
-.panel1-pipeline-auto[
-
-```r
-library(dplyr)
-bernoulli_trial(prob = .5) %&gt;%
-  add_trials() %&gt;%
-  add_trials() %&gt;%
-  add_trials() %&gt;%
-  .$out %&gt;%
-  sum_across() %&gt;%
-* prod_across()
-```
-]
- 
-.panel2-pipeline-auto[
-
-```
-# A tibble: 16 × 10
-   t1_outcome t1_prob t2_outcome t2_prob t3_outcome t3_prob t4_outcome t4_prob global_outcome global_probs
-        &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;          &lt;dbl&gt;        &lt;dbl&gt;
- 1          0     0.5          0     0.5          0     0.5          0     0.5              0       0.0625
- 2          0     0.5          0     0.5          0     0.5          1     0.5              1       0.0625
- 3          0     0.5          0     0.5          1     0.5          0     0.5              1       0.0625
- 4          0     0.5          0     0.5          1     0.5          1     0.5              2       0.0625
- 5          0     0.5          1     0.5          0     0.5          0     0.5              1       0.0625
- 6          0     0.5          1     0.5          0     0.5          1     0.5              2       0.0625
- 7          0     0.5          1     0.5          1     0.5          0     0.5              2       0.0625
- 8          0     0.5          1     0.5          1     0.5          1     0.5              3       0.0625
- 9          1     0.5          0     0.5          0     0.5          0     0.5              1       0.0625
-10          1     0.5          0     0.5          0     0.5          1     0.5              2       0.0625
-11          1     0.5          0     0.5          1     0.5          0     0.5              2       0.0625
-12          1     0.5          0     0.5          1     0.5          1     0.5              3       0.0625
-13          1     0.5          1     0.5          0     0.5          0     0.5              2       0.0625
-14          1     0.5          1     0.5          0     0.5          1     0.5              3       0.0625
-15          1     0.5          1     0.5          1     0.5          0     0.5              3       0.0625
-16          1     0.5          1     0.5          1     0.5          1     0.5              4       0.0625
-```
-]
-
----
-count: false
- 
-
-.panel1-pipeline-auto[
-
-```r
-library(dplyr)
-bernoulli_trial(prob = .5) %&gt;%
-  add_trials() %&gt;%
-  add_trials() %&gt;%
-  add_trials() %&gt;%
-  .$out %&gt;%
-  sum_across() %&gt;%
-  prod_across() %&gt;%
-* group_by(global_outcome)
-```
-]
- 
-.panel2-pipeline-auto[
-
-```
-# A tibble: 16 × 10
-# Groups:   global_outcome [5]
-   t1_outcome t1_prob t2_outcome t2_prob t3_outcome t3_prob t4_outcome t4_prob global_outcome global_probs
-        &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;          &lt;dbl&gt;        &lt;dbl&gt;
- 1          0     0.5          0     0.5          0     0.5          0     0.5              0       0.0625
- 2          0     0.5          0     0.5          0     0.5          1     0.5              1       0.0625
- 3          0     0.5          0     0.5          1     0.5          0     0.5              1       0.0625
- 4          0     0.5          0     0.5          1     0.5          1     0.5              2       0.0625
- 5          0     0.5          1     0.5          0     0.5          0     0.5              1       0.0625
- 6          0     0.5          1     0.5          0     0.5          1     0.5              2       0.0625
- 7          0     0.5          1     0.5          1     0.5          0     0.5              2       0.0625
- 8          0     0.5          1     0.5          1     0.5          1     0.5              3       0.0625
- 9          1     0.5          0     0.5          0     0.5          0     0.5              1       0.0625
-10          1     0.5          0     0.5          0     0.5          1     0.5              2       0.0625
-11          1     0.5          0     0.5          1     0.5          0     0.5              2       0.0625
-12          1     0.5          0     0.5          1     0.5          1     0.5              3       0.0625
-13          1     0.5          1     0.5          0     0.5          0     0.5              2       0.0625
-14          1     0.5          1     0.5          0     0.5          1     0.5              3       0.0625
-15          1     0.5          1     0.5          1     0.5          0     0.5              3       0.0625
-16          1     0.5          1     0.5          1     0.5          1     0.5              4       0.0625
-```
-]
-
----
-count: false
- 
-
-.panel1-pipeline-auto[
-
-```r
-library(dplyr)
-bernoulli_trial(prob = .5) %&gt;%
-  add_trials() %&gt;%
-  add_trials() %&gt;%
-  add_trials() %&gt;%
-  .$out %&gt;%
-  sum_across() %&gt;%
-  prod_across() %&gt;%
-  group_by(global_outcome) %&gt;%
-* summarize(probs = sum(global_probs))
-```
-]
- 
-.panel2-pipeline-auto[
-
-```
-# A tibble: 5 × 2
-  global_outcome  probs
-           &lt;dbl&gt;  &lt;dbl&gt;
-1              0 0.0625
-2              1 0.25  
-3              2 0.375 
-4              3 0.25  
-5              4 0.0625
-```
-]
-
-&lt;style&gt;
-.panel1-pipeline-auto {
-  color: black;
-  width: 38.6060606060606%;
-  hight: 32%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-.panel2-pipeline-auto {
-  color: black;
-  width: 59.3939393939394%;
-  hight: 32%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-.panel3-pipeline-auto {
-  color: black;
-  width: NA%;
-  hight: 33%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-&lt;/style&gt;
-
-
-
-
-
+## You can also build up binomial distributions from first principles uising bernoulli_trial() and adding trials().  
 
 
 ---
@@ -843,7 +1035,7 @@ bernoulli_trial(prob = .5) %&gt;%
 
 count: false
  
-
+## bernoulli_trial() and add_trials() usage
 .panel1-pipeline2-auto[
 
 ```r
@@ -865,49 +1057,68 @@ count: false
 ---
 count: false
  
-
+## bernoulli_trial() and add_trials() usage
 .panel1-pipeline2-auto[
 
 ```r
 bernoulli_trial(prob = .25) %&gt;%
-* add_trials(3)
+* add_trials()
 ```
 ]
  
 .panel2-pipeline2-auto[
 
 ```
-# A tibble: 16 × 8
-   t1_outcome t1_prob t2_outcome t2_prob t3_outcome t3_prob t4_outcome t4_prob
-        &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;
- 1          0    0.75          0    0.75          0    0.75          0    0.75
- 2          0    0.75          0    0.75          0    0.75          1    0.25
- 3          0    0.75          0    0.75          1    0.25          0    0.75
- 4          0    0.75          0    0.75          1    0.25          1    0.25
- 5          0    0.75          1    0.25          0    0.75          0    0.75
- 6          0    0.75          1    0.25          0    0.75          1    0.25
- 7          0    0.75          1    0.25          1    0.25          0    0.75
- 8          0    0.75          1    0.25          1    0.25          1    0.25
- 9          1    0.25          0    0.75          0    0.75          0    0.75
-10          1    0.25          0    0.75          0    0.75          1    0.25
-11          1    0.25          0    0.75          1    0.25          0    0.75
-12          1    0.25          0    0.75          1    0.25          1    0.25
-13          1    0.25          1    0.25          0    0.75          0    0.75
-14          1    0.25          1    0.25          0    0.75          1    0.25
-15          1    0.25          1    0.25          1    0.25          0    0.75
-16          1    0.25          1    0.25          1    0.25          1    0.25
+# A tibble: 4 × 4
+  t1_outcome t1_prob t2_outcome t2_prob
+       &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;
+1          0    0.75          0    0.75
+2          0    0.75          1    0.25
+3          1    0.25          0    0.75
+4          1    0.25          1    0.25
 ```
 ]
 
 ---
 count: false
  
-
+## bernoulli_trial() and add_trials() usage
 .panel1-pipeline2-auto[
 
 ```r
 bernoulli_trial(prob = .25) %&gt;%
-  add_trials(3) %&gt;%
+  add_trials() %&gt;%
+* add_trials()
+```
+]
+ 
+.panel2-pipeline2-auto[
+
+```
+# A tibble: 8 × 6
+  t1_outcome t1_prob t2_outcome t2_prob t3_outcome t3_prob
+       &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;
+1          0    0.75          0    0.75          0    0.75
+2          0    0.75          0    0.75          1    0.25
+3          0    0.75          1    0.25          0    0.75
+4          0    0.75          1    0.25          1    0.25
+5          1    0.25          0    0.75          0    0.75
+6          1    0.25          0    0.75          1    0.25
+7          1    0.25          1    0.25          0    0.75
+8          1    0.25          1    0.25          1    0.25
+```
+]
+
+---
+count: false
+ 
+## bernoulli_trial() and add_trials() usage
+.panel1-pipeline2-auto[
+
+```r
+bernoulli_trial(prob = .25) %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
 * .$out
 ```
 ]
@@ -915,78 +1126,64 @@ bernoulli_trial(prob = .25) %&gt;%
 .panel2-pipeline2-auto[
 
 ```
-# A tibble: 16 × 8
-   t1_outcome t1_prob t2_outcome t2_prob t3_outcome t3_prob t4_outcome t4_prob
-        &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;
- 1          0    0.75          0    0.75          0    0.75          0    0.75
- 2          0    0.75          0    0.75          0    0.75          1    0.25
- 3          0    0.75          0    0.75          1    0.25          0    0.75
- 4          0    0.75          0    0.75          1    0.25          1    0.25
- 5          0    0.75          1    0.25          0    0.75          0    0.75
- 6          0    0.75          1    0.25          0    0.75          1    0.25
- 7          0    0.75          1    0.25          1    0.25          0    0.75
- 8          0    0.75          1    0.25          1    0.25          1    0.25
- 9          1    0.25          0    0.75          0    0.75          0    0.75
-10          1    0.25          0    0.75          0    0.75          1    0.25
-11          1    0.25          0    0.75          1    0.25          0    0.75
-12          1    0.25          0    0.75          1    0.25          1    0.25
-13          1    0.25          1    0.25          0    0.75          0    0.75
-14          1    0.25          1    0.25          0    0.75          1    0.25
-15          1    0.25          1    0.25          1    0.25          0    0.75
-16          1    0.25          1    0.25          1    0.25          1    0.25
+# A tibble: 8 × 6
+  t1_outcome t1_prob t2_outcome t2_prob t3_outcome t3_prob
+       &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;
+1          0    0.75          0    0.75          0    0.75
+2          0    0.75          0    0.75          1    0.25
+3          0    0.75          1    0.25          0    0.75
+4          0    0.75          1    0.25          1    0.25
+5          1    0.25          0    0.75          0    0.75
+6          1    0.25          0    0.75          1    0.25
+7          1    0.25          1    0.25          0    0.75
+8          1    0.25          1    0.25          1    0.25
 ```
 ]
 
 ---
 count: false
  
-
+## bernoulli_trial() and add_trials() usage
 .panel1-pipeline2-auto[
 
 ```r
 bernoulli_trial(prob = .25) %&gt;%
-  add_trials(3) %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
   .$out %&gt;%
-* seq_across()
+* sum_across()
 ```
 ]
  
 .panel2-pipeline2-auto[
 
 ```
-# A tibble: 16 × 9
-   t1_outcome t1_prob t2_outcome t2_prob t3_outcome t3_prob t4_outcome t4_prob global_outcome
-        &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;         
- 1          0    0.75          0    0.75          0    0.75          0    0.75 0, 0, 0, 0    
- 2          0    0.75          0    0.75          0    0.75          1    0.25 0, 0, 0, 1    
- 3          0    0.75          0    0.75          1    0.25          0    0.75 0, 0, 1, 0    
- 4          0    0.75          0    0.75          1    0.25          1    0.25 0, 0, 1, 1    
- 5          0    0.75          1    0.25          0    0.75          0    0.75 0, 1, 0, 0    
- 6          0    0.75          1    0.25          0    0.75          1    0.25 0, 1, 0, 1    
- 7          0    0.75          1    0.25          1    0.25          0    0.75 0, 1, 1, 0    
- 8          0    0.75          1    0.25          1    0.25          1    0.25 0, 1, 1, 1    
- 9          1    0.25          0    0.75          0    0.75          0    0.75 1, 0, 0, 0    
-10          1    0.25          0    0.75          0    0.75          1    0.25 1, 0, 0, 1    
-11          1    0.25          0    0.75          1    0.25          0    0.75 1, 0, 1, 0    
-12          1    0.25          0    0.75          1    0.25          1    0.25 1, 0, 1, 1    
-13          1    0.25          1    0.25          0    0.75          0    0.75 1, 1, 0, 0    
-14          1    0.25          1    0.25          0    0.75          1    0.25 1, 1, 0, 1    
-15          1    0.25          1    0.25          1    0.25          0    0.75 1, 1, 1, 0    
-16          1    0.25          1    0.25          1    0.25          1    0.25 1, 1, 1, 1    
+# A tibble: 8 × 7
+  t1_outcome t1_prob t2_outcome t2_prob t3_outcome t3_prob global_outcome
+       &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;          &lt;dbl&gt;
+1          0    0.75          0    0.75          0    0.75              0
+2          0    0.75          0    0.75          1    0.25              1
+3          0    0.75          1    0.25          0    0.75              1
+4          0    0.75          1    0.25          1    0.25              2
+5          1    0.25          0    0.75          0    0.75              1
+6          1    0.25          0    0.75          1    0.25              2
+7          1    0.25          1    0.25          0    0.75              2
+8          1    0.25          1    0.25          1    0.25              3
 ```
 ]
 
 ---
 count: false
  
-
+## bernoulli_trial() and add_trials() usage
 .panel1-pipeline2-auto[
 
 ```r
 bernoulli_trial(prob = .25) %&gt;%
-  add_trials(3) %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
   .$out %&gt;%
-  seq_across() %&gt;%
+  sum_across() %&gt;%
 * prod_across()
 ```
 ]
@@ -994,39 +1191,32 @@ bernoulli_trial(prob = .25) %&gt;%
 .panel2-pipeline2-auto[
 
 ```
-# A tibble: 16 × 10
-   t1_outcome t1_prob t2_outcome t2_prob t3_outcome t3_prob t4_outcome t4_prob global_outcome global_probs
-        &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;                 &lt;dbl&gt;
- 1          0    0.75          0    0.75          0    0.75          0    0.75 0, 0, 0, 0          0.316  
- 2          0    0.75          0    0.75          0    0.75          1    0.25 0, 0, 0, 1          0.105  
- 3          0    0.75          0    0.75          1    0.25          0    0.75 0, 0, 1, 0          0.105  
- 4          0    0.75          0    0.75          1    0.25          1    0.25 0, 0, 1, 1          0.0352 
- 5          0    0.75          1    0.25          0    0.75          0    0.75 0, 1, 0, 0          0.105  
- 6          0    0.75          1    0.25          0    0.75          1    0.25 0, 1, 0, 1          0.0352 
- 7          0    0.75          1    0.25          1    0.25          0    0.75 0, 1, 1, 0          0.0352 
- 8          0    0.75          1    0.25          1    0.25          1    0.25 0, 1, 1, 1          0.0117 
- 9          1    0.25          0    0.75          0    0.75          0    0.75 1, 0, 0, 0          0.105  
-10          1    0.25          0    0.75          0    0.75          1    0.25 1, 0, 0, 1          0.0352 
-11          1    0.25          0    0.75          1    0.25          0    0.75 1, 0, 1, 0          0.0352 
-12          1    0.25          0    0.75          1    0.25          1    0.25 1, 0, 1, 1          0.0117 
-13          1    0.25          1    0.25          0    0.75          0    0.75 1, 1, 0, 0          0.0352 
-14          1    0.25          1    0.25          0    0.75          1    0.25 1, 1, 0, 1          0.0117 
-15          1    0.25          1    0.25          1    0.25          0    0.75 1, 1, 1, 0          0.0117 
-16          1    0.25          1    0.25          1    0.25          1    0.25 1, 1, 1, 1          0.00391
+# A tibble: 8 × 8
+  t1_outcome t1_prob t2_outcome t2_prob t3_outcome t3_prob global_outcome global_probs
+       &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;          &lt;dbl&gt;        &lt;dbl&gt;
+1          0    0.75          0    0.75          0    0.75              0       0.422 
+2          0    0.75          0    0.75          1    0.25              1       0.141 
+3          0    0.75          1    0.25          0    0.75              1       0.141 
+4          0    0.75          1    0.25          1    0.25              2       0.0469
+5          1    0.25          0    0.75          0    0.75              1       0.141 
+6          1    0.25          0    0.75          1    0.25              2       0.0469
+7          1    0.25          1    0.25          0    0.75              2       0.0469
+8          1    0.25          1    0.25          1    0.25              3       0.0156
 ```
 ]
 
 ---
 count: false
  
-
+## bernoulli_trial() and add_trials() usage
 .panel1-pipeline2-auto[
 
 ```r
 bernoulli_trial(prob = .25) %&gt;%
-  add_trials(3) %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
   .$out %&gt;%
-  seq_across() %&gt;%
+  sum_across() %&gt;%
   prod_across() %&gt;%
 * group_by(global_outcome)
 ```
@@ -1035,75 +1225,105 @@ bernoulli_trial(prob = .25) %&gt;%
 .panel2-pipeline2-auto[
 
 ```
-# A tibble: 16 × 10
-# Groups:   global_outcome [16]
-   t1_outcome t1_prob t2_outcome t2_prob t3_outcome t3_prob t4_outcome t4_prob global_outcome global_probs
-        &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;                 &lt;dbl&gt;
- 1          0    0.75          0    0.75          0    0.75          0    0.75 0, 0, 0, 0          0.316  
- 2          0    0.75          0    0.75          0    0.75          1    0.25 0, 0, 0, 1          0.105  
- 3          0    0.75          0    0.75          1    0.25          0    0.75 0, 0, 1, 0          0.105  
- 4          0    0.75          0    0.75          1    0.25          1    0.25 0, 0, 1, 1          0.0352 
- 5          0    0.75          1    0.25          0    0.75          0    0.75 0, 1, 0, 0          0.105  
- 6          0    0.75          1    0.25          0    0.75          1    0.25 0, 1, 0, 1          0.0352 
- 7          0    0.75          1    0.25          1    0.25          0    0.75 0, 1, 1, 0          0.0352 
- 8          0    0.75          1    0.25          1    0.25          1    0.25 0, 1, 1, 1          0.0117 
- 9          1    0.25          0    0.75          0    0.75          0    0.75 1, 0, 0, 0          0.105  
-10          1    0.25          0    0.75          0    0.75          1    0.25 1, 0, 0, 1          0.0352 
-11          1    0.25          0    0.75          1    0.25          0    0.75 1, 0, 1, 0          0.0352 
-12          1    0.25          0    0.75          1    0.25          1    0.25 1, 0, 1, 1          0.0117 
-13          1    0.25          1    0.25          0    0.75          0    0.75 1, 1, 0, 0          0.0352 
-14          1    0.25          1    0.25          0    0.75          1    0.25 1, 1, 0, 1          0.0117 
-15          1    0.25          1    0.25          1    0.25          0    0.75 1, 1, 1, 0          0.0117 
-16          1    0.25          1    0.25          1    0.25          1    0.25 1, 1, 1, 1          0.00391
+# A tibble: 8 × 8
+# Groups:   global_outcome [4]
+  t1_outcome t1_prob t2_outcome t2_prob t3_outcome t3_prob global_outcome global_probs
+       &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;          &lt;dbl&gt;        &lt;dbl&gt;
+1          0    0.75          0    0.75          0    0.75              0       0.422 
+2          0    0.75          0    0.75          1    0.25              1       0.141 
+3          0    0.75          1    0.25          0    0.75              1       0.141 
+4          0    0.75          1    0.25          1    0.25              2       0.0469
+5          1    0.25          0    0.75          0    0.75              1       0.141 
+6          1    0.25          0    0.75          1    0.25              2       0.0469
+7          1    0.25          1    0.25          0    0.75              2       0.0469
+8          1    0.25          1    0.25          1    0.25              3       0.0156
 ```
 ]
 
 ---
 count: false
  
-
+## bernoulli_trial() and add_trials() usage
 .panel1-pipeline2-auto[
 
 ```r
 bernoulli_trial(prob = .25) %&gt;%
-  add_trials(3) %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
   .$out %&gt;%
-  seq_across() %&gt;%
+  sum_across() %&gt;%
   prod_across() %&gt;%
   group_by(global_outcome) %&gt;%
-* summarize(probs = sum(global_probs))
+* summarize(probs =
+*             sum(global_probs))
 ```
 ]
  
 .panel2-pipeline2-auto[
 
 ```
-# A tibble: 16 × 2
-   global_outcome   probs
-   &lt;chr&gt;            &lt;dbl&gt;
- 1 0, 0, 0, 0     0.316  
- 2 0, 0, 0, 1     0.105  
- 3 0, 0, 1, 0     0.105  
- 4 0, 0, 1, 1     0.0352 
- 5 0, 1, 0, 0     0.105  
- 6 0, 1, 0, 1     0.0352 
- 7 0, 1, 1, 0     0.0352 
- 8 0, 1, 1, 1     0.0117 
- 9 1, 0, 0, 0     0.105  
-10 1, 0, 0, 1     0.0352 
-11 1, 0, 1, 0     0.0352 
-12 1, 0, 1, 1     0.0117 
-13 1, 1, 0, 0     0.0352 
-14 1, 1, 0, 1     0.0117 
-15 1, 1, 1, 0     0.0117 
-16 1, 1, 1, 1     0.00391
+# A tibble: 4 × 2
+  global_outcome  probs
+           &lt;dbl&gt;  &lt;dbl&gt;
+1              0 0.422 
+2              1 0.422 
+3              2 0.141 
+4              3 0.0156
+```
+]
+
+---
+count: false
+ 
+## bernoulli_trial() and add_trials() usage
+.panel1-pipeline2-auto[
+
+```r
+bernoulli_trial(prob = .25) %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  .$out %&gt;%
+  sum_across() %&gt;%
+  prod_across() %&gt;%
+  group_by(global_outcome) %&gt;%
+  summarize(probs =
+              sum(global_probs))
+
+# check consistency with
+# our automated computation
+*tidy_dbinom(
+* single_trial_pro = .25,
+* num_trials = 3)
+```
+]
+ 
+.panel2-pipeline2-auto[
+
+```
+# A tibble: 4 × 2
+  global_outcome  probs
+           &lt;dbl&gt;  &lt;dbl&gt;
+1              0 0.422 
+2              1 0.422 
+3              2 0.141 
+4              3 0.0156
+```
+
+```
+# A tibble: 4 × 4
+  num_successes probability single_trial_prob num_trials
+          &lt;int&gt;       &lt;dbl&gt;             &lt;dbl&gt;      &lt;dbl&gt;
+1             0      0.422               0.25          3
+2             1      0.422               0.25          3
+3             2      0.141               0.25          3
+4             3      0.0156              0.25          3
 ```
 ]
 
 &lt;style&gt;
 .panel1-pipeline2-auto {
   color: black;
-  width: 38.6060606060606%;
+  width: 28%;
   hight: 32%;
   float: left;
   padding-left: 1%;
@@ -1111,7 +1331,7 @@ bernoulli_trial(prob = .25) %&gt;%
 }
 .panel2-pipeline2-auto {
   color: black;
-  width: 59.3939393939394%;
+  width: 70%;
   hight: 32%;
   float: left;
   padding-left: 1%;
