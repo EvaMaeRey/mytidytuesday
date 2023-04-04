@@ -540,7 +540,30 @@ tidy_dbinom(single_trial_prob = 1/6, num_trials = 6) %&gt;%  # from ma206distrib
   ggplot() +
   aes(x = num_successes,
       y = probability) +
-  geom_lollipop() -&gt;
+  geom_lollipop() +
+* scale_x_counting()
+```
+]
+ 
+.panel2-tidy_dbinom_plot-auto[
+![](ma206dist_and_equa_files/figure-html/tidy_dbinom_plot_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+### geom_lollipop() and scale_x_counting() usage
+.panel1-tidy_dbinom_plot-auto[
+
+```r
+library(ma206distributions)
+library(tidyverse)
+tidy_dbinom(single_trial_prob = 1/6, num_trials = 6) %&gt;%  # from ma206distributions
+  ggplot() +
+  aes(x = num_successes,
+      y = probability) +
+  geom_lollipop() +
+  scale_x_counting() -&gt;
 *die_roll_viz
 ```
 ]
@@ -562,7 +585,8 @@ tidy_dbinom(single_trial_prob = 1/6, num_trials = 6) %&gt;%  # from ma206distrib
   ggplot() +
   aes(x = num_successes,
       y = probability) +
-  geom_lollipop() -&gt;
+  geom_lollipop() +
+  scale_x_counting() -&gt;
 die_roll_viz
 
 *tidy_dbinom(single_trial_prob = .5, num_trials = 10)   # from ma206distributions
@@ -602,38 +626,12 @@ tidy_dbinom(single_trial_prob = 1/6, num_trials = 6) %&gt;%  # from ma206distrib
   ggplot() +
   aes(x = num_successes,
       y = probability) +
-  geom_lollipop() -&gt;
+  geom_lollipop() +
+  scale_x_counting() -&gt;
 die_roll_viz
 
 tidy_dbinom(single_trial_prob = .5, num_trials = 10) %&gt;%  # from ma206distributions
 * ggplot()
-```
-]
- 
-.panel2-tidy_dbinom_plot-auto[
-![](ma206dist_and_equa_files/figure-html/tidy_dbinom_plot_auto_09_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-### geom_lollipop() and scale_x_counting() usage
-.panel1-tidy_dbinom_plot-auto[
-
-```r
-library(ma206distributions)
-library(tidyverse)
-tidy_dbinom(single_trial_prob = 1/6, num_trials = 6) %&gt;%  # from ma206distributions
-  ggplot() +
-  aes(x = num_successes,
-      y = probability) +
-  geom_lollipop() -&gt;
-die_roll_viz
-
-tidy_dbinom(single_trial_prob = .5, num_trials = 10) %&gt;%  # from ma206distributions
-  ggplot() +
-* aes(x = num_successes,
-*     y = probability)
 ```
 ]
  
@@ -654,14 +652,14 @@ tidy_dbinom(single_trial_prob = 1/6, num_trials = 6) %&gt;%  # from ma206distrib
   ggplot() +
   aes(x = num_successes,
       y = probability) +
-  geom_lollipop() -&gt;
+  geom_lollipop() +
+  scale_x_counting() -&gt;
 die_roll_viz
 
 tidy_dbinom(single_trial_prob = .5, num_trials = 10) %&gt;%  # from ma206distributions
   ggplot() +
-  aes(x = num_successes,
-      y = probability) +
-* geom_lollipop()
+* aes(x = num_successes,
+*     y = probability)
 ```
 ]
  
@@ -682,14 +680,75 @@ tidy_dbinom(single_trial_prob = 1/6, num_trials = 6) %&gt;%  # from ma206distrib
   ggplot() +
   aes(x = num_successes,
       y = probability) +
-  geom_lollipop() -&gt;
+  geom_lollipop() +
+  scale_x_counting() -&gt;
 die_roll_viz
 
 tidy_dbinom(single_trial_prob = .5, num_trials = 10) %&gt;%  # from ma206distributions
   ggplot() +
   aes(x = num_successes,
       y = probability) +
-  geom_lollipop() -&gt;
+* geom_lollipop()
+```
+]
+ 
+.panel2-tidy_dbinom_plot-auto[
+![](ma206dist_and_equa_files/figure-html/tidy_dbinom_plot_auto_12_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+### geom_lollipop() and scale_x_counting() usage
+.panel1-tidy_dbinom_plot-auto[
+
+```r
+library(ma206distributions)
+library(tidyverse)
+tidy_dbinom(single_trial_prob = 1/6, num_trials = 6) %&gt;%  # from ma206distributions
+  ggplot() +
+  aes(x = num_successes,
+      y = probability) +
+  geom_lollipop() +
+  scale_x_counting() -&gt;
+die_roll_viz
+
+tidy_dbinom(single_trial_prob = .5, num_trials = 10) %&gt;%  # from ma206distributions
+  ggplot() +
+  aes(x = num_successes,
+      y = probability) +
+  geom_lollipop() +
+* scale_x_counting()
+```
+]
+ 
+.panel2-tidy_dbinom_plot-auto[
+![](ma206dist_and_equa_files/figure-html/tidy_dbinom_plot_auto_13_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+### geom_lollipop() and scale_x_counting() usage
+.panel1-tidy_dbinom_plot-auto[
+
+```r
+library(ma206distributions)
+library(tidyverse)
+tidy_dbinom(single_trial_prob = 1/6, num_trials = 6) %&gt;%  # from ma206distributions
+  ggplot() +
+  aes(x = num_successes,
+      y = probability) +
+  geom_lollipop() +
+  scale_x_counting() -&gt;
+die_roll_viz
+
+tidy_dbinom(single_trial_prob = .5, num_trials = 10) %&gt;%  # from ma206distributions
+  ggplot() +
+  aes(x = num_successes,
+      y = probability) +
+  geom_lollipop() +
+  scale_x_counting() -&gt;
 *coin_flip_viz
 ```
 ]
@@ -711,14 +770,16 @@ tidy_dbinom(single_trial_prob = 1/6, num_trials = 6) %&gt;%  # from ma206distrib
   ggplot() +
   aes(x = num_successes,
       y = probability) +
-  geom_lollipop() -&gt;
+  geom_lollipop() +
+  scale_x_counting() -&gt;
 die_roll_viz
 
 tidy_dbinom(single_trial_prob = .5, num_trials = 10) %&gt;%  # from ma206distributions
   ggplot() +
   aes(x = num_successes,
       y = probability) +
-  geom_lollipop() -&gt;
+  geom_lollipop() +
+  scale_x_counting() -&gt;
 coin_flip_viz
 ```
 ]
@@ -1019,7 +1080,152 @@ coin_flip_viz_w_stamp
 ---
 class: inverse, center, middle
 
-# To be added:  layer stamp_eq_binom()
+# stamp_eq_binomial()
+
+## The function stamp_eq_binomial() tells you how the probability for each number of total successes is computed.
+
+---
+
+count: false
+ 
+
+.panel1-equations-auto[
+
+```r
+*library(ma206equations)
+```
+]
+ 
+.panel2-equations-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-equations-auto[
+
+```r
+library(ma206equations)
+*library(ma206distributions)
+```
+]
+ 
+.panel2-equations-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-equations-auto[
+
+```r
+library(ma206equations)
+library(ma206distributions)
+*ggplot()
+```
+]
+ 
+.panel2-equations-auto[
+![](ma206dist_and_equa_files/figure-html/equations_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-equations-auto[
+
+```r
+library(ma206equations)
+library(ma206distributions)
+ggplot() +
+* stamp_dbinom(single_trial_prob = .5,
+*              num_trials = 5)
+```
+]
+ 
+.panel2-equations-auto[
+![](ma206dist_and_equa_files/figure-html/equations_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-equations-auto[
+
+```r
+library(ma206equations)
+library(ma206distributions)
+ggplot() +
+  stamp_dbinom(single_trial_prob = .5,
+               num_trials = 5) +
+# binomial computation
+* stamp_eq_binomial(x = 4, y = .27, size = 7)
+```
+]
+ 
+.panel2-equations-auto[
+![](ma206dist_and_equa_files/figure-html/equations_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-equations-auto[
+
+```r
+library(ma206equations)
+library(ma206distributions)
+ggplot() +
+  stamp_dbinom(single_trial_prob = .5,
+               num_trials = 5) +
+# binomial computation
+  stamp_eq_binomial(x = 4, y = .27, size = 7) +
+# reminder of computing choose
+* stamp_eq_choose(x = 4.5, y = .21)
+```
+]
+ 
+.panel2-equations-auto[
+![](ma206dist_and_equa_files/figure-html/equations_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-equations-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-equations-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-equations-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
 
 
 ---

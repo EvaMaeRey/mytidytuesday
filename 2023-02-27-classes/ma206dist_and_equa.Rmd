@@ -327,14 +327,16 @@ tidy_dbinom(single_trial_prob = 1/6, num_trials = 6) %>% # from ma206distributio
   ggplot() + 
   aes(x = num_successes, 
       y = probability) + 
-  geom_lollipop() ->
+  geom_lollipop() +
+  scale_x_counting() ->
 die_roll_viz
 
 tidy_dbinom(single_trial_prob = .5, num_trials = 10) %>% # from ma206distributions
   ggplot() + 
   aes(x = num_successes, 
       y = probability) + 
-  geom_lollipop() ->
+  geom_lollipop() +
+  scale_x_counting() ->
 coin_flip_viz
 
 ```
@@ -372,7 +374,25 @@ coin_flip_viz_w_stamp
 ---
 class: inverse, center, middle
 
-# To be added:  layer stamp_eq_binom()
+# stamp_eq_binomial()
+
+## The function stamp_eq_binomial() tells you how the probability for each number of total successes is computed.
+
+---
+
+`r flipbookr::chunk_reveal("equations")`
+
+```{r equations, include = F}
+library(ma206equations)
+library(ma206distributions)
+ggplot() + 
+  stamp_dbinom(single_trial_prob = .5, 
+               num_trials = 5) + 
+  # binomial computation
+  stamp_eq_binomial(x = 4, y = .27, size = 7) + 
+  # reminder of computing choose
+  stamp_eq_choose(x = 4.5, y = .21)
+```
 
 
 ---
