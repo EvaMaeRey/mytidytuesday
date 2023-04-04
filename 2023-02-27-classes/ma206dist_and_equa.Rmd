@@ -355,17 +355,17 @@ class: inverse, center, middle
 
 ```{r tidy_dbinom_stamp, include = F}
 ggplot() + 
+  labs(title = "Probability of rolling 0,1,2,...10 sixes\nwhen rolling a fair die 10 times") +
   stamp_dbinom(single_trial_prob = 1/6, 
                num_trials = 10) +    
-  scale_x_counting() +                                        
-  labs(title = "Probability of rolling 0,1,2,...10 sixes when rolling a fair die 10 times") ->
+  scale_x_counting() ->                                     
 die_roll_viz_w_stamp
 
 
 ggplot() + 
+  labs(title = "Probability of flipping 0,1,2,3,4 or 5 heads\n when flipping a coin five times") +
   stamp_dbinom(single_trial_prob = .5, 
-               num_trials = 5) +    
-  labs(title = "Probability of flipping 0,1,2,3,4 or 5 heads\n when flipping a coin five times") ->
+               num_trials = 5) ->   
 coin_flip_viz_w_stamp
 
 ```
@@ -393,7 +393,9 @@ ggplot() +
   # reminder of computing choose
   stamp_eq_choose(x = 4.5, y = .21)
 ```
+---
 
+# To add, equations outside of context plot context.
 
 ---
 class: inverse, center, middle
