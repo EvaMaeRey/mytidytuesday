@@ -51,6 +51,16 @@ class: inverse, middle, center
 ---
 class: inverse, middle, center
 #   The goal of this project is to provide ready-to-use functions that will make it easier to engage computationally with these distributions.
+
+---
+class: inverse, middle, center
+#   In what follows, we highlight and demo some of the functionality, focusing on the binomial distribution.
+
+--
+
+# Using the binomial distribution, one can answer questions about the probability of seeing a specific number of successes out of a total number of possible successes when observing bernoulli (two outcomes, independent) trials.
+
+
 ---
 class: inverse, middle, center
 #   Your feedback is on this work is greatly appreciated.
@@ -284,6 +294,11 @@ class: inverse, center, middle
 
 ## The function tidy_dbinom() returns a dataframe that pairs outcomes and probabilities, using just two inputs. 
 
+--
+
+View source code [here](https://github.com/EvaMaeRey/ma206distributions/blob/main/R/tidy_dbinom.R). 
+
+
 
 ---
 
@@ -294,13 +309,13 @@ library(tidyverse)
 library(ma206distributions)
 library(ma206equations)
 
-tidy_dbinom(single_trial_prob = 1/6, 
-            num_trials = 8) ->
-eight_die_rolls
-
 tidy_dbinom(single_trial_prob = .5, 
             num_trials = 10) ->
 ten_coin_flips
+
+tidy_dbinom(single_trial_prob = 1/6, 
+            num_trials = 6) ->
+six_die_rolls
 
 tidy_dbinom(single_trial_prob = 1/38, 
             num_trials = 3) ->
@@ -311,10 +326,14 @@ three_roulette_spins
 ---
 class: inverse, center, middle
 
-# geom_lollipop() and scale_x_counting() 
+# geom_lollipop(), scale_x_counting(), geom_fulcrum()
 
-## Visualization functions geom_lollipop() and scale_x_counting() help concisely visualize discrete probability data frames like that produced with tidy_dbinom()  
+## The dataframe that tidy_dbinom() creates can easily be fed into the popular ggplot2 visualization system.  Visualization functions geom_lollipop() and scale_x_counting() help concisely visualize discrete probability visualizations. geom_fulcrum() marks the balancing point of the data - which is the expected value.  
 
+
+--
+
+View source code for geom_fulcrum() [here](https://github.com/EvaMaeRey/ma206distributions/blob/main/R/geom_fulcrum.R). 
 
 ---
 
@@ -323,21 +342,38 @@ class: inverse, center, middle
 ```{r tidy_dbinom_plot, include = F}
 library(ma206distributions)
 library(tidyverse)
-tidy_dbinom(single_trial_prob = 1/6, num_trials = 6) %>% # from ma206distributions
+
+tidy_dbinom(single_trial_prob = .5, 
+            num_trials = 10) %>% 
   ggplot() + 
+  labs(title = "Probability of flipping 0 head, 1 head, 2 heads, 3 heads, 4 heads or 5 heads\n when flipping a coin five times") +
   aes(x = num_successes, 
       y = probability) + 
   geom_lollipop() +
-  scale_x_counting() ->
+  scale_x_counting() + 
+  geom_fulcrum(aes(weight = probability),
+               size = 8,
+               color = "red") ->
+coin_flip_viz
+
+
+
+tidy_dbinom(single_trial_prob = 1/6, 
+            num_trials = 8) %>% 
+  ggplot() + 
+  labs(title = "Probability of rolling 0 sixes, 1 six, 2 sixes ... 8 sixes \nwhen rolling a fair die 8 times") +
+  aes(x = num_successes, 
+      y = probability) + 
+  geom_lollipop() +
+  scale_x_counting() + 
+  geom_fulcrum(aes(weight = probability),
+               size = 8,
+               color = "red")->
 die_roll_viz
 
-tidy_dbinom(single_trial_prob = .5, num_trials = 10) %>% # from ma206distributions
-  ggplot() + 
-  aes(x = num_successes, 
-      y = probability) + 
-  geom_lollipop() +
-  scale_x_counting() ->
-coin_flip_viz
+
+
+
 
 ```
 
@@ -355,6 +391,12 @@ class: inverse, center, middle
 
 ```{r tidy_dbinom_stamp, include = F}
 ggplot() + 
+  labs(title = "Probability of flipping 0,1,2,3,4 or 5 heads\n when flipping a coin five times") +
+  stamp_dbinom(single_trial_prob = .5, 
+               num_trials = 5) ->   
+coin_flip_viz_w_stamp
+
+ggplot() + 
   labs(title = "Probability of rolling 0,1,2,...10 sixes\nwhen rolling a fair die 10 times") +
   stamp_dbinom(single_trial_prob = 1/6, 
                num_trials = 10) +    
@@ -362,11 +404,7 @@ ggplot() +
 die_roll_viz_w_stamp
 
 
-ggplot() + 
-  labs(title = "Probability of flipping 0,1,2,3,4 or 5 heads\n when flipping a coin five times") +
-  stamp_dbinom(single_trial_prob = .5, 
-               num_trials = 5) ->   
-coin_flip_viz_w_stamp
+
 
 ```
 
