@@ -1,0 +1,155 @@
+---
+title: "Untitled"
+author: "Evangeline Reynolds"
+date: "4/17/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+#' compute_panel_circle_pack
+#'
+#' @param data
+#' @param scales
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' library(ggplot2)
+#' library(magrittr)
+#' library(dplyr)
+#' gapminder::gapminder %>%
+#' filter(continent == "Americas") %>%
+#'   filter(year == 2002) %>%
+#'   # input must have required aesthetic inputs as columns
+#'   rename(area = pop) %>%
+#'   compute_panel_circle_pack() %>%
+#'   head()
+#'
+#'   gapminder::gapminder %>%
+#' filter(continent == "Americas") %>%
+#'  filter(year == 2002) %>%
+#'  # input must have required aesthetic inputs as columns
+#'  rename(area = pop) %>%
+#'  compute_panel_circle_pack() %>%
+#'  ggplot() +
+#'  aes(x = x, y = y, fill = country) +
+#'  geom_polygon()
+compute_panel_circle_pack_collapse <- function(data, scales, fun = sum){
+
+
+  if(is.null(data$area)){
+
+    data %>%
+      mutate(area = 1) ->
+      data1
+
+  }
+
+  data1 %>%
+    group_by(linetype, alpha, fill) %>%
+    summarize(area = fun(area)) %>% 
+    ungroup() %>% 
+    mutate(id = row_number()) ->
+  summarized
+  
+  summarized %>% 
+    pull(area) %>%
+    packcircles::circleProgressiveLayout(
+      sizetype = 'area') %>%
+    packcircles::circleLayoutVertices(npoints = 300) %>%
+    left_join(summarized)
+
+}
+
+library(tidyverse)
+tidytitanic::tidy_titanic %>%
+  rename(linetype = sex, alpha = age, fill = survived) %>% 
+  compute_panel_circle_pack_collapse()
+```
+
+```{r}
+StatCirclepackcollapse <- ggplot2::ggproto(`_class` = "StatCirclepackcollapse",
+                                  `_inherit` = ggplot2::Stat,
+                                  required_aes = c("linetype"),
+                                  compute_panel = compute_panel_circle_pack_collapse,
+                                  # setup_data = my_setup_data,
+                                  default_aes = ggplot2::aes(group = after_stat(id))
+                                  )
+```
+
+```{r}
+#' Title
+#'
+#' @param mapping
+#' @param data
+#' @param position
+#' @param na.rm
+#' @param show.legend
+#' @param inherit.aes
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' library(ggplot2)
+#' library(magrittr)
+#' library(dplyr)
+#' gapminder::gapminder %>%
+#' filter(year == 2002) %>%
+#'   ggplot() +
+#'   aes(id = continent) +
+#'   geom_polygon_circlepack_collapse(alpha = .5, size = .002)
+#'
+#' last_plot() +
+#'   aes(fill = continent)
+#'
+#' last_plot() +
+#'   aes(area = pop)
+#'
+#' last_plot() +
+#'   aes(color = continent) +
+#'   facet_wrap(facets = vars(continent))
+geom_polygon_circlepack_collapse <- function(mapping = NULL, data = NULL,
+                           position = "identity", na.rm = FALSE,
+                           show.legend = NA,
+                           inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatCirclepackcollapse, # proto object from Step 2
+    geom = ggplot2::GeomPolygon, # inherit other behavior
+    data = data,
+    mapping = mapping,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+
+tidytitanic::tidy_titanic %>%
+  ggplot() +
+  aes(linetype = sex, alpha = age, fill = survived) +
+  geom_polygon_circlepack_collapse(alpha = .5, size = .002)
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
