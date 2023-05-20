@@ -1,0 +1,79 @@
+---
+title: "Risk Narratives"
+author: "Evangeline Reynolds"
+date: "5/3/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+library(ggplot2)
+data = tidy_titanic 
+outcome = "survived"
+exposure0 = "all"
+exposure1 = "sex"
+exposure2 = "class"
+reference_cat2 = "1st"
+
+# count
+data %>% 
+  ggplot()->
+plot
+
+plot +
+  aes(x = exposure0) +
+  geom_bar() + 
+  ggdirect::geom_text_count() 
+
+data %>% 
+  ggplot() +
+  geom_bar() + 
+  aes(y = get(outcome)) + 
+  aes(fill = get(outcome)) + 
+  scale_y_discrete()
+
+data %>% 
+  ggplot() +
+  geom_bar(position = "fill") + 
+  aes(x = "all passengers") + 
+  aes(fill = get(outcome))
+
+plot +
+  aes(x = exposure0) +
+  geom_bar() + 
+  ggdirect::geom_text_count() 
+```
+
+```{r}
+last_plot() + 
+  aes(x = get(exposure1))
+```
+
+```{r}
+plot + 
+  geom_bar(position = "fill") + 
+  aes(x = get(exposure1)) +
+  aes(fill = get(outcome))
+
+
+
+```
+
+```{r}
+plot + 
+  geom_bar(position = "fill") + 
+  aes(fill = get(exposure))
+
+
+```
+
+

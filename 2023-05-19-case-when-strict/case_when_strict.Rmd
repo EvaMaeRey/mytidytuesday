@@ -1,0 +1,173 @@
+---
+title: "Strict case_when"
+author: "Evangeline Reynolds"
+date: "5/19/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(tidytitanic)
+```
+
+
+```{r}
+passengers %>% as.tibble() -> passengers
+
+passengers %>% 
+  ggplot() + 
+  aes(x = age) +
+  geom_histogram()
+
+
+passengers %>% 
+  ggplot() + 
+  aes(x = age) + 
+  aes(y = survived) + 
+  geom_jitter(width = 0 )
+
+passengers %>% 
+  mutate(adult = case_when(age>=18 ~ TRUE,
+                           age<18 ~ FALSE)) %>% 
+  count(adult)
+
+
+passengers %>% 
+  mutate(adult = case_when(age>=18 ~ TRUE,
+                           age<18 ~ FALSE,
+                           TRUE ~ NA)) %>% 
+  count(adult)
+
+
+# When the data defies our expectations
+# Suppose we believe that adulthood ends at 49
+passengers %>% 
+  mutate(adult = case_when(age > 18 & age < 70 ~ TRUE,
+                           age < 18 ~ FALSE,
+                           is.na(NA) ~ NA)) %>% 
+  count(adult)
+
+
+
+
+passengers %>%
+  mutate(adult = case_when(age >= 18 & age < 70 ~ "adult",
+                           age %in% 0:17 ~ "child",
+                           is.na(age) ~ NA,
+                           TRUE ~ "Throw an error, unanticipated case"))
+
+# mixing variable types does not work
+passengers %>%
+  mutate(adult = case_when(age > 18 & age < 70 ~ "adult",
+                           age < 18 ~ "child",
+                           is.na(age) ~ NA,
+                           .default = paste("Warning! Unanticipated case detected: ", age))) %>% 
+  head()
+
+
+ifelse(1, "yes", warning())
+ifelse(0, "yes", warning("hello"))
+# ifelse(0, "yes", errorCondition(message = "hi", ))
+
+
+passengers %>%
+  mutate(adult = case_when(age > 18 & age < 70 ~ "adult",
+                           age < 18 ~ "child",
+                           is.na(age) ~ NA,
+                           TRUE ~"Warn!, unanticipated case"))
+
+# all values must be explicitly defined (NA will automatically return na unless specified)
+strict_recode <- function(var, ...){
+  
+  
+  case_when(...,  is.na({{var}}) ~ NA,
+            .default = paste0("Warning! Unanticipated value in '", deparse(substitute(var)), "': ",
+                             {{var}})
+            )
+  
+}
+
+
+check_strict_recode(data, var){
+
+
+}
+
+
+
+passengers %>%
+  mutate(adult = strict_recode(age >= 18 & age < 70 ~ "adult",
+                           age < 18 ~ "child",
+                           var = age)) ->
+cleaned_data
+
+check_for_unanticipated_cats <- function(data){
+
+data %>% 
+  as.matrix() %>% 
+  as.vector() ->
+all_values
+
+all_values %>%  
+  str_detect("Unanticipated value") -> 
+vector_true
+
+all_values[vector_true] %>% 
+  tibble(message  = . ) %>% 
+  count(message) %>% 
+  filter(!is.na(message)) ->
+messages_summary
+
+if(nrow(messages_summary) == 0){
+  
+  "No unanticipated value messages detected"
+  
+}else{messages_summary}
+
+}
+
+check_newvar_cats <- function(data, newvar, str = unanticipated){
+  
+  data %>% 
+    select({{var}}) %>% 
+    check_for_unanticipated_cats() ->
+  check_results  
+    
+    if(check_results == "No unanticipated value messages detected"){
+      message("No unanticipated values detects")
+      data
+      }else{
+      
+      message("Several unanticipated categories detected")
+      check_results
+    }
+  
+}
+
+check_for_unanticipated_cats(data = cleaned_data)
+
+
+passengers %>%
+  mutate(adult = case_when_strict(age >= 18 ~ "adult",
+                           age < 18 ~ "child",
+                           is.na(age) ~ NA,
+                           var = age)) ->
+cleaned_data
+
+
+check_for_unanticipated_cats(data = cleaned_data)
+
+
+passengers %>%
+  mutate(adult = (age > 18 ~ "adult",
+                           age < 18 ~ "child",
+                           is.na(age) ~ NA,
+                           var = age)) 
+  
+  
+
+```
+
+
+

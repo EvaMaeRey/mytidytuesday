@@ -1,0 +1,112 @@
+---
+title: "r6"
+author: "Evangeline Reynolds"
+date: "2/27/2023"
+output: html_document
+---
+
+
+```{r newclass}
+library(R6)
+Fibonnacci <- R6Class("Fibonnacci",
+                       public = list(
+                         
+                         # objects
+                         init = c(0, 1),
+                         last = 1,
+                         current = 1,
+                         rows = NULL,
+
+                         # functions
+                         fib_next = function(rows = NULL){ # a method
+                           
+                           x <- self$last
+                           y <- self$current
+                           
+                           self$last <- y
+                           self$current <- x + y
+                           
+                           if(!rlang::quo_is_null(rows)){self$rows <- enquo(rows)}
+                           
+                           invisible(self)          #returns
+                           
+                                     },
+                         
+                         fib_init = function(x1, x2){
+                           
+                           self$init <- c(x1, x2)
+                           self$last <- x2
+                           self$current <- x1 + x2
+                           invisible(self)            #returns
+                           
+                         },
+                         print = function() {  # print method; default is to print everything
+                           
+                           cat(self$current)
+                           
+                         }
+                       )
+                      
+                  
+)
+```
+
+
+
+```{r}
+library(magrittr)
+my_fib <- Fibonnacci$new()
+my_fib %>% class()
+my_fib %>% str()
+my_fib$fib_next()
+my_fib$fib_next() 
+my_fib$fib_next() 
+my_fib$fib_next() 
+my_fib$fib_next() 
+my_fib$fib_next() 
+my_fib$fib_next() 
+my_fib$fib_init(5,4) 
+my_fib$fib_next() 
+my_fib$fib_next() 
+my_fib$fib_next() 
+my_fib$fib_next() 
+
+my_fib$current
+```
+
+
+
+```{r wrapandpipe}
+## wrap and pipe
+fibi_init <- function(x1 = 0, x2 = 1){
+  
+  my_fib <- Fibonnacci$new()
+  
+  my_fib$fib_init(x1,x2)
+  
+  my_fib
+  
+}
+
+fibi_advance <- function(my_fib){
+  
+  my_fib <- my_fib
+  
+  my_fib$fib_next()
+  
+  my_fib
+  
+}
+```
+
+
+```{r}
+fibi_init() %>% 
+  fibi_advance()  %>% 
+  fibi_advance()  %>% 
+  fibi_advance()  %>% 
+  fibi_advance()  %>% 
+  fibi_advance()  %>% 
+  fibi_advance()
+
+```

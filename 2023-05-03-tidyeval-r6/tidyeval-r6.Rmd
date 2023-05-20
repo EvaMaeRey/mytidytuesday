@@ -1,0 +1,210 @@
+---
+title: "tidyeval r6"
+author: "Evangeline Reynolds"
+date: "5/3/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+library(rlang)
+library(R6)
+
+MyClass <- R6Class("MyClass",
+  public = list(
+    data = NULL,
+    set_data = function(value) {
+      self$data <- value
+    },
+    get_data = function() {
+      self$data
+    },
+    
+    x = NULL,
+    set_x = function(value) {
+      self$x <- enquo(value)
+    },
+    get_x = function() {
+      eval_tidy(self$x, data = self$get_data())
+    },
+    update_data = function(){
+      
+      dplyr::count(self$data, .data$x)
+      
+    }
+
+  )
+)
+```
+
+In this example, we define an R6 class called MyClass. This class has two public variables x and data and their respective set and get methods.
+
+In the set_x method, we use enquo() from the rlang package to capture the expression value as a quosure. This means that we can refer to the variable value without quoting it.
+
+In the get_x method, we use eval_tidy() from the rlang package to evaluate the quosure self$x in the context of the object's data. This allows us to refer to the variable x without quoting it.
+
+The set_data and get_data methods are provided as an example of how to use tidy evaluation with other object properties.
+
+Here's an example of how to use this class:
+
+```{r}
+my_obj <- MyClass$new()
+my_obj$set_data(mtcars)
+my_obj$set_x(cyl)
+
+# Get the value of x without quoting it
+my_obj$x
+my_obj$get_x() 
+my_obj$update_data()
+
+
+mtcars %>% dplyr::group_by(cyl)
+```
+
+```{r}
+# Get the value of data
+my_obj$get_data() 
+```
+
+#>                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+#> Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+#> Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+#> Datsun 710          22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+#> Hornet 4 Drive      21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+#> Hornet Sportabout   18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+#> Valiant             18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+
+```{r}
+library(dplyr)
+library(rlang)
+library(R6)
+
+MyClass <- R6Class("MyClass",
+  public = list(
+    data = NULL,
+    group_by_col = NULL,
+    set_data = function(value) {
+      self$data <- value
+    },
+    filter_data = function(column, condition) {
+      self$data <- self$data %>% filter({{condition}})
+    },
+    mutate_data = function(column, expression) {
+      self$data <- self$data %>% mutate({{column}} := {{expression}})
+    },
+    set_group_by_col = function(column) {
+      self$group_by_col <- enquo(column)
+    },
+    summarize_data = function(...) {
+      group_by_cols <- quos(!!self$group_by_col)
+      # summarise_cols <- quos(...)
+      self$data <- self$data %>% group_by(!!!group_by_cols) %>% count()
+    },
+    get_data = function() {
+      self$data
+    }
+  )
+)
+
+
+my_class <- MyClass$new()
+
+my_class$set_data(mtcars)
+
+my_class$set_group_by_col(cyl, class)
+my_class$data
+
+my_class$summarize_data()
+my_class$data
+
+
+
+library(dplyr)
+library(rlang)
+library(R6)
+
+MyClass <- R6Class("MyClass",
+  public = list(
+    data = NULL,
+    group_by_cols = NULL,
+    set_data = function(value) {
+      self$data <- value
+    },
+    filter_data = function(column, condition) {
+      self$data <- self$data %>% filter({{condition}})
+    },
+    mutate_data = function(column, expression) {
+      self$data <- self$data %>% mutate({{column}} := {{expression}})
+    },
+    set_group_by_cols = function(...) {
+      self$group_by_cols <- enquos(...)
+    },
+    summarize_data = function(...) {
+      group_by_cols <- self$group_by_cols
+      summarise_cols <- quos(...)
+      self$data <- self$data %>% group_by(!!!group_by_cols) %>% summarize(across(!!!summarise_cols))
+    },
+    get_data = function() {
+      self$data
+    }
+  )
+)
+
+
+
+
+
+library(dplyr)
+library(rlang)
+library(R6)
+
+MyClass <- R6Class("MyClass",
+  public = list(
+    data = NULL,
+    group_by_cols = NULL,
+    set_data = function(value) {
+      self$data <- value
+    },
+    filter_data = function(column, condition) {
+      self$data <- self$data %>% filter({{condition}})
+    },
+    mutate_data = function(column, expression) {
+      self$data <- self$data %>% mutate({{column}} := {{expression}})
+    },
+    set_group_by_cols = function(...) {
+      self$group_by_cols <- quos(...)
+    },
+    summarize_data = function(...) {
+      summarise_cols <- quos(...)
+      self$data <- self$data %>% group_by(!!!self$group_by_cols) %>% count()
+    },
+    get_data = function() {
+      self$data
+    }
+  )
+)
+
+my_class <- MyClass$new()
+
+my_class$set_data(mtcars)
+
+my_class$set_group_by_cols(cyl, gear)
+
+my_class$summarize_data()
+
+my_class$data
+
+
+```
+
+
+
