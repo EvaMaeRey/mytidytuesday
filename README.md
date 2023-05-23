@@ -11,6 +11,8 @@ The goal of mytidytuesday is to hold small projects. They are like blogs
 posts, but mostly code. In the spirit of \#tidytuesday no pressure to
 write prose\!
 
+  - [2023-05-23-indicator-recode/indicator\_recode.html](https://evamaerey.github.io/mytidytuesday/2023-05-23-indicator-recode/indicator_recode.html)
+  - [2023-05-19-case-when-strict/case\_when\_strict.html](https://evamaerey.github.io/mytidytuesday/2023-05-19-case-when-strict/case_when_strict.html)
   - [2023-03-21-ggwhere/ggwhere-.html](https://evamaerey.github.io/mytidytuesday/2023-03-21-ggwhere/ggwhere-.html)
   - [2023-03-16-compute-panel/compute-panel.html](https://evamaerey.github.io/mytidytuesday/2023-03-16-compute-panel/compute-panel.html)
   - [2023-03-12-ggbrain-seg-sf/ggbrain\_seg\_sf.html](https://evamaerey.github.io/mytidytuesday/2023-03-12-ggbrain-seg-sf/ggbrain_seg_sf.html)

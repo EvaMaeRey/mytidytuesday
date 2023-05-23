@@ -9,11 +9,10 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# problem
 
 ```{r cars}
 library(tidyverse)
-
-
 
 tidytitanic::passengers %>% 
   ggplot() + 
@@ -27,9 +26,13 @@ tidytitanic::passengers %>%
 tidytitanic::passengers %>% 
   tibble() %>% 
   mutate(cat_survived = ifelse(survived, "survived", "not survived"), .before = 1)
+```
 
+
+
+# Function
   
-
+```{r}
 indicator_recode <- function(var, pos_cat = NULL, negator = "not", neg_cat = NULL, rev = FALSE){
   
   if(is.null(pos_cat)){
@@ -53,8 +56,11 @@ indicator_recode <- function(var, pos_cat = NULL, negator = "not", neg_cat = NUL
   }
   
 }
+```
 
+# Examples of use
 
+```{r}
 tidytitanic::passengers %>% 
   tibble() %>% 
   mutate(cat_survived = indicator_recode(survived))
