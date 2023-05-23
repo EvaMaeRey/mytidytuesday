@@ -1,0 +1,68 @@
+---
+title: "Untitled"
+author: "Evangeline Reynolds"
+date: "5/23/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r cars}
+library(tidyverse)
+
+
+
+tidytitanic::passengers %>% 
+  ggplot() + 
+  aes(x = survived) + 
+  geom_bar()
+
+
+tidytitanic::passengers %>% 
+  count(survived)
+
+tidytitanic::passengers %>% 
+  tibble() %>% 
+  mutate(cat_survived = ifelse(survived, "survived", "not survived"), .before = 1)
+
+  
+
+indicator_recode <- function(var, pos_cat = NULL, negator = "not", neg_cat = NULL, rev = FALSE){
+  
+  if(is.null(pos_cat)){
+    cat_true = deparse(substitute(var))
+  }else{
+    cat_true = pos_cat
+  }
+  
+  if(is.null(neg_cat)){
+    cat_false = paste(negator, cat_true)
+  }else{
+    cat_false = neg_cat
+  }
+
+  if(rev){
+    ifelse({{var}}, cat_true, cat_false) %>% 
+      factor(levels = c(cat_true, cat_false))
+  }else{
+    ifelse({{var}}, cat_true, cat_false) %>% 
+      factor(levels = c(cat_false, cat_true))
+  }
+  
+}
+
+
+tidytitanic::passengers %>% 
+  tibble() %>% 
+  mutate(cat_survived = indicator_recode(survived))
+
+tidytitanic::passengers %>% 
+ggplot() + 
+  aes(x = indicator_recode(survived)) + 
+  geom_bar() + 
+  aes(x = indicator_recode(survived, neg_cat = "perished"))
+
+```
