@@ -11,11 +11,11 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# context: indicator variables well understood
+# Context:  *indicator variables well understood*
 
 - https://emilyriederer.netlify.app/post/column-name-contracts/
 
-# problem: content loss using indicator variables directly in data products
+# Problem:  *content loss using indicator variables directly in data products*
 
 ```{r cars}
 library(tidyverse)
@@ -38,7 +38,8 @@ ggplot() +
   facet_grid(~ survived)
 ```
 
-# one-off solution: manual indicator recode, but is repetitive
+
+# One-off solution:  *manual indicator recode, but is repetitive*
 
 addition downside is unanticipated reordering depending on value of true case v. false case category 
 
@@ -57,14 +58,14 @@ ggplot() +
 
 
 
-# proposed many-times solution: ind_recode() function uses variable name as starting point for creating true and false human understandable categories
+# Proposed many-times solution:  *ind_recode() function uses variable name as starting point for creating true and false human understandable categories*
   
 ```{r}
 ind_recode <- function(var, var_prefix = "ind_", negator = "not", cat_true = NULL, cat_false = NULL, rev = FALSE){
   
   if(is.null(cat_true)){
     cat_true = deparse(substitute(var)) %>% 
-      str_remove(var_prefix) %>% 
+      str_remove(paste0("^", var_prefix)) %>% 
       str_replace_all("_", " ")
   }
   
@@ -88,7 +89,7 @@ tibble(ind_female = c(0,0,1,1,1 ,0 ,0)) %>%
 
 ```
 
-# Examples
+# Examples:  *How to use ind_recode()*
 
 ```{r}
 tidytitanic::passengers %>% 
@@ -108,7 +109,7 @@ last_plot() +
 # or
 last_plot() +
   aes(x = ind_recode(survived, cat_false = "didn't", rev = T)) + 
-  labs(x = FALSE)
+  labs(x = NULL)
 
 tidytitanic::passengers %>% 
 ggplot() + 
@@ -117,7 +118,7 @@ ggplot() +
   facet_grid(~ ind_recode(survived))
 ```
 
-# Known Limitations: not for use with magrittr pipe (but base pipe works!)
+# Known Limitations:  *not for use with magrittr pipe (but base pipe works!)*
 
 ```{r}
 tidytitanic::passengers %>% 
