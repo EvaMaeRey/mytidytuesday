@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# problem
+# problem: content loss using indicator variables directly in data products
 
 ```{r cars}
 library(tidyverse)
@@ -19,32 +19,49 @@ tidytitanic::passengers %>%
   aes(x = survived) + 
   geom_bar()
 
-
 tidytitanic::passengers %>% 
   count(survived)
 
 tidytitanic::passengers %>% 
+  janitor::tabyl(sex, survived)
+
+tidytitanic::passengers %>% 
+ggplot() + 
+  aes(x = sex) + 
+  geom_bar() + 
+  facet_grid(~ survived)
+```
+
+# one-off solution: manual indicator recode, but is repetitive
+
+addition downside is unanticipated reordering depending on value of true case v. false case category 
+
+```{r}
+tidytitanic::passengers %>% 
   tibble() %>% 
-  mutate(cat_survived = ifelse(survived, "survived", "not survived"), .before = 1)
+  mutate(cat_survived = ifelse(survived, "survived", "not survived"), 
+         .before = 1)
+
+tidytitanic::passengers %>% 
+ggplot() + 
+  aes(x = sex) + 
+  geom_bar() + 
+  facet_grid(~ ifelse(survived, "survived", "not survived"))
 ```
 
 
 
-# Function
+# proposed many-times solution: ind_recode() function
   
 ```{r}
-indicator_recode <- function(var, pos_cat = NULL, negator = "not", neg_cat = NULL, rev = FALSE){
+ind_recode <- function(var, negator = "not", cat_true = NULL, cat_false = NULL, rev = FALSE){
   
-  if(is.null(pos_cat)){
+  if(is.null(cat_true)){
     cat_true = deparse(substitute(var))
-  }else{
-    cat_true = pos_cat
   }
   
-  if(is.null(neg_cat)){
+  if(is.null(cat_false)){
     cat_false = paste(negator, cat_true)
-  }else{
-    cat_false = neg_cat
   }
 
   if(rev){
@@ -58,17 +75,47 @@ indicator_recode <- function(var, pos_cat = NULL, negator = "not", neg_cat = NUL
 }
 ```
 
-# Examples of use
+# Examples
 
 ```{r}
 tidytitanic::passengers %>% 
   tibble() %>% 
-  mutate(cat_survived = indicator_recode(survived))
+  mutate(cat_survived = ind_recode(survived))
 
 tidytitanic::passengers %>% 
 ggplot() + 
-  aes(x = indicator_recode(survived)) + 
-  geom_bar() + 
-  aes(x = indicator_recode(survived, neg_cat = "perished"))
+  aes(x = ind_recode(survived)) + 
+  geom_bar()
 
+# or
+last_plot() +
+  aes(x = ind_recode(survived, cat_false = "perished"))
+
+  
+# or
+last_plot() +
+  aes(x = ind_recode(survived, cat_false = "didn't", rev = T)) + 
+  labs(x = FALSE)
+
+tidytitanic::passengers %>% 
+ggplot() + 
+  aes(x = sex) + 
+  geom_bar() + 
+  facet_grid(~ ind_recode(survived))
+```
+
+# Known Limitations: not for use with magrittr pipe (but base pipe works!)
+
+```{r}
+tidytitanic::passengers %>% 
+ggplot() + 
+  aes(x = sex) + 
+  geom_bar() + 
+  facet_grid(~ survived %>% ind_recode())
+
+tidytitanic::passengers %>% 
+ggplot() + 
+  aes(x = sex) + 
+  geom_bar() + 
+  facet_grid(~ survived |> ind_recode())
 ```
