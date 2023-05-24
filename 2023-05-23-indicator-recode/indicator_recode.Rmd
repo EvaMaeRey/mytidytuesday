@@ -1,13 +1,19 @@
 ---
-title: "Untitled"
+title: "Indicator recode"
 author: "Evangeline Reynolds"
 date: "5/23/2023"
-output: html_document
+output: 
+  html_document:
+    toc: true
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+# context: indicator variables well understood
+
+- https://emilyriederer.netlify.app/post/column-name-contracts/
 
 # problem: content loss using indicator variables directly in data products
 
@@ -51,13 +57,15 @@ ggplot() +
 
 
 
-# proposed many-times solution: ind_recode() function
+# proposed many-times solution: ind_recode() function uses variable name as starting point for creating true and false human understandable categories
   
 ```{r}
-ind_recode <- function(var, negator = "not", cat_true = NULL, cat_false = NULL, rev = FALSE){
+ind_recode <- function(var, var_prefix = "ind_", negator = "not", cat_true = NULL, cat_false = NULL, rev = FALSE){
   
   if(is.null(cat_true)){
-    cat_true = deparse(substitute(var))
+    cat_true = deparse(substitute(var)) %>% 
+      str_remove(var_prefix) %>% 
+      str_replace_all("_", " ")
   }
   
   if(is.null(cat_false)){
@@ -73,6 +81,11 @@ ind_recode <- function(var, negator = "not", cat_true = NULL, cat_false = NULL, 
   }
   
 }
+
+tibble(ind_female = c(0,0,1,1,1 ,0 ,0)) %>% 
+  mutate(cat_female  = ind_recode(ind_female))
+
+
 ```
 
 # Examples
