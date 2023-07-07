@@ -11,6 +11,7 @@ The goal of mytidytuesday is to hold small projects. They are like blogs
 posts, but mostly code. In the spirit of \#tidytuesday no pressure to
 write prose\!
 
+  - [2023-07-06-advanced-pivoting/advanced\_pivoting.html](https://evamaerey.github.io/mytidytuesday/2023-07-06-advanced-pivoting/advanced_pivoting.html)
   - [2023-05-23-indicator-recode/indicator\_recode.html](https://evamaerey.github.io/mytidytuesday/2023-05-23-indicator-recode/indicator_recode.html)
   - [2023-05-19-case-when-strict/case\_when\_strict.html](https://evamaerey.github.io/mytidytuesday/2023-05-19-case-when-strict/case_when_strict.html)
   - [2023-03-21-ggwhere/ggwhere-.html](https://evamaerey.github.io/mytidytuesday/2023-03-21-ggwhere/ggwhere-.html)

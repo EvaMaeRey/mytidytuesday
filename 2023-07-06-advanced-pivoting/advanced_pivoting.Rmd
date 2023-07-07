@@ -1,0 +1,258 @@
+---
+title: "A minimal flipbook"
+subtitle: "With flipbookr and xaringan"
+author: "You!"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r, include = T}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", cache = F)
+library(flipbookr)
+library(tidyverse)
+#remotes::install_github("dcl-docs/dcldata")
+
+```
+
+
+
+
+
+---
+class: inverse, middle, center
+
+
+# First up: classic flipbook, using defaults to walk through code pipeline
+
+---
+
+`r chunk_reveal("my_cars")`
+
+```{r my_cars, include = FALSE}
+ncells <- function(data){nrow(data)*nrow(data)}
+
+dcldata::example_eagle_nests %>% 
+  pivot_longer(
+    cols = c(`2007`, `2009`), 
+    names_to = "year", 
+    values_to = "num_nests"
+  ) ->
+long; ncells(long)
+
+dcldata::example_eagle_pairs %>% 
+  pivot_longer(
+    cols = !starts_with("state"), 
+    names_to = "year",
+    values_to = "num_pairs"
+  ) ->
+also_long; ncells(also_long)
+
+long %>% 
+  pivot_wider(
+    names_from = year, 
+    values_from = num_nests
+  ) ->
+back_home_again; ncells(back_home_again)
+```
+
+
+---
+
+`r chunk_reveal("my_cars2")`
+
+```{r my_cars2, include = FALSE}
+dcldata::example_acs_1 %>% 
+  pivot_wider(names_from = variable, 
+              values_from = estimate) ->
+df_values_in_columns_like_in_kind
+
+
+dcldata::example_migration %>% 
+  pivot_longer(cols = !dest, 
+               names_to = "origin", 
+               values_to = "migrants") ->
+longer_migrans_w_na
+
+dcldata::example_migration %>% 
+  pivot_longer(
+    cols = !dest, 
+    names_to = "origin", 
+    values_to = "migrants", 
+    values_drop_na = TRUE) ->
+longer_migrans_wo_na
+```
+
+---
+
+
+`r chunk_reveal("my_cars3")`
+
+```{r my_cars3, include = FALSE}
+dcldata::example_eagle_nests %>% 
+  pivot_longer(
+    cols = c(`2007`, `2009`), 
+    names_to = "year", 
+    names_transform = list(year = as.integer),
+    values_to = "num_nests"
+  ) ->
+long_nests_col_names_to_int
+
+dcldata::example_eagle_nests %>% 
+  pivot_longer(
+    cols = c(`2007`, `2009`), 
+    names_to = "year", 
+    names_transform = list(year = as.integer),
+    values_to = "num_nests",
+    values_transform = list(num_nests = as.integer)
+  ) ->
+long_nest_valus_num_to_int
+```
+
+---
+
+
+`r chunk_reveal("my_cars4")`
+
+```{r my_cars4, include = FALSE}
+dcldata::example_gymnastics_1 %>% 
+  pivot_longer(
+    cols = !country, 
+    names_to = "event", 
+    values_to = "score"
+  ) ->
+okay
+
+dcldata::example_gymnastics_1 %>% 
+  pivot_longer(
+    cols = !country, 
+    names_to = "event", 
+    names_prefix = "score_",
+    values_to = "score"
+  ) ->
+okay_prefix
+```
+
+---
+
+
+`r chunk_reveal("my_cars5")`
+
+```{r my_cars5, include = FALSE}
+dcldata::example_gymnastics_2 %>% 
+  pivot_longer(
+    cols = !country,
+    names_to = "event_year",
+    values_to = "score"
+  ) ->
+gym_partial
+
+dcldata::example_gymnastics_2 %>% 
+  pivot_longer(
+    cols = !country,
+    names_to = c("event", "year"),
+    names_sep = "_",
+    values_to = "score"
+  ) ->
+gym_two
+
+dcldata::example_gymnastics_3 %>% 
+  pivot_longer(
+    cols = !country,
+    names_to = c("event", "year", "gender"),
+    names_sep = "_",
+    values_to = "score"
+  ) ->
+gym_three
+```
+
+<!-- adjust font size in this css code chunk, currently 80 -->
+
+---
+
+`r chunk_reveal("my_cars6")`
+
+```{r my_cars6, include = FALSE}
+library(tidybernoulli)
+library(tidyverse)
+bernoulli_trial() %>% 
+  trial_init() %>% 
+   trial_advance(2) %>%
+   .$out %>%
+   pivot_longer(cols = -history, names_sep = "_",
+   names_to = c("trial","name")) %>%
+   pivot_wider(names_from = name, values_from = value)
+
+```
+---
+
+`r chunk_reveal("anscombe")`
+
+```{r anscombe, include = F}
+anscombe %>%
+  pivot_longer(
+    everything(),
+    cols_vary = "slowest",
+    names_to = c(".value", "set"),
+    names_pattern = "(.)(.)"
+  ) ->
+anscombe_mod
+
+billboard %>%
+  pivot_longer(
+    cols = starts_with("wk"),
+    names_to = "week",
+    names_prefix = "wk",
+    values_to = "rank",
+    values_drop_na = TRUE
+  ) ->
+billboard_mod
+
+who %>% 
+  pivot_longer(
+  cols = new_sp_m014:newrel_f65,
+  names_to = c("diagnosis", "gender", "age"),
+  names_pattern = "new_?(.*)_(.)(.*)",
+  values_to = "count"
+) ->
+who_mod
+
+
+```
+
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 80%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+
+

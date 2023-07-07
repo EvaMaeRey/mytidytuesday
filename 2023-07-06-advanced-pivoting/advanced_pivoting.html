@@ -1,0 +1,2481 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>A minimal flipbook</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="You!" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# A minimal flipbook
+]
+.subtitle[
+## With flipbookr and xaringan
+]
+.author[
+### You!
+]
+
+---
+
+
+
+
+```r
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", cache = F)
+library(flipbookr)
+library(tidyverse)
+```
+
+```
+## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.0     ✔ readr     2.1.4
+## ✔ forcats   1.0.0     ✔ stringr   1.5.0
+## ✔ ggplot2   3.4.1     ✔ tibble    3.2.0
+## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+## ✔ purrr     1.0.1     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors
+```
+
+```r
+#remotes::install_github("dcl-docs/dcldata")
+```
+
+
+
+
+
+---
+class: inverse, middle, center
+
+
+# First up: classic flipbook, using defaults to walk through code pipeline
+
+---
+
+count: false
+ 
+
+.panel1-my_cars-auto[
+
+```r
+*ncells &lt;- function(data){nrow(data)*nrow(data)}
+```
+]
+ 
+.panel2-my_cars-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars-auto[
+
+```r
+ncells &lt;- function(data){nrow(data)*nrow(data)}
+
+*dcldata::example_eagle_nests
+```
+]
+ 
+.panel2-my_cars-auto[
+
+```
+# A tibble: 3 × 3
+  region                     `2007` `2009`
+  &lt;chr&gt;                       &lt;dbl&gt;  &lt;dbl&gt;
+1 Pacific                      1039   2587
+2 Southwest                      51    176
+3 Rocky Mountains and Plains    200    338
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars-auto[
+
+```r
+ncells &lt;- function(data){nrow(data)*nrow(data)}
+
+dcldata::example_eagle_nests %&gt;%
+* pivot_longer(
+*   cols = c(`2007`, `2009`),
+*   names_to = "year",
+*   values_to = "num_nests"
+* )
+```
+]
+ 
+.panel2-my_cars-auto[
+
+```
+# A tibble: 6 × 3
+  region                     year  num_nests
+  &lt;chr&gt;                      &lt;chr&gt;     &lt;dbl&gt;
+1 Pacific                    2007       1039
+2 Pacific                    2009       2587
+3 Southwest                  2007         51
+4 Southwest                  2009        176
+5 Rocky Mountains and Plains 2007        200
+6 Rocky Mountains and Plains 2009        338
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars-auto[
+
+```r
+ncells &lt;- function(data){nrow(data)*nrow(data)}
+
+dcldata::example_eagle_nests %&gt;%
+  pivot_longer(
+    cols = c(`2007`, `2009`),
+    names_to = "year",
+    values_to = "num_nests"
+  ) -&gt;
+*long; ncells(long)
+```
+]
+ 
+.panel2-my_cars-auto[
+
+```
+[1] 36
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars-auto[
+
+```r
+ncells &lt;- function(data){nrow(data)*nrow(data)}
+
+dcldata::example_eagle_nests %&gt;%
+  pivot_longer(
+    cols = c(`2007`, `2009`),
+    names_to = "year",
+    values_to = "num_nests"
+  ) -&gt;
+long; ncells(long)
+
+*dcldata::example_eagle_pairs
+```
+]
+ 
+.panel2-my_cars-auto[
+
+```
+[1] 36
+```
+
+```
+# A tibble: 48 × 12
+   state  state…¹ `1997` `1998` `1999` `2000` `2001` `2002` `2003` `2004` `2005`
+   &lt;chr&gt;  &lt;chr&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;
+ 1 Alaba… AL          22     23     26     27     NA     NA     47     NA     NA
+ 2 Arizo… AZ          34     36     38     37     37     43     43     NA     NA
+ 3 Arkan… AR          24     29     34     36     NA     NA     36     42     NA
+ 4 Calif… CA         142    148    151     NA     NA     NA    160     NA    200
+ 5 Color… CO          29     27     29     42     45     NA     NA     NA     42
+ 6 Conne… CT           2      2      2      4      6      8      8     NA     NA
+ 7 Delaw… DE          14     13     14     16     17     26     31     NA     NA
+ 8 Flori… FL         874    980   1043   1069   1102   1133   1133     NA   1133
+ 9 Georg… GA          31     37     49     55     61     73     81     NA     82
+10 Idaho  ID          84     92     95    113    113    128     NA     NA     NA
+# … with 38 more rows, 1 more variable: `2006` &lt;int&gt;, and abbreviated variable
+#   name ¹​state_abbr
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars-auto[
+
+```r
+ncells &lt;- function(data){nrow(data)*nrow(data)}
+
+dcldata::example_eagle_nests %&gt;%
+  pivot_longer(
+    cols = c(`2007`, `2009`),
+    names_to = "year",
+    values_to = "num_nests"
+  ) -&gt;
+long; ncells(long)
+
+dcldata::example_eagle_pairs %&gt;%
+* pivot_longer(
+*   cols = !starts_with("state"),
+*   names_to = "year",
+*   values_to = "num_pairs"
+* )
+```
+]
+ 
+.panel2-my_cars-auto[
+
+```
+[1] 36
+```
+
+```
+# A tibble: 480 × 4
+   state   state_abbr year  num_pairs
+   &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;     &lt;int&gt;
+ 1 Alabama AL         1997         22
+ 2 Alabama AL         1998         23
+ 3 Alabama AL         1999         26
+ 4 Alabama AL         2000         27
+ 5 Alabama AL         2001         NA
+ 6 Alabama AL         2002         NA
+ 7 Alabama AL         2003         47
+ 8 Alabama AL         2004         NA
+ 9 Alabama AL         2005         NA
+10 Alabama AL         2006         77
+# … with 470 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars-auto[
+
+```r
+ncells &lt;- function(data){nrow(data)*nrow(data)}
+
+dcldata::example_eagle_nests %&gt;%
+  pivot_longer(
+    cols = c(`2007`, `2009`),
+    names_to = "year",
+    values_to = "num_nests"
+  ) -&gt;
+long; ncells(long)
+
+dcldata::example_eagle_pairs %&gt;%
+  pivot_longer(
+    cols = !starts_with("state"),
+    names_to = "year",
+    values_to = "num_pairs"
+  ) -&gt;
+*also_long; ncells(also_long)
+```
+]
+ 
+.panel2-my_cars-auto[
+
+```
+[1] 36
+```
+
+```
+[1] 230400
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars-auto[
+
+```r
+ncells &lt;- function(data){nrow(data)*nrow(data)}
+
+dcldata::example_eagle_nests %&gt;%
+  pivot_longer(
+    cols = c(`2007`, `2009`),
+    names_to = "year",
+    values_to = "num_nests"
+  ) -&gt;
+long; ncells(long)
+
+dcldata::example_eagle_pairs %&gt;%
+  pivot_longer(
+    cols = !starts_with("state"),
+    names_to = "year",
+    values_to = "num_pairs"
+  ) -&gt;
+also_long; ncells(also_long)
+
+*long
+```
+]
+ 
+.panel2-my_cars-auto[
+
+```
+[1] 36
+```
+
+```
+[1] 230400
+```
+
+```
+# A tibble: 6 × 3
+  region                     year  num_nests
+  &lt;chr&gt;                      &lt;chr&gt;     &lt;dbl&gt;
+1 Pacific                    2007       1039
+2 Pacific                    2009       2587
+3 Southwest                  2007         51
+4 Southwest                  2009        176
+5 Rocky Mountains and Plains 2007        200
+6 Rocky Mountains and Plains 2009        338
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars-auto[
+
+```r
+ncells &lt;- function(data){nrow(data)*nrow(data)}
+
+dcldata::example_eagle_nests %&gt;%
+  pivot_longer(
+    cols = c(`2007`, `2009`),
+    names_to = "year",
+    values_to = "num_nests"
+  ) -&gt;
+long; ncells(long)
+
+dcldata::example_eagle_pairs %&gt;%
+  pivot_longer(
+    cols = !starts_with("state"),
+    names_to = "year",
+    values_to = "num_pairs"
+  ) -&gt;
+also_long; ncells(also_long)
+
+long %&gt;%
+* pivot_wider(
+*   names_from = year,
+*   values_from = num_nests
+* )
+```
+]
+ 
+.panel2-my_cars-auto[
+
+```
+[1] 36
+```
+
+```
+[1] 230400
+```
+
+```
+# A tibble: 3 × 3
+  region                     `2007` `2009`
+  &lt;chr&gt;                       &lt;dbl&gt;  &lt;dbl&gt;
+1 Pacific                      1039   2587
+2 Southwest                      51    176
+3 Rocky Mountains and Plains    200    338
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars-auto[
+
+```r
+ncells &lt;- function(data){nrow(data)*nrow(data)}
+
+dcldata::example_eagle_nests %&gt;%
+  pivot_longer(
+    cols = c(`2007`, `2009`),
+    names_to = "year",
+    values_to = "num_nests"
+  ) -&gt;
+long; ncells(long)
+
+dcldata::example_eagle_pairs %&gt;%
+  pivot_longer(
+    cols = !starts_with("state"),
+    names_to = "year",
+    values_to = "num_pairs"
+  ) -&gt;
+also_long; ncells(also_long)
+
+long %&gt;%
+  pivot_wider(
+    names_from = year,
+    values_from = num_nests
+  ) -&gt;
+*back_home_again; ncells(back_home_again)
+```
+]
+ 
+.panel2-my_cars-auto[
+
+```
+[1] 36
+```
+
+```
+[1] 230400
+```
+
+```
+[1] 9
+```
+]
+
+&lt;style&gt;
+.panel1-my_cars-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-my_cars-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-my_cars-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-my_cars2-auto[
+
+```r
+*dcldata::example_acs_1
+```
+]
+ 
+.panel2-my_cars2-auto[
+
+```
+# A tibble: 156 × 4
+   geoid name     variable    estimate
+   &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
+ 1 01    Alabama  pop_housed   4731852
+ 2 01    Alabama  pop_renter   1434765
+ 3 01    Alabama  median_rent      747
+ 4 02    Alaska   pop_housed    710743
+ 5 02    Alaska   pop_renter    241484
+ 6 02    Alaska   median_rent     1200
+ 7 04    Arizona  pop_housed   6656124
+ 8 04    Arizona  pop_renter   2460534
+ 9 04    Arizona  median_rent      972
+10 05    Arkansas pop_housed   2894098
+# … with 146 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars2-auto[
+
+```r
+dcldata::example_acs_1 %&gt;%
+* pivot_wider(names_from = variable,
+*             values_from = estimate)
+```
+]
+ 
+.panel2-my_cars2-auto[
+
+```
+# A tibble: 52 × 5
+   geoid name                 pop_housed pop_renter median_rent
+   &lt;chr&gt; &lt;chr&gt;                     &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;
+ 1 01    Alabama                 4731852    1434765         747
+ 2 02    Alaska                   710743     241484        1200
+ 3 04    Arizona                 6656124    2460534         972
+ 4 05    Arkansas                2894098     965690         709
+ 5 06    California             38168482   17066023        1358
+ 6 08    Colorado                5318396    1782975        1125
+ 7 09    Connecticut             3478451    1053739        1123
+ 8 10    Delaware                 918625     255558        1076
+ 9 11    District of Columbia     632449     354285        1424
+10 12    Florida                19847798    7099078        1077
+# … with 42 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars2-auto[
+
+```r
+dcldata::example_acs_1 %&gt;%
+  pivot_wider(names_from = variable,
+              values_from = estimate) -&gt;
+*df_values_in_columns_like_in_kind
+```
+]
+ 
+.panel2-my_cars2-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars2-auto[
+
+```r
+dcldata::example_acs_1 %&gt;%
+  pivot_wider(names_from = variable,
+              values_from = estimate) -&gt;
+df_values_in_columns_like_in_kind
+
+
+*dcldata::example_migration
+```
+]
+ 
+.panel2-my_cars2-auto[
+
+```
+# A tibble: 3 × 6
+  dest     Afghanistan Canada India Japan `South Africa`
+  &lt;chr&gt;    &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;         
+1 Albania  &lt;NA&gt;        913    &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;          
+2 Bulgaria 483         713    281   213   260           
+3 Romania  &lt;NA&gt;        &lt;NA&gt;   102   &lt;NA&gt;  &lt;NA&gt;          
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars2-auto[
+
+```r
+dcldata::example_acs_1 %&gt;%
+  pivot_wider(names_from = variable,
+              values_from = estimate) -&gt;
+df_values_in_columns_like_in_kind
+
+
+dcldata::example_migration %&gt;%
+* pivot_longer(cols = !dest,
+*              names_to = "origin",
+*              values_to = "migrants")
+```
+]
+ 
+.panel2-my_cars2-auto[
+
+```
+# A tibble: 15 × 3
+   dest     origin       migrants
+   &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;   
+ 1 Albania  Afghanistan  &lt;NA&gt;    
+ 2 Albania  Canada       913     
+ 3 Albania  India        &lt;NA&gt;    
+ 4 Albania  Japan        &lt;NA&gt;    
+ 5 Albania  South Africa &lt;NA&gt;    
+ 6 Bulgaria Afghanistan  483     
+ 7 Bulgaria Canada       713     
+ 8 Bulgaria India        281     
+ 9 Bulgaria Japan        213     
+10 Bulgaria South Africa 260     
+11 Romania  Afghanistan  &lt;NA&gt;    
+12 Romania  Canada       &lt;NA&gt;    
+13 Romania  India        102     
+14 Romania  Japan        &lt;NA&gt;    
+15 Romania  South Africa &lt;NA&gt;    
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars2-auto[
+
+```r
+dcldata::example_acs_1 %&gt;%
+  pivot_wider(names_from = variable,
+              values_from = estimate) -&gt;
+df_values_in_columns_like_in_kind
+
+
+dcldata::example_migration %&gt;%
+  pivot_longer(cols = !dest,
+               names_to = "origin",
+               values_to = "migrants") -&gt;
+*longer_migrans_w_na
+```
+]
+ 
+.panel2-my_cars2-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars2-auto[
+
+```r
+dcldata::example_acs_1 %&gt;%
+  pivot_wider(names_from = variable,
+              values_from = estimate) -&gt;
+df_values_in_columns_like_in_kind
+
+
+dcldata::example_migration %&gt;%
+  pivot_longer(cols = !dest,
+               names_to = "origin",
+               values_to = "migrants") -&gt;
+longer_migrans_w_na
+
+*dcldata::example_migration
+```
+]
+ 
+.panel2-my_cars2-auto[
+
+```
+# A tibble: 3 × 6
+  dest     Afghanistan Canada India Japan `South Africa`
+  &lt;chr&gt;    &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;         
+1 Albania  &lt;NA&gt;        913    &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;          
+2 Bulgaria 483         713    281   213   260           
+3 Romania  &lt;NA&gt;        &lt;NA&gt;   102   &lt;NA&gt;  &lt;NA&gt;          
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars2-auto[
+
+```r
+dcldata::example_acs_1 %&gt;%
+  pivot_wider(names_from = variable,
+              values_from = estimate) -&gt;
+df_values_in_columns_like_in_kind
+
+
+dcldata::example_migration %&gt;%
+  pivot_longer(cols = !dest,
+               names_to = "origin",
+               values_to = "migrants") -&gt;
+longer_migrans_w_na
+
+dcldata::example_migration %&gt;%
+* pivot_longer(
+*   cols = !dest,
+*   names_to = "origin",
+*   values_to = "migrants",
+*   values_drop_na = TRUE)
+```
+]
+ 
+.panel2-my_cars2-auto[
+
+```
+# A tibble: 7 × 3
+  dest     origin       migrants
+  &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;   
+1 Albania  Canada       913     
+2 Bulgaria Afghanistan  483     
+3 Bulgaria Canada       713     
+4 Bulgaria India        281     
+5 Bulgaria Japan        213     
+6 Bulgaria South Africa 260     
+7 Romania  India        102     
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars2-auto[
+
+```r
+dcldata::example_acs_1 %&gt;%
+  pivot_wider(names_from = variable,
+              values_from = estimate) -&gt;
+df_values_in_columns_like_in_kind
+
+
+dcldata::example_migration %&gt;%
+  pivot_longer(cols = !dest,
+               names_to = "origin",
+               values_to = "migrants") -&gt;
+longer_migrans_w_na
+
+dcldata::example_migration %&gt;%
+  pivot_longer(
+    cols = !dest,
+    names_to = "origin",
+    values_to = "migrants",
+    values_drop_na = TRUE) -&gt;
+*longer_migrans_wo_na
+```
+]
+ 
+.panel2-my_cars2-auto[
+
+]
+
+&lt;style&gt;
+.panel1-my_cars2-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-my_cars2-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-my_cars2-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-my_cars3-auto[
+
+```r
+*dcldata::example_eagle_nests
+```
+]
+ 
+.panel2-my_cars3-auto[
+
+```
+# A tibble: 3 × 3
+  region                     `2007` `2009`
+  &lt;chr&gt;                       &lt;dbl&gt;  &lt;dbl&gt;
+1 Pacific                      1039   2587
+2 Southwest                      51    176
+3 Rocky Mountains and Plains    200    338
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars3-auto[
+
+```r
+dcldata::example_eagle_nests %&gt;%
+* pivot_longer(
+*   cols = c(`2007`, `2009`),
+*   names_to = "year",
+*   names_transform = list(year = as.integer),
+*   values_to = "num_nests"
+* )
+```
+]
+ 
+.panel2-my_cars3-auto[
+
+```
+# A tibble: 6 × 3
+  region                      year num_nests
+  &lt;chr&gt;                      &lt;int&gt;     &lt;dbl&gt;
+1 Pacific                     2007      1039
+2 Pacific                     2009      2587
+3 Southwest                   2007        51
+4 Southwest                   2009       176
+5 Rocky Mountains and Plains  2007       200
+6 Rocky Mountains and Plains  2009       338
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars3-auto[
+
+```r
+dcldata::example_eagle_nests %&gt;%
+  pivot_longer(
+    cols = c(`2007`, `2009`),
+    names_to = "year",
+    names_transform = list(year = as.integer),
+    values_to = "num_nests"
+  ) -&gt;
+*long_nests_col_names_to_int
+```
+]
+ 
+.panel2-my_cars3-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars3-auto[
+
+```r
+dcldata::example_eagle_nests %&gt;%
+  pivot_longer(
+    cols = c(`2007`, `2009`),
+    names_to = "year",
+    names_transform = list(year = as.integer),
+    values_to = "num_nests"
+  ) -&gt;
+long_nests_col_names_to_int
+
+*dcldata::example_eagle_nests
+```
+]
+ 
+.panel2-my_cars3-auto[
+
+```
+# A tibble: 3 × 3
+  region                     `2007` `2009`
+  &lt;chr&gt;                       &lt;dbl&gt;  &lt;dbl&gt;
+1 Pacific                      1039   2587
+2 Southwest                      51    176
+3 Rocky Mountains and Plains    200    338
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars3-auto[
+
+```r
+dcldata::example_eagle_nests %&gt;%
+  pivot_longer(
+    cols = c(`2007`, `2009`),
+    names_to = "year",
+    names_transform = list(year = as.integer),
+    values_to = "num_nests"
+  ) -&gt;
+long_nests_col_names_to_int
+
+dcldata::example_eagle_nests %&gt;%
+* pivot_longer(
+*   cols = c(`2007`, `2009`),
+*   names_to = "year",
+*   names_transform = list(year = as.integer),
+*   values_to = "num_nests",
+*   values_transform = list(num_nests = as.integer)
+* )
+```
+]
+ 
+.panel2-my_cars3-auto[
+
+```
+# A tibble: 6 × 3
+  region                      year num_nests
+  &lt;chr&gt;                      &lt;int&gt;     &lt;int&gt;
+1 Pacific                     2007      1039
+2 Pacific                     2009      2587
+3 Southwest                   2007        51
+4 Southwest                   2009       176
+5 Rocky Mountains and Plains  2007       200
+6 Rocky Mountains and Plains  2009       338
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars3-auto[
+
+```r
+dcldata::example_eagle_nests %&gt;%
+  pivot_longer(
+    cols = c(`2007`, `2009`),
+    names_to = "year",
+    names_transform = list(year = as.integer),
+    values_to = "num_nests"
+  ) -&gt;
+long_nests_col_names_to_int
+
+dcldata::example_eagle_nests %&gt;%
+  pivot_longer(
+    cols = c(`2007`, `2009`),
+    names_to = "year",
+    names_transform = list(year = as.integer),
+    values_to = "num_nests",
+    values_transform = list(num_nests = as.integer)
+  ) -&gt;
+*long_nest_valus_num_to_int
+```
+]
+ 
+.panel2-my_cars3-auto[
+
+]
+
+&lt;style&gt;
+.panel1-my_cars3-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-my_cars3-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-my_cars3-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-my_cars4-auto[
+
+```r
+*dcldata::example_gymnastics_1
+```
+]
+ 
+.panel2-my_cars4-auto[
+
+```
+# A tibble: 3 × 3
+  country       score_vault score_floor
+  &lt;chr&gt;               &lt;dbl&gt;       &lt;dbl&gt;
+1 United States        46.9        46.0
+2 Russia               45.7        42.0
+3 China                44.3        42.1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars4-auto[
+
+```r
+dcldata::example_gymnastics_1 %&gt;%
+* pivot_longer(
+*   cols = !country,
+*   names_to = "event",
+*   values_to = "score"
+* )
+```
+]
+ 
+.panel2-my_cars4-auto[
+
+```
+# A tibble: 6 × 3
+  country       event       score
+  &lt;chr&gt;         &lt;chr&gt;       &lt;dbl&gt;
+1 United States score_vault  46.9
+2 United States score_floor  46.0
+3 Russia        score_vault  45.7
+4 Russia        score_floor  42.0
+5 China         score_vault  44.3
+6 China         score_floor  42.1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars4-auto[
+
+```r
+dcldata::example_gymnastics_1 %&gt;%
+  pivot_longer(
+    cols = !country,
+    names_to = "event",
+    values_to = "score"
+  ) -&gt;
+*okay
+```
+]
+ 
+.panel2-my_cars4-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars4-auto[
+
+```r
+dcldata::example_gymnastics_1 %&gt;%
+  pivot_longer(
+    cols = !country,
+    names_to = "event",
+    values_to = "score"
+  ) -&gt;
+okay
+
+*dcldata::example_gymnastics_1
+```
+]
+ 
+.panel2-my_cars4-auto[
+
+```
+# A tibble: 3 × 3
+  country       score_vault score_floor
+  &lt;chr&gt;               &lt;dbl&gt;       &lt;dbl&gt;
+1 United States        46.9        46.0
+2 Russia               45.7        42.0
+3 China                44.3        42.1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars4-auto[
+
+```r
+dcldata::example_gymnastics_1 %&gt;%
+  pivot_longer(
+    cols = !country,
+    names_to = "event",
+    values_to = "score"
+  ) -&gt;
+okay
+
+dcldata::example_gymnastics_1 %&gt;%
+* pivot_longer(
+*   cols = !country,
+*   names_to = "event",
+*   names_prefix = "score_",
+*   values_to = "score"
+* )
+```
+]
+ 
+.panel2-my_cars4-auto[
+
+```
+# A tibble: 6 × 3
+  country       event score
+  &lt;chr&gt;         &lt;chr&gt; &lt;dbl&gt;
+1 United States vault  46.9
+2 United States floor  46.0
+3 Russia        vault  45.7
+4 Russia        floor  42.0
+5 China         vault  44.3
+6 China         floor  42.1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars4-auto[
+
+```r
+dcldata::example_gymnastics_1 %&gt;%
+  pivot_longer(
+    cols = !country,
+    names_to = "event",
+    values_to = "score"
+  ) -&gt;
+okay
+
+dcldata::example_gymnastics_1 %&gt;%
+  pivot_longer(
+    cols = !country,
+    names_to = "event",
+    names_prefix = "score_",
+    values_to = "score"
+  ) -&gt;
+*okay_prefix
+```
+]
+ 
+.panel2-my_cars4-auto[
+
+]
+
+&lt;style&gt;
+.panel1-my_cars4-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-my_cars4-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-my_cars4-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-my_cars5-auto[
+
+```r
+*dcldata::example_gymnastics_2
+```
+]
+ 
+.panel2-my_cars5-auto[
+
+```
+# A tibble: 3 × 5
+  country       vault_2012 floor_2012 vault_2016 floor_2016
+  &lt;chr&gt;              &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+1 United States       48.1       45.4       46.9       46.0
+2 Russia              46.4       41.6       45.7       42.0
+3 China               44.3       40.8       44.3       42.1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars5-auto[
+
+```r
+dcldata::example_gymnastics_2 %&gt;%
+* pivot_longer(
+*   cols = !country,
+*   names_to = "event_year",
+*   values_to = "score"
+* )
+```
+]
+ 
+.panel2-my_cars5-auto[
+
+```
+# A tibble: 12 × 3
+   country       event_year score
+   &lt;chr&gt;         &lt;chr&gt;      &lt;dbl&gt;
+ 1 United States vault_2012  48.1
+ 2 United States floor_2012  45.4
+ 3 United States vault_2016  46.9
+ 4 United States floor_2016  46.0
+ 5 Russia        vault_2012  46.4
+ 6 Russia        floor_2012  41.6
+ 7 Russia        vault_2016  45.7
+ 8 Russia        floor_2016  42.0
+ 9 China         vault_2012  44.3
+10 China         floor_2012  40.8
+11 China         vault_2016  44.3
+12 China         floor_2016  42.1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars5-auto[
+
+```r
+dcldata::example_gymnastics_2 %&gt;%
+  pivot_longer(
+    cols = !country,
+    names_to = "event_year",
+    values_to = "score"
+  ) -&gt;
+*gym_partial
+```
+]
+ 
+.panel2-my_cars5-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars5-auto[
+
+```r
+dcldata::example_gymnastics_2 %&gt;%
+  pivot_longer(
+    cols = !country,
+    names_to = "event_year",
+    values_to = "score"
+  ) -&gt;
+gym_partial
+
+*dcldata::example_gymnastics_2
+```
+]
+ 
+.panel2-my_cars5-auto[
+
+```
+# A tibble: 3 × 5
+  country       vault_2012 floor_2012 vault_2016 floor_2016
+  &lt;chr&gt;              &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+1 United States       48.1       45.4       46.9       46.0
+2 Russia              46.4       41.6       45.7       42.0
+3 China               44.3       40.8       44.3       42.1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars5-auto[
+
+```r
+dcldata::example_gymnastics_2 %&gt;%
+  pivot_longer(
+    cols = !country,
+    names_to = "event_year",
+    values_to = "score"
+  ) -&gt;
+gym_partial
+
+dcldata::example_gymnastics_2 %&gt;%
+* pivot_longer(
+*   cols = !country,
+*   names_to = c("event", "year"),
+*   names_sep = "_",
+*   values_to = "score"
+* )
+```
+]
+ 
+.panel2-my_cars5-auto[
+
+```
+# A tibble: 12 × 4
+   country       event year  score
+   &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+ 1 United States vault 2012   48.1
+ 2 United States floor 2012   45.4
+ 3 United States vault 2016   46.9
+ 4 United States floor 2016   46.0
+ 5 Russia        vault 2012   46.4
+ 6 Russia        floor 2012   41.6
+ 7 Russia        vault 2016   45.7
+ 8 Russia        floor 2016   42.0
+ 9 China         vault 2012   44.3
+10 China         floor 2012   40.8
+11 China         vault 2016   44.3
+12 China         floor 2016   42.1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars5-auto[
+
+```r
+dcldata::example_gymnastics_2 %&gt;%
+  pivot_longer(
+    cols = !country,
+    names_to = "event_year",
+    values_to = "score"
+  ) -&gt;
+gym_partial
+
+dcldata::example_gymnastics_2 %&gt;%
+  pivot_longer(
+    cols = !country,
+    names_to = c("event", "year"),
+    names_sep = "_",
+    values_to = "score"
+  ) -&gt;
+*gym_two
+```
+]
+ 
+.panel2-my_cars5-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars5-auto[
+
+```r
+dcldata::example_gymnastics_2 %&gt;%
+  pivot_longer(
+    cols = !country,
+    names_to = "event_year",
+    values_to = "score"
+  ) -&gt;
+gym_partial
+
+dcldata::example_gymnastics_2 %&gt;%
+  pivot_longer(
+    cols = !country,
+    names_to = c("event", "year"),
+    names_sep = "_",
+    values_to = "score"
+  ) -&gt;
+gym_two
+
+*dcldata::example_gymnastics_3
+```
+]
+ 
+.panel2-my_cars5-auto[
+
+```
+# A tibble: 3 × 9
+  country       vault_…¹ vault…² vault…³ vault…⁴ floor…⁵ floor…⁶ floor…⁷ floor…⁸
+  &lt;chr&gt;            &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+1 United States     48.1    46.6    46.9    45.9    45.4    45.3    46.0    43.8
+2 Russia            46.4    46.9    45.7    46.0    41.6    45.3    42.0    44.8
+3 China             44.3    48.3    44.3    45      40.8    45.1    42.1    43.8
+# … with abbreviated variable names ¹​vault_2012_f, ²​vault_2012_m,
+#   ³​vault_2016_f, ⁴​vault_2016_m, ⁵​floor_2012_f, ⁶​floor_2012_m, ⁷​floor_2016_f,
+#   ⁸​floor_2016_m
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars5-auto[
+
+```r
+dcldata::example_gymnastics_2 %&gt;%
+  pivot_longer(
+    cols = !country,
+    names_to = "event_year",
+    values_to = "score"
+  ) -&gt;
+gym_partial
+
+dcldata::example_gymnastics_2 %&gt;%
+  pivot_longer(
+    cols = !country,
+    names_to = c("event", "year"),
+    names_sep = "_",
+    values_to = "score"
+  ) -&gt;
+gym_two
+
+dcldata::example_gymnastics_3 %&gt;%
+* pivot_longer(
+*   cols = !country,
+*   names_to = c("event", "year", "gender"),
+*   names_sep = "_",
+*   values_to = "score"
+* )
+```
+]
+ 
+.panel2-my_cars5-auto[
+
+```
+# A tibble: 24 × 5
+   country       event year  gender score
+   &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;
+ 1 United States vault 2012  f       48.1
+ 2 United States vault 2012  m       46.6
+ 3 United States vault 2016  f       46.9
+ 4 United States vault 2016  m       45.9
+ 5 United States floor 2012  f       45.4
+ 6 United States floor 2012  m       45.3
+ 7 United States floor 2016  f       46.0
+ 8 United States floor 2016  m       43.8
+ 9 Russia        vault 2012  f       46.4
+10 Russia        vault 2012  m       46.9
+# … with 14 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars5-auto[
+
+```r
+dcldata::example_gymnastics_2 %&gt;%
+  pivot_longer(
+    cols = !country,
+    names_to = "event_year",
+    values_to = "score"
+  ) -&gt;
+gym_partial
+
+dcldata::example_gymnastics_2 %&gt;%
+  pivot_longer(
+    cols = !country,
+    names_to = c("event", "year"),
+    names_sep = "_",
+    values_to = "score"
+  ) -&gt;
+gym_two
+
+dcldata::example_gymnastics_3 %&gt;%
+  pivot_longer(
+    cols = !country,
+    names_to = c("event", "year", "gender"),
+    names_sep = "_",
+    values_to = "score"
+  ) -&gt;
+*gym_three
+```
+]
+ 
+.panel2-my_cars5-auto[
+
+]
+
+&lt;style&gt;
+.panel1-my_cars5-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-my_cars5-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-my_cars5-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+&lt;!-- adjust font size in this css code chunk, currently 80 --&gt;
+
+---
+
+count: false
+ 
+
+.panel1-my_cars6-auto[
+
+```r
+*library(tidybernoulli)
+```
+]
+ 
+.panel2-my_cars6-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars6-auto[
+
+```r
+library(tidybernoulli)
+*library(tidyverse)
+```
+]
+ 
+.panel2-my_cars6-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars6-auto[
+
+```r
+library(tidybernoulli)
+library(tidyverse)
+*bernoulli_trial()
+```
+]
+ 
+.panel2-my_cars6-auto[
+
+```
+  outcome prob
+1       0 0.75
+2       1 0.25
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars6-auto[
+
+```r
+library(tidybernoulli)
+library(tidyverse)
+bernoulli_trial() %&gt;%
+* trial_init()
+```
+]
+ 
+.panel2-my_cars6-auto[
+
+```
+  history t1_outcome t1_prob
+1       1          0    0.75
+2       2          1    0.25
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars6-auto[
+
+```r
+library(tidybernoulli)
+library(tidyverse)
+bernoulli_trial() %&gt;%
+  trial_init() %&gt;%
+*  trial_advance(2)
+```
+]
+ 
+.panel2-my_cars6-auto[
+
+```
+# A tibble: 8 × 7
+  history t1_outcome t1_prob t2_outcome t2_prob t3_outcome t3_prob
+    &lt;int&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;
+1       1          0    0.75          0    0.75          0    0.75
+2       2          0    0.75          0    0.75          1    0.25
+3       3          0    0.75          1    0.25          0    0.75
+4       4          0    0.75          1    0.25          1    0.25
+5       5          1    0.25          0    0.75          0    0.75
+6       6          1    0.25          0    0.75          1    0.25
+7       7          1    0.25          1    0.25          0    0.75
+8       8          1    0.25          1    0.25          1    0.25
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars6-auto[
+
+```r
+library(tidybernoulli)
+library(tidyverse)
+bernoulli_trial() %&gt;%
+  trial_init() %&gt;%
+   trial_advance(2) %&gt;%
+*  .$out
+```
+]
+ 
+.panel2-my_cars6-auto[
+
+```
+# A tibble: 8 × 7
+  history t1_outcome t1_prob t2_outcome t2_prob t3_outcome t3_prob
+    &lt;int&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;
+1       1          0    0.75          0    0.75          0    0.75
+2       2          0    0.75          0    0.75          1    0.25
+3       3          0    0.75          1    0.25          0    0.75
+4       4          0    0.75          1    0.25          1    0.25
+5       5          1    0.25          0    0.75          0    0.75
+6       6          1    0.25          0    0.75          1    0.25
+7       7          1    0.25          1    0.25          0    0.75
+8       8          1    0.25          1    0.25          1    0.25
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars6-auto[
+
+```r
+library(tidybernoulli)
+library(tidyverse)
+bernoulli_trial() %&gt;%
+  trial_init() %&gt;%
+   trial_advance(2) %&gt;%
+   .$out %&gt;%
+*  pivot_longer(cols = -history, names_sep = "_",
+*  names_to = c("trial","name"))
+```
+]
+ 
+.panel2-my_cars6-auto[
+
+```
+# A tibble: 48 × 4
+   history trial name    value
+     &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;
+ 1       1 t1    outcome  0   
+ 2       1 t1    prob     0.75
+ 3       1 t2    outcome  0   
+ 4       1 t2    prob     0.75
+ 5       1 t3    outcome  0   
+ 6       1 t3    prob     0.75
+ 7       2 t1    outcome  0   
+ 8       2 t1    prob     0.75
+ 9       2 t2    outcome  0   
+10       2 t2    prob     0.75
+# … with 38 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars6-auto[
+
+```r
+library(tidybernoulli)
+library(tidyverse)
+bernoulli_trial() %&gt;%
+  trial_init() %&gt;%
+   trial_advance(2) %&gt;%
+   .$out %&gt;%
+   pivot_longer(cols = -history, names_sep = "_",
+   names_to = c("trial","name")) %&gt;%
+*  pivot_wider(names_from = name, values_from = value)
+```
+]
+ 
+.panel2-my_cars6-auto[
+
+```
+# A tibble: 24 × 4
+   history trial outcome  prob
+     &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
+ 1       1 t1          0  0.75
+ 2       1 t2          0  0.75
+ 3       1 t3          0  0.75
+ 4       2 t1          0  0.75
+ 5       2 t2          0  0.75
+ 6       2 t3          1  0.25
+ 7       3 t1          0  0.75
+ 8       3 t2          1  0.25
+ 9       3 t3          0  0.75
+10       4 t1          0  0.75
+# … with 14 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars6-auto[
+
+```r
+library(tidybernoulli)
+library(tidyverse)
+bernoulli_trial() %&gt;%
+  trial_init() %&gt;%
+   trial_advance(2) %&gt;%
+   .$out %&gt;%
+   pivot_longer(cols = -history, names_sep = "_",
+   names_to = c("trial","name")) %&gt;%
+   pivot_wider(names_from = name, values_from = value)
+```
+]
+ 
+.panel2-my_cars6-auto[
+
+```
+# A tibble: 24 × 4
+   history trial outcome  prob
+     &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
+ 1       1 t1          0  0.75
+ 2       1 t2          0  0.75
+ 3       1 t3          0  0.75
+ 4       2 t1          0  0.75
+ 5       2 t2          0  0.75
+ 6       2 t3          1  0.25
+ 7       3 t1          0  0.75
+ 8       3 t2          1  0.25
+ 9       3 t3          0  0.75
+10       4 t1          0  0.75
+# … with 14 more rows
+```
+]
+
+&lt;style&gt;
+.panel1-my_cars6-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-my_cars6-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-my_cars6-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-anscombe-auto[
+
+```r
+*anscombe
+```
+]
+ 
+.panel2-anscombe-auto[
+
+```
+   x1 x2 x3 x4    y1   y2    y3    y4
+1  10 10 10  8  8.04 9.14  7.46  6.58
+2   8  8  8  8  6.95 8.14  6.77  5.76
+3  13 13 13  8  7.58 8.74 12.74  7.71
+4   9  9  9  8  8.81 8.77  7.11  8.84
+5  11 11 11  8  8.33 9.26  7.81  8.47
+6  14 14 14  8  9.96 8.10  8.84  7.04
+7   6  6  6  8  7.24 6.13  6.08  5.25
+8   4  4  4 19  4.26 3.10  5.39 12.50
+9  12 12 12  8 10.84 9.13  8.15  5.56
+10  7  7  7  8  4.82 7.26  6.42  7.91
+11  5  5  5  8  5.68 4.74  5.73  6.89
+```
+]
+
+---
+count: false
+ 
+
+.panel1-anscombe-auto[
+
+```r
+anscombe %&gt;%
+* pivot_longer(
+*   everything(),
+*   cols_vary = "slowest",
+*   names_to = c(".value", "set"),
+*   names_pattern = "(.)(.)"
+* )
+```
+]
+ 
+.panel2-anscombe-auto[
+
+```
+# A tibble: 44 × 3
+   set       x     y
+   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1 1        10  8.04
+ 2 1         8  6.95
+ 3 1        13  7.58
+ 4 1         9  8.81
+ 5 1        11  8.33
+ 6 1        14  9.96
+ 7 1         6  7.24
+ 8 1         4  4.26
+ 9 1        12 10.8 
+10 1         7  4.82
+# … with 34 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-anscombe-auto[
+
+```r
+anscombe %&gt;%
+  pivot_longer(
+    everything(),
+    cols_vary = "slowest",
+    names_to = c(".value", "set"),
+    names_pattern = "(.)(.)"
+  ) -&gt;
+*anscombe_mod
+```
+]
+ 
+.panel2-anscombe-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-anscombe-auto[
+
+```r
+anscombe %&gt;%
+  pivot_longer(
+    everything(),
+    cols_vary = "slowest",
+    names_to = c(".value", "set"),
+    names_pattern = "(.)(.)"
+  ) -&gt;
+anscombe_mod
+
+*billboard
+```
+]
+ 
+.panel2-anscombe-auto[
+
+```
+# A tibble: 317 × 79
+   artist track date.ent…¹   wk1   wk2   wk3   wk4   wk5   wk6   wk7   wk8   wk9
+   &lt;chr&gt;  &lt;chr&gt; &lt;date&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1 2 Pac  Baby… 2000-02-26    87    82    72    77    87    94    99    NA    NA
+ 2 2Ge+h… The … 2000-09-02    91    87    92    NA    NA    NA    NA    NA    NA
+ 3 3 Doo… Kryp… 2000-04-08    81    70    68    67    66    57    54    53    51
+ 4 3 Doo… Loser 2000-10-21    76    76    72    69    67    65    55    59    62
+ 5 504 B… Wobb… 2000-04-15    57    34    25    17    17    31    36    49    53
+ 6 98^0   Give… 2000-08-19    51    39    34    26    26    19     2     2     3
+ 7 A*Tee… Danc… 2000-07-08    97    97    96    95   100    NA    NA    NA    NA
+ 8 Aaliy… I Do… 2000-01-29    84    62    51    41    38    35    35    38    38
+ 9 Aaliy… Try … 2000-03-18    59    53    38    28    21    18    16    14    12
+10 Adams… Open… 2000-08-26    76    76    74    69    68    67    61    58    57
+# … with 307 more rows, 67 more variables: wk10 &lt;dbl&gt;, wk11 &lt;dbl&gt;, wk12 &lt;dbl&gt;,
+#   wk13 &lt;dbl&gt;, wk14 &lt;dbl&gt;, wk15 &lt;dbl&gt;, wk16 &lt;dbl&gt;, wk17 &lt;dbl&gt;, wk18 &lt;dbl&gt;,
+#   wk19 &lt;dbl&gt;, wk20 &lt;dbl&gt;, wk21 &lt;dbl&gt;, wk22 &lt;dbl&gt;, wk23 &lt;dbl&gt;, wk24 &lt;dbl&gt;,
+#   wk25 &lt;dbl&gt;, wk26 &lt;dbl&gt;, wk27 &lt;dbl&gt;, wk28 &lt;dbl&gt;, wk29 &lt;dbl&gt;, wk30 &lt;dbl&gt;,
+#   wk31 &lt;dbl&gt;, wk32 &lt;dbl&gt;, wk33 &lt;dbl&gt;, wk34 &lt;dbl&gt;, wk35 &lt;dbl&gt;, wk36 &lt;dbl&gt;,
+#   wk37 &lt;dbl&gt;, wk38 &lt;dbl&gt;, wk39 &lt;dbl&gt;, wk40 &lt;dbl&gt;, wk41 &lt;dbl&gt;, wk42 &lt;dbl&gt;,
+#   wk43 &lt;dbl&gt;, wk44 &lt;dbl&gt;, wk45 &lt;dbl&gt;, wk46 &lt;dbl&gt;, wk47 &lt;dbl&gt;, wk48 &lt;dbl&gt;, …
+```
+]
+
+---
+count: false
+ 
+
+.panel1-anscombe-auto[
+
+```r
+anscombe %&gt;%
+  pivot_longer(
+    everything(),
+    cols_vary = "slowest",
+    names_to = c(".value", "set"),
+    names_pattern = "(.)(.)"
+  ) -&gt;
+anscombe_mod
+
+billboard %&gt;%
+* pivot_longer(
+*   cols = starts_with("wk"),
+*   names_to = "week",
+*   names_prefix = "wk",
+*   values_to = "rank",
+*   values_drop_na = TRUE
+* )
+```
+]
+ 
+.panel2-anscombe-auto[
+
+```
+# A tibble: 5,307 × 5
+   artist  track                   date.entered week   rank
+   &lt;chr&gt;   &lt;chr&gt;                   &lt;date&gt;       &lt;chr&gt; &lt;dbl&gt;
+ 1 2 Pac   Baby Don't Cry (Keep... 2000-02-26   1        87
+ 2 2 Pac   Baby Don't Cry (Keep... 2000-02-26   2        82
+ 3 2 Pac   Baby Don't Cry (Keep... 2000-02-26   3        72
+ 4 2 Pac   Baby Don't Cry (Keep... 2000-02-26   4        77
+ 5 2 Pac   Baby Don't Cry (Keep... 2000-02-26   5        87
+ 6 2 Pac   Baby Don't Cry (Keep... 2000-02-26   6        94
+ 7 2 Pac   Baby Don't Cry (Keep... 2000-02-26   7        99
+ 8 2Ge+her The Hardest Part Of ... 2000-09-02   1        91
+ 9 2Ge+her The Hardest Part Of ... 2000-09-02   2        87
+10 2Ge+her The Hardest Part Of ... 2000-09-02   3        92
+# … with 5,297 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-anscombe-auto[
+
+```r
+anscombe %&gt;%
+  pivot_longer(
+    everything(),
+    cols_vary = "slowest",
+    names_to = c(".value", "set"),
+    names_pattern = "(.)(.)"
+  ) -&gt;
+anscombe_mod
+
+billboard %&gt;%
+  pivot_longer(
+    cols = starts_with("wk"),
+    names_to = "week",
+    names_prefix = "wk",
+    values_to = "rank",
+    values_drop_na = TRUE
+  ) -&gt;
+*billboard_mod
+```
+]
+ 
+.panel2-anscombe-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-anscombe-auto[
+
+```r
+anscombe %&gt;%
+  pivot_longer(
+    everything(),
+    cols_vary = "slowest",
+    names_to = c(".value", "set"),
+    names_pattern = "(.)(.)"
+  ) -&gt;
+anscombe_mod
+
+billboard %&gt;%
+  pivot_longer(
+    cols = starts_with("wk"),
+    names_to = "week",
+    names_prefix = "wk",
+    values_to = "rank",
+    values_drop_na = TRUE
+  ) -&gt;
+billboard_mod
+
+*who
+```
+]
+ 
+.panel2-anscombe-auto[
+
+```
+# A tibble: 7,240 × 60
+   country     iso2  iso3   year new_s…¹ new_s…² new_s…³ new_s…⁴ new_s…⁵ new_s…⁶
+   &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+ 1 Afghanistan AF    AFG    1980      NA      NA      NA      NA      NA      NA
+ 2 Afghanistan AF    AFG    1981      NA      NA      NA      NA      NA      NA
+ 3 Afghanistan AF    AFG    1982      NA      NA      NA      NA      NA      NA
+ 4 Afghanistan AF    AFG    1983      NA      NA      NA      NA      NA      NA
+ 5 Afghanistan AF    AFG    1984      NA      NA      NA      NA      NA      NA
+ 6 Afghanistan AF    AFG    1985      NA      NA      NA      NA      NA      NA
+ 7 Afghanistan AF    AFG    1986      NA      NA      NA      NA      NA      NA
+ 8 Afghanistan AF    AFG    1987      NA      NA      NA      NA      NA      NA
+ 9 Afghanistan AF    AFG    1988      NA      NA      NA      NA      NA      NA
+10 Afghanistan AF    AFG    1989      NA      NA      NA      NA      NA      NA
+# … with 7,230 more rows, 50 more variables: new_sp_m65 &lt;dbl&gt;,
+#   new_sp_f014 &lt;dbl&gt;, new_sp_f1524 &lt;dbl&gt;, new_sp_f2534 &lt;dbl&gt;,
+#   new_sp_f3544 &lt;dbl&gt;, new_sp_f4554 &lt;dbl&gt;, new_sp_f5564 &lt;dbl&gt;,
+#   new_sp_f65 &lt;dbl&gt;, new_sn_m014 &lt;dbl&gt;, new_sn_m1524 &lt;dbl&gt;,
+#   new_sn_m2534 &lt;dbl&gt;, new_sn_m3544 &lt;dbl&gt;, new_sn_m4554 &lt;dbl&gt;,
+#   new_sn_m5564 &lt;dbl&gt;, new_sn_m65 &lt;dbl&gt;, new_sn_f014 &lt;dbl&gt;,
+#   new_sn_f1524 &lt;dbl&gt;, new_sn_f2534 &lt;dbl&gt;, new_sn_f3544 &lt;dbl&gt;, …
+```
+]
+
+---
+count: false
+ 
+
+.panel1-anscombe-auto[
+
+```r
+anscombe %&gt;%
+  pivot_longer(
+    everything(),
+    cols_vary = "slowest",
+    names_to = c(".value", "set"),
+    names_pattern = "(.)(.)"
+  ) -&gt;
+anscombe_mod
+
+billboard %&gt;%
+  pivot_longer(
+    cols = starts_with("wk"),
+    names_to = "week",
+    names_prefix = "wk",
+    values_to = "rank",
+    values_drop_na = TRUE
+  ) -&gt;
+billboard_mod
+
+who %&gt;%
+* pivot_longer(
+* cols = new_sp_m014:newrel_f65,
+* names_to = c("diagnosis", "gender", "age"),
+* names_pattern = "new_?(.*)_(.)(.*)",
+* values_to = "count"
+*) 
+```
+]
+ 
+.panel2-anscombe-auto[
+
+```
+# A tibble: 405,440 × 8
+   country     iso2  iso3   year diagnosis gender age   count
+   &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt;
+ 1 Afghanistan AF    AFG    1980 sp        m      014      NA
+ 2 Afghanistan AF    AFG    1980 sp        m      1524     NA
+ 3 Afghanistan AF    AFG    1980 sp        m      2534     NA
+ 4 Afghanistan AF    AFG    1980 sp        m      3544     NA
+ 5 Afghanistan AF    AFG    1980 sp        m      4554     NA
+ 6 Afghanistan AF    AFG    1980 sp        m      5564     NA
+ 7 Afghanistan AF    AFG    1980 sp        m      65       NA
+ 8 Afghanistan AF    AFG    1980 sp        f      014      NA
+ 9 Afghanistan AF    AFG    1980 sp        f      1524     NA
+10 Afghanistan AF    AFG    1980 sp        f      2534     NA
+# … with 405,430 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-anscombe-auto[
+
+```r
+anscombe %&gt;%
+  pivot_longer(
+    everything(),
+    cols_vary = "slowest",
+    names_to = c(".value", "set"),
+    names_pattern = "(.)(.)"
+  ) -&gt;
+anscombe_mod
+
+billboard %&gt;%
+  pivot_longer(
+    cols = starts_with("wk"),
+    names_to = "week",
+    names_prefix = "wk",
+    values_to = "rank",
+    values_drop_na = TRUE
+  ) -&gt;
+billboard_mod
+
+who %&gt;%
+  pivot_longer(
+  cols = new_sp_m014:newrel_f65,
+  names_to = c("diagnosis", "gender", "age"),
+  names_pattern = "new_?(.*)_(.)(.*)",
+  values_to = "count"
+) -&gt;
+*who_mod
+```
+]
+ 
+.panel2-anscombe-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-anscombe-auto[
+
+```r
+anscombe %&gt;%
+  pivot_longer(
+    everything(),
+    cols_vary = "slowest",
+    names_to = c(".value", "set"),
+    names_pattern = "(.)(.)"
+  ) -&gt;
+anscombe_mod
+
+billboard %&gt;%
+  pivot_longer(
+    cols = starts_with("wk"),
+    names_to = "week",
+    names_prefix = "wk",
+    values_to = "rank",
+    values_drop_na = TRUE
+  ) -&gt;
+billboard_mod
+
+who %&gt;%
+  pivot_longer(
+  cols = new_sp_m014:newrel_f65,
+  names_to = c("diagnosis", "gender", "age"),
+  names_pattern = "new_?(.*)_(.)(.*)",
+  values_to = "count"
+) -&gt;
+who_mod
+```
+]
+ 
+.panel2-anscombe-auto[
+
+]
+
+&lt;style&gt;
+.panel1-anscombe-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-anscombe-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-anscombe-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 80%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
