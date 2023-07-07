@@ -71,7 +71,7 @@ count: false
 .panel1-my_cars-auto[
 
 ```r
-*ncells &lt;- function(data){nrow(data)*nrow(data)}
+*ncells &lt;- function(data){nrow(data)*ncol(data)}
 ```
 ]
  
@@ -86,7 +86,7 @@ count: false
 .panel1-my_cars-auto[
 
 ```r
-ncells &lt;- function(data){nrow(data)*nrow(data)}
+ncells &lt;- function(data){nrow(data)*ncol(data)}
 
 *dcldata::example_eagle_nests
 ```
@@ -111,7 +111,7 @@ count: false
 .panel1-my_cars-auto[
 
 ```r
-ncells &lt;- function(data){nrow(data)*nrow(data)}
+ncells &lt;- function(data){nrow(data)*ncol(data)}
 
 dcldata::example_eagle_nests %&gt;%
 * pivot_longer(
@@ -144,7 +144,7 @@ count: false
 .panel1-my_cars-auto[
 
 ```r
-ncells &lt;- function(data){nrow(data)*nrow(data)}
+ncells &lt;- function(data){nrow(data)*ncol(data)}
 
 dcldata::example_eagle_nests %&gt;%
   pivot_longer(
@@ -159,7 +159,7 @@ dcldata::example_eagle_nests %&gt;%
 .panel2-my_cars-auto[
 
 ```
-[1] 36
+[1] 18
 ```
 ]
 
@@ -170,7 +170,7 @@ count: false
 .panel1-my_cars-auto[
 
 ```r
-ncells &lt;- function(data){nrow(data)*nrow(data)}
+ncells &lt;- function(data){nrow(data)*ncol(data)}
 
 dcldata::example_eagle_nests %&gt;%
   pivot_longer(
@@ -180,6 +180,131 @@ dcldata::example_eagle_nests %&gt;%
   ) -&gt;
 long; ncells(long)
 
+*long
+```
+]
+ 
+.panel2-my_cars-auto[
+
+```
+[1] 18
+```
+
+```
+# A tibble: 6 × 3
+  region                     year  num_nests
+  &lt;chr&gt;                      &lt;chr&gt;     &lt;dbl&gt;
+1 Pacific                    2007       1039
+2 Pacific                    2009       2587
+3 Southwest                  2007         51
+4 Southwest                  2009        176
+5 Rocky Mountains and Plains 2007        200
+6 Rocky Mountains and Plains 2009        338
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars-auto[
+
+```r
+ncells &lt;- function(data){nrow(data)*ncol(data)}
+
+dcldata::example_eagle_nests %&gt;%
+  pivot_longer(
+    cols = c(`2007`, `2009`),
+    names_to = "year",
+    values_to = "num_nests"
+  ) -&gt;
+long; ncells(long)
+
+long %&gt;%
+* pivot_wider(
+*   names_from = year,
+*   values_from = num_nests
+* )
+```
+]
+ 
+.panel2-my_cars-auto[
+
+```
+[1] 18
+```
+
+```
+# A tibble: 3 × 3
+  region                     `2007` `2009`
+  &lt;chr&gt;                       &lt;dbl&gt;  &lt;dbl&gt;
+1 Pacific                      1039   2587
+2 Southwest                      51    176
+3 Rocky Mountains and Plains    200    338
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars-auto[
+
+```r
+ncells &lt;- function(data){nrow(data)*ncol(data)}
+
+dcldata::example_eagle_nests %&gt;%
+  pivot_longer(
+    cols = c(`2007`, `2009`),
+    names_to = "year",
+    values_to = "num_nests"
+  ) -&gt;
+long; ncells(long)
+
+long %&gt;%
+  pivot_wider(
+    names_from = year,
+    values_from = num_nests
+  ) -&gt;
+*back_home_again; ncells(back_home_again)
+```
+]
+ 
+.panel2-my_cars-auto[
+
+```
+[1] 18
+```
+
+```
+[1] 9
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars-auto[
+
+```r
+ncells &lt;- function(data){nrow(data)*ncol(data)}
+
+dcldata::example_eagle_nests %&gt;%
+  pivot_longer(
+    cols = c(`2007`, `2009`),
+    names_to = "year",
+    values_to = "num_nests"
+  ) -&gt;
+long; ncells(long)
+
+long %&gt;%
+  pivot_wider(
+    names_from = year,
+    values_from = num_nests
+  ) -&gt;
+back_home_again; ncells(back_home_again)
+
 *dcldata::example_eagle_pairs
 ```
 ]
@@ -187,7 +312,11 @@ long; ncells(long)
 .panel2-my_cars-auto[
 
 ```
-[1] 36
+[1] 18
+```
+
+```
+[1] 9
 ```
 
 ```
@@ -216,7 +345,7 @@ count: false
 .panel1-my_cars-auto[
 
 ```r
-ncells &lt;- function(data){nrow(data)*nrow(data)}
+ncells &lt;- function(data){nrow(data)*ncol(data)}
 
 dcldata::example_eagle_nests %&gt;%
   pivot_longer(
@@ -225,6 +354,13 @@ dcldata::example_eagle_nests %&gt;%
     values_to = "num_nests"
   ) -&gt;
 long; ncells(long)
+
+long %&gt;%
+  pivot_wider(
+    names_from = year,
+    values_from = num_nests
+  ) -&gt;
+back_home_again; ncells(back_home_again)
 
 dcldata::example_eagle_pairs %&gt;%
 * pivot_longer(
@@ -238,7 +374,11 @@ dcldata::example_eagle_pairs %&gt;%
 .panel2-my_cars-auto[
 
 ```
-[1] 36
+[1] 18
+```
+
+```
+[1] 9
 ```
 
 ```
@@ -266,7 +406,7 @@ count: false
 .panel1-my_cars-auto[
 
 ```r
-ncells &lt;- function(data){nrow(data)*nrow(data)}
+ncells &lt;- function(data){nrow(data)*ncol(data)}
 
 dcldata::example_eagle_nests %&gt;%
   pivot_longer(
@@ -275,6 +415,13 @@ dcldata::example_eagle_nests %&gt;%
     values_to = "num_nests"
   ) -&gt;
 long; ncells(long)
+
+long %&gt;%
+  pivot_wider(
+    names_from = year,
+    values_from = num_nests
+  ) -&gt;
+back_home_again; ncells(back_home_again)
 
 dcldata::example_eagle_pairs %&gt;%
   pivot_longer(
@@ -289,165 +436,15 @@ dcldata::example_eagle_pairs %&gt;%
 .panel2-my_cars-auto[
 
 ```
-[1] 36
-```
-
-```
-[1] 230400
-```
-]
-
----
-count: false
- 
-
-.panel1-my_cars-auto[
-
-```r
-ncells &lt;- function(data){nrow(data)*nrow(data)}
-
-dcldata::example_eagle_nests %&gt;%
-  pivot_longer(
-    cols = c(`2007`, `2009`),
-    names_to = "year",
-    values_to = "num_nests"
-  ) -&gt;
-long; ncells(long)
-
-dcldata::example_eagle_pairs %&gt;%
-  pivot_longer(
-    cols = !starts_with("state"),
-    names_to = "year",
-    values_to = "num_pairs"
-  ) -&gt;
-also_long; ncells(also_long)
-
-*long
-```
-]
- 
-.panel2-my_cars-auto[
-
-```
-[1] 36
-```
-
-```
-[1] 230400
-```
-
-```
-# A tibble: 6 × 3
-  region                     year  num_nests
-  &lt;chr&gt;                      &lt;chr&gt;     &lt;dbl&gt;
-1 Pacific                    2007       1039
-2 Pacific                    2009       2587
-3 Southwest                  2007         51
-4 Southwest                  2009        176
-5 Rocky Mountains and Plains 2007        200
-6 Rocky Mountains and Plains 2009        338
-```
-]
-
----
-count: false
- 
-
-.panel1-my_cars-auto[
-
-```r
-ncells &lt;- function(data){nrow(data)*nrow(data)}
-
-dcldata::example_eagle_nests %&gt;%
-  pivot_longer(
-    cols = c(`2007`, `2009`),
-    names_to = "year",
-    values_to = "num_nests"
-  ) -&gt;
-long; ncells(long)
-
-dcldata::example_eagle_pairs %&gt;%
-  pivot_longer(
-    cols = !starts_with("state"),
-    names_to = "year",
-    values_to = "num_pairs"
-  ) -&gt;
-also_long; ncells(also_long)
-
-long %&gt;%
-* pivot_wider(
-*   names_from = year,
-*   values_from = num_nests
-* )
-```
-]
- 
-.panel2-my_cars-auto[
-
-```
-[1] 36
-```
-
-```
-[1] 230400
-```
-
-```
-# A tibble: 3 × 3
-  region                     `2007` `2009`
-  &lt;chr&gt;                       &lt;dbl&gt;  &lt;dbl&gt;
-1 Pacific                      1039   2587
-2 Southwest                      51    176
-3 Rocky Mountains and Plains    200    338
-```
-]
-
----
-count: false
- 
-
-.panel1-my_cars-auto[
-
-```r
-ncells &lt;- function(data){nrow(data)*nrow(data)}
-
-dcldata::example_eagle_nests %&gt;%
-  pivot_longer(
-    cols = c(`2007`, `2009`),
-    names_to = "year",
-    values_to = "num_nests"
-  ) -&gt;
-long; ncells(long)
-
-dcldata::example_eagle_pairs %&gt;%
-  pivot_longer(
-    cols = !starts_with("state"),
-    names_to = "year",
-    values_to = "num_pairs"
-  ) -&gt;
-also_long; ncells(also_long)
-
-long %&gt;%
-  pivot_wider(
-    names_from = year,
-    values_from = num_nests
-  ) -&gt;
-*back_home_again; ncells(back_home_again)
-```
-]
- 
-.panel2-my_cars-auto[
-
-```
-[1] 36
-```
-
-```
-[1] 230400
+[1] 18
 ```
 
 ```
 [1] 9
+```
+
+```
+[1] 1920
 ```
 ]
 
@@ -1879,6 +1876,7 @@ bernoulli_trial() %&gt;%
 
 
 
+
 ---
 
 count: false
@@ -2315,6 +2313,2067 @@ who_mod
 &lt;/style&gt;
 
 
+
+
+
+---
+
+count: false
+ 
+
+.panel1-tsibble-auto[
+
+```r
+*bernoulli_trial(prob = .5)
+```
+]
+ 
+.panel2-tsibble-auto[
+
+```
+  outcome prob
+1       0  0.5
+2       1  0.5
+```
+]
+
+---
+count: false
+ 
+
+.panel1-tsibble-auto[
+
+```r
+bernoulli_trial(prob = .5) %&gt;%
+* add_trials()
+```
+]
+ 
+.panel2-tsibble-auto[
+
+```
+# A tibble: 4 × 5
+  history t1_outcome t1_prob t2_outcome t2_prob
+    &lt;int&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;
+1       1          0     0.5          0     0.5
+2       2          0     0.5          1     0.5
+3       3          1     0.5          0     0.5
+4       4          1     0.5          1     0.5
+```
+]
+
+---
+count: false
+ 
+
+.panel1-tsibble-auto[
+
+```r
+bernoulli_trial(prob = .5) %&gt;%
+  add_trials() %&gt;%
+* add_trials()
+```
+]
+ 
+.panel2-tsibble-auto[
+
+```
+# A tibble: 8 × 7
+  history t1_outcome t1_prob t2_outcome t2_prob t3_outcome t3_prob
+    &lt;int&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;   &lt;dbl&gt;
+1       1          0     0.5          0     0.5          0     0.5
+2       2          0     0.5          0     0.5          1     0.5
+3       3          0     0.5          1     0.5          0     0.5
+4       4          0     0.5          1     0.5          1     0.5
+5       5          1     0.5          0     0.5          0     0.5
+6       6          1     0.5          0     0.5          1     0.5
+7       7          1     0.5          1     0.5          0     0.5
+8       8          1     0.5          1     0.5          1     0.5
+```
+]
+
+---
+count: false
+ 
+
+.panel1-tsibble-auto[
+
+```r
+bernoulli_trial(prob = .5) %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+* to_tsibble()
+```
+]
+ 
+.panel2-tsibble-auto[
+
+```
+# A tibble: 24 × 4
+   history trial outcome  prob
+     &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
+ 1       1 t1          0   0.5
+ 2       1 t2          0   0.5
+ 3       1 t3          0   0.5
+ 4       2 t1          0   0.5
+ 5       2 t2          0   0.5
+ 6       2 t3          1   0.5
+ 7       3 t1          0   0.5
+ 8       3 t2          1   0.5
+ 9       3 t3          0   0.5
+10       4 t1          0   0.5
+# … with 14 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-tsibble-auto[
+
+```r
+bernoulli_trial(prob = .5) %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  to_tsibble()  %&gt;%
+* group_by(history)
+```
+]
+ 
+.panel2-tsibble-auto[
+
+```
+# A tibble: 24 × 4
+# Groups:   history [8]
+   history trial outcome  prob
+     &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
+ 1       1 t1          0   0.5
+ 2       1 t2          0   0.5
+ 3       1 t3          0   0.5
+ 4       2 t1          0   0.5
+ 5       2 t2          0   0.5
+ 6       2 t3          1   0.5
+ 7       3 t1          0   0.5
+ 8       3 t2          1   0.5
+ 9       3 t3          0   0.5
+10       4 t1          0   0.5
+# … with 14 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-tsibble-auto[
+
+```r
+bernoulli_trial(prob = .5) %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  to_tsibble()  %&gt;%
+  group_by(history)  %&gt;%
+* summarize(hist_prob = prod(prob),
+*           count_successes = sum(outcome),
+*           paths = paste(outcome, collapse = ","))
+```
+]
+ 
+.panel2-tsibble-auto[
+
+```
+# A tibble: 8 × 4
+  history hist_prob count_successes paths
+    &lt;int&gt;     &lt;dbl&gt;           &lt;dbl&gt; &lt;chr&gt;
+1       1     0.125               0 0,0,0
+2       2     0.125               1 0,0,1
+3       3     0.125               1 0,1,0
+4       4     0.125               2 0,1,1
+5       5     0.125               1 1,0,0
+6       6     0.125               2 1,0,1
+7       7     0.125               2 1,1,0
+8       8     0.125               3 1,1,1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-tsibble-auto[
+
+```r
+bernoulli_trial(prob = .5) %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  to_tsibble()  %&gt;%
+  group_by(history)  %&gt;%
+  summarize(hist_prob = prod(prob),
+            count_successes = sum(outcome),
+            paths = paste(outcome, collapse = ",")) %&gt;%
+* arrange(count_successes)
+```
+]
+ 
+.panel2-tsibble-auto[
+
+```
+# A tibble: 8 × 4
+  history hist_prob count_successes paths
+    &lt;int&gt;     &lt;dbl&gt;           &lt;dbl&gt; &lt;chr&gt;
+1       1     0.125               0 0,0,0
+2       2     0.125               1 0,0,1
+3       3     0.125               1 0,1,0
+4       5     0.125               1 1,0,0
+5       4     0.125               2 0,1,1
+6       6     0.125               2 1,0,1
+7       7     0.125               2 1,1,0
+8       8     0.125               3 1,1,1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-tsibble-auto[
+
+```r
+bernoulli_trial(prob = .5) %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  to_tsibble()  %&gt;%
+  group_by(history)  %&gt;%
+  summarize(hist_prob = prod(prob),
+            count_successes = sum(outcome),
+            paths = paste(outcome, collapse = ",")) %&gt;%
+  arrange(count_successes) %&gt;%
+* group_by(count_successes)
+```
+]
+ 
+.panel2-tsibble-auto[
+
+```
+# A tibble: 8 × 4
+# Groups:   count_successes [4]
+  history hist_prob count_successes paths
+    &lt;int&gt;     &lt;dbl&gt;           &lt;dbl&gt; &lt;chr&gt;
+1       1     0.125               0 0,0,0
+2       2     0.125               1 0,0,1
+3       3     0.125               1 0,1,0
+4       5     0.125               1 1,0,0
+5       4     0.125               2 0,1,1
+6       6     0.125               2 1,0,1
+7       7     0.125               2 1,1,0
+8       8     0.125               3 1,1,1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-tsibble-auto[
+
+```r
+bernoulli_trial(prob = .5) %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  to_tsibble()  %&gt;%
+  group_by(history)  %&gt;%
+  summarize(hist_prob = prod(prob),
+            count_successes = sum(outcome),
+            paths = paste(outcome, collapse = ",")) %&gt;%
+  arrange(count_successes) %&gt;%
+  group_by(count_successes) %&gt;%
+* summarize(count_prob = sum(hist_prob))
+```
+]
+ 
+.panel2-tsibble-auto[
+
+```
+# A tibble: 4 × 2
+  count_successes count_prob
+            &lt;dbl&gt;      &lt;dbl&gt;
+1               0      0.125
+2               1      0.375
+3               2      0.375
+4               3      0.125
+```
+]
+
+---
+count: false
+ 
+
+.panel1-tsibble-auto[
+
+```r
+bernoulli_trial(prob = .5) %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  to_tsibble()  %&gt;%
+  group_by(history)  %&gt;%
+  summarize(hist_prob = prod(prob),
+            count_successes = sum(outcome),
+            paths = paste(outcome, collapse = ",")) %&gt;%
+  arrange(count_successes) %&gt;%
+  group_by(count_successes) %&gt;%
+  summarize(count_prob = sum(hist_prob))
+```
+]
+ 
+.panel2-tsibble-auto[
+
+```
+# A tibble: 4 × 2
+  count_successes count_prob
+            &lt;dbl&gt;      &lt;dbl&gt;
+1               0      0.125
+2               1      0.375
+3               2      0.375
+4               3      0.125
+```
+]
+
+&lt;style&gt;
+.panel1-tsibble-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-tsibble-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-tsibble-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-veridicalp-auto[
+
+```r
+*options(pillar.print_max = Inf)
+```
+]
+ 
+.panel2-veridicalp-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-veridicalp-auto[
+
+```r
+options(pillar.print_max = Inf)
+*fair_coin(outcome_set = c("T", "H"))
+```
+]
+ 
+.panel2-veridicalp-auto[
+
+```
+  outcome prob
+1       T  0.5
+2       H  0.5
+```
+]
+
+---
+count: false
+ 
+
+.panel1-veridicalp-auto[
+
+```r
+options(pillar.print_max = Inf)
+fair_coin(outcome_set = c("T", "H")) %&gt;%
+* select(-prob)
+```
+]
+ 
+.panel2-veridicalp-auto[
+
+```
+  outcome
+1       T
+2       H
+```
+]
+
+---
+count: false
+ 
+
+.panel1-veridicalp-auto[
+
+```r
+options(pillar.print_max = Inf)
+fair_coin(outcome_set = c("T", "H")) %&gt;%
+  select(-prob) %&gt;%
+* trial_init()
+```
+]
+ 
+.panel2-veridicalp-auto[
+
+```
+  history t1_outcome
+1       1          T
+2       2          H
+```
+]
+
+---
+count: false
+ 
+
+.panel1-veridicalp-auto[
+
+```r
+options(pillar.print_max = Inf)
+fair_coin(outcome_set = c("T", "H")) %&gt;%
+  select(-prob) %&gt;%
+  trial_init() %&gt;%
+* add_trials()
+```
+]
+ 
+.panel2-veridicalp-auto[
+
+```
+# A tibble: 4 × 3
+  history t1_outcome t2_outcome
+    &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;     
+1       1 H          H         
+2       2 H          T         
+3       3 T          H         
+4       4 T          T         
+```
+]
+
+---
+count: false
+ 
+
+.panel1-veridicalp-auto[
+
+```r
+options(pillar.print_max = Inf)
+fair_coin(outcome_set = c("T", "H")) %&gt;%
+  select(-prob) %&gt;%
+  trial_init() %&gt;%
+  add_trials() %&gt;%
+* add_trials()
+```
+]
+ 
+.panel2-veridicalp-auto[
+
+```
+# A tibble: 8 × 4
+  history t1_outcome t2_outcome t3_outcome
+    &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;     
+1       1 H          H          H         
+2       2 H          H          T         
+3       3 H          T          H         
+4       4 H          T          T         
+5       5 T          H          H         
+6       6 T          H          T         
+7       7 T          T          H         
+8       8 T          T          T         
+```
+]
+
+---
+count: false
+ 
+
+.panel1-veridicalp-auto[
+
+```r
+options(pillar.print_max = Inf)
+fair_coin(outcome_set = c("T", "H")) %&gt;%
+  select(-prob) %&gt;%
+  trial_init() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+* add_trials()
+```
+]
+ 
+.panel2-veridicalp-auto[
+
+```
+# A tibble: 16 × 5
+   history t1_outcome t2_outcome t3_outcome t4_outcome
+     &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;     
+ 1       1 H          H          H          H         
+ 2       2 H          H          H          T         
+ 3       3 H          H          T          H         
+ 4       4 H          H          T          T         
+ 5       5 H          T          H          H         
+ 6       6 H          T          H          T         
+ 7       7 H          T          T          H         
+ 8       8 H          T          T          T         
+ 9       9 T          H          H          H         
+10      10 T          H          H          T         
+11      11 T          H          T          H         
+12      12 T          H          T          T         
+13      13 T          T          H          H         
+14      14 T          T          H          T         
+15      15 T          T          T          H         
+16      16 T          T          T          T         
+```
+]
+
+---
+count: false
+ 
+
+.panel1-veridicalp-auto[
+
+```r
+options(pillar.print_max = Inf)
+fair_coin(outcome_set = c("T", "H")) %&gt;%
+  select(-prob) %&gt;%
+  trial_init() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+* add_trials()
+```
+]
+ 
+.panel2-veridicalp-auto[
+
+```
+# A tibble: 32 × 6
+   history t1_outcome t2_outcome t3_outcome t4_outcome t5_outcome
+     &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;     
+ 1       1 H          H          H          H          H         
+ 2       2 H          H          H          H          T         
+ 3       3 H          H          H          T          H         
+ 4       4 H          H          H          T          T         
+ 5       5 H          H          T          H          H         
+ 6       6 H          H          T          H          T         
+ 7       7 H          H          T          T          H         
+ 8       8 H          H          T          T          T         
+ 9       9 H          T          H          H          H         
+10      10 H          T          H          H          T         
+11      11 H          T          H          T          H         
+12      12 H          T          H          T          T         
+13      13 H          T          T          H          H         
+14      14 H          T          T          H          T         
+15      15 H          T          T          T          H         
+16      16 H          T          T          T          T         
+17      17 T          H          H          H          H         
+18      18 T          H          H          H          T         
+19      19 T          H          H          T          H         
+20      20 T          H          H          T          T         
+21      21 T          H          T          H          H         
+22      22 T          H          T          H          T         
+23      23 T          H          T          T          H         
+24      24 T          H          T          T          T         
+25      25 T          T          H          H          H         
+26      26 T          T          H          H          T         
+27      27 T          T          H          T          H         
+28      28 T          T          H          T          T         
+29      29 T          T          T          H          H         
+30      30 T          T          T          H          T         
+31      31 T          T          T          T          H         
+32      32 T          T          T          T          T         
+```
+]
+
+---
+count: false
+ 
+
+.panel1-veridicalp-auto[
+
+```r
+options(pillar.print_max = Inf)
+fair_coin(outcome_set = c("T", "H")) %&gt;%
+  select(-prob) %&gt;%
+  trial_init() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+* add_trials()
+```
+]
+ 
+.panel2-veridicalp-auto[
+
+```
+# A tibble: 64 × 7
+   history t1_outcome t2_outcome t3_outcome t4_outcome t5_outcome t6_outcome
+     &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;     
+ 1       1 H          H          H          H          H          H         
+ 2       2 H          H          H          H          H          T         
+ 3       3 H          H          H          H          T          H         
+ 4       4 H          H          H          H          T          T         
+ 5       5 H          H          H          T          H          H         
+ 6       6 H          H          H          T          H          T         
+ 7       7 H          H          H          T          T          H         
+ 8       8 H          H          H          T          T          T         
+ 9       9 H          H          T          H          H          H         
+10      10 H          H          T          H          H          T         
+11      11 H          H          T          H          T          H         
+12      12 H          H          T          H          T          T         
+13      13 H          H          T          T          H          H         
+14      14 H          H          T          T          H          T         
+15      15 H          H          T          T          T          H         
+16      16 H          H          T          T          T          T         
+17      17 H          T          H          H          H          H         
+18      18 H          T          H          H          H          T         
+19      19 H          T          H          H          T          H         
+20      20 H          T          H          H          T          T         
+21      21 H          T          H          T          H          H         
+22      22 H          T          H          T          H          T         
+23      23 H          T          H          T          T          H         
+24      24 H          T          H          T          T          T         
+25      25 H          T          T          H          H          H         
+26      26 H          T          T          H          H          T         
+27      27 H          T          T          H          T          H         
+28      28 H          T          T          H          T          T         
+29      29 H          T          T          T          H          H         
+30      30 H          T          T          T          H          T         
+31      31 H          T          T          T          T          H         
+32      32 H          T          T          T          T          T         
+33      33 T          H          H          H          H          H         
+34      34 T          H          H          H          H          T         
+35      35 T          H          H          H          T          H         
+36      36 T          H          H          H          T          T         
+37      37 T          H          H          T          H          H         
+38      38 T          H          H          T          H          T         
+39      39 T          H          H          T          T          H         
+40      40 T          H          H          T          T          T         
+41      41 T          H          T          H          H          H         
+42      42 T          H          T          H          H          T         
+43      43 T          H          T          H          T          H         
+44      44 T          H          T          H          T          T         
+45      45 T          H          T          T          H          H         
+46      46 T          H          T          T          H          T         
+47      47 T          H          T          T          T          H         
+48      48 T          H          T          T          T          T         
+49      49 T          T          H          H          H          H         
+50      50 T          T          H          H          H          T         
+51      51 T          T          H          H          T          H         
+52      52 T          T          H          H          T          T         
+53      53 T          T          H          T          H          H         
+54      54 T          T          H          T          H          T         
+55      55 T          T          H          T          T          H         
+56      56 T          T          H          T          T          T         
+57      57 T          T          T          H          H          H         
+58      58 T          T          T          H          H          T         
+59      59 T          T          T          H          T          H         
+60      60 T          T          T          H          T          T         
+61      61 T          T          T          T          H          H         
+62      62 T          T          T          T          H          T         
+63      63 T          T          T          T          T          H         
+64      64 T          T          T          T          T          T         
+```
+]
+
+---
+count: false
+ 
+
+.panel1-veridicalp-auto[
+
+```r
+options(pillar.print_max = Inf)
+fair_coin(outcome_set = c("T", "H")) %&gt;%
+  select(-prob) %&gt;%
+  trial_init() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+* to_tsibble()
+```
+]
+ 
+.panel2-veridicalp-auto[
+
+```
+# A tibble: 384 × 3
+    history trial outcome
+      &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  
+  1       1 t1    H      
+  2       1 t2    H      
+  3       1 t3    H      
+  4       1 t4    H      
+  5       1 t5    H      
+  6       1 t6    H      
+  7       2 t1    H      
+  8       2 t2    H      
+  9       2 t3    H      
+ 10       2 t4    H      
+ 11       2 t5    H      
+ 12       2 t6    T      
+ 13       3 t1    H      
+ 14       3 t2    H      
+ 15       3 t3    H      
+ 16       3 t4    H      
+ 17       3 t5    T      
+ 18       3 t6    H      
+ 19       4 t1    H      
+ 20       4 t2    H      
+ 21       4 t3    H      
+ 22       4 t4    H      
+ 23       4 t5    T      
+ 24       4 t6    T      
+ 25       5 t1    H      
+ 26       5 t2    H      
+ 27       5 t3    H      
+ 28       5 t4    T      
+ 29       5 t5    H      
+ 30       5 t6    H      
+ 31       6 t1    H      
+ 32       6 t2    H      
+ 33       6 t3    H      
+ 34       6 t4    T      
+ 35       6 t5    H      
+ 36       6 t6    T      
+ 37       7 t1    H      
+ 38       7 t2    H      
+ 39       7 t3    H      
+ 40       7 t4    T      
+ 41       7 t5    T      
+ 42       7 t6    H      
+ 43       8 t1    H      
+ 44       8 t2    H      
+ 45       8 t3    H      
+ 46       8 t4    T      
+ 47       8 t5    T      
+ 48       8 t6    T      
+ 49       9 t1    H      
+ 50       9 t2    H      
+ 51       9 t3    T      
+ 52       9 t4    H      
+ 53       9 t5    H      
+ 54       9 t6    H      
+ 55      10 t1    H      
+ 56      10 t2    H      
+ 57      10 t3    T      
+ 58      10 t4    H      
+ 59      10 t5    H      
+ 60      10 t6    T      
+ 61      11 t1    H      
+ 62      11 t2    H      
+ 63      11 t3    T      
+ 64      11 t4    H      
+ 65      11 t5    T      
+ 66      11 t6    H      
+ 67      12 t1    H      
+ 68      12 t2    H      
+ 69      12 t3    T      
+ 70      12 t4    H      
+ 71      12 t5    T      
+ 72      12 t6    T      
+ 73      13 t1    H      
+ 74      13 t2    H      
+ 75      13 t3    T      
+ 76      13 t4    T      
+ 77      13 t5    H      
+ 78      13 t6    H      
+ 79      14 t1    H      
+ 80      14 t2    H      
+ 81      14 t3    T      
+ 82      14 t4    T      
+ 83      14 t5    H      
+ 84      14 t6    T      
+ 85      15 t1    H      
+ 86      15 t2    H      
+ 87      15 t3    T      
+ 88      15 t4    T      
+ 89      15 t5    T      
+ 90      15 t6    H      
+ 91      16 t1    H      
+ 92      16 t2    H      
+ 93      16 t3    T      
+ 94      16 t4    T      
+ 95      16 t5    T      
+ 96      16 t6    T      
+ 97      17 t1    H      
+ 98      17 t2    T      
+ 99      17 t3    H      
+100      17 t4    H      
+101      17 t5    H      
+102      17 t6    H      
+103      18 t1    H      
+104      18 t2    T      
+105      18 t3    H      
+106      18 t4    H      
+107      18 t5    H      
+108      18 t6    T      
+109      19 t1    H      
+110      19 t2    T      
+111      19 t3    H      
+112      19 t4    H      
+113      19 t5    T      
+114      19 t6    H      
+115      20 t1    H      
+116      20 t2    T      
+117      20 t3    H      
+118      20 t4    H      
+119      20 t5    T      
+120      20 t6    T      
+121      21 t1    H      
+122      21 t2    T      
+123      21 t3    H      
+124      21 t4    T      
+125      21 t5    H      
+126      21 t6    H      
+127      22 t1    H      
+128      22 t2    T      
+129      22 t3    H      
+130      22 t4    T      
+131      22 t5    H      
+132      22 t6    T      
+133      23 t1    H      
+134      23 t2    T      
+135      23 t3    H      
+136      23 t4    T      
+137      23 t5    T      
+138      23 t6    H      
+139      24 t1    H      
+140      24 t2    T      
+141      24 t3    H      
+142      24 t4    T      
+143      24 t5    T      
+144      24 t6    T      
+145      25 t1    H      
+146      25 t2    T      
+147      25 t3    T      
+148      25 t4    H      
+149      25 t5    H      
+150      25 t6    H      
+151      26 t1    H      
+152      26 t2    T      
+153      26 t3    T      
+154      26 t4    H      
+155      26 t5    H      
+156      26 t6    T      
+157      27 t1    H      
+158      27 t2    T      
+159      27 t3    T      
+160      27 t4    H      
+161      27 t5    T      
+162      27 t6    H      
+163      28 t1    H      
+164      28 t2    T      
+165      28 t3    T      
+166      28 t4    H      
+167      28 t5    T      
+168      28 t6    T      
+169      29 t1    H      
+170      29 t2    T      
+171      29 t3    T      
+172      29 t4    T      
+173      29 t5    H      
+174      29 t6    H      
+175      30 t1    H      
+176      30 t2    T      
+177      30 t3    T      
+178      30 t4    T      
+179      30 t5    H      
+180      30 t6    T      
+181      31 t1    H      
+182      31 t2    T      
+183      31 t3    T      
+184      31 t4    T      
+185      31 t5    T      
+186      31 t6    H      
+187      32 t1    H      
+188      32 t2    T      
+189      32 t3    T      
+190      32 t4    T      
+191      32 t5    T      
+192      32 t6    T      
+193      33 t1    T      
+194      33 t2    H      
+195      33 t3    H      
+196      33 t4    H      
+197      33 t5    H      
+198      33 t6    H      
+199      34 t1    T      
+200      34 t2    H      
+201      34 t3    H      
+202      34 t4    H      
+203      34 t5    H      
+204      34 t6    T      
+205      35 t1    T      
+206      35 t2    H      
+207      35 t3    H      
+208      35 t4    H      
+209      35 t5    T      
+210      35 t6    H      
+211      36 t1    T      
+212      36 t2    H      
+213      36 t3    H      
+214      36 t4    H      
+215      36 t5    T      
+216      36 t6    T      
+217      37 t1    T      
+218      37 t2    H      
+219      37 t3    H      
+220      37 t4    T      
+221      37 t5    H      
+222      37 t6    H      
+223      38 t1    T      
+224      38 t2    H      
+225      38 t3    H      
+226      38 t4    T      
+227      38 t5    H      
+228      38 t6    T      
+229      39 t1    T      
+230      39 t2    H      
+231      39 t3    H      
+232      39 t4    T      
+233      39 t5    T      
+234      39 t6    H      
+235      40 t1    T      
+236      40 t2    H      
+237      40 t3    H      
+238      40 t4    T      
+239      40 t5    T      
+240      40 t6    T      
+241      41 t1    T      
+242      41 t2    H      
+243      41 t3    T      
+244      41 t4    H      
+245      41 t5    H      
+246      41 t6    H      
+247      42 t1    T      
+248      42 t2    H      
+249      42 t3    T      
+250      42 t4    H      
+251      42 t5    H      
+252      42 t6    T      
+253      43 t1    T      
+254      43 t2    H      
+255      43 t3    T      
+256      43 t4    H      
+257      43 t5    T      
+258      43 t6    H      
+259      44 t1    T      
+260      44 t2    H      
+261      44 t3    T      
+262      44 t4    H      
+263      44 t5    T      
+264      44 t6    T      
+265      45 t1    T      
+266      45 t2    H      
+267      45 t3    T      
+268      45 t4    T      
+269      45 t5    H      
+270      45 t6    H      
+271      46 t1    T      
+272      46 t2    H      
+273      46 t3    T      
+274      46 t4    T      
+275      46 t5    H      
+276      46 t6    T      
+277      47 t1    T      
+278      47 t2    H      
+279      47 t3    T      
+280      47 t4    T      
+281      47 t5    T      
+282      47 t6    H      
+283      48 t1    T      
+284      48 t2    H      
+285      48 t3    T      
+286      48 t4    T      
+287      48 t5    T      
+288      48 t6    T      
+289      49 t1    T      
+290      49 t2    T      
+291      49 t3    H      
+292      49 t4    H      
+293      49 t5    H      
+294      49 t6    H      
+295      50 t1    T      
+296      50 t2    T      
+297      50 t3    H      
+298      50 t4    H      
+299      50 t5    H      
+300      50 t6    T      
+301      51 t1    T      
+302      51 t2    T      
+303      51 t3    H      
+304      51 t4    H      
+305      51 t5    T      
+306      51 t6    H      
+307      52 t1    T      
+308      52 t2    T      
+309      52 t3    H      
+310      52 t4    H      
+311      52 t5    T      
+312      52 t6    T      
+313      53 t1    T      
+314      53 t2    T      
+315      53 t3    H      
+316      53 t4    T      
+317      53 t5    H      
+318      53 t6    H      
+319      54 t1    T      
+320      54 t2    T      
+321      54 t3    H      
+322      54 t4    T      
+323      54 t5    H      
+324      54 t6    T      
+325      55 t1    T      
+326      55 t2    T      
+327      55 t3    H      
+328      55 t4    T      
+329      55 t5    T      
+330      55 t6    H      
+331      56 t1    T      
+332      56 t2    T      
+333      56 t3    H      
+334      56 t4    T      
+335      56 t5    T      
+336      56 t6    T      
+337      57 t1    T      
+338      57 t2    T      
+339      57 t3    T      
+340      57 t4    H      
+341      57 t5    H      
+342      57 t6    H      
+343      58 t1    T      
+344      58 t2    T      
+345      58 t3    T      
+346      58 t4    H      
+347      58 t5    H      
+348      58 t6    T      
+349      59 t1    T      
+350      59 t2    T      
+351      59 t3    T      
+352      59 t4    H      
+353      59 t5    T      
+354      59 t6    H      
+355      60 t1    T      
+356      60 t2    T      
+357      60 t3    T      
+358      60 t4    H      
+359      60 t5    T      
+360      60 t6    T      
+361      61 t1    T      
+362      61 t2    T      
+363      61 t3    T      
+364      61 t4    T      
+365      61 t5    H      
+366      61 t6    H      
+367      62 t1    T      
+368      62 t2    T      
+369      62 t3    T      
+370      62 t4    T      
+371      62 t5    H      
+372      62 t6    T      
+373      63 t1    T      
+374      63 t2    T      
+375      63 t3    T      
+376      63 t4    T      
+377      63 t5    T      
+378      63 t6    H      
+379      64 t1    T      
+380      64 t2    T      
+381      64 t3    T      
+382      64 t4    T      
+383      64 t5    T      
+384      64 t6    T      
+```
+]
+
+---
+count: false
+ 
+
+.panel1-veridicalp-auto[
+
+```r
+options(pillar.print_max = Inf)
+fair_coin(outcome_set = c("T", "H")) %&gt;%
+  select(-prob) %&gt;%
+  trial_init() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  to_tsibble() %&gt;%
+* group_by(history)
+```
+]
+ 
+.panel2-veridicalp-auto[
+
+```
+# A tibble: 384 × 3
+# Groups:   history [64]
+    history trial outcome
+      &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  
+  1       1 t1    H      
+  2       1 t2    H      
+  3       1 t3    H      
+  4       1 t4    H      
+  5       1 t5    H      
+  6       1 t6    H      
+  7       2 t1    H      
+  8       2 t2    H      
+  9       2 t3    H      
+ 10       2 t4    H      
+ 11       2 t5    H      
+ 12       2 t6    T      
+ 13       3 t1    H      
+ 14       3 t2    H      
+ 15       3 t3    H      
+ 16       3 t4    H      
+ 17       3 t5    T      
+ 18       3 t6    H      
+ 19       4 t1    H      
+ 20       4 t2    H      
+ 21       4 t3    H      
+ 22       4 t4    H      
+ 23       4 t5    T      
+ 24       4 t6    T      
+ 25       5 t1    H      
+ 26       5 t2    H      
+ 27       5 t3    H      
+ 28       5 t4    T      
+ 29       5 t5    H      
+ 30       5 t6    H      
+ 31       6 t1    H      
+ 32       6 t2    H      
+ 33       6 t3    H      
+ 34       6 t4    T      
+ 35       6 t5    H      
+ 36       6 t6    T      
+ 37       7 t1    H      
+ 38       7 t2    H      
+ 39       7 t3    H      
+ 40       7 t4    T      
+ 41       7 t5    T      
+ 42       7 t6    H      
+ 43       8 t1    H      
+ 44       8 t2    H      
+ 45       8 t3    H      
+ 46       8 t4    T      
+ 47       8 t5    T      
+ 48       8 t6    T      
+ 49       9 t1    H      
+ 50       9 t2    H      
+ 51       9 t3    T      
+ 52       9 t4    H      
+ 53       9 t5    H      
+ 54       9 t6    H      
+ 55      10 t1    H      
+ 56      10 t2    H      
+ 57      10 t3    T      
+ 58      10 t4    H      
+ 59      10 t5    H      
+ 60      10 t6    T      
+ 61      11 t1    H      
+ 62      11 t2    H      
+ 63      11 t3    T      
+ 64      11 t4    H      
+ 65      11 t5    T      
+ 66      11 t6    H      
+ 67      12 t1    H      
+ 68      12 t2    H      
+ 69      12 t3    T      
+ 70      12 t4    H      
+ 71      12 t5    T      
+ 72      12 t6    T      
+ 73      13 t1    H      
+ 74      13 t2    H      
+ 75      13 t3    T      
+ 76      13 t4    T      
+ 77      13 t5    H      
+ 78      13 t6    H      
+ 79      14 t1    H      
+ 80      14 t2    H      
+ 81      14 t3    T      
+ 82      14 t4    T      
+ 83      14 t5    H      
+ 84      14 t6    T      
+ 85      15 t1    H      
+ 86      15 t2    H      
+ 87      15 t3    T      
+ 88      15 t4    T      
+ 89      15 t5    T      
+ 90      15 t6    H      
+ 91      16 t1    H      
+ 92      16 t2    H      
+ 93      16 t3    T      
+ 94      16 t4    T      
+ 95      16 t5    T      
+ 96      16 t6    T      
+ 97      17 t1    H      
+ 98      17 t2    T      
+ 99      17 t3    H      
+100      17 t4    H      
+101      17 t5    H      
+102      17 t6    H      
+103      18 t1    H      
+104      18 t2    T      
+105      18 t3    H      
+106      18 t4    H      
+107      18 t5    H      
+108      18 t6    T      
+109      19 t1    H      
+110      19 t2    T      
+111      19 t3    H      
+112      19 t4    H      
+113      19 t5    T      
+114      19 t6    H      
+115      20 t1    H      
+116      20 t2    T      
+117      20 t3    H      
+118      20 t4    H      
+119      20 t5    T      
+120      20 t6    T      
+121      21 t1    H      
+122      21 t2    T      
+123      21 t3    H      
+124      21 t4    T      
+125      21 t5    H      
+126      21 t6    H      
+127      22 t1    H      
+128      22 t2    T      
+129      22 t3    H      
+130      22 t4    T      
+131      22 t5    H      
+132      22 t6    T      
+133      23 t1    H      
+134      23 t2    T      
+135      23 t3    H      
+136      23 t4    T      
+137      23 t5    T      
+138      23 t6    H      
+139      24 t1    H      
+140      24 t2    T      
+141      24 t3    H      
+142      24 t4    T      
+143      24 t5    T      
+144      24 t6    T      
+145      25 t1    H      
+146      25 t2    T      
+147      25 t3    T      
+148      25 t4    H      
+149      25 t5    H      
+150      25 t6    H      
+151      26 t1    H      
+152      26 t2    T      
+153      26 t3    T      
+154      26 t4    H      
+155      26 t5    H      
+156      26 t6    T      
+157      27 t1    H      
+158      27 t2    T      
+159      27 t3    T      
+160      27 t4    H      
+161      27 t5    T      
+162      27 t6    H      
+163      28 t1    H      
+164      28 t2    T      
+165      28 t3    T      
+166      28 t4    H      
+167      28 t5    T      
+168      28 t6    T      
+169      29 t1    H      
+170      29 t2    T      
+171      29 t3    T      
+172      29 t4    T      
+173      29 t5    H      
+174      29 t6    H      
+175      30 t1    H      
+176      30 t2    T      
+177      30 t3    T      
+178      30 t4    T      
+179      30 t5    H      
+180      30 t6    T      
+181      31 t1    H      
+182      31 t2    T      
+183      31 t3    T      
+184      31 t4    T      
+185      31 t5    T      
+186      31 t6    H      
+187      32 t1    H      
+188      32 t2    T      
+189      32 t3    T      
+190      32 t4    T      
+191      32 t5    T      
+192      32 t6    T      
+193      33 t1    T      
+194      33 t2    H      
+195      33 t3    H      
+196      33 t4    H      
+197      33 t5    H      
+198      33 t6    H      
+199      34 t1    T      
+200      34 t2    H      
+201      34 t3    H      
+202      34 t4    H      
+203      34 t5    H      
+204      34 t6    T      
+205      35 t1    T      
+206      35 t2    H      
+207      35 t3    H      
+208      35 t4    H      
+209      35 t5    T      
+210      35 t6    H      
+211      36 t1    T      
+212      36 t2    H      
+213      36 t3    H      
+214      36 t4    H      
+215      36 t5    T      
+216      36 t6    T      
+217      37 t1    T      
+218      37 t2    H      
+219      37 t3    H      
+220      37 t4    T      
+221      37 t5    H      
+222      37 t6    H      
+223      38 t1    T      
+224      38 t2    H      
+225      38 t3    H      
+226      38 t4    T      
+227      38 t5    H      
+228      38 t6    T      
+229      39 t1    T      
+230      39 t2    H      
+231      39 t3    H      
+232      39 t4    T      
+233      39 t5    T      
+234      39 t6    H      
+235      40 t1    T      
+236      40 t2    H      
+237      40 t3    H      
+238      40 t4    T      
+239      40 t5    T      
+240      40 t6    T      
+241      41 t1    T      
+242      41 t2    H      
+243      41 t3    T      
+244      41 t4    H      
+245      41 t5    H      
+246      41 t6    H      
+247      42 t1    T      
+248      42 t2    H      
+249      42 t3    T      
+250      42 t4    H      
+251      42 t5    H      
+252      42 t6    T      
+253      43 t1    T      
+254      43 t2    H      
+255      43 t3    T      
+256      43 t4    H      
+257      43 t5    T      
+258      43 t6    H      
+259      44 t1    T      
+260      44 t2    H      
+261      44 t3    T      
+262      44 t4    H      
+263      44 t5    T      
+264      44 t6    T      
+265      45 t1    T      
+266      45 t2    H      
+267      45 t3    T      
+268      45 t4    T      
+269      45 t5    H      
+270      45 t6    H      
+271      46 t1    T      
+272      46 t2    H      
+273      46 t3    T      
+274      46 t4    T      
+275      46 t5    H      
+276      46 t6    T      
+277      47 t1    T      
+278      47 t2    H      
+279      47 t3    T      
+280      47 t4    T      
+281      47 t5    T      
+282      47 t6    H      
+283      48 t1    T      
+284      48 t2    H      
+285      48 t3    T      
+286      48 t4    T      
+287      48 t5    T      
+288      48 t6    T      
+289      49 t1    T      
+290      49 t2    T      
+291      49 t3    H      
+292      49 t4    H      
+293      49 t5    H      
+294      49 t6    H      
+295      50 t1    T      
+296      50 t2    T      
+297      50 t3    H      
+298      50 t4    H      
+299      50 t5    H      
+300      50 t6    T      
+301      51 t1    T      
+302      51 t2    T      
+303      51 t3    H      
+304      51 t4    H      
+305      51 t5    T      
+306      51 t6    H      
+307      52 t1    T      
+308      52 t2    T      
+309      52 t3    H      
+310      52 t4    H      
+311      52 t5    T      
+312      52 t6    T      
+313      53 t1    T      
+314      53 t2    T      
+315      53 t3    H      
+316      53 t4    T      
+317      53 t5    H      
+318      53 t6    H      
+319      54 t1    T      
+320      54 t2    T      
+321      54 t3    H      
+322      54 t4    T      
+323      54 t5    H      
+324      54 t6    T      
+325      55 t1    T      
+326      55 t2    T      
+327      55 t3    H      
+328      55 t4    T      
+329      55 t5    T      
+330      55 t6    H      
+331      56 t1    T      
+332      56 t2    T      
+333      56 t3    H      
+334      56 t4    T      
+335      56 t5    T      
+336      56 t6    T      
+337      57 t1    T      
+338      57 t2    T      
+339      57 t3    T      
+340      57 t4    H      
+341      57 t5    H      
+342      57 t6    H      
+343      58 t1    T      
+344      58 t2    T      
+345      58 t3    T      
+346      58 t4    H      
+347      58 t5    H      
+348      58 t6    T      
+349      59 t1    T      
+350      59 t2    T      
+351      59 t3    T      
+352      59 t4    H      
+353      59 t5    T      
+354      59 t6    H      
+355      60 t1    T      
+356      60 t2    T      
+357      60 t3    T      
+358      60 t4    H      
+359      60 t5    T      
+360      60 t6    T      
+361      61 t1    T      
+362      61 t2    T      
+363      61 t3    T      
+364      61 t4    T      
+365      61 t5    H      
+366      61 t6    H      
+367      62 t1    T      
+368      62 t2    T      
+369      62 t3    T      
+370      62 t4    T      
+371      62 t5    H      
+372      62 t6    T      
+373      63 t1    T      
+374      63 t2    T      
+375      63 t3    T      
+376      63 t4    T      
+377      63 t5    T      
+378      63 t6    H      
+379      64 t1    T      
+380      64 t2    T      
+381      64 t3    T      
+382      64 t4    T      
+383      64 t5    T      
+384      64 t6    T      
+```
+]
+
+---
+count: false
+ 
+
+.panel1-veridicalp-auto[
+
+```r
+options(pillar.print_max = Inf)
+fair_coin(outcome_set = c("T", "H")) %&gt;%
+  select(-prob) %&gt;%
+  trial_init() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  to_tsibble() %&gt;%
+  group_by(history) %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-veridicalp-auto[
+![](advanced_pivoting_files/figure-html/veridicalp_auto_12_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-veridicalp-auto[
+
+```r
+options(pillar.print_max = Inf)
+fair_coin(outcome_set = c("T", "H")) %&gt;%
+  select(-prob) %&gt;%
+  trial_init() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  to_tsibble() %&gt;%
+  group_by(history) %&gt;%
+  ggplot() +
+* aes(y = history, x = trial)
+```
+]
+ 
+.panel2-veridicalp-auto[
+![](advanced_pivoting_files/figure-html/veridicalp_auto_13_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-veridicalp-auto[
+
+```r
+options(pillar.print_max = Inf)
+fair_coin(outcome_set = c("T", "H")) %&gt;%
+  select(-prob) %&gt;%
+  trial_init() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  to_tsibble() %&gt;%
+  group_by(history) %&gt;%
+  ggplot() +
+  aes(y = history, x = trial) +
+* geom_tile(color = "white")
+```
+]
+ 
+.panel2-veridicalp-auto[
+![](advanced_pivoting_files/figure-html/veridicalp_auto_14_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-veridicalp-auto[
+
+```r
+options(pillar.print_max = Inf)
+fair_coin(outcome_set = c("T", "H")) %&gt;%
+  select(-prob) %&gt;%
+  trial_init() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  to_tsibble() %&gt;%
+  group_by(history) %&gt;%
+  ggplot() +
+  aes(y = history, x = trial) +
+  geom_tile(color = "white") +
+* aes(fill = outcome)
+```
+]
+ 
+.panel2-veridicalp-auto[
+![](advanced_pivoting_files/figure-html/veridicalp_auto_15_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-veridicalp-auto[
+
+```r
+options(pillar.print_max = Inf)
+fair_coin(outcome_set = c("T", "H")) %&gt;%
+  select(-prob) %&gt;%
+  trial_init() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  to_tsibble() %&gt;%
+  group_by(history) %&gt;%
+  ggplot() +
+  aes(y = history, x = trial) +
+  geom_tile(color = "white") +
+  aes(fill = outcome) -&gt;
+*baseplot
+```
+]
+ 
+.panel2-veridicalp-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-veridicalp-auto[
+
+```r
+options(pillar.print_max = Inf)
+fair_coin(outcome_set = c("T", "H")) %&gt;%
+  select(-prob) %&gt;%
+  trial_init() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  to_tsibble() %&gt;%
+  group_by(history) %&gt;%
+  ggplot() +
+  aes(y = history, x = trial) +
+  geom_tile(color = "white") +
+  aes(fill = outcome) -&gt;
+baseplot
+
+*baseplot
+```
+]
+ 
+.panel2-veridicalp-auto[
+![](advanced_pivoting_files/figure-html/veridicalp_auto_17_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-veridicalp-auto[
+
+```r
+options(pillar.print_max = Inf)
+fair_coin(outcome_set = c("T", "H")) %&gt;%
+  select(-prob) %&gt;%
+  trial_init() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  to_tsibble() %&gt;%
+  group_by(history) %&gt;%
+  ggplot() +
+  aes(y = history, x = trial) +
+  geom_tile(color = "white") +
+  aes(fill = outcome) -&gt;
+baseplot
+
+baseplot +
+* geom_point(data = . %&gt;%
+*              filter( outcome == "H" &amp;
+*                        lag(outcome) == "H"),
+*            color = "darkred")
+```
+]
+ 
+.panel2-veridicalp-auto[
+![](advanced_pivoting_files/figure-html/veridicalp_auto_18_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-veridicalp-auto[
+
+```r
+options(pillar.print_max = Inf)
+fair_coin(outcome_set = c("T", "H")) %&gt;%
+  select(-prob) %&gt;%
+  trial_init() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  to_tsibble() %&gt;%
+  group_by(history) %&gt;%
+  ggplot() +
+  aes(y = history, x = trial) +
+  geom_tile(color = "white") +
+  aes(fill = outcome) -&gt;
+baseplot
+
+baseplot +
+  geom_point(data = . %&gt;%
+               filter( outcome == "H" &amp;
+                         lag(outcome) == "H"),
+             color = "darkred") -&gt;
+* heads_heads
+```
+]
+ 
+.panel2-veridicalp-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-veridicalp-auto[
+
+```r
+options(pillar.print_max = Inf)
+fair_coin(outcome_set = c("T", "H")) %&gt;%
+  select(-prob) %&gt;%
+  trial_init() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  to_tsibble() %&gt;%
+  group_by(history) %&gt;%
+  ggplot() +
+  aes(y = history, x = trial) +
+  geom_tile(color = "white") +
+  aes(fill = outcome) -&gt;
+baseplot
+
+baseplot +
+  geom_point(data = . %&gt;%
+               filter( outcome == "H" &amp;
+                         lag(outcome) == "H"),
+             color = "darkred") -&gt;
+  heads_heads
+
+*baseplot
+```
+]
+ 
+.panel2-veridicalp-auto[
+![](advanced_pivoting_files/figure-html/veridicalp_auto_20_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-veridicalp-auto[
+
+```r
+options(pillar.print_max = Inf)
+fair_coin(outcome_set = c("T", "H")) %&gt;%
+  select(-prob) %&gt;%
+  trial_init() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  to_tsibble() %&gt;%
+  group_by(history) %&gt;%
+  ggplot() +
+  aes(y = history, x = trial) +
+  geom_tile(color = "white") +
+  aes(fill = outcome) -&gt;
+baseplot
+
+baseplot +
+  geom_point(data = . %&gt;%
+               filter( outcome == "H" &amp;
+                         lag(outcome) == "H"),
+             color = "darkred") -&gt;
+  heads_heads
+
+baseplot +
+* geom_point(data = . %&gt;%
+*              filter( outcome == "T" &amp;
+*                        lag(outcome) == "H"),
+*            color = "darkred")
+```
+]
+ 
+.panel2-veridicalp-auto[
+![](advanced_pivoting_files/figure-html/veridicalp_auto_21_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-veridicalp-auto[
+
+```r
+options(pillar.print_max = Inf)
+fair_coin(outcome_set = c("T", "H")) %&gt;%
+  select(-prob) %&gt;%
+  trial_init() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  to_tsibble() %&gt;%
+  group_by(history) %&gt;%
+  ggplot() +
+  aes(y = history, x = trial) +
+  geom_tile(color = "white") +
+  aes(fill = outcome) -&gt;
+baseplot
+
+baseplot +
+  geom_point(data = . %&gt;%
+               filter( outcome == "H" &amp;
+                         lag(outcome) == "H"),
+             color = "darkred") -&gt;
+  heads_heads
+
+baseplot +
+  geom_point(data = . %&gt;%
+               filter( outcome == "T" &amp;
+                         lag(outcome) == "H"),
+             color = "darkred") -&gt;
+* heads_tails
+```
+]
+ 
+.panel2-veridicalp-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-veridicalp-auto[
+
+```r
+options(pillar.print_max = Inf)
+fair_coin(outcome_set = c("T", "H")) %&gt;%
+  select(-prob) %&gt;%
+  trial_init() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  to_tsibble() %&gt;%
+  group_by(history) %&gt;%
+  ggplot() +
+  aes(y = history, x = trial) +
+  geom_tile(color = "white") +
+  aes(fill = outcome) -&gt;
+baseplot
+
+baseplot +
+  geom_point(data = . %&gt;%
+               filter( outcome == "H" &amp;
+                         lag(outcome) == "H"),
+             color = "darkred") -&gt;
+  heads_heads
+
+baseplot +
+  geom_point(data = . %&gt;%
+               filter( outcome == "T" &amp;
+                         lag(outcome) == "H"),
+             color = "darkred") -&gt;
+  heads_tails
+
+*library(patchwork)
+```
+]
+ 
+.panel2-veridicalp-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-veridicalp-auto[
+
+```r
+options(pillar.print_max = Inf)
+fair_coin(outcome_set = c("T", "H")) %&gt;%
+  select(-prob) %&gt;%
+  trial_init() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  to_tsibble() %&gt;%
+  group_by(history) %&gt;%
+  ggplot() +
+  aes(y = history, x = trial) +
+  geom_tile(color = "white") +
+  aes(fill = outcome) -&gt;
+baseplot
+
+baseplot +
+  geom_point(data = . %&gt;%
+               filter( outcome == "H" &amp;
+                         lag(outcome) == "H"),
+             color = "darkred") -&gt;
+  heads_heads
+
+baseplot +
+  geom_point(data = . %&gt;%
+               filter( outcome == "T" &amp;
+                         lag(outcome) == "H"),
+             color = "darkred") -&gt;
+  heads_tails
+
+library(patchwork)
+
+*heads_heads + heads_tails
+```
+]
+ 
+.panel2-veridicalp-auto[
+![](advanced_pivoting_files/figure-html/veridicalp_auto_24_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-veridicalp-auto[
+
+```r
+options(pillar.print_max = Inf)
+fair_coin(outcome_set = c("T", "H")) %&gt;%
+  select(-prob) %&gt;%
+  trial_init() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  add_trials() %&gt;%
+  to_tsibble() %&gt;%
+  group_by(history) %&gt;%
+  ggplot() +
+  aes(y = history, x = trial) +
+  geom_tile(color = "white") +
+  aes(fill = outcome) -&gt;
+baseplot
+
+baseplot +
+  geom_point(data = . %&gt;%
+               filter( outcome == "H" &amp;
+                         lag(outcome) == "H"),
+             color = "darkred") -&gt;
+  heads_heads
+
+baseplot +
+  geom_point(data = . %&gt;%
+               filter( outcome == "T" &amp;
+                         lag(outcome) == "H"),
+             color = "darkred") -&gt;
+  heads_tails
+
+library(patchwork)
+
+heads_heads + heads_tails
+```
+]
+ 
+.panel2-veridicalp-auto[
+![](advanced_pivoting_files/figure-html/veridicalp_auto_25_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-veridicalp-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-veridicalp-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-veridicalp-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
 
 
 

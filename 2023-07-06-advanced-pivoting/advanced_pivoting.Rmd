@@ -40,7 +40,7 @@ class: inverse, middle, center
 `r chunk_reveal("my_cars")`
 
 ```{r my_cars, include = FALSE}
-ncells <- function(data){nrow(data)*nrow(data)}
+ncells <- function(data){nrow(data)*ncol(data)}
 
 dcldata::example_eagle_nests %>% 
   pivot_longer(
@@ -50,6 +50,13 @@ dcldata::example_eagle_nests %>%
   ) ->
 long; ncells(long)
 
+long %>% 
+  pivot_wider(
+    names_from = year, 
+    values_from = num_nests
+  ) ->
+back_home_again; ncells(back_home_again)
+
 dcldata::example_eagle_pairs %>% 
   pivot_longer(
     cols = !starts_with("state"), 
@@ -57,13 +64,6 @@ dcldata::example_eagle_pairs %>%
     values_to = "num_pairs"
   ) ->
 also_long; ncells(also_long)
-
-long %>% 
-  pivot_wider(
-    names_from = year, 
-    values_from = num_nests
-  ) ->
-back_home_again; ncells(back_home_again)
 ```
 
 
@@ -194,6 +194,7 @@ bernoulli_trial() %>%
    pivot_wider(names_from = name, values_from = value)
 
 ```
+
 ---
 
 `r chunk_reveal("anscombe")`
@@ -230,7 +231,67 @@ who_mod
 
 ```
 
+---
 
+`r chunk_reveal("tsibble")`
+
+```{r tsibble, include = F}
+bernoulli_trial(prob = .5) %>%
+  add_trials() %>%
+  add_trials() %>%
+  to_tsibble()  %>%
+  group_by(history)  %>%
+  summarize(hist_prob = prod(prob),
+            count_successes = sum(outcome),
+            paths = paste(outcome, collapse = ",")) %>%
+  arrange(count_successes) %>%
+  group_by(count_successes) %>%
+  summarize(count_prob = sum(hist_prob)) 
+
+```
+
+
+---
+
+`r chunk_reveal("veridicalp")`
+
+```{r veridicalp, include = F}
+options(pillar.print_max = Inf)
+fair_coin(outcome_set = c("T", "H")) %>% 
+  select(-prob) %>% 
+  trial_init() %>% 
+  add_trials() %>% 
+  add_trials() %>% 
+  add_trials() %>%
+  add_trials() %>%
+  add_trials() %>%
+  to_tsibble() %>% 
+  group_by(history) %>% 
+  ggplot() + 
+  aes(y = history, x = trial) + 
+  geom_tile(color = "white") + 
+  aes(fill = outcome) ->
+baseplot
+
+baseplot + 
+  geom_point(data = . %>% 
+               filter( outcome == "H" & 
+                         lag(outcome) == "H"), 
+             color = "darkred") ->
+  heads_heads
+
+baseplot + 
+  geom_point(data = . %>% 
+               filter( outcome == "T" & 
+                         lag(outcome) == "H"), 
+             color = "darkred") ->
+  heads_tails
+
+library(patchwork)
+
+heads_heads + heads_tails
+
+```
 
 
 ```{css, eval = TRUE, echo = FALSE}
