@@ -1,0 +1,110 @@
+---
+title: "ggcoords-notation"
+author: "Evangeline Reynolds"
+date: "7/18/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# you won't use the scales argument, but ggplot will later
+compute_group_row_number <- function(data,
+                                     scales){
+  data %>%
+    arrange(x, y) %>% 
+# add an additional column called label
+# the geom we inherit from requires the label aesthetic
+    mutate(id = row_number(),
+           label = paste0("(list(x[", id, "], ",
+                          "y[", id, "]))"))
+  
+  # "(list(x[1],y[1]))"
+}
+
+StatRownumber <- ggplot2::ggproto(
+  `_class` = "StatRownumber",
+  `_inherit` = ggplot2::Stat,
+  required_aes = c("x", "y"),
+  compute_group = compute_group_row_number
+  )
+
+geom_coords_notation <- function(
+  mapping = NULL,
+  data = NULL,
+  position = "identity",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatRownumber,  # proto object from Step 2
+    geom = ggplot2::GeomText,  # inherit other behavior
+    data = data,
+    mapping = mapping,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes, 
+    params = list(na.rm = na.rm,  ...)
+  )
+}
+
+
+
+library(tidyverse)
+ggplot(data = anscombe) + 
+  aes(x = x1, y = y1) + 
+  geom_point() + 
+  geom_coords_notation(hjust = 1.2, check_overlap = T, parse = TRUE)
+
+
+
+
+```
+
+
+```{r}
+geom_coords_notation <- function(
+mapping = NULL,
+data = NULL,
+position = "identity",
+na.rm = FALSE,
+show.legend = NA,
+inherit.aes = TRUE, ...) {
+ggplot2::layer(
+stat = StatRownumber,  # proto object from Step 2
+geom = ggplot2::GeomText,  # inherit other behavior
+data = data,
+mapping = mapping,
+position = position,
+show.legend = show.legend,
+inherit.aes = inherit.aes,
+params = list(na.rm = na.rm, ...)
+)
+}
+library(tidyverse)
+ggplot(data = anscombe) +
+aes(x = x1, y = y1) +
+geom_point() +
+# geom_coords_notation(hjust = 1.2, check_overlap = T, parse = TRUE) +
+annotate(geom = "text", x = 1, y = 1, label = "(list(x[1],y[1]))", parse = TRUE)
+ggplot(data = anscombe) +
+aes(x = x1, y = y1) +
+geom_point() +
+geom_coords_notation(hjust = 1.2, check_overlap = T, parse = TRUE) 
+
+#+
+#annotate(geom = "text", x = 1, y = 1, label = "(list(x[1],y[1]))", parse = TRUE)
+#ggplot(data = anscombe) +
+#aes(x = x1, y = y1) +
+#geom_point() +
+#geom_coords_notation(hjust = 1.2, check_overlap = T)
+#mapping = NULL,
+#library(tidyverse)
+#ggplot(data = anscombe) +
+#aes(x = x1, y = y1) +
+#geom_point() +
+#geom_coords_notation(hjust = 1.2, check_overlap = T)
+
+```
