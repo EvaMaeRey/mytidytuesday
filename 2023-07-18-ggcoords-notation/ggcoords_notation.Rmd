@@ -65,7 +65,7 @@ ggplot(data = anscombe) +
 
 
 ```{r}
-geom_coords_notation <- function(
+geom_coords_notation0 <- function(
 mapping = NULL,
 data = NULL,
 position = "identity",
@@ -92,7 +92,21 @@ annotate(geom = "text", x = 1, y = 1, label = "(list(x[1],y[1]))", parse = TRUE)
 ggplot(data = anscombe) +
 aes(x = x1, y = y1) +
 geom_point() +
-geom_coords_notation(hjust = 1.2, check_overlap = T, parse = TRUE) 
+geom_coords_notation0(hjust = 1.2, check_overlap = T, parse = TRUE) 
+
+
+geom_coords_notation <- function(...){
+  
+  geom_coords_notation0(parse = TRUE, hjust = 1.2, ...)
+  
+}
+
+
+ggplot(data = anscombe) +
+aes(x = x1, y = y1) +
+geom_point() +
+  geom_coords_notation() 
+
 
 #+
 #annotate(geom = "text", x = 1, y = 1, label = "(list(x[1],y[1]))", parse = TRUE)
