@@ -1,0 +1,100 @@
+---
+title: "Exploded code"
+subtitle: "Using flipbookr and xaringan"
+author: "Me"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r, include = T}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, fig.height = 4, message = F, warning = FALSE, comment = "", cache = T)
+
+options(tibble.print_min = 55)
+options(knitr.duplicate.label = "allow")
+options(width=300) # prevents data wrapping
+```
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 70%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+
+
+---
+
+`r flipbookr::chunk_reveal("cars", break_type = "replace", replace = "2.75", replacements = seq(2.75, 4.93, by = .25/5))`
+
+
+```{r cars, include = F}
+library(tidyverse)
+z <- 2.75
+tolerance <- .7
+mtcars %>% 
+  filter(drat < z + tolerance & drat > z - tolerance) %>% 
+  mutate(closeness = (tolerance - abs(z- drat))/tolerance) %>% 
+  ggplot() + 
+  aes(wt, qsec) + 
+  geom_point(aes(alpha = closeness, color = z)) + 
+  labs(title = paste0("z = ", z,"; tolerance = ",  tolerance)) +
+  scale_alpha(limits = c(0, 1)) +
+  geom_blank(data = mtcars) + 
+  scale_color_viridis_c(limits = range(mtcars$drat))
+counter <- 1
+```
+---
+
+
+```{r}
+read.csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-21/spotify_songs.csv") ->
+  songs
+```
+
+---
+
+`r flipbookr::chunk_reveal("songs", break_type = "replace", replace = "0.5", replacements = seq(0.000, 0.991, by = .05))`
+
+
+```{r songs, include = F}
+library(tidyverse)
+z <- 0.5
+tolerance <- .1
+songs %>% 
+  filter(valence < z + tolerance & valence > z - tolerance) %>% 
+  mutate(closeness = (tolerance - abs(z- valence))/tolerance) %>% 
+  ggplot() + 
+  aes(danceability, energy) + 
+  geom_point(aes(alpha = closeness, color = z)) + 
+  labs(title = paste0("z = ", z,"; tolerance = ",  tolerance)) +
+  scale_alpha(limits = c(0, 1)) +
+  geom_blank(data = songs) + 
+  scale_color_viridis_c(limits = range(songs$valence))
+counter <- 1
+```

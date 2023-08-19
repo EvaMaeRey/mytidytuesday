@@ -11,6 +11,7 @@ The goal of mytidytuesday is to hold small projects. They are like blogs
 posts, but mostly code. In the spirit of \#tidytuesday no pressure to
 write prose\!
 
+  - [2023-07-20-ggz/ggz\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2023-07-20-ggz/ggz_flipbook.html)
   - [2023-07-18-ggcoords-notation/ggcoords\_notation.html](https://evamaerey.github.io/mytidytuesday/2023-07-18-ggcoords-notation/ggcoords_notation.html)
   - [2023-07-06-advanced-pivoting/advanced\_pivoting.html](https://evamaerey.github.io/mytidytuesday/2023-07-06-advanced-pivoting/advanced_pivoting.html)
   - [2023-05-23-indicator-recode/indicator\_recode.html](https://evamaerey.github.io/mytidytuesday/2023-05-23-indicator-recode/indicator_recode.html)
@@ -110,3 +111,15 @@ write prose\!
   - [2021-10-31-anscombes-quartet/anscombes.html](https://evamaerey.github.io/mytidytuesday/2021-10-31-anscombes-quartet/anscombes.html)
   - [2021-10-19-great-pumpkin/memory\_input.html](https://evamaerey.github.io/mytidytuesday/2021-10-19-great-pumpkin/memory_input.html)
   - [2021-10-19-great-pumpkin/memory.html](https://evamaerey.github.io/mytidytuesday/2021-10-19-great-pumpkin/memory.html)
+
+<!-- end list -->
+
+``` r
+new_experiment <- function(name){
+  
+  dir.create(paste0(Sys.Date(),"-", name))
+  
+} 
+
+#new_experiment("ggz")
+```
