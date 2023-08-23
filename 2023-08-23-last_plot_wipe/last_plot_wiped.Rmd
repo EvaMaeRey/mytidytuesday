@@ -1,0 +1,46 @@
+---
+title: "last_plot_wipe"
+author: "Evangeline Reynolds"
+date: "8/23/2023"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+
+
+remove_layers <- function(plot, index = NULL){
+  
+  if(is.null(index)){
+  plot$layers <- NULL
+  }else{
+  plot$layers[[index]] <- NULL
+  }
+  
+ plot
+  
+}
+
+last_plot_wiped <- function(index = NULL){
+  
+  plot <- ggplot2::last_plot()
+  
+  if(is.null(index)){
+  plot$layers <- NULL
+  }else{
+  plot$layers[[index]] <- NULL
+  }
+  
+ plot
+  
+}
+
+ggplot(mtcars) +
+  aes(x = cyl, fill = factor(vs)) + 
+  geom_bar()
+
+last_plot_wiped() +
+  geom_bar(position = "fill")
+
+
+```
