@@ -1,0 +1,133 @@
+---
+title: "Value judgements"
+subtitle: "Using flipbookr and xaringan"
+author: "Me"
+output: html_document
+---
+
+
+Just after that up-front judgment on plots as achieved in FDV (Wilke).  Looking at extending to code and outputs.
+
+---
+
+```{r}
+knitr::opts_chunk$set(eval = T)
+
+```
+
+
+```{r, include = T}
+library(tidyverse)
+readLines("https://raw.githubusercontent.com/clauswilke/dviz.supp/master/R/stamp.R") %>% 
+  writeLines("stamp.R")
+
+source("stamp.R")
+
+tidytitanic::passengers %>% 
+  tibble() %>% 
+  mutate(cat_survived = ifelse(survived, "survived", "not survived"), 
+         .before = 1)
+
+judge <- function(p, color, alpha, label, family = dviz_font_family_bold,
+                  fontface = "plain", clip = "on")
+{
+  ggdraw(p, clip = clip) +
+    draw_text(paste0(label, "  "), x=1, y=1, vjust=1.1, hjust=1, size=35, angle = 0,
+              color=color, alpha=alpha, family = family, fontface = fontface) +
+    draw_line(c(1, 1), c(0, 1), size=2.8, color=color, alpha=alpha)
+}
+
+theme_set(new = theme_classic(base_size = 30) + theme(plot.margin = margin(50,20,30,10)))
+
+tidytitanic::passengers %>% 
+  mutate(adult = age >=18 ) %>% 
+  filter(!is.na(age)) %>% 
+ggplot() + 
+  aes(x = adult) + 
+  geom_bar() ->
+  p; p
+  
+library(cowplot)
+p %>% judge(family = "Helvetica", color = "red", alpha = .9, label = "ugly", fontface = "bold")
+
+
+p + 
+  facet_grid(~ survived) ->
+p2
+
+p2 %>% judge(family = "Helvetica", color = "red", alpha = .9, label = "bad", fontface = "bold")
+
+```
+
+
+
+
+```{r chunk1, eval = F}
+tidytitanic::passengers %>% 
+  ggplot() + 
+  aes(x = ind_recode(survived)) + 
+  geom_bar() + 
+  labs(x = NULL)
+```
+
+
+
+
+
+```{r chunk, eval = F}
+tidytitanic::passengers %>% 
+  ggplot() + 
+  aes(x = ifelse(survived, 
+                 "survived",
+                 "not survived")) + 
+  geom_bar() + 
+  labs(x = NULL)
+```
+
+
+
+```{r}
+knitr::knit_code$get("chunk") |>  
+  paste(collapse = "\n") ->
+text
+
+
+# text <- "tidytitanic::passengers %>% \n  mutate(adult = age >=18 ) %>% \n  filter(!is.na(age)) %>% \nggplot() + \n  aes(x = adult) + \n  geom_bar()"
+library(ggplot2)
+ggplot(data = data.frame(x = c(0, 1), y = c(0,1))) +
+  aes(x = x, y = y) +
+  geom_blank() +
+  annotate("text", label = text, x = 0, y = 1, hjust = 0, vjust = 1, size = 5, family = "Courier") + 
+  theme_void() ->
+syntax_plot
+
+syntax_plot %>% judge(family = "Helvetica", color = "red", alpha = .9, label = "repetitive", fontface = "bold")
+  
+```
+
+
+```{r, eval = F}
+sink("temp.txt")
+library(magrittr)
+tidytitanic::passengers |> 
+  janitor::tabyl(sex, survived)
+sink()
+```
+
+```{r}
+readLines("temp.txt") %>% 
+  paste(collapse = "\n")->
+  text
+
+
+library(ggplot2)
+ggplot(data = data.frame(x = c(0, 1), y = c(0,1))) +
+  aes(x = x, y = y) +
+  geom_blank() +
+  annotate("text", label = text, x = 0, y = 1, hjust = 0, vjust = 1, size = 5, family = "Courier") + 
+  theme_void() ->
+output_plot
+
+output_plot %>% judge(family = "Helvetica", color = "red", alpha = .9, label = "awkward", fontface = "bold")
+```
+
