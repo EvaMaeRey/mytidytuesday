@@ -11,6 +11,10 @@ The goal of mytidytuesday is to hold small projects. They are like blogs
 posts, but mostly code. In the spirit of \#tidytuesday no pressure to
 write prose\!
 
+  - [2023-08-25-circle\_chord\_lyrics/circle\_chord\_lyrics.html](https://evamaerey.github.io/mytidytuesday/2023-08-25-circle_chord_lyrics/circle_chord_lyrics.html)
+  - [2023-08-24-geom\_smoot\_cat/geom\_smooth\_cat.html](https://evamaerey.github.io/mytidytuesday/2023-08-24-geom_smoot_cat/geom_smooth_cat.html)
+  - [2023-08-23-last\_plot\_wipe/last\_plot\_wiped.html](https://evamaerey.github.io/mytidytuesday/2023-08-23-last_plot_wipe/last_plot_wiped.html)
+  - [2023-08-23-ggjudge/ggjudge.html](https://evamaerey.github.io/mytidytuesday/2023-08-23-ggjudge/ggjudge.html)
   - [2023-07-20-ggz/ggz\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2023-07-20-ggz/ggz_flipbook.html)
   - [2023-07-18-ggcoords-notation/ggcoords\_notation.html](https://evamaerey.github.io/mytidytuesday/2023-07-18-ggcoords-notation/ggcoords_notation.html)
   - [2023-07-06-advanced-pivoting/advanced\_pivoting.html](https://evamaerey.github.io/mytidytuesday/2023-07-06-advanced-pivoting/advanced_pivoting.html)
@@ -117,9 +121,9 @@ write prose\!
 ``` r
 new_experiment <- function(name){
   
-  dir.create(paste0(Sys.Date(),"-", name))
+  dir.create(paste0(Sys.Date(),"-", name), )
   
 } 
 
-#new_experiment("ggz")
+new_experiment("circle_chord_lyrics")
 ```

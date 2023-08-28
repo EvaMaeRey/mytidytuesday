@@ -1,0 +1,94 @@
+---
+title: "Leo's song and chord book"
+author: "Evangeline Reynolds"
+date: "8/25/2023"
+output: pdf_document
+---
+
+---
+title: "Exploded code"
+subtitle: "Using flipbookr and xaringan"
+author: "Me"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r setup, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 12, message = F, warning = FALSE, comment = "", cache = F)
+
+options(tibble.print_min = 55)
+options(knitr.duplicate.label = "allow")
+options(width=300) # prevents data wrapping
+```
+
+
+
+```{r first, include = F}
+library(ggstamp)
+library(ggplot2)
+library(tidyverse)
+
+major = c("C", "G", "D", "A", "E", "B", 
+            "Gb","Db", "Ab", "Eb", "Bb", "F")
+minor = c("Am", "Em", "Bm", "F#m", "C#m", "G#m", "Ebm",
+            "Bbm", "Fm", "Cm", "Gm", "Dm")
+spot = 1:12
+```
+
+---
+
+
+
+
+```{r another, include = T, echo = F}
+ggcanvas() + 
+  stamp_tile(x = 1:12) +
+  stamp_text(x = 1:12, 
+             label = major) + 
+  stamp_tile(x = 1:12, y = -1) +
+  stamp_text(x = 1:12, y = -.8, 
+             label = minor,
+             size = 4) +
+  coord_polar(start = -.25) + 
+  theme_void_fill(fill = "white") + 
+  stamp_tile(x = 1, alpha = .25) ->
+circle
+
+ggstamp::ggcanvas() + 
+  stamp_segment(x = 1:6, y = 0, xend = 1:6, yend = 7) + 
+  stamp_segment(y = 0:5, yend = 0:5, x = 1, xend = 6) + 
+  scale_y_reverse() + 
+  theme_void() ->
+frets
+
+ggstamp::ggcanvas() + 
+  stamp_segment(y = 1:5, yend = 1:5, x = 1, xend = 6) + 
+  theme_void() ->
+melody
+
+
+
+library(patchwork)
+```
+
+\clearpage
+```{r, fig.width=12, fig.height = 20}
+(circle + frets) /
+(circle + frets) /
+(circle + frets)
+(circle + frets) /
+(circle + frets) /
+(circle + frets)
+
+```
+

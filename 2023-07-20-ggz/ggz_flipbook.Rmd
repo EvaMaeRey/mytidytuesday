@@ -87,14 +87,79 @@ library(tidyverse)
 z <- 0.5
 tolerance <- .1
 songs %>% 
+  mutate(ind_tswift = track_artist |> str_detect("Taylor Swift")) %>% 
+  arrange(ind_tswift) %>% 
   filter(valence < z + tolerance & valence > z - tolerance) %>% 
   mutate(closeness = (tolerance - abs(z- valence))/tolerance) %>% 
   ggplot() + 
-  aes(danceability, energy) + 
-  geom_point(aes(alpha = closeness, color = z)) + 
+  aes(danceability, energy, alpha = closeness) + 
+  geom_point(aes(color = ind2cat::ind_recode(ind_tswift), fill = z), size = 4, shape = 21) + 
   labs(title = paste0("z = ", z,"; tolerance = ",  tolerance)) +
   scale_alpha(limits = c(0, 1)) +
-  geom_blank(data = songs) + 
-  scale_color_viridis_c(limits = range(songs$valence))
+  geom_blank(data = songs, alpha = 1) + 
+  scale_fill_viridis_c(limits = range(songs$valence)) + 
+  scale_color_manual(values = c("white", "darkred")) +
+  geom_text(data = . %>% filter(ind_tswift), check_overlap = T, lineheight = .7) + 
+  aes(label = track_name %>% str_wrap(20))
 counter <- 1
+```
+
+
+```{r}
+read.csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-21/spotify_songs.csv") ->
+  songs
+
+songs %>% 
+  mutate(ind_tswift = track_artist |> str_detect("Taylor Swift")) %>% 
+  filter(!is.na(ind_tswift)) %>% 
+  #The estimated overall key of the track. Integers map to pitches using standard Pitch Class notation . E.g. 0 = C, 1 = C♯/D♭, 2 = D, and so on. If no key was detected, the value is -1.
+  mutate(key = factor(key, levels = -1:11, labels = c('none', 'C', 'C#/Db', 'D', 'D#/Eb', "E",
+                                                      "F", "F#/Gb", "G",
+                                                      "G#/Ab", "A", "A#/Bb", "B"))) %>% 
+  ggplot() + 
+  aes(x = key) + 
+  facet_grid(ind2cat::ind_recode(ind_tswift) ~., scale = "free_y") + 
+  geom_bar() + 
+  aes(fill = ifelse(mode, "major", "minor")) 
+
+songs %>% 
+  mutate(ind_tswift = track_artist |> str_detect("Taylor Swift")) %>% 
+  filter(!is.na(ind_tswift)) %>% 
+  # The estimated overall key of the track. Integers map to pitches using standard Pitch Class notation . E.g. 0 = C, 1 = C♯/D♭, 2 = D, and so on. If no key was detected, the value is -1.
+  mutate(key = factor(key, levels = -1:11, labels = c('none', 'C', 'C#/Db', 'D', 'D#/Eb', "E",
+                                                      "F", "F#/Gb", "G",
+                                                      "G#/Ab", "A", "A#/Bb", "B"))) %>% 
+  ggplot() + 
+  aes(x = valence) + 
+  facet_grid(ind2cat::ind_recode(ind_tswift) ~., scale = "free_y") + 
+  geom_histogram() + 
+  ggxmean::geom_x_mean()
+  
+songs %>% 
+  mutate(ind_tswift = track_artist |> str_detect("Taylor Swift")) %>% 
+  filter(!is.na(ind_tswift)) %>% 
+  ggplot() + 
+  aes(x = valence, y = track_popularity) + 
+  facet_grid(ind2cat::ind_recode(ind_tswift) ~.) + 
+  geom_point() + 
+  ggxmean::geom_xy_means(color = "red", aes(text = NULL)) +
+  aes(text = track_name) 
+
+
+songs %>% 
+  mutate(ind_tswift = track_artist |> str_detect("Taylor Swift")) %>% 
+  filter(ind_tswift) %>% 
+  mutate(n = row_number()) %>% 
+  #The estimated overall key of the track. Integers map to pitches using standard Pitch Class notation . E.g. 0 = C, 1 = C♯/D♭, 2 = D, and so on. If no key was detected, the value is -1.
+  mutate(key = factor(key, levels = -1:11, labels = c('none', 'C', 'C#/Db', 'D', 'D#/Eb', "E",
+                                                      "F", "F#/Gb", "G",
+                                                      "G#/Ab", "A", "A#/Bb", "B"))) %>% 
+  ggplot() + 
+  aes(x = key) + 
+  aes(group = n) +
+  geom_bar(color = "grey") + 
+  aes(fill = ifelse(mode, "major", "minor")) + 
+  
+  facet_wrap(ifelse(mode, "major", "minor"), ncol = 1)
+
 ```
