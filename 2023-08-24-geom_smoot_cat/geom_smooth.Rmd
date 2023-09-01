@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, error = T)
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
@@ -59,9 +59,6 @@ stat_smooth <- function(mapping = NULL, data = NULL,
 # This function exists to silence an undeclared import warning
 gam_method <- function() mgcv::gam
 data_frame0 <- function(...) data_frame(..., .name_repair = "minimal")
-predictdf <- function(model, xseq, se, level) UseMethod("predictdf")
-
-# would be intersted in changeing the x sequence to observed values of x.  
 
 compute_group_smooth <- function(data, scales, method = NULL, formula = NULL,
                            se = TRUE, n = 80, span = 0.75, fullrange = FALSE,
@@ -121,6 +118,7 @@ compute_group_smooth <- function(data, scales, method = NULL, formula = NULL,
     flip_data(prediction, flipped_aes)
 }
 
+predictdf <- function(model, xseq, se, level) UseMethod("predictdf")
 
 #' @export
 predictdf.default <- function(model, xseq, se, level) {
@@ -204,8 +202,8 @@ predictdf.locfit <- function(model, xseq, se, level) {
 
 library(dplyr)
 mtcars %>% 
-  rename(x = wt, y = mpg, cat = am) %>% 
-  compute_group_smooth(method = lm, formula = y ~ x + cat)
+  rename(x = wt, y = mpg) %>% 
+  compute_group_smooth(method = lm, formula = y ~ x)
 
 
 #' @rdname ggplot2-ggproto
@@ -249,16 +247,10 @@ StatSmooth <- ggplot2::ggproto("StatSmooth", ggplot2::Stat,
     params
   },
   extra_params = c("na.rm", "orientation"),
-  compute_panel = compute_group_smooth,
+  compute_group = compute_group_smooth,
   dropped_aes = c("weight"),
   required_aes = c("x", "y")
 )
-
-
-mtcars %>% 
-  ggplot() +
-  aes(wt, mpg) + 
-  geom_smooth()
 
 
 
