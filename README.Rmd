@@ -29,7 +29,7 @@ The goal of mytidytuesday is to hold small projects.  They are like blogs posts,
 library(magrittr)
 webpages <- fs::dir_ls(type = "file", recurse = T, glob = "*.html") %>% rev()
      
-webpages %>%    
+webpages %>%     
   paste0("- [",
          . ,
          "]",
@@ -42,10 +42,11 @@ webpages %>%
 new_experiment <- function(name){
   
   dir.create(paste0(Sys.Date(),"-", name), )
+  rmarkdown::html_document()
   
 } 
 
-new_experiment("circle_chord_lyrics")
+new_experiment("mean_squared_error")
 
 
 ```

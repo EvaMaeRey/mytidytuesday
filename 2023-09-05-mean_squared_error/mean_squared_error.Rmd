@@ -1,0 +1,154 @@
+---
+title: "mean squared error"
+author: "Evangeline Reynolds"
+date: "9/5/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Step 0. get done w/o extending
+
+```{r}
+library(tidyverse)
+
+stdz <- function(x){
+  
+  var_mean <- mean(x) 
+  var_sd <- sd(x)
+  
+  (x-var_mean)/var_sd
+  
+}
+
+cars %>%  
+  mutate(x = stdz(speed), y = stdz(dist)) ->
+prep
+
+lm(y~x, data = prep) ->
+  model
+
+prep %>% 
+    mutate(y0 = y) %>% 
+    mutate(y = model$fitted.values) %>% 
+    mutate(ymin = model$fitted.values) %>%  
+    mutate(yend = y0) %>% 
+    mutate(ymax = y0) %>% 
+    mutate(xmin = x) %>% 
+    mutate(xend = x) %>% 
+    mutate(xmax = x + ( ymax- ymin)) %>% 
+  ggplot()+ 
+  aes(x, y, xmin = xmin, ymin = ymin, xmax = xmax, ymax = ymax) + 
+  geom_point() + 
+  coord_equal() + 
+  geom_rect()
+```
+
+# Step 1. Compute group
+
+```{r}
+compute_group_lm_fitted<- function(data, scales){
+  model<-lm(formula= y ~ x, data = data)
+  
+  data %>% 
+    mutate(y0 = y) %>% 
+    mutate(y = model$fitted.values) %>% 
+    mutate(ymin = model$fitted.values) %>%  
+    mutate(yend = y0) %>% 
+    mutate(ymax = y0) %>% 
+    mutate(xmin = x) %>% 
+    mutate(xend = x) %>% 
+    mutate(xmax = x + ( ymax- ymin))
+}
+
+# test out the function
+cars %>% 
+  # rename to explicitly state the x and y inputs
+  rename(x = speed, y = dist) %>%
+  compute_group_lm_fitted()
+```
+
+
+# Step 2. pass to ggproto
+
+
+```{r}
+StatLmFitted<-ggplot2::ggproto(`_class` = "StatLmFitted",
+                                  `_inherit` = ggplot2::Stat,
+                                  required_aes = c("x", "y"),
+                                  compute_group = compute_group_lm_fitted)
+```
+
+# Step 3. pass to geom function.
+
+```{r}
+geom_lm_residual_sq <- function(mapping = NULL, data = NULL,
+                           position = "identity", na.rm = FALSE,
+                           show.legend = NA,
+                           inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatLmFitted, # proto object from step 2
+    geom = ggplot2::GeomRect, # inherit other behavior
+    data = data, 
+    mapping = mapping,
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+
+```
+
+
+
+# Step 4. Enjoy
+
+
+```{r cars}
+
+library(ggxmean)
+
+# not a great result
+library(tidyverse)
+ggplot(cars) + 
+  aes(speed, dist) +
+  geom_point() + 
+  geom_lm() + 
+  geom_lm_fitted(color = "blue") +
+  geom_lm_residual_sq(alpha = .2)
+  
+# better
+last_plot() + 
+  coord_equal()
+
+
+# best
+last_plot() + 
+    aes(stdz(speed), stdz(dist))
+
+
+# coord_sd_equal()  Could this be a useful thing to this problem or another problem
+```
+
+# look at small data
+
+```{r}
+ggplot(anscombe) + 
+  aes(x = x1, y = y1) + 
+  geom_point() + 
+  geom_lm() + 
+  geom_lm_fitted(color = "blue") + 
+  geom_lm_residual_sq(alpha = .2) 
+
+last_plot() + 
+  coord_equal()
+
+last_plot() + 
+  aes(stdz(x1), stdz(y1))
+
+```
+
