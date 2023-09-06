@@ -1,0 +1,328 @@
+---
+title: "geom smooth fit"
+author: "Evangeline Reynolds"
+date: "9/1/2023"
+output: 
+  html_document:
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = T)
+```
+
+# Background: stats instructors gotta talk about residuals and the model predictions for model observations
+
+Status quo options for doing that in ggplot2
+
+- describe and move on... "image a line that drops down from the observation to the model line"
+- precalculate and plot 
+- model by model ggplot2 extension... ggols and ggxmean
+
+Also note...
+
+- base plot methods
+- other efforts like residpanel https://cran.r-project.org/web/packages/ggResidpanel/vignettes/introduction.html
+
+# Review of existing smooth ggplot2 capabilities
+
+## geom_smooth old hat
+
+
+```{r stat-smooth}
+library(tidyverse, warn.conflicts = F)
+
+mtcars %>% 
+  ggplot() +
+  aes(wt, mpg) + 
+  geom_point() + 
+  stat_smooth()
+```
+
+## a less common move:  stat_smooth(geom = "point", color = "blue")
+
+Specific predictions (80 evenly spaced between xmin and xmax). A bit of under-the-hood thinking
+
+```{r}
+mtcars %>% 
+  ggplot() +
+  aes(wt, mpg) + 
+  stat_smooth(geom = "point", color = "blue")
+```
+
+## almost surely new to you (and probably more interesting to stats instructors): predicting at observed values of x
+
+xseq is not advertised, but possibly of interest.. https://ggplot2.tidyverse.org/reference/geom_smooth.html
+
+```{r}
+# fit where the support is in the data... 
+mtcars %>% 
+  ggplot() +
+  aes(wt, mpg) + 
+  stat_smooth(geom = "point", 
+              color = "blue", 
+              xseq = mtcars$wt)
+```
+
+# Proposal 00: Can we make this available in a bit 'smoother' way? 
+
+## Target code
+
+```{r, eval = F}
+mtcars %>% 
+  ggplot() + 
+  aes(wt, mpg) + 
+  geom_smooth_fit()
+```
+
+##  And also explicitly visualize error (residuals as segments)
+
+```{r, eval = F}
+last_plot() + 
+  geom_smooth_error() 
+```
+
+
+# Step 0. Examine ggplot2::StatSmooth$compute_group, and a dataframe that it returns
+
+
+Key take away: this function allows you to set values of x with the *xseq argument*.  Although the default is to create an evenly spaced sequence. 
+
+```{r}
+ggplot2::StatSmooth$compute_group
+
+library(dplyr)
+mtcars %>%
+  rename(x = wt, y = mpg, cat = am) %>%
+  StatSmooth$compute_group(method = lm, formula = y ~ x, n = 7)
+```
+
+# Step 1. create compute_group_smooth_fit 
+
+Here we'll piggy back on StatSmooth$compute_group, to create a function, compute_group_smooth_fit.  We ask that function to compute predictions at the values of x observed in our data set.  We also preserve the values of y (as yend) so that we can draw in the residual error.
+
+xend and yend are computed to draw the segments visualizing the error.
+
+```{r}
+compute_group_smooth_fit <- function(data, scales, method = NULL, formula = NULL,
+                           se = TRUE, n = 80, span = 0.75, fullrange = FALSE,
+                           level = 0.95, method.args = list(),
+                           na.rm = FALSE, flipped_aes = NA){
+  
+StatSmooth$compute_group(data = data, scales = scales, 
+                       method = method, formula = formula, 
+                       se = FALSE, n= n, span = span, fullrange = fullrange,
+                       xseq = data$x, 
+                       level = .95, method.args = method.args, 
+                       na.rm = na.rm, flipped_aes = flipped_aes) %>% 
+    mutate(xend = data$x,
+           yend = data$y
+           )
+}
+```
+
+
+We'll also create compute_group_smooth_sq_error, further piggybacking, this time on the function we just build.  This creates the ymin, ymax, xmin and xmax columns needed to show the *squared* error.  Initially, I'd included this computation above, but the plot results can be bad, as the 'flags' that come off of the residuals effect the plot spacing even when they aren't used.  Preferring to avoid this side-effect, we create two functions (and later two ggproto objects).  Note too that xmax is computed in the units of y, and initial plotting can yield squares that do not look like squares. Standardizing both variables, with coord_equal will get us to squares. 
+
+```{r}
+compute_group_smooth_sq_error <- function(data, scales, method = NULL, formula = NULL,
+                           se = TRUE, n = 80, span = 0.75, fullrange = FALSE,
+                           level = 0.95, method.args = list(),
+                           na.rm = FALSE, flipped_aes = NA){
+  
+compute_group_smooth_fit(data = data, scales = scales, 
+                       method = method, formula = formula, 
+                       se = FALSE, n= n, span = span, fullrange = fullrange,
+                       level = .95, method.args = method.args, 
+                       na.rm = na.rm, flipped_aes = flipped_aes) %>% 
+    mutate(ymin = y,
+           xmin = x,
+           ymax = yend,
+           xmax = x + (ymax - ymin))
+  
+}
+```
+
+
+
+# Step 1.1 test compute group 
+
+```{r}
+mtcars %>% 
+  slice(1:10) %>% 
+  rename(x = wt, y = mpg) %>% 
+  compute_group_smooth_fit(method = lm, formula = y ~ x)
+
+
+mtcars %>% 
+  slice(1:10) %>% 
+  rename(x = wt, y = mpg) %>% 
+  compute_group_smooth_sq_error(method = lm, formula = y ~ x)
+```
+
+# Step 2. Pass to ggproto
+
+```{r}
+StatSmoothFit <- ggplot2::ggproto("StatSmoothFit", ggplot2::Stat,
+  setup_params = StatSmooth$setup_params,
+  extra_params = c("na.rm", "orientation"),
+  compute_group = compute_group_smooth_fit,
+  dropped_aes = c("weight"),
+  required_aes = c("x", "y")
+)
+
+StatSmoothErrorSq <- ggplot2::ggproto("StatSmoothErrorSq", ggplot2::Stat,
+  setup_params = StatSmooth$setup_params,
+  extra_params = c("na.rm", "orientation"),
+  compute_group = compute_group_smooth_sq_error,
+  dropped_aes = c("weight"),
+  required_aes = c("x", "y")
+)
+```
+
+# Step 3. Pass to stat_* functions
+
+```{r}
+stat_fit <- function(mapping = NULL, data = NULL,
+            geom = "point", position = "identity",
+            ...,
+            method = NULL,
+            formula = NULL,
+            se = TRUE,
+            n = 80,
+            span = 0.75,
+            fullrange = FALSE,
+            level = 0.95,
+            method.args = list(),
+            na.rm = FALSE,
+            orientation = NA,
+            show.legend = NA,
+            inherit.aes = TRUE) {
+  layer(
+    data = data,
+    mapping = mapping,
+    stat = StatSmoothFit,
+    geom = geom,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = rlang::list2(
+      method = method,
+      formula = formula,
+      se = se,
+      n = n,
+      fullrange = fullrange,
+      level = level,
+      na.rm = na.rm,
+      orientation = orientation,
+      method.args = method.args,
+      span = span,
+      ...
+    )
+  )
+}
+
+stat_errorsq <- function(mapping = NULL, data = NULL,
+                        geom = "rect", position = "identity",
+                        ...,
+                        method = NULL,
+                        formula = NULL,
+                        se = TRUE,
+                        n = 80,
+                        span = 0.75,
+                        fullrange = FALSE,
+                        level = 0.95,
+                        method.args = list(),
+                        na.rm = FALSE,
+                        orientation = NA,
+                        show.legend = NA,
+                        inherit.aes = TRUE) {
+  layer(
+    data = data,
+    mapping = mapping,
+    stat = StatSmoothErrorSq,
+    geom = geom,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = rlang::list2(
+      method = method,
+      formula = formula,
+      se = se,
+      n = n,
+      fullrange = fullrange,
+      level = level,
+      na.rm = na.rm,
+      orientation = orientation,
+      method.args = method.args,
+      span = span,
+      ...
+    )
+  )
+}
+
+```
+
+
+# Step 4. Test in ggplot2 pipeline and enjoy!
+
+```{r}
+mtcars %>% 
+  ggplot() +
+  aes(wt, mpg) + 
+  geom_point() +
+  geom_smooth(alpha = .2, se = FALSE) +
+  stat_fit(color = "blue") +  # wrap as geom_smooth_fit()
+  stat_fit(geom = "segment") # geom_smooth_error()
+```
+
+## Squared residuals
+
+For best results, use standardized x, y and coord_equal() as shown below
+
+```{r}
+stdz <- function(x){
+  
+  var_mean <- mean(x) 
+  var_sd <- sd(x)
+  
+  (x-var_mean)/var_sd
+  
+}
+
+last_plot() + 
+  stat_errorsq(geom = "rect", alpha = .1)  + # geom_smooth_error_sq() +
+  aes(stdz(wt), stdz(mpg)) + 
+  coord_equal()
+
+mtcars %>% 
+  ggplot() +
+  aes(wt, mpg) + 
+  geom_point() +
+  geom_smooth(alpha = .2, se = FALSE, method = lm) + 
+  stat_fit(geom = "point", color = "blue", method = lm) + # wrap as geom_smooth_fit()
+  stat_fit(geom = "segment", method = lm)
+```
+
+
+
+# Step 4.b Create geom alliases and wrappers, try it out, and enjoy! Wait not working, how do I need to do this?
+
+```{r}
+geom_smooth_fit <- function(...){stat_fit(color = "blue",...)}   # wrap as geom_smooth_fit()
+
+geom_smooth_residual <- function(...){stat_fit(geom = "segment", color = "darkred", ...)}   # wrap as geom_smooth_fit()
+
+mtcars %>%
+  ggplot() +
+  aes(wt, mpg) +
+  geom_point() +
+  geom_smooth(alpha = .2, se = FALSE) +
+  geom_smooth_fit(color = "blue") #+  # wrap as geom_smooth_fit()
+  geom_smooth_residual(geom = "segment")
+
+```
+
+
+# 
+
