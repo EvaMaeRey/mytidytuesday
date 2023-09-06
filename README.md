@@ -13,8 +13,10 @@ write prose\!
 
   - [2023-09-05-mean\_squared\_error/mean\_squared\_error.html](https://evamaerey.github.io/mytidytuesday/2023-09-05-mean_squared_error/mean_squared_error.html)
   - [2023-08-25-circle\_chord\_lyrics/circle\_chord\_lyrics.html](https://evamaerey.github.io/mytidytuesday/2023-08-25-circle_chord_lyrics/circle_chord_lyrics.html)
-  - [2023-08-24-geom\_smoot\_cat/geom\_smooth\_cat.html](https://evamaerey.github.io/mytidytuesday/2023-08-24-geom_smoot_cat/geom_smooth_cat.html)
-  - [2023-08-24-geom\_smoot\_cat/geom\_smooth.html](https://evamaerey.github.io/mytidytuesday/2023-08-24-geom_smoot_cat/geom_smooth.html)
+  - [2023-08-24-geom\_smooth\_extend/geom\_smooth\_fitted\_refactor.html](https://evamaerey.github.io/mytidytuesday/2023-08-24-geom_smooth_extend/geom_smooth_fitted_refactor.html)
+  - [2023-08-24-geom\_smooth\_extend/geom\_smooth\_fitted.html](https://evamaerey.github.io/mytidytuesday/2023-08-24-geom_smooth_extend/geom_smooth_fitted.html)
+  - [2023-08-24-geom\_smooth\_extend/geom\_smooth\_cat.html](https://evamaerey.github.io/mytidytuesday/2023-08-24-geom_smooth_extend/geom_smooth_cat.html)
+  - [2023-08-24-geom\_smooth\_extend/geom\_smooth.html](https://evamaerey.github.io/mytidytuesday/2023-08-24-geom_smooth_extend/geom_smooth.html)
   - [2023-08-23-last\_plot\_wipe/last\_plot\_wiped.html](https://evamaerey.github.io/mytidytuesday/2023-08-23-last_plot_wipe/last_plot_wiped.html)
   - [2023-08-23-ggjudge/ggjudge.html](https://evamaerey.github.io/mytidytuesday/2023-08-23-ggjudge/ggjudge.html)
   - [2023-07-20-ggz/ggz\_flipbook.html](https://evamaerey.github.io/mytidytuesday/2023-07-20-ggz/ggz_flipbook.html)
