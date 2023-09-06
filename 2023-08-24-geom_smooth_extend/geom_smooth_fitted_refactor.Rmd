@@ -15,19 +15,11 @@ knitr::opts_chunk$set(echo = TRUE, error = T)
 
 Status quo options for doing that in ggplot2
 
-- describe and move on... "image a line that drops down from the observation to the model line"
-- precalculate and plot 
-- model by model ggplot2 extension... ggols and ggxmean
+## Option 1. describe and move on...
 
-Also note...
-
-- base plot methods
-- other efforts like residpanel https://cran.r-project.org/web/packages/ggResidpanel/vignettes/introduction.html
-
-# Review of existing smooth ggplot2 capabilities
+"image a line that drops down from the observation to the model line"
 
 ## geom_smooth old hat
-
 
 ```{r stat-smooth}
 library(tidyverse, warn.conflicts = F)
@@ -36,21 +28,29 @@ mtcars %>%
   ggplot() +
   aes(wt, mpg) + 
   geom_point() + 
-  stat_smooth()
+  geom_smooth()
 ```
 
-## a less common move:  stat_smooth(geom = "point", color = "blue")
 
-Specific predictions (80 evenly spaced between xmin and xmax). A bit of under-the-hood thinking
+## Option 2: precalculate and plot 
+
+
+
+## Option 3: little known xseq argument and geom = "point"
+
+First a bit of under-the-hood thinking about geom_smooth/stat_smooth.
 
 ```{r}
 mtcars %>% 
   ggplot() +
   aes(wt, mpg) + 
-  stat_smooth(geom = "point", color = "blue")
+  geom_smooth(n = 12) +
+  stat_smooth(geom = "point", 
+              color = "blue", 
+              n = 12)
 ```
 
-## almost surely new to you (and probably more interesting to stats instructors): predicting at observed values of x
+Also, you can specify xseq... Almost surely new to you (and probably more interesting to stats instructors): predicting at observed values of x
 
 xseq is not advertised, but possibly of interest.. https://ggplot2.tidyverse.org/reference/geom_smooth.html
 
@@ -59,6 +59,8 @@ xseq is not advertised, but possibly of interest.. https://ggplot2.tidyverse.org
 mtcars %>% 
   ggplot() +
   aes(wt, mpg) + 
+  geom_point() +
+  geom_smooth() + 
   stat_smooth(geom = "point", 
               color = "blue", 
               xseq = mtcars$wt)
@@ -323,6 +325,9 @@ mtcars %>%
 
 ```
 
+# History... 
+
+- model by model ggplot2 extension... ggols and ggxmean
 
 # 
 
