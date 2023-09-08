@@ -35,7 +35,7 @@ predictdf <- function(model, xseq, catseq, se, level) UseMethod("predictdf")
 
 # prediction mechanisms
 
-```{r}
+```{r, eval = T}
 #' @export
 predictdf.default <- function(model, xseq, catseq, se, level) {
   pred <- stats::predict(
@@ -176,24 +176,24 @@ compute_cat_model_smooth <- function(data, scales, method = NULL, formula = NULL
     #     xseq <- seq(range[1], range[2], length.out = n)
     #   }
     # }
-# 
-#     # Special case span because it's the most commonly used model argument
-#     if (identical(method, "loess")) {
-#       method.args$span <- span
-#     }
-# 
-#     if (is.character(method)) {
-#       if (identical(method, "gam")) {
-#         method <- gam_method()
-#       } else {
-#         method <- match.fun(method)
-#       }
-#     }
-#     # If gam and gam's method is not specified by the user then use REML
-#     if (identical(method, gam_method()) && is.null(method.args$method)) {
-#       method.args$method <- "REML"
-#     }
-# 
+
+    # Special case span because it's the most commonly used model argument
+    if (identical(method, "loess")) {
+      method.args$span <- span
+    }
+
+    if (is.character(method)) {
+      if (identical(method, "gam")) {
+        method <- gam_method()
+      } else {
+        method <- match.fun(method)
+      }
+    }
+    # If gam and gam's method is not specified by the user then use REML
+    if (identical(method, gam_method()) && is.null(method.args$method)) {
+      method.args$method <- "REML"
+    }
+
     model <- rlang::inject(method(
       formula,
       data = data,
@@ -239,42 +239,6 @@ mtcars %>%
 
 ```{r}
 
-setup_smooth <- function(data, params) {
-    params$flipped_aes <- has_flipped_aes(data, params, ambiguous = TRUE)
-    msg <- character()
-    if (is.null(params$method) || identical(params$method, "auto")) {
-      # Use loess for small datasets, gam with a cubic regression basis for
-      # larger. Based on size of the _largest_ group to avoid bad memory
-      # behaviour of loess
-      max_group <- max(table(interaction(data$group, data$PANEL, drop = TRUE)))
-
-      if (max_group < 1000) {
-        params$method <- "loess"
-      } else {
-        params$method <- "gam"
-      }
-      msg <- c(msg, paste0("method = '", params$method, "'"))
-    }
-
-    if (is.null(params$formula)) {
-      if (identical(params$method, "gam")) {
-        params$formula <- y ~ s(x, bs = "cs")
-      } else {
-        params$formula <- y ~ x + cat
-      }
-      msg <- c(msg, paste0("formula = '", deparse(params$formula), "'"))
-    }
-    if (identical(params$method, "gam")) {
-      params$method <- gam_method()
-    }
-
-    if (length(msg) > 0) {
-      cli::cli_inform("{.fn geom_smooth} using {msg}")
-    }
-
-    params
-  }
-
 
 
 #' @rdname ggplot2-ggproto
@@ -282,35 +246,35 @@ setup_smooth <- function(data, params) {
 #' @usage NULL
 #' @export
 StatSmoothcat <- ggplot2::ggproto("StatSmoothcat", ggplot2::Stat,
-  # setup_params = setup_smooth,
+  setup_params = StatSmooth$setup_params,
   extra_params = c("na.rm", "orientation"),
-  compute_layer = compute_cat_model_smooth,
+  compute_group = StatSmooth$compute_group,  #compute_cat_model_smooth,
   dropped_aes = c("weight"),
-  required_aes = c("x", "y", "cat")
+  required_aes = c("x", "y")
 )
 
 
 
-stat_smooth_cat <- function(mapping = NULL, data = NULL,
-                        geom = "point", position = "identity",
-                        method = "lm",
-                        formula = y ~ x + cat,
-                        se = TRUE,
-                        n = 80,
-                        span = 0.75,
-                        fullrange = FALSE,
-                        level = 0.95,
-                        method.args = list(),
-                        na.rm = FALSE,
-                        orientation = NA,
-                        show.legend = NA,
-                        inherit.aes = TRUE,                        ...
-) {
+stat_fit <- function(mapping = NULL, data = NULL,
+            geom = "point", position = "identity",
+            ...,
+            method = NULL,
+            formula = NULL,
+            se = TRUE,
+            n = 80,
+            span = 0.75,
+            fullrange = FALSE,
+            level = 0.95,
+            method.args = list(),
+            na.rm = FALSE,
+            orientation = NA,
+            show.legend = NA,
+            inherit.aes = TRUE) {
   layer(
     data = data,
     mapping = mapping,
     stat = StatSmoothcat,
-    geom = ggplot2::GeomPoint,
+    geom = geom,
     position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
@@ -333,7 +297,6 @@ stat_smooth_cat <- function(mapping = NULL, data = NULL,
 
 
 
-
 ```
 
 
@@ -342,11 +305,11 @@ New...
 ```{r}
 mtcars %>% 
   ggplot() +
-  aes(x = wt, y = mpg, cat = am) + 
+  aes(x = wt, y = mpg) + 
   geom_point(aes(color = am)) +
-  stat_smooth_cat(
+  stat_fit(
                   n = 5,
-                  color = "red", method = lm)
+                  color = "red")
 
 
 ```
