@@ -1,0 +1,88 @@
+---
+title: "Examining the ggproto factory"
+subtitle: "tiered succession of calls"
+author: "Evangeline Reynolds"
+date: "9/15/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = T)
+```
+
+---
+
+
+## Want to do:
+
+```{r, eval = F}
+library(ggplot2)
+mtcars |> 
+  dplyr::rename(y = mpg, x = vs) |> 
+  StatCount$setup_data() |> 
+  StatCount$setup_params() |> # complains
+  StatCount$compute_layer() |> # complains
+  StatCount$compute_panel() |> # complains
+  StatCount$compute_group() 
+```
+
+
+---
+
+# Can do, w outcome:
+
+```{r, eval = T}
+library(ggplot2)
+mtcars |> 
+  dplyr::rename(y = mpg, x = vs) |> 
+  StatCount$setup_data() |> 
+  # StatCount$setup_params() |> # complains
+  # StatCount$compute_layer() |> # complains
+  # StatCount$compute_panel() |> # complains
+  StatCount$compute_group() 
+```
+
+---
+
+
+
+
+
+
+---
+
+# Error 'StatCount$setup_params()':
+
+```{r, eval = T}
+mtcars |> 
+  dplyr::rename(y = mpg, x = vs) |> 
+  StatCount$setup_data() |> 
+  StatCount$setup_params() 
+```
+
+---
+
+# Error 'StatCount$compute_layer()'
+
+```{r, eval = T}
+mtcars |> 
+  dplyr::rename(y = mpg, x = vs) |> 
+  StatCount$setup_data() |> 
+  # StatCount$setup_params() |> # complains
+  StatCount$compute_layer() 
+```
+
+
+---
+
+# Error 'StatCount$compute_panel()'
+
+```{r, eval = T}
+mtcars |> 
+  dplyr::rename(y = mpg, x = vs, group = -1L) |> 
+  # StatCount$setup_data() |> 
+  # StatCount$setup_params() |> # complains
+  # StatCount$compute_layer() |> # complains
+  StatCount$compute_panel() # complains
+```
+# Can we fill in arguments manually to make pipeline go? And so have a look at within pipeline states? If we figure that out for one Stat, could it be applied to other Stats/Geoms and ggproto objects. 

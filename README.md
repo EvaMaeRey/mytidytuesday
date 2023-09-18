@@ -11,6 +11,8 @@ The goal of mytidytuesday is to hold small projects. They are like blogs
 posts, but mostly code. In the spirit of \#tidytuesday no pressure to
 write prose\!
 
+  - [2023-09-15-ggplot2-stat-cascades/ggplot2\_stat\_cascades.html](https://evamaerey.github.io/mytidytuesday/2023-09-15-ggplot2-stat-cascades/ggplot2_stat_cascades.html)
+  - [2023-09-08-geom-smooth-stuff/geom\_smooth\_stuff.html](https://evamaerey.github.io/mytidytuesday/2023-09-08-geom-smooth-stuff/geom_smooth_stuff.html)
   - [2023-09-05-mean\_squared\_error/mean\_squared\_error.html](https://evamaerey.github.io/mytidytuesday/2023-09-05-mean_squared_error/mean_squared_error.html)
   - [2023-08-25-circle\_chord\_lyrics/circle\_chord\_lyrics.html](https://evamaerey.github.io/mytidytuesday/2023-08-25-circle_chord_lyrics/circle_chord_lyrics.html)
   - [2023-08-24-geom\_smooth\_extend/geom\_smooth\_fitted\_refactor.html](https://evamaerey.github.io/mytidytuesday/2023-08-24-geom_smooth_extend/geom_smooth_fitted_refactor.html)
@@ -126,9 +128,9 @@ write prose\!
 new_experiment <- function(name){
   
   dir.create(paste0(Sys.Date(),"-", name), )
-  rmarkdown::html_document()
+  # rmarkdown::html_document()
   
 } 
 
-new_experiment("mean_squared_error")
+new_experiment("ggplot2-stat-cascades")
 ```

@@ -1,0 +1,193 @@
+---
+title: "geom smooth fit"
+author: "Evangeline Reynolds"
+date: "9/1/2023"
+output: 
+  html_document:
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = T)
+```
+
+
+```{r stat-smooth}
+library(tidyverse, warn.conflicts = F)
+
+mtcars %>% 
+  ggplot() +
+  aes(wt, mpg) + 
+  geom_point() + 
+  geom_smooth()
+
+
+mtcars %>% 
+  ggplot() +
+  aes(wt, mpg) + 
+  geom_point() + 
+  geom_smooth(n = 5)
+
+mtcars %>% 
+  ggplot() +
+  aes(wt, mpg) + 
+  geom_point() + 
+  geom_smooth() + 
+  stat_smooth(geom = "point", 
+              xseq = mtcars$wt,
+              color = "blue")
+
+
+mtcars %>% 
+  ggplot() +
+  aes(wt, mpg) + 
+  geom_point() + 
+  geom_smooth(method = lm) + 
+  stat_smooth(geom = "point", 
+              xseq = mtcars$wt,
+              color = "blue",
+              method = lm)
+
+
+mtcars %>% 
+  ggplot() +
+  aes(wt, mpg) + 
+  geom_point() + 
+  geom_smooth(method = lm, formula = y ~ 1) + 
+  stat_smooth(geom = "point", 
+              xseq = mtcars$wt,
+              color = "blue",
+              method = lm,
+              formula = y ~ 1)
+
+
+mtcars %>% 
+  ggplot() +
+  aes(wt, mpg) + 
+  geom_point() + 
+  geom_smooth(method = lm, formula = y ~ 1) + 
+  stat_smooth(geom = "point", 
+              xseq = mtcars$wt,
+              color = "blue",
+              method = lm,
+              formula = y ~ 1)
+
+
+formula = "y ~ x + I(x^2)"
+mtcars %>% 
+  ggplot() +
+  aes(wt, mpg) + 
+  geom_point() + 
+  geom_smooth(method = lm, formula = formula) + 
+  stat_smooth(geom = "point", 
+              xseq = mtcars$wt,
+              color = "blue",
+              method = lm,
+              formula = formula)
+
+formula = "y ~ x + I(x^2) + I(x^3)"
+mtcars %>% 
+  ggplot() +
+  aes(wt, mpg) + 
+  geom_point() + 
+  geom_smooth(method = lm, formula = formula) + 
+  stat_smooth(geom = "point", 
+              xseq = mtcars$wt,
+              color = "blue",
+              method = lm,
+              formula = formula)
+
+
+formula = "y ~ x + I(x^2) + I(x^3)"
+mtcars %>% 
+  ggplot() +
+  aes(wt, mpg) + 
+  geom_point() + 
+  geom_smooth(method = lm, formula = formula) + 
+  stat_smooth(geom = "point", 
+              xseq = mtcars$wt,
+              color = "blue",
+              method = lm,
+              formula = formula)
+
+formula = 'y ~ splines::bs(x, 3)'
+method = "lm"
+mtcars %>% 
+  ggplot() +
+  aes(wt, mpg) + 
+  geom_point() + 
+  geom_smooth(method = method, formula = formula) + 
+  stat_smooth(geom = "point", 
+              xseq = mtcars$wt,
+              color = "blue",
+              method = method, formula = formula)
+mtcars %>% 
+  rename(y = mpg, x = wt) %>% 
+glm(formula = formula, data = .)
+
+binomial_smooth <- function(...) {
+  geom_smooth(method = "glm", method.args = list(family = "binomial"), ...)
+}
+
+ggplot(rpart::kyphosis, aes(Age, Kyphosis)) +
+  geom_jitter(height = 0.05) +
+  binomial_smooth()
+
+ggplot(rpart::kyphosis, aes(Age, as.numeric(Kyphosis) - 1)) +
+  geom_jitter(height = 0.05) +
+  binomial_smooth()
+
+
+ggplot(rpart::kyphosis, aes(Age, as.numeric(Kyphosis) - 1)) +
+  geom_jitter(height = 0.05) +
+  binomial_smooth(formula = y ~ splines::ns(x, 2))
+
+stdz <- function(x){
+  
+  (x-mean(x))/sd(x)
+  
+}
+
+
+ggplot(rpart::kyphosis, aes(Age, as.numeric(Kyphosis) - 1)) +
+  geom_jitter(height = 0.05) +
+  binomial_smooth(formula = y ~ splines::ns(x, 2)) +
+  ggplot2::scale_x_continuous(trans = "stdz")
+
+scales::trans_new(name = "stdz_trans", transform = stdz, inverse = , breaks = -3:3, minor_breaks = -2:4-.5, domain = c(-Inf, Inf))
+
+
+library(scales)
+library(ggplot2)
+
+cube_root <- function(x) x ^ (1/3)
+cube <- function(x)  x ^ 3
+stdzd <- function(x) (x-mean(x))/sd(x)
+stdzd_dont <- function(x) (x)
+
+
+
+trans_cube <- trans_new(name = "cube root",
+                        transform = stdzd,
+                        inverse = stdzd_dont,
+                        breaks = -3:3,
+                        minor_breaks = )
+
+# dummy data
+plot_data <- data.frame(x = 1:10,
+                        y = cube(1:10))
+
+# applying a transform
+ggplot(plot_data, aes(x = x, y = y)) +
+  geom_point() +
+  coord_trans(y = trans_cube, x = trans_cube)
+
+
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point() +
+  scale_y_continuous(sec.axis = sec_axis(stdzd, name = "Standard Deviations")) + 
+  scale_x_continuous(sec.axis = sec_axis(stdzd, name = "Standard Deviations"))
+
+scale_y_sd <- scale_y_continuous(sec.axis = sec_axis(stdzd, name = "Standard Deviations")) 
+```
+

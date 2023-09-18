@@ -11,7 +11,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE, error = T)
 ```
 
-# Background: stats instructors gotta talk about residuals and the model predictions for model observations
+# Background: stats instructors gotta talk about y ~ x, but then y ~ x + z. And often the first z is categorical.
 
 Status quo options for doing that in ggplot2
 
@@ -28,57 +28,16 @@ mtcars %>%
   ggplot() +
   aes(wt, mpg) + 
   geom_point() + 
-  geom_smooth() - 
-  geom_point()
+  geom_smooth()
 ```
 
 
 ## Option 2: precalculate and plot 
 
 
+## Option 3: ggols
 
-## Option 3: little known xseq argument and geom = "point"
 
-First a bit of under-the-hood thinking about geom_smooth/stat_smooth.
-
-```{r}
-mtcars %>% 
-  ggplot() +
-  aes(wt, mpg) + 
-  geom_smooth(n = 12) +
-  stat_smooth(geom = "point", 
-              color = "blue", 
-              n = 12)
-```
-
-Also, you can specify xseq... Almost surely new to you (and probably more interesting to stats instructors): predicting at observed values of x
-
-xseq is not advertised, but possibly of interest.. https://ggplot2.tidyverse.org/reference/geom_smooth.html
-
-```{r}
-# fit where the support is in the data... 
-mtcars %>% 
-  ggplot() +
-  aes(wt, mpg) + 
-  geom_point() +
-  geom_smooth() + 
-  stat_smooth(geom = "point", 
-              color = "blue", 
-              xseq = mtcars$wt)
-
-mtcars %>% 
-  ggplot() +
-  aes(wt, mpg) + 
-  geom_point() +
-  geom_smooth(formula = y ~ 1, 
-              method = lm, 
-              se = F) +
-  stat_smooth(geom = "point", 
-              color = "blue", 
-              xseq = mtcars$wt, 
-              method = lm, 
-              formula = y ~1)
-```
 
 # Proposal 00: Can we make this available in a bit 'smoother' way? 
 
@@ -87,7 +46,7 @@ mtcars %>%
 ```{r, eval = F}
 mtcars %>% 
   ggplot() + 
-  aes(wt, mpg) + 
+  aes(x = wt, y = mpg, cat = am) + 
   geom_smooth_fit()
 ```
 
@@ -310,11 +269,7 @@ last_plot() +
   stat_errorsq(geom = "rect", alpha = .1)  + # geom_smooth_error_sq() +
   aes(stdz(wt), stdz(mpg)) + 
   coord_equal()
-```
 
-# Test with lm
-
-```{r}
 mtcars %>% 
   ggplot() +
   aes(wt, mpg) + 
@@ -324,20 +279,6 @@ mtcars %>%
   stat_fit(geom = "segment", method = lm)
 ```
 
-# Contrast to an empty model...
-
-```{r}
-mtcars %>% 
-  ggplot() +
-  aes(stdz(wt), stdz(mpg)) + 
-  geom_point() +
-  geom_smooth(alpha = .2, se = FALSE, method = lm,  formula = y ~ 1) + 
-  stat_fit(geom = "point", color = "blue", method = lm, formula = y ~ 1) + # wrap as geom_smooth_fit()
-  stat_fit(geom = "segment", method = lm, formula = y ~ 1) + 
-  stat_errorsq(geom = "rect", alpha = .1, method = lm, formula = y ~ 1) + 
-  coord_equal()
-
-```
 
 
 # Step 4.b Create geom alliases and wrappers, try it out, and enjoy! Wait not working, how do I need to do this?
@@ -355,13 +296,7 @@ mtcars %>%
   geom_smooth_fit(color = "blue") #+  # wrap as geom_smooth_fit()
   geom_smooth_residual(geom = "segment")
 
-  
-
-  
 ```
-
-
-
 
 # History... 
 
