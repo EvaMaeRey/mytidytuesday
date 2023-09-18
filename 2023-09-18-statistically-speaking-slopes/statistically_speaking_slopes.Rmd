@@ -1,0 +1,92 @@
+---
+title: "statistically speaking slopes"
+author: "Evangeline Reynolds"
+date: "9/18/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Aspect ratio
+
+
+
+```{r cars}
+library(tidyverse)
+stdzd <- function(x) (x-mean(x))/sd(x)
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point() +
+  scale_y_continuous(sec.axis = sec_axis(stdzd, name = "Standard Deviations")) + 
+  scale_x_continuous(sec.axis = sec_axis(stdzd, name = "Standard Deviations"))
+
+scale_y_sd <- function(){
+  scale_y_continuous(sec.axis = sec_axis(stdzd, name = "Standard Deviations"))
+  } 
+scale_x_sd <- function(){
+  scale_x_continuous(sec.axis = sec_axis(stdzd, name = "Standard Deviations")) 
+  }
+
+
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point() +
+  scale_y_sd() + 
+  scale_x_sd()
+
+scale_xy_sd <- function(){
+  
+  list(scale_y_sd(),
+    scale_x_sd())
+  
+}
+
+
+last_plot() + 
+  coord_fixed(ratio = sd(mtcars$wt)/sd(mtcars$mpg))
+
+last_plot() + 
+  ggxmean::geom_xy_means(shape = 4, size = 120, alpha = .3)
+
+
+library(tidyverse)
+mtcars |>
+  ggplot() + 
+  aes(x = wt, y = mpg) + 
+  coord_fixed(ratio = sd(mtcars$wt)/sd(mtcars$mpg)) + 
+  geom_point() + 
+  geom_smooth(method = lm) + 
+  geom_smooth(method = lm, formula = y ~ 1) + 
+  ggxmean::geom_xy_means(shape = 4, size = 100, alpha = .5) +
+  scale_y_sd() + 
+  scale_x_sd() ->
+p1; p1
+
+cars %>% 
+  ggplot() + 
+  aes(x = speed, y = dist) + 
+  coord_fixed(ratio = sd(cars$speed)/sd(cars$dist)) + 
+  geom_point() + 
+  geom_smooth(method = lm) + 
+  geom_smooth(method = lm, formula = y ~ 1) + 
+  ggxmean::geom_xy_means(shape = 4, size = 100, alpha = .5)+
+  scale_y_sd() + 
+  scale_x_sd() ->
+p2; p2
+
+corrr::correlate(cars)
+
+mtcars %>% 
+  select(wt, mpg) %>% 
+  corrr:::correlate()
+
+```
+
+---
+
+```{r}
+library(patchwork)
+(p1 + 
+  scale_x_reverse() ) + p2
+
+```
