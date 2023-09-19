@@ -92,3 +92,95 @@ library(patchwork)
   scale_x_reverse() ) + p2
 
 ```
+
+
+```{r}
+
+library(tidyverse)
+library(palmerpenguins)
+penguins %>% 
+  filter(species == "Adelie") ->
+adelie
+
+adelie %>% 
+  ggplot() + 
+  aes(bill_length_mm, bill_depth_mm) + 
+  geom_point()  + 
+  geom_smooth(method = "lm") + 
+  coord_fixed(ratio = sd(adelie$bill_length_mm, na.rm = T)/
+                sd(adelie$bill_depth_mm, na.rm = T))
+ 
+
+palmerpenguins::penguins %>% 
+  filter(species == "Gentoo") ->
+gentoo
+
+gentoo %>% 
+  ggplot() + 
+  aes(bill_length_mm, bill_depth_mm) + 
+  geom_point() + 
+  geom_smooth(method = "lm") + 
+  coord_fixed(ratio = sd(gentoo$bill_length_mm, na.rm = T)/
+                sd(gentoo$bill_depth_mm, na.rm = T))
+ 
+```
+# minimal example
+
+```{r fig.show='hold', fig.height = 6, fig.width = 6, message=FALSE, out.width="33%"}
+theme_set(theme_gray(base_size = 18))
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  labs(title = "step 1. plot and 'square up' on sd") + 
+  geom_point() + 
+  geom_smooth(method = lm) + 
+  coord_fixed(ratio = sd(mtcars$wt)/
+                sd(mtcars$mpg))
+
+last_plot() + 
+  labs(title = "step 2. add 'empty model' for reference") +
+  geom_smooth(method = lm, formula = y ~ 1, se = F) 
+
+last_plot() +
+  labs(title = "step 3. add slope logical limits\nw/ point shape '4' hack") +
+  annotate(geom = "point", 
+           x = mean(mtcars$wt),
+           y = mean(mtcars$mpg),
+           shape = 4, # 'x' shape
+           size = 140, # make it giant
+           alpha = .75  # a little transparent - it's reference
+           )
+```
+
+
+```{r}
+library(tidyverse)
+stdzd <- function(x) { (x-mean(x))/sd(x) }
+
+mtcars0 <- mtcars %>% filter(!is.na(wt) & !is.na(mpg))
+
+sd_wt <- sd(mtcars0$wt)
+sd_mpg <- sd(mtcars0$mpg)
+av_wt <- mean(mtcars0$wt)
+av_mpg <- mean(mtcars$mpg)
+
+ggplot(mtcars0, aes(x = wt, y = mpg)) +
+  geom_point() +
+  scale_y_continuous(breaks = mean(mtcars0$mpg) + (-3:3)*sd_mpg, sec.axis = sec_axis(stdzd, name = "Trying for 'Standard Deviations (Z)'")) + 
+  scale_x_continuous(breaks = mean(mtcars0$wt) + (-3:3)*sd_wt , sec.axis = sec_axis(stdzd, name = "Trying for 'Standard Deviations (Z)'")) + 
+  coord_fixed(ratio = sd(mtcars0$wt)/sd(mtcars0$mpg)) + 
+  geom_smooth(method = lm) +
+  annotate(geom = "point", 
+           x = mean(mtcars0$wt),
+           y = mean(mtcars0$mpg),
+           shape = 4, # 'x' shape
+           size = 140, # make it giant
+           alpha = .75  # a little transparent - it's reference
+           ) +
+  geom_smooth(method = lm, formula = y ~ 1, se = F) 
+
+layer_data(last_plot())
+
+
+last_plot() -> g
+
+g$scales
+```
