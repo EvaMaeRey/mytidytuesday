@@ -4,8 +4,7 @@ output: github_document
    
 <!-- README.md is generated from README.Rmd. Please edit that file --> 
 
-    
-
+  
 ```{r, include = FALSE}
 knitr::opts_chunk$set(      
   collapse = TRUE,
@@ -15,14 +14,16 @@ knitr::opts_chunk$set(
 ```
 
 
-# mytidytuesday git repo 
+
+# mytidytuesday git repo ...
+ 
  
 <!-- badges: start -->
 <!-- badges: end -->  
 
-    
-
 The goal of mytidytuesday is to hold small projects.  They are like blogs posts, but mostly code.  In the spirit of #tidytuesday no pressure to write prose!  
+
+Initially, I planned to work on #tidytuesday stuff, but I ended up just working on problems that arose in my work.
 
 ```{r, results='asis', echo = F}
 library(magrittr)
@@ -41,12 +42,12 @@ webpages %>%
 ```{r, eval=FALSE}
 new_experiment <- function(name){
   
-  dir.create(paste0(Sys.Date(),"-", name), )
+  dir.create(paste0(Sys.Date(),"-", name), recursive = F)
   # rmarkdown::html_document()
   
 } 
 
-new_experiment("statistically-speaking-slopes")
+new_experiment("ggedges2plot")
 
 
 ```

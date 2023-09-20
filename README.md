@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# mytidytuesday git repo
+# mytidytuesday git repo …
 
 <!-- badges: start -->
 
@@ -11,6 +11,10 @@ The goal of mytidytuesday is to hold small projects. They are like blogs
 posts, but mostly code. In the spirit of \#tidytuesday no pressure to
 write prose\!
 
+Initially, I planned to work on \#tidytuesday stuff, but I ended up just
+working on problems that arose in my work.
+
+  - [2023-09-20-ggedges2plot/ggedges2plot.html](https://evamaerey.github.io/mytidytuesday/2023-09-20-ggedges2plot/ggedges2plot.html)
   - [2023-09-18-statistically-speaking-slopes/statistically\_speaking\_slopes.html](https://evamaerey.github.io/mytidytuesday/2023-09-18-statistically-speaking-slopes/statistically_speaking_slopes.html)
   - [2023-09-15-ggplot2-stat-cascades/ggplot2\_stat\_cascades.html](https://evamaerey.github.io/mytidytuesday/2023-09-15-ggplot2-stat-cascades/ggplot2_stat_cascades.html)
   - [2023-09-08-geom-smooth-stuff/geom\_smooth\_stuff.html](https://evamaerey.github.io/mytidytuesday/2023-09-08-geom-smooth-stuff/geom_smooth_stuff.html)
@@ -128,10 +132,10 @@ write prose\!
 ``` r
 new_experiment <- function(name){
   
-  dir.create(paste0(Sys.Date(),"-", name), )
+  dir.create(paste0(Sys.Date(),"-", name), recursive = F)
   # rmarkdown::html_document()
   
 } 
 
-new_experiment("statistically-speaking-slopes")
+new_experiment("ggedges2plot")
 ```

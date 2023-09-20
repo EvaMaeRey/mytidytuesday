@@ -153,34 +153,52 @@ last_plot() +
 
 ```{r}
 library(tidyverse)
-stdzd <- function(x) { (x-mean(x))/sd(x) }
 
-mtcars0 <- mtcars %>% filter(!is.na(wt) & !is.na(mpg))
 
-sd_wt <- sd(mtcars0$wt)
-sd_mpg <- sd(mtcars0$mpg)
-av_wt <- mean(mtcars0$wt)
-av_mpg <- mean(mtcars$mpg)
 
-ggplot(mtcars0, aes(x = wt, y = mpg)) +
+
+
+```
+
+
+
+```{r}
+dat <- tibble(temp = c(0, 100), time = 1:2)
+
+ctof <- function(x){x*9/5 + 32}
+ctof(0)
+ctof(100)
+
+ggplot(dat) + 
+  aes(x = time, y = temp) +
   geom_point() +
-  scale_y_continuous(breaks = mean(mtcars0$mpg) + (-3:3)*sd_mpg, sec.axis = sec_axis(stdzd, name = "Trying for 'Standard Deviations (Z)'")) + 
-  scale_x_continuous(breaks = mean(mtcars0$wt) + (-3:3)*sd_wt , sec.axis = sec_axis(stdzd, name = "Trying for 'Standard Deviations (Z)'")) + 
-  coord_fixed(ratio = sd(mtcars0$wt)/sd(mtcars0$mpg)) + 
-  geom_smooth(method = lm) +
-  annotate(geom = "point", 
-           x = mean(mtcars0$wt),
-           y = mean(mtcars0$mpg),
-           shape = 4, # 'x' shape
-           size = 140, # make it giant
-           alpha = .75  # a little transparent - it's reference
-           ) +
-  geom_smooth(method = lm, formula = y ~ 1, se = F) 
-
-layer_data(last_plot())
+  scale_y_continuous(sec.axis = sec_axis(trans = ctof))  +
+  scale_y_continuous(sec.axis = sec_axis(trans = ~.*9/5 + 32))  
+```
 
 
-last_plot() -> g
+```{r, message=F}
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point() +
+  coord_fixed(ratio = sd(mtcars$wt)/sd(mtcars$mpg)) + 
+  geom_smooth(method = lm)  + 
+  scale_y_continuous(sec.axis = 
+                       sec_axis(~ (. -mean(mtcars$mpg))/ 
+                                  sd(mtcars$mpg), 
+                        name = "Standard deviations (Z)")) +
+  scale_x_continuous(sec.axis = 
+                       sec_axis(~ (. -mean(mtcars$wt))/ 
+                                  sd(mtcars$wt), 
+                        name = "Standard deviations (Z)"))
 
-g$scales
+
+mtcars %>% 
+  mutate(sd_wt = wt/sd(wt),
+         sd_mpg = mpg/sd(mpg)) %>% 
+lm(data = ., formula = sd_mpg ~ sd_wt) %>% 
+  summary()
+
+0.86766^2
+
+cor(mtcars$mpg, mtcars$cyl) # corr with basel correction
 ```
