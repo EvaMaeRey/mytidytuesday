@@ -1,0 +1,250 @@
+---
+title: "ggedgelist proposal"
+author: "Evangeline Reynolds"
+date: "9/20/2023"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+## Intro {ggedgelist} idea
+
+Here we think about a shortcut to a first looks at networks using a flat, edgelist input that leads straight to a ggplot2 plot (ggraph) space; this will uses tidygraph and ggraph under the hood...
+
+
+
+## Step 00 Before getting into it, create an 'interesting' edge list
+
+```{r cars, message=F, warning=F}
+library(tidyverse)
+library(tidygraph)
+library(ggraph)
+
+set.seed(12345)
+
+edge_list <- 
+  data.frame(node_to = sample(rep(LETTERS[1:10], 50), 
+                              replace = T), 
+             node_from = sample(rep(LETTERS[1:10], 50),
+                                replace = T)) %>% 
+  arrange(node_to, node_from) %>% 
+  count(node_to, node_from) %>% 
+  sample_n(18)
+
+head(edge_list)
+```
+
+## Step 0. Whats the status quo edgelist -> network viz
+
+```{r}
+edge_list %>% 
+  as_tbl_graph() %>% 
+  ggraph() +
+  geom_edge_link(color = "orange") +
+  geom_node_point(size = 9,
+                  color = "steelblue",
+                  alpha = .8) + 
+  geom_node_text(aes(label = name))
+
+# aesthetic mapping for edge characteristics
+last_plot() + 
+  geom_edge_link(color = "red", 
+                 alpha = .5 ,
+                 aes(edge_width = n))
+```
+
+## Step 0.a And to also vizualize node atributes
+
+
+```{r}
+node_info <- data.frame(my_nodes = LETTERS[1:10], ind_child = sample(c(T,F), 10, replace = T))
+
+edge_list %>% 
+  as_tbl_graph() %>%
+  left_join(node_info %>% 
+              rename(name = my_nodes)) %>%
+  ggraph() +
+  geom_edge_link(color = "orange") +
+  geom_node_point(size = 9,
+                  color = "steelblue",
+                  alpha = .8) + 
+  geom_node_text(aes(label = name))
+
+```
+
+
+
+# Proposed functions, direct edgelist -> plotspace feel
+
+
+```{r}
+# get into ggplot2 plot space from edge list data frame 
+ggedgelist <- function(edgelist, nodelist = NULL, ...)(
+  
+  # message("'name' a variable created in the 'nodes' dataframe")
+  
+    if(is.null(nodelist)){
+    edgelist %>% 
+    as_tbl_graph() %>% 
+    ggraph(...) 
+    
+  }else{ # join on nodes attributes if they are available
+    
+    names(nodelist)[1] <- "name"
+    
+    edgelist %>% 
+    as_tbl_graph() %>%
+    left_join(nodelist) %>% 
+    ggraph(...) 
+    
+  }
+  
+)
+
+# get a fill viz w edgelist dataframe only
+quick_ggedgelist <- function(edgelist, nodelist = NULL, include_names = F,  ...){
+  
+
+  p <- ggedgelist(edgelist = edgelist,
+                  nodelist = nodelist, ...) +
+  geom_edge_link(color = "orange") +
+  geom_node_point(size = 9,
+                  color = "steelblue",
+                  alpha = .8) 
+  
+  if(include_names){p + geom_node_label(aes(label = name))}else{p}
+  
+}
+
+
+
+geom_node_label_auto <- function(...){ 
+  
+  geom_node_label(aes(label = name), ...)
+  
+}
+
+geom_node_text_auto <- function(...){ 
+  
+  geom_node_text(aes(label = name), ...)
+  
+}
+
+
+```
+
+
+# examples w/ proposed functions
+
+
+## `quick_ggedgelist()`
+
+```{r, out.width="33%", fig.show='hold', message=F}
+head(edge_list)
+head(node_info)
+edge_list %>% 
+  quick_ggedgelist() 
+
+edge_list %>% 
+  quick_ggedgelist(include_names = T) 
+
+edge_list %>% 
+  quick_ggedgelist(nodelist = node_info) + 
+  geom_node_point(aes(color = ind_child), size = 10)
+
+
+```
+
+## `ggedgelist()` + `geom_node_label_auto()`
+
+
+```{r}
+edge_list %>% 
+  ggedgelist(layout = "kk") + 
+  geom_edge_link(arrow = arrow(), linetype = "dashed") +
+  geom_node_tile(width = .18, height = .5) + 
+  geom_node_label_auto() 
+```
+
+# using the ggflowchart example (100% inspiration)
+
+```{r}
+# flowcharter example
+ggflowchart_example <- tribble(~from, ~to,
+        "A", "B",
+        "A", "C",
+        "A", "D",
+        "B", "E",
+        "C", "F",
+        "F", "G") 
+
+ggflowchart_example %>% 
+  as_tbl_graph()
+```
+
+
+## Start by using quick plot function 'qedgelist2ggraph'
+
+```{r, out.width="33%", fig.show='hold', message=F}
+ggflowchart_example %>% 
+  quick_ggedgelist(layout = "stress")
+
+ggflowchart_example %>% 
+  quick_ggedgelist(layout = "tree")
+
+# auto which is default also produces three in this case
+ggflowchart_example %>% 
+  quick_ggedgelist(layout = "auto") 
+
+layer_data(last_plot(), i = 2)
+```
+
+## Use ggedgelist and geom_edge_* and geom_node_* functions to customize
+
+```{r}
+ggflowchart_example %>% 
+  ggedgelist() +
+  geom_edge_link(linetype = "dashed") + 
+  geom_node_point(size = 12, alpha = .2) + 
+  geom_node_label_auto(fill = "magenta")
+
+```
+
+## Capabilities end here.  If you need to access powerful network calculation capabilities, step back into the tidygraph world!  
+
+
+```{r}
+ggflowchart_example %>% 
+  as_tbl_graph() %>% 
+  mutate(dg_cent = centrality_degree()) %>% 
+  ggraph("stress") +
+  geom_edge_link(linetype = "dashed") + 
+  geom_node_point(alpha = .2, aes(size = dg_cent)) + 
+  scale_size(range = c(8, 15)) +
+  geom_node_label_auto(fill = "magenta")
+
+```
+
+
+## use ggflowchart to make it even faster and prettier
+
+allows for node info, which currently isn't in proposal...
+
+```{r}
+library(ggflowchart)
+node_data <- tibble::tibble(
+  name = c("A", "B", "C", "D", "E", "F", "G"),
+  type = c("Type 1", "Type 1", "Type 1", "Type 1", 
+           "Type 2", "Type 2", "Type 2")
+  )
+ggflowchart(ggflowchart_example, 
+            node_data, fill = type)
+
+```
+
