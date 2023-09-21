@@ -26,13 +26,18 @@ Initially, I planned to work on #tidytuesday stuff, but I ended up just working 
 
 ```{r, results='asis', echo = F}
 library(magrittr)
-webpages <- fs::dir_ls(type = "file", recurse = T, glob = "*.html") %>% rev()
-       
+webpages <- fs::dir_ls(type = "file", recurse = T, glob = "*.html|*.pdf") %>% rev()
+file_name_wo_extension <- webpages %>% stringr::str_remove(".html|.pdf")
+
+
 webpages %>%     
   paste0("- [",
          . ,
          "]",
-         "(https://evamaerey.github.io/mytidytuesday/", ., ")\n") %>% 
+         "(https://evamaerey.github.io/mytidytuesday/", ., 
+         ") **[source](https://github.com/evamaerey/mytidytuesday/",
+         file_name_wo_extension,".Rmd",
+         ")**\n") %>% 
   cat()     
 ```
 
