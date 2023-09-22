@@ -80,7 +80,7 @@ edge_list %>%
 
 
 
-# Proposed functions, direct edgelist -> plotspace feel
+# Proposed functions, edgelist -> plotspace feel
 
 
 ```{r}
@@ -100,7 +100,7 @@ ggedgelist <- function(edgelist, nodelist = NULL, ...)(
     
     edgelist %>% 
     as_tbl_graph() %>%
-    left_join(nodelist) %>% 
+    full_join(nodelist) %>% 
     ggraph(...) 
     
   }
@@ -249,4 +249,39 @@ ggflowchart(ggflowchart_example,
             node_data, fill = type)
 
 ```
+# corrr example...
 
+```{r}
+
+datasets::airquality %>% 
+  corrr::correlate() %>% 
+  corrr::network_plot(min_cor = .2)
+
+
+node_list <-  data.frame(x = names(datasets::airquality))
+
+datasets::airquality %>% 
+  corrr::correlate() %>% 
+  corrr::shave() %>% 
+  pivot_longer(-1) %>% 
+  filter(abs(value) >= .2) ->
+corrr_edgelist
+
+# using quick_ggedgelist
+corrr_edgelist %>% 
+  quick_ggedgelist(include_names = T, 
+                   layout = "fr", 
+                   nodelist = node_list) + 
+  geom_edge_arc(aes(edge_width = abs(value)), 
+                alpha = .2)
+
+# customize using ggedgelist
+corrr_edgelist %>% 
+  ggedgelist(layout = "fr") + 
+  geom_edge_arc(aes(edge_width = abs(value),
+                    color = value), 
+                strength = .3) + 
+  geom_node_point() +
+  geom_node_label_auto() + 
+  scale_edge_colour_gradient2()
+```

@@ -1,0 +1,37 @@
+---
+title: "pooh"
+author: "Evangeline Reynolds"
+date: "9/22/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## color manipulation flex
+
+```{r cars}
+library(magick)
+
+magick::image_read("pooh_and_friends.png") %>% 
+  magick::image_rotate(90)
+
+pooh <- png::readPNG(source = "pooh_and_friends.png")
+
+str(pooh)
+
+pooh[,,1][pooh[,,1] >.3  ] <- 1 #red
+pooh[,,2][pooh[,,1] >.3  ] <- 1 #green
+pooh[,,3][pooh[,,1] >.3  ] <- 1 #blue
+pooh[,,4] <- 1 # alpha
+
+# RGB
+
+png::writePNG(pooh, "pooh_and_friends2.png")
+
+magick::image_read("pooh_and_friends2.png") %>% 
+  magick::image_rotate(90)
+
+```
+
