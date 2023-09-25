@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>after_stat, after_scale</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# after_stat, after_scale
+]
+.subtitle[
+## A flipbook and layer_data treatment
+]
+
+---
+
+
+
+
+
+
+
+Thanks for joining!  
+
+This flipbook will look at the topic of fine-tuned aesthetic evaluation using after_stat, after_scale, and stage.  
+
+Are you the type of person that learned ggplot2 before these mechanisms were put together, and just ignore them (that's me!) 
+
+--
+
+This book is for you!
+
+---
+
+Are you the kind of person that can copy and paste after_stat, after_scale, and stage code but really has no idea what's going on? (that'd be me if I actually used the mechanisms)
+
+--
+
+This book is for you!
+
+---
+
+Are you the kind of person that admires really beautifully and thoughtfully crafted data vizualizations, and have noticed the authors use of after_stat, after_scale, and stage, but have thought, I'm not sure it's worth all the fuss.
+
+--
+
+This book is for you!
+
+
+
+
+
+The source material is basically an expansion of https://ggplot2.tidyverse.org/reference/aes_eval.html
+
+
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-start-auto[
+
+```r
+*ggplot(faithful, aes(x = waiting))
+```
+]
+ 
+.panel2-start-auto[
+![](after_stat_etc_files/figure-html/start_auto_01_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-start-auto[
+
+```r
+ggplot(faithful, aes(x = waiting)) +
+* geom_rug()
+```
+]
+ 
+.panel2-start-auto[
+![](after_stat_etc_files/figure-html/start_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-start-auto[
+
+```r
+ggplot(faithful, aes(x = waiting)) +
+  geom_rug() +
+* geom_histogram(bins = 12)
+```
+]
+ 
+.panel2-start-auto[
+![](after_stat_etc_files/figure-html/start_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-start-auto[
+
+```r
+ggplot(faithful, aes(x = waiting)) +
+  geom_rug() +
+  geom_histogram(bins = 12)
+
+
+
+*layer_data(last_plot(), 2)
+```
+]
+ 
+.panel2-start-auto[
+![](after_stat_etc_files/figure-html/start_auto_04_output-1.png)&lt;!-- --&gt;
+
+```
+    y count        x     xmin     xmax     density     ncount   ndensity
+1   4     4 43.36364 40.95455 45.77273 0.003052164 0.07017544 0.07017544
+2  22    22 48.18182 45.77273 50.59091 0.016786903 0.38596491 0.38596491
+3  33    33 53.00000 50.59091 55.40909 0.025180355 0.57894737 0.57894737
+4  24    24 57.81818 55.40909 60.22727 0.018312986 0.42105263 0.42105263
+5  14    14 62.63636 60.22727 65.04545 0.010682575 0.24561404 0.24561404
+6   6     6 67.45455 65.04545 69.86364 0.004578246 0.10526316 0.10526316
+7  23    23 72.27273 69.86364 74.68182 0.017549945 0.40350877 0.40350877
+8  54    54 77.09091 74.68182 79.50000 0.041204218 0.94736842 0.94736842
+9  57    57 81.90909 79.50000 84.31818 0.043493341 1.00000000 1.00000000
+10 23    23 86.72727 84.31818 89.13636 0.017549945 0.40350877 0.40350877
+11 10    10 91.54545 89.13636 93.95455 0.007630411 0.17543860 0.17543860
+12  2     2 96.36364 93.95455 98.77273 0.001526082 0.03508772 0.03508772
+   flipped_aes PANEL group ymin ymax colour   fill linewidth linetype alpha
+1        FALSE     1    -1    0    4     NA grey35       0.5        1    NA
+2        FALSE     1    -1    0   22     NA grey35       0.5        1    NA
+3        FALSE     1    -1    0   33     NA grey35       0.5        1    NA
+4        FALSE     1    -1    0   24     NA grey35       0.5        1    NA
+5        FALSE     1    -1    0   14     NA grey35       0.5        1    NA
+6        FALSE     1    -1    0    6     NA grey35       0.5        1    NA
+7        FALSE     1    -1    0   23     NA grey35       0.5        1    NA
+8        FALSE     1    -1    0   54     NA grey35       0.5        1    NA
+9        FALSE     1    -1    0   57     NA grey35       0.5        1    NA
+10       FALSE     1    -1    0   23     NA grey35       0.5        1    NA
+11       FALSE     1    -1    0   10     NA grey35       0.5        1    NA
+12       FALSE     1    -1    0    2     NA grey35       0.5        1    NA
+```
+]
+
+---
+count: false
+ 
+
+.panel1-start-auto[
+
+```r
+ggplot(faithful, aes(x = waiting)) +
+  geom_rug() +
+  geom_histogram(bins = 12)
+
+
+
+layer_data(last_plot(), 2) %&gt;%
+* .[1:6]
+```
+]
+ 
+.panel2-start-auto[
+![](after_stat_etc_files/figure-html/start_auto_05_output-1.png)&lt;!-- --&gt;
+
+```
+    y count        x     xmin     xmax     density
+1   4     4 43.36364 40.95455 45.77273 0.003052164
+2  22    22 48.18182 45.77273 50.59091 0.016786903
+3  33    33 53.00000 50.59091 55.40909 0.025180355
+4  24    24 57.81818 55.40909 60.22727 0.018312986
+5  14    14 62.63636 60.22727 65.04545 0.010682575
+6   6     6 67.45455 65.04545 69.86364 0.004578246
+7  23    23 72.27273 69.86364 74.68182 0.017549945
+8  54    54 77.09091 74.68182 79.50000 0.041204218
+9  57    57 81.90909 79.50000 84.31818 0.043493341
+10 23    23 86.72727 84.31818 89.13636 0.017549945
+11 10    10 91.54545 89.13636 93.95455 0.007630411
+12  2     2 96.36364 93.95455 98.77273 0.001526082
+```
+]
+
+&lt;style&gt;
+.panel1-start-auto {
+  color: black;
+  width: 39.2%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-start-auto {
+  color: black;
+  width: 58.8%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-start-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-after-1[
+
+```r
+ggplot(faithful, aes(x = waiting)) +
+  geom_rug() +
+  geom_histogram(bins = 12,
+    aes(y = after_stat(density))
+    )
+
+layer_data(last_plot(), 2) %&gt;%
+  .[1:6]
+```
+]
+ 
+.panel2-after-1[
+![](after_stat_etc_files/figure-html/after_1_01_output-1.png)&lt;!-- --&gt;
+
+```
+             y count        x     xmin     xmax     density
+1  0.003052164     4 43.36364 40.95455 45.77273 0.003052164
+2  0.016786903    22 48.18182 45.77273 50.59091 0.016786903
+3  0.025180355    33 53.00000 50.59091 55.40909 0.025180355
+4  0.018312986    24 57.81818 55.40909 60.22727 0.018312986
+5  0.010682575    14 62.63636 60.22727 65.04545 0.010682575
+6  0.004578246     6 67.45455 65.04545 69.86364 0.004578246
+7  0.017549945    23 72.27273 69.86364 74.68182 0.017549945
+8  0.041204218    54 77.09091 74.68182 79.50000 0.041204218
+9  0.043493341    57 81.90909 79.50000 84.31818 0.043493341
+10 0.017549945    23 86.72727 84.31818 89.13636 0.017549945
+11 0.007630411    10 91.54545 89.13636 93.95455 0.007630411
+12 0.001526082     2 96.36364 93.95455 98.77273 0.001526082
+```
+]
+
+&lt;style&gt;
+.panel1-after-1 {
+  color: black;
+  width: 39.2%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-after-1 {
+  color: black;
+  width: 58.8%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-after-1 {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.panel1-after2-1[
+
+```r
+ggplot(faithful, aes(x = waiting)) +
+  geom_rug() +
+  geom_histogram(bins = 12,
+    aes(y = ..density..)
+    )
+
+layer_data(last_plot(), 2) %&gt;%
+  .[1:6]
+```
+]
+ 
+.panel2-after2-1[
+![](after_stat_etc_files/figure-html/after2_1_01_output-1.png)&lt;!-- --&gt;
+
+```
+             y count        x     xmin     xmax     density
+1  0.003052164     4 43.36364 40.95455 45.77273 0.003052164
+2  0.016786903    22 48.18182 45.77273 50.59091 0.016786903
+3  0.025180355    33 53.00000 50.59091 55.40909 0.025180355
+4  0.018312986    24 57.81818 55.40909 60.22727 0.018312986
+5  0.010682575    14 62.63636 60.22727 65.04545 0.010682575
+6  0.004578246     6 67.45455 65.04545 69.86364 0.004578246
+7  0.017549945    23 72.27273 69.86364 74.68182 0.017549945
+8  0.041204218    54 77.09091 74.68182 79.50000 0.041204218
+9  0.043493341    57 81.90909 79.50000 84.31818 0.043493341
+10 0.017549945    23 86.72727 84.31818 89.13636 0.017549945
+11 0.007630411    10 91.54545 89.13636 93.95455 0.007630411
+12 0.001526082     2 96.36364 93.95455 98.77273 0.001526082
+```
+]
+
+&lt;style&gt;
+.panel1-after2-1 {
+  color: black;
+  width: 39.2%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-after2-1 {
+  color: black;
+  width: 58.8%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-after2-1 {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+
+
+
+```r
+# faithful %&gt;% 
+#   rename(x = waiting, y) 
+```
+
+
+---
+
+count: false
+ 
+
+.panel1-ok-1[
+
+```r
+# The exact colour is known after scale transformation
+ggplot(mpg,
+       aes(cty, colour = factor(cyl))) +
+  geom_density()
+
+layer_data(last_plot(), 1)[1:5, 1:3]
+```
+]
+ 
+.panel2-ok-1[
+![](after_stat_etc_files/figure-html/ok_1_01_output-1.png)&lt;!-- --&gt;
+
+```
+   colour            y        x
+1 #F8766D 8.805984e-14 9.000000
+2 #F8766D 1.334346e-13 9.050881
+3 #F8766D 2.041311e-13 9.101761
+4 #F8766D 3.176278e-13 9.152642
+5 #F8766D 4.876455e-13 9.203523
+```
+]
+
+&lt;style&gt;
+.panel1-ok-1 {
+  color: black;
+  width: 49%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-ok-1 {
+  color: black;
+  width: 49%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-ok-1 {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-ok2-1[
+
+```r
+# We re-use colour properties for the fill without a separate fill scale
+ggplot(mpg,
+       aes(cty, colour = factor(cyl))) +
+  geom_density(aes(
+    fill = after_scale(alpha(colour, 0.3))
+    ))
+
+layer_data(last_plot(), 1)[1:5, 1:3]
+```
+]
+ 
+.panel2-ok2-1[
+![](after_stat_etc_files/figure-html/ok2_1_01_output-1.png)&lt;!-- --&gt;
+
+```
+       fill  colour            y
+1 #F8766D4C #F8766D 8.805984e-14
+2 #F8766D4C #F8766D 1.334346e-13
+3 #F8766D4C #F8766D 2.041311e-13
+4 #F8766D4C #F8766D 3.176278e-13
+5 #F8766D4C #F8766D 4.876455e-13
+```
+]
+
+&lt;style&gt;
+.panel1-ok2-1 {
+  color: black;
+  width: 49%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-ok2-1 {
+  color: black;
+  width: 49%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-ok2-1 {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-ok222-1[
+
+```r
+# We re-use colour properties for the fill without a separate fill scale
+ggplot(mpg, aes(class, hwy)) +
+  geom_boxplot(
+    aes(fill = class)
+    )
+
+layer_data(last_plot(), 1)[1:5, 1:3]
+```
+]
+ 
+.panel2-ok222-1[
+![](after_stat_etc_files/figure-html/ok222_1_01_output-1.png)&lt;!-- --&gt;
+
+```
+     fill ymin lower
+1 #F8766D   23    24
+2 #C49A00   23    26
+3 #53B400   23    26
+4 #00C094   21    22
+5 #00B6EB   15    16
+```
+]
+
+&lt;style&gt;
+.panel1-ok222-1 {
+  color: black;
+  width: 49%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-ok222-1 {
+  color: black;
+  width: 49%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-ok222-1 {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-ok223-1[
+
+```r
+# We re-use colour properties for the fill without a separate fill scale
+ggplot(mpg, aes(class, hwy)) +
+  geom_boxplot(
+    aes(fill = class),
+    alpha = 0.4
+    )
+
+layer_data(last_plot(), 1)[1:5, 1:3]
+```
+]
+ 
+.panel2-ok223-1[
+![](after_stat_etc_files/figure-html/ok223_1_01_output-1.png)&lt;!-- --&gt;
+
+```
+     fill ymin lower
+1 #F8766D   23    24
+2 #C49A00   23    26
+3 #53B400   23    26
+4 #00C094   21    22
+5 #00B6EB   15    16
+```
+]
+
+&lt;style&gt;
+.panel1-ok223-1 {
+  color: black;
+  width: 49%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-ok223-1 {
+  color: black;
+  width: 49%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-ok223-1 {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-ok300-1[
+
+```r
+# The exact colour is known after scale transformation
+ggplot(mpg, aes(class, hwy)) +
+  geom_boxplot(
+    aes(fill =
+          stage(class,
+                after_scale =
+                  alpha(fill, 0.4)))
+    )
+
+
+layer_data(last_plot(), 1)[1:5, 1:3]
+```
+]
+ 
+.panel2-ok300-1[
+![](after_stat_etc_files/figure-html/ok300_1_01_output-1.png)&lt;!-- --&gt;
+
+```
+       fill ymin lower
+1 #F8766D66   23    24
+2 #C49A0066   23    26
+3 #53B40066   23    26
+4 #00C09466   21    22
+5 #00B6EB66   15    16
+```
+]
+
+&lt;style&gt;
+.panel1-ok300-1 {
+  color: black;
+  width: 49%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-ok300-1 {
+  color: black;
+  width: 49%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-ok300-1 {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-ok38-1[
+
+```r
+# The exact colour is known after scale transformation
+ggplot(mpg, aes(class, hwy)) +
+  geom_boxplot(
+    aes(fill =
+          stage(class,
+                after_scale =
+                  alpha(fill, 0.4)))
+    )
+
+
+layer_data(last_plot(), 1)[1:5, 1:3]
+```
+]
+ 
+.panel2-ok38-1[
+![](after_stat_etc_files/figure-html/ok38_1_01_output-1.png)&lt;!-- --&gt;
+
+```
+       fill ymin lower
+1 #F8766D66   23    24
+2 #C49A0066   23    26
+3 #53B40066   23    26
+4 #00C09466   21    22
+5 #00B6EB66   15    16
+```
+]
+
+&lt;style&gt;
+.panel1-ok38-1 {
+  color: black;
+  width: 49%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-ok38-1 {
+  color: black;
+  width: 49%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-ok38-1 {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-ok232-1[
+
+```r
+# We re-use colour properties for the fill without a separate fill scale
+ggplot(mpg) +
+  aes(x = class,
+      y = displ) +
+  geom_violin() +
+  stat_summary(
+# layer is text
+    geom = "text",
+# compute variables on-the-fly
+    fun.data =
+      ~ round(data.frame(my_mean = mean(.x),
+                         my_sd = sd(.x)), 2),
+# use those vars in plot
+    mapping =
+      aes(y = stage(displ, after_stat = 8),
+          label = after_stat(
+            paste(my_mean, "±", my_sd)
+            )
+          )
+  )
+
+layer_data(last_plot(), 2)[1:5, 1:7]
+```
+]
+ 
+.panel2-ok232-1[
+![](after_stat_etc_files/figure-html/ok232_1_01_output-1.png)&lt;!-- --&gt;
+
+```
+  y       label x group my_mean my_sd PANEL
+1 8 6.16 ± 0.53 1     1    6.16  0.53     1
+2 8 2.33 ± 0.45 2     2    2.33  0.45     1
+3 8 2.92 ± 0.72 3     3    2.92  0.72     1
+4 8 3.39 ± 0.45 4     4    3.39  0.45     1
+5 8 4.42 ± 0.83 5     5    4.42  0.83     1
+```
+]
+
+&lt;style&gt;
+.panel1-ok232-1 {
+  color: black;
+  width: 49%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-ok232-1 {
+  color: black;
+  width: 49%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-ok232-1 {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

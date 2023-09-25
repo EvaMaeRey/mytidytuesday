@@ -285,3 +285,15 @@ corrr_edgelist %>%
   geom_node_label_auto() + 
   scale_edge_colour_gradient2()
 ```
+
+
+```{r}
+library(babynames)
+set.seed(12145)
+project_partners <- data.frame(x = sample(babynames$name, 19, prob = babynames$n), 
+                               y = sample(babynames$name, 19, prob = babynames$n))
+
+project_partners %>% 
+  quick_ggedgelist(layout = "fr", 
+                   include_names = T)
+```

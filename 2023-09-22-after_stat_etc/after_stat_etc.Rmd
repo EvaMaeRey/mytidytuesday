@@ -1,0 +1,265 @@
+---
+title: "after_stat, after_scale"
+subtitle: "A flipbook and layer_data treatment"
+author: ""
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, fig.height = 4, message = FALSE, 
+                      warning = FALSE, comment = "", cache = F)
+library(flipbookr)
+library(tidyverse)
+theme_set(new = theme_gray(base_size = 15))
+```
+
+
+
+Thanks for joining!  
+
+This flipbook will look at the topic of fine-tuned aesthetic evaluation using after_stat, after_scale, and stage.  
+
+Are you the type of person that learned ggplot2 before these mechanisms were put together, and just ignore them (that's me!) 
+
+--
+
+This book is for you!
+
+---
+
+Are you the kind of person that can copy and paste after_stat, after_scale, and stage code but really has no idea what's going on? (that'd be me if I actually used the mechanisms)
+
+--
+
+This book is for you!
+
+---
+
+Are you the kind of person that admires really beautifully and thoughtfully crafted data vizualizations, and have noticed the authors use of after_stat, after_scale, and stage, but have thought, I'm not sure it's worth all the fuss.
+
+--
+
+This book is for you!
+
+
+
+
+
+The source material is basically an expansion of https://ggplot2.tidyverse.org/reference/aes_eval.html
+
+
+
+
+
+
+
+---
+
+`r chunk_reveal("start", widths = c(2,3))`
+
+```{r start, include = F}
+ggplot(faithful, aes(x = waiting)) +
+  geom_rug() + 
+  geom_histogram(bins = 12)
+
+
+
+layer_data(last_plot(), 2) %>% 
+  .[1:6] 
+```
+
+
+---
+
+
+`r chunk_reveal("after", break_type = 1, widths = c(2,3))`
+
+
+```{r after, include = F}
+ggplot(faithful, aes(x = waiting)) +
+  geom_rug() + 
+  geom_histogram(bins = 12, 
+    aes(y = after_stat(density))
+    )
+
+layer_data(last_plot(), 2) %>% 
+  .[1:6] 
+```
+
+
+---
+
+
+`r chunk_reveal("after2", break_type = 1, widths = c(2,3))`
+
+
+```{r after2, include = F}
+ggplot(faithful, aes(x = waiting)) +
+  geom_rug() + 
+  geom_histogram(bins = 12, 
+    aes(y = ..density..)
+    )
+
+layer_data(last_plot(), 2) %>% 
+  .[1:6] 
+```
+
+
+---
+
+
+
+```{r}
+# faithful %>% 
+#   rename(x = waiting, y) 
+```
+
+
+---
+
+`r chunk_reveal("ok", break_type = 1, widths = c(2,2))`
+
+
+```{r ok, include = F}
+# The exact colour is known after scale transformation
+ggplot(mpg, 
+       aes(cty, colour = factor(cyl))) +
+  geom_density()
+
+layer_data(last_plot(), 1)[1:5, 1:3]
+
+```
+
+---
+
+`r chunk_reveal("ok2", break_type = 1, widths = c(2,2))`
+
+
+```{r ok2, include = F}
+# We re-use colour properties for the fill without a separate fill scale
+ggplot(mpg, 
+       aes(cty, colour = factor(cyl))) +
+  geom_density(aes(
+    fill = after_scale(alpha(colour, 0.3))
+    ))
+
+layer_data(last_plot(), 1)[1:5, 1:3]
+```
+
+---
+
+`r chunk_reveal("ok222", break_type = 1, widths = c(2,2))`
+
+
+```{r ok222, include = F}
+# We re-use colour properties for the fill without a separate fill scale
+ggplot(mpg, aes(class, hwy)) +
+  geom_boxplot(
+    aes(fill = class)
+    )
+
+layer_data(last_plot(), 1)[1:5, 1:3]
+```
+
+
+---
+
+`r chunk_reveal("ok223", break_type = 1, widths = c(2,2))`
+
+
+```{r ok223, include = F}
+# We re-use colour properties for the fill without a separate fill scale
+ggplot(mpg, aes(class, hwy)) +
+  geom_boxplot(
+    aes(fill = class),
+    alpha = 0.4
+    )
+
+layer_data(last_plot(), 1)[1:5, 1:3]
+```
+
+---
+
+`r chunk_reveal("ok300", break_type = 1, widths = c(2,2))`
+
+
+```{r ok300, include = F}
+# The exact colour is known after scale transformation
+ggplot(mpg, aes(class, hwy)) +
+  geom_boxplot(
+    aes(fill = 
+          stage(class,
+                after_scale = 
+                  alpha(fill, 0.4)))
+    )
+
+
+layer_data(last_plot(), 1)[1:5, 1:3]
+
+```
+
+
+---
+
+`r chunk_reveal("ok38", break_type = 1, widths = c(2,2))`
+
+
+```{r ok38, include = F}
+# The exact colour is known after scale transformation
+ggplot(mpg, aes(class, hwy)) +
+  geom_boxplot(
+    aes(fill = 
+          stage(class,
+                after_scale = 
+                  alpha(fill, 0.4)))
+    )
+
+
+layer_data(last_plot(), 1)[1:5, 1:3]
+
+```
+
+
+
+---
+
+`r chunk_reveal("ok232", break_type = 1, widths = c(2,2))`
+
+
+```{r ok232, include = F}
+# We re-use colour properties for the fill without a separate fill scale
+ggplot(mpg) +
+  aes(x = class, 
+      y = displ) +
+  geom_violin() + 
+  stat_summary(
+    # layer is text
+    geom = "text", 
+    # compute variables on-the-fly  
+    fun.data = 
+      ~ round(data.frame(my_mean = mean(.x),
+                         my_sd = sd(.x)), 2),
+    # use those vars in plot
+    mapping = 
+      aes(y = stage(displ, after_stat = 8),
+          label = after_stat(
+            paste(my_mean, "±", my_sd)
+            )
+          )
+  )
+
+layer_data(last_plot(), 2)[1:5, 1:7]
+```
+
+
