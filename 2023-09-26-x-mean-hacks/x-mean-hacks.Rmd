@@ -1,0 +1,81 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = T, error = T)
+options(tidyverse.quiet = TRUE)
+```
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r cars}
+library(tidyverse)
+```
+
+## Experiment
+
+```{r}
+ggplot(mtcars) + 
+  aes(x = wt, y = mpg, color = factor(am)) + 
+  geom_rug() + 
+  geom_point() + 
+  geom_smooth(orientation = "y", 
+              method = lm,
+              formula = y ~ 1)
+
+ggplot(mtcars) + 
+  aes(x = wt, y = 1) + 
+  geom_rug() + 
+  geom_smooth(orientation = "y", 
+              method = lm,
+              formula = y ~ 1)
+
+
+ggplot(mtcars) + 
+  aes(x = wt, y = 1) + 
+  geom_rug() + 
+  geom_smooth(orientation = "y", 
+              method = lm,
+              formula = y ~ 1)
+
+
+ggplot(mtcars) + 
+  aes(x = wt) +
+  geom_rug() + 
+  geom_vline()
+
+ggplot(mtcars) + 
+  aes(x = wt, y = 0) +
+  geom_rug()
+
+
+mean_wt <- data.frame(cyl = c(4, 6, 8), wt = c(2.28, 3.11, 4.00))
+p + geom_hline(aes(yintercept = wt), mean_wt)
+
+ggplot(mtcars, aes(mpg, wt, colour = wt)) +
+  geom_point() +
+  geom_hline(aes(yintercept = wt, colour = wt), mean_wt) +
+  facet_wrap(~ cyl)
+
+
+ggplot(mtcars, aes(mpg, wt, colour = wt)) +
+  geom_point() +
+  geom_hline(aes(yintercept = wt, colour = wt), mean_wt) +
+  facet_wrap(~ cyl)
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

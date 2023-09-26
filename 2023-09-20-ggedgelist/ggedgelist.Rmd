@@ -297,3 +297,29 @@ project_partners %>%
   quick_ggedgelist(layout = "fr", 
                    include_names = T)
 ```
+
+
+
+```{r, fig.height=20, fig.width=20}
+cran_20230905 <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-09-19/cran_20230905.csv')
+package_authors <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-09-19/package_authors.csv')
+cran_graph_nodes <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-09-19/cran_graph_nodes.csv')
+cran_graph_edges <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-09-19/cran_graph_edges.csv')
+  
+package_authors %>% 
+  count(authorsR) %>% 
+  filter(n >= 10) ->
+crans_prolific
+
+package_authors %>% 
+  inner_join(crans_prolific) ->
+package_authors_prolific
+
+
+package_authors_prolific %>% 
+  group_by(Package) %>% 
+  filter(n()>=10) %>% 
+  quick_ggedgelist(include_names = T, layout = "fr") + 
+  labs(title = "Which CRAN packages have at least 10 very prolific CRAN developers as authors",
+       caption = "Where prolific as 10 or more >=10 R packages on CRAN")
+```

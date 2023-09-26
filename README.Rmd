@@ -47,12 +47,18 @@ webpages %>%
 ```{r, eval=FALSE}
 new_experiment <- function(name){
   
-  dir.create(paste0(Sys.Date(),"-", name), recursive = F)
-  # rmarkdown::html_document()
+  dir <- paste0(Sys.Date(),"-", name)
   
+  dir.create(dir, recursive = F)
+  
+  filepath <- paste0(dir, "/", name, ".Rmd")
+  
+  readLines("2023-09-26-template-spot/template_spot.Rmd") %>% 
+    writeLines(filepath)
+
 } 
 
-new_experiment("pooh_and_friends")
+new_experiment(name = "cowy-outline")
 
 
 ```
