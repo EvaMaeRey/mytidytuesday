@@ -39,40 +39,42 @@ ggplot(mtcars) +
   geom_smooth(orientation = "y", 
               method = lm,
               formula = y ~ 1)
+```
 
 
-ggplot(mtcars) + 
-  aes(x = wt, y = 1) + 
-  geom_rug() + 
-  geom_smooth(orientation = "y", 
-              method = lm,
-              formula = y ~ 1)
+# pre- computation
 
+```{r}
+mean_wt <- data.frame(cyl = c(4, 6, 8), wt = c(2.28, 3.11, 4.00))
+
+ggplot(mtcars, aes(wt,mpg,  colour = wt)) +
+  geom_point() +
+  geom_vline(aes(xintercept = wt, colour = wt), mean_wt) +
+  facet_wrap(~ cyl,
+             ncol = 1)
+```
+
+# a terrible hack with stat_summary and point
+
+```{r}
 
 ggplot(mtcars) + 
   aes(x = wt) +
   geom_rug() + 
-  geom_vline()
+  geom_histogram() +
+  stat_summary(fun = "median", 
+               geom = "point", 
+               size = 100, 
+               orientation = "y", 
+               shape = 3, 
+               aes(y = 0)
+               ) + 
+  aes(color = factor(am)) + 
+  facet_wrap(~factor(am),
+             ncol = 1) 
 
-ggplot(mtcars) + 
-  aes(x = wt, y = 0) +
-  geom_rug()
-
-
-mean_wt <- data.frame(cyl = c(4, 6, 8), wt = c(2.28, 3.11, 4.00))
-p + geom_hline(aes(yintercept = wt), mean_wt)
-
-ggplot(mtcars, aes(mpg, wt, colour = wt)) +
-  geom_point() +
-  geom_hline(aes(yintercept = wt, colour = wt), mean_wt) +
-  facet_wrap(~ cyl)
-
-
-ggplot(mtcars, aes(mpg, wt, colour = wt)) +
-  geom_point() +
-  geom_hline(aes(yintercept = wt, colour = wt), mean_wt) +
-  facet_wrap(~ cyl)
-
+last_plot() + 
+  guides(color = "none")
 
 ```
 
