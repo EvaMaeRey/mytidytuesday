@@ -1,5 +1,5 @@
 ---
-title: "another experiment"
+title: "another experiment: base ggplot2, draw x = mean(x_var) line"
 author: "Evangeline Reynolds"
 date: "`r Sys.Date()`"
 output: 
@@ -13,36 +13,12 @@ options(tidyverse.quiet = TRUE)
 ```
 
 
-## Intro Thoughts
 
-
-## Status Quo
+## Traditional approach, pre-computation w/ vline
 
 ```{r cars}
 library(tidyverse)
 ```
-
-## Experiment
-
-```{r}
-ggplot(mtcars) + 
-  aes(x = wt, y = mpg, color = factor(am)) + 
-  geom_rug() + 
-  geom_point() + 
-  geom_smooth(orientation = "y", 
-              method = lm,
-              formula = y ~ 1)
-
-ggplot(mtcars) + 
-  aes(x = wt, y = 1) + 
-  geom_rug() + 
-  geom_smooth(orientation = "y", 
-              method = lm,
-              formula = y ~ 1)
-```
-
-
-# pre- computation
 
 ```{r}
 mean_wt <- data.frame(cyl = c(4, 6, 8), wt = c(2.28, 3.11, 4.00))
@@ -54,30 +30,119 @@ ggplot(mtcars, aes(wt,mpg,  colour = wt)) +
              ncol = 1)
 ```
 
-# a terrible hack with stat_summary and point
+
+## Auto compute experiments.  Use base ggplot2 to give compute the xmean
+
+### Use geom_smooth, w/ 'y' orientation and formula y~1
 
 ```{r}
+ggplot(mtcars) + 
+  aes(x = wt, y = mpg, color = factor(am)) + 
+  geom_rug() + 
+  geom_point() + 
+  geom_smooth(orientation = "y", 
+              method = lm,
+              formula = y ~ 1)
+```
 
+#### univariate (no y) gets more hacky
+
+```{r}
+ggplot(mtcars) + 
+  aes(x = wt) + 
+  geom_rug() + 
+  geom_histogram() +
+  geom_smooth(orientation = "y", 
+              method = lm, 
+              formula = y ~ 1,
+              se = F,
+              aes(y = 1:nrow(mtcars)*.3) # create some values of y, w same length x to 
+              )
+
+last_plot() + 
+  aes(color = factor(am))
+```
+
+
+## Use stat_summary w/ geom = "point", shape = 3 (cross hairs)
+
+a terrible(ly fun?) hack
+
+```{r, out.width="45%", fig.show='hold'}
 ggplot(mtcars) + 
   aes(x = wt) +
   geom_rug() + 
   geom_histogram() +
-  stat_summary(fun = "median", 
-               geom = "point", 
-               size = 100, 
-               orientation = "y", 
-               shape = 3, 
-               aes(y = 0)
-               ) + 
+  stat_summary(fun = "mean", # calculate the mean
+               orientation = "y", # for x
+               geom = "point", # place a point there
+               aes(y = 0), # with the value 0 for y
+               shape = 3, # use the 'cross hairs' shape
+               size = 300, # make the cross hairs huge
+               show.legend = F # legend with will overwhelm plot because of size
+               ) 
+
+last_plot() +
   aes(color = factor(am)) + 
   facet_wrap(~factor(am),
              ncol = 1) 
-
-last_plot() + 
-  guides(color = "none")
-
 ```
 
+---
 
+
+# use geom_segment with stage, after_stat?
+
+```{r}
+library(tidyverse)
+ggplot(mtcars) + 
+  aes(x = wt) +
+  geom_rug() + 
+  geom_histogram() + 
+  geom_segment(aes(xend = wt, y = -Inf, yend = Inf))
+
+layer_data(last_plot())
+
+
+ggtrace::ggtrace_inspect_args(
+  x = last_plot(),
+  method = ggplot2:::Layer$compute_statistic
+)$data %>% head()
+
+
+# computes for all data, after_stat alone errors
+ggplot(mtcars) + 
+  aes(x = wt) +
+  geom_rug() + 
+  geom_histogram() + 
+  geom_segment(aes(x = stage(start = wt, after_stat = mean(x)),
+                   xend = stage(start = wt, after_stat = mean(x)),
+                   y = -Inf, yend = Inf))
+
+
+# does not work as expected
+last_plot() + 
+  aes(color = factor(am))
+```
+
+# other notes
+
+
+
+```{r}
+# also, expect 2 rows of data, but get 32
+layer_data(last_plot(), 3) %>%
+  head()
+  
+
+# a knock against segment shown below..
+# requires y, whereas vline will draw without, via range back computation
+ggplot(mtcars) + 
+  aes(x = wt) +
+  geom_rug() + 
+  geom_segment(aes(xend = wt, y = -Inf, yend = Inf))
+
+
+```
 
 ## Closing remarks, Other Relevant Work, Caveats
