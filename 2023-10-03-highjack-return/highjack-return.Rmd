@@ -17,10 +17,11 @@ output:
 ```{r, include = F}
 # This is the recommended set up for flipbooks
 # you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
-knitr::opts_chunk$set(fig.width = 10, fig.height = 7, message = FALSE, 
+knitr::opts_chunk$set(fig.width = 12, fig.height = 10, message = FALSE, 
                       warning = FALSE, comment = "", cache = F)
 library(flipbookr)
 library(tidyverse)
+set.seed(1293812)
 theme_set(new = theme_gray(base_size = 15))
 ```
 
@@ -75,7 +76,7 @@ library(tidyverse)
 library(ggtrace)
 p1 <- ggplot(diamonds, aes(cut)) +
   geom_bar(aes(fill = cut)) +
-  facet_wrap(~ clarity)
+  facet_wrap(~ clarity, ncol = 2)
 
 p1
 ```
@@ -90,10 +91,10 @@ p1
 ```{r start1, include = F}
 ggtrace_highjack_return(
   x = p1, 
-  method = Stat$compute_panel,
-  value = quote({
-    returnValue() %>%
-      mutate(count = 0)
+  method = Stat$compute_panel, #<<
+  value = quote({ #<<
+    returnValue() %>% #<<
+      mutate(count = 0) #<<
   })
 )
 ```
@@ -101,7 +102,7 @@ ggtrace_highjack_return(
 
 ---
 
-`r chunk_reveal("start12", widths = c(2,3), break_type = 1, title = "# first panel times 100")`
+`r chunk_reveal("start12", widths = c(2,3), break_type = 1, title = "# first panel times 20")`
 
 ```{r start12, include = F}
 ggtrace_highjack_return(
@@ -109,7 +110,7 @@ ggtrace_highjack_return(
   method = Stat$compute_panel,
   value = quote({
     returnValue() %>%
-      mutate(count = count*100)
+      mutate(count = count*20) #<<
   })
 )
 ```
@@ -125,7 +126,7 @@ ggtrace_highjack_return(
   method = Stat$compute_panel,
   value = quote({
     returnValue() %>%
-      mutate(count = count)
+      mutate(count = count) #<<
   })
 )
 ```
@@ -139,10 +140,27 @@ ggtrace_highjack_return(
 ggtrace_highjack_return(
   x = p1, 
   method = Stat$compute_panel,
-  cond = quote(data$PANEL[1] == 4),
+  cond = quote(data$PANEL[1] == 4), #<<
   value = quote({
     returnValue() %>%
-      mutate(x = sample(x))
+      mutate(x = sample(x)) #<<
+  })
+)
+```
+
+
+---
+
+`r chunk_reveal("start27", widths = c(2,3), break_type = 1, title = "# mix up 4th panel counts?")`
+
+```{r start27, include = F}
+ggtrace_highjack_return(
+  x = p1, 
+  method = Stat$compute_panel,
+  cond = quote(data$PANEL[1] == 4), #<<
+  value = quote({
+    returnValue() %>%
+      mutate(count = sample(count)) #<<
   })
 )
 ```
@@ -155,9 +173,10 @@ ggtrace_highjack_return(
 ggtrace_highjack_return(
   x = p1, 
   method = Stat$compute_panel,
+  cond = quote(data$PANEL[1] == 4), 
   value = quote({
     returnValue() %>%
-      mutate(count = count)
+      mutate(count = count) #<<
   })
 )
 ```
@@ -165,20 +184,21 @@ ggtrace_highjack_return(
 
 ---
 
-`r chunk_reveal("start3", widths = c(2,3), break_type = 1, title = "# special highlighting for panel 2")`
+`r chunk_reveal("start3", widths = c(2,3), break_type = 1, title = "# very special highlighting for panel 4")`
 
 ```{r start3, include = F}
 ggtrace_highjack_return(
   x = p1, 
-  method = GeomBar$draw_panel,
-  cond = quote(data$PANEL[1] == 2),
+  method = GeomBar$draw_panel, #<<
+  cond = quote(data$PANEL[1] == 4),
   value = quote({
-    editGrob(returnValue(), 
-             gp = gpar(
-               col = "black", 
-               alpha = seq(0.2, 1, 
-                           length.out = 
-                             nrow(data)
+    editGrob( #<<
+      returnValue(),
+      gp = gpar( #<<
+        col = "black",  #<<
+        alpha = seq(0.2, 1,  #<<
+                    length.out =  #<<
+                      nrow(data) #<<
     )))
   })
 )

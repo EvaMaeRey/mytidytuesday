@@ -77,7 +77,7 @@ library(tidyverse)
 library(ggtrace)
 p1 &lt;- ggplot(diamonds, aes(cut)) +
   geom_bar(aes(fill = cut)) +
-  facet_wrap(~ clarity)
+  facet_wrap(~ clarity, ncol = 2)
 
 p1
 ```
@@ -131,10 +131,10 @@ count: false
 ```r
 ggtrace_highjack_return(
   x = p1,
-  method = Stat$compute_panel,
-  value = quote({
-    returnValue() %&gt;%
-      mutate(count = 0)
+* method = Stat$compute_panel,
+* value = quote({
+*   returnValue() %&gt;%
+*     mutate(count = 0)
   })
 )
 ```
@@ -180,7 +180,7 @@ ggtrace_highjack_return(
 
 count: false
  
-# first panel times 100
+# first panel times 20
 .panel1-start12-1[
 
 ```r
@@ -189,7 +189,7 @@ ggtrace_highjack_return(
   method = Stat$compute_panel,
   value = quote({
     returnValue() %&gt;%
-      mutate(count = count*100)
+*     mutate(count = count*20)
   })
 )
 ```
@@ -244,7 +244,7 @@ ggtrace_highjack_return(
   method = Stat$compute_panel,
   value = quote({
     returnValue() %&gt;%
-      mutate(count = count)
+*     mutate(count = count)
   })
 )
 ```
@@ -290,17 +290,17 @@ ggtrace_highjack_return(
 
 count: false
  
-# mix up 4th panel positions?
+# mix up 4th panel x positions?
 .panel1-start2-1[
 
 ```r
 ggtrace_highjack_return(
   x = p1,
   method = Stat$compute_panel,
-  cond = quote(data$PANEL[1] == 4),
+* cond = quote(data$PANEL[1] == 4),
   value = quote({
     returnValue() %&gt;%
-      mutate(x = sample(x))
+*     mutate(x = sample(x))
   })
 )
 ```
@@ -341,6 +341,62 @@ ggtrace_highjack_return(
 
 
 
+
+---
+
+count: false
+ 
+# mix up 4th panel counts?
+.panel1-start27-1[
+
+```r
+ggtrace_highjack_return(
+  x = p1,
+  method = Stat$compute_panel,
+* cond = quote(data$PANEL[1] == 4),
+  value = quote({
+    returnValue() %&gt;%
+*     mutate(count = sample(count))
+  })
+)
+```
+]
+ 
+.panel2-start27-1[
+![](highjack-return_files/figure-html/start27_1_01_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-start27-1 {
+  color: black;
+  width: 39.2%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-start27-1 {
+  color: black;
+  width: 58.8%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-start27-1 {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
 ---
 
 count: false
@@ -352,9 +408,10 @@ count: false
 ggtrace_highjack_return(
   x = p1,
   method = Stat$compute_panel,
+  cond = quote(data$PANEL[1] == 4),
   value = quote({
     returnValue() %&gt;%
-      mutate(count = count)
+*     mutate(count = count)
   })
 )
 ```
@@ -400,21 +457,22 @@ ggtrace_highjack_return(
 
 count: false
  
-# special highlighting for panel 2
+# very special highlighting for panel 4
 .panel1-start3-1[
 
 ```r
 ggtrace_highjack_return(
   x = p1,
-  method = GeomBar$draw_panel,
-  cond = quote(data$PANEL[1] == 2),
+* method = GeomBar$draw_panel,
+  cond = quote(data$PANEL[1] == 4),
   value = quote({
-    editGrob(returnValue(),
-             gp = gpar(
-               col = "black",
-               alpha = seq(0.2, 1,
-                           length.out =
-                             nrow(data)
+*   editGrob(
+      returnValue(),
+*     gp = gpar(
+*       col = "black",
+*       alpha = seq(0.2, 1,
+*                   length.out =
+*                     nrow(data)
     )))
   })
 )
