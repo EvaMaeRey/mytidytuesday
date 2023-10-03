@@ -32,11 +32,10 @@ class: center, middle, inverse, title-slide
 
 
 
-## Intro Thoughts
+## Usage
 
 
 ```r
-Usage
 ggtrace_highjack_return(
   
   x, 
@@ -70,7 +69,7 @@ ggtrace_highjack_return(
 
 count: false
  
-
+# base plot to highjack
 .panel1-start-1[
 
 ```r
@@ -126,7 +125,7 @@ p1
 
 count: false
  
-
+# first panel to zero
 .panel1-start1-1[
 
 ```r
@@ -135,7 +134,7 @@ ggtrace_highjack_return(
   method = Stat$compute_panel,
   value = quote({
     returnValue() %&gt;%
-      mutate(count = count * 100)
+      mutate(count = 0)
   })
 )
 ```
@@ -177,12 +176,66 @@ ggtrace_highjack_return(
 
 
 
+---
+
+count: false
+ 
+# first panel times 100
+.panel1-start12-1[
+
+```r
+ggtrace_highjack_return(
+  x = p1,
+  method = Stat$compute_panel,
+  value = quote({
+    returnValue() %&gt;%
+      mutate(count = count*100)
+  })
+)
+```
+]
+ 
+.panel2-start12-1[
+![](highjack-return_files/figure-html/start12_1_01_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-start12-1 {
+  color: black;
+  width: 39.2%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-start12-1 {
+  color: black;
+  width: 58.8%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-start12-1 {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
 
 ---
 
 count: false
  
-
+# back to original
 .panel1-start11-1[
 
 ```r
@@ -237,7 +290,7 @@ ggtrace_highjack_return(
 
 count: false
  
-
+# mix up 4th panel positions?
 .panel1-start2-1[
 
 ```r
@@ -292,7 +345,7 @@ ggtrace_highjack_return(
 
 count: false
  
-
+# back to original
 .panel1-start111-1[
 
 ```r
@@ -347,7 +400,7 @@ ggtrace_highjack_return(
 
 count: false
  
-
+# special highlighting for panel 2
 .panel1-start3-1[
 
 ```r

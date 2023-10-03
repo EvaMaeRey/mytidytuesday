@@ -17,7 +17,7 @@ output:
 ```{r, include = F}
 # This is the recommended set up for flipbooks
 # you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
-knitr::opts_chunk$set(fig.width = 8, fig.height = 7, message = FALSE, 
+knitr::opts_chunk$set(fig.width = 10, fig.height = 7, message = FALSE, 
                       warning = FALSE, comment = "", cache = F)
 library(flipbookr)
 library(tidyverse)
@@ -34,10 +34,9 @@ options(tidyverse.quiet = TRUE)
 
 
 
-## Intro Thoughts
+## Usage
 
 ```{r, eval = F}
-Usage
 ggtrace_highjack_return(
   
   x, 
@@ -69,7 +68,7 @@ ggtrace_highjack_return(
 
 ---
 
-`r chunk_reveal("start", break_type = 1, widths = c(2,3))`
+`r chunk_reveal("start", break_type = 1, widths = c(2,3), title = "# base plot to highjack")`
 
 ```{r start, include = F}
 library(tidyverse)
@@ -86,7 +85,7 @@ p1
 
 ---
 
-`r chunk_reveal("start1", widths = c(2,3), break_type = 1)`
+`r chunk_reveal("start1", widths = c(2,3), break_type = 1, title = "# first panel to zero")`
 
 ```{r start1, include = F}
 ggtrace_highjack_return(
@@ -94,16 +93,31 @@ ggtrace_highjack_return(
   method = Stat$compute_panel,
   value = quote({
     returnValue() %>%
-      mutate(count = count * 100)
+      mutate(count = 0)
   })
 )
 ```
 
 
+---
+
+`r chunk_reveal("start12", widths = c(2,3), break_type = 1, title = "# first panel times 100")`
+
+```{r start12, include = F}
+ggtrace_highjack_return(
+  x = p1, 
+  method = Stat$compute_panel,
+  value = quote({
+    returnValue() %>%
+      mutate(count = count*100)
+  })
+)
+```
+
 
 ---
 
-`r chunk_reveal("start11", widths = c(2,3), break_type = 1)`
+`r chunk_reveal("start11", widths = c(2,3), break_type = 1, title = "# back to original")`
 
 ```{r start11, include = F}
 ggtrace_highjack_return(
@@ -119,7 +133,7 @@ ggtrace_highjack_return(
 
 ---
 
-`r chunk_reveal("start2", widths = c(2,3), break_type = 1)`
+`r chunk_reveal("start2", widths = c(2,3), break_type = 1, title = "# mix up 4th panel x positions?")`
 
 ```{r start2, include = F}
 ggtrace_highjack_return(
@@ -135,7 +149,7 @@ ggtrace_highjack_return(
 
 ---
 
-`r chunk_reveal("start111", widths = c(2,3), break_type = 1)`
+`r chunk_reveal("start111", widths = c(2,3), break_type = 1, title = "# back to original")`
 
 ```{r start111, include = F}
 ggtrace_highjack_return(
@@ -151,7 +165,7 @@ ggtrace_highjack_return(
 
 ---
 
-`r chunk_reveal("start3", widths = c(2,3), break_type = 1)`
+`r chunk_reveal("start3", widths = c(2,3), break_type = 1, title = "# special highlighting for panel 2")`
 
 ```{r start3, include = F}
 ggtrace_highjack_return(
