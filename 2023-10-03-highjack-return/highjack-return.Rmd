@@ -1,0 +1,173 @@
+---
+title: "ggtrace_highjack_return"
+subtitle: "A flipbook treatment"
+author: ""
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 8, fig.height = 7, message = FALSE, 
+                      warning = FALSE, comment = "", cache = F)
+library(flipbookr)
+library(tidyverse)
+theme_set(new = theme_gray(base_size = 15))
+```
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+```{r, eval = F}
+Usage
+ggtrace_highjack_return(
+  
+  x, 
+  # A ggplot object
+  
+  method, 
+  # A function or a ggproto method. The ggproto method may be specified 
+  # using any of the following forms: ggproto$method, namespace::ggproto$method,
+  # namespace:::ggproto$method
+  
+  cond = 1L, 
+  # When the return value should be replaced. Defaults to 1L.
+  
+  value = quote(returnValue()), 
+  # What the method should return instead. Defaults to quote(returnValue()).
+
+  draw = TRUE 
+  # Whether to draw the modified graphical output from evaluating x. 
+  # Defaults to TRUE.
+
+)
+```
+
+
+
+
+
+
+
+---
+
+`r chunk_reveal("start", break_type = 1, widths = c(2,3))`
+
+```{r start, include = F}
+library(tidyverse)
+library(ggtrace)
+p1 <- ggplot(diamonds, aes(cut)) +
+  geom_bar(aes(fill = cut)) +
+  facet_wrap(~ clarity)
+
+p1
+```
+
+
+
+
+---
+
+`r chunk_reveal("start1", widths = c(2,3), break_type = 1)`
+
+```{r start1, include = F}
+ggtrace_highjack_return(
+  x = p1, 
+  method = Stat$compute_panel,
+  value = quote({
+    returnValue() %>%
+      mutate(count = count * 100)
+  })
+)
+```
+
+
+
+---
+
+`r chunk_reveal("start11", widths = c(2,3), break_type = 1)`
+
+```{r start11, include = F}
+ggtrace_highjack_return(
+  x = p1, 
+  method = Stat$compute_panel,
+  value = quote({
+    returnValue() %>%
+      mutate(count = count)
+  })
+)
+```
+
+
+---
+
+`r chunk_reveal("start2", widths = c(2,3), break_type = 1)`
+
+```{r start2, include = F}
+ggtrace_highjack_return(
+  x = p1, 
+  method = Stat$compute_panel,
+  cond = quote(data$PANEL[1] == 4),
+  value = quote({
+    returnValue() %>%
+      mutate(x = sample(x))
+  })
+)
+```
+
+---
+
+`r chunk_reveal("start111", widths = c(2,3), break_type = 1)`
+
+```{r start111, include = F}
+ggtrace_highjack_return(
+  x = p1, 
+  method = Stat$compute_panel,
+  value = quote({
+    returnValue() %>%
+      mutate(count = count)
+  })
+)
+```
+
+
+---
+
+`r chunk_reveal("start3", widths = c(2,3), break_type = 1)`
+
+```{r start3, include = F}
+ggtrace_highjack_return(
+  x = p1, 
+  method = GeomBar$draw_panel,
+  cond = quote(data$PANEL[1] == 2),
+  value = quote({
+    editGrob(returnValue(), 
+             gp = gpar(
+               col = "black", 
+               alpha = seq(0.2, 1, 
+                           length.out = 
+                             nrow(data)
+    )))
+  })
+)
+```
+
+
