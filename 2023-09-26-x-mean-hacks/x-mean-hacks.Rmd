@@ -21,7 +21,8 @@ library(tidyverse)
 ```
 
 ```{r}
-mean_wt <- data.frame(cyl = c(4, 6, 8), wt = c(2.28, 3.11, 4.00))
+mean_wt <- data.frame(cyl = c(4, 6, 8), 
+                      wt = c(2.28, 3.11, 4.00))
 
 ggplot(mtcars, aes(wt,mpg,  colour = wt)) +
   geom_point() +
@@ -40,9 +41,37 @@ ggplot(mtcars) +
   aes(x = wt, y = mpg, color = factor(am)) + 
   geom_rug() + 
   geom_point() + 
-  geom_smooth(orientation = "y", 
-              method = lm,
+  geom_smooth(orientation = "y", xseq = c(10,35),
+              method = lm, se = F,
               formula = y ~ 1)
+
+# can fullrange be used?  Unsure of what's going on here, maybe x and y got switched
+ggplot(mtcars) + 
+  aes(x = wt, y = mpg, color = factor(am)) + 
+  geom_rug() + 
+  geom_point() + 
+  geom_smooth(orientation = "y", 
+              method = lm, se = T,
+              formula = y ~ 1,
+              fullrange = TRUE)
+
+
+# can fullrange be used?  Unsure of what's going on here, maybe x and y got switched
+ggplot(mtcars) + 
+  aes(x = mpg, y = wt, color = factor(am)) + 
+  geom_rug() + 
+  geom_point() + 
+  geom_smooth(orientation = "x", 
+              method = lm, se = FALSE,
+              formula = y ~ 1,
+              fullrange = TRUE)
+
+
+
+# seems true...
+last_plot() + 
+  coord_flip()
+
 ```
 
 #### univariate (no y) gets more hacky
@@ -55,12 +84,17 @@ ggplot(mtcars) +
   geom_smooth(orientation = "y", 
               method = lm, 
               formula = y ~ 1,
-              se = F,
-              aes(y = 1:nrow(mtcars)*.3) # create some values of y, w same length x to 
+              se = F, 
+              aes(y = wt), # it a required aesthetic - you can kind of put any var so we just put x again...
+              xseq = c(0, 10) # determined looking histogram first
               )
 
+# not good cause of the row numbers 'randomly' covering different groups
 last_plot() + 
   aes(color = factor(am))
+
+
+# Not very hopeful about fullrange at present but maybe after bug fix?
 ```
 
 
@@ -84,6 +118,7 @@ ggplot(mtcars) +
 
 last_plot() +
   aes(color = factor(am)) + 
+  aes(fill = factor(am)) +
   facet_wrap(~factor(am),
              ncol = 1) 
 ```

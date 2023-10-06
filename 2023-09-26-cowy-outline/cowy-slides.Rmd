@@ -1,16 +1,957 @@
 ---
-title: "another experiment"
-author: "Evangeline Reynolds"
-date: "`r Sys.Date()`"
-output: 
-  html_document:
-    toc: TRUE
----
-
+title: "A new wave of ggplot2 extenders"
+author: "Dr. Evangeline Reynolds"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    seal: false
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      seal: false
+---      
+      
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 options(tidyverse.quiet = TRUE)
 ```
+
+
+class: inverse, left, bottom
+background-image: url(https://images.unsplash.com/photo-1543286386-713bdd548da4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80)
+background-size: cover
+# .Large[A new wave of ggplot2 extenders]
+## .small[Supporting ggplot2 super-users move to extension]
+#### .tiny[Dr. Evangeline Reynolds | 2022-04-26 |Image credit: William Iven, Upsplash]
+
+
+???
+
+Title slide
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, fig.height = 4.5, message = FALSE, warning = FALSE, comment = "", cache = F)
+library(flipbookr)
+```
+
+---
+
+class: middle, inverse, center
+# So ggplot2...
+--
+#               ... what's the fuss?
+
+
+
+
+
+class: inverse, bottom
+background-image: url(https://images.unsplash.com/photo-1603300216540-6b77f84ee101?ixlib=rb-1.2.1&raw_url=true&q=80&fm=jpg&crop=entropy&cs=tinysrgb&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387)
+background-size: cover
+
+# Unlocking ggplot2 as a computational engine 
+## by extending ggplot2 statistical geometries
+### Dr. Evangeline 'Gina' Reynolds
+
+### Thursday May 19, 2022, 12:15AM
+#### Photo Credit: Mike Lewis HeadSmart Media
+
+
+---
+
+class: inverse, bottom
+background-image: url(https://images.unsplash.com/photo-1542178432-52211bc52073?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374)
+background-size: cover
+
+# Creating new geom vocabulary for richer statistical visual stories 
+## by extending ggplot2 statistical geometries
+### Dr. Evangeline 'Gina' Reynolds
+
+### Thursday May 19, 2022, 12:15AM
+#### Photo Credit: Klim Sergeev
+
+
+
+
+```{r, include = F}
+ knitr::opts_chunk$set(echo = F, comment = "", message = F, 
+                       warning = F, cache = T, fig.retina = 3)
+ library(tidyverse)
+ library(flipbookr)
+ library(xaringanthemer)
+ xaringanthemer::mono_light(
+   base_color = "#02075D",
+   # header_font_google = google_font("Josefin Sans"),
+   # text_font_google   = google_font("Montserrat", "200", "200i"),
+   # code_font_google   = google_font("Droid Mono"),
+   text_font_size = ".85cm",
+   code_font_size = ".15cm")
+theme_set(theme_gray(base_size = 20))
+```
+
+
+---
+
+# gg in ggplot2
+
+--
+
+# Grammar of Graphics
+
+---
+
+## Elements of the Grammar of Graphics (choices)
+
+```{r, echo = F}
+knitr::include_graphics("https://miro.medium.com/max/1400/1*MMZuYgeC_YjXNC1r4D4sog.png")
+```
+
+
+
+
+
+---
+
+> # "the Grammar of Graphics makes everything else easy because you've just got all these, like, little nice decomposable components" -- Hadley Wickham
+
+--
+
+# Build up your plot, bit by bit
+
+
+---
+
+# ggplot2 is called a 'declarative' graphing system.
+
+--
+
+# It lets you *'speak your plot into existence'*. (Thomas Lin Pederson?) 
+
+--
+
+# Describe the elements of the plot you have in your mind.  
+
+
+
+
+
+---
+
+## This is fast. Because most of us, can **picture** the form of the plot we're going after rather clearly (i.e. what the horizontal position should represent, what color should represent, what 'marks' (points, lines) are going to appear on the plot).  
+
+--
+
+## 'Getting' our plot made becomes a matter of describing what we're already picturing!
+
+
+
+---
+# So what's the promise of ggplot2?
+
+--
+
+## Getting the plot form you picture in your head ...
+
+--
+
+## ... into reality...
+
+--
+
+## ... by describing it.
+
+
+---
+
+
+
+## "Create graphical 'poems'." - Hadley Wickham (2010)
+
+--
+
+## 'Write statistical stories.' - (May 2022)
+
+
+
+---
+class: inverse, center, middle
+
+# The problem?
+
+--
+
+## Sometimes we don't have the vocabulary that's needed to 'speak' fluently.
+
+---
+
+## Example
+
+```{r, echo = F}
+library(ggplot2)
+ggplot(airquality) + 
+  aes(x = Ozone) + 
+  geom_rug() + 
+  geom_histogram() + 
+  ggxmean::geom_x_mean()
+```
+
+???
+Consider for example, a the seemingly simple enterprise of adding a vertical line at the mean of x, perhaps atop a histogram or density plot.
+
+
+---
+
+`r chunk_reveal("basic", title = "### What's the experience")`
+
+```{r basic}
+airquality %>% 
+  ggplot(data = .) + 
+  aes(x = Ozone) + 
+  geom_rug() + 
+  geom_histogram() + 
+  geom_vline(
+    xintercept = 
+      mean(airquality$Ozone, 
+           na.rm = T)
+    ) ->
+g
+
+g %>% layer_data(i = 2) # histogram layer
+```
+
+???
+Creating this plot requires greater focus on ggplot2 *syntax*, likely detracting from discussion of *the mean* that statistical instructors desire.
+It may require a discussion about dollar sign syntax and how geom_vline is actually a special geom -- an annotation -- rather than being mapped to the data. None of this is relevant to the point you as an instructor aim to make: maybe that the the mean is the balancing point of the data or maybe a comment about skewness.
+
+
+---
+
+## geom_histogram()
+
+--
+
+## counts the number of observations in a 'bin'
+
+--
+
+## draws rectangles accordingly
+
+---
+
+### Adding the conditional means?
+
+```{r cond_means_hard, echo = F}
+airquality %>% 
+  group_by(Month) %>% 
+  summarise(
+    Ozone_mean = 
+      mean(Ozone, na.rm = T)
+    ) ->
+airquality_by_month
+
+ggplot(airquality) + 
+  aes(x = Ozone) + 
+  geom_histogram() + 
+  facet_grid(rows = vars(Month)) +
+  geom_vline(data = airquality_by_month, 
+             aes(xintercept = 
+               Ozone_mean))
+```
+
+???
+Further, for the case of adding a vertical line at the mean for different subsets of the data, a different approach is required. This enterprise may take instructor/analyst/student on an even larger detour -- possibly googling, and maybe landing on the following stack overflow page where 11,000 analytics souls (some repeats to be sure) have landed:
+
+---
+
+`r chunk_reveal("cond_means_hard", title = "#### Conditional means (may require a trip to stackoverflow!)")`
+
+
+
+---
+
+geom_boxplot(), example of compute happening under the hood
+
+---
+
+`r flipbookr::chunk_reveal("boxplot", break_type = "user")`
+
+```{r boxplot, include = F}
+library(tidyverse)
+gapminder::gapminder %>% 
+  filter(year == 2002) %>% 
+  ggplot() + 
+  aes(x = continent) + 
+  aes(y = gdpPercap) +
+  geom_boxplot() ->
+g
+  
+g %>% #BREAK
+  layer_data() #BREAK
+```
+
+---
+
+# Like histogram, geom_boxplot does lots of compute in the background
+
+--
+
+### built from a number of primitives
+
+- rect
+- point
+- segment
+
+--
+
+### conceptually distinct from those components
+
+---
+
+## ggplot2 intentionally lean for maintenance purposes.
+
+--
+
+## ... but geom_x_mean() would be so nice!
+
+--
+
+## ggplot2 extensions system exists...
+
+--
+
+## thus, {ggxmean} r package https://github.com/EvaMaeRey/ggxmean, that gives us geom_x_mean(), and ~ 25 more geoms...
+
+--
+
+## Mostly creates geoms that *inherit* from existing geometries
+
+--
+
+## Cool mechanism, probably underutilized...
+
+---
+
+## Hand*schuh*
+
+--
+
+## hand shoe 
+
+--
+
+## glove
+
+---
+
+## Nackt*schnecke*
+
+--
+
+## naked snail
+
+--
+
+## slug
+
+---
+
+## Daumen*kino*
+
+--
+
+## thumb movie
+
+--
+
+## flip book
+
+---
+
+# inheriting geoms: have their own conceptual identity, but inheriting from more primitive forms (segment, point, text, etc)
+
+--
+
+# geom_*point*_xy_means
+
+--
+
+# geom_*text*_coordinates
+
+--
+
+# geom_*segment*_residuals
+
+---
+
+# Inheriting geoms easy to use -- you know the grammar!
+
+--
+
+# Not horrible to make 
+--
+(especially now...)
+
+---
+
+# Chapter 1: Wanting to tell a statistical story. 
+
+--
+
+# What does Pearson correlation look like...?
+
+
+--
+.huge[
+
+$$ cor(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{n *\sigma_x \sigma_y} $$
+] 
+
+--
+
+--
+
+https://evamaerey.github.io/statistics/covariance_correlation.html#1
+
+--
+
+
+# 'by-hand' compute all values (mean of x, y, differences, sd etc)
+--
+, fragile
+--
+, not portable
+--
+, not delightful!
+--
+, no group-wise compute
+:
+
+---
+
+# Chapter 2: fluidly telling the covariance, variance, sd, correlation story
+
+--
+
+Starting with the mean of x (so {ggxmean})
+
+---
+
+`r flipbookr::chunk_reveal("correlation")`
+
+```{r correlation, include = F}
+library(ggxmean)
+palmerpenguins::penguins %>% 
+  ggplot() +
+  aes(x = bill_length_mm) +
+  aes(y = flipper_length_mm) +
+  geom_point() +
+  ggxmean:::geom_x_mean() +
+  ggxmean:::geom_y_mean() +
+  ggxmean:::geom_xdiff() +
+  ggxmean:::geom_ydiff() +
+  ggxmean:::geom_x1sd(linetype = "dashed") +
+  ggxmean:::geom_y1sd(linetype = "dashed") +
+  ggxmean:::geom_diffsmultiplied() +
+  ggxmean:::geom_xydiffsmean(alpha = 1) +
+  ggxmean:::geom_rsq1() +
+  ggxmean:::geom_corrlabel() +
+  facet_wrap(~species)
+```
+
+
+---
+
+# Chapter 3, Visually telling an MA206 story
+
+--
+
+## Linear model (OLS)
+
+---
+
+`r flipbookr::chunk_reveal("ols")`
+
+```{r ols, include = F}
+library(tidyverse)
+library(ggxmean)
+#library(transformr) might help w/ animate
+
+## basic example code
+cars %>% 
+  ggplot() +
+  aes(x = speed,
+      y = dist) +
+  geom_point() + 
+  ggxmean::geom_lm() +
+  ggxmean::geom_lm_residuals(linetype = "dashed") +
+  ggxmean::geom_lm_fitted(
+    color = "goldenrod3",
+    size = 3) +
+  ggxmean::geom_lm_conf_int() +
+  ggxmean::geom_lm_pred_int() +
+  ggxmean::geom_lm_formula() +
+  ggxmean::geom_lm_intercept(color = "red",
+                             size = 5) +
+  ggxmean::geom_lm_intercept_label(
+    size = 3,
+    hjust = 0)
+```
+
+---
+
+New wave? 
+
+
+---
+
+
+There is a growing population of ggplot2 ‘super-users’ that – given their regular and long-term ggplot2 use – have a strong working knowledge of grammar of graphics principles and of ggplot2's user interface.  Among their ranks are educators and professionals statistics, data science and data journalism.
+
+There's evidence that many ggplot2 super-users could find creating ggplot2 extensions valuable, but that current educational materials are falling short in reaching and enabling many in this group.  
+
+
+If provided well tailored points of entry and support, such super-users are likely to move rapidly into the extension space given the elegance and efficiency that extension work promises.
+
+Investment in ggplot2 extension education for this talented group of super-users is likely to have positive externalities for the R and ggplot2 ecosystem.  First, such users are likely to be interested in packaging their materials, providing their elegant and efficient work flow.  This further would strengthen ranks in the R community's package developer base.
+
+Furthermore, know-how in the extension space should lead to greater knowledge of the ggplot2 code base and could help build the contributor pool of talent that can help with ggplot2 maintenance itself.  ggplot2's power and elegance is a notable draw to the R language, and these maintenance concerns should be prioritized by the R community. 
+
+A small survey and focus group of super-users that are statistics educators suggest that current extension educational materials aren't reaching folks that could potentially benefit from extension. Here is summary information about the focus group participants.  
+
+```{r, out.width="45%", fig.show="hold", echo = F, eval = T}
+library(knitr)
+include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q05r_length_user-1.png")
+include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q06r_frequency-1.png")
+include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q07ggplot2_frequency-1.png")
+include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/unnamed-chunk-7-1.png")
+include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q08r_frequency-1.png")
+```
+
+
+Despite this group's level of expertise in R, ggplot2 and R programming, they have little experience with ggplot2 extension.  Only one of nine in this group had successfully written a ggplot2 extension before the intervention.
+
+```{r}
+include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q10_previous_ext_experience-1.png")
+include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q11_previous_ext_attempt-1.png")
+```
+
+ ggplot2 super-users be capable extenders?  
+
+My experience with ggplot2 extension lead me to believe that there's a lot of untapped potential.  During my 
+
+
+New material on ggplot2 extension will *tailored* to this group and will provide new points of entry.  I'll conclude by presenting how one new tutorial in this vein performed with a small group of statistics educators.
+
+## Overview
+
+To be more specific about the exact reasons that ggplot2 super users might not have joined the extender ranks, the high level reason is that users may not see themselves as developers.  They face 'scary ggproto methods' (quoting June Choe) and may be turned off as many may not have experience with object oriented programming, Additionally, as less experienced developers, they may find it hard to reason about the big chunk of codes that typically defined ggroto objects. And third, even if they master ggplot2 extension, these ggplot2 super-users may not feel comfortable in the package development space, which might well seem like a requirement for an extension.
+
+<!--
+At a high-level address what your proposal is and how it will address the problem identified. Highlight any benefits to the R Community that follow from solving the problem. This should be your most compelling section.
+-->
+
+My proposed solutions involve messaging maybe users have got no choice but to be developers, because as practitioners and educators, we're just loosing out on so much by not entering this space in terms of efficiency and elegance.  Then, I propose new points of entry (tutorials and example package that de-emphasize ggproto methods as 'need-to-understand' --- instead taking a recipes approach that demonstrates 'how-to-use'.  Second, and complementary this first strategy, the new reference material, as much as possible, pulls out all the pieces that define the ggproto and handles and tests these tasks separately, such as compute_group definitions and compute_panel definitions.  This leads to a very compact, high-level view of the ggproto object; these abstractions should the authors more easily reason about the ggproto pipeline (or ignorable if the newcomer prefers).   Third, to address that super users may be unskilled in package creation and maintenance, I'm working on organizing workshops on package development best practices: https://github.com/EvaMaeRey/ggtedious - this is where I'm personally currently failing in my own journey from ggplot2 super-user to extender.  Given this shortcoming in my own journey, I've approached package building and ggplot2 experts to be involved in the initiative for guidance.  At the same time, I'm bringing in a presenter with a little less package building experience than myself to be the principle guide; which will allow for true-to-life confusion and doubts come to the fore in the workshop session. 
+
+```{r}
+knitr::include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q13_oop_experience-1.png")
+```
+
+## Detail
+
+One of my first efforts in this area is 
+
+```{r}
+knitr::include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q10_previous_ext_experience-1.png")
+```
+
+
+
+
+# Chapter 5, Spring Independent Study (geom extension patterns) 
+
+
+# 'Easy Geom Recipes'
+
+--
+
+
+# Helping others to build new vocabulary for stories yet to be told...?
+
+--
+
+# Identifying patterns for success in building geoms that inherit from other primitives
+
+
+
+---
+
+## Step 0.  Build it with 'base gglot2'
+
+--
+
+## Step 1. Capture the compute that's needed, and test
+
+--
+
+## Step 2. Pass the compute to a ggproto object
+
+--
+
+## Step 2. Pass the ggproto object to your geom_*() function
+
+--
+
+## Step 4. Enjoy.
+
+---
+class: inverse, middle
+background-image: url(https://images.unsplash.com/photo-1592173376801-185310a68dea?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1286&q=80)
+background-size: cover
+
+
+
+# Easy geom_*() recipes
+
+###Gina Reynolds and Morgan Brown
+
+<br>
+<br>
+<br>
+
+
+
+
+
+---
+
+
+### Using ggplot2 has been described as writing 'graphical poems'.
+
+--
+
+<!-- and a system that lets us 'speak our plot into existence'.  -->
+### But we may feel at a loss for words when functions we'd like to have don't exist.  The ggplot2 extension system allows us to build new 'vocabulary' for fluent expression.  
+
+--
+
+### An exciting extension mechanism is inheriting from existing geoms.  Particularly important to statisticians and mathematicians is writing new geom_* that perform and visualize calculations.  
+
+---
+
+### To get your feet wet in this world and give you a taste of patterns for geom extension, we provide three *introductory* examples of the geoms_ that inherit from *existing* geoms (point, text, segment, etc) along with practice exercises.  
+
+--
+
+### With such geoms, calculation is done under the hood by the ggplot2 system; with these geom, you can write graphical poems with exciting new graphical 'words'! 
+
+---
+
+### This tutorial is intended for individuals who already have a working knowledge of the grammar of ggplot2, but may like to build a richer vocabulary for themselves. 
+
+--
+
+### Grab an .Rmd worksheet version [here](https://raw.githubusercontent.com/EvaMaeRey/mytidytuesday/master/2022-01-03-easy-geom-recipes/easy_geom_recipes.Rmd).
+
+### or you can browse the rendered version of that [here](https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/easy_geom_recipes.html).
+
+---
+
+
+
+
+
+---
+class: inverse, middle, center
+
+# Recipe #1
+
+--
+
+##`geom_point_xy_medians()`
+
+--
+
+- This will be a point at the median of x and y
+
+---
+class: inverse, middle, center
+
+## Step 0: use base ggplot2 to get the job done
+
+---
+
+
+`r flipbookr::chunk_reveal("penguins", left_assign = "detect")`
+
+
+```{r penguins, include = FALSE}
+library(tidyverse)
+library(palmerpenguins)
+
+penguins <- remove_missing(penguins)
+
+penguins %>% 
+  summarize(bill_length_mm_median = median(bill_length_mm),
+            bill_depth_mm_median = median(bill_depth_mm)) ->
+penguins_medians
+
+penguins %>% 
+  ggplot() + 
+  aes(x = bill_depth_mm) + 
+  aes(y = bill_length_mm) + 
+  geom_point() + 
+  geom_point(data = penguins_medians,
+    color = "red", size = 4,
+             aes(x = bill_depth_mm_median,
+                 y = bill_length_mm_median))
+```
+
+---
+class: inverse, middle, center
+
+## Step 1: computation
+
+--
+
+- define computation that ggplot2 should do for you, before plotting
+  - here it's computing a variable with labels for each observation
+- test that functionality!
+
+---
+
+
+`r flipbookr::chunk_reveal("compute_group_xy_medians", left_assign = "detect")`
+
+
+```{r compute_group_xy_medians, include = FALSE}
+compute_group_xy_medians <- function(data, 
+                                     scales){
+  data %>% 
+    summarize(x = median(x),
+            y = median(y))
+}
+
+penguins %>%
+  # function requires data 
+  # with columns named x and y
+  rename(x = bill_depth_mm, 
+         y = bill_length_mm) %>%
+  compute_group_xy_medians()
+```
+
+
+---
+class: inverse, middle, center
+
+## Step 2: define ggproto
+
+--
+
+- ## what's the naming convention for the proto object?
+- ## which aesthetics are required as inputs?
+- ## where does the function from above go?
+
+---
+
+
+`r flipbookr::chunk_reveal("StatXYMedians", left_assign = "detect")`
+
+
+```{r StatXYMedians, include = FALSE}
+StatXYMedians <- ggplot2::ggproto(
+  `_class` = "StatXYMedians",
+  `_inherit` = ggplot2::Stat,
+  required_aes = c("x", "y"),
+  compute_group = compute_group_xy_medians
+  )
+```
+
+---
+class: inverse, middle, center
+
+## Step 3: define geom_* function
+
+
+--
+
+- define the stat and geom for your layer
+
+---
+
+
+`r flipbookr::chunk_reveal("geom_point_xy_medians", left_assign = "detect")`
+
+
+```{r geom_point_xy_medians, include = FALSE} 
+geom_point_xy_medians <- function(
+  mapping = NULL, 
+  data = NULL,
+  position = "identity", 
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE, ...) {
+  
+  ggplot2::layer(
+    stat = StatXYMedians, # proto object from step 2
+    geom = ggplot2::GeomPoint, # inherit other behavior
+    data = data, 
+    mapping = mapping,
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+  
+}
+```
+
+---
+class: inverse, middle, center
+
+
+## Step 4: Enjoy! Use your function
+
+
+---
+
+
+`r flipbookr::chunk_reveal("enjoy_penguins", left_assign = "detect")`
+
+
+```{r enjoy_penguins, include = FALSE}
+penguins %>%
+  ggplot()+
+  aes(x = bill_depth_mm, 
+      y = bill_length_mm) +
+  geom_point()+
+  geom_point_xy_medians(
+    size = 8,
+    color = "red")
+```
+
+---
+class: inverse, middle, center
+
+### And check out conditionality!
+
+---
+
+
+`r flipbookr::chunk_reveal("conditional_penguins", left_assign = "detect")`
+
+
+```{r conditional_penguins, include = FALSE}
+penguins %>%
+  ggplot()+
+  aes(x = bill_depth_mm, 
+      y = bill_length_mm, 
+      color = species)+
+  geom_point()+
+  geom_point_xy_medians(size = 8)
+```
+
+---
+class: inverse, middle, center
+background-image: url(https://images.unsplash.com/photo-1628559225804-71f6e4643f44?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=837&q=80)
+background-size: cover
+
+
+
+---
+class: inverse, middle, center
+
+## Now you ...
+
+--
+
+### Create the function `geom_point_xy_means()`
+
+
+---
+
+## Q&A
+
+--
+
+## Suggested questions.
+
+--
+
+### How long does it take to get through one of the 'Easy Geom Recipes'? 
+
+### Can all new geoms be modeled after a 'easy geom recipes'?
+
+### Why did it take you so long to figure out the extension mechanism?/What does your and Morgan's tutorial offer? Isn't there already instruction out there?
+
+### Which was the most difficult geom to build in {ggxmean}?
+
+### Is building a package difficult?
+
+### Is maintaining a package difficult? 
+
+### Dusty Turner: Is the idea that MA206 students might use this package to aid in their learning of statistics?  
+
+
+---
+
+`r chunk_reveal("ma206verse", display_type = "output")`
+
+```{r ma206verse, include = F}
+library(ggstamp)
+ggcanvas() + 
+  stamp_polygon(fill = "slateblue") + 
+  stamp_text(label = "tidyverse") + 
+  stamp_polygon(x0y0 = pos_honeycomb()[2,], fill = "darkred") + 
+  stamp_text(label = "ggxmean", 
+             xy = pos_honeycomb()[2,]) + 
+  stamp_polygon(x0y0 = pos_honeycomb()[4,], fill = "darkolivegreen") + 
+  stamp_text(label = "ma206data", 
+             xy = pos_honeycomb()[4,]) + 
+  stamp_polygon(x0y0 = pos_honeycomb()[5,], fill = "goldenrod4") + 
+  stamp_text(label = "ggsample", 
+             xy = pos_honeycomb()[5,]) + 
+  stamp_polygon(radius = 3, alpha = .6, 
+                x0 = 1, y = -.7)  + 
+  stamp_text(label = "ma206verse", 
+            x = 1, size = 15, y = -2,
+            color = "gray15")
+  
+  
+```
+
+
+
+
+<!-- adjust font size in this css code chunk, currently 80 -->
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 100%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+
+
+
 
 
 ## Intro Thoughts
