@@ -1,0 +1,105 @@
+---
+title: "rise and run"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r cars}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+mtcars |>
+  ggplot(aes(wt, mpg)) +
+  geom_point() +
+  geom_smooth(method = lm) +
+  stat_smooth(method = lm,
+              geom = "point", # draw fitted values as points
+              color = "blue",
+              xseq = c(3,4),
+              size = 3)
+
+layer_data(last_plot(), 3)
+
+xdiff <- c(2,3)
+
+mtcars |>
+  ggplot(aes(wt, mpg)) +
+  geom_point() +
+  geom_smooth(method = lm) +
+  stat_smooth(method = lm, 
+              geom = 'point',
+              xseq = c(2,3), 
+              size = 3, 
+              color = "blue") +
+  stat_smooth(method = lm,
+              geom = "segment", # draw fitted values as points
+              color = "darkred",
+              xseq = c(2,3), # 'from', 'to' value pair
+              aes(yend = after_stat(y[1]), # 'from' value of y
+                  xend = 3), # 'to' value of x
+              arrow = arrow(ends = c("last", "first"), 
+                            length = unit(.1, "in"))) 
+
+
+std <- function(x){
+  
+  (x - mean(x))/sd(x)
+  
+}
+
+mtcars |>
+  ggplot() +
+  aes(std(wt), std(mpg)) +
+  geom_point() +
+  geom_smooth(method = lm) +
+  stat_smooth(method = lm, 
+              geom = 'point',
+              xseq = c(0,1), 
+              size = 3, 
+              color = "blue") +
+  stat_smooth(method = lm,
+              geom = "segment", # draw fitted values as points
+              color = "darkred",
+              xseq = c(0,1), # 'from', 'to' value pair
+              aes(yend = after_stat(y[1]), # 'from' value of y
+                  xend = 1), # 'to' value of x
+              arrow = arrow(ends = c("last", "first"), 
+                            length = unit(.1, "in"))) + 
+  coord_fixed() + 
+  annotate(geom = "point",
+           x = 0, y = 0,
+           shape = 4,
+           size = 200,
+           alpha = .3)
+
+
+
+```
+
+```{r, results='asis', eval=F}
+readLines("https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/mtcars.html") %>% cat()
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

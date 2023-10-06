@@ -23,8 +23,8 @@ options(tidyverse.quiet = TRUE)
 class: inverse, left, bottom
 background-image: url(https://images.unsplash.com/photo-1543286386-713bdd548da4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80)
 background-size: cover
-# .Large[A new wave of ggplot2 extenders]
-## .small[Supporting ggplot2 super-users move to extension]
+# .Large[Supporting a new wave of ggplot2 extenders]
+## .small[with new points of entry for ggplot2 super-users]
 #### .tiny[Dr. Evangeline Reynolds | 2022-04-26 |Image credit: William Iven, Upsplash]
 
 
@@ -37,6 +37,18 @@ Title slide
 knitr::opts_chunk$set(fig.width = 6, fig.height = 4.5, message = FALSE, warning = FALSE, comment = "", cache = F)
 library(flipbookr)
 ```
+
+---
+
+
+1. Why ggplot2
+2. Limitations of base ggplot2
+3. Promise of Extension
+4. Un-reached talent - ggplot2 super users unrealized potential
+5. New strategies for reaching this talent & evidence of effectiveness
+6. New fronteer of challenges and ideas for addressing them
+
+
 
 ---
 
@@ -164,6 +176,15 @@ knitr::include_graphics("https://miro.medium.com/max/1400/1*MMZuYgeC_YjXNC1r4D4s
 
 ## ... by describing it.
 
+---
+
+
+Hans... 1999
+
+---
+
+2010
+
 
 ---
 
@@ -171,16 +192,12 @@ knitr::include_graphics("https://miro.medium.com/max/1400/1*MMZuYgeC_YjXNC1r4D4s
 
 ## "Create graphical 'poems'." - Hadley Wickham (2010)
 
---
-
-## 'Write statistical stories.' - (May 2022)
-
 
 
 ---
 class: inverse, center, middle
 
-# The problem?
+# The problem? (Limitations)
 
 --
 
@@ -397,79 +414,7 @@ g %>% #BREAK
 
 ---
 
-# Chapter 1: Wanting to tell a statistical story. 
-
---
-
-# What does Pearson correlation look like...?
-
-
---
-.huge[
-
-$$ cor(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{n *\sigma_x \sigma_y} $$
-] 
-
---
-
---
-
-https://evamaerey.github.io/statistics/covariance_correlation.html#1
-
---
-
-
-# 'by-hand' compute all values (mean of x, y, differences, sd etc)
---
-, fragile
---
-, not portable
---
-, not delightful!
---
-, no group-wise compute
-:
-
----
-
-# Chapter 2: fluidly telling the covariance, variance, sd, correlation story
-
---
-
-Starting with the mean of x (so {ggxmean})
-
----
-
-`r flipbookr::chunk_reveal("correlation")`
-
-```{r correlation, include = F}
-library(ggxmean)
-palmerpenguins::penguins %>% 
-  ggplot() +
-  aes(x = bill_length_mm) +
-  aes(y = flipper_length_mm) +
-  geom_point() +
-  ggxmean:::geom_x_mean() +
-  ggxmean:::geom_y_mean() +
-  ggxmean:::geom_xdiff() +
-  ggxmean:::geom_ydiff() +
-  ggxmean:::geom_x1sd(linetype = "dashed") +
-  ggxmean:::geom_y1sd(linetype = "dashed") +
-  ggxmean:::geom_diffsmultiplied() +
-  ggxmean:::geom_xydiffsmean(alpha = 1) +
-  ggxmean:::geom_rsq1() +
-  ggxmean:::geom_corrlabel() +
-  facet_wrap(~species)
-```
-
-
----
-
-# Chapter 3, Visually telling an MA206 story
-
---
-
-## Linear model (OLS)
+## Examples from ggxmean
 
 ---
 
@@ -501,9 +446,124 @@ cars %>%
     hjust = 0)
 ```
 
+
 ---
 
-New wave? 
+Thesis of the talk:
+
+Extension system is really cool.  
+
+--
+
+Really powerful.
+
+--
+
+Vastly underused.
+
+---
+
+Who could find it extremely useful?  Super users...
+
+know the grammar.  Be German. 
+
+
+---
+
+Evidence from a micro survey and focus group. 
+
+Nine statistics and data analytics educators.
+
+May 2023.
+
+15 question survey and 2 focus groups.
+
+---
+
+Hand picked, extraordinay educators, very experienced with stats, data viz, ggplot2 and R.
+
+---
+
+Correct impression:
+
+```{r, out.width="45%", fig.show="hold", echo = F, eval = T}
+library(knitr)
+include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q05r_length_user-1.png")
+include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q06r_frequency-1.png")
+include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q07ggplot2_frequency-1.png")
+include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/unnamed-chunk-7-1.png")
+include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q08r_frequency-1.png")
+```
+
+
+---
+
+But, minimal experience with extension.
+
+
+```{r}
+include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q10_previous_ext_experience-1.png")
+include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q11_previous_ext_attempt-1.png")
+```
+
+---
+
+
+What's the barrier?  
+
+The problems for the 'new wave' quoting June bunch... 
+
+0) 'users aren't developers' 
+1) 'scary ggproto methods' (less experience with OOP) 
+2) hard to reason about the big chunk of codes that defined a new ggroto object  
+3) even if we master all of this, then we have to become package developers? 
+
+
+---
+
+0) Users are leaving too much on the table not to get into ggplot2 extensions
+1) deemphasize ggproto methods
+2) pull computation out of ggproto method
+3) build communities of support
+
+
+
+---
+
+Show an easy geom recipe
+
+---
+
+Then survey results
+
+
+---
+
+Then 
+
+
+'I felt empowered... But not that easy'
+
+-
+
+Maybe it will?
+
+--
+
+Sometimes it won't
+
+--
+
+ggplot2 extenders virtual micro meeting.
+
+---
+
+ggtedious
+
+---
+
+Toward literate programming in my own packages, to make package building process more transparent, collaborative and fun (and more of a narrative. )
+
 
 
 ---
@@ -539,7 +599,7 @@ include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey
 include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q11_previous_ext_attempt-1.png")
 ```
 
- ggplot2 super-users be capable extenders?  
+ggplot2 super-users be capable extenders?  
 
 My experience with ggplot2 extension lead me to believe that there's a lot of untapped potential.  During my 
 
