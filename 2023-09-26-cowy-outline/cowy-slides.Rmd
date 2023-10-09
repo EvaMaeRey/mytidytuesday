@@ -38,27 +38,6 @@ knitr::opts_chunk$set(fig.width = 6, fig.height = 4.5, message = FALSE, warning 
 library(flipbookr)
 ```
 
----
-
-
-1. Why ggplot2
-2. Limitations of base ggplot2
-3. Promise of Extension
-4. Un-reached talent - ggplot2 super users unrealized potential
-5. New strategies for reaching this talent & evidence of effectiveness
-6. New fronteer of challenges and ideas for addressing them
-
-
-
----
-
-class: middle, inverse, center
-# So ggplot2...
---
-#               ... what's the fuss?
-
-
-
 
 
 class: inverse, bottom
@@ -85,6 +64,31 @@ background-size: cover
 
 ### Thursday May 19, 2022, 12:15AM
 #### Photo Credit: Klim Sergeev
+
+
+
+
+---
+
+
+1. Why ggplot2
+2. Limitations of base ggplot2
+3. Promise of Extension
+4. Un-reached talent - ggplot2 super users unrealized potential
+5. New strategies for reaching this talent & evidence of effectiveness
+6. New frontier of challenges and ideas for addressing them
+
+
+
+---
+
+class: middle, inverse, center
+# So ggplot2...
+
+--
+#               ... what's the fuss?
+
+
 
 
 
@@ -116,6 +120,13 @@ theme_set(theme_gray(base_size = 20))
 
 ---
 
+
+# It lets you *'speak your plot into existence'*. (Thomas Lin Pederson?) 
+
+---
+
+
+
 ## Elements of the Grammar of Graphics (choices)
 
 ```{r, echo = F}
@@ -124,74 +135,191 @@ knitr::include_graphics("https://miro.medium.com/max/1400/1*MMZuYgeC_YjXNC1r4D4s
 
 
 
+<!-- --- -->
+
+<!-- > # "the Grammar of Graphics makes everything else easy because you've just got all these, like, little nice decomposable components" -- Hadley Wickham -->
+
+
+
+<!-- -- -->
+
+<!-- # Build up your plot, bit by bit -->
+
+
+<!-- --- -->
+
+<!-- # ggplot2 is called a 'declarative' graphing system. -->
+
+<!-- -- -->
+
+<!-- # It lets you *'speak your plot into existence'*. (Thomas Lin Pederson?)  -->
+
+<!-- -- -->
+
+<!-- # Describe the elements of the plot you have in your mind.   -->
+
+
+
+
+
+<!-- --- -->
+
+<!-- ## This is fast. Because most of us, can **picture** the form of the plot we're going after rather clearly (i.e. what the horizontal position should represent, what color should represent, what 'marks' (points, lines) are going to appear on the plot).   -->
+
+<!-- -- -->
+
+<!-- ## 'Getting' our plot made becomes a matter of describing what we're already picturing! -->
+
+
+
+<!-- --- -->
+<!-- # So what's the promise of ggplot2? -->
+
+<!-- -- -->
+
+<!-- ## Getting the plot form you picture in your head ... -->
+
+<!-- -- -->
+
+<!-- ## ... into reality... -->
+
+<!-- -- -->
+
+<!-- ## ... by describing it. -->
+
 
 
 ---
+
+
+# Hans Rosling 2010 BBC 
+
+<iframe width="767" height="431" src="https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A
+
+
+---
+
+background-image: url(images/paste-A8314E33.png)
+background-size: cover
+
+
+---
+
+
+background-image: url(images/paste-D46A77DF.png)
+background-size: cover
+
+---
+
+background-image: url(images/paste-CAD8C893.png)
+background-size: cover
+
+
+---
+
+
+background-image: url(images/paste-DC46E991.png)
+background-size: cover
+
+
+---
+
+2010, but now, we are able to speak out plots into existence too. 
+
+This is because the grammar of graphics, (the principles which ggplot2 is based on) breaks up the elements of a visualization into orthogonal parts, and the user is able to manipulate these bit by bit.
+
 
 > # "the Grammar of Graphics makes everything else easy because you've just got all these, like, little nice decomposable components" -- Hadley Wickham
 
---
-
-# Build up your plot, bit by bit
-
-
----
-
-# ggplot2 is called a 'declarative' graphing system.
-
---
-
-# It lets you *'speak your plot into existence'*. (Thomas Lin Pederson?) 
-
---
-
-# Describe the elements of the plot you have in your mind.  
+Hadley Wickham (2010) A Layered Grammar of Graphics, Journal of
+Computational and Graphical Statistics, 
 
 
+<!-- --- -->
 
+<!-- # Back to ggplot2. What's the fuss? -->
+<!-- -- -->
+<!-- Hadley Wickham, ggplot2 author on it's motivation: -->
+<!-- > ### And, you know, I'd get a dataset. And, *in my head I could very clearly kind of picture*, I want to put this on the x-axis. Let's put this on the y-axis, draw a line, put some points here, break it up by this variable.  -->
 
+<!-- -- -->
+<!-- > ### And then, like, getting that vision out of my head, and into reality, it's just really, really hard. Just, like, felt harder than it should be. Like, there's a lot of custom programming involved, -->
 
----
+<!-- --- -->
 
-## This is fast. Because most of us, can **picture** the form of the plot we're going after rather clearly (i.e. what the horizontal position should represent, what color should represent, what 'marks' (points, lines) are going to appear on the plot).  
+<!-- > ### where I just felt, like, to me, I just wanted to say, like, you know, *this is what I'm thinking, this is how I'm picturing this plot. Like you're the computer 'Go and do it'.*  -->
 
---
-
-## 'Getting' our plot made becomes a matter of describing what we're already picturing!
+<!-- -- -->
+<!-- > ### ... and I'd also been reading about the Grammar of Graphics by Leland Wilkinson, I got to meet him a couple of times and ... I was, like, this book has been, like, written for me.  -->
+<!-- https://www.trifacta.com/podcast/tidy-data-with-hadley-wickham/ -->
 
 
 
 ---
+
+
 # So what's the promise of ggplot2?
-
 --
-
 ## Getting the plot form you picture in your head ...
-
 --
-
 ## ... into reality...
-
 --
-
 ## ... by describing it.
 
----
-
-
-Hans... 1999
-
----
-
-2010
-
 
 ---
 
 
+`r chunk_reveal("scatter", title = "# We all have Hans Rosling capabilities")`
+
+```{r scatter}
+library(tidyverse)
+library(gapminder)
+gapminder %>%  # data from package
+  filter(year == 2002) %>% 
+  ggplot() +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  scale_x_log10() +
+  geom_point() + 
+  aes(size = pop) +
+  aes(color = continent) +
+  aes(shape = continent) +
+  labs(x = "GDP per capita (US$)") +
+  labs(alpha = "GDP per cap")
+```
+
+---
+
+
+`r chunk_reveal("scatter2", title = "# And more", break_type = 1)`
+
+```{r scatter2}
+library(tidyverse)
+library(gapminder)
+gapminder %>%  # data from package
+  filter(year == 2002) %>% 
+  ggplot() +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  scale_x_log10() +
+  geom_point() + 
+  aes(size = pop) +
+  aes(color = continent) +
+  labs(x = "GDP per capita (US$)") +
+  labs(alpha = "GDP per cap") + 
+  geom_smooth(method = lm, aes(color = NULL)) #<<
+```
+
+---
 
 ## "Create graphical 'poems'." - Hadley Wickham (2010)
 
+--
+
+
+# But... sometimes there are limits to what we can express
 
 
 ---
@@ -290,37 +418,19 @@ Further, for the case of adding a vertical line at the mean for different subset
 
 ---
 
-geom_boxplot(), example of compute happening under the hood
+Why is geom_smooth() is so easy, and my mean of x line is so hard?
+
 
 ---
 
-`r flipbookr::chunk_reveal("boxplot", break_type = "user")`
-
-```{r boxplot, include = F}
-library(tidyverse)
-gapminder::gapminder %>% 
-  filter(year == 2002) %>% 
-  ggplot() + 
-  aes(x = continent) + 
-  aes(y = gdpPercap) +
-  geom_boxplot() ->
-g
-  
-g %>% #BREAK
-  layer_data() #BREAK
-```
-
----
-
-# Like histogram, geom_boxplot does lots of compute in the background
+# Like geom_smooth does a bunch of compute in the background
 
 --
 
 ### built from a number of primitives
 
-- rect
-- point
-- segment
+- line
+- ribbon
 
 --
 
@@ -408,9 +518,29 @@ g %>% #BREAK
 
 --
 
-# Not horrible to make 
---
-(especially now...)
+vline at mean of x (line)
+
+Residuals off of model fit (segment)
+
+Intercept for a linear model (point)
+
+---
+
+### Entry time for me... 
+
+~ 6 months
+
+
+---
+
+Points of entry...
+
+# ggplot2 vignette
+# 
+
+---
+
+
 
 ---
 
@@ -447,6 +577,9 @@ cars %>%
 ```
 
 
+
+
+
 ---
 
 Thesis of the talk:
@@ -465,7 +598,18 @@ Vastly underused.
 
 Who could find it extremely useful?  Super users...
 
-know the grammar.  Be German. 
+know the grammar. 
+
+--
+
+Be German, combine stuff to make new words (functions)
+
+---
+
+Durchschnitt
+
+Restfehler
+
 
 
 ---
@@ -480,7 +624,7 @@ May 2023.
 
 ---
 
-Hand picked, extraordinay educators, very experienced with stats, data viz, ggplot2 and R.
+Hand picked, extraordinary educators, very experienced with stats, data viz, ggplot2 and R.
 
 ---
 
