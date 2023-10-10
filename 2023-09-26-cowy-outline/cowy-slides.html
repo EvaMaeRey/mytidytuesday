@@ -1,0 +1,3523 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>A new wave of ggplot2 extenders</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. Evangeline Reynolds" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+      
+
+
+
+class: inverse, left, bottom
+background-image: url(https://images.unsplash.com/photo-1543286386-713bdd548da4?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80)
+background-size: cover
+# .Large[Supporting a new wave of ggplot2 extenders]
+## .small[with new points of entry for ggplot2 super-users]
+#### .tiny[Dr. Evangeline Reynolds | 2022-04-26 |Image credit: William Iven, Upsplash]
+
+
+???
+
+Title slide
+
+
+
+
+class: inverse, bottom
+background-image: url(https://images.unsplash.com/photo-1603300216540-6b77f84ee101?ixlib=rb-1.2.1&amp;raw_url=true&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=387)
+background-size: cover
+
+# Unlocking ggplot2 as a computational engine 
+## by extending ggplot2 statistical geometries
+### Dr. Evangeline 'Gina' Reynolds
+
+### Thursday May 19, 2022, 12:15AM
+#### Photo Credit: Mike Lewis HeadSmart Media
+
+
+---
+
+class: inverse, bottom
+background-image: url(https://images.unsplash.com/photo-1542178432-52211bc52073?crop=entropy&amp;cs=tinysrgb&amp;fm=jpg&amp;ixlib=rb-1.2.1&amp;q=80&amp;raw_url=true&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1374)
+background-size: cover
+
+# Creating new geom vocabulary for richer statistical visual stories 
+## by extending ggplot2 statistical geometries
+### Dr. Evangeline 'Gina' Reynolds
+
+### Thursday May 19, 2022, 12:15AM
+#### Photo Credit: Klim Sergeev
+
+
+
+
+---
+
+
+1. Why ggplot2
+2. Limitations of base ggplot2
+3. Promise of Extension
+4. Un-reached talent - ggplot2 super users unrealized potential
+5. New strategies for reaching this talent &amp; evidence of effectiveness
+6. New frontier of challenges and ideas for addressing them
+
+
+
+---
+
+class: middle, inverse, center
+# So ggplot2...
+
+--
+#               ... what's the fuss?
+
+
+
+
+
+
+
+
+
+---
+
+# gg in ggplot2
+
+--
+
+# Grammar of Graphics
+
+---
+
+
+# It lets you *'speak your plot into existence'*. (Thomas Lin Pederson?) 
+
+---
+
+
+
+## Elements of the Grammar of Graphics (choices)
+
+![](https://miro.medium.com/max/1400/1*MMZuYgeC_YjXNC1r4D4sog.png)&lt;!-- --&gt;
+
+
+
+&lt;!-- --- --&gt;
+
+&lt;!-- &gt; # "the Grammar of Graphics makes everything else easy because you've just got all these, like, little nice decomposable components" -- Hadley Wickham --&gt;
+
+
+
+&lt;!-- -- --&gt;
+
+&lt;!-- # Build up your plot, bit by bit --&gt;
+
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # ggplot2 is called a 'declarative' graphing system. --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- # It lets you *'speak your plot into existence'*. (Thomas Lin Pederson?)  --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- # Describe the elements of the plot you have in your mind.   --&gt;
+
+
+
+
+
+&lt;!-- --- --&gt;
+
+&lt;!-- ## This is fast. Because most of us, can **picture** the form of the plot we're going after rather clearly (i.e. what the horizontal position should represent, what color should represent, what 'marks' (points, lines) are going to appear on the plot).   --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- ## 'Getting' our plot made becomes a matter of describing what we're already picturing! --&gt;
+
+
+
+&lt;!-- --- --&gt;
+&lt;!-- # So what's the promise of ggplot2? --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- ## Getting the plot form you picture in your head ... --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- ## ... into reality... --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- ## ... by describing it. --&gt;
+
+
+
+---
+
+
+# Hans Rosling 2010 BBC 
+
+&lt;iframe width="767" height="431" src="https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
+https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A
+
+
+---
+
+background-image: url(images/paste-A8314E33.png)
+background-size: cover
+
+
+---
+
+
+background-image: url(images/paste-D46A77DF.png)
+background-size: cover
+
+---
+
+background-image: url(images/paste-CAD8C893.png)
+background-size: cover
+
+
+---
+
+
+background-image: url(images/paste-DC46E991.png)
+background-size: cover
+
+
+---
+
+2010, but now, we are able to speak out plots into existence too. 
+
+This is because the grammar of graphics, (the principles which ggplot2 is based on) breaks up the elements of a visualization into orthogonal parts, and the user is able to manipulate these bit by bit.
+
+
+&gt; # "the Grammar of Graphics makes everything else easy because you've just got all these, like, little nice decomposable components" -- Hadley Wickham
+
+Hadley Wickham (2010) A Layered Grammar of Graphics, Journal of
+Computational and Graphical Statistics, 
+
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Back to ggplot2. What's the fuss? --&gt;
+&lt;!-- -- --&gt;
+&lt;!-- Hadley Wickham, ggplot2 author on it's motivation: --&gt;
+&lt;!-- &gt; ### And, you know, I'd get a dataset. And, *in my head I could very clearly kind of picture*, I want to put this on the x-axis. Let's put this on the y-axis, draw a line, put some points here, break it up by this variable.  --&gt;
+
+&lt;!-- -- --&gt;
+&lt;!-- &gt; ### And then, like, getting that vision out of my head, and into reality, it's just really, really hard. Just, like, felt harder than it should be. Like, there's a lot of custom programming involved, --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- &gt; ### where I just felt, like, to me, I just wanted to say, like, you know, *this is what I'm thinking, this is how I'm picturing this plot. Like you're the computer 'Go and do it'.*  --&gt;
+
+&lt;!-- -- --&gt;
+&lt;!-- &gt; ### ... and I'd also been reading about the Grammar of Graphics by Leland Wilkinson, I got to meet him a couple of times and ... I was, like, this book has been, like, written for me.  --&gt;
+&lt;!-- https://www.trifacta.com/podcast/tidy-data-with-hadley-wickham/ --&gt;
+
+
+
+---
+
+
+# So what's the promise of ggplot2?
+--
+## Getting the plot form you picture in your head ...
+--
+## ... into reality...
+--
+## ... by describing it.
+
+
+---
+
+
+count: false
+ 
+# We all have Hans Rosling capabilities
+.panel1-scatter-auto[
+
+```r
+*library(tidyverse)
+```
+]
+ 
+.panel2-scatter-auto[
+
+]
+
+---
+count: false
+ 
+# We all have Hans Rosling capabilities
+.panel1-scatter-auto[
+
+```r
+library(tidyverse)
+*library(gapminder)
+```
+]
+ 
+.panel2-scatter-auto[
+
+]
+
+---
+count: false
+ 
+# We all have Hans Rosling capabilities
+.panel1-scatter-auto[
+
+```r
+library(tidyverse)
+library(gapminder)
+*gapminder   # data from package
+```
+]
+ 
+.panel2-scatter-auto[
+
+```
+# A tibble: 1,704 × 6
+   country     continent  year lifeExp      pop gdpPercap
+   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+ 1 Afghanistan Asia       1952    28.8  8425333      779.
+ 2 Afghanistan Asia       1957    30.3  9240934      821.
+ 3 Afghanistan Asia       1962    32.0 10267083      853.
+ 4 Afghanistan Asia       1967    34.0 11537966      836.
+ 5 Afghanistan Asia       1972    36.1 13079460      740.
+ 6 Afghanistan Asia       1977    38.4 14880372      786.
+ 7 Afghanistan Asia       1982    39.9 12881816      978.
+ 8 Afghanistan Asia       1987    40.8 13867957      852.
+ 9 Afghanistan Asia       1992    41.7 16317921      649.
+10 Afghanistan Asia       1997    41.8 22227415      635.
+# … with 1,694 more rows
+```
+]
+
+---
+count: false
+ 
+# We all have Hans Rosling capabilities
+.panel1-scatter-auto[
+
+```r
+library(tidyverse)
+library(gapminder)
+gapminder %&gt;%  # data from package
+* filter(year == 2002)
+```
+]
+ 
+.panel2-scatter-auto[
+
+```
+# A tibble: 142 × 6
+   country     continent  year lifeExp       pop gdpPercap
+   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;     &lt;int&gt;     &lt;dbl&gt;
+ 1 Afghanistan Asia       2002    42.1  25268405      727.
+ 2 Albania     Europe     2002    75.7   3508512     4604.
+ 3 Algeria     Africa     2002    71.0  31287142     5288.
+ 4 Angola      Africa     2002    41.0  10866106     2773.
+ 5 Argentina   Americas   2002    74.3  38331121     8798.
+ 6 Australia   Oceania    2002    80.4  19546792    30688.
+ 7 Austria     Europe     2002    79.0   8148312    32418.
+ 8 Bahrain     Asia       2002    74.8    656397    23404.
+ 9 Bangladesh  Asia       2002    62.0 135656790     1136.
+10 Belgium     Europe     2002    78.3  10311970    30486.
+# … with 132 more rows
+```
+]
+
+---
+count: false
+ 
+# We all have Hans Rosling capabilities
+.panel1-scatter-auto[
+
+```r
+library(tidyverse)
+library(gapminder)
+gapminder %&gt;%  # data from package
+  filter(year == 2002) %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-scatter-auto[
+&lt;img src="cowy-slides_files/figure-html/scatter_auto_05_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+# We all have Hans Rosling capabilities
+.panel1-scatter-auto[
+
+```r
+library(tidyverse)
+library(gapminder)
+gapminder %&gt;%  # data from package
+  filter(year == 2002) %&gt;%
+  ggplot() +
+* aes(y = lifeExp)
+```
+]
+ 
+.panel2-scatter-auto[
+&lt;img src="cowy-slides_files/figure-html/scatter_auto_06_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+# We all have Hans Rosling capabilities
+.panel1-scatter-auto[
+
+```r
+library(tidyverse)
+library(gapminder)
+gapminder %&gt;%  # data from package
+  filter(year == 2002) %&gt;%
+  ggplot() +
+  aes(y = lifeExp) +
+* aes(x = gdpPercap)
+```
+]
+ 
+.panel2-scatter-auto[
+&lt;img src="cowy-slides_files/figure-html/scatter_auto_07_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+# We all have Hans Rosling capabilities
+.panel1-scatter-auto[
+
+```r
+library(tidyverse)
+library(gapminder)
+gapminder %&gt;%  # data from package
+  filter(year == 2002) %&gt;%
+  ggplot() +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+* scale_x_log10()
+```
+]
+ 
+.panel2-scatter-auto[
+&lt;img src="cowy-slides_files/figure-html/scatter_auto_08_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+# We all have Hans Rosling capabilities
+.panel1-scatter-auto[
+
+```r
+library(tidyverse)
+library(gapminder)
+gapminder %&gt;%  # data from package
+  filter(year == 2002) %&gt;%
+  ggplot() +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  scale_x_log10() +
+* geom_point()
+```
+]
+ 
+.panel2-scatter-auto[
+&lt;img src="cowy-slides_files/figure-html/scatter_auto_09_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+# We all have Hans Rosling capabilities
+.panel1-scatter-auto[
+
+```r
+library(tidyverse)
+library(gapminder)
+gapminder %&gt;%  # data from package
+  filter(year == 2002) %&gt;%
+  ggplot() +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  scale_x_log10() +
+  geom_point() +
+* aes(size = pop)
+```
+]
+ 
+.panel2-scatter-auto[
+&lt;img src="cowy-slides_files/figure-html/scatter_auto_10_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+# We all have Hans Rosling capabilities
+.panel1-scatter-auto[
+
+```r
+library(tidyverse)
+library(gapminder)
+gapminder %&gt;%  # data from package
+  filter(year == 2002) %&gt;%
+  ggplot() +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  scale_x_log10() +
+  geom_point() +
+  aes(size = pop) +
+* aes(color = continent)
+```
+]
+ 
+.panel2-scatter-auto[
+&lt;img src="cowy-slides_files/figure-html/scatter_auto_11_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+# We all have Hans Rosling capabilities
+.panel1-scatter-auto[
+
+```r
+library(tidyverse)
+library(gapminder)
+gapminder %&gt;%  # data from package
+  filter(year == 2002) %&gt;%
+  ggplot() +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  scale_x_log10() +
+  geom_point() +
+  aes(size = pop) +
+  aes(color = continent) +
+* aes(shape = continent)
+```
+]
+ 
+.panel2-scatter-auto[
+&lt;img src="cowy-slides_files/figure-html/scatter_auto_12_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+# We all have Hans Rosling capabilities
+.panel1-scatter-auto[
+
+```r
+library(tidyverse)
+library(gapminder)
+gapminder %&gt;%  # data from package
+  filter(year == 2002) %&gt;%
+  ggplot() +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  scale_x_log10() +
+  geom_point() +
+  aes(size = pop) +
+  aes(color = continent) +
+  aes(shape = continent) +
+* labs(x = "GDP per capita (US$)")
+```
+]
+ 
+.panel2-scatter-auto[
+&lt;img src="cowy-slides_files/figure-html/scatter_auto_13_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+# We all have Hans Rosling capabilities
+.panel1-scatter-auto[
+
+```r
+library(tidyverse)
+library(gapminder)
+gapminder %&gt;%  # data from package
+  filter(year == 2002) %&gt;%
+  ggplot() +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  scale_x_log10() +
+  geom_point() +
+  aes(size = pop) +
+  aes(color = continent) +
+  aes(shape = continent) +
+  labs(x = "GDP per capita (US$)") +
+* labs(alpha = "GDP per cap")
+```
+]
+ 
+.panel2-scatter-auto[
+&lt;img src="cowy-slides_files/figure-html/scatter_auto_14_output-1.png" width="432" /&gt;
+]
+
+&lt;style&gt;
+.panel1-scatter-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-scatter-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-scatter-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+&lt;img src="cowy-slides_files/figure-html/scatter-1.png" width="432" /&gt;
+
+---
+
+
+count: false
+ 
+# And more
+.panel1-scatter2-1[
+
+```r
+library(tidyverse)
+library(gapminder)
+gapminder %&gt;%  # data from package
+  filter(year == 2002) %&gt;%
+  ggplot() +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  scale_x_log10() +
+  geom_point() +
+  aes(size = pop) +
+  aes(color = continent) +
+  labs(x = "GDP per capita (US$)") +
+  labs(alpha = "GDP per cap") +
+* geom_smooth(method = lm, aes(color = NULL))
+```
+]
+ 
+.panel2-scatter2-1[
+&lt;img src="cowy-slides_files/figure-html/scatter2_1_01_output-1.png" width="432" /&gt;
+]
+
+&lt;style&gt;
+.panel1-scatter2-1 {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-scatter2-1 {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-scatter2-1 {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+&lt;img src="cowy-slides_files/figure-html/scatter2-1.png" width="432" /&gt;
+
+---
+
+## "Create graphical 'poems'." - Hadley Wickham (2010)
+
+--
+
+
+# But... sometimes there are limits to what we can express
+
+
+---
+class: inverse, center, middle
+
+# The problem? (Limitations)
+
+--
+
+## Sometimes we don't have the vocabulary that's needed to 'speak' fluently.
+
+---
+
+## Example
+
+&lt;img src="cowy-slides_files/figure-html/unnamed-chunk-4-1.png" width="432" /&gt;
+
+???
+Consider for example, a the seemingly simple enterprise of adding a vertical line at the mean of x, perhaps atop a histogram or density plot.
+
+
+---
+
+count: false
+ 
+### What's the experience
+.panel1-basic-auto[
+
+```r
+*airquality
+```
+]
+ 
+.panel2-basic-auto[
+
+```
+    Ozone Solar.R Wind Temp Month Day
+1      41     190  7.4   67     5   1
+2      36     118  8.0   72     5   2
+3      12     149 12.6   74     5   3
+4      18     313 11.5   62     5   4
+5      NA      NA 14.3   56     5   5
+6      28      NA 14.9   66     5   6
+7      23     299  8.6   65     5   7
+8      19      99 13.8   59     5   8
+9       8      19 20.1   61     5   9
+10     NA     194  8.6   69     5  10
+11      7      NA  6.9   74     5  11
+12     16     256  9.7   69     5  12
+13     11     290  9.2   66     5  13
+14     14     274 10.9   68     5  14
+15     18      65 13.2   58     5  15
+16     14     334 11.5   64     5  16
+17     34     307 12.0   66     5  17
+18      6      78 18.4   57     5  18
+19     30     322 11.5   68     5  19
+20     11      44  9.7   62     5  20
+21      1       8  9.7   59     5  21
+22     11     320 16.6   73     5  22
+23      4      25  9.7   61     5  23
+24     32      92 12.0   61     5  24
+25     NA      66 16.6   57     5  25
+26     NA     266 14.9   58     5  26
+27     NA      NA  8.0   57     5  27
+28     23      13 12.0   67     5  28
+29     45     252 14.9   81     5  29
+30    115     223  5.7   79     5  30
+31     37     279  7.4   76     5  31
+32     NA     286  8.6   78     6   1
+33     NA     287  9.7   74     6   2
+34     NA     242 16.1   67     6   3
+35     NA     186  9.2   84     6   4
+36     NA     220  8.6   85     6   5
+37     NA     264 14.3   79     6   6
+38     29     127  9.7   82     6   7
+39     NA     273  6.9   87     6   8
+40     71     291 13.8   90     6   9
+41     39     323 11.5   87     6  10
+42     NA     259 10.9   93     6  11
+43     NA     250  9.2   92     6  12
+44     23     148  8.0   82     6  13
+45     NA     332 13.8   80     6  14
+46     NA     322 11.5   79     6  15
+47     21     191 14.9   77     6  16
+48     37     284 20.7   72     6  17
+49     20      37  9.2   65     6  18
+50     12     120 11.5   73     6  19
+51     13     137 10.3   76     6  20
+52     NA     150  6.3   77     6  21
+53     NA      59  1.7   76     6  22
+54     NA      91  4.6   76     6  23
+55     NA     250  6.3   76     6  24
+56     NA     135  8.0   75     6  25
+57     NA     127  8.0   78     6  26
+58     NA      47 10.3   73     6  27
+59     NA      98 11.5   80     6  28
+60     NA      31 14.9   77     6  29
+61     NA     138  8.0   83     6  30
+62    135     269  4.1   84     7   1
+63     49     248  9.2   85     7   2
+64     32     236  9.2   81     7   3
+65     NA     101 10.9   84     7   4
+66     64     175  4.6   83     7   5
+67     40     314 10.9   83     7   6
+68     77     276  5.1   88     7   7
+69     97     267  6.3   92     7   8
+70     97     272  5.7   92     7   9
+71     85     175  7.4   89     7  10
+72     NA     139  8.6   82     7  11
+73     10     264 14.3   73     7  12
+74     27     175 14.9   81     7  13
+75     NA     291 14.9   91     7  14
+76      7      48 14.3   80     7  15
+77     48     260  6.9   81     7  16
+78     35     274 10.3   82     7  17
+79     61     285  6.3   84     7  18
+80     79     187  5.1   87     7  19
+81     63     220 11.5   85     7  20
+82     16       7  6.9   74     7  21
+83     NA     258  9.7   81     7  22
+84     NA     295 11.5   82     7  23
+85     80     294  8.6   86     7  24
+86    108     223  8.0   85     7  25
+87     20      81  8.6   82     7  26
+88     52      82 12.0   86     7  27
+89     82     213  7.4   88     7  28
+90     50     275  7.4   86     7  29
+91     64     253  7.4   83     7  30
+92     59     254  9.2   81     7  31
+93     39      83  6.9   81     8   1
+94      9      24 13.8   81     8   2
+95     16      77  7.4   82     8   3
+96     78      NA  6.9   86     8   4
+97     35      NA  7.4   85     8   5
+98     66      NA  4.6   87     8   6
+99    122     255  4.0   89     8   7
+100    89     229 10.3   90     8   8
+101   110     207  8.0   90     8   9
+102    NA     222  8.6   92     8  10
+103    NA     137 11.5   86     8  11
+104    44     192 11.5   86     8  12
+105    28     273 11.5   82     8  13
+106    65     157  9.7   80     8  14
+107    NA      64 11.5   79     8  15
+108    22      71 10.3   77     8  16
+109    59      51  6.3   79     8  17
+110    23     115  7.4   76     8  18
+111    31     244 10.9   78     8  19
+112    44     190 10.3   78     8  20
+113    21     259 15.5   77     8  21
+114     9      36 14.3   72     8  22
+115    NA     255 12.6   75     8  23
+116    45     212  9.7   79     8  24
+117   168     238  3.4   81     8  25
+118    73     215  8.0   86     8  26
+119    NA     153  5.7   88     8  27
+120    76     203  9.7   97     8  28
+121   118     225  2.3   94     8  29
+122    84     237  6.3   96     8  30
+123    85     188  6.3   94     8  31
+124    96     167  6.9   91     9   1
+125    78     197  5.1   92     9   2
+126    73     183  2.8   93     9   3
+127    91     189  4.6   93     9   4
+128    47      95  7.4   87     9   5
+129    32      92 15.5   84     9   6
+130    20     252 10.9   80     9   7
+131    23     220 10.3   78     9   8
+132    21     230 10.9   75     9   9
+133    24     259  9.7   73     9  10
+134    44     236 14.9   81     9  11
+135    21     259 15.5   76     9  12
+136    28     238  6.3   77     9  13
+137     9      24 10.9   71     9  14
+138    13     112 11.5   71     9  15
+139    46     237  6.9   78     9  16
+140    18     224 13.8   67     9  17
+141    13      27 10.3   76     9  18
+142    24     238 10.3   68     9  19
+143    16     201  8.0   82     9  20
+144    13     238 12.6   64     9  21
+145    23      14  9.2   71     9  22
+146    36     139 10.3   81     9  23
+147     7      49 10.3   69     9  24
+148    14      20 16.6   63     9  25
+149    30     193  6.9   70     9  26
+150    NA     145 13.2   77     9  27
+151    14     191 14.3   75     9  28
+152    18     131  8.0   76     9  29
+153    20     223 11.5   68     9  30
+```
+]
+
+---
+count: false
+ 
+### What's the experience
+.panel1-basic-auto[
+
+```r
+airquality %&gt;%
+* ggplot(data = .)
+```
+]
+ 
+.panel2-basic-auto[
+&lt;img src="cowy-slides_files/figure-html/basic_auto_02_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+### What's the experience
+.panel1-basic-auto[
+
+```r
+airquality %&gt;%
+  ggplot(data = .) +
+* aes(x = Ozone)
+```
+]
+ 
+.panel2-basic-auto[
+&lt;img src="cowy-slides_files/figure-html/basic_auto_03_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+### What's the experience
+.panel1-basic-auto[
+
+```r
+airquality %&gt;%
+  ggplot(data = .) +
+  aes(x = Ozone) +
+* geom_rug()
+```
+]
+ 
+.panel2-basic-auto[
+&lt;img src="cowy-slides_files/figure-html/basic_auto_04_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+### What's the experience
+.panel1-basic-auto[
+
+```r
+airquality %&gt;%
+  ggplot(data = .) +
+  aes(x = Ozone) +
+  geom_rug() +
+* geom_histogram()
+```
+]
+ 
+.panel2-basic-auto[
+&lt;img src="cowy-slides_files/figure-html/basic_auto_05_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+### What's the experience
+.panel1-basic-auto[
+
+```r
+airquality %&gt;%
+  ggplot(data = .) +
+  aes(x = Ozone) +
+  geom_rug() +
+  geom_histogram() +
+* geom_vline(
+*   xintercept =
+*     mean(airquality$Ozone,
+*          na.rm = T)
+*   )
+```
+]
+ 
+.panel2-basic-auto[
+&lt;img src="cowy-slides_files/figure-html/basic_auto_06_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+### What's the experience
+.panel1-basic-auto[
+
+```r
+airquality %&gt;%
+  ggplot(data = .) +
+  aes(x = Ozone) +
+  geom_rug() +
+  geom_histogram() +
+  geom_vline(
+    xintercept =
+      mean(airquality$Ozone,
+           na.rm = T)
+    ) -&gt;
+*g 
+```
+]
+ 
+.panel2-basic-auto[
+
+]
+
+---
+count: false
+ 
+### What's the experience
+.panel1-basic-auto[
+
+```r
+airquality %&gt;%
+  ggplot(data = .) +
+  aes(x = Ozone) +
+  geom_rug() +
+  geom_histogram() +
+  geom_vline(
+    xintercept =
+      mean(airquality$Ozone,
+           na.rm = T)
+    ) -&gt;
+g
+
+*g %&gt;% layer_data(i = 2)  # histogram layer
+```
+]
+ 
+.panel2-basic-auto[
+
+```
+    y count          x       xmin       xmax     density     ncount   ndensity
+1   1     1   0.000000  -2.879310   2.879310 0.001497006 0.05882353 0.05882353
+2   6     6   5.758621   2.879310   8.637931 0.008982036 0.35294118 0.35294118
+3  17    17  11.517241   8.637931  14.396552 0.025449102 1.00000000 1.00000000
+4  13    13  17.275862  14.396552  20.155172 0.019461078 0.76470588 0.76470588
+5  13    13  23.034483  20.155172  25.913793 0.019461078 0.76470588 0.76470588
+6   8     8  28.793103  25.913793  31.672414 0.011976048 0.47058824 0.47058824
+7  10    10  34.551724  31.672414  37.431034 0.014970060 0.58823529 0.58823529
+8   4     4  40.310345  37.431034  43.189655 0.005988024 0.23529412 0.23529412
+9   8     8  46.068966  43.189655  48.948276 0.011976048 0.47058824 0.47058824
+10  3     3  51.827586  48.948276  54.706897 0.004491018 0.17647059 0.17647059
+11  2     2  57.586207  54.706897  60.465517 0.002994012 0.11764706 0.11764706
+12  6     6  63.344828  60.465517  66.224138 0.008982036 0.35294118 0.35294118
+13  1     1  69.103448  66.224138  71.982759 0.001497006 0.05882353 0.05882353
+14  4     4  74.862069  71.982759  77.741379 0.005988024 0.23529412 0.23529412
+15  5     5  80.620690  77.741379  83.500000 0.007485030 0.29411765 0.29411765
+16  4     4  86.379310  83.500000  89.258621 0.005988024 0.23529412 0.23529412
+17  1     1  92.137931  89.258621  95.017241 0.001497006 0.05882353 0.05882353
+18  3     3  97.896552  95.017241 100.775862 0.004491018 0.17647059 0.17647059
+19  0     0 103.655172 100.775862 106.534483 0.000000000 0.00000000 0.00000000
+20  2     2 109.413793 106.534483 112.293103 0.002994012 0.11764706 0.11764706
+21  2     2 115.172414 112.293103 118.051724 0.002994012 0.11764706 0.11764706
+22  1     1 120.931034 118.051724 123.810345 0.001497006 0.05882353 0.05882353
+23  0     0 126.689655 123.810345 129.568966 0.000000000 0.00000000 0.00000000
+24  1     1 132.448276 129.568966 135.327586 0.001497006 0.05882353 0.05882353
+25  0     0 138.206897 135.327586 141.086207 0.000000000 0.00000000 0.00000000
+26  0     0 143.965517 141.086207 146.844828 0.000000000 0.00000000 0.00000000
+27  0     0 149.724138 146.844828 152.603448 0.000000000 0.00000000 0.00000000
+28  0     0 155.482759 152.603448 158.362069 0.000000000 0.00000000 0.00000000
+29  0     0 161.241379 158.362069 164.120690 0.000000000 0.00000000 0.00000000
+30  1     1 167.000000 164.120690 169.879310 0.001497006 0.05882353 0.05882353
+   flipped_aes PANEL group ymin ymax colour   fill linewidth linetype alpha
+1        FALSE     1    -1    0    1     NA grey35       0.5        1    NA
+2        FALSE     1    -1    0    6     NA grey35       0.5        1    NA
+3        FALSE     1    -1    0   17     NA grey35       0.5        1    NA
+4        FALSE     1    -1    0   13     NA grey35       0.5        1    NA
+5        FALSE     1    -1    0   13     NA grey35       0.5        1    NA
+6        FALSE     1    -1    0    8     NA grey35       0.5        1    NA
+7        FALSE     1    -1    0   10     NA grey35       0.5        1    NA
+8        FALSE     1    -1    0    4     NA grey35       0.5        1    NA
+9        FALSE     1    -1    0    8     NA grey35       0.5        1    NA
+10       FALSE     1    -1    0    3     NA grey35       0.5        1    NA
+11       FALSE     1    -1    0    2     NA grey35       0.5        1    NA
+12       FALSE     1    -1    0    6     NA grey35       0.5        1    NA
+13       FALSE     1    -1    0    1     NA grey35       0.5        1    NA
+14       FALSE     1    -1    0    4     NA grey35       0.5        1    NA
+15       FALSE     1    -1    0    5     NA grey35       0.5        1    NA
+16       FALSE     1    -1    0    4     NA grey35       0.5        1    NA
+17       FALSE     1    -1    0    1     NA grey35       0.5        1    NA
+18       FALSE     1    -1    0    3     NA grey35       0.5        1    NA
+19       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
+20       FALSE     1    -1    0    2     NA grey35       0.5        1    NA
+21       FALSE     1    -1    0    2     NA grey35       0.5        1    NA
+22       FALSE     1    -1    0    1     NA grey35       0.5        1    NA
+23       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
+24       FALSE     1    -1    0    1     NA grey35       0.5        1    NA
+25       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
+26       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
+27       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
+28       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
+29       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
+30       FALSE     1    -1    0    1     NA grey35       0.5        1    NA
+```
+]
+
+&lt;style&gt;
+.panel1-basic-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-basic-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-basic-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+```
+    y count          x       xmin       xmax     density     ncount   ndensity
+1   1     1   0.000000  -2.879310   2.879310 0.001497006 0.05882353 0.05882353
+2   6     6   5.758621   2.879310   8.637931 0.008982036 0.35294118 0.35294118
+3  17    17  11.517241   8.637931  14.396552 0.025449102 1.00000000 1.00000000
+4  13    13  17.275862  14.396552  20.155172 0.019461078 0.76470588 0.76470588
+5  13    13  23.034483  20.155172  25.913793 0.019461078 0.76470588 0.76470588
+6   8     8  28.793103  25.913793  31.672414 0.011976048 0.47058824 0.47058824
+7  10    10  34.551724  31.672414  37.431034 0.014970060 0.58823529 0.58823529
+8   4     4  40.310345  37.431034  43.189655 0.005988024 0.23529412 0.23529412
+9   8     8  46.068966  43.189655  48.948276 0.011976048 0.47058824 0.47058824
+10  3     3  51.827586  48.948276  54.706897 0.004491018 0.17647059 0.17647059
+11  2     2  57.586207  54.706897  60.465517 0.002994012 0.11764706 0.11764706
+12  6     6  63.344828  60.465517  66.224138 0.008982036 0.35294118 0.35294118
+13  1     1  69.103448  66.224138  71.982759 0.001497006 0.05882353 0.05882353
+14  4     4  74.862069  71.982759  77.741379 0.005988024 0.23529412 0.23529412
+15  5     5  80.620690  77.741379  83.500000 0.007485030 0.29411765 0.29411765
+16  4     4  86.379310  83.500000  89.258621 0.005988024 0.23529412 0.23529412
+17  1     1  92.137931  89.258621  95.017241 0.001497006 0.05882353 0.05882353
+18  3     3  97.896552  95.017241 100.775862 0.004491018 0.17647059 0.17647059
+19  0     0 103.655172 100.775862 106.534483 0.000000000 0.00000000 0.00000000
+20  2     2 109.413793 106.534483 112.293103 0.002994012 0.11764706 0.11764706
+21  2     2 115.172414 112.293103 118.051724 0.002994012 0.11764706 0.11764706
+22  1     1 120.931034 118.051724 123.810345 0.001497006 0.05882353 0.05882353
+23  0     0 126.689655 123.810345 129.568966 0.000000000 0.00000000 0.00000000
+24  1     1 132.448276 129.568966 135.327586 0.001497006 0.05882353 0.05882353
+25  0     0 138.206897 135.327586 141.086207 0.000000000 0.00000000 0.00000000
+26  0     0 143.965517 141.086207 146.844828 0.000000000 0.00000000 0.00000000
+27  0     0 149.724138 146.844828 152.603448 0.000000000 0.00000000 0.00000000
+28  0     0 155.482759 152.603448 158.362069 0.000000000 0.00000000 0.00000000
+29  0     0 161.241379 158.362069 164.120690 0.000000000 0.00000000 0.00000000
+30  1     1 167.000000 164.120690 169.879310 0.001497006 0.05882353 0.05882353
+   flipped_aes PANEL group ymin ymax colour   fill linewidth linetype alpha
+1        FALSE     1    -1    0    1     NA grey35       0.5        1    NA
+2        FALSE     1    -1    0    6     NA grey35       0.5        1    NA
+3        FALSE     1    -1    0   17     NA grey35       0.5        1    NA
+4        FALSE     1    -1    0   13     NA grey35       0.5        1    NA
+5        FALSE     1    -1    0   13     NA grey35       0.5        1    NA
+6        FALSE     1    -1    0    8     NA grey35       0.5        1    NA
+7        FALSE     1    -1    0   10     NA grey35       0.5        1    NA
+8        FALSE     1    -1    0    4     NA grey35       0.5        1    NA
+9        FALSE     1    -1    0    8     NA grey35       0.5        1    NA
+10       FALSE     1    -1    0    3     NA grey35       0.5        1    NA
+11       FALSE     1    -1    0    2     NA grey35       0.5        1    NA
+12       FALSE     1    -1    0    6     NA grey35       0.5        1    NA
+13       FALSE     1    -1    0    1     NA grey35       0.5        1    NA
+14       FALSE     1    -1    0    4     NA grey35       0.5        1    NA
+15       FALSE     1    -1    0    5     NA grey35       0.5        1    NA
+16       FALSE     1    -1    0    4     NA grey35       0.5        1    NA
+17       FALSE     1    -1    0    1     NA grey35       0.5        1    NA
+18       FALSE     1    -1    0    3     NA grey35       0.5        1    NA
+19       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
+20       FALSE     1    -1    0    2     NA grey35       0.5        1    NA
+21       FALSE     1    -1    0    2     NA grey35       0.5        1    NA
+22       FALSE     1    -1    0    1     NA grey35       0.5        1    NA
+23       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
+24       FALSE     1    -1    0    1     NA grey35       0.5        1    NA
+25       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
+26       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
+27       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
+28       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
+29       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
+30       FALSE     1    -1    0    1     NA grey35       0.5        1    NA
+```
+
+???
+Creating this plot requires greater focus on ggplot2 *syntax*, likely detracting from discussion of *the mean* that statistical instructors desire.
+It may require a discussion about dollar sign syntax and how geom_vline is actually a special geom -- an annotation -- rather than being mapped to the data. None of this is relevant to the point you as an instructor aim to make: maybe that the the mean is the balancing point of the data or maybe a comment about skewness.
+
+
+---
+
+## geom_histogram()
+
+--
+
+## counts the number of observations in a 'bin'
+
+--
+
+## draws rectangles accordingly
+
+---
+
+### Adding the conditional means?
+
+&lt;img src="cowy-slides_files/figure-html/cond_means_hard-1.png" width="432" /&gt;
+
+???
+Further, for the case of adding a vertical line at the mean for different subsets of the data, a different approach is required. This enterprise may take instructor/analyst/student on an even larger detour -- possibly googling, and maybe landing on the following stack overflow page where 11,000 analytics souls (some repeats to be sure) have landed:
+
+---
+
+count: false
+ 
+#### Conditional means (may require a trip to stackoverflow!)
+.panel1-cond_means_hard-auto[
+
+```r
+*airquality
+```
+]
+ 
+.panel2-cond_means_hard-auto[
+
+```
+    Ozone Solar.R Wind Temp Month Day
+1      41     190  7.4   67     5   1
+2      36     118  8.0   72     5   2
+3      12     149 12.6   74     5   3
+4      18     313 11.5   62     5   4
+5      NA      NA 14.3   56     5   5
+6      28      NA 14.9   66     5   6
+7      23     299  8.6   65     5   7
+8      19      99 13.8   59     5   8
+9       8      19 20.1   61     5   9
+10     NA     194  8.6   69     5  10
+11      7      NA  6.9   74     5  11
+12     16     256  9.7   69     5  12
+13     11     290  9.2   66     5  13
+14     14     274 10.9   68     5  14
+15     18      65 13.2   58     5  15
+16     14     334 11.5   64     5  16
+17     34     307 12.0   66     5  17
+18      6      78 18.4   57     5  18
+19     30     322 11.5   68     5  19
+20     11      44  9.7   62     5  20
+21      1       8  9.7   59     5  21
+22     11     320 16.6   73     5  22
+23      4      25  9.7   61     5  23
+24     32      92 12.0   61     5  24
+25     NA      66 16.6   57     5  25
+26     NA     266 14.9   58     5  26
+27     NA      NA  8.0   57     5  27
+28     23      13 12.0   67     5  28
+29     45     252 14.9   81     5  29
+30    115     223  5.7   79     5  30
+31     37     279  7.4   76     5  31
+32     NA     286  8.6   78     6   1
+33     NA     287  9.7   74     6   2
+34     NA     242 16.1   67     6   3
+35     NA     186  9.2   84     6   4
+36     NA     220  8.6   85     6   5
+37     NA     264 14.3   79     6   6
+38     29     127  9.7   82     6   7
+39     NA     273  6.9   87     6   8
+40     71     291 13.8   90     6   9
+41     39     323 11.5   87     6  10
+42     NA     259 10.9   93     6  11
+43     NA     250  9.2   92     6  12
+44     23     148  8.0   82     6  13
+45     NA     332 13.8   80     6  14
+46     NA     322 11.5   79     6  15
+47     21     191 14.9   77     6  16
+48     37     284 20.7   72     6  17
+49     20      37  9.2   65     6  18
+50     12     120 11.5   73     6  19
+51     13     137 10.3   76     6  20
+52     NA     150  6.3   77     6  21
+53     NA      59  1.7   76     6  22
+54     NA      91  4.6   76     6  23
+55     NA     250  6.3   76     6  24
+56     NA     135  8.0   75     6  25
+57     NA     127  8.0   78     6  26
+58     NA      47 10.3   73     6  27
+59     NA      98 11.5   80     6  28
+60     NA      31 14.9   77     6  29
+61     NA     138  8.0   83     6  30
+62    135     269  4.1   84     7   1
+63     49     248  9.2   85     7   2
+64     32     236  9.2   81     7   3
+65     NA     101 10.9   84     7   4
+66     64     175  4.6   83     7   5
+67     40     314 10.9   83     7   6
+68     77     276  5.1   88     7   7
+69     97     267  6.3   92     7   8
+70     97     272  5.7   92     7   9
+71     85     175  7.4   89     7  10
+72     NA     139  8.6   82     7  11
+73     10     264 14.3   73     7  12
+74     27     175 14.9   81     7  13
+75     NA     291 14.9   91     7  14
+76      7      48 14.3   80     7  15
+77     48     260  6.9   81     7  16
+78     35     274 10.3   82     7  17
+79     61     285  6.3   84     7  18
+80     79     187  5.1   87     7  19
+81     63     220 11.5   85     7  20
+82     16       7  6.9   74     7  21
+83     NA     258  9.7   81     7  22
+84     NA     295 11.5   82     7  23
+85     80     294  8.6   86     7  24
+86    108     223  8.0   85     7  25
+87     20      81  8.6   82     7  26
+88     52      82 12.0   86     7  27
+89     82     213  7.4   88     7  28
+90     50     275  7.4   86     7  29
+91     64     253  7.4   83     7  30
+92     59     254  9.2   81     7  31
+93     39      83  6.9   81     8   1
+94      9      24 13.8   81     8   2
+95     16      77  7.4   82     8   3
+96     78      NA  6.9   86     8   4
+97     35      NA  7.4   85     8   5
+98     66      NA  4.6   87     8   6
+99    122     255  4.0   89     8   7
+100    89     229 10.3   90     8   8
+101   110     207  8.0   90     8   9
+102    NA     222  8.6   92     8  10
+103    NA     137 11.5   86     8  11
+104    44     192 11.5   86     8  12
+105    28     273 11.5   82     8  13
+106    65     157  9.7   80     8  14
+107    NA      64 11.5   79     8  15
+108    22      71 10.3   77     8  16
+109    59      51  6.3   79     8  17
+110    23     115  7.4   76     8  18
+111    31     244 10.9   78     8  19
+112    44     190 10.3   78     8  20
+113    21     259 15.5   77     8  21
+114     9      36 14.3   72     8  22
+115    NA     255 12.6   75     8  23
+116    45     212  9.7   79     8  24
+117   168     238  3.4   81     8  25
+118    73     215  8.0   86     8  26
+119    NA     153  5.7   88     8  27
+120    76     203  9.7   97     8  28
+121   118     225  2.3   94     8  29
+122    84     237  6.3   96     8  30
+123    85     188  6.3   94     8  31
+124    96     167  6.9   91     9   1
+125    78     197  5.1   92     9   2
+126    73     183  2.8   93     9   3
+127    91     189  4.6   93     9   4
+128    47      95  7.4   87     9   5
+129    32      92 15.5   84     9   6
+130    20     252 10.9   80     9   7
+131    23     220 10.3   78     9   8
+132    21     230 10.9   75     9   9
+133    24     259  9.7   73     9  10
+134    44     236 14.9   81     9  11
+135    21     259 15.5   76     9  12
+136    28     238  6.3   77     9  13
+137     9      24 10.9   71     9  14
+138    13     112 11.5   71     9  15
+139    46     237  6.9   78     9  16
+140    18     224 13.8   67     9  17
+141    13      27 10.3   76     9  18
+142    24     238 10.3   68     9  19
+143    16     201  8.0   82     9  20
+144    13     238 12.6   64     9  21
+145    23      14  9.2   71     9  22
+146    36     139 10.3   81     9  23
+147     7      49 10.3   69     9  24
+148    14      20 16.6   63     9  25
+149    30     193  6.9   70     9  26
+150    NA     145 13.2   77     9  27
+151    14     191 14.3   75     9  28
+152    18     131  8.0   76     9  29
+153    20     223 11.5   68     9  30
+```
+]
+
+---
+count: false
+ 
+#### Conditional means (may require a trip to stackoverflow!)
+.panel1-cond_means_hard-auto[
+
+```r
+airquality %&gt;%
+* group_by(Month)
+```
+]
+ 
+.panel2-cond_means_hard-auto[
+
+```
+# A tibble: 153 × 6
+# Groups:   Month [5]
+   Ozone Solar.R  Wind  Temp Month   Day
+   &lt;int&gt;   &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
+ 1    41     190   7.4    67     5     1
+ 2    36     118   8      72     5     2
+ 3    12     149  12.6    74     5     3
+ 4    18     313  11.5    62     5     4
+ 5    NA      NA  14.3    56     5     5
+ 6    28      NA  14.9    66     5     6
+ 7    23     299   8.6    65     5     7
+ 8    19      99  13.8    59     5     8
+ 9     8      19  20.1    61     5     9
+10    NA     194   8.6    69     5    10
+# … with 143 more rows
+```
+]
+
+---
+count: false
+ 
+#### Conditional means (may require a trip to stackoverflow!)
+.panel1-cond_means_hard-auto[
+
+```r
+airquality %&gt;%
+  group_by(Month) %&gt;%
+* summarise(
+*   Ozone_mean =
+*     mean(Ozone, na.rm = T)
+*   )
+```
+]
+ 
+.panel2-cond_means_hard-auto[
+
+```
+# A tibble: 5 × 2
+  Month Ozone_mean
+  &lt;int&gt;      &lt;dbl&gt;
+1     5       23.6
+2     6       29.4
+3     7       59.1
+4     8       60.0
+5     9       31.4
+```
+]
+
+---
+count: false
+ 
+#### Conditional means (may require a trip to stackoverflow!)
+.panel1-cond_means_hard-auto[
+
+```r
+airquality %&gt;%
+  group_by(Month) %&gt;%
+  summarise(
+    Ozone_mean =
+      mean(Ozone, na.rm = T)
+    ) -&gt;
+*airquality_by_month
+```
+]
+ 
+.panel2-cond_means_hard-auto[
+
+]
+
+---
+count: false
+ 
+#### Conditional means (may require a trip to stackoverflow!)
+.panel1-cond_means_hard-auto[
+
+```r
+airquality %&gt;%
+  group_by(Month) %&gt;%
+  summarise(
+    Ozone_mean =
+      mean(Ozone, na.rm = T)
+    ) -&gt;
+airquality_by_month
+
+*ggplot(airquality)
+```
+]
+ 
+.panel2-cond_means_hard-auto[
+&lt;img src="cowy-slides_files/figure-html/cond_means_hard_auto_05_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+#### Conditional means (may require a trip to stackoverflow!)
+.panel1-cond_means_hard-auto[
+
+```r
+airquality %&gt;%
+  group_by(Month) %&gt;%
+  summarise(
+    Ozone_mean =
+      mean(Ozone, na.rm = T)
+    ) -&gt;
+airquality_by_month
+
+ggplot(airquality) +
+* aes(x = Ozone)
+```
+]
+ 
+.panel2-cond_means_hard-auto[
+&lt;img src="cowy-slides_files/figure-html/cond_means_hard_auto_06_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+#### Conditional means (may require a trip to stackoverflow!)
+.panel1-cond_means_hard-auto[
+
+```r
+airquality %&gt;%
+  group_by(Month) %&gt;%
+  summarise(
+    Ozone_mean =
+      mean(Ozone, na.rm = T)
+    ) -&gt;
+airquality_by_month
+
+ggplot(airquality) +
+  aes(x = Ozone) +
+* geom_histogram()
+```
+]
+ 
+.panel2-cond_means_hard-auto[
+&lt;img src="cowy-slides_files/figure-html/cond_means_hard_auto_07_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+#### Conditional means (may require a trip to stackoverflow!)
+.panel1-cond_means_hard-auto[
+
+```r
+airquality %&gt;%
+  group_by(Month) %&gt;%
+  summarise(
+    Ozone_mean =
+      mean(Ozone, na.rm = T)
+    ) -&gt;
+airquality_by_month
+
+ggplot(airquality) +
+  aes(x = Ozone) +
+  geom_histogram() +
+* facet_grid(rows = vars(Month))
+```
+]
+ 
+.panel2-cond_means_hard-auto[
+&lt;img src="cowy-slides_files/figure-html/cond_means_hard_auto_08_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+#### Conditional means (may require a trip to stackoverflow!)
+.panel1-cond_means_hard-auto[
+
+```r
+airquality %&gt;%
+  group_by(Month) %&gt;%
+  summarise(
+    Ozone_mean =
+      mean(Ozone, na.rm = T)
+    ) -&gt;
+airquality_by_month
+
+ggplot(airquality) +
+  aes(x = Ozone) +
+  geom_histogram() +
+  facet_grid(rows = vars(Month)) +
+* geom_vline(data = airquality_by_month,
+*            aes(xintercept =
+*              Ozone_mean))
+```
+]
+ 
+.panel2-cond_means_hard-auto[
+&lt;img src="cowy-slides_files/figure-html/cond_means_hard_auto_09_output-1.png" width="432" /&gt;
+]
+
+&lt;style&gt;
+.panel1-cond_means_hard-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-cond_means_hard-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-cond_means_hard-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+Why is geom_smooth() is so easy, and my mean of x line is so hard?
+
+
+---
+
+# Like geom_smooth does a bunch of smoothcompute in the background
+
+--
+
+### built from a number of primitives
+
+- line
+- ribbon
+
+--
+
+### conceptually distinct from those components
+
+---
+
+## ggplot2 intentionally lean for maintenance purposes.
+
+--
+
+## ... but geom_x_mean() would be so nice!
+
+--
+
+## ggplot2 extensions system exists...
+
+--
+
+## thus, {ggxmean} r package https://github.com/EvaMaeRey/ggxmean, that gives us geom_x_mean(), and ~ 25 more geoms...
+
+--
+
+## Mostly creates geoms that *inherit* from existing geometries
+
+--
+
+## Cool mechanism, probably underutilized...
+
+---
+
+## Hand*schuh*
+
+--
+
+## hand shoe 
+
+--
+
+## glove
+
+---
+
+## Nackt*schnecke*
+
+--
+
+## naked snail
+
+--
+
+## slug
+
+---
+
+## Daumen*kino*
+
+--
+
+## thumb movie
+
+--
+
+## flip book
+
+---
+
+# inheriting geoms: have their own conceptual identity, but inheriting from more primitive forms (segment, point, text, etc)
+
+--
+
+# geom_*point*_xy_means
+
+--
+
+# geom_*text*_coordinates
+
+--
+
+# geom_*segment*_residuals
+
+---
+
+# Inheriting geoms easy to use -- you know the grammar!
+
+--
+
+vline at mean of x (line)
+
+Residuals off of model fit (segment)
+
+Intercept for a linear model (point)
+
+---
+
+### Entry time for me... 
+
+~ 6 months
+
+
+---
+
+Points of entry...
+
+# ggplot2 vignette
+# 
+
+---
+
+
+
+---
+
+## Examples from ggxmean
+
+---
+
+count: false
+ 
+
+.panel1-ols-auto[
+
+```r
+*library(tidyverse)
+```
+]
+ 
+.panel2-ols-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-ols-auto[
+
+```r
+library(tidyverse)
+*library(ggxmean)
+```
+]
+ 
+.panel2-ols-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-ols-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+*#library(transformr) might help w/ animate  #library(transformr) might help w/ animate
+```
+]
+ 
+.panel2-ols-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-ols-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+#library(transformr) might help w/ animate  #library(transformr) might help w/ animate
+
+## basic example code
+*cars
+```
+]
+ 
+.panel2-ols-auto[
+
+```
+   speed dist
+1      4    2
+2      4   10
+3      7    4
+4      7   22
+5      8   16
+6      9   10
+7     10   18
+8     10   26
+9     10   34
+10    11   17
+11    11   28
+12    12   14
+13    12   20
+14    12   24
+15    12   28
+16    13   26
+17    13   34
+18    13   34
+19    13   46
+20    14   26
+21    14   36
+22    14   60
+23    14   80
+24    15   20
+25    15   26
+26    15   54
+27    16   32
+28    16   40
+29    17   32
+30    17   40
+31    17   50
+32    18   42
+33    18   56
+34    18   76
+35    18   84
+36    19   36
+37    19   46
+38    19   68
+39    20   32
+40    20   48
+41    20   52
+42    20   56
+43    20   64
+44    22   66
+45    23   54
+46    24   70
+47    24   92
+48    24   93
+49    24  120
+50    25   85
+```
+]
+
+---
+count: false
+ 
+
+.panel1-ols-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+#library(transformr) might help w/ animate  #library(transformr) might help w/ animate
+
+## basic example code
+cars %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-ols-auto[
+&lt;img src="cowy-slides_files/figure-html/ols_auto_05_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ols-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+#library(transformr) might help w/ animate  #library(transformr) might help w/ animate
+
+## basic example code
+cars %&gt;%
+  ggplot() +
+* aes(x = speed,
+*     y = dist)
+```
+]
+ 
+.panel2-ols-auto[
+&lt;img src="cowy-slides_files/figure-html/ols_auto_06_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ols-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+#library(transformr) might help w/ animate  #library(transformr) might help w/ animate
+
+## basic example code
+cars %&gt;%
+  ggplot() +
+  aes(x = speed,
+      y = dist) +
+* geom_point()
+```
+]
+ 
+.panel2-ols-auto[
+&lt;img src="cowy-slides_files/figure-html/ols_auto_07_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ols-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+#library(transformr) might help w/ animate  #library(transformr) might help w/ animate
+
+## basic example code
+cars %&gt;%
+  ggplot() +
+  aes(x = speed,
+      y = dist) +
+  geom_point() +
+* ggxmean::geom_lm()
+```
+]
+ 
+.panel2-ols-auto[
+&lt;img src="cowy-slides_files/figure-html/ols_auto_08_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ols-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+#library(transformr) might help w/ animate  #library(transformr) might help w/ animate
+
+## basic example code
+cars %&gt;%
+  ggplot() +
+  aes(x = speed,
+      y = dist) +
+  geom_point() +
+  ggxmean::geom_lm() +
+* ggxmean::geom_lm_residuals(linetype = "dashed")
+```
+]
+ 
+.panel2-ols-auto[
+&lt;img src="cowy-slides_files/figure-html/ols_auto_09_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ols-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+#library(transformr) might help w/ animate  #library(transformr) might help w/ animate
+
+## basic example code
+cars %&gt;%
+  ggplot() +
+  aes(x = speed,
+      y = dist) +
+  geom_point() +
+  ggxmean::geom_lm() +
+  ggxmean::geom_lm_residuals(linetype = "dashed") +
+* ggxmean::geom_lm_fitted(
+*   color = "goldenrod3",
+*   size = 3)
+```
+]
+ 
+.panel2-ols-auto[
+&lt;img src="cowy-slides_files/figure-html/ols_auto_10_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ols-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+#library(transformr) might help w/ animate  #library(transformr) might help w/ animate
+
+## basic example code
+cars %&gt;%
+  ggplot() +
+  aes(x = speed,
+      y = dist) +
+  geom_point() +
+  ggxmean::geom_lm() +
+  ggxmean::geom_lm_residuals(linetype = "dashed") +
+  ggxmean::geom_lm_fitted(
+    color = "goldenrod3",
+    size = 3) +
+* ggxmean::geom_lm_conf_int()
+```
+]
+ 
+.panel2-ols-auto[
+&lt;img src="cowy-slides_files/figure-html/ols_auto_11_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ols-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+#library(transformr) might help w/ animate  #library(transformr) might help w/ animate
+
+## basic example code
+cars %&gt;%
+  ggplot() +
+  aes(x = speed,
+      y = dist) +
+  geom_point() +
+  ggxmean::geom_lm() +
+  ggxmean::geom_lm_residuals(linetype = "dashed") +
+  ggxmean::geom_lm_fitted(
+    color = "goldenrod3",
+    size = 3) +
+  ggxmean::geom_lm_conf_int() +
+* ggxmean::geom_lm_pred_int()
+```
+]
+ 
+.panel2-ols-auto[
+&lt;img src="cowy-slides_files/figure-html/ols_auto_12_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ols-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+#library(transformr) might help w/ animate  #library(transformr) might help w/ animate
+
+## basic example code
+cars %&gt;%
+  ggplot() +
+  aes(x = speed,
+      y = dist) +
+  geom_point() +
+  ggxmean::geom_lm() +
+  ggxmean::geom_lm_residuals(linetype = "dashed") +
+  ggxmean::geom_lm_fitted(
+    color = "goldenrod3",
+    size = 3) +
+  ggxmean::geom_lm_conf_int() +
+  ggxmean::geom_lm_pred_int() +
+* ggxmean::geom_lm_formula()
+```
+]
+ 
+.panel2-ols-auto[
+&lt;img src="cowy-slides_files/figure-html/ols_auto_13_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ols-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+#library(transformr) might help w/ animate  #library(transformr) might help w/ animate
+
+## basic example code
+cars %&gt;%
+  ggplot() +
+  aes(x = speed,
+      y = dist) +
+  geom_point() +
+  ggxmean::geom_lm() +
+  ggxmean::geom_lm_residuals(linetype = "dashed") +
+  ggxmean::geom_lm_fitted(
+    color = "goldenrod3",
+    size = 3) +
+  ggxmean::geom_lm_conf_int() +
+  ggxmean::geom_lm_pred_int() +
+  ggxmean::geom_lm_formula() +
+* ggxmean::geom_lm_intercept(color = "red",
+*                            size = 5)
+```
+]
+ 
+.panel2-ols-auto[
+&lt;img src="cowy-slides_files/figure-html/ols_auto_14_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-ols-auto[
+
+```r
+library(tidyverse)
+library(ggxmean)
+#library(transformr) might help w/ animate  #library(transformr) might help w/ animate
+
+## basic example code
+cars %&gt;%
+  ggplot() +
+  aes(x = speed,
+      y = dist) +
+  geom_point() +
+  ggxmean::geom_lm() +
+  ggxmean::geom_lm_residuals(linetype = "dashed") +
+  ggxmean::geom_lm_fitted(
+    color = "goldenrod3",
+    size = 3) +
+  ggxmean::geom_lm_conf_int() +
+  ggxmean::geom_lm_pred_int() +
+  ggxmean::geom_lm_formula() +
+  ggxmean::geom_lm_intercept(color = "red",
+                             size = 5) +
+* ggxmean::geom_lm_intercept_label(
+*   size = 3,
+*   hjust = 0)
+```
+]
+ 
+.panel2-ols-auto[
+&lt;img src="cowy-slides_files/figure-html/ols_auto_15_output-1.png" width="432" /&gt;
+]
+
+&lt;style&gt;
+.panel1-ols-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-ols-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-ols-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+
+---
+
+Thesis of the talk:
+
+Extension system is really cool.  
+
+--
+
+Really powerful.
+
+--
+
+Vastly underused.
+
+---
+
+Who could find it extremely useful?  Super users...
+
+know the grammar. 
+
+--
+
+Be German, combine stuff to make new words (functions)
+
+---
+
+Durchschnitt
+
+Restfehler
+
+
+
+---
+
+Evidence from a micro survey and focus group. 
+
+Nine statistics and data analytics educators.
+
+May 2023.
+
+15 question survey and 2 focus groups.
+
+---
+
+Hand picked, extraordinary educators, very experienced with stats, data viz, ggplot2 and R.
+
+---
+class: inverse, middle, center
+
+# profile of survey/focus group: 
+
+--
+
+# 100% R/ggplot stars!  
+
+---
+
+
+
+&lt;img src="https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q05r_length_user-1.png" width="45%" /&gt;
+
+---
+
+![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q06r_frequency-1.png)&lt;!-- --&gt;
+
+---
+
+![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q07ggplot2_frequency-1.png)&lt;!-- --&gt;
+
+---
+
+![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+
+---
+
+![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q08r_frequency-1.png)&lt;!-- --&gt;
+
+
+---
+class: inverse, middle, center
+
+
+# And yet, 
+
+--
+
+# *minimal* experience with extension.
+
+---
+
+![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q10_previous_ext_experience-1.png)&lt;!-- --&gt;
+
+---
+
+![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q11_previous_ext_attempt-1.png)&lt;!-- --&gt;
+
+---
+
+
+What's the barrier?  
+
+The problems for the 'new wave' quoting June bunch... 
+
+0) 'users aren't developers' 
+--
+
+1) 'scary ggproto methods' (less experience with OOP) 
+--
+
+2) hard to reason about the big chunk of codes that defined a new ggroto object  
+--
+
+3) even if we master all of this, then we have to become package developers? 
+
+
+---
+
+0) Users are leaving too much on the table not to get into ggplot2 extensions
+--
+
+1) deemphasize ggproto methods
+--
+
+2) pull computation out of ggproto method
+--
+
+3) build communities of support
+
+
+
+---
+
+Show an easy geom recipe
+
+---
+
+Then survey results
+
+
+---
+
+Then 
+
+
+'I felt empowered... But not that easy'
+
+-
+
+Maybe it will?
+
+--
+
+Sometimes it won't
+
+--
+
+ggplot2 extenders virtual micro meeting.
+
+---
+
+ggtedious
+
+---
+
+Toward literate programming in my own packages, to make package building process more transparent, collaborative and fun (and more of a narrative. )
+
+
+
+---
+
+
+There is a growing population of ggplot2 ‘super-users’ that – given their regular and long-term ggplot2 use – have a strong working knowledge of grammar of graphics principles and of ggplot2's user interface.  Among their ranks are educators and professionals statistics, data science and data journalism.
+
+There's evidence that many ggplot2 super-users could find creating ggplot2 extensions valuable, but that current educational materials are falling short in reaching and enabling many in this group.  
+
+
+If provided well tailored points of entry and support, such super-users are likely to move rapidly into the extension space given the elegance and efficiency that extension work promises.
+
+Investment in ggplot2 extension education for this talented group of super-users is likely to have positive externalities for the R and ggplot2 ecosystem.  First, such users are likely to be interested in packaging their materials, providing their elegant and efficient work flow.  This further would strengthen ranks in the R community's package developer base.
+
+Furthermore, know-how in the extension space should lead to greater knowledge of the ggplot2 code base and could help build the contributor pool of talent that can help with ggplot2 maintenance itself.  ggplot2's power and elegance is a notable draw to the R language, and these maintenance concerns should be prioritized by the R community. 
+
+A small survey and focus group of super-users that are statistics educators suggest that current extension educational materials aren't reaching folks that could potentially benefit from extension. Here is summary information about the focus group participants.  
+
+
+
+
+ggplot2 super-users be capable extenders?  
+
+My experience with ggplot2 extension lead me to believe that there's a lot of untapped potential.  During my 
+
+
+New material on ggplot2 extension will *tailored* to this group and will provide new points of entry.  I'll conclude by presenting how one new tutorial in this vein performed with a small group of statistics educators.
+
+## Overview
+
+To be more specific about the exact reasons that ggplot2 super users might not have joined the extender ranks, the high level reason is that users may not see themselves as developers.  They face 'scary ggproto methods' (quoting June Choe) and may be turned off as many may not have experience with object oriented programming, Additionally, as less experienced developers, they may find it hard to reason about the big chunk of codes that typically defined ggroto objects. And third, even if they master ggplot2 extension, these ggplot2 super-users may not feel comfortable in the package development space, which might well seem like a requirement for an extension.
+
+&lt;!--
+At a high-level address what your proposal is and how it will address the problem identified. Highlight any benefits to the R Community that follow from solving the problem. This should be your most compelling section.
+--&gt;
+
+My proposed solutions involve messaging maybe users have got no choice but to be developers, because as practitioners and educators, we're just loosing out on so much by not entering this space in terms of efficiency and elegance.  Then, I propose new points of entry (tutorials and example package that de-emphasize ggproto methods as 'need-to-understand' --- instead taking a recipes approach that demonstrates 'how-to-use'.  Second, and complementary this first strategy, the new reference material, as much as possible, pulls out all the pieces that define the ggproto and handles and tests these tasks separately, such as compute_group definitions and compute_panel definitions.  This leads to a very compact, high-level view of the ggproto object; these abstractions should the authors more easily reason about the ggproto pipeline (or ignorable if the newcomer prefers).   Third, to address that super users may be unskilled in package creation and maintenance, I'm working on organizing workshops on package development best practices: https://github.com/EvaMaeRey/ggtedious - this is where I'm personally currently failing in my own journey from ggplot2 super-user to extender.  Given this shortcoming in my own journey, I've approached package building and ggplot2 experts to be involved in the initiative for guidance.  At the same time, I'm bringing in a presenter with a little less package building experience than myself to be the principle guide; which will allow for true-to-life confusion and doubts come to the fore in the workshop session. 
+
+![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q13_oop_experience-1.png)&lt;!-- --&gt;
+
+## Detail
+
+One of my first efforts in this area is 
+
+![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q10_previous_ext_experience-1.png)&lt;!-- --&gt;
+
+
+
+
+# Chapter 5, Spring Independent Study (geom extension patterns) 
+
+
+# 'Easy Geom Recipes'
+
+--
+
+
+# Helping others to build new vocabulary for stories yet to be told...?
+
+--
+
+# Identifying patterns for success in building geoms that inherit from other primitives
+
+
+
+---
+
+## Step 0.  Build it with 'base gglot2'
+
+--
+
+## Step 1. Capture the compute that's needed, and test
+
+--
+
+## Step 2. Pass the compute to a ggproto object
+
+--
+
+## Step 2. Pass the ggproto object to your geom_*() function
+
+--
+
+## Step 4. Enjoy.
+
+---
+class: inverse, middle
+background-image: url(https://images.unsplash.com/photo-1592173376801-185310a68dea?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1286&amp;q=80)
+background-size: cover
+
+
+
+# Easy geom_*() recipes
+
+###Gina Reynolds and Morgan Brown
+
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+
+
+
+
+
+---
+
+
+### Using ggplot2 has been described as writing 'graphical poems'.
+
+--
+
+&lt;!-- and a system that lets us 'speak our plot into existence'.  --&gt;
+### But we may feel at a loss for words when functions we'd like to have don't exist.  The ggplot2 extension system allows us to build new 'vocabulary' for fluent expression.  
+
+--
+
+### An exciting extension mechanism is inheriting from existing geoms.  Particularly important to statisticians and mathematicians is writing new geom_* that perform and visualize calculations.  
+
+---
+
+### To get your feet wet in this world and give you a taste of patterns for geom extension, we provide three *introductory* examples of the geoms_ that inherit from *existing* geoms (point, text, segment, etc) along with practice exercises.  
+
+--
+
+### With such geoms, calculation is done under the hood by the ggplot2 system; with these geom, you can write graphical poems with exciting new graphical 'words'! 
+
+---
+
+### This tutorial is intended for individuals who already have a working knowledge of the grammar of ggplot2, but may like to build a richer vocabulary for themselves. 
+
+--
+
+### Grab an .Rmd worksheet version [here](https://raw.githubusercontent.com/EvaMaeRey/mytidytuesday/master/2022-01-03-easy-geom-recipes/easy_geom_recipes.Rmd).
+
+### or you can browse the rendered version of that [here](https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/easy_geom_recipes.html).
+
+---
+
+
+
+
+
+---
+class: inverse, middle, center
+
+# Recipe #1
+
+--
+
+##`geom_point_xy_medians()`
+
+--
+
+- This will be a point at the median of x and y
+
+---
+class: inverse, middle, center
+
+## Step 0: use base ggplot2 to get the job done
+
+---
+
+
+count: false
+ 
+
+.panel1-penguins-auto[
+
+```r
+*library(tidyverse)
+
+NA
+```
+]
+ 
+.panel2-penguins-auto[
+
+```
+[1] NA
+```
+]
+
+---
+count: false
+ 
+
+.panel1-penguins-auto[
+
+```r
+library(tidyverse)
+*library(palmerpenguins)
+
+NA
+```
+]
+ 
+.panel2-penguins-auto[
+
+```
+[1] NA
+```
+]
+
+---
+count: false
+ 
+
+.panel1-penguins-auto[
+
+```r
+library(tidyverse)
+library(palmerpenguins)
+
+*penguins &lt;- remove_missing(penguins)
+
+NA
+```
+]
+ 
+.panel2-penguins-auto[
+
+```
+[1] NA
+```
+]
+
+---
+count: false
+ 
+
+.panel1-penguins-auto[
+
+```r
+library(tidyverse)
+library(palmerpenguins)
+
+penguins &lt;- remove_missing(penguins)
+
+*penguins
+
+NA
+```
+]
+ 
+.panel2-penguins-auto[
+
+```
+# A tibble: 333 × 8
+   species island    bill_length_mm bill_depth_mm flipper_…¹ body_…² sex    year
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;      &lt;int&gt;   &lt;int&gt; &lt;fct&gt; &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7        181    3750 male   2007
+ 2 Adelie  Torgersen           39.5          17.4        186    3800 fema…  2007
+ 3 Adelie  Torgersen           40.3          18          195    3250 fema…  2007
+ 4 Adelie  Torgersen           36.7          19.3        193    3450 fema…  2007
+ 5 Adelie  Torgersen           39.3          20.6        190    3650 male   2007
+ 6 Adelie  Torgersen           38.9          17.8        181    3625 fema…  2007
+ 7 Adelie  Torgersen           39.2          19.6        195    4675 male   2007
+ 8 Adelie  Torgersen           41.1          17.6        182    3200 fema…  2007
+ 9 Adelie  Torgersen           38.6          21.2        191    3800 male   2007
+10 Adelie  Torgersen           34.6          21.1        198    4400 male   2007
+# … with 323 more rows, and abbreviated variable names ¹​flipper_length_mm,
+#   ²​body_mass_g
+```
+
+```
+[1] NA
+```
+]
+
+---
+count: false
+ 
+
+.panel1-penguins-auto[
+
+```r
+library(tidyverse)
+library(palmerpenguins)
+
+penguins &lt;- remove_missing(penguins)
+
+penguins %&gt;%
+* summarize(bill_length_mm_median = median(bill_length_mm),
+*           bill_depth_mm_median = median(bill_depth_mm))
+
+NA
+```
+]
+ 
+.panel2-penguins-auto[
+
+```
+# A tibble: 1 × 2
+  bill_length_mm_median bill_depth_mm_median
+                  &lt;dbl&gt;                &lt;dbl&gt;
+1                  44.5                 17.3
+```
+
+```
+[1] NA
+```
+]
+
+---
+count: false
+ 
+
+.panel1-penguins-auto[
+
+```r
+library(tidyverse)
+library(palmerpenguins)
+
+penguins &lt;- remove_missing(penguins)
+
+penguins %&gt;%
+  summarize(bill_length_mm_median = median(bill_length_mm),
+            bill_depth_mm_median = median(bill_depth_mm)) -&gt;
+*penguins_medians
+
+NA
+```
+]
+ 
+.panel2-penguins-auto[
+
+```
+[1] NA
+```
+]
+
+---
+count: false
+ 
+
+.panel1-penguins-auto[
+
+```r
+library(tidyverse)
+library(palmerpenguins)
+
+penguins &lt;- remove_missing(penguins)
+
+penguins %&gt;%
+  summarize(bill_length_mm_median = median(bill_length_mm),
+            bill_depth_mm_median = median(bill_depth_mm)) -&gt;
+penguins_medians
+
+*penguins
+
+NA
+```
+]
+ 
+.panel2-penguins-auto[
+
+```
+# A tibble: 333 × 8
+   species island    bill_length_mm bill_depth_mm flipper_…¹ body_…² sex    year
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;      &lt;int&gt;   &lt;int&gt; &lt;fct&gt; &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7        181    3750 male   2007
+ 2 Adelie  Torgersen           39.5          17.4        186    3800 fema…  2007
+ 3 Adelie  Torgersen           40.3          18          195    3250 fema…  2007
+ 4 Adelie  Torgersen           36.7          19.3        193    3450 fema…  2007
+ 5 Adelie  Torgersen           39.3          20.6        190    3650 male   2007
+ 6 Adelie  Torgersen           38.9          17.8        181    3625 fema…  2007
+ 7 Adelie  Torgersen           39.2          19.6        195    4675 male   2007
+ 8 Adelie  Torgersen           41.1          17.6        182    3200 fema…  2007
+ 9 Adelie  Torgersen           38.6          21.2        191    3800 male   2007
+10 Adelie  Torgersen           34.6          21.1        198    4400 male   2007
+# … with 323 more rows, and abbreviated variable names ¹​flipper_length_mm,
+#   ²​body_mass_g
+```
+
+```
+[1] NA
+```
+]
+
+---
+count: false
+ 
+
+.panel1-penguins-auto[
+
+```r
+library(tidyverse)
+library(palmerpenguins)
+
+penguins &lt;- remove_missing(penguins)
+
+penguins %&gt;%
+  summarize(bill_length_mm_median = median(bill_length_mm),
+            bill_depth_mm_median = median(bill_depth_mm)) -&gt;
+penguins_medians
+
+penguins %&gt;%
+* ggplot()
+
+NA
+```
+]
+ 
+.panel2-penguins-auto[
+&lt;img src="cowy-slides_files/figure-html/penguins_auto_08_output-1.png" width="432" /&gt;
+
+```
+[1] NA
+```
+]
+
+---
+count: false
+ 
+
+.panel1-penguins-auto[
+
+```r
+library(tidyverse)
+library(palmerpenguins)
+
+penguins &lt;- remove_missing(penguins)
+
+penguins %&gt;%
+  summarize(bill_length_mm_median = median(bill_length_mm),
+            bill_depth_mm_median = median(bill_depth_mm)) -&gt;
+penguins_medians
+
+penguins %&gt;%
+  ggplot() +
+* aes(x = bill_depth_mm)
+
+NA
+```
+]
+ 
+.panel2-penguins-auto[
+&lt;img src="cowy-slides_files/figure-html/penguins_auto_09_output-1.png" width="432" /&gt;
+
+```
+[1] NA
+```
+]
+
+---
+count: false
+ 
+
+.panel1-penguins-auto[
+
+```r
+library(tidyverse)
+library(palmerpenguins)
+
+penguins &lt;- remove_missing(penguins)
+
+penguins %&gt;%
+  summarize(bill_length_mm_median = median(bill_length_mm),
+            bill_depth_mm_median = median(bill_depth_mm)) -&gt;
+penguins_medians
+
+penguins %&gt;%
+  ggplot() +
+  aes(x = bill_depth_mm) +
+* aes(y = bill_length_mm)
+
+NA
+```
+]
+ 
+.panel2-penguins-auto[
+&lt;img src="cowy-slides_files/figure-html/penguins_auto_10_output-1.png" width="432" /&gt;
+
+```
+[1] NA
+```
+]
+
+---
+count: false
+ 
+
+.panel1-penguins-auto[
+
+```r
+library(tidyverse)
+library(palmerpenguins)
+
+penguins &lt;- remove_missing(penguins)
+
+penguins %&gt;%
+  summarize(bill_length_mm_median = median(bill_length_mm),
+            bill_depth_mm_median = median(bill_depth_mm)) -&gt;
+penguins_medians
+
+penguins %&gt;%
+  ggplot() +
+  aes(x = bill_depth_mm) +
+  aes(y = bill_length_mm) +
+* geom_point()
+
+NA
+```
+]
+ 
+.panel2-penguins-auto[
+&lt;img src="cowy-slides_files/figure-html/penguins_auto_11_output-1.png" width="432" /&gt;
+
+```
+[1] NA
+```
+]
+
+---
+count: false
+ 
+
+.panel1-penguins-auto[
+
+```r
+library(tidyverse)
+library(palmerpenguins)
+
+penguins &lt;- remove_missing(penguins)
+
+penguins %&gt;%
+  summarize(bill_length_mm_median = median(bill_length_mm),
+            bill_depth_mm_median = median(bill_depth_mm)) -&gt;
+penguins_medians
+
+penguins %&gt;%
+  ggplot() +
+  aes(x = bill_depth_mm) +
+  aes(y = bill_length_mm) +
+  geom_point() +
+* geom_point(data = penguins_medians,
+*   color = "red", size = 4,
+*            aes(x = bill_depth_mm_median,
+*                y = bill_length_mm_median))
+
+NA
+```
+]
+ 
+.panel2-penguins-auto[
+&lt;img src="cowy-slides_files/figure-html/penguins_auto_12_output-1.png" width="432" /&gt;
+
+```
+[1] NA
+```
+]
+
+&lt;style&gt;
+.panel1-penguins-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-penguins-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-penguins-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+class: inverse, middle, center
+
+## Step 1: computation
+
+--
+
+- define computation that ggplot2 should do for you, before plotting
+  - here it's computing a variable with labels for each observation
+- test that functionality!
+
+---
+
+
+
+
+
+```
+# A tibble: 1 × 2
+      x     y
+  &lt;dbl&gt; &lt;dbl&gt;
+1  17.3  44.5
+```
+
+
+---
+class: inverse, middle, center
+
+## Step 2: define ggproto
+
+--
+
+- ## what's the naming convention for the ggproto object?
+- ## which aesthetics are required as inputs?
+- ## where does the function from above go?
+
+---
+
+
+
+
+
+
+---
+class: inverse, middle, center
+
+## Step 3: define geom_* function
+
+
+--
+
+- define the stat and geom for your layer
+
+---
+
+
+
+
+
+
+---
+class: inverse, middle, center
+
+
+## Step 4: Enjoy! Use your function
+
+
+---
+
+
+count: false
+ 
+
+.panel1-enjoy_penguins-auto[
+
+```r
+*penguins
+
+NA
+```
+]
+ 
+.panel2-enjoy_penguins-auto[
+
+```
+# A tibble: 333 × 8
+   species island    bill_length_mm bill_depth_mm flipper_…¹ body_…² sex    year
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;      &lt;int&gt;   &lt;int&gt; &lt;fct&gt; &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7        181    3750 male   2007
+ 2 Adelie  Torgersen           39.5          17.4        186    3800 fema…  2007
+ 3 Adelie  Torgersen           40.3          18          195    3250 fema…  2007
+ 4 Adelie  Torgersen           36.7          19.3        193    3450 fema…  2007
+ 5 Adelie  Torgersen           39.3          20.6        190    3650 male   2007
+ 6 Adelie  Torgersen           38.9          17.8        181    3625 fema…  2007
+ 7 Adelie  Torgersen           39.2          19.6        195    4675 male   2007
+ 8 Adelie  Torgersen           41.1          17.6        182    3200 fema…  2007
+ 9 Adelie  Torgersen           38.6          21.2        191    3800 male   2007
+10 Adelie  Torgersen           34.6          21.1        198    4400 male   2007
+# … with 323 more rows, and abbreviated variable names ¹​flipper_length_mm,
+#   ²​body_mass_g
+```
+
+```
+[1] NA
+```
+]
+
+---
+count: false
+ 
+
+.panel1-enjoy_penguins-auto[
+
+```r
+penguins %&gt;%
+* ggplot()
+
+NA
+```
+]
+ 
+.panel2-enjoy_penguins-auto[
+&lt;img src="cowy-slides_files/figure-html/enjoy_penguins_auto_02_output-1.png" width="432" /&gt;
+
+```
+[1] NA
+```
+]
+
+---
+count: false
+ 
+
+.panel1-enjoy_penguins-auto[
+
+```r
+penguins %&gt;%
+  ggplot() +
+* aes(x = bill_depth_mm,
+*     y = bill_length_mm)
+
+NA
+```
+]
+ 
+.panel2-enjoy_penguins-auto[
+&lt;img src="cowy-slides_files/figure-html/enjoy_penguins_auto_03_output-1.png" width="432" /&gt;
+
+```
+[1] NA
+```
+]
+
+---
+count: false
+ 
+
+.panel1-enjoy_penguins-auto[
+
+```r
+penguins %&gt;%
+  ggplot() +
+  aes(x = bill_depth_mm,
+      y = bill_length_mm) +
+* geom_point()
+
+NA
+```
+]
+ 
+.panel2-enjoy_penguins-auto[
+&lt;img src="cowy-slides_files/figure-html/enjoy_penguins_auto_04_output-1.png" width="432" /&gt;
+
+```
+[1] NA
+```
+]
+
+---
+count: false
+ 
+
+.panel1-enjoy_penguins-auto[
+
+```r
+penguins %&gt;%
+  ggplot() +
+  aes(x = bill_depth_mm,
+      y = bill_length_mm) +
+  geom_point() +
+* geom_point_xy_medians(
+*   size = 8,
+*   color = "red")
+
+NA
+```
+]
+ 
+.panel2-enjoy_penguins-auto[
+&lt;img src="cowy-slides_files/figure-html/enjoy_penguins_auto_05_output-1.png" width="432" /&gt;
+
+```
+[1] NA
+```
+]
+
+&lt;style&gt;
+.panel1-enjoy_penguins-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-enjoy_penguins-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-enjoy_penguins-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+class: inverse, middle, center
+
+### And check out conditionality!
+
+---
+
+
+count: false
+ 
+
+.panel1-conditional_penguins-1[
+
+```r
+penguins %&gt;%
+  ggplot() +
+  aes(x = bill_depth_mm,
+      y = bill_length_mm,
+*     color = species) +
+  geom_point() +
+  geom_point_xy_medians(size = 8)
+
+NA
+```
+]
+ 
+.panel2-conditional_penguins-1[
+&lt;img src="cowy-slides_files/figure-html/conditional_penguins_1_01_output-1.png" width="432" /&gt;
+
+```
+[1] NA
+```
+]
+
+&lt;style&gt;
+.panel1-conditional_penguins-1 {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-conditional_penguins-1 {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-conditional_penguins-1 {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+class: inverse, middle, center
+background-image: url(https://images.unsplash.com/photo-1628559225804-71f6e4643f44?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=837&amp;q=80)
+background-size: cover
+
+
+
+---
+class: inverse, middle, center
+
+## Now you ...
+
+--
+
+### Create the function `geom_point_xy_means()`
+
+
+---
+
+## Q&amp;A
+
+--
+
+## Suggested questions.
+
+--
+
+### How long does it take to get through one of the 'Easy Geom Recipes'?
+
+### Can all new geoms be modeled after a 'easy geom recipes'?
+
+### Why did it take you so long to figure out the extension mechanism?/What does your and Morgan's tutorial offer? Isn't there already instruction out there?
+
+### Which was the most difficult geom to build in {ggxmean}?
+
+### Is building a package difficult?
+
+### Is maintaining a package difficult?
+
+### Dusty Turner: Is the idea that MA206 students might use this package to aid in their learning of statistics?
+
+
+
+
+
+
+
+&lt;!-- adjust font size in this css code chunk, currently 80 --&gt;
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 100%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+&lt;/style&gt;
+
+
+
+
+
+## Intro Thoughts
+
+- ggplot2 lets you speak plots into existence
+
+- this allows for some powerful data viz and statistical story telling, build up your plot bit by bit...
+
+- just like rock star Hans Rosling...
+
+- and more (geom_smooth)
+
+- except you will run into a wall... where you don't have the vocab.
+
+- promise is ggplot2 extension... (vignette, Thomas Pederson)
+
+- but you may run into a wall... because you don't have the background to translate this stuff to action
+
+- OOP, holding all the pieces together, inability to practice demonstrated mechanisms.
+
+- New approach for 'a new wave of ggplot2 extenders'...
+
+- extension-ready population; ggplot2 super-users
+
+- easy geom recipes
+
+- population description
+
+- results
+
+- 'It's not gonna be that easy'
+
+- support group
+
+- 'so now I need to write a package...? and test and message?'
+
+- ggtedious
+
+
+The problems for the 'new wave' quoting June bunch... 0. 'users aren't developers' 1) 'scary ggproto methods' (less experience with oop) 2) hard to reason about the big chunk of codes that defined a new ggroto object  3) even if we master all of this, then we have to become package developers?
+
+My proposed solutions, promoting 'easy geom recipes',  0) maybe users have got no choice but to be developers, because 0a. they are sick of precalculation that ggplot2 can just do and 0.b want the mental match of geom_x_mean() and the vline mean appears and 0c. ggplot2 base can't be responsible for working on all my unique problems. 1) make ggproto as ignorable as possible at first. 2) pull out all the pieces that define the ggproto and handle separately. 3) work on package development best practices: https://github.com/EvaMaeRey/ggtedious - this is where I'm definitely currently failing and know it. I never formally test anything.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"seal": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

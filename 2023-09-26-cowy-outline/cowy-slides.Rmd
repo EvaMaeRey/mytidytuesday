@@ -12,8 +12,7 @@ output:
       highlightLines: true
       countIncrementalSlides: false
       seal: false
----      
-      
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 options(tidyverse.quiet = TRUE)
@@ -21,11 +20,12 @@ options(tidyverse.quiet = TRUE)
 
 
 class: inverse, left, bottom
-background-image: url(https://images.unsplash.com/photo-1543286386-713bdd548da4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80)
+background-image: url(https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80)
 background-size: cover
+
 # .Large[Supporting a new wave of ggplot2 extenders]
 ## .small[with new points of entry for ggplot2 super-users]
-#### .tiny[Dr. Evangeline Reynolds | 2022-04-26 |Image credit: William Iven, Upsplash]
+#### .tiny[Dr. Evangeline Reynolds | 2022-04-26 |Image credit: Silas Baisch, Upsplash]
 
 
 ???
@@ -38,7 +38,7 @@ knitr::opts_chunk$set(fig.width = 6, fig.height = 4.5, message = FALSE, warning 
 library(flipbookr)
 ```
 
-
+---
 
 class: inverse, bottom
 background-image: url(https://images.unsplash.com/photo-1603300216540-6b77f84ee101?ixlib=rb-1.2.1&raw_url=true&q=80&fm=jpg&crop=entropy&cs=tinysrgb&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387)
@@ -261,33 +261,36 @@ Computational and Graphical Statistics,
 
 # So what's the promise of ggplot2?
 --
+
 ## Getting the plot form you picture in your head ...
 --
+
 ## ... into reality...
 --
+
 ## ... by describing it.
 
 
 ---
 
 
-`r chunk_reveal("scatter", title = "# We all have Hans Rosling capabilities")`
+`r chunk_reveal("scatter", title = "# We all have Hans Rosling capabilities", break_type = "user")`
 
-```{r scatter}
+```{r scatter, include = F}
 library(tidyverse)
 library(gapminder)
 gapminder %>%  # data from package
-  filter(year == 2002) %>% 
-  ggplot() +
-  aes(y = lifeExp) +
-  aes(x = gdpPercap) +
-  scale_x_log10() +
-  geom_point() + 
-  aes(size = pop) +
-  aes(color = continent) +
-  aes(shape = continent) +
-  labs(x = "GDP per capita (US$)") +
-  labs(alpha = "GDP per cap")
+  filter(year == 2002) %>% # BREAK0
+  ggplot() + # BREAK1
+  aes(y = lifeExp) + # BREAK2
+  aes(x = gdpPercap) + # BREAK3
+  scale_x_log10() + # BREAK4
+  geom_point() +  # BREAK5
+  aes(size = pop/1000000 # BREAK6
+  aes(color = continent) # BREAK7
+  aes(shape = continent) # BREAK8
+  labs(x = "GDP per capita (US$)") + # BREAK9
+  labs(alpha = "GDP per cap") # BREAK10
 ```
 
 ---
@@ -295,7 +298,7 @@ gapminder %>%  # data from package
 
 `r chunk_reveal("scatter2", title = "# And more", break_type = 1)`
 
-```{r scatter2}
+```{r scatter2, include = F}
 library(tidyverse)
 library(gapminder)
 gapminder %>%  # data from package
@@ -305,7 +308,7 @@ gapminder %>%  # data from package
   aes(x = gdpPercap) +
   scale_x_log10() +
   geom_point() + 
-  aes(size = pop) +
+  aes(size = pop/1000000) +
   aes(color = continent) +
   labs(x = "GDP per capita (US$)") +
   labs(alpha = "GDP per cap") + 
@@ -423,7 +426,7 @@ Why is geom_smooth() is so easy, and my mean of x line is so hard?
 
 ---
 
-# Like geom_smooth does a bunch of compute in the background
+# Like geom_smooth does a bunch of smoothcompute in the background
 
 --
 
@@ -627,26 +630,71 @@ May 2023.
 Hand picked, extraordinary educators, very experienced with stats, data viz, ggplot2 and R.
 
 ---
+class: inverse, middle, center
 
-Correct impression:
+# profile of survey/focus group: 
 
-```{r, out.width="45%", fig.show="hold", echo = F, eval = T}
-library(knitr)
+--
+
+# 100% R/ggplot stars!  
+
+---
+
+
+```{r, include = F}
+knitr::opts_chunk$set(out.width = "70%")
+```
+
+
+```{r, echo = F, eval = T}
 include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q05r_length_user-1.png")
+
+```
+
+---
+
+```{r}
 include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q06r_frequency-1.png")
+```
+
+---
+
+```{r}
 include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q07ggplot2_frequency-1.png")
+```
+
+---
+
+```{r}
 include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/unnamed-chunk-7-1.png")
+```
+
+---
+
+```{r}
 include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q08r_frequency-1.png")
 ```
 
 
 ---
+class: inverse, middle, center
 
-But, minimal experience with extension.
 
+# And yet, 
+
+--
+
+# *minimal* experience with extension.
+
+---
 
 ```{r}
 include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q10_previous_ext_experience-1.png")
+```
+
+---
+
+```{r}
 include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q11_previous_ext_attempt-1.png")
 ```
 
@@ -655,20 +703,57 @@ include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey
 
 What's the barrier?  
 
-The problems for the 'new wave' quoting June bunch... 
+# The problems for a 'new wave' quoting June Choe*... 
 
-0) 'users aren't developers' 
-1) 'scary ggproto methods' (less experience with OOP) 
-2) hard to reason about the big chunk of codes that defined a new ggroto object  
-3) even if we master all of this, then we have to become package developers? 
+--
+
+# 0) 'users aren't developers'
+
+--
+
+# 1) 'scary ggproto methods' (less experience with OOP) 
+
+--
+
+# 2) hard to reason about the big chunk of codes that defined a new ggroto object  
+
+--
+
+# 3) even if we master all of this, then we have to become package developers? 
+
+--
+
+* Extender friend, without whose support *sine qua non*, and winner of ASA Statistical Computing and Graphics student paper award: https://yjunechoe.github.io/static/papers/Choe_2022_SublayerGG.pdf 
+
+--
+
+Users can do more
 
 
 ---
 
-0) Users are leaving too much on the table not to get into ggplot2 extensions
-1) deemphasize ggproto methods
-2) pull computation out of ggproto method
-3) build communities of support
+
+```{r}
+knitr::include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q13_oop_experience-1.png")
+```
+
+
+---
+
+# 0) Users are leaving too much on the table not to get into ggplot2 extensions
+--
+
+# 1) deemphasize ggproto methods
+
+--
+
+# 2) pull computation out of ggproto method
+
+--
+
+# 3) build communities of support, and also support developer activities like package building
+
+
 
 
 
@@ -680,25 +765,65 @@ Show an easy geom recipe
 
 Then survey results
 
+---
+
+
+# Tutorial assessment
+
+Most participants indicated the tutorial taking them a short amount of time.  Six of nine said that on average, each of the recipes took less than 15 minutes to complete.  The remaining three participants responded that the recipes took between 15 and 30 minutes on average. 
+
+
+![](../../easy-geom-recipes/survey_results_summary_files/figure-html/q16tutorial_time_taken-1.png)
+---
+
+The first prompt `geom_point_xy_means` exercise was completed by all participants; and all but one completed the `geom_text_coordinates()` exercise.  Several participants failed complete the last recipe (residuals).
+
+![](../../easy-geom-recipes/survey_results_summary_files/figure-html/q14which_completed-1.png)
 
 ---
 
-Then 
+![](../../easy-geom-recipes/survey_results_summary_files/figure-html/q17tutorial_length-1.png)
 
 
-'I felt empowered... But not that easy'
+---
 
--
+![](../../easy-geom-recipes/survey_results_summary_files/figure-html/q18example_clarity-1.png)
+
+---
+
+![](../../easy-geom-recipes/survey_results_summary_files/figure-html/q19examples_engaging-1.png)
+
+---
+
+![](../../easy-geom-recipes/survey_results_summary_files/figure-html/unnamed-chunk-4-1.png)
+
+---
+
+![](../../easy-geom-recipes/survey_results_summary_files/figure-html/unnamed-chunk-5-1.png)
+
+
+
+
+---
+
+Then ...
+
+
+> And it was that easy. And I felt
+empowered as a result of that.... But you know, like, my problem
+isn't gonna be that easy.
+
+--
 
 Maybe it will?
 
 --
 
-Sometimes it won't
+Sometimes it won't...
 
---
+---
 
-ggplot2 extenders virtual micro meeting.
+ggplot2 extenders virtual micro meeting. Support group. 
 
 ---
 
@@ -726,22 +851,8 @@ Furthermore, know-how in the extension space should lead to greater knowledge of
 
 A small survey and focus group of super-users that are statistics educators suggest that current extension educational materials aren't reaching folks that could potentially benefit from extension. Here is summary information about the focus group participants.  
 
-```{r, out.width="45%", fig.show="hold", echo = F, eval = T}
-library(knitr)
-include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q05r_length_user-1.png")
-include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q06r_frequency-1.png")
-include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q07ggplot2_frequency-1.png")
-include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/unnamed-chunk-7-1.png")
-include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q08r_frequency-1.png")
-```
 
 
-Despite this group's level of expertise in R, ggplot2 and R programming, they have little experience with ggplot2 extension.  Only one of nine in this group had successfully written a ggplot2 extension before the intervention.
-
-```{r}
-include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q10_previous_ext_experience-1.png")
-include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q11_previous_ext_attempt-1.png")
-```
 
 ggplot2 super-users be capable extenders?  
 
@@ -928,10 +1039,9 @@ class: inverse, middle, center
 ---
 
 
-`r flipbookr::chunk_reveal("compute_group_xy_medians", left_assign = "detect")`
 
 
-```{r compute_group_xy_medians, include = FALSE}
+```{r compute_group_xy_medians, include = T}
 compute_group_xy_medians <- function(data, 
                                      scales){
   data %>% 
@@ -940,8 +1050,6 @@ compute_group_xy_medians <- function(data,
 }
 
 penguins %>%
-  # function requires data 
-  # with columns named x and y
   rename(x = bill_depth_mm, 
          y = bill_length_mm) %>%
   compute_group_xy_medians()
@@ -955,17 +1063,16 @@ class: inverse, middle, center
 
 --
 
-- ## what's the naming convention for the proto object?
+- ## what's the naming convention for the ggproto object?
 - ## which aesthetics are required as inputs?
 - ## where does the function from above go?
 
 ---
 
 
-`r flipbookr::chunk_reveal("StatXYMedians", left_assign = "detect")`
 
 
-```{r StatXYMedians, include = FALSE}
+```{r StatXYMedians, include = T}
 StatXYMedians <- ggplot2::ggproto(
   `_class` = "StatXYMedians",
   `_inherit` = ggplot2::Stat,
@@ -987,29 +1094,28 @@ class: inverse, middle, center
 ---
 
 
-`r flipbookr::chunk_reveal("geom_point_xy_medians", left_assign = "detect")`
 
 
-```{r geom_point_xy_medians, include = FALSE} 
+```{r geom_point_xy_medians, include = T}
 geom_point_xy_medians <- function(
-  mapping = NULL, 
+  mapping = NULL,
   data = NULL,
-  position = "identity", 
+  position = "identity",
   na.rm = FALSE,
   show.legend = NA,
   inherit.aes = TRUE, ...) {
-  
+
   ggplot2::layer(
     stat = StatXYMedians, # proto object from step 2
     geom = ggplot2::GeomPoint, # inherit other behavior
-    data = data, 
+    data = data,
     mapping = mapping,
-    position = position, 
-    show.legend = show.legend, 
+    position = position,
+    show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(na.rm = na.rm, ...)
   )
-  
+
 }
 ```
 
@@ -1028,10 +1134,10 @@ class: inverse, middle, center
 
 ```{r enjoy_penguins, include = FALSE}
 penguins %>%
-  ggplot()+
-  aes(x = bill_depth_mm, 
+  ggplot() +
+  aes(x = bill_depth_mm,
       y = bill_length_mm) +
-  geom_point()+
+  geom_point() +
   geom_point_xy_medians(
     size = 8,
     color = "red")
@@ -1045,16 +1151,16 @@ class: inverse, middle, center
 ---
 
 
-`r flipbookr::chunk_reveal("conditional_penguins", left_assign = "detect")`
+`r flipbookr::chunk_reveal("conditional_penguins", left_assign = "detect", break_type = 1)`
 
 
 ```{r conditional_penguins, include = FALSE}
 penguins %>%
-  ggplot()+
-  aes(x = bill_depth_mm, 
-      y = bill_length_mm, 
-      color = species)+
-  geom_point()+
+  ggplot() +
+  aes(x = bill_depth_mm,
+      y = bill_length_mm,
+      color = species) + #<<
+  geom_point() +
   geom_point_xy_medians(size = 8)
 ```
 
@@ -1085,7 +1191,7 @@ class: inverse, middle, center
 
 --
 
-### How long does it take to get through one of the 'Easy Geom Recipes'? 
+### How long does it take to get through one of the 'Easy Geom Recipes'?
 
 ### Can all new geoms be modeled after a 'easy geom recipes'?
 
@@ -1095,37 +1201,12 @@ class: inverse, middle, center
 
 ### Is building a package difficult?
 
-### Is maintaining a package difficult? 
+### Is maintaining a package difficult?
 
-### Dusty Turner: Is the idea that MA206 students might use this package to aid in their learning of statistics?  
+### Dusty Turner: Is the idea that MA206 students might use this package to aid in their learning of statistics?
 
 
----
 
-`r chunk_reveal("ma206verse", display_type = "output")`
-
-```{r ma206verse, include = F}
-library(ggstamp)
-ggcanvas() + 
-  stamp_polygon(fill = "slateblue") + 
-  stamp_text(label = "tidyverse") + 
-  stamp_polygon(x0y0 = pos_honeycomb()[2,], fill = "darkred") + 
-  stamp_text(label = "ggxmean", 
-             xy = pos_honeycomb()[2,]) + 
-  stamp_polygon(x0y0 = pos_honeycomb()[4,], fill = "darkolivegreen") + 
-  stamp_text(label = "ma206data", 
-             xy = pos_honeycomb()[4,]) + 
-  stamp_polygon(x0y0 = pos_honeycomb()[5,], fill = "goldenrod4") + 
-  stamp_text(label = "ggsample", 
-             xy = pos_honeycomb()[5,]) + 
-  stamp_polygon(radius = 3, alpha = .6, 
-                x0 = 1, y = -.7)  + 
-  stamp_text(label = "ma206verse", 
-            x = 1, size = 15, y = -2,
-            color = "gray15")
-  
-  
-```
 
 
 
@@ -1190,12 +1271,12 @@ code.r.hljs.remark-code:hover{
 
 - support group
 
-- 'so now I need to write a package...? and test and message?' 
+- 'so now I need to write a package...? and test and message?'
 
 - ggtedious
 
 
-The problems for the 'new wave' quoting June bunch... 0. 'users aren't developers' 1) 'scary ggproto methods' (less experience with oop) 2) hard to reason about the big chunk of codes that defined a new ggroto object  3) even if we master all of this, then we have to become package developers? 
+The problems for the 'new wave' quoting June bunch... 0. 'users aren't developers' 1) 'scary ggproto methods' (less experience with oop) 2) hard to reason about the big chunk of codes that defined a new ggroto object  3) even if we master all of this, then we have to become package developers?
 
-My proposed solutions, promoting 'easy geom recipes',  0) maybe users have got no choice but to be developers, because 0a. they are sick of precalculation that ggplot2 can just do and 0.b want the mental match of geom_x_mean() and the vline mean appears and 0c. ggplot2 base can't be responsible for working on all my unique problems. 1) make ggproto as ignorable as possible at first. 2) pull out all the pieces that define the ggproto and handle separately. 3) work on package development best practices: https://github.com/EvaMaeRey/ggtedious - this is where I'm definitely currently failing and know it. I never formally test anything.  
+My proposed solutions, promoting 'easy geom recipes',  0) maybe users have got no choice but to be developers, because 0a. they are sick of precalculation that ggplot2 can just do and 0.b want the mental match of geom_x_mean() and the vline mean appears and 0c. ggplot2 base can't be responsible for working on all my unique problems. 1) make ggproto as ignorable as possible at first. 2) pull out all the pieces that define the ggproto and handle separately. 3) work on package development best practices: https://github.com/EvaMaeRey/ggtedious - this is where I'm definitely currently failing and know it. I never formally test anything.
 
