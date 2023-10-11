@@ -63,12 +63,12 @@ background-size: cover
 ---
 
 
-## 1. Why ggplot2
-## 2. Limitations of base ggplot2
-## 3. Promise of Extension
-## 4. Un-reached talent - ggplot2 super users unrealized potential
-## 5. New strategies for reaching this talent &amp; evidence of effectiveness
-## 6. New frontier of challenges and ideas for addressing them
+### 1. Why ggplot2
+### 2. Limitations of base ggplot2
+### 3. Promise of Extension
+### 4. Un-reached talent - ggplot2 super users unrealized potential
+### 5. New strategies for reaching this talent &amp; evidence of effectiveness
+### 6. Preparing for more challenges
 
 
 
@@ -105,62 +105,9 @@ class: middle, inverse, center
 ---
 
 
-
-
-
-
-&lt;!-- -- --&gt;
-
-&lt;!-- # Build up your plot, bit by bit --&gt;
-
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # ggplot2 is called a 'declarative' graphing system. --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- # It lets you *'speak your plot into existence'*. (Thomas Lin Pederson?)  --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- # Describe the elements of the plot you have in your mind.   --&gt;
-
-
-
-
-
-&lt;!-- --- --&gt;
-
-&lt;!-- ## This is fast. Because most of us, can **picture** the form of the plot we're going after rather clearly (i.e. what the horizontal position should represent, what color should represent, what 'marks' (points, lines) are going to appear on the plot).   --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- ## 'Getting' our plot made becomes a matter of describing what we're already picturing! --&gt;
-
-
-
-&lt;!-- --- --&gt;
-&lt;!-- # So what's the promise of ggplot2? --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- ## Getting the plot form you picture in your head ... --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- ## ... into reality... --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- ## ... by describing it. --&gt;
-
-
-
----
-
-
 # Hans Rosling &amp; BBC in 2010  
+
+
 
 &lt;iframe width="767" height="431" src="https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
 https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A
@@ -169,7 +116,9 @@ https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A
 ---
 
 
-&lt;img src="images/hans_argument.png" width="80%" /&gt;
+## ... I know having the data is not enough. I have to show it in ways people both enjoy and understand
+
+&lt;img src="images/hans_argument.png" width="65%" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -200,7 +149,7 @@ https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A
 &lt;img src="images/hans_size.png" width="80%" /&gt;
 
 ---
-
+class: inverse, center, middle
 
 #  Response to speaking plot into existence?
 
@@ -210,46 +159,33 @@ https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A
 
 --
 
-(also does animation at the end...)
+(also does animation at the end... which I don't show)
 
 
 
 ---
+class: inverse, center, middle
 
-# And ggplot2 also affords this build-up-your-plot-bit-by-bit experience. 'i.e. speaking your plot into existance.' 
+# And ggplot2 also affords this build-up-your-plot-bit-by-bit experience.  
+
+--
+# i.e. 'speaking your plot into existence.' 
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ---
-
-
-
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Back to ggplot2. What's the fuss? --&gt;
-&lt;!-- -- --&gt;
-&lt;!-- Hadley Wickham, ggplot2 author on it's motivation: --&gt;
-&lt;!-- &gt; ### And, you know, I'd get a dataset. And, *in my head I could very clearly kind of picture*, I want to put this on the x-axis. Let's put this on the y-axis, draw a line, put some points here, break it up by this variable.  --&gt;
-
-&lt;!-- -- --&gt;
-&lt;!-- &gt; ### And then, like, getting that vision out of my head, and into reality, it's just really, really hard. Just, like, felt harder than it should be. Like, there's a lot of custom programming involved, --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- &gt; ### where I just felt, like, to me, I just wanted to say, like, you know, *this is what I'm thinking, this is how I'm picturing this plot. Like you're the computer 'Go and do it'.*  --&gt;
-
-&lt;!-- -- --&gt;
-&lt;!-- &gt; ### ... and I'd also been reading about the Grammar of Graphics by Leland Wilkinson, I got to meet him a couple of times and ... I was, like, this book has been, like, written for me.  --&gt;
-&lt;!-- https://www.trifacta.com/podcast/tidy-data-with-hadley-wickham/ --&gt;
-
-
-
-
-
-
-
-
-
 
 count: false
  
@@ -308,7 +244,7 @@ count: false
 ggplot(data = gapminder_2002) +
   aes(y = lifeExp) +
   aes(x = gdpPercap) +
-* scale_x_log10()
+* geom_point()
 ```
 ]
  
@@ -326,8 +262,8 @@ count: false
 ggplot(data = gapminder_2002) +
   aes(y = lifeExp) +
   aes(x = gdpPercap) +
-  scale_x_log10() +
-* geom_point()
+  geom_point() +
+* aes(size = pop/1000000000)
 ```
 ]
  
@@ -345,27 +281,6 @@ count: false
 ggplot(data = gapminder_2002) +
   aes(y = lifeExp) +
   aes(x = gdpPercap) +
-  scale_x_log10() +
-  geom_point() +
-* aes(size = pop/1000000000)
-```
-]
- 
-.panel2-scatter-auto[
-&lt;img src="cowy-slides_files/figure-html/scatter_auto_06_output-1.png" width="432" /&gt;
-]
-
----
-count: false
- 
-# We all have Hans Rosling capabilities
-.panel1-scatter-auto[
-
-```r
-ggplot(data = gapminder_2002) +
-  aes(y = lifeExp) +
-  aes(x = gdpPercap) +
-  scale_x_log10() +
   geom_point() +
   aes(size = pop/1000000000) +
 * aes(color = continent)
@@ -373,29 +288,7 @@ ggplot(data = gapminder_2002) +
 ]
  
 .panel2-scatter-auto[
-&lt;img src="cowy-slides_files/figure-html/scatter_auto_07_output-1.png" width="432" /&gt;
-]
-
----
-count: false
- 
-# We all have Hans Rosling capabilities
-.panel1-scatter-auto[
-
-```r
-ggplot(data = gapminder_2002) +
-  aes(y = lifeExp) +
-  aes(x = gdpPercap) +
-  scale_x_log10() +
-  geom_point() +
-  aes(size = pop/1000000000) +
-  aes(color = continent) +
-* labs(x = "GDP per capita (US$)")
-```
-]
- 
-.panel2-scatter-auto[
-&lt;img src="cowy-slides_files/figure-html/scatter_auto_08_output-1.png" width="432" /&gt;
+&lt;img src="cowy-slides_files/figure-html/scatter_auto_06_output-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
@@ -432,10 +325,19 @@ ggplot(data = gapminder_2002) +
 ---
 
 
-# We get the 'Hans Rosling' speak it experience, because ggplot2 is based on the grammar of graphics, (gg = grammar of graphics) which breaks up the plot elements into *orthogonal* parts, and the user is able to manipulate these bit by bit.
+## We get the 'Hans Rosling' speak-it experience ...
+
+--
+## ... because ggplot2 is based on the grammar of graphics, (gg = grammar of graphics) 
+
+--
+## which breaks up the plot elements into *orthogonal* parts,
+
+--
+## and allows user to manipulate those parts bit by bit.
 
 ---
-
+class: inverse, center, middle
 
 &gt; # "the Grammar of Graphics makes [building plots] easy because you've just got all these, like, little nice decomposable components" -- Hadley Wickham
 
@@ -443,8 +345,33 @@ ggplot(data = gapminder_2002) +
 
 ---
 
-## Elements of the Grammar of Graphics (choices)
+## Orthogonal elements ... 
 
+![](https://miro.medium.com/max/1400/1*MMZuYgeC_YjXNC1r4D4sog.png)&lt;!-- --&gt;
+
+
+---
+
+
+
+# Skip at COWY: discussing origins of ggplot2
+
+--
+
+Hadley Wickham, ggplot2 author on it's motivation:
+
+&gt; ### And, you know, I'd get a dataset. And, *in my head I could very clearly kind of picture*, I want to put this on the x-axis. Let's put this on the y-axis, draw a line, put some points here, break it up by this variable.
+
+--
+&gt; ### And then, like, getting that vision out of my head, and into reality, it's just really, really hard. Just, like, felt harder than it should be. Like, there's a lot of custom programming involved,
+
+---
+
+&gt; ### where I just felt, like, to me, I just wanted to say, like, you know, *this is what I'm thinking, this is how I'm picturing this plot. Like you're the computer 'Go and do it'.*
+
+--
+&gt; ### ... and I'd also been reading about the Grammar of Graphics by Leland Wilkinson, I got to meet him a couple of times and ... I was, like, this book has been, like, written for me.
+https://www.trifacta.com/podcast/tidy-data-with-hadley-wickham/
 
 
 
@@ -453,7 +380,7 @@ ggplot(data = gapminder_2002) +
 
 count: false
  
-# And even more
+# And ggplot2 gives us even more than Rosling...
 .panel1-scatter2-1[
 
 ```r
@@ -465,7 +392,7 @@ ggplot(data = gapminder_2002) +
   aes(size = pop/1000000000) +
   aes(color = continent) +
   labs(x = "GDP per capita (US$)") +
-* geom_smooth(method = lm, aes(color = NULL))
+* geom_smooth(method = lm)
 ```
 ]
  
@@ -506,7 +433,9 @@ ggplot(data = gapminder_2002) +
 
 ---
 
-&gt; "Create graphical 'poems'." - Hadley Wickham (2010) A Layered Grammar of Graphics, Journal of Computational and Graphical Statistics
+
+
+# "Create graphical 'poems'." - Hadley Wickham (2010) A Layered Grammar of Graphics, Journal of Computational and Graphical Statistics
 
 --
 
@@ -517,7 +446,7 @@ ggplot(data = gapminder_2002) +
 ---
 class: inverse, center, middle
 
-# The problem? (Limitations)
+# The problem?
 
 --
 
@@ -824,97 +753,6 @@ airquality %&gt;%
 
 ]
 
----
-count: false
- 
-### What's the *base* ggplot2 experience
-.panel1-basic-auto[
-
-```r
-airquality %&gt;%
-  ggplot(data = .) +
-  aes(x = Ozone) +
-  geom_rug() +
-  geom_histogram() +
-  geom_vline(
-    xintercept =
-      mean(airquality$Ozone,
-           na.rm = T)
-    ) -&gt;
-g
-
-*g %&gt;% layer_data(i = 2)  # histogram layer
-```
-]
- 
-.panel2-basic-auto[
-
-```
-    y count          x       xmin       xmax     density     ncount   ndensity
-1   1     1   0.000000  -2.879310   2.879310 0.001497006 0.05882353 0.05882353
-2   6     6   5.758621   2.879310   8.637931 0.008982036 0.35294118 0.35294118
-3  17    17  11.517241   8.637931  14.396552 0.025449102 1.00000000 1.00000000
-4  13    13  17.275862  14.396552  20.155172 0.019461078 0.76470588 0.76470588
-5  13    13  23.034483  20.155172  25.913793 0.019461078 0.76470588 0.76470588
-6   8     8  28.793103  25.913793  31.672414 0.011976048 0.47058824 0.47058824
-7  10    10  34.551724  31.672414  37.431034 0.014970060 0.58823529 0.58823529
-8   4     4  40.310345  37.431034  43.189655 0.005988024 0.23529412 0.23529412
-9   8     8  46.068966  43.189655  48.948276 0.011976048 0.47058824 0.47058824
-10  3     3  51.827586  48.948276  54.706897 0.004491018 0.17647059 0.17647059
-11  2     2  57.586207  54.706897  60.465517 0.002994012 0.11764706 0.11764706
-12  6     6  63.344828  60.465517  66.224138 0.008982036 0.35294118 0.35294118
-13  1     1  69.103448  66.224138  71.982759 0.001497006 0.05882353 0.05882353
-14  4     4  74.862069  71.982759  77.741379 0.005988024 0.23529412 0.23529412
-15  5     5  80.620690  77.741379  83.500000 0.007485030 0.29411765 0.29411765
-16  4     4  86.379310  83.500000  89.258621 0.005988024 0.23529412 0.23529412
-17  1     1  92.137931  89.258621  95.017241 0.001497006 0.05882353 0.05882353
-18  3     3  97.896552  95.017241 100.775862 0.004491018 0.17647059 0.17647059
-19  0     0 103.655172 100.775862 106.534483 0.000000000 0.00000000 0.00000000
-20  2     2 109.413793 106.534483 112.293103 0.002994012 0.11764706 0.11764706
-21  2     2 115.172414 112.293103 118.051724 0.002994012 0.11764706 0.11764706
-22  1     1 120.931034 118.051724 123.810345 0.001497006 0.05882353 0.05882353
-23  0     0 126.689655 123.810345 129.568966 0.000000000 0.00000000 0.00000000
-24  1     1 132.448276 129.568966 135.327586 0.001497006 0.05882353 0.05882353
-25  0     0 138.206897 135.327586 141.086207 0.000000000 0.00000000 0.00000000
-26  0     0 143.965517 141.086207 146.844828 0.000000000 0.00000000 0.00000000
-27  0     0 149.724138 146.844828 152.603448 0.000000000 0.00000000 0.00000000
-28  0     0 155.482759 152.603448 158.362069 0.000000000 0.00000000 0.00000000
-29  0     0 161.241379 158.362069 164.120690 0.000000000 0.00000000 0.00000000
-30  1     1 167.000000 164.120690 169.879310 0.001497006 0.05882353 0.05882353
-   flipped_aes PANEL group ymin ymax colour   fill linewidth linetype alpha
-1        FALSE     1    -1    0    1     NA grey35       0.5        1    NA
-2        FALSE     1    -1    0    6     NA grey35       0.5        1    NA
-3        FALSE     1    -1    0   17     NA grey35       0.5        1    NA
-4        FALSE     1    -1    0   13     NA grey35       0.5        1    NA
-5        FALSE     1    -1    0   13     NA grey35       0.5        1    NA
-6        FALSE     1    -1    0    8     NA grey35       0.5        1    NA
-7        FALSE     1    -1    0   10     NA grey35       0.5        1    NA
-8        FALSE     1    -1    0    4     NA grey35       0.5        1    NA
-9        FALSE     1    -1    0    8     NA grey35       0.5        1    NA
-10       FALSE     1    -1    0    3     NA grey35       0.5        1    NA
-11       FALSE     1    -1    0    2     NA grey35       0.5        1    NA
-12       FALSE     1    -1    0    6     NA grey35       0.5        1    NA
-13       FALSE     1    -1    0    1     NA grey35       0.5        1    NA
-14       FALSE     1    -1    0    4     NA grey35       0.5        1    NA
-15       FALSE     1    -1    0    5     NA grey35       0.5        1    NA
-16       FALSE     1    -1    0    4     NA grey35       0.5        1    NA
-17       FALSE     1    -1    0    1     NA grey35       0.5        1    NA
-18       FALSE     1    -1    0    3     NA grey35       0.5        1    NA
-19       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
-20       FALSE     1    -1    0    2     NA grey35       0.5        1    NA
-21       FALSE     1    -1    0    2     NA grey35       0.5        1    NA
-22       FALSE     1    -1    0    1     NA grey35       0.5        1    NA
-23       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
-24       FALSE     1    -1    0    1     NA grey35       0.5        1    NA
-25       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
-26       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
-27       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
-28       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
-29       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
-30       FALSE     1    -1    0    1     NA grey35       0.5        1    NA
-```
-]
-
 &lt;style&gt;
 .panel1-basic-auto {
   color: black;
@@ -945,70 +783,6 @@ g
 
 
 
-```
-    y count          x       xmin       xmax     density     ncount   ndensity
-1   1     1   0.000000  -2.879310   2.879310 0.001497006 0.05882353 0.05882353
-2   6     6   5.758621   2.879310   8.637931 0.008982036 0.35294118 0.35294118
-3  17    17  11.517241   8.637931  14.396552 0.025449102 1.00000000 1.00000000
-4  13    13  17.275862  14.396552  20.155172 0.019461078 0.76470588 0.76470588
-5  13    13  23.034483  20.155172  25.913793 0.019461078 0.76470588 0.76470588
-6   8     8  28.793103  25.913793  31.672414 0.011976048 0.47058824 0.47058824
-7  10    10  34.551724  31.672414  37.431034 0.014970060 0.58823529 0.58823529
-8   4     4  40.310345  37.431034  43.189655 0.005988024 0.23529412 0.23529412
-9   8     8  46.068966  43.189655  48.948276 0.011976048 0.47058824 0.47058824
-10  3     3  51.827586  48.948276  54.706897 0.004491018 0.17647059 0.17647059
-11  2     2  57.586207  54.706897  60.465517 0.002994012 0.11764706 0.11764706
-12  6     6  63.344828  60.465517  66.224138 0.008982036 0.35294118 0.35294118
-13  1     1  69.103448  66.224138  71.982759 0.001497006 0.05882353 0.05882353
-14  4     4  74.862069  71.982759  77.741379 0.005988024 0.23529412 0.23529412
-15  5     5  80.620690  77.741379  83.500000 0.007485030 0.29411765 0.29411765
-16  4     4  86.379310  83.500000  89.258621 0.005988024 0.23529412 0.23529412
-17  1     1  92.137931  89.258621  95.017241 0.001497006 0.05882353 0.05882353
-18  3     3  97.896552  95.017241 100.775862 0.004491018 0.17647059 0.17647059
-19  0     0 103.655172 100.775862 106.534483 0.000000000 0.00000000 0.00000000
-20  2     2 109.413793 106.534483 112.293103 0.002994012 0.11764706 0.11764706
-21  2     2 115.172414 112.293103 118.051724 0.002994012 0.11764706 0.11764706
-22  1     1 120.931034 118.051724 123.810345 0.001497006 0.05882353 0.05882353
-23  0     0 126.689655 123.810345 129.568966 0.000000000 0.00000000 0.00000000
-24  1     1 132.448276 129.568966 135.327586 0.001497006 0.05882353 0.05882353
-25  0     0 138.206897 135.327586 141.086207 0.000000000 0.00000000 0.00000000
-26  0     0 143.965517 141.086207 146.844828 0.000000000 0.00000000 0.00000000
-27  0     0 149.724138 146.844828 152.603448 0.000000000 0.00000000 0.00000000
-28  0     0 155.482759 152.603448 158.362069 0.000000000 0.00000000 0.00000000
-29  0     0 161.241379 158.362069 164.120690 0.000000000 0.00000000 0.00000000
-30  1     1 167.000000 164.120690 169.879310 0.001497006 0.05882353 0.05882353
-   flipped_aes PANEL group ymin ymax colour   fill linewidth linetype alpha
-1        FALSE     1    -1    0    1     NA grey35       0.5        1    NA
-2        FALSE     1    -1    0    6     NA grey35       0.5        1    NA
-3        FALSE     1    -1    0   17     NA grey35       0.5        1    NA
-4        FALSE     1    -1    0   13     NA grey35       0.5        1    NA
-5        FALSE     1    -1    0   13     NA grey35       0.5        1    NA
-6        FALSE     1    -1    0    8     NA grey35       0.5        1    NA
-7        FALSE     1    -1    0   10     NA grey35       0.5        1    NA
-8        FALSE     1    -1    0    4     NA grey35       0.5        1    NA
-9        FALSE     1    -1    0    8     NA grey35       0.5        1    NA
-10       FALSE     1    -1    0    3     NA grey35       0.5        1    NA
-11       FALSE     1    -1    0    2     NA grey35       0.5        1    NA
-12       FALSE     1    -1    0    6     NA grey35       0.5        1    NA
-13       FALSE     1    -1    0    1     NA grey35       0.5        1    NA
-14       FALSE     1    -1    0    4     NA grey35       0.5        1    NA
-15       FALSE     1    -1    0    5     NA grey35       0.5        1    NA
-16       FALSE     1    -1    0    4     NA grey35       0.5        1    NA
-17       FALSE     1    -1    0    1     NA grey35       0.5        1    NA
-18       FALSE     1    -1    0    3     NA grey35       0.5        1    NA
-19       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
-20       FALSE     1    -1    0    2     NA grey35       0.5        1    NA
-21       FALSE     1    -1    0    2     NA grey35       0.5        1    NA
-22       FALSE     1    -1    0    1     NA grey35       0.5        1    NA
-23       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
-24       FALSE     1    -1    0    1     NA grey35       0.5        1    NA
-25       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
-26       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
-27       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
-28       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
-29       FALSE     1    -1    0    0     NA grey35       0.5        1    NA
-30       FALSE     1    -1    0    1     NA grey35       0.5        1    NA
-```
 
 ???
 Creating this plot requires greater focus on ggplot2 *syntax*, likely detracting from discussion of *the mean* that statistical instructors desire.
@@ -1023,6 +797,7 @@ It may require a discussion about dollar sign syntax and how geom_vline is actua
 &lt;img src="cowy-slides_files/figure-html/cond_means_hard-1.png" width="432" /&gt;
 
 ???
+
 Further, for the case of adding a vertical line at the mean for different subsets of the data, a different approach is required. This enterprise may take instructor/analyst/student on an even larger detour -- possibly googling, and maybe landing on the following stack overflow page where 11,000 analytics souls (some repeats to be sure) have landed:
 
 ---
@@ -1441,19 +1216,23 @@ ggplot(airquality) +
 
 ---
 
-Why is geom_smooth() is so easy, and my mean of x line is so hard?
-
-
----
-
-# Like geom_smooth does a bunch of compute in the background
+# Why is geom_smooth() is so easy, and my mean of x line is so hard?
 
 --
 
-### built from a number of primitives
+### Like geom_smooth does a bunch of compute in the background
+
+--
+
+### then uses geometric primitives
 
 - line
 - ribbon
+
+--
+
+### geom_x_mean() doesn't exist.
+
 
 --
 
@@ -1962,31 +1741,36 @@ cars %&gt;%
 
 --
 
-# Saggeringly under-utilized.
+# Next: Saggeringly under-utilized.
 
 ---
 
-# by whom? could find it extremely useful and could flouish in this extension space?  
+# Under-utilized by whom? 
+--
+Who could find it extremely useful and could flourish in this extension space?  
+--
 
-# ggplot2 super users...
-# 
-# - know the grammar. 
-# - know how to write functions
-# - know R/ggplot2 extremely well..
-
----
-
-Evidence from a micro survey and focus group. 
-
-Nine statistics and data analytics educators.
-
-May 2023.
-
-15 question survey and 2 focus groups.
+## ggplot2 super users...
+## 
+## - know the grammar. 
+## - know how to write functions
+## - know R/ggplot2 extremely well..
 
 ---
 
-Hand picked, extraordinary educators, very experienced with stats, data viz, ggplot2 and R.
+# Evidence from a micro survey and focus group. 
+
+--
+
+# Nine statistics and data analytics educators. May 2023.
+
+--
+
+# ~ 15 question survey and 2 focus groups.
+
+---
+
+# Hand picked, extraordinary educators, very experienced with stats, data viz, ggplot2 and R.
 
 ---
 class: inverse, middle, center
@@ -2003,23 +1787,23 @@ class: inverse, middle, center
 
 
 
-![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q05r_length_user-1.png)&lt;!-- --&gt;
+&lt;img src="https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q05r_length_user-1.png" width="90%" /&gt;
 
 ---
 
-![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q06r_frequency-1.png)&lt;!-- --&gt;
+&lt;img src="https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q06r_frequency-1.png" width="90%" /&gt;
 
 ---
 
-![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q07ggplot2_frequency-1.png)&lt;!-- --&gt;
+&lt;img src="https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q07ggplot2_frequency-1.png" width="90%" /&gt;
 
 ---
 
-![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+&lt;img src="https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/unnamed-chunk-7-1.png" width="90%" /&gt;
 
 ---
 
-![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q08r_frequency-1.png)&lt;!-- --&gt;
+&lt;img src="https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q08r_frequency-1.png" width="90%" /&gt;
 
 
 ---
@@ -2034,11 +1818,11 @@ class: inverse, middle, center
 
 ---
 
-![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q10_previous_ext_experience-1.png)&lt;!-- --&gt;
+&lt;img src="https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q10_previous_ext_experience-1.png" width="90%" /&gt;
 
 ---
 
-![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q11_previous_ext_attempt-1.png)&lt;!-- --&gt;
+&lt;img src="https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q11_previous_ext_attempt-1.png" width="90%" /&gt;
 
 ---
 
@@ -2078,1089 +1862,137 @@ June's thesis: users can use ggplot2 more powerfully and dynamically on the user
 ---
 
 
-![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q13_oop_experience-1.png)&lt;!-- --&gt;
+
+&lt;img src="https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q13_oop_experience-1.png" width="80%" /&gt;
 
 
 ---
 
-# 0) Users are leaving too much on the table not to get into ggplot2 extensions
+## 0) Users are leaving too much on the table not to get into ggplot2 extensions - foregoing super-fluid ggplot2 experiences that extension affords
 
 --
 
-# 1) deemphasize ggproto methods
+## 1) deemphasize OOP ggproto methods
 
 --
 
-# 2) pull computation out of ggproto method
+## 2) pull computation out of ggproto method, to facilitate reasoning, debugging
 
 --
 
-# 3) build communities of support, and also support developer activities like package building
-
-
-
+## 3) build communities of support, and also support developer activities like package building
 
 
 ---
 
-Show an easy geom recipe
 
----
+# *Easy geom recipes*: practice with `compute_group`
+# Under construction: *More easy geom recipes*: practice with `compute_panel`
+
+## multiple examples
+##
 
 Then survey results
 
 ---
 
 
-# Tutorial assessment
-
-Most participants indicated the tutorial taking them a short amount of time.  Six of nine said that on average, each of the recipes took less than 15 minutes to complete.  The remaining three participants responded that the recipes took between 15 and 30 minutes on average. 
-
-
-![](../../easy-geom-recipes/survey_results_summary_files/figure-html/q16tutorial_time_taken-1.png)
----
-
-The first prompt `geom_point_xy_means` exercise was completed by all participants; and all but one completed the `geom_text_coordinates()` exercise.  Several participants failed complete the last recipe (residuals).
-
-![](../../easy-geom-recipes/survey_results_summary_files/figure-html/q14which_completed-1.png)
-
----
-
-![](../../easy-geom-recipes/survey_results_summary_files/figure-html/q17tutorial_length-1.png)
+# *Easy geom recipes* tutorial assessment
 
 
 ---
 
-![](../../easy-geom-recipes/survey_results_summary_files/figure-html/q18example_clarity-1.png)
+# Straight forward
 
----
-
-![](../../easy-geom-recipes/survey_results_summary_files/figure-html/q19examples_engaging-1.png)
-
----
-
-![](../../easy-geom-recipes/survey_results_summary_files/figure-html/unnamed-chunk-4-1.png)
-
----
-
-![](../../easy-geom-recipes/survey_results_summary_files/figure-html/unnamed-chunk-5-1.png)
-
+&lt;img src="https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q16tutorial_time_taken-1.png" width="80%" /&gt;
 
 
 
 ---
 
-Then ...
+
+# High completion rate
+
+![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q14which_completed-1.png)&lt;!-- --&gt;
+
+---
+
+# Appropriate length
 
 
-&gt; And it was that easy. And I felt
-empowered as a result of that.... But you know, like, my problem
-isn't gonna be that easy.
+![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q17tutorial_length-1.png)&lt;!-- --&gt;
+
+---
+
+# Accessible examples
+
+
+![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q18example_clarity-1.png)&lt;!-- --&gt;
+
+---
+
+# Engaging
+
+![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q19examples_engaging-1.png)&lt;!-- --&gt;
+
+---
+
+# Emotionally positive experience
+
+
+![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+
+---
+
+
+# 7/9 could see themselves extending
+
+![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
+
+---
+
+# In the focus group...
 
 --
 
-Maybe it will?
+# 'And it was that easy. And I felt empowered as a result of that....' 
 
 --
 
-Sometimes it won't...
+# 'But you know, like, my problem isn't gonna be that easy.'
 
 ---
 
-ggplot2 extenders virtual micro meeting. Support group. 
+## Sometimes it might that easy
+
+--
+
+## Sometimes it won't...
 
 ---
 
-ggtedious
+## More support: ggplot2 extenders virtual micro meeting. Support group. https://github.com/teunbrand/ggplot-extension-club
+
+---
+
+## Another problem: once you get your extension working,
+
+--
+
+## you will want to share with the world.  
+
+--
+## And then you'll really be in 'scary developer territory'. 
+
+## New workshop: ggtedious
+https://github.com/EvaMaeRey/ggtedious
 
 ---
 
 Toward literate programming in my own packages, to make package building process more transparent, collaborative and fun (and more of a narrative. )
 
-
-
 ---
-
-
-
-
-![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q13_oop_experience-1.png)&lt;!-- --&gt;
-
-## Detail
-
-One of my first efforts in this area is 
-
-![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q10_previous_ext_experience-1.png)&lt;!-- --&gt;
-
-
-
-
-# Chapter 5, Spring Independent Study (geom extension patterns) 
-
-
-# 'Easy Geom Recipes'
-
---
-
-
-# Helping others to build new vocabulary for stories yet to be told...?
-
---
-
-# Identifying patterns for success in building geoms that inherit from other primitives
-
-
-
----
-
-## Step 0.  Build it with 'base gglot2'
-
---
-
-## Step 1. Capture the compute that's needed, and test
-
---
-
-## Step 2. Pass the compute to a ggproto object
-
---
-
-## Step 2. Pass the ggproto object to your geom_*() function
-
---
-
-## Step 4. Enjoy.
-
----
-class: inverse, middle
-background-image: url(https://images.unsplash.com/photo-1592173376801-185310a68dea?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1286&amp;q=80)
-background-size: cover
-
-
-
-# Easy geom_*() recipes
-
-###Gina Reynolds and Morgan Brown
-
-&lt;br&gt;
-&lt;br&gt;
-&lt;br&gt;
-
-
-
-
-
----
-
-
-### Using ggplot2 has been described as writing 'graphical poems'.
-
---
-
-&lt;!-- and a system that lets us 'speak our plot into existence'.  --&gt;
-### But we may feel at a loss for words when functions we'd like to have don't exist.  The ggplot2 extension system allows us to build new 'vocabulary' for fluent expression.  
-
---
-
-### An exciting extension mechanism is inheriting from existing geoms.  Particularly important to statisticians and mathematicians is writing new geom_* that perform and visualize calculations.  
-
----
-
-### To get your feet wet in this world and give you a taste of patterns for geom extension, we provide three *introductory* examples of the geoms_ that inherit from *existing* geoms (point, text, segment, etc) along with practice exercises.  
-
---
-
-### With such geoms, calculation is done under the hood by the ggplot2 system; with these geom, you can write graphical poems with exciting new graphical 'words'! 
-
----
-
-### This tutorial is intended for individuals who already have a working knowledge of the grammar of ggplot2, but may like to build a richer vocabulary for themselves. 
-
---
-
-### Grab an .Rmd worksheet version [here](https://raw.githubusercontent.com/EvaMaeRey/mytidytuesday/master/2022-01-03-easy-geom-recipes/easy_geom_recipes.Rmd).
-
-### or you can browse the rendered version of that [here](https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/easy_geom_recipes.html).
-
----
-
-
-
-
-
----
-class: inverse, middle, center
-
-# Recipe #1
-
---
-
-##`geom_point_xy_medians()`
-
---
-
-- This will be a point at the median of x and y
-
----
-class: inverse, middle, center
-
-## Step 0: use base ggplot2 to get the job done
-
----
-
-
-count: false
- 
-
-.panel1-penguins-auto[
-
-```r
-*library(tidyverse)
-
-NA
-```
-]
- 
-.panel2-penguins-auto[
-
-```
-[1] NA
-```
-]
-
----
-count: false
- 
-
-.panel1-penguins-auto[
-
-```r
-library(tidyverse)
-*library(palmerpenguins)
-
-NA
-```
-]
- 
-.panel2-penguins-auto[
-
-```
-[1] NA
-```
-]
-
----
-count: false
- 
-
-.panel1-penguins-auto[
-
-```r
-library(tidyverse)
-library(palmerpenguins)
-
-*penguins &lt;- remove_missing(penguins)
-
-NA
-```
-]
- 
-.panel2-penguins-auto[
-
-```
-[1] NA
-```
-]
-
----
-count: false
- 
-
-.panel1-penguins-auto[
-
-```r
-library(tidyverse)
-library(palmerpenguins)
-
-penguins &lt;- remove_missing(penguins)
-
-*penguins
-
-NA
-```
-]
- 
-.panel2-penguins-auto[
-
-```
-# A tibble: 333 × 8
-   species island    bill_length_mm bill_depth_mm flipper_…¹ body_…² sex    year
-   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;      &lt;int&gt;   &lt;int&gt; &lt;fct&gt; &lt;int&gt;
- 1 Adelie  Torgersen           39.1          18.7        181    3750 male   2007
- 2 Adelie  Torgersen           39.5          17.4        186    3800 fema…  2007
- 3 Adelie  Torgersen           40.3          18          195    3250 fema…  2007
- 4 Adelie  Torgersen           36.7          19.3        193    3450 fema…  2007
- 5 Adelie  Torgersen           39.3          20.6        190    3650 male   2007
- 6 Adelie  Torgersen           38.9          17.8        181    3625 fema…  2007
- 7 Adelie  Torgersen           39.2          19.6        195    4675 male   2007
- 8 Adelie  Torgersen           41.1          17.6        182    3200 fema…  2007
- 9 Adelie  Torgersen           38.6          21.2        191    3800 male   2007
-10 Adelie  Torgersen           34.6          21.1        198    4400 male   2007
-# … with 323 more rows, and abbreviated variable names ¹​flipper_length_mm,
-#   ²​body_mass_g
-```
-
-```
-[1] NA
-```
-]
-
----
-count: false
- 
-
-.panel1-penguins-auto[
-
-```r
-library(tidyverse)
-library(palmerpenguins)
-
-penguins &lt;- remove_missing(penguins)
-
-penguins %&gt;%
-* summarize(bill_length_mm_median = median(bill_length_mm),
-*           bill_depth_mm_median = median(bill_depth_mm))
-
-NA
-```
-]
- 
-.panel2-penguins-auto[
-
-```
-# A tibble: 1 × 2
-  bill_length_mm_median bill_depth_mm_median
-                  &lt;dbl&gt;                &lt;dbl&gt;
-1                  44.5                 17.3
-```
-
-```
-[1] NA
-```
-]
-
----
-count: false
- 
-
-.panel1-penguins-auto[
-
-```r
-library(tidyverse)
-library(palmerpenguins)
-
-penguins &lt;- remove_missing(penguins)
-
-penguins %&gt;%
-  summarize(bill_length_mm_median = median(bill_length_mm),
-            bill_depth_mm_median = median(bill_depth_mm)) -&gt;
-*penguins_medians
-
-NA
-```
-]
- 
-.panel2-penguins-auto[
-
-```
-[1] NA
-```
-]
-
----
-count: false
- 
-
-.panel1-penguins-auto[
-
-```r
-library(tidyverse)
-library(palmerpenguins)
-
-penguins &lt;- remove_missing(penguins)
-
-penguins %&gt;%
-  summarize(bill_length_mm_median = median(bill_length_mm),
-            bill_depth_mm_median = median(bill_depth_mm)) -&gt;
-penguins_medians
-
-*penguins
-
-NA
-```
-]
- 
-.panel2-penguins-auto[
-
-```
-# A tibble: 333 × 8
-   species island    bill_length_mm bill_depth_mm flipper_…¹ body_…² sex    year
-   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;      &lt;int&gt;   &lt;int&gt; &lt;fct&gt; &lt;int&gt;
- 1 Adelie  Torgersen           39.1          18.7        181    3750 male   2007
- 2 Adelie  Torgersen           39.5          17.4        186    3800 fema…  2007
- 3 Adelie  Torgersen           40.3          18          195    3250 fema…  2007
- 4 Adelie  Torgersen           36.7          19.3        193    3450 fema…  2007
- 5 Adelie  Torgersen           39.3          20.6        190    3650 male   2007
- 6 Adelie  Torgersen           38.9          17.8        181    3625 fema…  2007
- 7 Adelie  Torgersen           39.2          19.6        195    4675 male   2007
- 8 Adelie  Torgersen           41.1          17.6        182    3200 fema…  2007
- 9 Adelie  Torgersen           38.6          21.2        191    3800 male   2007
-10 Adelie  Torgersen           34.6          21.1        198    4400 male   2007
-# … with 323 more rows, and abbreviated variable names ¹​flipper_length_mm,
-#   ²​body_mass_g
-```
-
-```
-[1] NA
-```
-]
-
----
-count: false
- 
-
-.panel1-penguins-auto[
-
-```r
-library(tidyverse)
-library(palmerpenguins)
-
-penguins &lt;- remove_missing(penguins)
-
-penguins %&gt;%
-  summarize(bill_length_mm_median = median(bill_length_mm),
-            bill_depth_mm_median = median(bill_depth_mm)) -&gt;
-penguins_medians
-
-penguins %&gt;%
-* ggplot()
-
-NA
-```
-]
- 
-.panel2-penguins-auto[
-&lt;img src="cowy-slides_files/figure-html/penguins_auto_08_output-1.png" width="432" /&gt;
-
-```
-[1] NA
-```
-]
-
----
-count: false
- 
-
-.panel1-penguins-auto[
-
-```r
-library(tidyverse)
-library(palmerpenguins)
-
-penguins &lt;- remove_missing(penguins)
-
-penguins %&gt;%
-  summarize(bill_length_mm_median = median(bill_length_mm),
-            bill_depth_mm_median = median(bill_depth_mm)) -&gt;
-penguins_medians
-
-penguins %&gt;%
-  ggplot() +
-* aes(x = bill_depth_mm)
-
-NA
-```
-]
- 
-.panel2-penguins-auto[
-&lt;img src="cowy-slides_files/figure-html/penguins_auto_09_output-1.png" width="432" /&gt;
-
-```
-[1] NA
-```
-]
-
----
-count: false
- 
-
-.panel1-penguins-auto[
-
-```r
-library(tidyverse)
-library(palmerpenguins)
-
-penguins &lt;- remove_missing(penguins)
-
-penguins %&gt;%
-  summarize(bill_length_mm_median = median(bill_length_mm),
-            bill_depth_mm_median = median(bill_depth_mm)) -&gt;
-penguins_medians
-
-penguins %&gt;%
-  ggplot() +
-  aes(x = bill_depth_mm) +
-* aes(y = bill_length_mm)
-
-NA
-```
-]
- 
-.panel2-penguins-auto[
-&lt;img src="cowy-slides_files/figure-html/penguins_auto_10_output-1.png" width="432" /&gt;
-
-```
-[1] NA
-```
-]
-
----
-count: false
- 
-
-.panel1-penguins-auto[
-
-```r
-library(tidyverse)
-library(palmerpenguins)
-
-penguins &lt;- remove_missing(penguins)
-
-penguins %&gt;%
-  summarize(bill_length_mm_median = median(bill_length_mm),
-            bill_depth_mm_median = median(bill_depth_mm)) -&gt;
-penguins_medians
-
-penguins %&gt;%
-  ggplot() +
-  aes(x = bill_depth_mm) +
-  aes(y = bill_length_mm) +
-* geom_point()
-
-NA
-```
-]
- 
-.panel2-penguins-auto[
-&lt;img src="cowy-slides_files/figure-html/penguins_auto_11_output-1.png" width="432" /&gt;
-
-```
-[1] NA
-```
-]
-
----
-count: false
- 
-
-.panel1-penguins-auto[
-
-```r
-library(tidyverse)
-library(palmerpenguins)
-
-penguins &lt;- remove_missing(penguins)
-
-penguins %&gt;%
-  summarize(bill_length_mm_median = median(bill_length_mm),
-            bill_depth_mm_median = median(bill_depth_mm)) -&gt;
-penguins_medians
-
-penguins %&gt;%
-  ggplot() +
-  aes(x = bill_depth_mm) +
-  aes(y = bill_length_mm) +
-  geom_point() +
-* geom_point(data = penguins_medians,
-*   color = "red", size = 4,
-*            aes(x = bill_depth_mm_median,
-*                y = bill_length_mm_median))
-
-NA
-```
-]
- 
-.panel2-penguins-auto[
-&lt;img src="cowy-slides_files/figure-html/penguins_auto_12_output-1.png" width="432" /&gt;
-
-```
-[1] NA
-```
-]
-
-&lt;style&gt;
-.panel1-penguins-auto {
-  color: black;
-  width: 38.6060606060606%;
-  hight: 32%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-.panel2-penguins-auto {
-  color: black;
-  width: 59.3939393939394%;
-  hight: 32%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-.panel3-penguins-auto {
-  color: black;
-  width: NA%;
-  hight: 33%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-&lt;/style&gt;
-
-
-
-
-
-
----
-class: inverse, middle, center
-
-## Step 1: computation
-
---
-
-- define computation that ggplot2 should do for you, before plotting
-  - here it's computing a variable with labels for each observation
-- test that functionality!
-
----
-
-
-
-
-
-```
-# A tibble: 1 × 2
-      x     y
-  &lt;dbl&gt; &lt;dbl&gt;
-1  17.3  44.5
-```
-
-
----
-class: inverse, middle, center
-
-## Step 2: define ggproto
-
---
-
-- ## what's the naming convention for the ggproto object?
-- ## which aesthetics are required as inputs?
-- ## where does the function from above go?
-
----
-
-
-
-
-
-
----
-class: inverse, middle, center
-
-## Step 3: define geom_* function
-
-
---
-
-- define the stat and geom for your layer
-
----
-
-
-
-
-
-
----
-class: inverse, middle, center
-
-
-## Step 4: Enjoy! Use your function
-
-
----
-
-
-count: false
- 
-
-.panel1-enjoy_penguins-auto[
-
-```r
-*penguins
-
-NA
-```
-]
- 
-.panel2-enjoy_penguins-auto[
-
-```
-# A tibble: 333 × 8
-   species island    bill_length_mm bill_depth_mm flipper_…¹ body_…² sex    year
-   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;      &lt;int&gt;   &lt;int&gt; &lt;fct&gt; &lt;int&gt;
- 1 Adelie  Torgersen           39.1          18.7        181    3750 male   2007
- 2 Adelie  Torgersen           39.5          17.4        186    3800 fema…  2007
- 3 Adelie  Torgersen           40.3          18          195    3250 fema…  2007
- 4 Adelie  Torgersen           36.7          19.3        193    3450 fema…  2007
- 5 Adelie  Torgersen           39.3          20.6        190    3650 male   2007
- 6 Adelie  Torgersen           38.9          17.8        181    3625 fema…  2007
- 7 Adelie  Torgersen           39.2          19.6        195    4675 male   2007
- 8 Adelie  Torgersen           41.1          17.6        182    3200 fema…  2007
- 9 Adelie  Torgersen           38.6          21.2        191    3800 male   2007
-10 Adelie  Torgersen           34.6          21.1        198    4400 male   2007
-# … with 323 more rows, and abbreviated variable names ¹​flipper_length_mm,
-#   ²​body_mass_g
-```
-
-```
-[1] NA
-```
-]
-
----
-count: false
- 
-
-.panel1-enjoy_penguins-auto[
-
-```r
-penguins %&gt;%
-* ggplot()
-
-NA
-```
-]
- 
-.panel2-enjoy_penguins-auto[
-&lt;img src="cowy-slides_files/figure-html/enjoy_penguins_auto_02_output-1.png" width="432" /&gt;
-
-```
-[1] NA
-```
-]
-
----
-count: false
- 
-
-.panel1-enjoy_penguins-auto[
-
-```r
-penguins %&gt;%
-  ggplot() +
-* aes(x = bill_depth_mm,
-*     y = bill_length_mm)
-
-NA
-```
-]
- 
-.panel2-enjoy_penguins-auto[
-&lt;img src="cowy-slides_files/figure-html/enjoy_penguins_auto_03_output-1.png" width="432" /&gt;
-
-```
-[1] NA
-```
-]
-
----
-count: false
- 
-
-.panel1-enjoy_penguins-auto[
-
-```r
-penguins %&gt;%
-  ggplot() +
-  aes(x = bill_depth_mm,
-      y = bill_length_mm) +
-* geom_point()
-
-NA
-```
-]
- 
-.panel2-enjoy_penguins-auto[
-&lt;img src="cowy-slides_files/figure-html/enjoy_penguins_auto_04_output-1.png" width="432" /&gt;
-
-```
-[1] NA
-```
-]
-
----
-count: false
- 
-
-.panel1-enjoy_penguins-auto[
-
-```r
-penguins %&gt;%
-  ggplot() +
-  aes(x = bill_depth_mm,
-      y = bill_length_mm) +
-  geom_point() +
-* geom_point_xy_medians(
-*   size = 8,
-*   color = "red")
-
-NA
-```
-]
- 
-.panel2-enjoy_penguins-auto[
-&lt;img src="cowy-slides_files/figure-html/enjoy_penguins_auto_05_output-1.png" width="432" /&gt;
-
-```
-[1] NA
-```
-]
-
-&lt;style&gt;
-.panel1-enjoy_penguins-auto {
-  color: black;
-  width: 38.6060606060606%;
-  hight: 32%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-.panel2-enjoy_penguins-auto {
-  color: black;
-  width: 59.3939393939394%;
-  hight: 32%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-.panel3-enjoy_penguins-auto {
-  color: black;
-  width: NA%;
-  hight: 33%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-&lt;/style&gt;
-
-
-
-
-
-
----
-class: inverse, middle, center
-
-### And check out conditionality!
-
----
-
-
-count: false
- 
-
-.panel1-conditional_penguins-1[
-
-```r
-penguins %&gt;%
-  ggplot() +
-  aes(x = bill_depth_mm,
-      y = bill_length_mm,
-*     color = species) +
-  geom_point() +
-  geom_point_xy_medians(size = 8)
-
-NA
-```
-]
- 
-.panel2-conditional_penguins-1[
-&lt;img src="cowy-slides_files/figure-html/conditional_penguins_1_01_output-1.png" width="432" /&gt;
-
-```
-[1] NA
-```
-]
-
-&lt;style&gt;
-.panel1-conditional_penguins-1 {
-  color: black;
-  width: 38.6060606060606%;
-  hight: 32%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-.panel2-conditional_penguins-1 {
-  color: black;
-  width: 59.3939393939394%;
-  hight: 32%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-.panel3-conditional_penguins-1 {
-  color: black;
-  width: NA%;
-  hight: 33%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-&lt;/style&gt;
-
-
-
-
-
-
----
-class: inverse, middle, center
-background-image: url(https://images.unsplash.com/photo-1628559225804-71f6e4643f44?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=837&amp;q=80)
-background-size: cover
-
-
-
----
-class: inverse, middle, center
-
-## Now you ...
-
---
-
-### Create the function `geom_point_xy_means()`
-
-
----
-
-## Q&amp;A
-
---
-
-## Suggested questions.
-
---
-
-### How long does it take to get through one of the 'Easy Geom Recipes'?
-
-### Can all new geoms be modeled after a 'easy geom recipes'?
-
-### Why did it take you so long to figure out the extension mechanism?/What does your and Morgan's tutorial offer? Isn't there already instruction out there?
-
-### Which was the most difficult geom to build in {ggxmean}?
-
-### Is building a package difficult?
-
-### Is maintaining a package difficult?
-
-### Dusty Turner: Is the idea that MA206 students might use this package to aid in their learning of statistics?
-
-
-
-
----
-
---
-
-Be German, combine stuff to make new words (functions)
-
----
-
-Durchschnitt
-
-Restfehler
-
-
-
-
-&lt;!-- adjust font size in this css code chunk, currently 80 --&gt;
-
-&lt;style type="text/css"&gt;
-.remark-code{line-height: 1.5; font-size: 100%}
-
-@media print {
-  .has-continuation {
-    display: block;
-  }
-}
-
-code.r.hljs.remark-code{
-  position: relative;
-  overflow-x: hidden;
-}
-
-
-code.r.hljs.remark-code:hover{
-  overflow-x:visible;
-  width: 500px;
-  border-style: solid;
-}
-&lt;/style&gt;
-
-
-
-
-
-## Intro Thoughts
-
-- ggplot2 lets you speak plots into existence
-
-- this allows for some powerful data viz and statistical story telling, build up your plot bit by bit...
-
-- just like rock star Hans Rosling...
-
-- and more (geom_smooth)
-
-- except you will run into a wall... where you don't have the vocab.
-
-- promise is ggplot2 extension... (vignette, Thomas Pederson)
-
-- but you may run into a wall... because you don't have the background to translate this stuff to action
-
-- OOP, holding all the pieces together, inability to practice demonstrated mechanisms.
-
-- New approach for 'a new wave of ggplot2 extenders'...
-
-- extension-ready population; ggplot2 super-users
-
-- easy geom recipes
-
-- population description
-
-- results
-
-- 'It's not gonna be that easy'
-
-- support group
-
-- 'so now I need to write a package...? and test and message?'
-
-- ggtedious
-
-
-The problems for the 'new wave' quoting June bunch... 0. 'users aren't developers' 1) 'scary ggproto methods' (less experience with oop) 2) hard to reason about the big chunk of codes that defined a new ggroto object  3) even if we master all of this, then we have to become package developers?
-
-My proposed solutions, promoting 'easy geom recipes',  0) maybe users have got no choice but to be developers, because 0a. they are sick of precalculation that ggplot2 can just do and 0.b want the mental match of geom_x_mean() and the vline mean appears and 0c. ggplot2 base can't be responsible for working on all my unique problems. 1) make ggproto as ignorable as possible at first. 2) pull out all the pieces that define the ggproto and handle separately. 3) work on package development best practices: https://github.com/EvaMaeRey/ggtedious - this is where I'm definitely currently failing and know it. I never formally test anything.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
