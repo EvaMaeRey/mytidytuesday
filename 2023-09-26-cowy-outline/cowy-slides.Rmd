@@ -12,6 +12,8 @@ output:
       highlightLines: true
       countIncrementalSlides: false
       seal: false
+---
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -19,12 +21,12 @@ options(tidyverse.quiet = TRUE)
 ```
 
 
-class: inverse, left, bottom
+class: inverse, bottom
 background-image: url(https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80)
 background-size: cover
 
 # .Large[Supporting a new wave of ggplot2 extenders]
-## .small[with new points of entry for ggplot2 super-users]
+## .small[by providing new points of entry for ggplot2 super-users]
 #### .tiny[Dr. Evangeline Reynolds | 2022-04-26 |Image credit: Silas Baisch, Upsplash]
 
 
@@ -71,12 +73,12 @@ background-size: cover
 ---
 
 
-1. Why ggplot2
-2. Limitations of base ggplot2
-3. Promise of Extension
-4. Un-reached talent - ggplot2 super users unrealized potential
-5. New strategies for reaching this talent & evidence of effectiveness
-6. New frontier of challenges and ideas for addressing them
+## 1. Why ggplot2
+## 2. Limitations of base ggplot2
+## 3. Promise of Extension
+## 4. Un-reached talent - ggplot2 super users unrealized potential
+## 5. New strategies for reaching this talent & evidence of effectiveness
+## 6. New frontier of challenges and ideas for addressing them
 
 
 
@@ -110,34 +112,24 @@ theme_set(theme_gray(base_size = 20))
 ```
 
 
----
-
-# gg in ggplot2
-
---
-
-# Grammar of Graphics
-
----
-
-
-# It lets you *'speak your plot into existence'*. (Thomas Lin Pederson?) 
-
----
-
-
-
-## Elements of the Grammar of Graphics (choices)
-
-```{r, echo = F}
-knitr::include_graphics("https://miro.medium.com/max/1400/1*MMZuYgeC_YjXNC1r4D4sog.png")
-```
-
-
-
 <!-- --- -->
 
-<!-- > # "the Grammar of Graphics makes everything else easy because you've just got all these, like, little nice decomposable components" -- Hadley Wickham -->
+<!-- # gg in ggplot2 -->
+
+<!-- -- -->
+
+<!-- # Grammar of Graphics -->
+
+---
+class: middle, inverse, center
+
+
+# It lets you *'speak your plot into existence'*. (Thomas Lin Pederson) 
+
+---
+
+
+
 
 
 
@@ -192,7 +184,9 @@ knitr::include_graphics("https://miro.medium.com/max/1400/1*MMZuYgeC_YjXNC1r4D4s
 ---
 
 
-# Hans Rosling 2010 BBC 
+# Hans Rosling & BBC in 2010  
+
+
 
 <iframe width="767" height="431" src="https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A
@@ -200,124 +194,174 @@ https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A
 
 ---
 
-background-image: url(images/paste-A8314E33.png)
-background-size: cover
+
+#And I know having the data is not enough. I have to show it in ways people both enjoy and understand
+
+```{r, out.width="65%", fig.align='center'}
+knitr::include_graphics("images/hans_argument.png")
+```
 
 
 ---
 
+# 'Here we go. Life expectancy on the y-axis'
 
-background-image: url(images/paste-D46A77DF.png)
-background-size: cover
 
----
-
-background-image: url(images/paste-CAD8C893.png)
-background-size: cover
-
+```{r, out.width="80%"}
+knitr::include_graphics("images/hans_y_axis.png")
+```
 
 ---
 
+# 'On the x-axis, '
 
-background-image: url(images/paste-DC46E991.png)
-background-size: cover
 
+```{r, out.width="80%"}
+knitr::include_graphics("images/hans_x_axis.png")
+
+```
 
 ---
 
-2010, but now, we are able to speak out plots into existence too. 
+# 'Colors represent the different continents'
 
-This is because the grammar of graphics, (the principles which ggplot2 is based on) breaks up the elements of a visualization into orthogonal parts, and the user is able to manipulate these bit by bit.
+```{r, out.width="80%"}
+knitr::include_graphics("images/hans_colors.png")
 
-
-> # "the Grammar of Graphics makes everything else easy because you've just got all these, like, little nice decomposable components" -- Hadley Wickham
-
-Hadley Wickham (2010) A Layered Grammar of Graphics, Journal of
-Computational and Graphical Statistics, 
-
-
-<!-- --- -->
-
-<!-- # Back to ggplot2. What's the fuss? -->
-<!-- -- -->
-<!-- Hadley Wickham, ggplot2 author on it's motivation: -->
-<!-- > ### And, you know, I'd get a dataset. And, *in my head I could very clearly kind of picture*, I want to put this on the x-axis. Let's put this on the y-axis, draw a line, put some points here, break it up by this variable.  -->
-
-<!-- -- -->
-<!-- > ### And then, like, getting that vision out of my head, and into reality, it's just really, really hard. Just, like, felt harder than it should be. Like, there's a lot of custom programming involved, -->
-
-<!-- --- -->
-
-<!-- > ### where I just felt, like, to me, I just wanted to say, like, you know, *this is what I'm thinking, this is how I'm picturing this plot. Like you're the computer 'Go and do it'.*  -->
-
-<!-- -- -->
-<!-- > ### ... and I'd also been reading about the Grammar of Graphics by Leland Wilkinson, I got to meet him a couple of times and ... I was, like, this book has been, like, written for me.  -->
-<!-- https://www.trifacta.com/podcast/tidy-data-with-hadley-wickham/ -->
-
+```
 
 
 ---
 
+# Size represents population
 
-# So what's the promise of ggplot2?
+```{r, out.width="80%"}
+knitr::include_graphics("images/hans_size.png")
+```
+
+---
+class: inverse, center, middle
+
+#  Response to speaking plot into existence?
+
 --
 
-## Getting the plot form you picture in your head ...
+# 10 million views...
+
 --
 
-## ... into reality...
---
+(also does animation at the end... which I don't show)
 
-## ... by describing it.
+
+
+---
+class: inverse, center, middle
+
+# And ggplot2 also affords this build-up-your-plot-bit-by-bit experience.
+--
+i.e. 'speaking your plot into existence.' 
 
 
 ---
 
 
-`r chunk_reveal("scatter", title = "# We all have Hans Rosling capabilities", break_type = "user")`
 
-```{r scatter, include = F}
+
+
+
+
+
+
+
+```{r, echo = F}
 library(tidyverse)
 library(gapminder)
 gapminder %>%  # data from package
-  filter(year == 2002) %>% # BREAK0
-  ggplot() + # BREAK1
-  aes(y = lifeExp) + # BREAK2
-  aes(x = gdpPercap) + # BREAK3
-  scale_x_log10() + # BREAK4
-  geom_point() +  # BREAK5
-  aes(size = pop/1000000 # BREAK6
-  aes(color = continent) # BREAK7
-  aes(shape = continent) # BREAK8
-  labs(x = "GDP per capita (US$)") + # BREAK9
-  labs(alpha = "GDP per cap") # BREAK10
+  filter(year == 2002) ->
+gapminder_2002
+```
+
+---
+
+`r chunk_reveal("scatter", title = "# We all have Hans Rosling capabilities")`
+
+```{r scatter, include = F}
+ggplot(data = gapminder_2002) + #BREAK1
+  aes(y = lifeExp) + #BREAK2
+  aes(x = gdpPercap) + #BREAK3
+  scale_x_log10() + #BREAK4
+  geom_point() +  #BREAK5
+  aes(size = pop/1000000000) + #BREAK6
+  aes(color = continent) + #BREAK7
+  labs(x = "GDP per capita (US$)") #BREAK9
 ```
 
 ---
 
 
-`r chunk_reveal("scatter2", title = "# And more", break_type = 1)`
+# We get the 'Hans Rosling' speak it experience, because ggplot2 is based on the grammar of graphics, (gg = grammar of graphics) which breaks up the plot elements into *orthogonal* parts, and the user is able to manipulate these bit by bit.
+
+---
+
+
+> # "the Grammar of Graphics makes [building plots] easy because you've just got all these, like, little nice decomposable components" -- Hadley Wickham
+
+
+
+---
+
+## Elements of the Grammar of Graphics (choices)
+
+```{r, echo = F, eval = F}
+knitr::include_graphics("https://miro.medium.com/max/1400/1*MMZuYgeC_YjXNC1r4D4sog.png")
+```
+
+
+---
+
+
+
+# Skip at COWY: discussing origins of ggplot2
+
+--
+
+Hadley Wickham, ggplot2 author on it's motivation:
+
+> ### And, you know, I'd get a dataset. And, *in my head I could very clearly kind of picture*, I want to put this on the x-axis. Let's put this on the y-axis, draw a line, put some points here, break it up by this variable.
+
+--
+> ### And then, like, getting that vision out of my head, and into reality, it's just really, really hard. Just, like, felt harder than it should be. Like, there's a lot of custom programming involved,
+
+---
+
+> ### where I just felt, like, to me, I just wanted to say, like, you know, *this is what I'm thinking, this is how I'm picturing this plot. Like you're the computer 'Go and do it'.*
+
+--
+> ### ... and I'd also been reading about the Grammar of Graphics by Leland Wilkinson, I got to meet him a couple of times and ... I was, like, this book has been, like, written for me.
+https://www.trifacta.com/podcast/tidy-data-with-hadley-wickham/
+
+
+
+---
+
+
+`r chunk_reveal("scatter2", title = "# And even more than Rosling...", break_type = 1)`
 
 ```{r scatter2, include = F}
-library(tidyverse)
-library(gapminder)
-gapminder %>%  # data from package
-  filter(year == 2002) %>% 
-  ggplot() +
-  aes(y = lifeExp) +
-  aes(x = gdpPercap) +
-  scale_x_log10() +
-  geom_point() + 
-  aes(size = pop/1000000) +
-  aes(color = continent) +
-  labs(x = "GDP per capita (US$)") +
-  labs(alpha = "GDP per cap") + 
+ggplot(data = gapminder_2002) + #BREAK1
+  aes(y = lifeExp) + #BREAK2
+  aes(x = gdpPercap) + #BREAK3
+  scale_x_log10() + #BREAK4
+  geom_point() +  #BREAK5
+  aes(size = pop/1000000000) + #BREAK6
+  aes(color = continent) + #BREAK7
+  labs(x = "GDP per capita (US$)") + #BREAK9 
   geom_smooth(method = lm, aes(color = NULL)) #<<
 ```
 
 ---
 
-## "Create graphical 'poems'." - Hadley Wickham (2010)
+> "Create graphical 'poems'." - Hadley Wickham (2010) A Layered Grammar of Graphics, Journal of Computational and Graphical Statistics
 
 --
 
@@ -353,7 +397,7 @@ Consider for example, a the seemingly simple enterprise of adding a vertical lin
 
 ---
 
-`r chunk_reveal("basic", title = "### What's the experience")`
+`r chunk_reveal("basic", title = "### What's the *base* ggplot2 experience")`
 
 ```{r basic}
 airquality %>% 
@@ -367,8 +411,6 @@ airquality %>%
            na.rm = T)
     ) ->
 g
-
-g %>% layer_data(i = 2) # histogram layer
 ```
 
 ???
@@ -376,17 +418,6 @@ Creating this plot requires greater focus on ggplot2 *syntax*, likely detracting
 It may require a discussion about dollar sign syntax and how geom_vline is actually a special geom -- an annotation -- rather than being mapped to the data. None of this is relevant to the point you as an instructor aim to make: maybe that the the mean is the balancing point of the data or maybe a comment about skewness.
 
 
----
-
-## geom_histogram()
-
---
-
-## counts the number of observations in a 'bin'
-
---
-
-## draws rectangles accordingly
 
 ---
 
@@ -411,6 +442,7 @@ ggplot(airquality) +
 ```
 
 ???
+
 Further, for the case of adding a vertical line at the mean for different subsets of the data, a different approach is required. This enterprise may take instructor/analyst/student on an even larger detour -- possibly googling, and maybe landing on the following stack overflow page where 11,000 analytics souls (some repeats to be sure) have landed:
 
 ---
@@ -426,7 +458,7 @@ Why is geom_smooth() is so easy, and my mean of x line is so hard?
 
 ---
 
-# Like geom_smooth does a bunch of smoothcompute in the background
+# Like geom_smooth does a bunch of compute in the background
 
 --
 
@@ -447,101 +479,13 @@ Why is geom_smooth() is so easy, and my mean of x line is so hard?
 
 ## ... but geom_x_mean() would be so nice!
 
---
+---
 
 ## ggplot2 extensions system exists...
 
 --
 
 ## thus, {ggxmean} r package https://github.com/EvaMaeRey/ggxmean, that gives us geom_x_mean(), and ~ 25 more geoms...
-
---
-
-## Mostly creates geoms that *inherit* from existing geometries
-
---
-
-## Cool mechanism, probably underutilized...
-
----
-
-## Hand*schuh*
-
---
-
-## hand shoe 
-
---
-
-## glove
-
----
-
-## Nackt*schnecke*
-
---
-
-## naked snail
-
---
-
-## slug
-
----
-
-## Daumen*kino*
-
---
-
-## thumb movie
-
---
-
-## flip book
-
----
-
-# inheriting geoms: have their own conceptual identity, but inheriting from more primitive forms (segment, point, text, etc)
-
---
-
-# geom_*point*_xy_means
-
---
-
-# geom_*text*_coordinates
-
---
-
-# geom_*segment*_residuals
-
----
-
-# Inheriting geoms easy to use -- you know the grammar!
-
---
-
-vline at mean of x (line)
-
-Residuals off of model fit (segment)
-
-Intercept for a linear model (point)
-
----
-
-### Entry time for me... 
-
-~ 6 months
-
-
----
-
-Points of entry...
-
-# ggplot2 vignette
-# 
-
----
 
 
 
@@ -581,47 +525,40 @@ cars %>%
 
 
 
-
-
 ---
 
-Thesis of the talk:
-
-Extension system is really cool.  
+# Thesis of the talk:
 
 --
 
-Really powerful.
+# Extension system is really cool.  
 
 --
 
-Vastly underused.
-
----
-
-Who could find it extremely useful?  Super users...
-
-know the grammar. 
+# Really powerful.
 
 --
 
-Be German, combine stuff to make new words (functions)
+# Saggeringly under-utilized.
 
 ---
 
-Durchschnitt
+# Under-utilized by whom? 
+--
+Who could find it extremely useful and could flouish in this extension space?  
+--
 
-Restfehler
-
-
+## ggplot2 super users...
+## 
+## - know the grammar. 
+## - know how to write functions
+## - know R/ggplot2 extremely well..
 
 ---
 
 Evidence from a micro survey and focus group. 
 
-Nine statistics and data analytics educators.
-
-May 2023.
+Nine statistics and data analytics educators. May 2023.
 
 15 question survey and 2 focus groups.
 
@@ -642,7 +579,7 @@ class: inverse, middle, center
 
 
 ```{r, include = F}
-knitr::opts_chunk$set(out.width = "70%")
+knitr::opts_chunk$set(out.width = "90%")
 ```
 
 
@@ -701,25 +638,28 @@ include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey
 ---
 
 
-What's the barrier?  
+# What's the barrier?
 
-# The problems for a 'new wave' quoting June Choe*... 
 
---
+---
 
-# 0) 'users aren't developers'
-
---
-
-# 1) 'scary ggproto methods' (less experience with OOP) 
+## The problems for a 'new wave' (quoting ggtrace author June Choe*)... 
 
 --
 
-# 2) hard to reason about the big chunk of codes that defined a new ggroto object  
+### 0) 'users aren't developers'
 
 --
 
-# 3) even if we master all of this, then we have to become package developers? 
+### 1) 'scary ggproto methods' (less experience with OOP) 
+
+--
+
+### 2) hard to reason about the big chunk of codes that defined a new ggroto object  
+
+--
+
+### 3) even if we master all of this, then we have to become package developers? 
 
 --
 
@@ -727,7 +667,7 @@ What's the barrier?
 
 --
 
-Users can do more
+June's thesis: users can use ggplot2 more powerfully and dynamically on the user side with greater knowledge of delayed aesthetic evaluation?
 
 
 ---
@@ -741,6 +681,7 @@ knitr::include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main
 ---
 
 # 0) Users are leaving too much on the table not to get into ggplot2 extensions
+
 --
 
 # 1) deemphasize ggproto methods
@@ -838,38 +779,7 @@ Toward literate programming in my own packages, to make package building process
 ---
 
 
-There is a growing population of ggplot2 ‘super-users’ that – given their regular and long-term ggplot2 use – have a strong working knowledge of grammar of graphics principles and of ggplot2's user interface.  Among their ranks are educators and professionals statistics, data science and data journalism.
 
-There's evidence that many ggplot2 super-users could find creating ggplot2 extensions valuable, but that current educational materials are falling short in reaching and enabling many in this group.  
-
-
-If provided well tailored points of entry and support, such super-users are likely to move rapidly into the extension space given the elegance and efficiency that extension work promises.
-
-Investment in ggplot2 extension education for this talented group of super-users is likely to have positive externalities for the R and ggplot2 ecosystem.  First, such users are likely to be interested in packaging their materials, providing their elegant and efficient work flow.  This further would strengthen ranks in the R community's package developer base.
-
-Furthermore, know-how in the extension space should lead to greater knowledge of the ggplot2 code base and could help build the contributor pool of talent that can help with ggplot2 maintenance itself.  ggplot2's power and elegance is a notable draw to the R language, and these maintenance concerns should be prioritized by the R community. 
-
-A small survey and focus group of super-users that are statistics educators suggest that current extension educational materials aren't reaching folks that could potentially benefit from extension. Here is summary information about the focus group participants.  
-
-
-
-
-ggplot2 super-users be capable extenders?  
-
-My experience with ggplot2 extension lead me to believe that there's a lot of untapped potential.  During my 
-
-
-New material on ggplot2 extension will *tailored* to this group and will provide new points of entry.  I'll conclude by presenting how one new tutorial in this vein performed with a small group of statistics educators.
-
-## Overview
-
-To be more specific about the exact reasons that ggplot2 super users might not have joined the extender ranks, the high level reason is that users may not see themselves as developers.  They face 'scary ggproto methods' (quoting June Choe) and may be turned off as many may not have experience with object oriented programming, Additionally, as less experienced developers, they may find it hard to reason about the big chunk of codes that typically defined ggroto objects. And third, even if they master ggplot2 extension, these ggplot2 super-users may not feel comfortable in the package development space, which might well seem like a requirement for an extension.
-
-<!--
-At a high-level address what your proposal is and how it will address the problem identified. Highlight any benefits to the R Community that follow from solving the problem. This should be your most compelling section.
--->
-
-My proposed solutions involve messaging maybe users have got no choice but to be developers, because as practitioners and educators, we're just loosing out on so much by not entering this space in terms of efficiency and elegance.  Then, I propose new points of entry (tutorials and example package that de-emphasize ggproto methods as 'need-to-understand' --- instead taking a recipes approach that demonstrates 'how-to-use'.  Second, and complementary this first strategy, the new reference material, as much as possible, pulls out all the pieces that define the ggproto and handles and tests these tasks separately, such as compute_group definitions and compute_panel definitions.  This leads to a very compact, high-level view of the ggproto object; these abstractions should the authors more easily reason about the ggproto pipeline (or ignorable if the newcomer prefers).   Third, to address that super users may be unskilled in package creation and maintenance, I'm working on organizing workshops on package development best practices: https://github.com/EvaMaeRey/ggtedious - this is where I'm personally currently failing in my own journey from ggplot2 super-user to extender.  Given this shortcoming in my own journey, I've approached package building and ggplot2 experts to be involved in the initiative for guidance.  At the same time, I'm bringing in a presenter with a little less package building experience than myself to be the principle guide; which will allow for true-to-life confusion and doubts come to the fore in the workshop session. 
 
 ```{r}
 knitr::include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q13_oop_experience-1.png")
@@ -1189,24 +1099,18 @@ class: inverse, middle, center
 
 ## Suggested questions.
 
+
+
+
 --
 
-### How long does it take to get through one of the 'Easy Geom Recipes'?
+Be German, combine stuff to make new words (functions)
 
-### Can all new geoms be modeled after a 'easy geom recipes'?
+---
 
-### Why did it take you so long to figure out the extension mechanism?/What does your and Morgan's tutorial offer? Isn't there already instruction out there?
+Durchschnitt
 
-### Which was the most difficult geom to build in {ggxmean}?
-
-### Is building a package difficult?
-
-### Is maintaining a package difficult?
-
-### Dusty Turner: Is the idea that MA206 students might use this package to aid in their learning of statistics?
-
-
-
+Restfehler
 
 
 
@@ -1214,7 +1118,7 @@ class: inverse, middle, center
 <!-- adjust font size in this css code chunk, currently 80 -->
 
 ```{css, eval = TRUE, echo = FALSE}
-.remark-code{line-height: 1.5; font-size: 100%}
+.remark-code{line-height: 1.5; font-size: 13130%}
 
 @media print {
   .has-continuation {

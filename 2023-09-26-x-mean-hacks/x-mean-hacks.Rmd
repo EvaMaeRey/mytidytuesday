@@ -76,7 +76,7 @@ last_plot() +
 
 #### univariate (no y) gets more hacky
 
-```{r}
+```{r, out.width="45%", fig.show='hold', message = F, warning=F}
 ggplot(mtcars) + 
   aes(x = wt) + 
   geom_rug() + 
@@ -85,16 +85,13 @@ ggplot(mtcars) +
               method = lm, 
               formula = y ~ 1,
               se = F, 
-              aes(y = wt), # it a required aesthetic - you can kind of put any var so we just put x again...
-              xseq = c(0, 10) # determined looking histogram first
+              aes(y = wt), # y is a required aesthetic - you can kind x again
+              xseq = c(0, Inf) 
               )
 
-# not good cause of the row numbers 'randomly' covering different groups
+# group-wise computation
 last_plot() + 
   aes(color = factor(am))
-
-
-# Not very hopeful about fullrange at present but maybe after bug fix?
 ```
 
 
