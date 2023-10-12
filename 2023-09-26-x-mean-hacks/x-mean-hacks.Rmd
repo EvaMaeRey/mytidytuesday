@@ -76,22 +76,52 @@ last_plot() +
 
 #### univariate (no y) gets more hacky
 
-```{r, out.width="45%", fig.show='hold', message = F, warning=F}
+```{r}
 ggplot(mtcars) + 
   aes(x = wt) + 
   geom_rug() + 
   geom_histogram() +
-  geom_smooth(orientation = "y", 
+  geom_smooth(
+    orientation = "y", 
               method = lm, 
               formula = y ~ 1,
               se = F, 
-              aes(y = wt), # y is a required aesthetic - you can kind x again
-              xseq = c(0, Inf) 
+              aes(y = new_var), # it a required aesthetic - you can kind of put any var so we just put x again...      
+              data = . %>% mutate(new_var = row_number()), # so you can use the genaric new_var...
+              xseq = c(0, Inf) # determined looking histogram first
               )
 
-# group-wise computation
+# not good cause of the row numbers 'randomly' covering different groups
 last_plot() + 
   aes(color = factor(am))
+
+geom_x_mean <- function(...){
+  
+    geom_smooth(
+    orientation = "y", 
+              method = lm, 
+              formula = y ~ 1,
+              se = F, 
+              aes(y = new_var), # it a required aesthetic - you can kind of put any var so we just put x again...
+              data = . %>% mutate(new_var = row_number()),
+              xseq = c(0, Inf), # determined looking histogram first
+    ...
+              )
+  
+}
+
+
+ggplot(mtcars) + 
+  aes(x = wt) + 
+  geom_rug() + 
+  geom_histogram() +
+  geom_x_mean(linetype = "dotted")
+
+# not good cause of the row numbers 'randomly' covering different groups
+last_plot() + 
+  aes(color = factor(am))
+
+# Not very hopeful about fullrange at present but maybe after bug fix?
 ```
 
 
@@ -173,9 +203,6 @@ ggplot(mtcars) +
   aes(x = wt) +
   geom_rug() + 
   geom_segment(aes(xend = wt, y = -Inf, yend = Inf))
-
-
-
 ```
 
 ## Closing remarks, Other Relevant Work, Caveats
