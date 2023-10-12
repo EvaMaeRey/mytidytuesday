@@ -21,7 +21,7 @@ background-image: url(https://images.unsplash.com/photo-1559827260-dc66d52bef19?
 background-size: cover
 
 # .Large[Supporting a new wave of ggplot2 extenders]
-## .small[by providing new points of entry for ggplot2 super-users]
+## .small[By creating new points of entry to extension for ggplot2 super-users]
 #### .tiny[Dr. Evangeline Reynolds | 2022-04-26 |Image credit: Silas Baisch, Upsplash]
 
 
@@ -75,7 +75,7 @@ background-size: cover
 ---
 
 class: middle, inverse, center
-# So ggplot2...
+# Part 1. So ggplot2...
 
 --
 #               ... what's the fuss?
@@ -130,7 +130,7 @@ https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A
 
 ---
 
-# 'On the x-axis, '
+# 'On the x-axis, wealth'
 
 
 &lt;img src="images/hans_x_axis.png" width="80%" /&gt;
@@ -144,7 +144,7 @@ https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A
 
 ---
 
-# Size represents population
+# 'Size represents population'
 
 &lt;img src="images/hans_size.png" width="80%" /&gt;
 
@@ -432,10 +432,10 @@ ggplot(data = gapminder_2002) +
 
 
 ---
+class: inverse, middle, center
 
 
-
-# "Create graphical 'poems'." - Hadley Wickham (2010) A Layered Grammar of Graphics, Journal of Computational and Graphical Statistics
+# ggplot2 let us "... create graphical 'poems'." - Hadley Wickham (2010) in 'A Layered Grammar of Graphics', *Journal of Computational and Graphical Statistics*
 
 --
 
@@ -446,7 +446,7 @@ ggplot(data = gapminder_2002) +
 ---
 class: inverse, center, middle
 
-# The problem?
+# Part 2. The problem
 
 --
 
@@ -1224,19 +1224,15 @@ ggplot(airquality) +
 
 --
 
-### then uses geometric primitives
+### then uses geometric primitives to show computed values
 
 - line
-- ribbon
+- ribbon geometry 
 
 --
 
-### geom_x_mean() doesn't exist.
+### geom_x_mean() doesn't exist; we have to do the compute
 
-
---
-
-### conceptually distinct from those components
 
 ---
 
@@ -1248,7 +1244,7 @@ ggplot(airquality) +
 
 ---
 
-## ggplot2 extensions system exists...
+## Part 3. ggplot2 extensions system exists...
 
 --
 
@@ -1741,11 +1737,16 @@ cars %&gt;%
 
 --
 
-# Next: Saggeringly under-utilized.
+# Saggeringly under-utilized.
+
+---
+class: inverse, center, middle
+
+# Part 4. Underutilized extension mechanism. 
 
 ---
 
-# Under-utilized by whom? 
+## Under-utilized by whom? 
 --
 Who could find it extremely useful and could flourish in this extension space?  
 --
@@ -1758,19 +1759,16 @@ Who could find it extremely useful and could flourish in this extension space?
 
 ---
 
-# Evidence from a micro survey and focus group. 
+# Evidence from a micro survey and focus group 
 
 --
 
-# Nine statistics and data analytics educators. May 2023.
+# Nine statistics and data analytics educators. April 2023.
 
 --
 
 # ~ 15 question survey and 2 focus groups.
 
----
-
-# Hand picked, extraordinary educators, very experienced with stats, data viz, ggplot2 and R.
 
 ---
 class: inverse, middle, center
@@ -1852,7 +1850,7 @@ class: inverse, middle, center
 
 --
 
-* Extender friend, without whose support *sine qua non*, and winner of ASA Statistical Computing and Graphics student paper award: https://yjunechoe.github.io/static/papers/Choe_2022_SublayerGG.pdf 
+* Extender friend, without whose support probably *sine qua non*, and winner of ASA Statistical Computing and Graphics student paper award: https://yjunechoe.github.io/static/papers/Choe_2022_SublayerGG.pdf 
 
 --
 
@@ -1868,34 +1866,57 @@ June's thesis: users can use ggplot2 more powerfully and dynamically on the user
 
 ---
 
-## 0) Users are leaving too much on the table not to get into ggplot2 extensions - foregoing super-fluid ggplot2 experiences that extension affords
+### 0) Users are leaving too much on the table not to get into ggplot2 extensions - foregoing super-fluid ggplot2 experiences that extension affords
 
 --
 
-## 1) deemphasize OOP ggproto methods
+### 1) deemphasize OOP ggproto methods
 
 --
 
-## 2) pull computation out of ggproto method, to facilitate reasoning, debugging
+### 2) pull computation out of ggproto method, to facilitate reasoning, debugging
 
 --
 
-## 3) build communities of support, and also support developer activities like package building
+### 3) build communities of support, and also support developer activities like package building
+
+
+
 
 
 ---
+class: inverse, middle, center
 
 
-# *Easy geom recipes*: practice with `compute_group`
-# Under construction: *More easy geom recipes*: practice with `compute_panel`
-
-## multiple examples
-##
-
-Then survey results
+# Part 5. New points of entry tailor made for ggplot2 super-users who are not yet in extension
 
 ---
 
+# Specific new points of entry:
+
+## - *Easy geom recipes*: practice with `compute_group`
+## - *More easy geom recipes*: practice with `compute_panel` (Under construction)
+
+---
+
+# Pedegogical considerations incorporated... (Skip at COWY)
+
+## Using 'step 0' to establish baseline knowledge
+## multiple examples using same strategy to let patterns sink in
+## 
+
+---
+
+## *Easy geom recipes*: practice with `compute_group`
+
+## Link to html: 
+https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/easy_geom_recipes.html
+
+## link to rmarkdown file:
+https://raw.githubusercontent.com/evamaerey/mytidytuesday/master/2022-01-03-easy-geom-recipes/easy_geom_recipes.Rmd
+
+---
+class: inverse, center, middle
 
 # *Easy geom recipes* tutorial assessment
 
@@ -1904,7 +1925,7 @@ Then survey results
 
 # Straight forward
 
-&lt;img src="https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q16tutorial_time_taken-1.png" width="80%" /&gt;
+&lt;img src="https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q16tutorial_time_taken-1.png" width="65%" /&gt;
 
 
 
@@ -1913,41 +1934,41 @@ Then survey results
 
 # High completion rate
 
-![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q14which_completed-1.png)&lt;!-- --&gt;
+&lt;img src="https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q14which_completed-1.png" width="65%" /&gt;
 
 ---
 
 # Appropriate length
 
 
-![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q17tutorial_length-1.png)&lt;!-- --&gt;
+&lt;img src="https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q17tutorial_length-1.png" width="65%" /&gt;
 
 ---
 
 # Accessible examples
 
 
-![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q18example_clarity-1.png)&lt;!-- --&gt;
+&lt;img src="https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q18example_clarity-1.png" width="65%" /&gt;
 
 ---
 
 # Engaging
 
-![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q19examples_engaging-1.png)&lt;!-- --&gt;
+&lt;img src="https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/q19examples_engaging-1.png" width="65%" /&gt;
 
 ---
 
 # Emotionally positive experience
 
 
-![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+&lt;img src="https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/unnamed-chunk-4-1.png" width="65%" /&gt;
 
 ---
 
 
 # 7/9 could see themselves extending
 
-![](https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+&lt;img src="https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey_results_summary_files/figure-html/unnamed-chunk-5-1.png" width="65%" /&gt;
 
 
 ---
@@ -1966,33 +1987,55 @@ Then survey results
 
 ## Sometimes it might that easy
 
+
 --
 
 ## Sometimes it won't...
 
 ---
+class: inverse, center, middle
 
-## More support: ggplot2 extenders virtual micro meeting. Support group. https://github.com/teunbrand/ggplot-extension-club
+## Part 6: More support for future challenges
+
 
 ---
 
-## Another problem: once you get your extension working,
+### ggplot2 extenders virtual micro meeting. Support group. https://github.com/teunbrand/ggplot-extension-club
+
+---
+
+## Another problem: Inexperience with package development
 
 --
 
-## you will want to share with the world.  
+### Once you get your extension working,
 
 --
-## And then you'll really be in 'scary developer territory'. 
 
-## New workshop: ggtedious
-https://github.com/EvaMaeRey/ggtedious
+### you may want to share with the world.  
 
----
-
-Toward literate programming in my own packages, to make package building process more transparent, collaborative and fun (and more of a narrative. )
+--
+## And then you'll really be in 'scary developer territory' (Choe). 
 
 ---
+
+## Writing responsible New workshop: ggtedious
+
+## https://github.com/EvaMaeRey/ggtedious (not yet scheduled)
+
+--
+
+## Experiments in literate programming in packaging.  Rmd as home of package narrative while developing
+
+
+### - https://github.com/EvaMaeRey/ggbarlabs
+### - https://github.com/EvaMaeRey/ggcirclepack
+### - https://github.com/EvaMaeRey/ggsmoothfit
+
+---
+class: center, middle, inverse
+
+# Thank you! Questions?
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
