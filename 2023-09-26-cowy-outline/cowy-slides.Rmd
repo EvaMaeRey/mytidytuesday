@@ -26,8 +26,9 @@ background-image: url(https://images.unsplash.com/photo-1559827260-dc66d52bef19?
 background-size: cover
 
 # .Large[Supporting a new wave of ggplot2 extenders]
-## .small[With new points of entry to extension for ggplot2 super-users]
-#### .tiny[Dr. Evangeline Reynolds | 2022-04-26 |Image credit: Silas Baisch, Upsplash]
+## .small[New points of entry for ggplot2 super-users]
+## .small[https://bit.ly/ggextend-cowy]
+#### .tiny[Dr. Evangeline Reynolds | 2023-10-13 | ASA, COWY, Image credit: Silas Baisch, Upsplash]
 
 
 ???
@@ -335,7 +336,7 @@ class: inverse, center, middle
 
 ---
 
-## Example
+## Example: What's the graphical poem here? 
 
 ```{r, echo = F}
 library(ggplot2)
@@ -435,18 +436,17 @@ Further, for the case of adding a vertical line at the mean for different subset
 ## ... but geom_x_mean() would be so nice!
 
 ---
+class: middle, center, inverse
 
-## Part 3. ggplot2 extensions system exists...
 
---
-
-## thus, {ggxmean} r package https://github.com/EvaMaeRey/ggxmean, that gives us geom_x_mean(), and ~ 25 more geoms...
-
+## Part 3. ggplot2 extensions can be used to help restore that 'speak it into existance' feel, when base ggplot2 'words' fail
 
 
 ---
 
 ## Examples from ggxmean
+
+https://github.com/EvaMaeRey/ggxmean, that gives us geom_x_mean(), and ~ 25 more geoms...
 
 ---
 
@@ -494,7 +494,9 @@ cars %>%
 
 --
 
-# Saggeringly under-utilized.
+# Staggeringly under-utilized, 
+--
+because existing points of entry are challenging.
 
 ---
 class: inverse, center, middle
@@ -604,7 +606,7 @@ include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey
 
 ---
 
-## The problems for a 'new wave' (quoting ggtrace author June Choe*)... 
+## Why super-user's aren't extending (quoting ggtrace author*)... 
 
 --
 
@@ -624,11 +626,11 @@ include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main/survey
 
 --
 
-* Extender friend, without whose support probably *sine qua non*, and winner of ASA Statistical Computing and Graphics student paper award: https://yjunechoe.github.io/static/papers/Choe_2022_SublayerGG.pdf 
+* *June Choe is a ggplot2 enthusiast and winner of ASA Statistical Computing and Graphics student paper award: https://yjunechoe.github.io/static/papers/Choe_2022_SublayerGG.pdf 
 
 --
 
-* June's thesis: users can use ggplot2 more powerfully and dynamically on the *user side* with greater knowledge of delayed aesthetic evaluation? ggtrace serves to help 'crack open ggplot2 internals' to help w/ current knowledge gap about computational that's already taking place and which are available'
+* June's thesis: users can use ggplot2 more powerfully and flexibly even staying on the *user side* with greater knowledge of delayed aesthetic evaluation. ggtrace serves to help 'crack open ggplot2 internals' to help w/ current knowledge gap about computational that's already taking place can be accessed and used in visualizations.
 
 
 ---
@@ -668,10 +670,19 @@ class: inverse, middle, center
 
 ---
 
-# Specific new points of entry:
+## - *Easy geom recipes: practice with `compute_group`*
 
-## - *Easy geom recipes*: practice with `compute_group`
-## - *More easy geom recipes*: practice with `compute_panel` (Under construction)
+### Link to html: 
+https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/easy_geom_recipes.html
+
+### Link to rmarkdown file:
+https://raw.githubusercontent.com/evamaerey/mytidytuesday/master/2022-01-03-easy-geom-recipes/easy_geom_recipes.Rmd
+
+### Link to slideshow overview: 
+https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/easy_geom_recipes_flipbook.html
+
+
+## - *More easy geom recipes: practice with `compute_panel`* (Under construction)
 
 ---
 
@@ -682,15 +693,7 @@ class: inverse, middle, center
 ## Enumeration and high level description to reinforce pattern; keep track of which parts are clear and/or need clarification
 ## ...
 
----
 
-## *Easy geom recipes*: practice with `compute_group`
-
-## Link to html: 
-https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/easy_geom_recipes.html
-
-## link to rmarkdown file:
-https://raw.githubusercontent.com/evamaerey/mytidytuesday/master/2022-01-03-easy-geom-recipes/easy_geom_recipes.Rmd
 
 ---
 class: inverse, center, middle
@@ -765,11 +768,11 @@ knitr::include_graphics("https://github.com/EvaMaeRey/easy-geom-recipes/raw/main
 
 ---
 
-# In the focus group...
+# Feedback from the focus group...
 
 --
 
-# 'And it was that easy. And I felt empowered as a result of that....' 
+# '[in] it was that easy. And I felt empowered as a result of that....' 
 
 --
 
@@ -812,14 +815,16 @@ class: inverse, center, middle
 ---
 
 
-> And so I have, like this [...] code that I would like to wrap up into a package. But there’s this extra layer ... like my functions work [for] myself, but when I actually put them in the package they always break. 
+> ## And so I have, like this [...] code that I would like to wrap up into a package. 
 
-> So like there’s some other layer of getting into the ggplot extension world that I’m missing.
+> ## But there’s this extra layer ... like my functions work [by themselves], but when I actually put them in the package they always break. 
+
+> ## So like there’s some other layer of getting into the ggplot extension world that I’m missing.
 
 
 ---
 
-## Responsibly packaging responsible New workshop: ggtedious
+## Best practices for packaging ggplot2 extensions: ggtedious
 
 ## https://github.com/EvaMaeRey/ggtedious (not yet scheduled)
 
@@ -830,18 +835,15 @@ class: inverse, center, middle
 ---
 
 
-## Experiments in literate programming in packaging.  Rmd as home of package narrative while developing
+## Experiments in literate programming in packaging development.  Rmd as home of package narrative while developing
 
 
-### - https://github.com/EvaMaeRey/ggbarlabs
-### - https://github.com/EvaMaeRey/ggcirclepack
 ### - https://github.com/EvaMaeRey/ggsmoothfit
+### - https://github.com/EvaMaeRey/ggcirclepack
+### - https://github.com/EvaMaeRey/ggbarlabs
 
 ---
 class: center, middle, inverse
 
 # Thank you! Questions?
-
-
-
 
