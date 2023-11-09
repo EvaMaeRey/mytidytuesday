@@ -18,7 +18,9 @@ options(tidyverse.quiet = TRUE)
 ## Intro Thoughts
 
 
-## Status Quo
+## Status Quo: ggforce lets you build pie chart in cartesian coordinate sytsem; there are a lot of required aesthetics - so can feel like a mouthfull
+
+
 
 ```{r cars}
 library(ggforce)
@@ -67,18 +69,39 @@ data = pie, stat = 'pie'
   scale_fill_brewer('', type = 'qual')
 
 
+
 ```
-# proposed interface
+# proposed interface reduces number of required aesthetics... aliasing give users familiar geom_pie()
 
 ```{r, eval = F}
-# Behold the arcs
-ggplot(arcs) +
-  aes(fill = r) +
-  geom_arc_bar()
+ggplot(pie) +
+  aes(fill = state, amount = amount) +
+  geom_pie() + 
+  facet_wrap(~type)
 ```
 
 
-## Experiment
+## Experiment rewrite:  x0, y0, r0, and r all have defaults; geom_pie is created as stat_pie alias.
+
+The trick it to insert this code a bunch of times. (I kind of saw this with the `explode` argument and borrowed)
+
+``` r
+if(!("x0" %in% names(data))){data$x0 <- 0}
+if(!("y0" %in% names(data))){data$y0 <- 0}
+if(!("r0" %in% names(data))){data$r0 <- 0}
+if(!("r" %in% names(data))){data$r <- 1}
+```      
+
+Then you can move x0, etc from `required_aes` to `default_aes`
+
+``` r
+...
+required_aes = c('start', 'end'),
+default_aes = aes(x0 = NULL, y0 = NULL, r0 = NULL, r = NULL)
+...
+```
+
+#### rewrite
 
 ```{r}
 #' @include shape.R
@@ -109,10 +132,6 @@ gpar <- grid:::gpar
 #' geom_arc_bar understand the following aesthetics (required aesthetics are in
 #' bold):
 #'
-#' - **x0**
-#' - **y0**
-#' - **r0**
-#' - **r**
 #' - **start** - when using stat_arc_bar
 #' - **end** - when using stat_arc_bar
 #' - **amount** - when using stat_pie
@@ -221,6 +240,12 @@ stat_arc_bar <- function(mapping = NULL, data = NULL, geom = 'arc_bar',
 #' @export
 StatPie <- ggproto('StatPie', Stat,
   compute_panel = function(data, scales, n = 360, sep = 0) {
+    
+      if(!("x0" %in% names(data))){data$x0 <- 0}
+     if(!("y0" %in% names(data))){data$y0 <- 0}
+     if(!("r0" %in% names(data))){data$r0 <- 0}
+      if(!("r" %in% names(data))){data$r <- 1}
+    
     data <- ggforce:::dapply(data, c('x0', 'y0'), function(df) {
       angles <- cumsum(df$amount)
       seps <- cumsum(sep * seq_along(angles))
@@ -290,6 +315,10 @@ make_unique <- function(x, sep = '.') {
 }
 
 arcPaths <- function(data, n) {
+  if(!("x0" %in% names(data))){data$x0 <- 0}
+  if(!("y0" %in% names(data))){data$y0 <- 0}
+  if(!("r0" %in% names(data))){data$r0 <- 0}
+  if(!("r" %in% names(data))){data$r <- 1}
   trans <- ggforce:::radial_trans(c(0, 1), c(0, 2 * pi), pad = 0)
   data <- data[data$start != data$end, ]
   data$nControl <- ceiling(n / (2 * pi) * abs(data$end - data$start))
@@ -326,7 +355,7 @@ arcPaths <- function(data, n) {
   if(!("x0" %in% names(data))){data$x0 <- 0}
   if(!("y0" %in% names(data))){data$y0 <- 0}
   if(!("r0" %in% names(data))){data$r0 <- 0}
-  if(!("r" %in% names(data))){data$r <- 0}
+  if(!("r" %in% names(data))){data$r <- 1}
 
   paths$x <- paths$x + paths$x0
   paths$y <- paths$y + paths$y0
@@ -347,7 +376,13 @@ arcPaths <- function(data, n) {
   }
   paths[, !names(paths) %in% c('x0', 'y0', 'exploded')]
 }
+
 arcPaths2 <- function(data, n) {
+  if(!("x0" %in% names(data))){data$x0 <- 0}
+  if(!("y0" %in% names(data))){data$y0 <- 0}
+  if(!("r0" %in% names(data))){data$r0 <- 0}
+  if(!("r" %in% names(data))){data$r <- 1}
+  
   trans <- radial_trans(c(0, 1), c(0, 2 * pi), pad = 0)
   fullCirc <- n / (2 * pi)
   extraData <- setdiff(names(data), c('r', 'x0', 'y0', 'end', 'group', 'PANEL'))
@@ -401,12 +436,146 @@ arcPaths2 <- function(data, n) {
 # try out proposed
 
 ```{r, eval = T}
+# If you know the angle spans to plot it is easy
+arcs <- data.frame(
+  start = seq(0, 2 * pi, length.out = 11)[-11],
+  end = seq(0, 2 * pi, length.out = 11)[-1],
+  r = rep(1:2, 5)
+)
+
 # Behold the arcs
 ggplot(arcs) +
-  geom_arc_bar(aes(start = start,
+  geom_arc_bar(aes(r0 = r - 1, r = r, start = start,
                    end = end, fill = r))
+
+# geom_arc_bar uses geom_shape to draw the arcs, so you have all the
+# possibilities of that as well, e.g. rounding of corners
+ggplot(arcs) +
+  geom_arc_bar(aes(r0 = r - 1, r = r, start = start,
+                   end = end, fill = r), radius = unit(4, 'mm'))
+
+# If you got values for a pie chart, use stat_pie
+states <- c(
+  'eaten', 'eaten but said you didn\'t', 'cat took it', 'for tonight',
+  'will decompose slowly'
+)
+
+pie <- data.frame(
+  state = factor(rep(states, 2), levels = states),
+  type = rep(c('Pie', 'Donut'), each = 5),
+  r0 = rep(c(0, 0.8), each = 5),
+  focus = rep(c(0.2, 0, 0, 0, 0), 2),
+  amount = c(4, 3, 1, 1.5, 6, 6, 1, 2, 3, 2)
+)
+
+# Look at the cakes; original fancy
+ggplot(data = pie) + 
+  geom_arc_bar(stat = 'pie') +
+    aes(r0 = r0, 
+        amount = amount,
+        fill = state, 
+        explode = focus) +
+  facet_wrap(~type, ncol = 1) +
+  coord_fixed() +
+#  theme_no_axes() +
+  scale_fill_brewer('', type = 'qual')
+
+# simple two pies
+ggplot(data = pie) + 
+  aes(amount = amount,
+      fill = state) +
+  geom_arc_bar(stat = 'pie') +
+  facet_wrap(~type) +
+  coord_fixed()
+
+# simple donuts
+ggplot(data = pie) + 
+  aes(amount = amount,
+      fill = state,
+      r0 = .2) +
+  geom_arc_bar(stat = 'pie') +
+  facet_wrap(~type) +
+  coord_fixed()
+
+# quick alias
+geom_pie <- function(...){geom_arc_bar(stat = 'pie', ...)}
+
+
+# simple one pie
+
+pie |>
+  dplyr::filter(type == "Pie") |>
+  ggplot() + 
+  aes(amount = amount,
+      fill = state) +
+  geom_pie() 
+
+pie |> 
+  dplyr::filter(type == "Donut") |> 
+  ggplot() + 
+  aes(amount = amount,
+      fill = state,
+      r0 = .5) +
+  geom_pie() 
+
+# uh-oh, I'd like to set r0 in geom_pie though
+pie |> 
+  dplyr::filter(type == "Donut") |> 
+  ggplot() + 
+  aes(amount = amount,
+      fill = state) +
+  geom_pie(r0 = .5) 
+
+# yet, this is also true of the original ggforce stat_pie...
+# Ignoring unknown parameters: `r0`
+pie |> 
+  dplyr::filter(type == "Donut") |> 
+  ggplot() + 
+  aes(amount = amount, x0 = 0, y0 = 0, r0 = 0, r = 1, 
+      fill = state) +
+  ggforce::stat_pie(r0 = .5) 
+
 ```
 
 
 
-## Closing remarks, Other Relevant Work, Caveats
+## But ... short-term, in-script helpers?
+
+
+
+```{r}
+remove(list = ls())
+library(tidyverse)
+library(ggforce)
+ggpie <- function(data){
+  
+ ggplot(data) +
+    aes(x0 = 0, y0 = 0, r0 = 0, r = 1)+
+    coord_fixed()
+  
+}
+
+# similar ggdonut situation...
+ggdonut <- function(data){
+  
+  ggplot(data) +
+    aes(x0 = 0, y0 = 0, r0 = .75, r = 1) +
+    coord_fixed()
+  
+}
+
+geom_wedge <- function(...){stat_pie(...)}
+
+ggplot2::diamonds %>% 
+  count(cut) %>% 
+  ggpie() + 
+  aes(amount = n, fill = cut) +
+  geom_wedge()
+
+ggplot2::diamonds %>% 
+  count(cut) %>% 
+  ggdonut() + 
+  aes(amount = n, fill = cut) +
+  geom_wedge()
+```
+
