@@ -74,6 +74,7 @@ data = pie, stat = 'pie'
 # proposed interface reduces number of required aesthetics... aliasing give users familiar geom_pie()
 
 ```{r, eval = F}
+# proposed?
 ggplot(pie) +
   aes(fill = state, amount = amount) +
   geom_pie() + 
@@ -517,8 +518,13 @@ pie |>
       fill = state,
       r0 = .5) +
   geom_pie() 
+```
 
-# uh-oh, I'd like to set r0 in geom_pie though
+
+## hesitation, not exploring much
+
+```{r}
+# uh-oh, I'd like to *set* r0 in geom_pie as follows; but fails.
 pie |> 
   dplyr::filter(type == "Donut") |> 
   ggplot() + 
@@ -534,7 +540,6 @@ pie |>
   aes(amount = amount, x0 = 0, y0 = 0, r0 = 0, r = 1, 
       fill = state) +
   ggforce::stat_pie(r0 = .5) 
-
 ```
 
 
@@ -547,20 +552,24 @@ pie |>
 remove(list = ls())
 library(tidyverse)
 library(ggforce)
-ggpie <- function(data){
+ggplot <- function(data, defaults = NULL){
   
- ggplot(data) +
-    aes(x0 = 0, y0 = 0, r0 = 0, r = 1)+
-    coord_fixed()
-  
-}
+  if(is.null(defaults)){start <- ggplot2::ggplot(data = data)}
 
-# similar ggdonut situation...
-ggdonut <- function(data){
+  if(defaults == "wedge_plot"){
+  start <- ggplot2::ggplot(data = data) +
+    # I don't thinkg aes really belong in here, it's a hack
+   aes(x0 = 0, y0 = 0, r0 = 0, r = 1) +
+   coord_fixed() 
+  }
+
+  if(defaults == "wedge_donut_plot"){
+  start <- ggplot2::ggplot(data = data) +
+  aes(x0 = 0, y0 = 0, r0 = .75, r = 1) +
+  coord_fixed()
+  }
   
-  ggplot(data) +
-    aes(x0 = 0, y0 = 0, r0 = .75, r = 1) +
-    coord_fixed()
+  start
   
 }
 
@@ -568,13 +577,13 @@ geom_wedge <- function(...){stat_pie(...)}
 
 ggplot2::diamonds %>% 
   count(cut) %>% 
-  ggpie() + 
+  ggplot(defaults = "wedge_plot") + 
   aes(amount = n, fill = cut) +
   geom_wedge()
 
 ggplot2::diamonds %>% 
   count(cut) %>% 
-  ggdonut() + 
+  ggplot(defaults = "wedge_donut_plot") + 
   aes(amount = n, fill = cut) +
   geom_wedge()
 ```
