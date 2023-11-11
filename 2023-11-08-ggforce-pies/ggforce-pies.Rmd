@@ -552,6 +552,10 @@ pie |>
 remove(list = ls())
 library(tidyverse)
 library(ggforce)
+
+# overwriting ggplot feels a little weird for sure
+# alternative is ggwedge, ggdonut individually
+# just trying some new things
 ggplot <- function(data, defaults = NULL){
   
   if(is.null(defaults)){start <- ggplot2::ggplot(data = data)}
@@ -588,3 +592,28 @@ ggplot2::diamonds %>%
   geom_wedge()
 ```
 
+```{r}
+library(ggplot2)
+geom_pie <- function(...){ggforce::stat_pie(aes(r0 = 0, r = 1, x0 = 0, y0 = 0), ...)}
+
+ggplot2::diamonds |> 
+  dplyr::count(cut) |> 
+  ggplot2::ggplot() + 
+  aes(amount = n, fill = cut) +
+  geom_pie()
+
+geom_pie <- function(...){ggforce::stat_pie(r0 = 0, r = 1, x0 = 0, y0 = 0, ...)}
+
+ggplot2::diamonds |> 
+  dplyr::count(cut) |> 
+  ggplot2::ggplot() + 
+  aes(amount = n, fill = cut) +
+  geom_pie()
+
+ggplot2::diamonds |> 
+  dplyr::count(cut) |> 
+  ggplot2::ggplot() + 
+  aes(weight = n, fill = cut) +
+  geom_bar(x = 1)
+
+```

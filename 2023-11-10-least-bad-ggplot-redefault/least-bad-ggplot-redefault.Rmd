@@ -1,0 +1,187 @@
+---
+title: "ggplot redefaulting ideas"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, out.width = "33%")
+options(tidyverse.quiet = TRUE)
+```
+
+## TL;DR
+
+The `ggplot2::ggplot()` function contains a lot of defaults (e.g. coordinate  and theme specifications).  The default are more friendly to certain chart types (scatter plots) than others (bars, pies).  Is there a way to bundle up new defaults and provide alternatives to ggplot()?  Interface ideas:
+
+```{r, eval=F}
+# idea 1
+ggplot() + 
+  defaults_pie()
+  
+# idea 2
+ggplot() + 
+  plot_pie()
+
+# idea 3
+ggpie()
+
+# idea 4
+ggplot(defaults = "pie")
+```
+
+
+
+## ggplot the function
+
+Have you ever built up plots with new comers to ggplot2, bit-by-bit?  And maybe you just executed the code 'ggplot(data = mtcars)'?  
+
+```{r}
+library(ggplot2)
+ggplot(data = mtcars)
+```
+
+Then, it's fun to ask the newbees, "So what do we get?"  A typical response has been "Nothing!"  And this is a good moment to geek out about ggplot2, countering, "No no. Not nothing. This is a blank canvass - full of promise and possibility (and the mtcars data)!"
+
+And, I would say this kind of thing, and it is probably not a bad way to understand ggplot() as a beginner.  However, 'blank canvas' is very far from the truth. 
+
+Let's look at the object p, created below... 
+
+```{r}
+p <- ggplot()
+```
+
+We'll inspect it a bit now. To not overwhelm, we don't print out `str(p)`; you can do that on your own. But inspecting length(p) we see that there are 9 list elements.
+
+
+```{r}
+# str(p)
+length(p)
+```
+
+And with `names(p)` you'll see elements of the plot that may look familiar.  
+
+
+```{r}
+names(p)
+```
+
+What is user-friendly about ggplot2 is that you do not need to specify all 9 elements to get a plot back.  You only need to specify three things:
+
+1. data
+2. aesthetic mapping, and
+3. a geom or stat layer
+
+But, hey, what about all the other elements, the theme, scales, coordinate system etc, that are needed to define a plot
+
+Well, there are defaults for those and algorithms that pick defaults (especially based on declared aesthetic mappings).  For example, coordinates are Cartesian, rather than polar for example when we embark on a ggplot2 build, by virtue of starting at `ggplot()`.
+
+
+What's the implication of the ggplot2 defaults doing so much work?  They are generally a boon analyst productivity. Analysts don't have to fiddle around with plot details to start to explore their data.  Having `ggplot()` allows analysts to do a '123 of data+aes+layer' and be off to the races inspecting their data. It thereby generally affords 'pit of success' tidyverse goal.  Defaults are enormously beneficial for productivity and analyst success.  
+
+However, the success pit looks different according to one objectives.   The `ggplot` function, because of it's defaults, really points in toward a *particular* pit  -- while your version of success might be different.  
+
+Thinking, the ease with certain plots can be produces with the `ggplot()` defaults, has produced a hunger for this experience more generally.   A 123 scatterplot is practically perfect; while other plot types have mis-match in defaults to be near publication ready (I'm thinking bar charts - example soon); still other plots cannot be produced with the attractive 123 method (e.g. pie charts) in base ggplot2.
+
+# Meandering toward ggplot() redefaulting
+
+Below, I show an example of how a bunch of changes -- thematic, coord and scale -- are required to get to a great looking labeled bar chart.  From a technical standpoint, I'd argue that these choices would have grammatically unproblematic as the `ggplot` start point. We are not in the land of 123 any more. 
+
+```{r}
+ggplot(mtcars) +
+  aes(x = factor(cyl)) +
+  geom_bar(position = "dodge") +
+  ggbarlabs::geom_barlab_count(nudge_y = .2) +
+  theme_classic() +
+  theme(axis.line.y = element_blank(),
+        axis.text.y.right = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        panel.grid.major.y = element_line(color = alpha("gray35", .1)),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        axis.ticks = element_blank(),
+        axis.line.x = element_line(colour = "gray35"),
+        legend.position = "top",
+        legend.justification = 0) +
+  scale_y_continuous(expand = expansion(mult = c(0, .1)))
+```
+
+It is common to collect up thematic decisions into a single theme like theme_barlabs below (more commonly the focus is about generating a feeling or nastalgia for a tv show or something cooler that what I'm after - I know I'm not cool like that).
+
+```{r}
+theme_barlabs <- function(base_size = 25, ...){
+  
+  theme_classic(base_size = base_size, ...)  %+replace%
+  theme(axis.line.y = element_blank(),
+        axis.text.y.right = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        panel.grid.major.y = element_line(color = alpha("gray35", .1)),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        axis.ticks = element_blank(),
+        axis.line.x = element_line(colour = "gray35"),
+        legend.position = "top",
+        legend.justification = 0, 
+        complete = TRUE
+        )
+}
+```
+
+
+
+```{r}
+#' Title
+#'
+#' @return
+#' @export
+#'
+#' @examples
+scale_y_barlabs <- function(...){
+    ggplot2::scale_y_continuous(expand = expansion(mult = c(0, .15)), ...)
+}
+#' Title
+#'
+#' @return
+#' @export
+#'
+#' @examples
+scale_fill_barlabs <- function(...){
+    ggplot2::scale_fill_viridis_d(...)
+}
+#' Title
+#'
+#' @return
+#'
+#' @examples
+defaults_barlabs <- function(){
+  
+  list(theme_barlabs(),
+       scale_y_barlabs(), 
+       scale_fill_barlabs()
+       )
+}
+
+
+#' Title
+#'
+#' @param data 
+#' @param ... 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+ggbarlabs <- function(data = NULL, ...){
+  ggplot(data = data , ... ) +
+  defaults_barlabs()
+}
+
+
+```
+

@@ -876,6 +876,10 @@ pie |&gt;
 <pre class="r"><code>remove(list = ls())
 library(tidyverse)
 library(ggforce)
+
+# overwriting ggplot feels a little weird for sure
+# alternative is ggwedge, ggdonut individually
+# just trying some new things
 ggplot &lt;- function(data, defaults = NULL){
   
   if(is.null(defaults)){start &lt;- ggplot2::ggplot(data = data)}
