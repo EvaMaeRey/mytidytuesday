@@ -1,0 +1,75 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## An implementation in polar coordinates with geom rect, where total count changes the size of the pie.
+
+```{r cars}
+library(tidyverse)
+ggplot2::diamonds %>% 
+  count(cut) %>% 
+  mutate(cum_n = cumsum(n)) %>% 
+  mutate(cum_prop = cum_n/sum(n)) %>% 
+  mutate(ymin = lag(cum_prop)) %>% 
+  mutate(ymin = replace_na(ymin, 0)) %>% 
+  mutate(r = sqrt(sum(n)/pi)) %>% 
+  mutate(r0 = 0) %>% 
+  ggplot() + 
+  aes(x = 0, y = 0, 
+      xmin = 0, ymin = ymin, 
+      xmax = r, 
+      ymax = cum_prop) + 
+  geom_rect() + 
+  aes(fill = cut) + 
+  coord_polar(theta = "y")
+```
+
+## And now in cartesian coordinates...
+
+```{r}
+num_in_arc <- 10
+
+library(tidyverse)
+ggplot2::diamonds %>% 
+  count(cut) %>% 
+  mutate(cum_n = cumsum(n)) %>% 
+  mutate(cum_prop = cum_n/sum(n)) %>% 
+  mutate(ymin = lag(cum_prop)) %>% 
+  mutate(ymin = replace_na(ymin, 0)) %>% 
+  mutate(r = sqrt(sum(n)/pi)) %>% 
+  mutate(r0 = 0) %>% 
+  crossing(num_arc_points = 0:num_in_arc) %>% 
+  mutate(pos_in_radians = 2*pi*(ymin + (cum_prop - ymin)/num_in_arc*num_arc_points )) %>% 
+  mutate(x = cos(pos_in_radians)) %>% 
+  mutate(y = sin(pos_in_radians)) %>% 
+  ggplot() + 
+  aes(x = x, y = y ) + 
+  geom_line() + 
+  aes(color = cut) + 
+  geom_point() + 
+  coord_equal()
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
+
+The polar version, with plan to inherit from geom rect to make pie sizes proportional seems very promising!  
+
+The cartesian, wedge plot idea is coming along too.  I'm not 100% sure why we are zig-zagging, but probably surmountable w/ more time and attention! 
