@@ -14,7 +14,7 @@ options(tidyverse.quiet = TRUE)
 
 ## TL;DR
 
-ggplots contains a lot of defaults (e.g. coordinate  and theme specifications).  The defaults are friendlier to certain chart types (scatter plots) than others (bars, pies).  Is there a way to bundle up new collections of defaults and provide alternatives?  Interface ideas:
+ggplot2's chart building uses a lot of defaults (e.g. coordinate  and theme specifications).  These defaults are friendlier to certain chart types (scatter plots) than others (bars, pies).  If we bundle up new collections of defaults we can provide alternative start points for ggplot2 builds.  Good idea?  Also, what'd be the least bad interface:
 
 ```{r, eval=F}
 # idea 1
@@ -43,9 +43,9 @@ library(ggplot2)
 ggplot(data = mtcars)
 ```
 
-Then, it's fun to ask the newbies, "So what do we get?"  A typical response has been "Nothing!"  And this is a good moment to geek out about ggplot2, countering, "No no. Not nothing. This is a blank canvass - full of promise and possibility (and the mtcars data)!"
+When you do, it's fun to ask, "So what do we get?"  A typical response from folks I've been teaching has been: "Nothing!"  And this is a good moment to geek out about ggplot2, countering, "No, no. Not nothing. This is a blank canvass - full of promise and possibility (and the mtcars data)!"
 
-And, I would say this kind of thing, and it is probably not a bad way to understand ggplot() as a beginner.  However, initiating a ggplot is far from a  'blank canvas'. 
+And, 'blank canvas' is probably not a bad way to understand ggplot() as a beginner.  However, initiating a ggplot is *far* from a  'blank canvas'. 
 
 We can see this if we inspect the object p, created below instead of rendering it... 
 
@@ -53,7 +53,7 @@ We can see this if we inspect the object p, created below instead of rendering i
 p <- ggplot(data = mtcars)
 ```
 
-We'll inspect it a bit now. To not overwhelm, we don't print out `str(p)`; you can do that on your own. But inspecting length(p) we see that there are 9 list elements.
+But inspecting length(p) we see that there are 9 list elements. (To not overwhelm, we don't print out `str(p)` here)
 
 
 ```{r}
@@ -68,30 +68,27 @@ And with `names(p)` you'll see elements of the plot that may look familiar.
 names(p)
 ```
 
-You may recognize element are the orthogonal components layed out in the grammar of graphics which define a data visualization.
+You may recognize many of the elements are the orthogonal components laid out in the Wilkinson's 'The Grammar of Graphics' -- components which define a data visualization.
 
-What is user-friendly about ggplot2 is that you do *not need to specify* all 9 elements to get a plot back.  You only need to specify three things:
+ggplot2 is user friendly becauseyou do *not need to specify* all 9 elements to get a plot back.  You only need to specify three things:
 
 1. data
 2. aesthetic mapping, and
 3. a geom or stat layer
 
-But, hey, what about all the other elements, the theme, scales, coordinate system etc?
-
-Well, there are defaults for those and algorithms that pick defaults (especially based on declared aesthetic mappings).  For example, coordinates are cartesian, rather than polar for example when we embark on a ggplot2 build, by virtue of starting at `ggplot()`.
-
+But, hey, what about all the other elements, the theme, scales, coordinate system etc?  For these, there are defaults and algorithms that pick defaults (especially based on declared aesthetic mappings).  For example, coordinates are cartesian, rather than polar when we embark on a ggplot2 build, just by virtue of initiating with `ggplot()`.
 
 What's the implication of the ggplot2 defaults doing so much work?  They are generally a boon analyst productivity. Analysts don't have to fiddle around with plot details to start to explore their data.  Having `ggplot()` allows analysts to do a '123 of data+aes+layer' and be off to the races inspecting their data. It thereby generally affords 'pit of success' tidyverse goal.  Defaults are enormously beneficial for productivity and analyst success.  
 
-However, the success pit looks different according to one objectives.   The `ggplot` function, because of its defaults, really points in toward a *particular* pit  -- while your vision of success, at least sometimes, might be different.  
+However, a success pit looks different according to one objectives.   The `ggplot` function, because of its defaults, really points in toward a *particular* pits of success  -- while your vision of success, at least sometimes, might be different.  
 
-To be more specific, a 1-2-3 scatterplot (data - aes - geom) is practically publication ready; while other plot types have miss-match in defaults for final form publication ready (I'm thinking bar charts - details coming soon); still other chart types cannot be produced at all with the simple 123 methodin base ggplot2 (e.g. pie charts) .
+To be more specific, a ggplot2 1-2-3 scatterplot (data - aes - geom) is practically publication ready; while other plot types have miss-match in defaults for final form publication ready (I'm thinking bar charts - details coming soon); still other chart types cannot be produced at all using the simple data-aes-geom method in base ggplot2 (e.g. pie charts) .
 
-The effortlessness of data-aes-geom workflows that just work, though, comes with the price of people feeling hungry when things aren't as easy.
+We may feel the absence of the effortlessness of 'data-aes-geom' workflow for plot types that don't have these available natively.
 
 # Meandering toward ggplot() redefaulting
 
-Below, I show an example of how a bunch of changes -- thematic, coord and scale -- are required to get to a great looking labeled bar chart.  From a technical standpoint, I'd argue that these choices would have grammatically unproblematic as the `ggplot` start point. We are not in the land of 123 any more. 
+Below, I show an example of a labeled bar chart.  The chart requires changes to the theme, scale, and coord specifications to get an appropriate output.  From a technical standpoint, I'd argue that these alternate choices would have grammatically unproblematic as the `ggplot` start point.  Next we'll look at collecting these alternatives, and offering a quick redefaulting funtction `default_barlabs` that has the labeled barchart as the end goal in mind.
 
 ```{r}
 ggplot(mtcars) +
@@ -114,7 +111,7 @@ ggplot(mtcars) +
   scale_y_continuous(expand = expansion(mult = c(0, .1)))
 ```
 
-It is common to collect up decisions that are made with the theme() argument into a function like theme_barlabs.  It is less common to bundle this further, w/ say scales.  But that is a thing I'm thinking could be useful, and valid, and quite similar to what's being done anyway unpon intiating a ggplot.
+Okay. Let's see this.  It is common to collect up decisions that are made with the theme() argument into a function like theme_barlabs.  It is less common to bundle thematic decisions further, with, say scales.  So this 'big bundle' is the 'extension space' that I'm exploring.    
 
 ```{r}
 theme_barlabs <- function(base_size = 25, ...){
@@ -138,6 +135,7 @@ theme_barlabs <- function(base_size = 25, ...){
 ```
 
 
+Here are some of the default scales that will be bundled.
 
 ```{r}
 scale_y_barlabs <- function(...){
@@ -148,6 +146,12 @@ scale_y_barlabs <- function(...){
 scale_fill_barlabs <- function(...){
     ggplot2::scale_fill_viridis_d(...)
 }
+
+```
+
+And the default function itself:
+
+```{r}
 
 defaults_barlabs <- function(){
   
@@ -167,13 +171,27 @@ ggbarlabs <- function(data = NULL, ...){
 
 ```
 
+## Other's doing this?
 
-# Questions to readers
+
+The place I've definitely seen this before is ggraph::ggraph().  So it is not unprecedented.  I'm not aware of other examples (except in my own extension experiments.) Please let me know of other examples.  ggraph not only changes defaults but also preprocesses data.
+
+
+
+## Questions to readers:
+
+I'm interested in feedback especially on the following questions.
 
 
 1. Are bundle of new defaults valid?
-2. What are the pitfalls I'm not seeing?
+2. Do you think I'm fundamentally misunderstanding ggplot2 initiation?
+2. Is redefaulting strategy technically problematic? 
+2. Are there pitfalls I'm not seeing?
 2. If valid, and pitfalls can be avoided, what should the interface look like? Return to top under TL;DR for some ideas.
+3. How does one go about settling on the right defaults?
+
+
+## Applying the defaults
 
 Here's a couple of examples of possible interfaces using the functions created above.
 
