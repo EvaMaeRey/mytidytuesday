@@ -1,5 +1,5 @@
 ---
-title: "another experiment"
+title: "geom_pie and geom_wedge via StatPie and StatWedge"
 author: "Evangeline Reynolds"
 date: "`r Sys.Date()`"
 output: 
@@ -12,13 +12,13 @@ knitr::opts_chunk$set(echo = TRUE)
 options(tidyverse.quiet = TRUE)
 ```
 
+## intro...
 
+I tried borrowing from geom_bar in https://github.com/EvaMaeRey/ggpie, but it's not the best, I think new stats might be the best way forward.
 
+## Part 1. geom_pie... An implementation in polar coordinates with geom rect, where total count changes the size of the pie.
 
-## Intro Thoughts
-
-
-## An implementation in polar coordinates with geom rect, where total count changes the size of the pie.
+### Step 0.  Get job done with base ggplot2
 
 ```{r cars}
 library(tidyverse)
@@ -42,6 +42,9 @@ ggplot2::diamonds %>%
 
 layer_data()
 ```
+
+
+### Step 12&3. compute, ggproto, geom_*,
 
 ```{r, error=TRUE}
 compute_panel_pie <- function(data, scales){
@@ -85,26 +88,25 @@ geom_pie <- function(
     params = list(na.rm = na.rm, ...)
   )
 }
+```
 
+### Step 4. Test it out
+
+
+```{r}
 ggplot2::diamonds %>% 
   ggplot() + 
   aes(fill = cut) + 
   geom_pie() 
 
-layer_data()
-
-last_plot() +
-  facet_grid(~color)
-
 last_plot() + 
-  facet_null() +
   coord_polar()
 
-layer_data()
+last_plot() +
+  facet_wrap(~color) + 
+  coord_cartesian()
 
-ggplot() + 
-  annotate(geom = "rect",
-           x = 0, y = 0, xmin = 0, ymin = 0, xmax = 1, ymax = 1) +
+last_plot() + 
   coord_polar()
 
 Titanic %>% 
@@ -136,7 +138,9 @@ Titanic %>%
 ```
 
 
-## And now in cartesian coordinates...
+## Part 2. geom_wedge And now in cartesian coordinates...
+
+### Step 0. W/ base ggplot2
 
 ```{r}
 num_in_arc <- 5
@@ -166,6 +170,8 @@ ggplot2::diamonds %>%
   geom_point() + 
   coord_equal()
 ```
+
+### Step 123 (compute, ggproto, geom_*)
 
 ```{r error = T}
 compute_panel_wedge <- function(data, scales){
@@ -214,12 +220,15 @@ geom_wedge <- function(
     params = list(na.rm = na.rm, ...)
   )
 }
+```
 
+### Step 4. Test it out (failing)
+
+```{r warning=T, error= T, message = T}
 diamonds %>% 
 ggplot() + 
   aes(fill = cut) + 
   geom_wedge()
-
 ```
 
 ## Closing remarks, Other Relevant Work, Caveats
