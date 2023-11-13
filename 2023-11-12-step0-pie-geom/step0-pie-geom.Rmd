@@ -23,7 +23,8 @@ options(tidyverse.quiet = TRUE)
 ```{r cars}
 library(tidyverse)
 ggplot2::diamonds %>% 
-  count(cut) %>% 
+  mutate(weight = 1) %>% 
+  count(cut, wt = weight) %>% 
   mutate(cum_n = cumsum(n)) %>% 
   mutate(cum_prop = cum_n/sum(n)) %>% 
   mutate(ymin = lag(cum_prop)) %>% 
@@ -38,12 +39,107 @@ ggplot2::diamonds %>%
   geom_rect() + 
   aes(fill = cut) + 
   coord_polar(theta = "y")
+
+layer_data()
 ```
+
+```{r, error=TRUE}
+compute_panel_pie <- function(data, scales){
+  
+  data %>% 
+  count(fill) %>% 
+  mutate(cum_n = cumsum(n)) %>% 
+  mutate(xmax = cum_n/sum(n)) %>% 
+  mutate(xmin = lag(xmax)) %>% 
+  mutate(xmin = replace_na(xmin, 0)) %>% 
+  mutate(r = sqrt(sum(n)/pi)) %>% 
+  mutate(r0 = 0) %>% 
+  mutate(x = 0, y = 0, 
+         ymin = 0, ymax = r
+         )
+  
+}
+
+StatPie <- ggproto(`_class` = "StatPie",
+                  `_inherit` = ggplot2::Stat,
+                  required_aes = "fill",
+                  compute_panel = compute_panel_pie,
+                  default_aes = aes(group = after_stat(fill))
+                  )
+
+geom_pie <- function(
+  mapping = NULL,
+  data = NULL,
+  position = "identity",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatPie,  # proto object from step 2
+    geom = ggplot2::GeomRect,  # inherit other behavior
+    data = data,
+    mapping = mapping,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+
+ggplot2::diamonds %>% 
+  ggplot() + 
+  aes(fill = cut) + 
+  geom_pie() 
+
+layer_data()
+
+last_plot() +
+  facet_grid(~color)
+
+last_plot() + 
+  facet_null() +
+  coord_polar()
+
+layer_data()
+
+ggplot() + 
+  annotate(geom = "rect",
+           x = 0, y = 0, xmin = 0, ymin = 0, xmax = 1, ymax = 1) +
+  coord_polar()
+
+Titanic %>% 
+  data.frame() %>% 
+  uncount(Freq) %>% 
+  ggplot() + 
+  coord_polar() + 
+  aes(fill = Sex) +
+  geom_pie() + 
+  facet_wrap(~Sex) + 
+  aes(fill = Class) + 
+  facet_grid(Sex~Class) + 
+  aes(fill = Survived) + 
+  theme_void() +
+  facet_wrap(~Sex)
+
+
+Titanic %>% 
+  data.frame() %>% 
+  uncount(Freq) %>% 
+  ggplot() + 
+  coord_polar() + 
+  aes(fill = Sex) +
+  geom_pie() + 
+  facet_wrap(~Sex) + 
+  aes(fill = Class)
+
+
+```
+
 
 ## And now in cartesian coordinates...
 
 ```{r}
-num_in_arc <- 10
+num_in_arc <- 5
 
 library(tidyverse)
 ggplot2::diamonds %>% 
@@ -54,19 +150,77 @@ ggplot2::diamonds %>%
   mutate(ymin = replace_na(ymin, 0)) %>% 
   mutate(r = sqrt(sum(n)/pi)) %>% 
   mutate(r0 = 0) %>% 
-  crossing(num_arc_points = 0:num_in_arc) %>% 
-  mutate(pos_in_radians = 2*pi*(ymin + (cum_prop - ymin)/num_in_arc*num_arc_points )) %>% 
-  mutate(x = cos(pos_in_radians)) %>% 
-  mutate(y = sin(pos_in_radians)) %>% 
+  crossing(id_arc_point = c(-1:(num_in_arc + 1))) %>% 
+  mutate(pos_in_radians = 2*pi*(ymin + (cum_prop - ymin)/num_in_arc*id_arc_point )) %>% 
+  mutate(x = r*cos(pos_in_radians)) %>% 
+  mutate(y = r*sin(pos_in_radians)) %>% 
+  mutate(x = ifelse(id_arc_point == -1 | 
+                      id_arc_point == num_in_arc + 1, 0, x)) %>% 
+  mutate(y = ifelse(id_arc_point == -1 | 
+                      id_arc_point == num_in_arc + 1, 0, y)) %>% 
   ggplot() + 
   aes(x = x, y = y ) + 
-  geom_line() + 
+  geom_polygon() + 
+  aes(fill = cut) + 
   aes(color = cut) + 
   geom_point() + 
   coord_equal()
 ```
 
+```{r error = T}
+compute_panel_wedge <- function(data, scales){
+  
+  data %>% 
+  count(fill) %>% 
+  mutate(cum_n = cumsum(n)) %>% 
+  mutate(cum_prop = cum_n/sum(n)) %>% 
+  mutate(ymin = lag(cum_prop)) %>% 
+  mutate(ymin = replace_na(ymin, 0)) %>% 
+  mutate(r = sqrt(sum(n)/pi)) %>% 
+  mutate(r0 = 0) %>% 
+  crossing(id_arc_point = c(-1:(num_in_arc + 1))) %>% 
+  mutate(pos_in_radians = 2*pi*(ymin + (cum_prop - ymin)/num_in_arc*id_arc_point )) %>% 
+  mutate(x = cos(pos_in_radians)) %>% 
+  mutate(y = sin(pos_in_radians)) %>% 
+  mutate(x = ifelse(id_arc_point == -1 | id_arc_point == num_in_arc + 1, 0, x)) %>% 
+  mutate(y = ifelse(id_arc_point == -1 | id_arc_point == num_in_arc + 1, 0, y))
+  
+  
+  
+}
 
+
+StatWedge <- ggproto(`_class` = "StatWedge",
+                  `_inherit` = ggplot2::Stat,
+                  required_aes = "fill",
+                  compute_panel = compute_panel_wedge,
+                  default_aes = aes(group = after_stat(fill)))
+
+geom_wedge <- function(
+  mapping = NULL,
+  data = NULL,
+  position = "identity",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatPie,  # proto object from step 2
+    geom = ggplot2::GeomPolygon,  # inherit other behavior
+    data = data,
+    mapping = mapping,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+
+diamonds %>% 
+ggplot() + 
+  aes(fill = cut) + 
+  geom_wedge()
+
+```
 
 ## Closing remarks, Other Relevant Work, Caveats
 
