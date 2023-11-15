@@ -1,0 +1,292 @@
+---
+title: "flipbookr empathy"
+author: "Dr. Evangeline Reynolds"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    seal: false
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      seal: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+library(flipbookr)
+```
+
+
+<!-- Title slide -->
+
+class: inverse, bottom
+background-image: url(https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80)
+background-size: cover
+
+# .Large[Supporting a new wave of ggplot2 extenders]
+## .small[New points of entry for ggplot2 super-users]
+## .small[https://bit.ly/ggextend-cowy]
+#### .tiny[Dr. Evangeline Reynolds | 2023-10-13 | ASA, COWY, Image credit: Silas Baisch, Upsplash]
+
+
+???
+
+
+
+Chapter 1: Explain your plot bit by bit is empathetic (Matt Blackwell; Hans Rosling)
+Chapter 2: Pair up your code and plot is empathetic (Garrick Aden-Bui, others)
+Chapter 3: Automating builds is self empathy (Emi Tanaka; Garrick Aden-Bui; Me)
+
+--
+
+Next Chapter: chunk_reveal_live()... Keeping it short and making it easy and personal/situated is empathetic.  (Kelly Bodwin; Me)
+
+--
+
+Another Chapter:  Flipbookr for quarto: Keeping it up-to-date is empathetic (Kieran Healey; Kelly Bodwin; me?)
+
+
+---
+
+
+## Origins in presentation and *empathy* for your audience in presentation...
+
+
+
+---
+
+## you are practicing empathy by using data visualization (it's fast); gonna make seeing patterns in your data feel effortless
+
+John Tukey quote...
+
+--
+
+## but you can encode so much in a data viz.  So you really need to talk about that encoding step by step, else the interpretation is lost.
+
+
+--
+
+```{r}
+knitr::include_graphics("https://clauswilke.com/dataviz/aesthetic_mapping_files/figure-html/common-aesthetics-1.png")
+```
+
+
+---
+
+Not me: 'Wow, that is profoundly empathetic'. 🦉🦉🦉
+
+--
+
+Me: 'Neat-o! That sounds a lot like the *layered* presentation of graphics.'  🤓🤓🤓
+
+https://twitter.com/EvaMaeRey/status/991576057424867329?ref_src=twsrc%5Etfw%7Ctwcamp%5Etweetembed%7Ctwterm%5E992341968125493248%7Ctwgr%5E6984c963ccc42b1ee417755fdaea0b53199dc51a%7Ctwcon%5Es2_&ref_url=https%3A%2F%2Fevangelinereynolds.netlify.com%2Fpost%2Fflipbooks-and-flipbookr%2F
+
+
+
+
+---
+
+# And when people do, this it is profoundly appreciated... Hans Rosling & BBC in 2010  
+
+
+<iframe width="767" height="431" src="https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A
+
+
+---
+
+
+## ... I know having the data is not enough. I have to show it in ways people both enjoy and understand
+
+```{r, out.width="65%", fig.align='center'}
+knitr::include_graphics("../2023-09-26-cowy-outline/images/hans_argument.png")
+```
+
+
+---
+
+# 'Here we go. Life expectancy on the y-axis'
+
+
+```{r, out.width="80%"}
+knitr::include_graphics("../2023-09-26-cowy-outline/images/hans_y_axis.png")
+```
+
+---
+
+# 'On the x-axis, wealth'
+
+
+```{r, out.width="80%"}
+knitr::include_graphics("../2023-09-26-cowy-outline/images/hans_x_axis.png")
+
+```
+
+---
+
+# 'Colors represent the different continents'
+
+```{r, out.width="80%"}
+knitr::include_graphics("../2023-09-26-cowy-outline/images/hans_colors.png")
+
+```
+
+
+---
+
+# 'Size represents population'
+
+```{r, out.width="80%"}
+knitr::include_graphics("../2023-09-26-cowy-outline/images/hans_size.png")
+```
+
+---
+class: inverse, center, middle
+
+#  Response to empathic presentation?
+
+--
+
+# 10 million views...
+
+--
+
+(also does animation at the end... which I don't show)
+
+
+---
+
+# And ggplot2 also affords this show-your-plot-bit-by-bit experience, which is empathetic! 
+
+(Specifically aesthetic mappings explained 1 by 1)
+
+```{r, include = F}
+library(tidyverse)
+library(gapminder)
+gapminder %>%  # data from package
+  filter(year == 2002) ->
+gapminder_2002
+```
+
+
+
+```{r scatter1, out.width="33%"}
+ggplot(data = gapminder_2002) + aes(y = lifeExp) 
+  
+last_plot() + aes(x = gdpPercap)
+
+last_plot() + geom_point()
+  
+last_plot() + aes(size = pop/1000000000) 
+
+last_plot() + aes(color = continent) 
+```
+
+---
+class: inverse, center, middle
+
+# And ggplot2 also affords this show-your-plot-bit-by-bit experience, which is empathetic! 
+
+
+---
+
+
+
+
+---
+
+`r chunk_reveal("scatter", title = "## Now, we all have Rosling capabilities with ggplot2")`
+
+```{r scatter, include = F}
+ggplot(data = gapminder_2002) + 
+  aes(y = lifeExp) + 
+  aes(x = gdpPercap) + 
+  geom_point() + 
+  aes(size = pop/1000000000) + 
+  aes(color = continent) 
+```
+
+---
+
+
+## We get the 'Hans Rosling' speak-it experience ...
+
+--
+## ... because ggplot2 is based on the grammar of graphics, (gg = grammar of graphics) ...
+
+--
+## ... which breaks up the plot elements into *orthogonal* parts ...
+
+--
+## ... and allows user to manipulate those parts bit by bit.
+
+---
+class: inverse, center, middle
+
+> # "the Grammar of Graphics makes [building plots] easy because you've just got all these, like, little nice decomposable components" -- Hadley Wickham
+
+
+
+---
+
+## Leland Wilkinson identified orthogonal elements in 'The Grammar of Graphics'. Wilkinson on the Policy Viz Podcast [here](https://policyviz.com/podcast/episode-201-leland-wilkinson/).
+
+```{r, echo = F, eval = T, out.width="75%"}
+knitr::include_graphics("https://miro.medium.com/max/1400/1*MMZuYgeC_YjXNC1r4D4sog.png")
+```
+
+
+
+
+
+
+
+---
+
+## Unpaired pipeline_steps & graphical_elements
+
+```{r}
+library(tidyverse)
+library(ggraph)
+library(tidygraph)
+1:10 %>% 
+  tibble(pipeline_step = .) %>% 
+  crossing(graphical_elements = LETTERS[1:10]) %>% 
+  ggedgelist:::quick_ggedgelist(include_names = T,
+                                layout = "fr")
+
+factor(rep(LETTERS[1:3],3), levels = 1:9 )
+
+# Titanic %>% 
+# tidytext::reorder_within(company, revenue, year))
+```
+
+
+
+## Empathy Failures... 
+
+
+```{r}
+
+
+```
+
+
+
+```{r}
+
+
+
+```
+
+
+
+https://github.com/EvaMaeRey/flipbookr/blob/master/docs/draft_jasa_submission.pdf
+
+
+

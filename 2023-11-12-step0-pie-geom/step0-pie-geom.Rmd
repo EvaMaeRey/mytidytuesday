@@ -49,8 +49,10 @@ layer_data()
 ```{r, error=TRUE}
 compute_panel_pie <- function(data, scales){
   
-  data %>% 
-  count(fill) %>% 
+  if(!("weight" %in% names(data))){data$weight <- 1}
+  
+  out <- data %>% 
+  count(fill, wt = weight) %>% 
   mutate(cum_n = cumsum(n)) %>% 
   mutate(xmax = cum_n/sum(n)) %>% 
   mutate(xmin = lag(xmax)) %>% 
@@ -61,7 +63,18 @@ compute_panel_pie <- function(data, scales){
          ymin = 0, ymax = r
          )
   
+  if("r" %in% names(data)){out$ymax <- data$r[1]}
+  if("r0" %in% names(data)){out$ymin <- data$r0[1]}
+  
+  out
+  
 }
+
+diamonds %>% 
+  mutate(fill = cut) %>% 
+  mutate(r = 1) %>% 
+  mutate(r0 = .5) %>% 
+  compute_panel_pie()
 
 StatPie <- ggproto(`_class` = "StatPie",
                   `_inherit` = ggplot2::Stat,
@@ -99,6 +112,8 @@ ggplot2::diamonds %>%
   aes(fill = cut) + 
   geom_pie() 
 
+layer_data()
+
 last_plot() + 
   coord_polar()
 
@@ -109,32 +124,46 @@ last_plot() +
 last_plot() + 
   coord_polar()
 
+last_plot() + 
+  aes(r = 1, r0 = .5)
+
+```
+
+### Step 4. Test With Titanic Data
+
+```{r}
 Titanic %>% 
   data.frame() %>% 
   uncount(Freq) %>% 
   ggplot() + 
   coord_polar() + 
   aes(fill = Sex) +
-  geom_pie() + 
+  geom_pie() 
+
+last_plot() + 
   facet_wrap(~Sex) + 
-  aes(fill = Class) + 
+  aes(fill = Class) 
+
+last_plot() + 
   facet_grid(Sex~Class) + 
   aes(fill = Survived) + 
-  theme_void() +
-  facet_wrap(~Sex)
+  theme_void() 
+  
+last_plot() +
+  facet_wrap(~Sex) + 
+  aes(r = 1, r0 = .5)
+```
 
+### Example example with weight
 
+```{r}
 Titanic %>% 
   data.frame() %>% 
-  uncount(Freq) %>% 
   ggplot() + 
   coord_polar() + 
-  aes(fill = Sex) +
-  geom_pie() + 
-  facet_wrap(~Sex) + 
-  aes(fill = Class)
-
-
+  aes(fill = Survived, weight = Freq) +
+  facet_wrap(~Sex) +
+  geom_pie()
 ```
 
 
@@ -191,8 +220,6 @@ compute_panel_wedge <- function(data, scales){
   mutate(x = ifelse(id_arc_point == -1 | id_arc_point == num_in_arc + 1, 0, x)) %>% 
   mutate(y = ifelse(id_arc_point == -1 | id_arc_point == num_in_arc + 1, 0, y))
   
-  
-  
 }
 
 
@@ -229,6 +256,8 @@ diamonds %>%
 ggplot() + 
   aes(fill = cut) + 
   geom_wedge()
+
+layer_data()
 ```
 
 ## Closing remarks, Other Relevant Work, Caveats
