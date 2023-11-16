@@ -21,8 +21,8 @@ background-size: cover
 
 # .Large[flipbooks]
 ## .small[past, present, future]
-## .small[https://bit.ly/ggextend-cowy]
-#### .tiny[Dr. Evangeline Reynolds | 2023-10-13 | Lawrence Livermore National Lab R Users Meetup , Image credit: Jaredd Craig, Upsplash]
+## .small[bit.ly/flipbooks-llnl]
+#### .tiny[Dr. Evangeline Reynolds | 2023-11-16 | Lawrence Livermore National Lab R Users Meetup , Image credit: Jaredd Craig, Upsplash]
 
 
 ???
@@ -31,153 +31,354 @@ background-size: cover
 
 
 ---
+class: center, middle, inverse
 
-# flipbookr: An unfolding tale about empathy...
+# flipbooks: An unfolding tale about empathy...
 
 
----
-
-## Chapter 1: Explaining your plot bit by bit is empathetic (Matt Blackwell; Hans Rosling)
 
 --
-## Chapter 2: Pairing code and plot components is empathetic (Hadley Wickham)
+
+draft manuscript:  https://github.com/EvaMaeRey/flipbookr/blob/master/docs/draft_jasa_submission.pdf
+
+---
+class: inverse
+
+
+# Abstract:  
+--
+Flipbooks reveal code pipe-lines 
+--
+line-by-line 
+--
+and side-by-side with output, 
+--
+which yields an animated experience.
+
+
+
+---
+
+count: false
+ 
+## A code 'flipbook'
+.panel1-scatter-auto[
+
+```r
+*library(ggplot2)
+```
+]
+ 
+.panel2-scatter-auto[
+
+]
+
+---
+count: false
+ 
+## A code 'flipbook'
+.panel1-scatter-auto[
+
+```r
+library(ggplot2)
+*gapminder::gapminder
+```
+]
+ 
+.panel2-scatter-auto[
+
+```
+## # A tibble: 1,704 × 6
+##    country     continent  year lifeExp      pop gdpPercap
+##    &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+##  1 Afghanistan Asia       1952    28.8  8425333      779.
+##  2 Afghanistan Asia       1957    30.3  9240934      821.
+##  3 Afghanistan Asia       1962    32.0 10267083      853.
+##  4 Afghanistan Asia       1967    34.0 11537966      836.
+##  5 Afghanistan Asia       1972    36.1 13079460      740.
+##  6 Afghanistan Asia       1977    38.4 14880372      786.
+##  7 Afghanistan Asia       1982    39.9 12881816      978.
+##  8 Afghanistan Asia       1987    40.8 13867957      852.
+##  9 Afghanistan Asia       1992    41.7 16317921      649.
+## 10 Afghanistan Asia       1997    41.8 22227415      635.
+## # ℹ 1,694 more rows
+```
+]
+
+---
+count: false
+ 
+## A code 'flipbook'
+.panel1-scatter-auto[
+
+```r
+library(ggplot2)
+gapminder::gapminder %&gt;%
+* dplyr::filter(year == 2002)
+```
+]
+ 
+.panel2-scatter-auto[
+
+```
+## # A tibble: 142 × 6
+##    country     continent  year lifeExp       pop gdpPercap
+##    &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;     &lt;int&gt;     &lt;dbl&gt;
+##  1 Afghanistan Asia       2002    42.1  25268405      727.
+##  2 Albania     Europe     2002    75.7   3508512     4604.
+##  3 Algeria     Africa     2002    71.0  31287142     5288.
+##  4 Angola      Africa     2002    41.0  10866106     2773.
+##  5 Argentina   Americas   2002    74.3  38331121     8798.
+##  6 Australia   Oceania    2002    80.4  19546792    30688.
+##  7 Austria     Europe     2002    79.0   8148312    32418.
+##  8 Bahrain     Asia       2002    74.8    656397    23404.
+##  9 Bangladesh  Asia       2002    62.0 135656790     1136.
+## 10 Belgium     Europe     2002    78.3  10311970    30486.
+## # ℹ 132 more rows
+```
+]
+
+---
+count: false
+ 
+## A code 'flipbook'
+.panel1-scatter-auto[
+
+```r
+library(ggplot2)
+gapminder::gapminder %&gt;%
+  dplyr::filter(year == 2002) %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-scatter-auto[
+![](flipbooks-lawrence-livermore_files/figure-html/scatter_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+## A code 'flipbook'
+.panel1-scatter-auto[
+
+```r
+library(ggplot2)
+gapminder::gapminder %&gt;%
+  dplyr::filter(year == 2002) %&gt;%
+  ggplot() +
+* aes(y = lifeExp)
+```
+]
+ 
+.panel2-scatter-auto[
+![](flipbooks-lawrence-livermore_files/figure-html/scatter_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+## A code 'flipbook'
+.panel1-scatter-auto[
+
+```r
+library(ggplot2)
+gapminder::gapminder %&gt;%
+  dplyr::filter(year == 2002) %&gt;%
+  ggplot() +
+  aes(y = lifeExp) +
+* aes(x = gdpPercap)
+```
+]
+ 
+.panel2-scatter-auto[
+![](flipbooks-lawrence-livermore_files/figure-html/scatter_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+## A code 'flipbook'
+.panel1-scatter-auto[
+
+```r
+library(ggplot2)
+gapminder::gapminder %&gt;%
+  dplyr::filter(year == 2002) %&gt;%
+  ggplot() +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+* geom_point()
+```
+]
+ 
+.panel2-scatter-auto[
+![](flipbooks-lawrence-livermore_files/figure-html/scatter_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+## A code 'flipbook'
+.panel1-scatter-auto[
+
+```r
+library(ggplot2)
+gapminder::gapminder %&gt;%
+  dplyr::filter(year == 2002) %&gt;%
+  ggplot() +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  geom_point() +
+* aes(size = pop/1000000000)
+```
+]
+ 
+.panel2-scatter-auto[
+![](flipbooks-lawrence-livermore_files/figure-html/scatter_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+## A code 'flipbook'
+.panel1-scatter-auto[
+
+```r
+library(ggplot2)
+gapminder::gapminder %&gt;%
+  dplyr::filter(year == 2002) %&gt;%
+  ggplot() +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  geom_point() +
+  aes(size = pop/1000000000) +
+* aes(color = continent)
+```
+]
+ 
+.panel2-scatter-auto[
+![](flipbooks-lawrence-livermore_files/figure-html/scatter_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-scatter-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-scatter-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-scatter-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+&lt;!-- --- --&gt;
+
+&lt;!-- ### This movie magic arises, because code and output are revealed in a slide show, and content is aligned from one slide to another, which makes differencing (seeing what's new) a effortless physiological process rather than a cognitive one (the case of visual search), availing more cognitive resources to task of interpretation of how code and output pair. --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- ### Flipbooks are additionally powerful, because users can move at their own pace, and back and forth to help address their own specific doubts. The implementation allows users to copy and paste code, full pipelines or bits relevant to their problems. Highlighting newest code in a pipeline allows the consumer to focus on what's changing in the output space, rather than th --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- ### Yet, flipbook *making* has been somewhat cumbersome (does not feel magical), requiring *detailed* know-how about tools like the knitr dynamic document system, YAMLs, and Xaringan. And their use has primarily been by educators creating material for students, in workshops, and presentations. --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- ### New efforts to create `chunk_reveal_live` might put this tech in the hands of more coding newcomers; including on-the-fly classroom use.  Arguably the people that might find flipbooks the most useful (people who aren't going to be able to 'just-read' a pipeline of code), might find them even more engaging when they are used to review and present on the most interesting pipelines: their own explorations of their own data.  --&gt;
+
+---
+
+# Talk outline
+
+## Chapter 1: Pairing code and independent plot elements is elegant, and *empathetic* (Lelend Wilkinson, Hadley Wickham)
 
 --
-## Chapter 3: *showing* pairing by coodinated reveal is gentle and empathetic (Garrick Aden-Bui, others)
+## Chapter 2: step-by-step code-output reveal is gentle and *empathetic* (Garrick Aden-Bui, others)
+
+--
+## Backstory Chapter 3.0: Explaining your plot bit by bit makes your presentation stronger, because it is *empathetic* (Matt Blackwell; Hans Rosling)
 
 ---
 
-## Chapter 4: Automating the paired reveal is self-empathetic (Emi Tanaka; Garrick Aden-Bui; Me)
+## Chapter 3: Sequential reveal allows for automating paired reveal, which is *self-empathetic* (Me; Emi Tanaka; Garrick Aden-Bui)
 
 ---
 
-## Next Chapter: chunk_reveal_live()... Making it accessible and relevant is empathetic.  (via Kelly Bodwin; rstudioapi; Me)
+## Chapter 4: {flipbookr} package is born.
+
+---
+
+## Next Chapter: chunk_reveal_live()... Making flipbook making more accessible is *empathetic.*   (via Kelly Bodwin; rstudioapi; Me)
+
+&lt;!-- ### also faster feedback for iterative design process. --&gt;
 
 ---
 
 ## Yet another Chapter:  Flipbookr for quarto: Keeping it up-to-date is empathetic (Kieran Healey; Kelly Bodwin; me?)
 
 
----
-
-
-## Origins in presentation and *empathy* for your audience in presentation...
-
-
-&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;My best tip on how to give better quantitative presentations is to (a) use more plots and (b) build up your plots on multiple overlays, as in:&lt;br&gt;&lt;br&gt;- Just x-axis (explain it)&lt;br&gt;- Add y-axis (explain it)&lt;br&gt;- Add 1 data point (explain it)&lt;br&gt;- Plot the rest of the data (explain it)&lt;/p&gt;&amp;mdash; Matt Blackwell (@matt_blackwell) &lt;a href="https://twitter.com/matt_blackwell/status/991004129198854145?ref_src=twsrc%5Etfw"&gt;April 30, 2018&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
-
 
 ---
 
-## you are practicing empathy by using data visualization (it's fast); gonna make seeing patterns in your data feel effortless
+# Chapter 1: pairing code with plot element is elegant and empathetic...
+
+
+
+
+---
+
+
+## Leland Wilkinson's Grammar of Graphics work kind of discover the 'natural language' of chart definition.
 
 --
 
-## Visual information channels are "preattentively processed" -- Cleveland and McGill 1984
+## different gg implementations (Tableau, spss' etc) allow us great ability to express ourselves!  
 
-## "preattentively processed" == effortlessness
 
 
 
 ---
 
-## but you can encode so much in a data viz.  So you really need to talk about *each* encoding (one by one) else the interpretation is lost.
+## Leland Wilkinson identified orthogonal elements in 'The Grammar of Graphics'. Wilkinson on the Policy Viz Podcast [here](https://policyviz.com/podcast/episode-201-leland-wilkinson/).
 
+&lt;img src="https://miro.medium.com/max/1400/1*MMZuYgeC_YjXNC1r4D4sog.png" width="75%" /&gt;
+
+
+---
+
+## But unlike natural languages, Japanese, English, Dutch... there wasn't anything freely available! 
 
 --
 
-&lt;img src="https://clauswilke.com/dataviz/aesthetic_mapping_files/figure-html/common-aesthetics-1.png" width="80%" /&gt;
-
-### Wilke's Fundamentals of data visualization
-
+## Hadley Wickam reading the grammar of graphics: 'This is so beautiful, but there's no software."
 
 ---
 
-## Not me: 'Wow, that is profoundly empathetic'. 🦉🦉🦉
-
---
-
-## Me: 'Neat-o! That sounds a lot like the *layered* presentation of graphics.'  🤓🤓🤓
-
----
-
-&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;Good ideas! Very &lt;a href="https://twitter.com/hashtag/ggplot?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#ggplot&lt;/a&gt;. A layered presentation of graphics. &lt;a href="https://t.co/M4tRB9bGS5"&gt;https://t.co/M4tRB9bGS5&lt;/a&gt;&lt;/p&gt;&amp;mdash; Gina Reynolds (@EvaMaeRey) &lt;a href="https://twitter.com/EvaMaeRey/status/991269331257487366?ref_src=twsrc%5Etfw"&gt;May 1, 2018&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
-
-
----
-
-# And when people do, this it is profoundly appreciated... Hans Rosling &amp; BBC in 2010  
-
-
-&lt;iframe width="767" height="431" src="https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
-https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A
-
-
----
-
-
-## ... I know having the data is not enough. I have to show it in ways people both enjoy and understand
-
-
-```r
-knitr::include_graphics("images/hans_argument.png")
-```
-
-&lt;img src="images/hans_argument.png" width="65%" style="display: block; margin: auto;" /&gt;
-
-
----
-
-# 'Here we go. Life expectancy on the y-axis'
-
-
-&lt;img src="images/hans_y_axis.png" width="80%" /&gt;
-
----
-
-# 'On the x-axis, wealth'
-
-
-&lt;img src="images/hans_x_axis.png" width="80%" /&gt;
-
----
-
-# 'Colors represent the different continents'
-
-&lt;img src="images/hans_colors.png" width="80%" /&gt;
-
-
----
-
-# 'Size represents population'
-
-&lt;img src="images/hans_size.png" width="80%" /&gt;
-
----
-class: inverse, center, middle
-
-#  Response to empathic presentation?
-
---
-
-# 10 million views...
-
---
-
-(also does animation at the end... which I don't show)
-
-
----
-
-# Chapter 2: pairing code with plot element is empathetic...
-
-
-
-
-
---
-
-Hadley Wickham, ggplot2 author on it's motivation:
+### Hadley Wickham, ggplot2 author on it's motivation:
 
 &gt; ### And, you know, I'd get a dataset. And, *in my head I could very clearly kind of picture*, I want to put this on the x-axis. Let's put this on the y-axis, draw a line, put some points here, break it up by this variable.
 
@@ -198,17 +399,11 @@ https://www.trifacta.com/podcast/tidy-data-with-hadley-wickham/
 
 # ggplot2 let us "... create graphical 'poems'." - Hadley Wickham (2010) in 'A Layered Grammar of Graphics', *Journal of Computational and Graphical Statistics*
 
---
-
-# ggplot2...
-
-
-
 
 ---
 
 count: false
-## ggplot2 code is graphical narrative
+## ggplot2 code is a sussinct graphical narrative, where the orthogonal components may independently declared
 
 ```r
 *library(ggplot2)
@@ -216,7 +411,7 @@ count: false
 
 ---
 count: false
-## ggplot2 code is graphical narrative
+## ggplot2 code is a sussinct graphical narrative, where the orthogonal components may independently declared
 
 ```r
 library(ggplot2)
@@ -225,7 +420,7 @@ library(ggplot2)
 
 ---
 count: false
-## ggplot2 code is graphical narrative
+## ggplot2 code is a sussinct graphical narrative, where the orthogonal components may independently declared
 
 ```r
 library(ggplot2)
@@ -235,7 +430,7 @@ ggplot(data = gapminder_2002) +
 
 ---
 count: false
-## ggplot2 code is graphical narrative
+## ggplot2 code is a sussinct graphical narrative, where the orthogonal components may independently declared
 
 ```r
 library(ggplot2)
@@ -246,7 +441,7 @@ ggplot(data = gapminder_2002) +
 
 ---
 count: false
-## ggplot2 code is graphical narrative
+## ggplot2 code is a sussinct graphical narrative, where the orthogonal components may independently declared
 
 ```r
 library(ggplot2)
@@ -258,7 +453,7 @@ ggplot(data = gapminder_2002) +
 
 ---
 count: false
-## ggplot2 code is graphical narrative
+## ggplot2 code is a sussinct graphical narrative, where the orthogonal components may independently declared
 
 ```r
 library(ggplot2)
@@ -271,7 +466,7 @@ ggplot(data = gapminder_2002) +
 
 ---
 count: false
-## ggplot2 code is graphical narrative
+## ggplot2 code is a sussinct graphical narrative, where the orthogonal components may independently declared
 
 ```r
 library(ggplot2)
@@ -317,160 +512,21 @@ ggplot(data = gapminder_2002) +
 
 
 ---
+
+# 'Here's what I have in my head, I'm going to translate that to a grammatical representation.'
+
+
+
+---
 class: inverse, center, middle
 
 &gt; # "the Grammar of Graphics makes [building plots] easy because you've just got all these, like, little nice *decomposible components*" -- Hadley Wickham
 
+### They actually map pretty well to how you might go about describing the sketch of the data visualization as you sketch it out. 
 
 ---
 
-## Leland Wilkinson identified orthogonal elements in 'The Grammar of Graphics'. Wilkinson on the Policy Viz Podcast [here](https://policyviz.com/podcast/episode-201-leland-wilkinson/).
-
-&lt;img src="https://miro.medium.com/max/1400/1*MMZuYgeC_YjXNC1r4D4sog.png" width="75%" /&gt;
-
-
----
-
-## Chapter 3: *showing* pairing by coodinated reveal is gentle and empathetic (Garrick Aden-Bui, others)
-
-https://pkg.garrickadenbuie.com/gentle-ggplot2/#1
-
-
----
-
-count: false
- 
-## Garrick Aiden-Buie Coordinated code/plot reveal
-.panel1-scatter-auto[
-
-```r
-*ggplot(data = gapminder_2002)
-```
-]
- 
-.panel2-scatter-auto[
-![](flipbooks-lawrence-livermore_files/figure-html/scatter_auto_01_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-## Garrick Aiden-Buie Coordinated code/plot reveal
-.panel1-scatter-auto[
-
-```r
-ggplot(data = gapminder_2002) +
-* aes(y = lifeExp)
-```
-]
- 
-.panel2-scatter-auto[
-![](flipbooks-lawrence-livermore_files/figure-html/scatter_auto_02_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-## Garrick Aiden-Buie Coordinated code/plot reveal
-.panel1-scatter-auto[
-
-```r
-ggplot(data = gapminder_2002) +
-  aes(y = lifeExp) +
-* aes(x = gdpPercap)
-```
-]
- 
-.panel2-scatter-auto[
-![](flipbooks-lawrence-livermore_files/figure-html/scatter_auto_03_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-## Garrick Aiden-Buie Coordinated code/plot reveal
-.panel1-scatter-auto[
-
-```r
-ggplot(data = gapminder_2002) +
-  aes(y = lifeExp) +
-  aes(x = gdpPercap) +
-* geom_point()
-```
-]
- 
-.panel2-scatter-auto[
-![](flipbooks-lawrence-livermore_files/figure-html/scatter_auto_04_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-## Garrick Aiden-Buie Coordinated code/plot reveal
-.panel1-scatter-auto[
-
-```r
-ggplot(data = gapminder_2002) +
-  aes(y = lifeExp) +
-  aes(x = gdpPercap) +
-  geom_point() +
-* aes(size = pop/1000000000)
-```
-]
- 
-.panel2-scatter-auto[
-![](flipbooks-lawrence-livermore_files/figure-html/scatter_auto_05_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-## Garrick Aiden-Buie Coordinated code/plot reveal
-.panel1-scatter-auto[
-
-```r
-ggplot(data = gapminder_2002) +
-  aes(y = lifeExp) +
-  aes(x = gdpPercap) +
-  geom_point() +
-  aes(size = pop/1000000000) +
-* aes(color = continent)
-```
-]
- 
-.panel2-scatter-auto[
-![](flipbooks-lawrence-livermore_files/figure-html/scatter_auto_06_output-1.png)&lt;!-- --&gt;
-]
-
-&lt;style&gt;
-.panel1-scatter-auto {
-  color: black;
-  width: 38.6060606060606%;
-  hight: 32%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-.panel2-scatter-auto {
-  color: black;
-  width: 59.3939393939394%;
-  hight: 32%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-.panel3-scatter-auto {
-  color: black;
-  width: NA%;
-  hight: 33%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-&lt;/style&gt;
-
-
-
+# Chapter 2: *showing* pairing by coodinated reveal is gentle and empathetic (Garrick Aden-Bui, others)
 
 
 
@@ -483,11 +539,132 @@ ggplot(data = gapminder_2002) +
 
 ---
 
-#  More true to natural language aquisition... Point to each thing and name it...
+# True to natural language aquisition... Point to each thing and name it... (like pair programming too.)
+
+
+https://pkg.garrickadenbuie.com/gentle-ggplot2/#1
+
+## ggplot2 lets you 'speaking your plot into existence'; write 'graphical poems'
 
 --
 
-# and pair coding
+## Garrick read the poem out loud (poetry slam!): Bedtime, picture book, where parent is pointing out new vocabulary in the pictures.  
+
+
+---
+
+# Back Story for Chapter 3.  
+
+### Origins in presentation and *empathy* for your audience in presentation...
+
+
+&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;My best tip on how to give better quantitative presentations is to (a) use more plots and (b) build up your plots on multiple overlays, as in:&lt;br&gt;&lt;br&gt;- Just x-axis (explain it)&lt;br&gt;- Add y-axis (explain it)&lt;br&gt;- Add 1 data point (explain it)&lt;br&gt;- Plot the rest of the data (explain it)&lt;/p&gt;&amp;mdash; Matt Blackwell (@matt_blackwell) &lt;a href="https://twitter.com/matt_blackwell/status/991004129198854145?ref_src=twsrc%5Etfw"&gt;April 30, 2018&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+
+
+---
+
+## you are practicing empathy by using data visualization (it's fast); gonna make seeing patterns in your data feel effortless
+
+--
+
+## Visual information channels are "preattentively processed" -- Cleveland and McGill 1984
+
+## "preattentively processed" == effortlessness
+
+
+
+---
+
+### but you can encode so much in a data viz...
+
+&lt;img src="https://clauswilke.com/dataviz/aesthetic_mapping_files/figure-html/common-aesthetics-1.png" width="80%" /&gt;
+
+Wilke's Fundamentals of data visualization
+
+
+--
+### ...So you really need to talk about *each* encoding (one by one) or the interpretation is lost.
+
+
+
+---
+
+# And when people do, this it is really appreciated... Hans Rosling &amp; BBC in 2010  
+
+
+&lt;iframe width="767" height="431" src="https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
+https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A
+
+
+
+---
+
+# 'Here we go. Life expectancy on the y-axis'
+
+
+&lt;img src="images/hans_y_axis.png" width="80%" /&gt;
+
+---
+
+# 'On the x-axis, wealth'
+
+
+&lt;img src="images/hans_x_axis.png" width="80%" /&gt;
+
+---
+
+# 'Colors represent the different continents'
+
+&lt;img src="images/hans_colors.png" width="80%" /&gt;
+
+
+---
+
+# 'Size represents population'
+
+&lt;img src="images/hans_size.png" width="80%" /&gt;
+
+---
+class: inverse, center, middle
+
+#  Response to empathic presentation?
+
+--
+
+# 10 million views...
+
+--
+
+(also does animation at the end... which I don't show)
+
+
+---
+
+# Chapter 3. Sequential reveal and automation
+
+## Not me: 'Wow, that is profoundly empathetic'. 🦉🦉🦉
+
+--
+
+## Me: 'Neat-o! That sounds a lot like the *layered* presentation of graphics.'  🤓🤓🤓
+
+---
+
+&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;Good ideas! Very &lt;a href="https://twitter.com/hashtag/ggplot?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#ggplot&lt;/a&gt;. A layered presentation of graphics. &lt;a href="https://t.co/M4tRB9bGS5"&gt;https://t.co/M4tRB9bGS5&lt;/a&gt;&lt;/p&gt;&amp;mdash; Gina Reynolds (@EvaMaeRey) &lt;a href="https://twitter.com/EvaMaeRey/status/991269331257487366?ref_src=twsrc%5Etfw"&gt;May 1, 2018&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+
+---
+
+
+&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;Here, building up a &lt;a href="https://twitter.com/hashtag/ggplot2?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#ggplot2&lt;/a&gt; as slowly as possible, &lt;a href="https://twitter.com/hashtag/rstats?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#rstats&lt;/a&gt;. Incremental adjustments. &lt;a href="https://twitter.com/hashtag/rstatsteachingideas?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#rstatsteachingideas&lt;/a&gt; &lt;a href="https://t.co/nUulQl8bPh"&gt;pic.twitter.com/nUulQl8bPh&lt;/a&gt;&lt;/p&gt;&amp;mdash; Gina Reynolds (@EvaMaeRey) &lt;a href="https://twitter.com/EvaMaeRey/status/1029104656763572226?ref_src=twsrc%5Etfw"&gt;August 13, 2018&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+
+
+
+---
+
+## Emi Tanaka; Semi-automation...
+
+&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;Inspired by &lt;a href="https://twitter.com/grrrck?ref_src=twsrc%5Etfw"&gt;@grrrck&lt;/a&gt; and &lt;a href="https://twitter.com/EvaMaeRey?ref_src=twsrc%5Etfw"&gt;@EvaMaeRey&lt;/a&gt;, made the kunoichi + ninjutsu (ninja-theme) version of &lt;a href="https://twitter.com/hashtag/ggplot?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#ggplot&lt;/a&gt; tutorial although Garrick already does explaining this in his excellent blog &lt;a href="https://t.co/msXfg14Ztn"&gt;https://t.co/msXfg14Ztn&lt;/a&gt;. Gist for ninja-theme here: &lt;a href="https://t.co/soHH4Qvz4F"&gt;https://t.co/soHH4Qvz4F&lt;/a&gt; &lt;a href="https://twitter.com/hashtag/rstats?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#rstats&lt;/a&gt; &lt;a href="https://t.co/YlRHAGnaUm"&gt;pic.twitter.com/YlRHAGnaUm&lt;/a&gt;&lt;/p&gt;&amp;mdash; Emi Tanaka @emitanaka@fosstodon.org (@statsgen) &lt;a href="https://twitter.com/statsgen/status/1041279648452108289?ref_src=twsrc%5Etfw"&gt;September 16, 2018&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+
 
 ---
 
@@ -497,9 +674,9 @@ count: false
 
 ```
 ## # A tibble: 1 × 2
-##   function_name    gg_element       
-##   &lt;chr&gt;            &lt;chr&gt;            
-## 1 ggplot2 func 'A' gg manipulation 1
+##   function_name    gg_element      
+##   &lt;chr&gt;            &lt;chr&gt;           
+## 1 ggplot2 func 'A' grammar move # 1
 ```
 
 ---
@@ -508,10 +685,10 @@ count: false
 
 ```
 ## # A tibble: 2 × 2
-##   function_name    gg_element       
-##   &lt;chr&gt;            &lt;chr&gt;            
-## 1 ggplot2 func 'A' gg manipulation 1
-## 2 ggplot2 func 'B' gg manipulation 2
+##   function_name    gg_element      
+##   &lt;chr&gt;            &lt;chr&gt;           
+## 1 ggplot2 func 'A' grammar move # 1
+## 2 ggplot2 func 'B' grammar move # 2
 ```
 
 ---
@@ -520,11 +697,11 @@ count: false
 
 ```
 ## # A tibble: 3 × 2
-##   function_name    gg_element       
-##   &lt;chr&gt;            &lt;chr&gt;            
-## 1 ggplot2 func 'A' gg manipulation 1
-## 2 ggplot2 func 'B' gg manipulation 2
-## 3 ggplot2 func 'C' gg manipulation 3
+##   function_name    gg_element      
+##   &lt;chr&gt;            &lt;chr&gt;           
+## 1 ggplot2 func 'A' grammar move # 1
+## 2 ggplot2 func 'B' grammar move # 2
+## 3 ggplot2 func 'C' grammar move # 3
 ```
 
 ---
@@ -533,12 +710,12 @@ count: false
 
 ```
 ## # A tibble: 4 × 2
-##   function_name    gg_element       
-##   &lt;chr&gt;            &lt;chr&gt;            
-## 1 ggplot2 func 'A' gg manipulation 1
-## 2 ggplot2 func 'B' gg manipulation 2
-## 3 ggplot2 func 'C' gg manipulation 3
-## 4 ggplot2 func 'D' gg manipulation 4
+##   function_name    gg_element      
+##   &lt;chr&gt;            &lt;chr&gt;           
+## 1 ggplot2 func 'A' grammar move # 1
+## 2 ggplot2 func 'B' grammar move # 2
+## 3 ggplot2 func 'C' grammar move # 3
+## 4 ggplot2 func 'D' grammar move # 4
 ```
 
 ---
@@ -547,13 +724,13 @@ count: false
 
 ```
 ## # A tibble: 5 × 2
-##   function_name    gg_element       
-##   &lt;chr&gt;            &lt;chr&gt;            
-## 1 ggplot2 func 'A' gg manipulation 1
-## 2 ggplot2 func 'B' gg manipulation 2
-## 3 ggplot2 func 'C' gg manipulation 3
-## 4 ggplot2 func 'D' gg manipulation 4
-## 5 ggplot2 func 'E' gg manipulation 5
+##   function_name    gg_element      
+##   &lt;chr&gt;            &lt;chr&gt;           
+## 1 ggplot2 func 'A' grammar move # 1
+## 2 ggplot2 func 'B' grammar move # 2
+## 3 ggplot2 func 'C' grammar move # 3
+## 4 ggplot2 func 'D' grammar move # 4
+## 5 ggplot2 func 'E' grammar move # 5
 ```
 
 ---
@@ -562,14 +739,14 @@ count: false
 
 ```
 ## # A tibble: 6 × 2
-##   function_name    gg_element       
-##   &lt;chr&gt;            &lt;chr&gt;            
-## 1 ggplot2 func 'A' gg manipulation 1
-## 2 ggplot2 func 'B' gg manipulation 2
-## 3 ggplot2 func 'C' gg manipulation 3
-## 4 ggplot2 func 'D' gg manipulation 4
-## 5 ggplot2 func 'E' gg manipulation 5
-## 6 ggplot2 func 'F' gg manipulation 6
+##   function_name    gg_element      
+##   &lt;chr&gt;            &lt;chr&gt;           
+## 1 ggplot2 func 'A' grammar move # 1
+## 2 ggplot2 func 'B' grammar move # 2
+## 3 ggplot2 func 'C' grammar move # 3
+## 4 ggplot2 func 'D' grammar move # 4
+## 5 ggplot2 func 'E' grammar move # 5
+## 6 ggplot2 func 'F' grammar move # 6
 ```
 
 ---
@@ -578,15 +755,15 @@ count: false
 
 ```
 ## # A tibble: 7 × 2
-##   function_name    gg_element       
-##   &lt;chr&gt;            &lt;chr&gt;            
-## 1 ggplot2 func 'A' gg manipulation 1
-## 2 ggplot2 func 'B' gg manipulation 2
-## 3 ggplot2 func 'C' gg manipulation 3
-## 4 ggplot2 func 'D' gg manipulation 4
-## 5 ggplot2 func 'E' gg manipulation 5
-## 6 ggplot2 func 'F' gg manipulation 6
-## 7 ggplot2 func 'G' gg manipulation 7
+##   function_name    gg_element      
+##   &lt;chr&gt;            &lt;chr&gt;           
+## 1 ggplot2 func 'A' grammar move # 1
+## 2 ggplot2 func 'B' grammar move # 2
+## 3 ggplot2 func 'C' grammar move # 3
+## 4 ggplot2 func 'D' grammar move # 4
+## 5 ggplot2 func 'E' grammar move # 5
+## 6 ggplot2 func 'F' grammar move # 6
+## 7 ggplot2 func 'G' grammar move # 7
 ```
 
 ---
@@ -595,16 +772,16 @@ count: false
 
 ```
 ## # A tibble: 8 × 2
-##   function_name    gg_element       
-##   &lt;chr&gt;            &lt;chr&gt;            
-## 1 ggplot2 func 'A' gg manipulation 1
-## 2 ggplot2 func 'B' gg manipulation 2
-## 3 ggplot2 func 'C' gg manipulation 3
-## 4 ggplot2 func 'D' gg manipulation 4
-## 5 ggplot2 func 'E' gg manipulation 5
-## 6 ggplot2 func 'F' gg manipulation 6
-## 7 ggplot2 func 'G' gg manipulation 7
-## 8 ggplot2 func 'H' gg manipulation 8
+##   function_name    gg_element      
+##   &lt;chr&gt;            &lt;chr&gt;           
+## 1 ggplot2 func 'A' grammar move # 1
+## 2 ggplot2 func 'B' grammar move # 2
+## 3 ggplot2 func 'C' grammar move # 3
+## 4 ggplot2 func 'D' grammar move # 4
+## 5 ggplot2 func 'E' grammar move # 5
+## 6 ggplot2 func 'F' grammar move # 6
+## 7 ggplot2 func 'G' grammar move # 7
+## 8 ggplot2 func 'H' grammar move # 8
 ```
 
 ---
@@ -613,17 +790,17 @@ count: false
 
 ```
 ## # A tibble: 9 × 2
-##   function_name    gg_element       
-##   &lt;chr&gt;            &lt;chr&gt;            
-## 1 ggplot2 func 'A' gg manipulation 1
-## 2 ggplot2 func 'B' gg manipulation 2
-## 3 ggplot2 func 'C' gg manipulation 3
-## 4 ggplot2 func 'D' gg manipulation 4
-## 5 ggplot2 func 'E' gg manipulation 5
-## 6 ggplot2 func 'F' gg manipulation 6
-## 7 ggplot2 func 'G' gg manipulation 7
-## 8 ggplot2 func 'H' gg manipulation 8
-## 9 ggplot2 func 'I' gg manipulation 9
+##   function_name    gg_element      
+##   &lt;chr&gt;            &lt;chr&gt;           
+## 1 ggplot2 func 'A' grammar move # 1
+## 2 ggplot2 func 'B' grammar move # 2
+## 3 ggplot2 func 'C' grammar move # 3
+## 4 ggplot2 func 'D' grammar move # 4
+## 5 ggplot2 func 'E' grammar move # 5
+## 6 ggplot2 func 'F' grammar move # 6
+## 7 ggplot2 func 'G' grammar move # 7
+## 8 ggplot2 func 'H' grammar move # 8
+## 9 ggplot2 func 'I' grammar move # 9
 ```
 
 &lt;style&gt;
@@ -659,23 +836,18 @@ count: false
 
 ---
 
-Usual pairing? 
+### Usual pairing? (pairing at all is empathetic! output helps communicat intent of code. Afforeded by dynamic document systems: knitr, quarto, jupytr notebooks.)
 
 --
 
-Pipeline
-
---
-
-Final output
-
----
-
-### Complete code pipeline
+#### Complete code pipeline
 
 
 ```r
-ggplot(data = gapminder_2002) + 
+library(ggplot2)
+gapminder::gapminder %&gt;% 
+  dplyr::filter(year == 2002) %&gt;% 
+  ggplot() + 
   aes(y = lifeExp) + 
   aes(x = gdpPercap) + 
   geom_point() + 
@@ -683,43 +855,30 @@ ggplot(data = gapminder_2002) +
   aes(color = continent) 
 ```
 
----
 
-### Complete code pipeline
+--
 
-
-```r
-ggplot(data = gapminder_2002) + 
-  aes(y = lifeExp) + 
-  aes(x = gdpPercap) + 
-  geom_point() + 
-  aes(size = pop/1000000000) + 
-  aes(color = continent) 
-```
-
-### Complete plot
+#### Complete plot
 
 
-&lt;img src="flipbooks-lawrence-livermore_files/figure-html/unnamed-chunk-11-1.png" height="50%" /&gt;
+&lt;img src="flipbooks-lawrence-livermore_files/figure-html/unnamed-chunk-9-1.png" height="30%" /&gt;
 
 ---
 
 ### Possible pairings of functions and gg graphical moves.
 
-![](flipbooks-lawrence-livermore_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+![](flipbooks-lawrence-livermore_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
 
----
-
-# flipbook pairing is tidy, like vectors in a data frame...
+# flipbook pairing is 'tidy', like vectors organized in a data frame...
 
 
 
 ---
-
 
 count: false
  
-
+## Pairing is powerful, 'tidy'; e.g. data frames
+### How many Minnies in 1880?
 .panel1-babynamesvectors-auto[
 
 ```r
@@ -738,7 +897,8 @@ count: false
 ---
 count: false
  
-
+## Pairing is powerful, 'tidy'; e.g. data frames
+### How many Minnies in 1880?
 .panel1-babynamesvectors-auto[
 
 ```r
@@ -763,7 +923,8 @@ babynames::babynames$name[1:10]
 ---
 count: false
  
-
+## Pairing is powerful, 'tidy'; e.g. data frames
+### How many Minnies in 1880?
 .panel1-babynamesvectors-auto[
 
 ```r
@@ -794,7 +955,8 @@ babynames::babynames$n[1:10]
 ---
 count: false
  
-
+## Pairing is powerful, 'tidy'; e.g. data frames
+### How many Minnies in 1880?
 .panel1-babynamesvectors-auto[
 
 ```r
@@ -844,7 +1006,8 @@ babynames::babynames$year[1:10]
 ---
 count: false
  
-
+## Pairing is powerful, 'tidy'; e.g. data frames
+### How many Minnies in 1880?
 .panel1-babynamesvectors-auto[
 
 ```r
@@ -922,44 +1085,424 @@ babynames::babynames %&gt;% select(name, year, n) %&gt;% .[1:10,]
 
 
 
----
-
-
-&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;Here, building up a &lt;a href="https://twitter.com/hashtag/ggplot2?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#ggplot2&lt;/a&gt; as slowly as possible, &lt;a href="https://twitter.com/hashtag/rstats?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#rstats&lt;/a&gt;. Incremental adjustments. &lt;a href="https://twitter.com/hashtag/rstatsteachingideas?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#rstatsteachingideas&lt;/a&gt; &lt;a href="https://t.co/nUulQl8bPh"&gt;pic.twitter.com/nUulQl8bPh&lt;/a&gt;&lt;/p&gt;&amp;mdash; Gina Reynolds (@EvaMaeRey) &lt;a href="https://twitter.com/EvaMaeRey/status/1029104656763572226?ref_src=twsrc%5Etfw"&gt;August 13, 2018&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
 
 
 ---
 
+### {flipbookr} was born
 
-&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;Inspired by &lt;a href="https://twitter.com/grrrck?ref_src=twsrc%5Etfw"&gt;@grrrck&lt;/a&gt; and &lt;a href="https://twitter.com/EvaMaeRey?ref_src=twsrc%5Etfw"&gt;@EvaMaeRey&lt;/a&gt;, made the kunoichi + ninjutsu (ninja-theme) version of &lt;a href="https://twitter.com/hashtag/ggplot?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#ggplot&lt;/a&gt; tutorial although Garrick already does explaining this in his excellent blog &lt;a href="https://t.co/msXfg14Ztn"&gt;https://t.co/msXfg14Ztn&lt;/a&gt;. Gist for ninja-theme here: &lt;a href="https://t.co/soHH4Qvz4F"&gt;https://t.co/soHH4Qvz4F&lt;/a&gt; &lt;a href="https://twitter.com/hashtag/rstats?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#rstats&lt;/a&gt; &lt;a href="https://t.co/YlRHAGnaUm"&gt;pic.twitter.com/YlRHAGnaUm&lt;/a&gt;&lt;/p&gt;&amp;mdash; Emi Tanaka @emitanaka@fosstodon.org (@statsgen) &lt;a href="https://twitter.com/statsgen/status/1041279648452108289?ref_src=twsrc%5Etfw"&gt;September 16, 2018&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+
+
+```r
+remotes::install.github("EvaMaeRey/flipbookr")
+install.packages("xaringan")
+```
+
+RConsortium Grant. Thanks!
+
+---
+
+
+``` verbatim
+
+r chunk_reveal(chunk_name = "my_chunk",
+break_type = c("auto", "user", 10, "rotate", "replace"),
+display_type = c("code", "output", "both"))`
+
+
+
+```r
+library(ggplot2)
+gapminder::gapminder %&gt;% 
+  dplyr::filter(year == 2002) %&gt;% 
+  ggplot() + 
+  aes(y = lifeExp) + 
+  aes(x = gdpPercap) + 
+  geom_point() + 
+  aes(size = pop/1000000000) + 
+  aes(color = continent) 
+```
+
+![](flipbooks-lawrence-livermore_files/figure-html/my_chunk-1.png)&lt;!-- --&gt;
+
+````
 
 
 ---
 
-flipboork::chunk_reveal()
+# In the backgroud flipbookr::chunk_reveal():
 
+--
 
-"a_create_test_code.R"       
-"b_parsing.R"       
-"c_prep_sequences.R"         
-"d_prep_rmd_chunks.R"    
-"e_define_css.R"             
-"f_chunk_expand.R"      
-"g_exported_functions.R"     
-
-
----
-
-## Failures... 
-
-"0_knitr_live_experimental.R"
-"h_write_instant_flipbook.R"
-
+## grabs code from chunk,
+--
+parses it,
+--
+explodes it into partial builds,
+--
+inserts each partial build into individual slides for presentation in Xaringan
 
 
 ---
 
-https://github.com/EvaMaeRey/flipbookr/blob/master/docs/draft_jasa_submission.pdf
+# Flipbooks feel magical...
+
+--
+
+# Creating a flipbook doesn't... (you'll see in the demo)
+
+--
+
+# But it could w/ chunk_reveal_live()
+
+---
+
+
+# Stats 101 classroom goal...
+
+### New efforts to create `chunk_reveal_live` might put this tech in the hands of more coding newcomers; including on-the-fly classroom use.  Arguably the people that might find flipbooks the most useful --- people who aren't going to be able to 'just-read' a pipeline of code --- might find them even more engaging when they are used to review and present on the most interesting pipelines: their own explorations of their own data. 
+
+---
+
+count: false
+ 
+
+.panel1-stats_101-auto[
+
+```r
+*library(ggplot2)
+```
+]
+ 
+.panel2-stats_101-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-stats_101-auto[
+
+```r
+library(ggplot2)
+*library(ggsmoothfit)  # stat fit below
+```
+]
+ 
+.panel2-stats_101-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-stats_101-auto[
+
+```r
+library(ggplot2)
+library(ggsmoothfit)  # stat fit below
+
+*mtcars
+```
+]
+ 
+.panel2-stats_101-auto[
+
+```
+##                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710          22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+## Hornet 4 Drive      21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+## Hornet Sportabout   18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+## Valiant             18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+## Duster 360          14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
+## Merc 240D           24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+## Merc 230            22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+## Merc 280            19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+## Merc 280C           17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
+## Merc 450SE          16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3
+## Merc 450SL          17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3
+## Merc 450SLC         15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
+## Cadillac Fleetwood  10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
+## Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
+## Chrysler Imperial   14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
+## Fiat 128            32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+## Honda Civic         30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+## Toyota Corolla      33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
+## Toyota Corona       21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
+## Dodge Challenger    15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2
+## AMC Javelin         15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2
+## Camaro Z28          13.3   8 350.0 245 3.73 3.840 15.41  0  0    3    4
+## Pontiac Firebird    19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2
+## Fiat X1-9           27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
+## Porsche 914-2       26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+## Lotus Europa        30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+## Ford Pantera L      15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4
+## Ferrari Dino        19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
+## Maserati Bora       15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
+## Volvo 142E          21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-stats_101-auto[
+
+```r
+library(ggplot2)
+library(ggsmoothfit)  # stat fit below
+
+mtcars %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-stats_101-auto[
+![](flipbooks-lawrence-livermore_files/figure-html/stats_101_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-stats_101-auto[
+
+```r
+library(ggplot2)
+library(ggsmoothfit)  # stat fit below
+
+mtcars %&gt;%
+  ggplot() +
+* aes(x = wt)
+```
+]
+ 
+.panel2-stats_101-auto[
+![](flipbooks-lawrence-livermore_files/figure-html/stats_101_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-stats_101-auto[
+
+```r
+library(ggplot2)
+library(ggsmoothfit)  # stat fit below
+
+mtcars %&gt;%
+  ggplot() +
+  aes(x = wt) +
+* aes(y = mpg)
+```
+]
+ 
+.panel2-stats_101-auto[
+![](flipbooks-lawrence-livermore_files/figure-html/stats_101_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-stats_101-auto[
+
+```r
+library(ggplot2)
+library(ggsmoothfit)  # stat fit below
+
+mtcars %&gt;%
+  ggplot() +
+  aes(x = wt) +
+  aes(y = mpg) +
+* geom_point()
+```
+]
+ 
+.panel2-stats_101-auto[
+![](flipbooks-lawrence-livermore_files/figure-html/stats_101_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-stats_101-auto[
+
+```r
+library(ggplot2)
+library(ggsmoothfit)  # stat fit below
+
+mtcars %&gt;%
+  ggplot() +
+  aes(x = wt) +
+  aes(y = mpg) +
+  geom_point() +
+* geom_smooth(method = lm, se = F)
+```
+]
+ 
+.panel2-stats_101-auto[
+![](flipbooks-lawrence-livermore_files/figure-html/stats_101_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-stats_101-auto[
+
+```r
+library(ggplot2)
+library(ggsmoothfit)  # stat fit below
+
+mtcars %&gt;%
+  ggplot() +
+  aes(x = wt) +
+  aes(y = mpg) +
+  geom_point() +
+  geom_smooth(method = lm, se = F) +
+* stat_fit(method = lm,
+*          geom = "point",
+*          color = "blue")
+```
+]
+ 
+.panel2-stats_101-auto[
+![](flipbooks-lawrence-livermore_files/figure-html/stats_101_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-stats_101-auto[
+
+```r
+library(ggplot2)
+library(ggsmoothfit)  # stat fit below
+
+mtcars %&gt;%
+  ggplot() +
+  aes(x = wt) +
+  aes(y = mpg) +
+  geom_point() +
+  geom_smooth(method = lm, se = F) +
+  stat_fit(method = lm,
+           geom = "point",
+           color = "blue") +
+* stat_fit(method = lm,
+*          geom = "segment",
+*          color = "red")
+```
+]
+ 
+.panel2-stats_101-auto[
+![](flipbooks-lawrence-livermore_files/figure-html/stats_101_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-stats_101-auto[
+
+```r
+library(ggplot2)
+library(ggsmoothfit)  # stat fit below
+
+mtcars %&gt;%
+  ggplot() +
+  aes(x = wt) +
+  aes(y = mpg) +
+  geom_point() +
+  geom_smooth(method = lm, se = F) +
+  stat_fit(method = lm,
+           geom = "point",
+           color = "blue") +
+  stat_fit(method = lm,
+           geom = "segment",
+           color = "red") +
+* geom_smooth(method = lm)
+```
+]
+ 
+.panel2-stats_101-auto[
+![](flipbooks-lawrence-livermore_files/figure-html/stats_101_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-stats_101-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-stats_101-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-stats_101-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+### Tell me and I forget.
+
+--
+
+### Show me, I remember.
+
+--
+
+### Let me do and, I understand
+
+---
+
+### And then let me reflect on what I've done, 
+--
+in a step by step way 
+--
+and let me verbalize with my peers&amp;instructor about what I've done 
+--
+I understand more profoundly 
+--
+(and my peers&amp;instructor can help straighten out any misunderstandings).
+
+---
+
+## What'd be needed for the paper I want to publish.  
+
+## Data.  
+--
+Eyetracking data probably about how people are actually use and interact with flipbooks. 
+
+
+---
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
