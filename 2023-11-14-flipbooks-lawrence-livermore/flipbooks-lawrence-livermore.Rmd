@@ -458,28 +458,14 @@ RConsortium Grant. Thanks!
 
 ---
 
+# Live demo - with flipbookr
 
-``` verbatim
-
-r chunk_reveal(chunk_name = "my_chunk",
-break_type = c("auto", "user", 10, "rotate", "replace"),
-display_type = c("code", "output", "both"))`
-
-
-```{r my_chunk}
-library(ggplot2)
-gapminder::gapminder %>% 
-  dplyr::filter(year == 2002) %>% 
-  ggplot() + 
-  aes(y = lifeExp) + 
-  aes(x = gdpPercap) + 
-  geom_point() + 
-  aes(size = pop/1000000000) + 
-  aes(color = continent) 
+```{r, eval = F}
+install.packages("xaringan")
+remotes::install_github("EvaMaeRey/flipbookr")
 ```
 
-````
-
+## RStudio -> File -> New File -> R Markdown -> From Template -> Template: A Minimal Flipbook
 
 ---
 
@@ -487,11 +473,11 @@ gapminder::gapminder %>%
 
 --
 
-## grabs code from chunk,
+## grabs code from chunk, 
 --
-parses it,
+parses it, 
 --
-explodes it into partial builds,
+explodes it into partial builds, 
 --
 inserts each partial build into individual slides for presentation in Xaringan
 
@@ -502,11 +488,24 @@ inserts each partial build into individual slides for presentation in Xaringan
 
 --
 
-# Creating a flipbook doesn't... (you'll see in the demo)
+# Flipbookr makes, creating a flipbook is manigeable, but not quite magical ...
+
+---
+
+### But it could magical w/ a chunk_reveal() modified behaivior for on-demand mini flipbooks from within live session (rmd/qmd). 
 
 --
+### Using Bodwin's live chunk getting strategy as used in {flair}.  https://github.com/EvaMaeRey/knitcodegetlive,  (working) 
 
-# But it could w/ chunk_reveal_live()
+--
+### and rstudioapi::viewer... (not working) 
+--
+### and maybe addin... (to be added). 
+--
+### only getting started with .qmd (He)
+
+
+
 
 ---
 
@@ -541,27 +540,37 @@ mtcars %>%
 
 ---
 
-### Tell me and I forget.
+## Flipbooks and proverb about learning
+
+### Tell me and I forget. 
 
 --
 
-### Show me, I remember.
+### Show me, I remember. (creating flipbooks for others) 
 
 --
 
-### Let me do and, I understand
+### Let me do and, I understand. (making flipbooks more accessible)
 
 ---
 
-### And then let me reflect on what I've done, 
+### Extending the proverb...
+
+### Let me tell you about what I've done, I expose what I might not fully understand... 
+
 --
-in a step by step way 
+
+(and then ask newcomers to talk you though *their* pipeline)
+
+### Flipbooks I make myself, let me reflect on what I've done, 
 --
-and let me verbalize with my peers&instructor about what I've done 
+in a step by step way. 
 --
-I understand more profoundly 
+In a workshop or classroom setting, too, I can go through verbalizing with my peers & instructor about what I've done 
 --
-(and my peers&instructor can help straighten out any misunderstandings).
+I understand more profoundly  
+--
+and my peers & instructor can help straighten out any misunderstandings.
 
 ---
 
