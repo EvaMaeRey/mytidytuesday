@@ -1,0 +1,171 @@
+---
+title: "a geom_wedge via ggforce::stat_pie extension experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+# Step 0. build w/out extending (ggplot2 + ggforce)
+
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+diamonds %>% 
+  count(cut) %>% 
+  ggplot() + 
+  aes(amount = n, r0 = 0, r = 1, fill = cut, x0 = 0, y0 = 0) + 
+  ggforce::stat_pie()
+
+```
+
+
+# Step 1. computation
+
+Here we're mostly piggybacking on ggforce::StatPie, but we'd like to have more default rather than required aesthetics, an the external circle area to be meaningful; so data$amount
+
+```{r}
+compute_panel_wedge <- function(data, scales, n = 360, sep = 0){
+  
+  # defaulting aesthetics, instead of requiring
+  if(!("x0" %in% names(data))){data$x0 <- 0}
+  if(!("y0" %in% names(data))){data$y0 <- 0}
+  if(!("r0" %in% names(data))){data$r0 <- 0}
+  if(!("r" %in% names(data))) {data$r  <- sqrt(sum(data$amount)/pi)} # area will be equal to amount
+  
+  # maybe change 'amount' to 'weight'?
+  
+  
+  # piggybacking from StatPie
+  ggforce::StatPie$compute_panel(data, scales = scales, n = n, sep = sep)
+  
+}
+```
+
+
+
+# Step 2. create ggproto objects
+
+We define a StatWedge, which is closely related to ggforce::StatPie, but has fewer required aesthetics.
+
+```{r}
+#     For reference... showing the abreviated ggforce::StatPie 
+#     StatPie <- ggproto('StatPie', Stat,
+#       compute_panel = function(data, scales, n = 360, sep = 0) {.......},
+#       required_aes = c('x0', 'y0', 'r0', 'r', 'amount'),
+#       default_aes = aes(explode = NULL)
+#     )
+
+StatWedge <- ggplot2::ggproto(
+  `_class` = 'StatWedge', 
+  `_inherit` = ggplot2::Stat,
+  compute_panel = compute_panel_wedge,
+  required_aes = c('amount'),
+  default_aes = ggplot2::aes(x0 = NULL, y0 = NULL, 
+                             r0 = NULL, r = NULL, 
+                             explode = NULL)
+)
+
+# Gentle modification from ggforce::GeomArcBar, changing color (was black) and fill (was NA) defaults 
+GeomArcWedge <- ggplot2::ggproto('GeomArcWedge', ggforce::GeomShape,
+  default_aes = ggforce:::combine_aes(ggforce::GeomShape$default_aes, 
+                                      ggplot2::aes(colour = NA, fill = "grey"))
+)
+
+
+```
+
+# Step 3. pass to user facing geom_* or stat_*
+
+Almost same as stat_pie, but using the GeomArcWedge defined above and StatWedge defined above
+
+```{r}
+geom_wedge <- function(mapping = NULL, data = NULL, geom = 'arc_wedge',
+                     position = 'identity', n = 360, sep = 0, na.rm = FALSE,
+                     show.legend = NA, inherit.aes = TRUE, ...) {
+  layer(
+    stat = StatWedge, data = data, mapping = mapping, geom = geom,
+    position = position, show.legend = show.legend, inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, n = n, sep = sep, ...)
+  )
+}
+```
+
+
+# Step 4.  Try it out...
+
+```{r}
+library(tidyverse)
+diamonds %>% 
+  count(cut) %>% 
+  ggplot() + 
+  aes(amount = n) + 
+  geom_wedge()
+
+last_plot() + 
+  aes(fill = cut)
+  
+last_plot() + 
+  aes(alpha = n)
+
+last_plot() + 
+  aes(r0 = .5, r = 1)
+
+last_plot() + 
+  aes(x0 = 5)
+
+last_plot() + 
+  aes(r = n)
+
+diamonds |>
+  count(cut, clarity) |> 
+  ggplot() + 
+  facet_wrap(~clarity) +
+  geom_wedge(color = "blue", alpha = .2) + 
+  aes(amount = n, fill = cut)
+
+last_plot() + 
+  aes(r = 1) # back to unit circle...
+```
+
+```{r}
+Titanic %>% 
+  data.frame() %>% 
+  uncount(Freq) ->
+tidyTitanic
+
+tidyTitanic %>% 
+  count(Sex, Survived) %>% 
+  ungroup() %>% 
+  ungroup() %>% ### Issue!!!!??
+  ggplot() + 
+  aes(amount = n, fill = Sex) + 
+  geom_wedge()
+
+last_plot() + 
+  facet_wrap(~Sex)
+
+
+
+## Bayesian thinking
+# Given Female, prob survived
+last_plot() + 
+  aes(fill = Survived)
+
+# Given Survived, prob female
+last_plot() + 
+  facet_wrap(~Survived) + 
+  aes(fill = Sex)
+
+last_plot() + 
+  aes(explode = c(0,0, 5, 0))
+
+```
+

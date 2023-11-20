@@ -1,0 +1,204 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+Below, I'm copying and pasting a first cut at ggpie - one that mostly just borrows from geom_bar and the recommended approach in the ggplot2 documentation.
+
+But there is a point of friction in the y or x needs to be specified to build the pie.  Which doesn't really seem like relevant to building a pie chart. 
+
+The bigger issue is be that overall area of the pie could be relevant, and this, I believe is not possible with geom_bar/stat_count.  So it seems worthwhile to try to build a custom geom.  
+
+
+---
+
+
+
+
+
+# ggpie  🦄 (is mostly mythical), probably changing to ggwedge
+
+<!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+<!-- badges: end -->
+
+The goal of ggpie is to allow this interface:
+
+```{r, eval = T}
+library(ggplot2)
+library(ggpie)
+
+ggpie(diamonds) + 
+  aes(fill = color) + 
+  geom_wedge() 
+
+last_plot() + 
+  facet_wrap(facets = vars(cut))
+```
+
+
+Observations:  the `ggplot()` function start point has a particular set of defaults that might not be the best suited for final plot.
+
+Assertion: other defaults can be bundled up and serve as grammatically-equivalent alternative start points.
+
+
+### Alternative without ggpie
+
+```{r}
+library(tidyverse)
+
+diamonds %>%
+ggplot() + 
+  aes(y = 0, fill = cut) + 
+  geom_bar(position = "fill") + 
+  coord_polar() + 
+  theme_void() 
+```
+
+#### adding labels
+
+```{r, error=T}
+last_plot() + 
+ stat_count(
+    geom = "text", position = "fill",
+    color = "white", size = 8,
+    aes(x = .25,
+        label = after_stat(
+          count*100/sum(count)) |>
+          round(1) |>
+          paste0("%"),
+        y = stage(start = NULL,
+                  after_stat = count,
+                  after_scale = (ymin +
+                                   ymax)/2)))
+  
+
+
+```
+
+#### case where you already have summary on which to proportion...
+
+
+```{r}
+library(tidyverse)
+
+diamonds %>%
+  count(cut) %>% 
+  ggplot() + 
+  aes(x = 0, fill = cut, weight = n) + 
+  geom_bar(position = "fill") + 
+  coord_polar(theta = "y") + 
+  theme_void() 
+```
+
+
+# Developing the new API.
+
+```{r, pie_functions}
+#' Title
+#'
+#' @return
+#' @export
+#'
+#' @examples
+plot_pie <- function(...){
+  
+  list(
+    ggplot2::coord_polar(theta = "y", ...),
+    ggplot2::theme_void(),
+    ggplot2::aes(x = 0) # hacky; grammar problem
+  )
+  
+}
+
+#' Title
+#'
+#' @param data 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+ggpie <- function(data){
+  
+  ggplot2::ggplot(data = data) + 
+  plot_pie()
+  
+}
+
+
+# just aliasing to be nice to ourselves
+# probably a better way 
+# is doing more re-writing so that x is not a required aesthetic
+#' Title
+#'
+#' @param ... 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+geom_wedge <- function(...){
+  
+  ggplot2::geom_bar(position = "fill", ...)
+  
+}
+
+
+# some very preliminary and messy ideas for new Stat Wedge approach
+# but wondering if this is worth it.  
+# I think it could be if geom is used with ggplot() start point.
+# StatWedge <- ggproto(`_class` = StatCount2, 
+#                      `_inherit` = ggplot2::Stat,
+#                      compute_group )
+# 
+# ggplot2::StatCount$compute_group %>% 
+#   mutate(x)
+# 
+# stat_count
+
+# geom_wedge <- function (mapping = NULL, data = NULL, geom = "bar", 
+#                         position = "fill", 
+#                         ..., width = NULL, na.rm = FALSE, 
+#                         orientation = NA, show.legend = NA, 
+#                         inherit.aes = TRUE) 
+# {
+#     params <- list2(na.rm = na.rm, orientation = orientation, 
+#         width = width, ...)
+#     layer(data = data, mapping = mapping, stat = StatCount, geom = geom, 
+#         position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
+#         params = params)
+# }
+
+```
+
+
+## Test it out
+
+
+```{r}
+ggpie(diamonds) + 
+  aes(fill = cut) +
+  geom_wedge() 
+
+# a ggdonut() function could also be written
+ggpie(diamonds) + 
+  aes(fill = cut) +
+  geom_wedge() +
+  xlim(-2, 1)
+  
+```
