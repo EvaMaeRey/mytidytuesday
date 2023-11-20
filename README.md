@@ -14,8 +14,8 @@ write prose\!
 Initially, I planned to work on \#tidytuesday stuff, but I ended up just
 working on problems that arose in my work and personal interests.
 
-1.  [embedded\_flipbooks/scatter\_embed.html](https://evamaerey.github.io/mytidytuesday/embedded_flipbooks/scatter_embed.html)
-    **[source](https://github.com/evamaerey/mytidytuesday/blob/master/embedded_flipbooks/scatter_embed.Rmd)**
+1.  [2023-11-14-flipbooks-lawrence-livermore/flipbooks-lawrence-livermore\_double\_crochet.html](https://evamaerey.github.io/mytidytuesday/2023-11-14-flipbooks-lawrence-livermore/flipbooks-lawrence-livermore_double_crochet.html)
+    **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-11-14-flipbooks-lawrence-livermore/flipbooks-lawrence-livermore_double_crochet.Rmd)**
 2.  [2023-11-14-flipbooks-lawrence-livermore/flipbooks-lawrence-livermore.html](https://evamaerey.github.io/mytidytuesday/2023-11-14-flipbooks-lawrence-livermore/flipbooks-lawrence-livermore.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-11-14-flipbooks-lawrence-livermore/flipbooks-lawrence-livermore.Rmd)**
 3.  [2023-11-13-extension-as-an-analytic-care-task/extension-as-an-analytic-care-task.html](https://evamaerey.github.io/mytidytuesday/2023-11-13-extension-as-an-analytic-care-task/extension-as-an-analytic-care-task.html)
