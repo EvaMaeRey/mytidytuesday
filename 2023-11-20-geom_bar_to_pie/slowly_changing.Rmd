@@ -1,0 +1,185 @@
+---
+title: "Untitled"
+author: "Evangeline Reynolds"
+date: "11/21/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+
+
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+`%||%` <- ggplot2:::`%||%`
+
+stat_count <- function(mapping = NULL, data = NULL,
+                       geom = ggplot2::GeomBar, position = "stack",
+                       ...,
+                       width = NULL,
+                       na.rm = FALSE,
+                       orientation = NA,
+                       show.legend = NA,
+                       inherit.aes = TRUE) {
+
+  params <- rlang::list2(
+    na.rm = na.rm,
+    orientation = orientation,
+    width = width,
+    ...
+  )
+
+  ggplot2::layer(
+    data = data,
+    mapping = mapping,
+    stat = StatCountPie,
+    geom = geom,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = params
+  )
+}
+
+
+StatCountPie <- ggplot2::ggproto("StatCountPie", ggplot2::Stat,
+  # required_aes = "x|y",
+
+  default_aes = ggplot2::aes(x = ggplot2::after_stat(count), y = ggplot2::after_stat(count), weight = 1),
+
+  setup_params = function(self, data, params) {
+    
+    # data$y <- 5
+      if(!("y" %in% names(data))){data$y <- 5}
+    
+    params$flipped_aes <- ggplot2::has_flipped_aes(data, params, main_is_orthogonal = FALSE)
+    
+    # params$flipped_aes <- TRUE
+
+    # has_x <- !(is.null(data$x) && is.null(params$x))
+    # has_y <- !(is.null(data$y) && is.null(params$y))
+    # if (!has_x && !has_y) {
+    #   cli::cli_abort("{.fn {snake_class(self)}} requires an {.field x} or {.field y} aesthetic.")
+    # }
+    # if (has_x && has_y) {
+    #   cli::cli_abort("{.fn {snake_class(self)}} must only have an {.field x} {.emph or} {.field y} aesthetic.")
+    # }
+
+    if (is.null(params$width)) {
+      # x <- if (params$flipped_aes) "y" else "x"
+      x <- "y"
+      params$width <- ggplot2::resolution(data[[x]]) * 0.9
+    }
+
+    params
+  },
+
+  extra_params = c("na.rm", "orientation"),
+
+  compute_group = function(self, data, scales, width = NULL, flipped_aes = FALSE) {
+          if(!("y" %in% names(data))){data$y <- 5}
+    
+    data <- ggplot2::flip_data(data, flipped_aes)
+    x <- data$x
+    weight <- data$weight %||% rep(1, length(x))
+
+    count <- as.numeric(tapply(weight, x, sum, na.rm = TRUE))
+    count[is.na(count)] <- 0
+
+    bars <- data_frame0(
+      count = count,
+      prop = count / sum(abs(count)),
+      x = sort(unique0(x)),
+      width = width,
+      flipped_aes = flipped_aes,
+      .size = length(count)
+    )
+    ggplot2::flip_data(bars, flipped_aes)
+  },
+
+  dropped_aes = "weight"
+)
+
+
+GeomBar <- ggplot2::ggproto("GeomBar", ggplot2::GeomRect,
+  required_aes = c("x", "y"),
+
+  # These aes columns are created by setup_data(). They need to be listed here so
+  # that GeomRect$handle_na() properly removes any bars that fall outside the defined
+  # limits, not just those for which x and y are outside the limits
+  non_missing_aes = c("xmin", "xmax", "ymin", "ymax"),
+
+  setup_params = function(data, params) {
+          if(!("y" %in% names(data))){data$y <- 5}
+    params$flipped_aes <- ggplot2::has_flipped_aes(data, params)
+    params
+  },
+
+  extra_params = c("just", "na.rm", "orientation"),
+
+  setup_data = function(data, params) {
+          if(!("y" %in% names(data))){data$y <- 5}
+    data$flipped_aes <- params$flipped_aes
+    data <- ggplot2::flip_data(data, params$flipped_aes)
+    data$width <- data$width %||%
+      params$width %||% (min(vapply(
+        split(data$x, data$PANEL),
+        resolution, numeric(1), zero = FALSE
+      )) * 0.9)
+    data$just <- params$just %||% 0.5
+    data <- transform(data,
+      ymin = pmin(y, 0), ymax = pmax(y, 0),
+      xmin = x - width * just, xmax = x + width * (1 - just),
+      width = NULL, just = NULL
+    )
+    ggplot2::flip_data(data, params$flipped_aes)
+  },
+
+  draw_panel = function(self, data, panel_params, coord, lineend = "butt",
+                        linejoin = "mitre", width = NULL, flipped_aes = FALSE) {
+          # if(!("y" %in% names(data))){data$y <- 5}
+    
+    # Hack to ensure that width is detected as a parameter
+    ggplot2::ggproto_parent(ggplot2::GeomRect, self)$draw_panel(
+      
+      data,
+      panel_params,
+      coord,
+      lineend = lineend,
+      linejoin = linejoin
+    )
+  },
+  rename_size = TRUE
+)
+
+ggplot2::diamonds |>
+  ggplot2::ggplot() + 
+  ggplot2::aes(fill = cut) + #, y = 1) +
+  stat_count(position = "fill", geom = GeomBar)
+
+```
+```{r}
+ggplot2::diamonds |>
+  ggplot2::ggplot() + 
+  ggplot2::aes(fill = cut, y = 1) +
+  ggplot2::stat_count(position = "fill", 
+                      geom = ggplot2::GeomBar)
+
+rladies_chapters <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-11-21/rladies_chapters.csv')
+
+library(tidyverse)
+rladies_chapters  %>% 
+  count(location, year) %>% 
+  ggplot() + 
+  aes(fill = location) + 
+  geom_wedge
+
+```

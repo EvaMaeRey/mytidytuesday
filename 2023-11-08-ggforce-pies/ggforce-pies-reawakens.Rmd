@@ -41,12 +41,12 @@ compute_panel_wedge <- function(data, scales, n = 360, sep = 0){
   if(!("r" %in% names(data))) {data$r  <- sqrt(sum(data$amount)/pi)} # area will be equal to amount
   
   # maybe change 'amount' to 'weight'?
-  
-  
+
   # piggybacking from StatPie
   ggforce::StatPie$compute_panel(data, scales = scales, n = n, sep = sep)
   
 }
+
 ```
 
 
@@ -73,6 +73,7 @@ StatWedge <- ggplot2::ggproto(
                              explode = NULL)
 )
 
+
 # Gentle modification from ggforce::GeomArcBar, changing color (was black) and fill (was NA) defaults 
 GeomArcWedge <- ggplot2::ggproto('GeomArcWedge', ggforce::GeomShape,
   default_aes = ggforce:::combine_aes(ggforce::GeomShape$default_aes, 
@@ -87,15 +88,23 @@ GeomArcWedge <- ggplot2::ggproto('GeomArcWedge', ggforce::GeomShape,
 Almost same as stat_pie, but using the GeomArcWedge defined above and StatWedge defined above
 
 ```{r}
-geom_wedge <- function(mapping = NULL, data = NULL, geom = 'arc_wedge',
+geom_wedge <- function(mapping = NULL, data = NULL, geom = 'arc_wedge', stat = StatWedge,
                      position = 'identity', n = 360, sep = 0, na.rm = FALSE,
                      show.legend = NA, inherit.aes = TRUE, ...) {
   layer(
-    stat = StatWedge, data = data, mapping = mapping, geom = geom,
+    stat = stat, data = data, mapping = mapping, geom = geom,
     position = position, show.legend = show.legend, inherit.aes = inherit.aes,
     params = list(na.rm = na.rm, n = n, sep = sep, ...)
   )
 }
+
+diamonds %>% 
+  count(cut) %>% 
+  ggplot() + 
+  aes(amount = n, fill = cut) + 
+  geom_wedge() 
+
+
 ```
 
 
@@ -167,7 +176,9 @@ last_plot() +
 ```
 # 2201 little wedges
 
-In fact you get a pie back even without aggregating (something you may notice above...).  Ultimately, we'd want to move to some counting in the backgroun.  Amount will be like 'weight' in geom_bar()/stat_count()
+In fact you get a pie back even without aggregating (something you may notice above; if you look close, the "Survive" Wedges are visible when only Sex is a mapped var...).  In the plots here, looking closely, you'll see the exciting wave patterns that the 2201 wedges create.
+
+Ultimately, we'd want to move to some counting in the background.  Amount will be like 'weight' in geom_bar()/stat_count()
 
 
 ```{r}
@@ -178,5 +189,54 @@ tidyTitanic %>%
   
 last_plot() +
   aes(fill = sort(Sex))
+```
+
+```{r}
+rladies_chapters <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-11-21/rladies_chapters.csv')
+
+library(tidyverse)
+rladies_chapters  %>% 
+  filter(year >= 2016) %>% 
+  count(location, year, month = month(date)) %>% 
+  ggplot() + 
+  aes(fill = location, amount = n) + 
+  geom_wedge() + 
+  facet_wrap(~year) + 
+  coord_equal() 
+
+last_plot() + 
+  facet_grid(year~month)
+
+library(ggtext)
+
+rladies_chapters  %>% 
+  filter(year == 2020) %>% 
+  count(location, month = month(date, label = T, abbr = T)) %>% 
+  ggplot() + 
+  aes(fill = location, amount = n) + 
+  geom_wedge(color = "snow", linewidth = .25) + 
+  facet_wrap(~month, nrow = 2) + 
+  coord_equal() +
+  labs(fill = NULL) + 
+  ggstamp::theme_void_fill(fill = "snow") +
+  theme(legend.position = "none",
+        legend.justification = 0) +
+  aes(r = 1) + aes(r = NULL) + 
+  scale_fill_manual(values = c("Plum3", "Magenta")) +
+  labs(title = "RLadies moved from in person to mostly online in 2020") +
+  theme(plot.title.position = "plot") + 
+  labs(title = "R-Ladies meetings in 2020 moved<br>from mostly <span style = 'color:Plum3;'>in person</span> to mostly <span style = 'color:Magenta;'>online</span>.") +
+  labs(subtitle = "There was also a drop in the number of April/May meetings.\n") +
+  theme(
+    plot.title = element_textbox_simple(
+      size = 14, lineheight = 1, padding = margin(0, 0, 5, 0)
+    )
+  ) + 
+  theme(text = element_text(color = "grey55"))
+
+last_plot() + 
+  geom_wedge(aes(label= n), n = 1, geom = "text")
+
+
 ```
 

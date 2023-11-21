@@ -22,105 +22,186 @@ options(tidyverse.quiet = TRUE)
 
 ```{r cars}
 library(tidyverse)
-diamonds %>%
+p <- diamonds %>%
 ggplot() + 
   aes(y = 0, fill = cut) + 
   stat_count(position = "fill", geom = "col") + # or geom_bar
   coord_polar() + 
   theme_void() 
+
+p
 ```
 
 ## Step 1. compute
 
 
 ```{r}
-compute_panel_pie <- function(data, scales){
-  
-  # defaulting aesthetics, instead of requiring
-  if(!("y" %in% names(data))){data$y <- .5}
-  if(!("group" %in% names(data))){data$group <- 1}
+stat_count <- function(mapping = NULL, data = NULL,
+                       geom = "bar", position = "stack",
+                       ...,
+                       width = NULL,
+                       na.rm = FALSE,
+                       orientation = NA,
+                       show.legend = NA,
+                       inherit.aes = TRUE) {
 
-  # maybe change 'amount' to 'weight'?
-  
-  # piggybacking from StatPie
-  ggplot2::StatCount$compute_panel(data, scales = scales)
-  
+  params <- rlang::list2(
+    na.rm = na.rm,
+    orientation = orientation,
+    width = width,
+    ...
+  )
+
+  layer(
+    data = data,
+    mapping = mapping,
+    stat = StatCount,
+    geom = geom,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = params
+  )
 }
 
-ggplot2::na.rm
-??na.rm
+#' @rdname ggplot2-ggproto
+#' @format NULL
+#' @usage NULL
+#' @export
+#' @include stat-.R
+StatCount <- ggproto("StatCount", Stat,
+  required_aes = "x|y",
 
+  default_aes = aes(x = after_stat(count), y = after_stat(count), weight = 1),
 
-compute_layer_pie <- function(data, params = list(na.rm = T), layout){
-  
-  # defaulting aesthetics, instead of requiring
-  if(!("y" %in% names(data))){data$y <- .5}
-  if(!("group" %in% names(data))){data$group <- 1}
+  setup_params = function(self, data, params) {
+    params$flipped_aes <- has_flipped_aes(data, params, main_is_orthogonal = FALSE)
 
-  # maybe change 'amount' to 'weight'?
-  
-  # cloning from StatCount
-    required_aes <- "y"
-    data <- remove_missing(data, params$na.rm, c(required_aes, 
-        StatCount$non_missing_aes), snake_class(StatCount), finite = TRUE)
-    params <- params[intersect(names(params), StatCount$parameters())]
-    args <- c(list(data = quote(data), scales = quote(scales)), 
-        params)
-    ggplot2:::dapply(data, "PANEL", function(data) {
-        scales <- layout$get_scales(data$PANEL[1])
-        try_fetch(inject(StatCount$compute_panel(data = data, scales = scales, 
-            !!!params)), error = function(cnd) {
-            cli::cli_warn("Computation failed in {.fn {snake_class(StatCount)}}", 
-                parent = cnd)
-            data_frame0()
-        })
-    })
-    
-}
+    has_x <- !(is.null(data$x) && is.null(params$x))
+    has_y <- !(is.null(data$y) && is.null(params$y))
+    if (!has_x && !has_y) {
+      cli::cli_abort("{.fn {snake_class(self)}} requires an {.field x} or {.field y} aesthetic.")
+    }
+    if (has_x && has_y) {
+      cli::cli_abort("{.fn {snake_class(self)}} must only have an {.field x} {.emph or} {.field y} aesthetic.")
+    }
 
+    if (is.null(params$width)) {
+      x <- if (params$flipped_aes) "y" else "x"
+      params$width <- resolution(data[[x]]) * 0.9
+    }
 
-```
+    params
+  },
 
+  extra_params = c("na.rm", "orientation"),
 
-```{r}
-diamonds %>% 
-  mutate(weight = 1) %>% 
-  StatCount$compute_group() %>% 
-  compute_panel_pie()  %>% 
-  compute_layer_pie()
-  
+  compute_group = function(self, data, scales, width = NULL, flipped_aes = FALSE) {
+    data <- flip_data(data, flipped_aes)
+    x <- data$x
+    weight <- data$weight %||% rep(1, length(x))
 
+    count <- as.numeric(tapply(weight, x, sum, na.rm = TRUE))
+    count[is.na(count)] <- 0
 
-```
+    bars <- data_frame0(
+      count = count,
+      prop = count / sum(abs(count)),
+      x = sort(unique0(x)),
+      width = width,
+      flipped_aes = flipped_aes,
+      .size = length(count)
+    )
+    flip_data(bars, flipped_aes)
+  },
 
-```{r}
-StatPie <- ggplot2::ggproto(
-  `_class` = 'StatPie', 
-  `_inherit` = ggplot2::Stat,
-  aesthetics = StatCount$aesthetics,
-  compute_group = StatCount$compute_group, 
-  compute_panel = compute_panel_pie,
-  compute_layer = compute_layer_pie,
-  default_aes = ggplot2::aes(y = NULL, x = after_stat(pie)),
-  # default_aes = StatCount$default_aes,
-  dropped_aes =StatCount$dropped_aes,
-  extra_params = StatCount$extra_params,
-  finish_layer = StatCount$finish_layer,
-  non_missing_aes = StatCount$non_missing_aes,
-   optional_aes = StatCount$optional_aes,
-    parameters = StatCount$parameters,
-    # required_aes = StatCount$re
-    retransform = StatCount$retransform,
-    setup_data =StatCount$setup_data
-    # setup_params =StatCount$setup_params
-    # super = StatCount$sup
+  dropped_aes = "weight"
 )
 
-StatPie2 <- StatCount
+GeomBar <- ggproto("GeomBar", GeomRect,
+  required_aes = c("x", "y"),
 
-GeomPie <- GeomBar
+  # These aes columns are created by setup_data(). They need to be listed here so
+  # that GeomRect$handle_na() properly removes any bars that fall outside the defined
+  # limits, not just those for which x and y are outside the limits
+  non_missing_aes = c("xmin", "xmax", "ymin", "ymax"),
 
-# GeomPie$required_aes <- ""
+  setup_params = function(data, params) {
+    params$flipped_aes <- has_flipped_aes(data, params)
+    params
+  },
+
+  extra_params = c("just", "na.rm", "orientation"),
+
+  setup_data = function(data, params) {
+    data$flipped_aes <- params$flipped_aes
+    data <- flip_data(data, params$flipped_aes)
+    data$width <- data$width %||%
+      params$width %||% (min(vapply(
+        split(data$x, data$PANEL),
+        resolution, numeric(1), zero = FALSE
+      )) * 0.9)
+    data$just <- params$just %||% 0.5
+    data <- transform(data,
+      ymin = pmin(y, 0), ymax = pmax(y, 0),
+      xmin = x - width * just, xmax = x + width * (1 - just),
+      width = NULL, just = NULL
+    )
+    flip_data(data, params$flipped_aes)
+  },
+
+  draw_panel = function(self, data, panel_params, coord, lineend = "butt",
+                        linejoin = "mitre", width = NULL, flipped_aes = FALSE) {
+    # Hack to ensure that width is detected as a parameter
+    ggproto_parent(GeomRect, self)$draw_panel(
+      data,
+      panel_params,
+      coord,
+      lineend = lineend,
+      linejoin = linejoin
+    )
+  },
+  rename_size = TRUE
+)
+
+diamonds %>%   
+  ggplot() + 
+  aes(fill = cut, y = 1) + 
+  stat_count()
+
+```
+
+
+
+
+```{r}
+# StatPie <- ggplot2::ggproto(
+#   `_class` = 'StatPie', 
+#   `_inherit` = ggplot2::Stat,
+#   aesthetics = StatCount$aesthetics,
+#   compute_group = StatCount$compute_group, 
+#   compute_panel = compute_panel_pie,
+#   compute_layer = compute_layer_pie,
+#   default_aes = ggplot2::aes(y = NULL, x = after_stat(pie)),
+#   # default_aes = StatCount$default_aes,
+#   dropped_aes =StatCount$dropped_aes,
+#   extra_params = StatCount$extra_params,
+#   finish_layer = StatCount$finish_layer,
+#   non_missing_aes = StatCount$non_missing_aes,
+#    optional_aes = StatCount$optional_aes,
+#     parameters = StatCount$parameters,
+#     # required_aes = StatCount$re
+#     retransform = StatCount$retransform,
+#     setup_data =StatCount$setup_data
+#     # setup_params =StatCount$setup_params
+#     # super = StatCount$sup
+# )
+# 
+# StatPie2 <- StatCount
+# 
+# GeomPie <- GeomBar
+# 
+# # GeomPie$required_aes <- ""
 
 ```
 
