@@ -1,0 +1,153 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Step 0. With base ggplot2
+
+```{r cars}
+library(tidyverse)
+diamonds %>%
+ggplot() + 
+  aes(y = 0, fill = cut) + 
+  stat_count(position = "fill", geom = "col") + # or geom_bar
+  coord_polar() + 
+  theme_void() 
+```
+
+## Step 1. compute
+
+
+```{r}
+compute_panel_pie <- function(data, scales){
+  
+  # defaulting aesthetics, instead of requiring
+  if(!("y" %in% names(data))){data$y <- .5}
+  if(!("group" %in% names(data))){data$group <- 1}
+
+  # maybe change 'amount' to 'weight'?
+  
+  # piggybacking from StatPie
+  ggplot2::StatCount$compute_panel(data, scales = scales)
+  
+}
+
+ggplot2::na.rm
+??na.rm
+
+
+compute_layer_pie <- function(data, params = list(na.rm = T), layout){
+  
+  # defaulting aesthetics, instead of requiring
+  if(!("y" %in% names(data))){data$y <- .5}
+  if(!("group" %in% names(data))){data$group <- 1}
+
+  # maybe change 'amount' to 'weight'?
+  
+  # cloning from StatCount
+    required_aes <- "y"
+    data <- remove_missing(data, params$na.rm, c(required_aes, 
+        StatCount$non_missing_aes), snake_class(StatCount), finite = TRUE)
+    params <- params[intersect(names(params), StatCount$parameters())]
+    args <- c(list(data = quote(data), scales = quote(scales)), 
+        params)
+    ggplot2:::dapply(data, "PANEL", function(data) {
+        scales <- layout$get_scales(data$PANEL[1])
+        try_fetch(inject(StatCount$compute_panel(data = data, scales = scales, 
+            !!!params)), error = function(cnd) {
+            cli::cli_warn("Computation failed in {.fn {snake_class(StatCount)}}", 
+                parent = cnd)
+            data_frame0()
+        })
+    })
+    
+}
+
+
+```
+
+
+```{r}
+diamonds %>% 
+  mutate(weight = 1) %>% 
+  StatCount$compute_group() %>% 
+  compute_panel_pie()  %>% 
+  compute_layer_pie()
+  
+
+
+```
+
+```{r}
+StatPie <- ggplot2::ggproto(
+  `_class` = 'StatPie', 
+  `_inherit` = ggplot2::Stat,
+  aesthetics = StatCount$aesthetics,
+  compute_group = StatCount$compute_group, 
+  compute_panel = compute_panel_pie,
+  compute_layer = compute_layer_pie,
+  default_aes = ggplot2::aes(y = NULL, x = after_stat(pie)),
+  # default_aes = StatCount$default_aes,
+  dropped_aes =StatCount$dropped_aes,
+  extra_params = StatCount$extra_params,
+  finish_layer = StatCount$finish_layer,
+  non_missing_aes = StatCount$non_missing_aes,
+   optional_aes = StatCount$optional_aes,
+    parameters = StatCount$parameters,
+    # required_aes = StatCount$re
+    retransform = StatCount$retransform,
+    setup_data =StatCount$setup_data
+    # setup_params =StatCount$setup_params
+    # super = StatCount$sup
+)
+
+StatPie2 <- StatCount
+
+GeomPie <- GeomBar
+
+# GeomPie$required_aes <- ""
+
+```
+
+# Step 3 user function
+
+```{r}
+geom_pie <- function (mapping = NULL, data = NULL, stat = StatPie, position = "stack", 
+    ..., just = 0.5, width = NULL, na.rm = FALSE, orientation = NA, 
+    show.legend = NA, inherit.aes = TRUE) 
+{
+    layer(data = data, mapping = mapping, stat = stat, geom = GeomPie, 
+        position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
+        params = rlang::list2(just = just, width = width, na.rm = na.rm, 
+            orientation = orientation, ...))
+}
+
+```
+
+
+# Step 4 try out
+
+```{r}
+ggplot(diamonds) + 
+  aes(fill = cut) + 
+  geom_pie()
+
+
+```
+
+## Closing remarks, Other Relevant Work, Caveats

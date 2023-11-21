@@ -133,6 +133,7 @@ diamonds |>
 
 last_plot() + 
   aes(r = 1) # back to unit circle...
+
 ```
 
 ```{r}
@@ -143,16 +144,12 @@ tidyTitanic
 
 tidyTitanic %>% 
   count(Sex, Survived) %>% 
-  ungroup() %>% 
-  ungroup() %>% ### Issue!!!!??
   ggplot() + 
   aes(amount = n, fill = Sex) + 
   geom_wedge()
 
 last_plot() + 
   facet_wrap(~Sex)
-
-
 
 ## Bayesian thinking
 # Given Female, prob survived
@@ -167,5 +164,19 @@ last_plot() +
 last_plot() + 
   aes(explode = c(0,0, 5, 0))
 
+```
+# 2201 little wedges
+
+In fact you get a pie back even without aggregating (something you may notice above...).  Ultimately, we'd want to move to some counting in the backgroun.  Amount will be like 'weight' in geom_bar()/stat_count()
+
+
+```{r}
+tidyTitanic %>% 
+  ggplot() + 
+  aes(fill = Sex, amount = 1) + 
+  geom_wedge()
+  
+last_plot() +
+  aes(fill = sort(Sex))
 ```
 

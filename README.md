@@ -301,5 +301,5 @@ new_experiment <- function(name){
 
 } 
 
-new_experiment(name = "flipbooks-lawrence-livermore")
+new_experiment(name = "geom_bar_to_pie")
 ```
