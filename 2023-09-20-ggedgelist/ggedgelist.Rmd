@@ -108,7 +108,7 @@ ggedgelist <- function(edgelist, nodelist = NULL, ...)(
 )
 
 # get a fill viz w edgelist dataframe only
-quick_ggedgelist <- function(edgelist, nodelist = NULL, include_names = F,  ...){
+ggedgelist_quick <- function(edgelist, nodelist = NULL, include_names = F,  ...){
   
 
   p <- ggedgelist(edgelist = edgelist,
@@ -143,19 +143,19 @@ geom_node_text_auto <- function(...){
 # examples w/ proposed functions
 
 
-## `quick_ggedgelist()`
+## `ggedgelist_quick()`
 
 ```{r, out.width="33%", fig.show='hold', message=F}
 head(edge_list)
 head(node_info)
 edge_list %>% 
-  quick_ggedgelist() 
+  ggedgelist_quick() 
 
 edge_list %>% 
-  quick_ggedgelist(include_names = T) 
+  ggedgelist_quick(include_names = T) 
 
 edge_list %>% 
-  quick_ggedgelist(nodelist = node_info) + 
+  ggedgelist_quick(nodelist = node_info) + 
   geom_node_point(aes(color = ind_child), size = 10)
 
 
@@ -193,16 +193,16 @@ ggflowchart_example %>%
 
 ```{r, out.width="33%", fig.show='hold', message=F}
 ggflowchart_example %>% 
-  quick_ggedgelist(layout = "stress", 
+  ggedgelist_quick(layout = "stress", 
                    include_names = T)
 
 ggflowchart_example %>% 
-  quick_ggedgelist(layout = "tree", 
+  ggedgelist_quick(layout = "tree", 
                    include_names = T)
 
 # auto which is default also produces three in this case
 ggflowchart_example %>% 
-  quick_ggedgelist(layout = "auto") 
+  ggedgelist_quick(layout = "auto") 
 
 layer_data(last_plot(), i = 2)
 ```
@@ -267,9 +267,9 @@ datasets::airquality %>%
   filter(abs(value) >= .2) ->
 corrr_edgelist
 
-# using quick_ggedgelist
+# using ggedgelist_quick
 corrr_edgelist %>% 
-  quick_ggedgelist(include_names = T, 
+  ggedgelist_quick(include_names = T, 
                    layout = "fr", 
                    nodelist = node_list) + 
   geom_edge_arc(aes(edge_width = abs(value)), 
@@ -294,7 +294,7 @@ project_partners <- data.frame(x = sample(babynames$name, 19, prob = babynames$n
                                y = sample(babynames$name, 19, prob = babynames$n))
 
 project_partners %>% 
-  quick_ggedgelist(layout = "fr", 
+  ggedgelist_quick(layout = "fr", 
                    include_names = T)
 ```
 
@@ -309,14 +309,16 @@ cran_graph_edges <- readr::read_csv('https://raw.githubusercontent.com/rfordatas
 
 cran_20230905 %>% 
   filter(Package %>% 
-           str_detect("^gg")) %>% 
+           str_detect("^gg|^GG")) %>% 
   filter(Depends %>% 
            str_detect("ggplot2")) %>% 
   select(Package) %>% 
   left_join(package_authors %>% mutate(authorsR = authorsR %>% str_replace(" ", "\n"))) %>% 
-  quick_ggedgelist(layout = "fr", 
+  ggedgelist_quick(layout = "fr", 
                    include_names = T)
   
+
+
 ```  
   
   
@@ -334,7 +336,7 @@ package_authors_prolific
 package_authors_prolific %>% 
   group_by(Package) %>% 
   filter(n()>=10) %>% 
-  quick_ggedgelist(include_names = T, layout = "fr") + 
+  ggedgelist_quick(include_names = T, layout = "fr") + 
   labs(title = "Which CRAN packages have at least 10 very prolific CRAN developers as authors",
        caption = "Where prolific as 10 or more >=10 R packages on CRAN")
 ```

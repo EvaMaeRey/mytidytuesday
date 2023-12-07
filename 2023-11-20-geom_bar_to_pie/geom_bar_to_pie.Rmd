@@ -36,8 +36,55 @@ p
 
 
 ```{r}
-stat_count <- function(mapping = NULL, data = NULL,
-                       geom = "bar", position = "stack",
+# compute_panel_pie <- function(data, scales){
+#   
+#   # defaulting aesthetics, instead of requiring
+#   if(!("y" %in% names(data))){data$y <- .5}
+#   if(!("group" %in% names(data))){data$group <- 1}
+# 
+#   # maybe change 'amount' to 'weight'?
+#   
+#   # piggybacking from StatPie
+#   ggplot2::StatCount$compute_panel(data, scales = scales)
+#   
+# }
+# 
+# ggplot2::na.rm
+# ??na.rm
+
+
+# compute_layer_pie <- function(data, params = list(na.rm = T), layout){
+#   
+#   # defaulting aesthetics, instead of requiring
+#   if(!("y" %in% names(data))){data$y <- .5}
+#   if(!("group" %in% names(data))){data$group <- 1}
+# 
+#   # maybe change 'amount' to 'weight'?
+#   
+#   # cloning from StatCount
+#     required_aes <- "y"
+#     data <- remove_missing(data, params$na.rm, c(required_aes, 
+#         StatCount$non_missing_aes), snake_class(StatCount), finite = TRUE)
+#     params <- params[intersect(names(params), StatCount$parameters())]
+#     args <- c(list(data = quote(data), scales = quote(scales)), 
+#         params)
+#     ggplot2:::dapply(data, "PANEL", function(data) {
+#         scales <- layout$get_scales(data$PANEL[1])
+#         try_fetch(inject(StatCount$compute_panel(data = data, scales = scales, 
+#             !!!params)), error = function(cnd) {
+#             cli::cli_warn("Computation failed in {.fn {snake_class(StatCount)}}", 
+#                 parent = cnd)
+#             data_frame0()
+#         })
+#     })
+#     
+# }
+
+
+
+
+stat_countpie <- function(mapping = NULL, data = NULL,
+                       geom = GeomBarpie, position = "stack",
                        ...,
                        width = NULL,
                        na.rm = FALSE,
@@ -55,7 +102,7 @@ stat_count <- function(mapping = NULL, data = NULL,
   layer(
     data = data,
     mapping = mapping,
-    stat = StatCount,
+    stat = StatCountpie,
     geom = geom,
     position = position,
     show.legend = show.legend,
@@ -69,14 +116,20 @@ stat_count <- function(mapping = NULL, data = NULL,
 #' @usage NULL
 #' @export
 #' @include stat-.R
-StatCount <- ggproto("StatCount", Stat,
-  required_aes = "x|y",
+StatCountpie <- ggproto("StatCountpie", Stat,
+  required_aes = "x|y",  # no required aes!
 
   default_aes = aes(x = after_stat(count), y = after_stat(count), weight = 1),
 
   setup_params = function(self, data, params) {
-    params$flipped_aes <- has_flipped_aes(data, params, main_is_orthogonal = FALSE)
+    
+    # if(!("y" %in% names(data))){data$y <- .5} # added for StatCountpie
 
+    
+    params$flipped_aes <- has_flipped_aes(data, params, main_is_orthogonal = FALSE)
+    # params$flipped_aes <- TRUE
+
+    # just messaging so we don't need it
     has_x <- !(is.null(data$x) && is.null(params$x))
     has_y <- !(is.null(data$y) && is.null(params$y))
     if (!has_x && !has_y) {
@@ -86,11 +139,14 @@ StatCount <- ggproto("StatCount", Stat,
       cli::cli_abort("{.fn {snake_class(self)}} must only have an {.field x} {.emph or} {.field y} aesthetic.")
     }
 
+
     if (is.null(params$width)) {
       x <- if (params$flipped_aes) "y" else "x"
       params$width <- resolution(data[[x]]) * 0.9
     }
 
+    # params$width <- resolution(data$y) * 1 # unit circle for now
+    
     params
   },
 
@@ -108,7 +164,7 @@ StatCount <- ggproto("StatCount", Stat,
       count = count,
       prop = count / sum(abs(count)),
       x = sort(unique0(x)),
-      width = width,
+      width = width,  ###
       flipped_aes = flipped_aes,
       .size = length(count)
     )
@@ -118,8 +174,9 @@ StatCount <- ggproto("StatCount", Stat,
   dropped_aes = "weight"
 )
 
-GeomBar <- ggproto("GeomBar", GeomRect,
-  required_aes = c("x", "y"),
+
+GeomBarpie <- ggproto("GeomBarpie", GeomRect,
+  required_aes = c("x", "y"), # 
 
   # These aes columns are created by setup_data(). They need to be listed here so
   # that GeomRect$handle_na() properly removes any bars that fall outside the defined
@@ -128,12 +185,16 @@ GeomBar <- ggproto("GeomBar", GeomRect,
 
   setup_params = function(data, params) {
     params$flipped_aes <- has_flipped_aes(data, params)
+    # params$flipped_aes <- TRUE
     params
   },
 
   extra_params = c("just", "na.rm", "orientation"),
 
   setup_data = function(data, params) {
+    
+    params$flipped_aes <- TRUE # for StatCountpie
+    
     data$flipped_aes <- params$flipped_aes
     data <- flip_data(data, params$flipped_aes)
     data$width <- data$width %||%
@@ -167,7 +228,7 @@ GeomBar <- ggproto("GeomBar", GeomRect,
 diamonds %>%   
   ggplot() + 
   aes(fill = cut, y = 1) + 
-  stat_count()
+  stat_countpie()
 
 ```
 

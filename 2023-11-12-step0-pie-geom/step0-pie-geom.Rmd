@@ -47,22 +47,35 @@ layer_data()
 ### Step 12&3. compute, ggproto, geom_*,
 
 ```{r, error=TRUE}
-compute_panel_pie <- function(data, scales){
+compute_panel_pie <- function(data, scales, digits = 1, r_nudge = 0, r_prop = 1){
   
   if(!("weight" %in% names(data))){data$weight <- 1}
+  # order matters...
+  if("fill" %in% names(data)){data <- group_by(data, fill, .add = T)}
+  if("alpha" %in% names(data)){data <- group_by(data, alpha, .add = T)}
+  if("colour" %in% names(data)){data <- group_by(data, colour, .add = T)}
+  if("group" %in% names(data)){data <- group_by(data, group, .add = T)}
+  if("linetype" %in% names(data)){data <- group_by(data, linetype, .add = T)}
+  if("linewidth" %in% names(data)){data <- group_by(data, linewidth, .add = T)}
   
-  out <- data %>% 
-  count(fill, wt = weight) %>% 
-  mutate(cum_n = cumsum(n)) %>% 
-  mutate(xmax = cum_n/sum(n)) %>% 
+out <- data %>% 
+  summarize(wt = sum(weight)) %>% 
+  ungroup() %>% 
+  mutate(group = 1:n()) %>% 
+  mutate(cum_n = cumsum(wt)) %>% 
+  mutate(xmax = cum_n/sum(wt)) %>% 
   mutate(xmin = lag(xmax)) %>% 
   mutate(xmin = replace_na(xmin, 0)) %>% 
-  mutate(r = sqrt(sum(n)/pi)) %>% 
+  mutate(r = sqrt(sum(wt)/pi)) %>% 
   mutate(r0 = 0) %>% 
-  mutate(x = 0, y = 0, 
+  mutate(x = (xmin + xmax)/2, y = r, 
          ymin = 0, ymax = r
-         )
-  
+         ) %>% 
+  mutate(prop = wt/sum(wt)) %>% 
+  mutate(percent = paste0(round(100*prop, digits), "%")) %>% 
+  mutate(r_prop = r_prop) %>% 
+  mutate(r_nudge = r_nudge)
+
   if("r" %in% names(data)){out$ymax <- data$r[1]}
   if("r0" %in% names(data)){out$ymin <- data$r0[1]}
   
@@ -70,17 +83,57 @@ compute_panel_pie <- function(data, scales){
   
 }
 
-diamonds %>% 
+
+compute_panel_pietext <- function(data, scales,...){
+  
+  compute_panel_pie(data, scales, r_prop = r_prop, r_nudge = r_nudge) %>% 
+                      mutate(y = .data$r * .data$r_prop + .data$r_nudge) # overwriting y
+  
+  
+}
+
+ggplot2::diamonds %>% 
   mutate(fill = cut) %>% 
   mutate(r = 1) %>% 
   mutate(r0 = .5) %>% 
   compute_panel_pie()
 
+ggplot2::diamonds %>% 
+  count(cut) %>% 
+  mutate(fill = cut, weight = n) %>% 
+  mutate(r = 1) %>% 
+  mutate(r0 = .5) %>% 
+  compute_panel_pie(r_prop = .5)
+
+ggplot2::diamonds %>% 
+  count(cut) %>% 
+  mutate(fill = cut, weight = n) %>% 
+  mutate(r = 1) %>% 
+  mutate(r0 = .5) %>% 
+  compute_panel_pietext(r_prop = .5, r_nudge = 10 )
+```
+
+```{r}
+ggplot2::diamonds %>% 
+  count(cut) %>% 
+  mutate(fill = cut, weight = n) %>% 
+  mutate(r = 1) %>% 
+  mutate(r0 = .5) %>% 
+  compute_panel_pietext(r_nudge = 50)
+
 StatPie <- ggproto(`_class` = "StatPie",
                   `_inherit` = ggplot2::Stat,
-                  required_aes = "fill",
+                  # required_aes = "fill",
                   compute_panel = compute_panel_pie,
-                  default_aes = aes(group = after_stat(fill))
+                  default_aes = aes(group = after_stat(group))
+                  )
+
+StatPietext <- ggproto(`_class` = "StatPietext",
+                  `_inherit` = ggplot2::Stat,
+                  # required_aes = "fill",
+                  compute_panel = compute_panel_pie,
+                  default_aes = aes(group = after_stat(group), label = after_stat(percent),
+                                    y = after_stat(r_prop * r + r_nudge))
                   )
 
 geom_pie <- function(
@@ -101,6 +154,28 @@ geom_pie <- function(
     params = list(na.rm = na.rm, ...)
   )
 }
+
+
+
+geom_pie_label <- function(
+  mapping = NULL,
+  data = NULL,
+  position = "identity",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatPietext,  # proto object from step 2
+    geom = ggplot2::GeomText,  # inherit other behavior
+    data = data,
+    mapping = mapping,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+
 ```
 
 ### Step 4. Test it out
@@ -109,13 +184,40 @@ geom_pie <- function(
 ```{r}
 ggplot2::diamonds %>% 
   ggplot() + 
-  aes(fill = cut) + 
-  geom_pie() 
+  aes(fill = color) + 
+  geom_pie() + 
+  coord_polar()
+
+ggplot2::diamonds %>% 
+  ggplot() + 
+  aes(fill = color) + 
+  geom_pie() + 
+  geom_pie_label(r_nudge = -50) +
+  coord_polar() +
+  NULL
+
+
+ggplot2::diamonds %>% 
+  ggplot() + 
+  aes(fill = color) + 
+  geom_pie() + 
+  geom_pie_label(r_prop = 1.5) + 
+  coord_polar() +
+  NULL
 
 layer_data()
 
-last_plot() + 
+last_plot() +
   coord_polar()
+
+layer_data()
+
+
+last_plot() + 
+  aes(alpha = cut)
+
+last_plot() + 
+  facet_wrap(~color)
 
 last_plot() +
   facet_wrap(~color) + 
@@ -127,6 +229,17 @@ last_plot() +
 last_plot() + 
   aes(r = 1, r0 = .5)
 
+ggplot2::diamonds %>% 
+  count(cut) %>% 
+  ggplot() + 
+  aes(fill = cut, weight = n) + 
+  geom_pie() +
+  coord_polar()
+
+last_plot() + 
+  geom_pie_label(aes(label = after_stat(wt), angle = after_stat(c(85,0,0,0,0))),
+                 r_nudge = -40, 
+                 color = "oldlace")
 ```
 
 ### Step 4. Test With Titanic Data
@@ -141,12 +254,13 @@ Titanic %>%
   geom_pie() 
 
 last_plot() + 
-  facet_wrap(~Sex) + 
+  facet_wrap(~ Sex) + 
   aes(fill = Class) 
 
 last_plot() + 
-  facet_grid(Sex~Class) + 
+  facet_grid(Sex ~ Class) + 
   aes(fill = Survived) + 
+  geom_pie_label(r_nudge = 7) +
   theme_void() 
   
 last_plot() +

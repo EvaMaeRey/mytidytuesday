@@ -1,0 +1,71 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r cars}
+library(tidyverse)
+```
+
+## Experiment
+
+```{r, message=F}
+library(ggwedge)
+diamonds %>% 
+  ggplot() +
+  ggwedge:::geom_pie() + 
+  coord_polar() + 
+  aes(fill = cut)
+
+layer_all_stages <- function(){
+
+a <- ggtrace::layer_before_stat() %>% head(3)
+b <- ggtrace::layer_after_stat() %>% head(3)
+c <- ggtrace::layer_before_geom() %>% head(3)
+d <- ggtrace::layer_after_scale() %>% head(3)
+
+list(before_stat = a, after_stat = b, 
+     before_geom = c, after_scale = d)
+
+}
+
+layer_all_stages()
+
+summary_layer_preview_all <- function(df = F){
+  
+for (i in 1:length(layer_all_stages())){
+  
+  print(names(layer_all_stages()[i]))
+  print(names(layer_all_stages()[[i]]))
+  print(nrow(layer_all_stages()[[i]]))
+  
+  if(df){print(layer_all_stages()[[i]])}
+
+  
+}
+}
+
+summary_layer_preview_all()
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
