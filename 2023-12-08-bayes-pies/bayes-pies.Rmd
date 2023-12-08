@@ -1,0 +1,86 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r cars}
+library(tidyverse)
+
+```
+
+## Experiment
+
+
+```{r, out.width="33%", fig.show='hold'}
+tribble(~disease, ~test_positive,  ~symptoms, ~weight, 
+        1,        1,                1,         .1588,  #  true positive, symptoms
+        1,        0,                1,         .025,  # false negative, symptoms
+        0,        1,                1,         .02,  # false positive, symptoms
+        0,        0,                1,         .20,  #  true negative, symptoms
+        1,        1,                0,         .025,  #  true positive, no symptoms
+        1,        0,                0,         .0512,  # false negative, no symptoms
+        0,        1,                0,         .15,  # false positive, no symptoms
+        0,        0,                0,         2.80   #  true negative, no symptoms
+        ) ->
+testing
+
+library(ind2cat)
+ggplot(testing) +
+  aes(weight = weight) +
+  ggwedge:::geom_pie(color = "grey",
+                     linewidth = 1.5) + 
+  ggwedge:::geom_pie_label(r_prop = 1.15) + 
+  coord_polar() +
+  aes(alpha = ind_recode(disease)) + 
+  scale_alpha_discrete(range = c(.6,1)) + 
+  theme_void()
+
+last_plot() +
+  aes(alpha = NULL) +
+  aes(fill = ind_recode(test_positive)) + 
+  scale_fill_manual(values = c("cadetblue", "darkred"))
+
+last_plot() +
+  aes(fill = NULL) +
+  aes(linetype = ind_recode(symptoms))
+```
+
+```{r}
+last_plot() +
+  aes(linetype = NULL) + 
+  aes(alpha = ind_recode(disease)) +
+  aes(fill = ind_recode(test_positive)) +
+  facet_grid(.~ind_recode(disease))
+
+last_plot() +
+  facet_wrap(~ind_recode(test_positive))
+
+last_plot() +
+    aes(linetype = ind_recode(symptoms)) + 
+   facet_grid(ind_recode(symptoms)~ind_recode(test_positive)) 
+
+
+last_plot() %+%
+  (testing %>% filter(symptoms == 1))
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
