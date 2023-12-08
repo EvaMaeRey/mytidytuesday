@@ -1,0 +1,180 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+Sometimes I've wanted to add default aes to a stat_* or geom_* function.  However, this is messy.  You can cleanly pass all the behavior with ellipses only to carry on with behavior within the aes call or outside.  
+
+```{r}
+geom_barlab <- function(...){stat_count(aes(label = after_stat(count)), ...)}
+geom_barlab <- function(...){stat_count(aes(label = after_stat(count), ...))}
+```
+
+What if we modify the ggproto stat itself that feeds stat_count, to have label as a default aes.  I can imagine this kind of move being useful for the labeling problem...
+
+## Status Quo, without new functions
+
+```{r}
+library(tidyverse)
+mtcars %>% 
+  ggplot() + 
+  aes(x = vs, y = am) + 
+  stat_sum(alpha = .2) + 
+  stat_sum(geom = "text", 
+           aes(label = after_stat(n)))
+```
+
+# aliasing stat to geom ...
+
+```{r}
+geom_sum <- stat_sum
+
+mtcars %>% 
+  ggplot() + 
+  aes(x = vs, y = am) + 
+  geom_sum(alpha = .2)
+```
+
+# but we also want labeling geom
+
+```{r}
+StatSum$default_aes
+# adding label to make it ready for 
+StatSum$default_aes = aes(size = after_stat(n), 
+                          weight = 1, 
+                          label = after_stat(n))
+geom_sum_text <- function(...){stat_sum(geom = "text", ...)}
+
+mtcars %>% 
+  ggplot() + 
+  aes(x = vs, y = am) + 
+  geom_sum(alpha = .2) + 
+  geom_sum_text()
+```
+
+---
+
+### Second application...
+
+```{r}
+# Status quoto
+mtcars %>% 
+  ggplot() + 
+  aes(x = factor(vs), y = factor(am)) + 
+  stat_bin_2d(alpha = .2) + 
+  stat_bin_2d(geom = "text", 
+           aes(label = after_stat(count)))
+
+# alias
+geom_heatmap <- stat_bin2d
+
+# add label default
+StatBin2d$default_aes
+StatBin2d$default_aes <- aes(weight = 1, 
+                             fill = after_stat(count),
+                             label = after_stat((100*count/sum(count)) %>% 
+                                                  round(1) %>% 
+                                                  paste0("%")))
+                                            
+
+geom_heatmap_percent <- function(...){stat_bin_2d(geom = "text", ...)}
+
+mtcars %>% 
+  ggplot() + 
+  aes(x = factor(vs), y = factor(am)) + 
+  geom_heatmap(alpha = .2) + 
+  geom_heatmap_percent()
+```
+
+# third example
+
+```{r}
+library(tidyverse)
+diamonds %>% 
+  ggplot() + 
+  aes(y = cut) + 
+  geom_bar() + 
+  stat_count(geom = "text", 
+             aes(label = after_stat(count)))
+
+StatCount$default_aes
+StatCount$default_aes <- aes(x = after_stat(count),
+                             y = after_stat(count),
+                             weight = 1,
+                             label = after_stat(count),
+                             percent = after_stat(100*count/sum(count)) %>% 
+                               round(1) %>% 
+                               paste0("%"))
+
+geom_barlab <- function(...){stat_count(geom = "text", ...)}
+
+diamonds %>% 
+  ggplot() + 
+  aes(y = cut) + 
+  geom_bar() + 
+  geom_barlab()
+
+layer_data()  # wow!  percent is here.  (but we can't seem to access it)
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
+
+- There's a danger of overwriting necessary default aesthetics; restart r session to restore... check out what the existing defaults are and include them.
+- though a default aes addition seems innocuous, it seems a bit heavy handed to change a proto...
+- it would be nice to have a handful of calculations to choose from for labels.  I'm not sure what the way forward is.  conditional logic in default aes doesn't see to work.
+
+
+Could you, in this case, What if you want a variant, where default aes, e.g. text gives you something a little different, but you want both functions to work.  
+
+```{r}
+StatCount2 <- ggproto(NULL, StatCount)
+
+StatCount2$default_aes = aes(x = after_stat(count),
+                             y = after_stat(count),
+                             weight = 1,
+                             label = after_stat(100*count/sum(count)) %>% 
+                               round(1) %>% 
+                               paste0("%"))
+
+# did copy paste og stat_count and changed geom to "text" and StatCount to StatCount2
+
+geom_bar_percent <- function (mapping = NULL, data = NULL, 
+                              geom = "text", 
+                              position = "stack", 
+    ..., width = NULL, na.rm = FALSE, orientation = NA, show.legend = NA, 
+    inherit.aes = TRUE) 
+{
+    params <- rlang::list2(na.rm = na.rm, orientation = orientation, 
+        width = width, ...)
+    layer(data = data, mapping = mapping, stat = StatCount2, geom = geom, 
+        position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
+        params = params)
+}
+
+diamonds %>% 
+  ggplot() + 
+  aes(y = cut) + 
+  geom_bar() +
+  geom_bar_percent()
+
+
+```
+
+https://stackoverflow.com/questions/70637463/when-i-modify-a-duplicated-copied-geom-object-this-also-modifies-the-underlyi
