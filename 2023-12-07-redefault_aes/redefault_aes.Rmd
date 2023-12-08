@@ -7,7 +7,7 @@ output:
     toc: TRUE
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=TRUE}
 knitr::opts_chunk$set(echo = TRUE)
 options(tidyverse.quiet = TRUE)
 ```
@@ -134,6 +134,197 @@ layer_data()  # wow!  percent is here.  (but we can't seem to access it)
 
 
 
+# example four, re-defaulting when there are required aesthetics...
+
+reference: https://evamaerey.github.io/mytidytuesday/2023-11-08-ggforce-pies/ggforce-pies-reawakens.html
+
+---
+
+```{r}
+
+library(tidyverse)
+diamonds %>% 
+  count(cut) %>% 
+  ggplot() + 
+  aes(amount = n, r0 = 0, r = 1, fill = cut, x0 = 0, y0 = 0) + 
+  ggforce::stat_pie()
+
+
+compute_panel_wedge <- function(data, scales, n = 360, sep = 0){
+  
+  # defaulting aesthetics, instead of requiring
+  # data$x0 <- data$x0 %||% 0
+  if(!("x0" %in% names(data))){data$x0 <- 0}
+  if(!("y0" %in% names(data))){data$y0 <- 0}
+  if(!("r0" %in% names(data))){data$r0 <- 0}
+  if(!("r" %in% names(data))) {data$r  <- sqrt(sum(data$amount)/pi)} # area will be equal to amount
+  
+  # maybe change 'amount' to 'weight'?
+
+  # piggybacking from StatPie
+  ggforce::StatPie$compute_panel(data, scales = scales, n = n, sep = sep)
+  
+}
+
+StatWedge <- ggplot2::ggproto(
+  `_class` = 'StatWedge', 
+  `_inherit` = ggplot2::Stat,
+  compute_panel = compute_panel_wedge,
+  required_aes = c('amount'),
+  default_aes = ggplot2::aes(x0 = NULL, y0 = NULL, 
+                             r0 = NULL, r = NULL, 
+                             explode = NULL)
+)
+
+
+# Gentle modification from ggforce::GeomArcBar, changing color (was black) and fill (was NA) defaults 
+GeomArcWedge <- ggplot2::ggproto('GeomArcWedge', ggforce::GeomShape,
+  default_aes = ggforce:::combine_aes(ggforce::GeomShape$default_aes, 
+                                      ggplot2::aes(colour = NA, fill = "grey"))
+)
+
+
+geom_wedge <- function(mapping = NULL, data = NULL, 
+                       geom = 'arc_wedge', stat = StatWedge,
+                     position = 'identity', n = 360, sep = 0, na.rm = FALSE,
+                     show.legend = NA, inherit.aes = TRUE, ...) {
+  layer(
+    stat = stat, data = data, mapping = mapping, geom = geom,
+    position = position, show.legend = show.legend, inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, n = n, sep = sep, ...)
+  )
+}
+
+diamonds %>% 
+  count(cut) %>% 
+  ggplot() + 
+  aes(amount = n, fill = cut) + 
+  geom_wedge() 
+```  
+
+
+## Attempt to apply changing required aesthetics to geom bar case... hiding, not working
+
+```{r, eval =F, echo = F}
+library(tidyverse)
+
+ggplot(diamonds) + 
+  aes(fill = cut, y = .5) + 
+  geom_bar(width = 1) + 
+  coord_polar()
+  
+StatCount$required_aes <- character()
+StatCount$default_aes <- aes(x = after_stat(count),
+                             y = NULL,
+                             weight = 1)
+StatCount$setup_params <-   function (self, data, params) 
+{
+  
+  data$y <- .5
+  
+    params$flipped_aes <- has_flipped_aes(data, params, main_is_orthogonal = FALSE)
+    has_x <- !(is.null(data$x) && is.null(params$x))
+    has_y <- !(is.null(data$y) && is.null(params$y))
+    if (!has_x && !has_y) {
+        cli::cli_abort("{.fn {snake_class(self)}} requires an {.field x} or {.field y} aesthetic.")
+    }
+    if (has_x && has_y) {
+        cli::cli_abort("{.fn {snake_class(self)}} must only have an {.field x} {.emph or} {.field y} aesthetic.")
+    }
+     if (is.null(params$width)) {
+         x <- if (params$flipped_aes) 
+             "y"
+         else "x"
+         params$width <- resolution(data[[x]]) * 0.9
+     }
+    params
+}
+
+StatCount$compute_group <- function (self, data, scales, width = NULL, flipped_aes = FALSE) 
+{
+   data$y = .5
+    data <- flip_data(data, flipped_aes)
+    x <- data$x
+    weight <- data$weight %||% rep(1, length(x))
+    count <- as.numeric(tapply(weight, x, sum, na.rm = TRUE))
+    count[is.na(count)] <- 0
+    bars <- data_frame0(count = count, prop = count/sum(abs(count)), 
+        x = sort(unique0(x)), width = width, flipped_aes = flipped_aes, 
+        .size = length(count))
+    flip_data(bars, flipped_aes)
+}
+
+StatCount$compute_panel <- function (self, data, scales, ...) 
+{
+    if (empty(data)) 
+        return(data_frame0())
+    groups <- split(data, data$group)
+    stats <- lapply(groups, function(group) {
+        self$compute_group(data = group, scales = scales, ...)
+    })
+    non_constant_columns <- character(0)
+    stats <- mapply(function(new, old) {
+        if (empty(new)) 
+            return(data_frame0())
+        old <- old[, !(names(old) %in% names(new)), drop = FALSE]
+        non_constant <- vapply(old, vec_unique_count, integer(1)) > 
+            1L
+        non_constant_columns <<- c(non_constant_columns, names(old)[non_constant])
+        vec_cbind(new, old[rep(1, nrow(new)), , drop = FALSE])
+    }, stats, groups, SIMPLIFY = FALSE)
+    non_constant_columns <- unique0(non_constant_columns)
+    dropped <- non_constant_columns[!non_constant_columns %in% 
+        self$dropped_aes]
+    if (length(dropped) > 0) {
+        cli::cli_warn(c("The following aesthetics were dropped during statistical transformation: {.field {glue_collapse(dropped, sep = ', ')}}", 
+            i = "This can happen when ggplot fails to infer the correct grouping structure in the data.", 
+            i = "Did you forget to specify a {.code group} aesthetic or to convert a numerical variable into a factor?"))
+    }
+    data_new <- vec_rbind0(!!!stats)
+    data_new[, !names(data_new) %in% non_constant_columns, drop = FALSE]
+}
+
+
+StatCount$compute_layer <-     function (self, data, params, layout) 
+{
+  data$x = .5
+    # ggplot2:::check_required_aesthetics(self$required_aes, c(names(data), 
+    #     names(params)), snake_class(self))
+    required_aes <- intersect(names(data), unlist(strsplit(self$required_aes, 
+        "|", fixed = TRUE)))
+    data <- remove_missing(data, params$na.rm, c(required_aes, 
+        self$non_missing_aes), snake_class(self), finite = TRUE)
+    params <- params[intersect(names(params), self$parameters())]
+    args <- c(list(data = quote(data), scales = quote(scales)), 
+        params)
+    ggplot2:::dapply(data, "PANEL", function(data) {
+        scales <- layout$get_scales(data$PANEL[1])
+        rlang::try_fetch(inject(self$compute_panel(data = data, scales = scales, 
+            !!!params)), error = function(cnd) {
+            cli::cli_warn("Computation failed in {.fn {ggplot2:::snake_class(self)}}",
+                parent = cnd)
+            ggplot2:::data_frame0()
+        })
+    })
+}
+
+geom_pie <- stat_count
+
+ggplot(diamonds) + 
+  # aes(fill = cut) + 
+  geom_pie(width = 1) + 
+  coord_polar()
+
+
+StatNull <- ggproto("StatNull", Stat)
+StatNull$required_aes
+
+character()
+```
+
+
+
+
 ## Closing remarks, Other Relevant Work, Caveats
 
 - There's a danger of overwriting necessary default aesthetics; restart r session to restore... check out what the existing defaults are and include them.
@@ -141,10 +332,13 @@ layer_data()  # wow!  percent is here.  (but we can't seem to access it)
 - it would be nice to have a handful of calculations to choose from for labels.  I'm not sure what the way forward is.  conditional logic in default aes doesn't see to work.
 
 
-Could you, in this case, What if you want a variant, where default aes, e.g. text gives you something a little different, but you want both functions to work.  
+Could you, in this case, What if you want a variant, where default aes, e.g. text gives you something a little different, but you want both functions to work.   https://stackoverflow.com/questions/70637463/when-i-modify-a-duplicated-copied-geom-object-this-also-modifies-the-underlyi
+
 
 ```{r}
-StatCount2 <- ggproto(NULL, StatCount)
+library(tidyverse)
+
+StatCount2 <- ggproto(NULL, ggplot2::StatCount)
 
 StatCount2$default_aes = aes(x = after_stat(count),
                              y = after_stat(count),
@@ -173,8 +367,9 @@ diamonds %>%
   aes(y = cut) + 
   geom_bar() +
   geom_bar_percent()
-
-
 ```
 
-https://stackoverflow.com/questions/70637463/when-i-modify-a-duplicated-copied-geom-object-this-also-modifies-the-underlyi
+
+
+
+
