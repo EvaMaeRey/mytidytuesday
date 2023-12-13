@@ -1,0 +1,91 @@
+---
+title: "adding usable (?) stat_* columns via default_aes"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Would like to be able to add some bonus aes by adding defaults.  
+
+## We see, adding 'known' (anticipated?) aes works nicely (i.e. label)
+
+```{r error = T}
+library(tidyverse)
+diamonds %>% 
+  ggplot() + 
+  aes(y = cut) + 
+  geom_bar() + 
+  stat_count(geom = "text", 
+             aes(label = after_stat(count)))
+
+StatCount$default_aes
+StatCount$default_aes <- aes(x = after_stat(count),
+                             y = after_stat(count),
+                             weight = 1,
+                             label = after_stat(count),
+                             percent = after_stat(100*count/sum(count)) %>% 
+                               round(1) %>% 
+                               paste0("%"),
+                             another_aes = after_stat("bonus aes"))
+
+geom_barlab <- function(...){stat_count(geom = "text", ...)}
+
+diamonds %>% 
+  ggplot() + 
+  aes(y = cut) + 
+  geom_bar() + 
+  geom_barlab()
+```
+
+# looks like we should be able to use it, inspecting w/ layer_data()
+
+```{r}
+layer_data()  # wow!  percent is here.  (but we can't seem to access it)
+```
+
+# let's use ggtrace 'layer_all_stages' :-) to see when columns should be available?
+
+```{r}
+layer_all_stages <- function(){
+
+a <- ggtrace::layer_before_stat() %>% head(3)
+b <- ggtrace::layer_after_stat() %>% head(3)
+c <- ggtrace::layer_before_geom() %>% head(3)
+d <- ggtrace::layer_after_scale() %>% head(3)
+
+list(before_stat = a, after_stat = b, 
+     before_geom = c, after_scale = d)
+
+}
+
+
+
+layer_all_stages()
+```
+
+# but... throws error when we actually try 'Caused by error in `compute_geom_1()` `geom_text()` requires the following missing aesthetics: label'
+
+```{r, error=T}
+# but
+diamonds %>% 
+  ggplot() + 
+  aes(y = cut) + 
+  geom_bar() + 
+  stat_count(geom = "text", aes(label = after_scale(percent))) 
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

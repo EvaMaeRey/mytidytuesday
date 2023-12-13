@@ -42,43 +42,58 @@ tribble(~disease, ~test_positive,  ~symptoms, ~weight,
 testing
 
 library(ind2cat)
-ggplot(testing) +
+
+testing %>% 
+  mutate(disease = ind_recode(disease)) %>% 
+  mutate(test_positive = ind_recode(test_positive)) %>% 
+  mutate(symptoms = ind_recode(symptoms)) ->
+testing_factors
+  
+  
+ggplot(testing_factors) +
   aes(weight = weight) +
   ggwedge:::geom_pie(color = "grey",
                      linewidth = 1.5) + 
   ggwedge:::geom_pie_label(r_prop = 1.15) + 
   coord_polar() +
-  aes(alpha = ind_recode(disease)) + 
+  aes(alpha = disease) + 
   scale_alpha_discrete(range = c(.6,1)) + 
   theme_void()
 
 last_plot() +
   aes(alpha = NULL) +
-  aes(fill = ind_recode(test_positive)) + 
+  aes(fill = test_positive) + 
   scale_fill_manual(values = c("cadetblue", "darkred"))
 
 last_plot() +
   aes(fill = NULL) +
-  aes(linetype = ind_recode(symptoms))
+  aes(linetype = symptoms)
 ```
 
 ```{r}
 last_plot() +
   aes(linetype = NULL) + 
-  aes(alpha = ind_recode(disease)) +
-  aes(fill = ind_recode(test_positive)) +
-  facet_grid(.~ind_recode(disease))
+  aes(alpha = disease) +
+  aes(fill = test_positive) +
+  facet_grid(.~disease)
 
 last_plot() +
-  facet_wrap(~ind_recode(test_positive))
+  facet_wrap(~test_positive)
 
 last_plot() +
-    aes(linetype = ind_recode(symptoms)) + 
-   facet_grid(ind_recode(symptoms)~ind_recode(test_positive)) 
+    aes(linetype = symptoms) + 
+   facet_grid(symptoms~test_positive) 
 
 
 last_plot() %+%
-  (testing %>% filter(symptoms == 1))
+  (testing_factors %>% filter(symptoms == "symptoms"))
+
+last_plot() %+% 
+  facet_null() +
+  aes(fill = NULL)
+
+
+
 ```
 
 
