@@ -7,7 +7,7 @@
 #    http://shiny.rstudio.com/
 #
 
-remotes::install_github("statistikat/codeModules")
+# remotes::install_github("statistikat/codeModules")
 
 
 ##### R Stuff in the background ######
@@ -129,7 +129,7 @@ write_input_code_numeric <- function(input = "", short_input, value){
              label = "', short_input, '",
              step = 1,
              min = 10,
-             max = 200,
+             max = 150,
              value = ', value, '
              )')
 
@@ -310,7 +310,7 @@ ui <- fluidPage(
                   label = "vertices",
                   step = 1,
                   min = 10,
-                  max = 200,
+                  max = 120,
                   value = 16
                   ),
       selectInput(inputId = "char_color",
