@@ -1,0 +1,132 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+
+
+## Step 0.  Do it with base ggplot2
+
+```{r}
+library(tidyverse)
+
+data.frame(x0 = 0:1, y0 = 0:1, r = 1:2/3) %>% 
+  mutate(join = 1) %>% 
+  mutate(group = row_number()) %>% 
+  left_join(tibble(z = 1:5, join = 1)) %>% 
+  mutate(around = 2*pi*z/max(z-1)) %>% 
+  mutate(x = x0 + cos(around)*r,
+         y = y0 + sin(around)*r) %>% 
+  ggplot() + 
+  aes(x, y, label = z) +
+  geom_text() +
+  geom_path(aes(group = group))
+```
+
+
+Step 1. Compute
+
+```{r}
+compute_group_stat <- function(data, scales, n = 4){
+  
+  data %>% 
+    mutate(join = 1, 
+           group = row_number()) %>% 
+  left_join(tibble(z = 1:(n + 1), join = 1)) %>% 
+  mutate(around = 2*pi*z/max(z-1)) %>% 
+  mutate(x = x0 + cos(around)*r,
+         y = y0 + sin(around)*r) 
+  
+}
+
+tibble(x0 = 1, y0 = 1, r = 1 ) %>% 
+  compute_group_stat()
+
+
+```
+
+# Step 2. Pass to ggproto
+
+```{r}
+StatAround <- ggproto(`_class` = "StatAround", 
+                      `_inherit` = ggplot2::Stat,
+                      compute_group = compute_group_stat,
+                      required_aes = c("x0", "y0", "r")
+                      # default_aes = aes(r = NULL)
+                      )
+```
+
+## Step 3. Write geom_* or stat_*
+
+```{r}
+geom_around <- function(
+  mapping = NULL,
+  data = NULL,
+  position = "identity",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatAround,  # proto object from Step 2
+    geom = ggplot2::GeomPolygon,  # inherit other behavior
+    data = data,
+    mapping = mapping,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+```
+
+
+
+# Step 4: Enjoy (test)
+
+```{r}
+data.frame(x0 = 0:1, y0 = 0:1, r = 1:2/3) %>% 
+  ggplot() + 
+  aes(x0 = x0, y0 = y0, r = r) + 
+  geom_around() + 
+  aes(fill = r)
+
+diamonds %>% 
+  slice_sample(n = 80) %>% 
+  ggplot() + 
+  aes(x0 = cut %>% as.numeric, y0 = carat  , r = clarity %>% as.numeric()/20) + 
+  geom_around(alpha = .2) + 
+  aes(fill = after_stat(r)) +
+  coord_equal()
+
+
+cars %>% 
+  ggplot() + 
+  aes(x0 = speed, y0 = dist, r = speed/dist) + 
+  geom_around()
+  
+
+cars %>% 
+  ggplot() + 
+  aes(x0 = speed, y0 = dist, r = 3) + 
+  geom_around(alpha = .3, fill = "blue") +
+  coord_equal()
+
+```
+
+
+## Closing remarks, Other Relevant Work, Caveats
