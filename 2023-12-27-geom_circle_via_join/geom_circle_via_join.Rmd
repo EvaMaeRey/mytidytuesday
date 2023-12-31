@@ -42,7 +42,7 @@ data.frame(x0 = 0:1, y0 = 0:1, r = 1:2/3) %>%
 Step 1. Compute
 
 ```{r}
-compute_group_stat <- function(data, scales, n = 4){
+compute_panel_equilateral <- function(data, scales, n = 4){
   
   data %>% 
     mutate(join = 1, 
@@ -54,8 +54,8 @@ compute_group_stat <- function(data, scales, n = 4){
   
 }
 
-tibble(x0 = 1, y0 = 1, r = 1 ) %>% 
-  compute_group_stat()
+tibble(x0 = 1:2, y0 = 1:2, r = 1 ) %>% 
+  compute_panel_equilateral()
 
 
 ```
@@ -63,18 +63,18 @@ tibble(x0 = 1, y0 = 1, r = 1 ) %>%
 # Step 2. Pass to ggproto
 
 ```{r}
-StatAround <- ggproto(`_class` = "StatAround", 
+StatEquilateral <- ggproto(`_class` = "StatAround", 
                       `_inherit` = ggplot2::Stat,
-                      compute_group = compute_group_stat,
-                      required_aes = c("x0", "y0", "r")
-                      # default_aes = aes(r = NULL)
+                      compute_panel = compute_panel_equilateral,
+                      required_aes = c("x0", "y0", "r")#,
+                      # default_aes = aes(group = row)
                       )
 ```
 
 ## Step 3. Write geom_* or stat_*
 
 ```{r}
-geom_around <- function(
+geom_equilateral <- function(
   mapping = NULL,
   data = NULL,
   position = "identity",
@@ -82,7 +82,7 @@ geom_around <- function(
   show.legend = NA,
   inherit.aes = TRUE, ...) {
   ggplot2::layer(
-    stat = StatAround,  # proto object from Step 2
+    stat = StatEquilateral,  # proto object from Step 2
     geom = ggplot2::GeomPolygon,  # inherit other behavior
     data = data,
     mapping = mapping,
@@ -102,14 +102,14 @@ geom_around <- function(
 data.frame(x0 = 0:1, y0 = 0:1, r = 1:2/3) %>% 
   ggplot() + 
   aes(x0 = x0, y0 = y0, r = r) + 
-  geom_around() + 
+  geom_equilateral() + 
   aes(fill = r)
 
 diamonds %>% 
   slice_sample(n = 80) %>% 
   ggplot() + 
   aes(x0 = cut %>% as.numeric, y0 = carat  , r = clarity %>% as.numeric()/20) + 
-  geom_around(alpha = .2) + 
+  geom_equilateral(alpha = .2) + 
   aes(fill = after_stat(r)) +
   coord_equal()
 
@@ -117,14 +117,34 @@ diamonds %>%
 cars %>% 
   ggplot() + 
   aes(x0 = speed, y0 = dist, r = speed/dist) + 
-  geom_around()
+  geom_equilateral()
   
 
 cars %>% 
+  sample_n(12) %>%  
   ggplot() + 
   aes(x0 = speed, y0 = dist, r = 3) + 
-  geom_around(alpha = .3, fill = "blue") +
+  geom_equilateral(color = "black") +
   coord_equal()
+
+last_plot() + 
+  aes(alpha = speed > 15)
+
+
+
+last_plot() + 
+  aes(linetype = dist > 20)
+
+
+last_plot() + 
+  aes(fill = speed > 20)
+
+
+layer_data()
+
+last_plot() + 
+  facet_wrap(~ dist > 40)
+
 
 ```
 
