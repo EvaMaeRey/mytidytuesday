@@ -1,0 +1,131 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r cars}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+data.frame(event = c("Starting Cash", 
+                     "Sales", 
+                     "Refunds",
+                     "Payouts", 
+                     "Court Losses", 
+                     "Court Wins", 
+                     "Contracts", 
+                     "End Cash"),
+           change = c(2000, 3400, -1100, 
+                      -100, -6600, 3800, 
+                      1400, -2800)) ->
+flow_df
+  
+flow_df %>%   
+  mutate(balance = cumsum(c(0, 
+                            change[-nrow(.)]))) %>% 
+  mutate(time = row_number()) %>% 
+  mutate(flow = factor(sign(change))) ->
+balance_df
+
+ggplot(balance_df) +
+          geom_rect(
+            aes(xmin = time - 0.45, 
+                xmax = time + 0.45, 
+                ymin = balance, 
+                ymax = balance + change)) +
+          geom_text(aes(x = time, 
+                        y = pmin(balance, 
+                                 balance + change) - 50, 
+                        label = balance))
+```
+
+
+## Step 1. compute
+
+```{r}
+compute_panel_waterfall <- function(data, scales){
+  
+  data %>% 
+  mutate(balance = cumsum(c(0, 
+                            change[-nrow(.)]))) %>% 
+  mutate(x = row_number()) %>% 
+  mutate(direction = factor(sign(change))) %>% 
+  mutate(xmin = x - .45,
+         xmax = x + .45,
+         ymin = balance,
+         ymax = balance + change)
+  
+}
+
+flow_df %>% 
+  compute_panel_waterfall() 
+
+```
+
+
+## Step 2. Pass to ggproto 
+
+```{r}
+StatWaterfall <- ggproto(`_class` = "StatWaterfall", 
+                         `_inherit` = ggplot2::Stat,
+                         required_aes = c("change"),
+                         compute_panel = compute_panel_waterfall)
+```
+
+
+## Step 3. pass to geom_ / stat_
+
+```{r}
+geom_waterfall <- function(
+  mapping = NULL,
+  data = NULL,
+  position = "identity",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatWaterfall,  # proto object from step 2
+    geom = ggplot2::GeomRect,  # inherit other behavior
+    data = data,
+    mapping = mapping,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+```
+
+
+## Step 4. Enjoy (test)
+
+
+```{r}
+flow_df %>% 
+  ggplot() +
+  aes(change = change) + 
+  geom_waterfall()
+```
+
+## Closing remarks, Other Relevant Work, Caveats
