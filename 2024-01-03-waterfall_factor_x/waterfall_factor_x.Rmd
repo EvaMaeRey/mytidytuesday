@@ -53,7 +53,12 @@ ggplot(balance_df) +
           geom_text(aes(x = event, 
                         y = pmin(balance, 
                                  balance + change) - 50, 
-                        label = balance))
+                        label = balance)) ->
+p;p
+
+
+layer_data()
+layer_scales()$x
 ```
 
 
@@ -63,8 +68,8 @@ ggplot(balance_df) +
 compute_panel_waterfall <- function(data, scales){
   
   data %>% 
-  # mutate(x = event) %>% 
-  mutate(x_pos = event %>% as.numeric()) %>% 
+  mutate(x_scale = x) %>% 
+  mutate(x_pos = x %>% as.numeric()) %>% 
   arrange(x_pos) %>% 
   mutate(balance = cumsum(c(0, 
                             change[-nrow(.)]))) %>% 
@@ -72,11 +77,15 @@ compute_panel_waterfall <- function(data, scales){
   mutate(xmin = x_pos - .45,
          xmax = x_pos + .45,
          ymin = balance,
-         ymax = balance + change)
+         ymax = balance + change) %>% 
+  mutate(x = x_pos) %>% 
+  mutate(y = ymax) %>% 
+  mutate(gain_loss = ifelse(direction == 1, "gain", "loss"))
   
 }
 
 flow_df %>% 
+  rename(x = event) %>% 
   compute_panel_waterfall() 
 
 ```
@@ -87,15 +96,19 @@ flow_df %>%
 ```{r}
 StatWaterfall <- ggproto(`_class` = "StatWaterfall", 
                          `_inherit` = ggplot2::Stat,
-                         required_aes = c("change"),
-                         compute_panel = compute_panel_waterfall)
+                         required_aes = c("change", "x"),
+                         compute_panel = compute_panel_waterfall,
+                         default_aes = aes(label = after_stat(change),
+                                           fill = after_stat(gain_loss),
+                                           vjust = after_stat((direction == -1) %>%
+                                                                as.numeric)))
 ```
 
 
 ## Step 3. pass to geom_ / stat_
 
 ```{r}
-geom_waterfall <- function(
+stat_waterfall <- function(geom = ggplot2::GeomRect,
   mapping = NULL,
   data = NULL,
   position = "identity",
@@ -104,7 +117,7 @@ geom_waterfall <- function(
   inherit.aes = TRUE, ...) {
   ggplot2::layer(
     stat = StatWaterfall,  # proto object from step 2
-    geom = ggplot2::GeomRect,  # inherit other behavior
+    geom = geom,  # inherit other behavior
     data = data,
     mapping = mapping,
     position = position,
@@ -113,6 +126,11 @@ geom_waterfall <- function(
     params = list(na.rm = na.rm, ...)
   )
 }
+
+
+geom_waterfall <- stat_waterfall
+
+geom_waterfall_label <- function(..., lineheight = .8){stat_waterfall(geom = "text", lineheight = lineheight, ...)}
 ```
 
 
@@ -122,12 +140,23 @@ geom_waterfall <- function(
 ```{r}
 flow_df %>% 
   ggplot() +
-  aes(change = change, event = event) + 
-  geom_waterfall()
+  aes(change = change, 
+      x = event) + # event in order
+  geom_waterfall() + 
+  geom_waterfall_label() + 
+  scale_y_continuous(expand = expansion(.1)) + 
+  scale_fill_manual(values = c("springgreen4", "darkred"))
 
 last_plot() + 
-  aes(event = fct_reorder(event, change))
-```
+  aes(x = fct_reorder(event, change)) # in order neg to positive
+
+last_plot() + 
+  aes(x = fct_reorder(event, abs(change))) # in order magnitude
+
+
+```  
+
+
 
 
 
