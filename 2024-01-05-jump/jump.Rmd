@@ -1,0 +1,149 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r cars}
+library(tidyverse)
+tribble(~part_id, ~group, ~x0, ~y0, ~length, ~size,
+        1,        1,      0,  .6,   0,  3,
+        2,        1,      0,  1,   0,   1,
+        3,        1,      0,  3,   0,   1,
+        2,        2,      0,  1,   0,  NA,
+        4,        2,      0,  1,   1,   1,
+        5,        2,      0,  1,   1,   2,
+        2,        3,      0,  1,   0,  NA,
+        6,        3,      0,  1,   1,   1,
+        7,        3,      0,  1,   1,   2,
+        3,        4,      0,  3,   0,  NA,
+        8,        4,      0,  3,   1,   1,
+        9,        4,      0,  3,   1, 2.5,
+        3,        5,      0,  3,   0,  NA,
+        10,       5,      0,  3,   1,   1,
+        11,       5,      0,  3,   1,   2.5  
+        ) %>% 
+  mutate(angle = runif(15, 0, 2*pi)) %>% 
+  mutate(xchange = length*cos(angle)) %>% 
+  mutate(ychange = length*sin(angle)) %>% 
+  group_by(group) %>% 
+  mutate(xcumchange = cumsum(xchange)) %>% 
+  mutate(ycumchange = cumsum(ychange)) %>% 
+  mutate(x = x0 + xcumchange) %>% 
+  mutate(y = y0 + ycumchange) %>% 
+  ggplot() + 
+  aes(x = x, y = y, group = group) +
+  geom_path(size = .2) + 
+  geom_point() +
+  scale_y_reverse() + 
+  coord_equal() + 
+  aes(color = group %>% as.factor()) + 
+  aes(size = size)
+```
+
+## Experiment
+
+```{r}
+compute_panel_body <- function(data,scales){
+  
+  
+  tribble(~part_id, ~group_part, ~x0, ~y0, ~length, ~volume,
+        1,        1,      0,  .6,   0,  3,
+        2,        1,      0,  1,   0,   1,
+        3,        1,      0,  3,   0,   1,
+        2,        2,      0,  1,   0,  NA,
+        4,        2,      0,  1,   1,   1,
+        5,        2,      0,  1,   1,   2,
+        2,        3,      0,  1,   0,  NA,
+        6,        3,      0,  1,   1,   1,
+        7,        3,      0,  1,   1,   2,
+        3,        4,      0,  3,   0,  NA,
+        8,        4,      0,  3,   1,   1,
+        9,        4,      0,  3,   1, 2.5,
+        3,        5,      0,  3,   0,  NA,
+        10,       5,      0,  3,   1,   1,
+        11,       5,      0,  3,   1,   2.5  
+        ) %>% 
+  mutate(angle_part = runif(15, 0, 2*pi)) %>% 
+  mutate(xchange = length*cos(angle_part)) %>% 
+  mutate(ychange = length*sin(angle_part)) %>% 
+  group_by(group_part) %>% 
+  mutate(xcumchange = cumsum(xchange)) %>% 
+  mutate(ycumchange = cumsum(ychange)) %>% 
+  mutate(x = x0 + xcumchange) %>% 
+  mutate(y = y0 + ycumchange)  %>% 
+    ungroup() %>% 
+    mutate(y = -y) %>% 
+    mutate(group_part = group_part %>% as.factor())
+  
+}
+
+
+# compute_panel_body()
+```
+
+
+```{r}
+StatBody <- ggproto(`_class` = "StatBody", 
+                    `_inherit` = ggplot2::Stat,
+                    compute_panel = compute_panel_body,
+                    default_aes = aes(group = after_stat(group_part)))
+```
+
+
+```{r}
+stat_body <- function(geom = ggplot2::GeomPath,
+  mapping = NULL,
+  data = NULL,
+  position = "identity",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatBody,  # proto object from step 2
+    geom = geom,  # inherit other behavior
+    data = data,
+    mapping = mapping,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+
+stamp_body <- stat_body
+
+```
+
+
+```{r}
+tibble(x = 1:15) %>%  
+  ggplot() + 
+  stamp_body() + 
+  coord_equal() + 
+  facet_wrap(~x) + 
+  aes(color = after_stat(group_part))
+  
+
+# layer_data()
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

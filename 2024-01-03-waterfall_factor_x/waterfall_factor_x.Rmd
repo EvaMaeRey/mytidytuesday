@@ -22,15 +22,15 @@ options(tidyverse.quiet = TRUE)
 
 ```{r cars}
 library(tidyverse)
-data.frame(event = c("Starting Cash", 
+data.frame(event = c(
                      "Sales", 
                      "Refunds",
                      "Payouts", 
                      "Court Losses", 
                      "Court Wins", 
                      "Contracts", 
-                     "End Cash"),
-           change = c(2000, 3400, -1100, 
+                     "Fees"),
+           change = c(6400, -1100, 
                       -100, -6600, 3800, 
                       1400, -2800)) %>% 
   mutate(event = factor(event)) ->
@@ -140,6 +140,7 @@ geom_waterfall_label <- function(..., lineheight = .8){stat_waterfall(geom = "te
 ```{r}
 flow_df %>% 
   ggplot() +
+  geom_hline(yintercept = 0) +
   aes(change = change, 
       x = event) + # event in order
   geom_waterfall() + 
