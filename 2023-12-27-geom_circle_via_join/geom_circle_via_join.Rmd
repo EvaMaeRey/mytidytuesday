@@ -7,31 +7,27 @@ output:
     toc: TRUE
 ---
 
-```{r setup, include=FALSE}
+```{r include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 options(tidyverse.quiet = TRUE)
 ```
 
 
 
-
-## Intro Thoughts
-
-
-
-
-## Step 0.  Do it with base ggplot2
+### Step 0.  Do it with base ggplot2
 
 ```{r}
 library(tidyverse)
 
-data.frame(x0 = 0:1, y0 = 0:1, r = 1:2/3) %>% 
-  mutate(join = 1) %>% 
-  mutate(group = row_number()) %>% 
-  left_join(tibble(z = 1:5, join = 1)) %>% 
-  mutate(around = 2*pi*z/max(z-1)) %>% 
+data.frame(x0 = 0:1, y0 = 0:1, r = 1:2/3) |> 
+  mutate(group = row_number()) |> 
+  crossing(tibble(z = 0:15)) |> 
+  # mutate(join_var = 1) |> 
+  # left_join(tibble(z = 0:15, join_var = 1),
+  #           multiple = "all") |> 
+  mutate(around = 2*pi*z/max(z)) |> 
   mutate(x = x0 + cos(around)*r,
-         y = y0 + sin(around)*r) %>% 
+         y = y0 + sin(around)*r) |> 
   ggplot() + 
   aes(x, y, label = z) +
   geom_text() +
@@ -39,42 +35,44 @@ data.frame(x0 = 0:1, y0 = 0:1, r = 1:2/3) %>%
 ```
 
 
-Step 1. Compute
+### Step 1. Compute
 
 ```{r}
-compute_panel_equilateral <- function(data, scales, n = 4){
+compute_panel_equilateral <- function(data, scales, n = 15){
   
-  data %>% 
-    mutate(join = 1, 
-           group = row_number()) %>% 
-  left_join(tibble(z = 1:(n + 1), join = 1)) %>% 
-  mutate(around = 2*pi*z/max(z-1)) %>% 
-  mutate(x = x0 + cos(around)*r,
-         y = y0 + sin(around)*r) 
+  data |> 
+    mutate(group = row_number()) |> 
+    crossing(tibble(z = 0:n)) |>
+    # mutate(join_var = 1) |> 
+    # left_join(tibble(z = 0:(n), join_var = 1),
+    #         multiple = "all") |> 
+    mutate(around = 2*pi*z/max(z)) |> 
+    mutate(x = x0 + cos(around)*r,
+           y = y0 + sin(around)*r) 
   
 }
 
-tibble(x0 = 1:2, y0 = 1:2, r = 1 ) %>% 
+tibble(x0 = 1:2, y0 = 1:2, r = 1 ) |> 
   compute_panel_equilateral()
 
 
 ```
 
-# Step 2. Pass to ggproto
+### Step 2. Pass to ggproto
 
 ```{r}
-StatEquilateral <- ggproto(`_class` = "StatAround", 
-                      `_inherit` = ggplot2::Stat,
-                      compute_panel = compute_panel_equilateral,
-                      required_aes = c("x0", "y0", "r")#,
-                      # default_aes = aes(group = row)
+StatCircle <- ggproto(
+  `_class` = "StatCircle", 
+  `_inherit` = ggplot2::Stat,
+  compute_panel = compute_panel_equilateral,
+                      required_aes = c("x0", "y0", "r")
                       )
 ```
 
-## Step 3. Write geom_* or stat_*
+### Step 3. Write geom_* or stat_*
 
 ```{r}
-geom_equilateral <- function(
+geom_circle <- function(
   mapping = NULL,
   data = NULL,
   position = "identity",
@@ -82,7 +80,7 @@ geom_equilateral <- function(
   show.legend = NA,
   inherit.aes = TRUE, ...) {
   ggplot2::layer(
-    stat = StatEquilateral,  # proto object from Step 2
+    stat = StatCircle,  # proto object from Step 2
     geom = ggplot2::GeomPolygon,  # inherit other behavior
     data = data,
     mapping = mapping,
@@ -96,57 +94,94 @@ geom_equilateral <- function(
 
 
 
-# Step 4: Enjoy (test)
+### Step 4: Enjoy (test)
 
 ```{r}
-data.frame(x0 = 0:1, y0 = 0:1, r = 1:2/3) %>% 
+data.frame(x0 = 0:1, y0 = 0:1, r = 1:2/3) |> 
   ggplot() + 
   aes(x0 = x0, y0 = y0, r = r) + 
-  geom_equilateral() + 
+  geom_circle() + 
   aes(fill = r)
 
-diamonds %>% 
-  slice_sample(n = 80) %>% 
+diamonds |> 
+  slice_sample(n = 80) |> 
   ggplot() + 
-  aes(x0 = cut %>% as.numeric, y0 = carat  , r = clarity %>% as.numeric()/20) + 
-  geom_equilateral(alpha = .2) + 
+  aes(x0 = as.numeric(cut), y0 = carat  , r = as.numeric(clarity)/20) + 
+  geom_circle(alpha = .2) + 
   aes(fill = after_stat(r)) +
   coord_equal()
-
-
-cars %>% 
-  ggplot() + 
-  aes(x0 = speed, y0 = dist, r = speed/dist) + 
-  geom_equilateral()
   
-
-cars %>% 
-  sample_n(12) %>%  
+cars |> 
+  sample_n(12) |>  
   ggplot() + 
-  aes(x0 = speed, y0 = dist, r = 3) + 
-  geom_equilateral(color = "black") +
+  aes(x0 = speed, y0 = dist, r = dist/speed) + 
+  geom_circle(color = "black") +
   coord_equal()
 
 last_plot() + 
-  aes(alpha = speed > 15)
-
-
-
-last_plot() + 
-  aes(linetype = dist > 20)
-
-
-last_plot() + 
-  aes(fill = speed > 20)
-
-
-layer_data()
-
-last_plot() + 
+  aes(alpha = speed > 15) +
+  aes(linetype = dist > 20) +
+  aes(fill = speed > 18) +
   facet_wrap(~ dist > 40)
+```
 
+### Discussion: Why not compute_group?
 
+```{r}
+StatCircle2 <- ggproto(
+  `_class` = "StatCircle2",
+  `_inherit` = ggplot2::Stat,
+  compute_group = compute_panel_equilateral,
+  required_aes = c("x0", "y0", "r"))
+
+geom_circle_CG <- function(
+  mapping = NULL,
+  data = NULL,
+  position = "identity",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatCircle2,  # proto object from Step 2
+    geom = ggplot2::GeomPolygon,  # inherit other behavior
+    data = data,
+    mapping = mapping,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+
+cars |> 
+  sample_n(12) |>  
+  ggplot() + 
+  aes(x0 = speed, y0 = dist, r = dist/speed) + 
+  geom_circle_CG(color = "black") +
+  coord_equal() + 
+  aes(alpha = speed > 15) +
+  aes(linetype = dist > 20) +
+  aes(fill = speed > 18) +
+  facet_wrap(~ dist > 40)
 ```
 
 
-## Closing remarks, Other Relevant Work, Caveats
+### Exercise: Write the function, geom_heart() that will take the compute below and do it within the geom_* function
+
+```{r}
+data.frame(x0 = 0:1, y0 = 0:1, r = 1:2/3, rotation = 0) %>% 
+  mutate(group = row_number()) %>% 
+  tidyr::crossing(around = 0:15/15) %>%
+    dplyr::mutate(
+      y = y0 + r * (
+        .85 * cos(2*pi*around)
+        - .35 * cos(2 * 2*pi*around)
+        - .25 * cos(3 * 2*pi*around)
+        - .05 * cos(4 * 2*pi*around)
+      ) - rotation * pi,
+      x = x0 + r * (sin(2*pi*around)^3) - rotation * pi) %>% 
+  ggplot() +
+   aes(x = x, y = y, group = group) + 
+  geom_polygon(alpha = .5, fill = "darkred") + 
+  coord_equal()
+```

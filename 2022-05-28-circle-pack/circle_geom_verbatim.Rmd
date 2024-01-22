@@ -16,8 +16,41 @@ knitr::include_graphics("step0geomcircle.png")
 ```
 
 ```{r}
+library(ggplot2)
+
+radius <- 10
+x0 <- 4
+y0 <- 2
+angles <- seq(0, 2*pi, length.out = 200)
+
+circle <- data.frame(
+  x = cos(angles) * radius + x0,
+  y = sin(angles) * radius + y0
+  
+)
+
+ggplot(circle) + 
+  geom_polygon(aes(x, y),
+               fill = 'forestgreen',
+               colour = 'black') + 
+  coord_fixed()
+```
+
+```{r}
 knitr::include_graphics("step1computation.png")
 ```
+
+```{r}
+create_circle <- function(data, n){
+  
+  angles <- seq(from = 0, to = 2*pi,length.out = n+1)
+  data.frame()
+  
+}
+
+
+```
+
 
 
 ```{r}
