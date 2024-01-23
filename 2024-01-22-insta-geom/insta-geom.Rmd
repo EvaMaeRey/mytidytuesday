@@ -1,0 +1,187 @@
+---
+title: "wrap ggproto? (!?)"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+## Intro Thoughts
+
+What if you just want to define a basic computational engine (geom_* or stat_* function) on the fly in a script.  It seems like it requires a good amount of code, but there are things that repeat.  Below, we see if we define a StatTemp within a function, and use that function to remove some of the repetition for vanilla-y extensions.
+
+TLDR:  This seems to work, and surprisingly well (??).  I thought I'd only be able to use StatTemp once, but you seem to be able to define multiple geoms_* functions with the same define_temp_geom wrapper...
+
+## Status Quo:  1. compute, 2. ggproto, 3. define layer
+
+```{r cars}
+library(tidyverse)
+compute_panel_equilateral <- function(data, scales, n = 15){
+  
+  data |> 
+    mutate(group = row_number()) |> 
+    crossing(tibble(z = 0:n)) |>
+    mutate(around = 2*pi*z/max(z)) |> 
+    mutate(x = x0 + cos(around)*r,
+           y = y0 + sin(around)*r) 
+  
+}
+
+StatCircle <- ggproto(
+  `_class` = "StatCircle",
+  `_inherit` = ggplot2::Stat,
+  compute_panel = compute_panel_equilateral,
+  required_aes = c("x0", "y0", "r"))
+
+geom_circle <- function(
+  mapping = NULL,
+  data = NULL,
+  position = "identity",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatCircle,  # proto object from Step 2
+    geom = ggplot2::GeomPolygon,  # inherit other behavior
+    data = data,
+    mapping = mapping,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+
+data.frame(x0 = 0:1, y0 = 0:1, r = 1:2/3) |> 
+  ggplot() + 
+  aes(x0 = x0, y0 = y0, r = r) + 
+  geom_circle() + 
+  aes(fill = r)
+```
+
+## Experimental:  `define_temp_geom()` combines 2 and 3 in using a temp stat
+
+
+```{r}
+define_temp_geom_compute_panel <- function(
+  required_aes,
+  compute_panel, 
+  geom = ggplot2::GeomPoint, 
+  mapping = NULL,
+  data = NULL,
+  position = "identity",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE, 
+  ...) {
+
+StatTemp <- ggproto(
+  `_class` = "StatTemp",
+  `_inherit` = ggplot2::Stat,
+  compute_panel = compute_panel,
+  required_aes = required_aes)
+
+  ggplot2::layer(
+    stat = StatTemp,  # proto object from Step 2
+    geom = geom,  # inherit other behavior
+    data = data,
+    mapping = mapping,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+```
+
+### Try it out
+
+#### abbreviated definition `geom_circle()` using `define_temp_geom_compute_panel`
+
+```{r}
+compute_panel_circle <- function(data, scales, n = 15){
+  
+  data |> 
+    mutate(group = row_number()) |> 
+    crossing(tibble(z = 0:n)) |>
+    mutate(around = 2*pi*z/max(z)) |> 
+    mutate(x = x0 + cos(around)*r,
+           y = y0 + sin(around)*r) 
+  
+}
+
+geom_circle <- function(...){
+  
+  define_temp_geom_compute_panel(
+    required_aes = c("x0", "y0", "r"),
+    compute_panel = compute_panel_circle,
+    geom = ggplot2::GeomPath,
+    ...)
+  
+}
+```
+
+
+#### use `geom_circle()`
+
+```{r}
+data.frame(x0 = 0:1, y0 = 0:1, r = 1:2/3) |>
+  ggplot() +
+  aes(x0 = x0, y0 = y0, r = r) +
+  geom_circle() +
+  aes(fill = r)
+```
+
+### Can you define a second w/ the same StatTemp...
+
+#### define geom_heart
+
+```{r}
+compute_panel_heart <- function(data, scales){
+
+  data %>%
+  mutate(group = row_number()) %>%
+  tidyr::crossing(around = 0:15/15) %>%
+    dplyr::mutate(
+      y = y0 + r * (
+        .85 * cos(2*pi*around)
+        - .35 * cos(2 * 2*pi*around)
+        - .25 * cos(3 * 2*pi*around)
+        - .05 * cos(4 * 2*pi*around)
+      ),
+      x = x0 + r * (sin(2*pi*around)^3))
+
+}
+
+geom_heart <- function(...){
+
+    define_temp_geom_compute_panel(
+      required_aes = c("x0", "y0", "r"),
+      compute_panel = compute_panel_heart,
+      geom = ggplot2::GeomPolygon,
+      ...)
+
+  }
+```
+
+#### try using both geom_heart and geom_circle together...
+
+```{r}
+data.frame(x0 = 0:1, y0 = 0:1, r = 1:2/3) |>
+  ggplot() +
+  aes(x0 = x0, y0 = y0, r = r) +
+  geom_heart(alpha = .3) +
+  geom_circle(color = "red", 
+              data = data.frame(x0 = 4,y0 = 2, r = 1)) + 
+  annotate(geom = "point", x = .5, y = .5, size = 8, color = "green")
+
+```
+
+
+## Closing remarks, Other Relevant Work, Caveats
