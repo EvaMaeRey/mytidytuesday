@@ -1,0 +1,71 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+## Experiment
+
+```{r}
+library(tidyverse)
+roi_df <- data.frame(event = c("investment", "return"),
+                     change = c(-800, 1200))
+
+
+compute_panel_waterfall <- function(data, scales, width = .90){
+  
+  data %>% 
+  arrange(x) %>% 
+  mutate(balance = cumsum(c(0, 
+                            change[-nrow(.)]))) %>% 
+  mutate(direction = factor(sign(change))) %>% 
+  mutate(xmin = as.numeric(as.factor(x)) - width/2,
+         xmax = as.numeric(as.factor(x)) + width/2,
+         ymin = balance,
+         ymax = balance + change) %>% 
+  mutate(y = ymax) %>% 
+  mutate(gain_loss = ifelse(direction == 1, "positive", "negative"))
+  
+}  
+  
+roi_df |>
+  select(x = event, change) |>
+  compute_panel_waterfall()
+```
+
+### Using `create layer temp` outside of package development environment...
+
+
+```{r}
+ggtemp:::create_layer_temp("geom_waterfall", 
+                           compute_panel = compute_panel_waterfall,
+                           required_aes = c("x", "change"), 
+                           geom = "rect")
+
+ggplot(roi_df) + 
+  aes(x = event) +
+  aes(change = change) + 
+  geom_hline(yintercept = 0, alpha) +
+  geom_waterfall() + 
+  aes(fill = after_stat(gain_loss)) 
+```
+
+## Next step, expand x axis for start balance and end balance... Less obvious than it seemed when I started. 
+
+Probably should try with numeric x first, and then look into factor level x. 
+
+
+
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

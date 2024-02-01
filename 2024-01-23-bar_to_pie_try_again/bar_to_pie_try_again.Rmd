@@ -1,0 +1,126 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+
+```
+
+```{r}
+library(tidyverse)
+library(rlang)
+data_frame0 <- ggplot2:::data_frame0
+unique0 <- ggplot2:::unique0
+```
+
+
+# geom-bar.R
+
+```{r, code = readr::read_lines("https://raw.githubusercontent.com/tidyverse/ggplot2/main/R/geom-bar.R")}
+
+```
+
+# stat-count.R
+
+
+```{r, code = readr::read_lines("https://raw.githubusercontent.com/tidyverse/ggplot2/main/R/stat-count.R")}
+
+```
+
+
+
+```{r}
+diamonds |>
+  dplyr::sample_n(15) |>
+  ggplot() + 
+  aes(fill = color) + 
+  aes(y = "all") + 
+  geom_bar()
+
+last_plot() +
+  coord_polar()
+```
+
+
+# Start fiddling
+
+```{r}
+GeomBar$required_aes <- "fill"
+
+
+StatCount <- ggproto("StatCount", Stat,
+  required_aes = "fill",
+
+  default_aes = aes(x = NULL, y = after_stat(count), weight = 1),
+
+  setup_params = function(self, data, params) {
+    # params$flipped_aes <- has_flipped_aes(data, params, main_is_orthogonal = FALSE)
+
+        params$flipped_aes <- FALSE
+
+    # has_x <- !(is.null(data$x) && is.null(params$x))
+    # has_y <- !(is.null(data$y) && is.null(params$y))
+    # if (!has_x && !has_y) {
+    #   cli::cli_abort("{.fn {snake_class(self)}} requires an {.field x} or {.field y} aesthetic.")
+    # }
+    # if (has_x && has_y) {
+    #   cli::cli_abort("{.fn {snake_class(self)}} must only have an {.field x} {.emph or} {.field y} aesthetic.")
+    # }
+
+    # if (is.null(params$width)) {
+    #   # x <- if (params$flipped_aes) "y" else "x"
+    #   x <- "x"
+
+      params$width <- resolution(data[[x]]) * 0.9
+    # }
+
+    params
+  },
+
+  extra_params = c("na.rm", "orientation"),
+
+  compute_group = function(self, data, scales, width = NULL, flipped_aes = FALSE) {
+    
+    data$x <- .5
+    
+    data <- flip_data(data, flipped_aes)
+    x <- data$x
+    weight <- data$weight %||% rep(1, length(x))
+
+    count <- as.vector(rowsum(weight, x, na.rm = TRUE))
+
+    bars <- data_frame0(
+      count = count,
+      prop = count / sum(abs(count)),
+      x = sort(unique0(x)),
+      width = width,
+      flipped_aes = flipped_aes,
+      .size = length(count)
+    )
+    flip_data(bars, flipped_aes)
+  },
+
+  dropped_aes = "weight"
+)
+
+```
+
+```{r}
+diamonds |>
+  dplyr::sample_n(15) |>
+  ggplot() + 
+  aes(fill = color) + 
+  aes(x = "all") + 
+  geom_bar() +
+  coord_polar(theta = "y")
+```
+
+
+## Closing remarks, Other Relevant Work, Caveats
