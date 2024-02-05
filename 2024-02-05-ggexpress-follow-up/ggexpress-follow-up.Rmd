@@ -1,5 +1,5 @@
 ---
-title: "another experiment"
+title: "gg express"
 author: "Evangeline Reynolds"
 date: "`r Sys.Date()`"
 output: 
@@ -15,25 +15,32 @@ options(tidyverse.quiet = TRUE)
 
 
 
-## Intro Thoughts
+## gg express? why abbreviate syntax for new layers where computation is performed under the hood...
+
+[ggtemp/ggexpress](https://github.com/EvaMaeRey/ggtemp) project exists because syntax to generate new layer seems a little more verbose and not proportionate to what you are trying to accomplish.
+
+I've learned other people think would be nice to have lighter syntax layer creation, and have worked on this problem, including Elio Campitelli who writes about his similar motivation: 
+
+> But still, creating a geom from scratch is an involved process that doesn’t lend itself to simple transformations. -- Elio Campitelli  *Pero aún así, hacer un stat específico cada vez que uno quiere hacer un plot en particular es demasiado complicado.*
+
+I worked with stat_rasa and it is good.  It seems very similar to the ggtemp goals.  I think ggtemp might be motivated by the idea that eventually you might want to move to full, standard extension syntax, and then maybe you'd be more positioned to do that? 
+
+I heard about https://github.com/mjskay/ggbuilder from June Choe and think that is about even more flexibility?  Redefine compute internals on the fly?  I'm not sure. I also include some code on piping, but to be honest, practical implications are not clear to me. 😭
+
+I tried to make some changes to ggtemp functions to make the internal code more compact... but I think (hope) my ggplot2::stat knowledge is failing me, and hope there is a solution.
+
+I worked on a project with ggtemp and it was fun!  I think more fun than it would have been w/ traditional syntax. https://github.com/EvaMaeRey/ggcircleof5ths
 
 
-
-
-
----
-
-## stat_rasa
+## Campitelli:  stat_rasa {.tabset}
 
 https://eliocamp.github.io/codigo-r/en/2018/05/how-to-make-a-generic-stat-in-ggplot2/
 
+### Backend StatRasa, stat_rasa() 
+
 ```{r cars}
 library(tidyverse)
-```
 
-## Experiment
-
-```{r}
 StatRasa <- ggplot2::ggproto("StatRasa", ggplot2::Stat,
   compute_group = function(data, scales, fun, fun.args) {
      # Change default arguments of the function to the 
@@ -82,8 +89,11 @@ stat_rasa <- function(mapping = NULL, data = NULL,
       )
    )
 }
+```
 
+### UI, stat_rasa(fun = detrend)
 
+```{r}
 # using .75 span to match ggplot2 geom_smooth
 Detrend <- function(data, method = "lm", span = 0.75) {
    if (method == "lm") {
@@ -102,22 +112,11 @@ y <- x^2 + rnorm(30)*0.5
 df <- data.frame(x = x, y = y)
 
 ggplot(df, aes(x, y)) +
-  geom_line()
-
-last_plot() +
-   stat_rasa(geom = "line", 
-             fun = Detrend, 
-             method = "smooth",
-             color = "steelblue") +
-  geom_hline(yintercept = 0, 
-             linetype = "dashed") + 
-  labs(title = "detrending with loess smoothing")
-
-
-ggplot(df, aes(x, y)) +
   geom_line(aes(color = "original")) +
-  geom_smooth(aes(color = "loess smoothing")) + 
-  stat_smooth(geom = "point", aes(color = "loess smoothing"),
+  geom_smooth(aes(color = "loess smoothing"),
+              alpha = .3) + 
+  stat_smooth(geom = "point", 
+              aes(color = "loess smoothing"),
               xseq = df$x) +
   stat_rasa(geom = "line", 
              fun = Detrend, 
@@ -125,9 +124,16 @@ ggplot(df, aes(x, y)) +
              aes(color = "detrended")) +
   geom_hline(yintercept = 0, 
              linetype = "dashed") + 
+  scale_color_discrete(breaks = 
+                         fct_inorder(c("raw data",
+                                       "loess smoothing",
+                                       "detrended"))) +
   labs(title = "detrending with loess smoothing")
+```  
   
+### UI, stat_rasa -> stat_detrend
   
+```{r}  
 stat_detrend <- function(...) {
    stat_rasa(fun = Detrend, geom = "line", ...)
 }
@@ -152,7 +158,7 @@ ggplot(df, aes(x, y)) +
        color = NULL)
 ```
 
-## Simpler example for reach...
+### stat_rasa(fun = summarize_xy)
 
 ```{r}
 summarize_xy <- function(data, sum_fun = mean){
@@ -183,7 +189,86 @@ mtcars |>
 ```
 
 
-### Compare with ggtemp/ggexpress formulation
+## Compare with ggtemp formulation {.tabset}
+
+### Backend ggtemp:::define_layer_temp()
+
+```{r}
+ggtemp:::define_layer_temp
+```
+
+### Backend ggtemp:::create_layer_temp()
+
+
+```{r}
+ggtemp:::create_layer_temp
+```
+
+
+### UI: define_layer_temp()
+
+```{r}
+compute_panel_circle <- function(data, scales, n_vertices = 15){
+  
+  data |> 
+    mutate(group = row_number()) |> 
+    crossing(tibble(z = 0:n_vertices)) |>
+    mutate(around = 2*pi*z/max(z)) |> 
+    mutate(x = x0 + cos(around)*r,
+           y = y0 + sin(around)*r) 
+  
+}
+
+geom_circle <- function(...){
+  
+  ggtemp:::define_layer_temp(
+  compute_panel = compute_panel_circle,
+  required_aes = c("x0", "y0"),
+    ...)
+  
+}
+
+library(ggplot2)
+data.frame(x0 = 0:1, y0 = 0:1, r = 1:2/3) |>
+  ggplot() +
+  aes(x0 = x0, y0 = y0, r = r) +
+  geom_circle(n_vertices = 5) +
+  aes(fill = r)
+```
+
+
+### UI: ggtemp:::create_layer_temp()
+
+
+```{r}
+compute_group_xy_summary <- function(data, scales){
+  
+  data |> 
+    summarize(x = mean(x),
+              y = mean(y))
+  
+}
+
+ggtemp:::create_layer_temp("geom_xy_summary",
+    compute_group = compute_group_xy_summary,
+    required_aes = c("x", "y"))
+  
+
+mtcars |>
+  ggplot() +
+  aes(x = wt, y = mpg) +
+  geom_point() + 
+  geom_xy_summary(size = 8)
+
+last_plot() + 
+  aes(color = factor(gear))
+
+
+```
+
+### Backend rewrite attempt..
+
+This is giving me more problems; I thought I would be able to start with a lot of null elements, and use generic slot fillers like ggplot2::Stat$compute_panel... But strategy doesn't seem to be working.
 
 ```{r}
 define_layer_temp <- function(
@@ -209,7 +294,8 @@ StatTemp <- ggproto(
   `_inherit` = ggplot2::Stat,
   compute_group = compute_group,
   compute_panel = compute_panel,
-  required_aes  = required_aes)
+  required_aes  = required_aes
+  )
   
   ggplot2::layer(
     stat = StatTemp,  # proto object from Step 2
@@ -222,66 +308,16 @@ StatTemp <- ggproto(
     params = list(na.rm = na.rm, ...)
   )
 }
-
-
-compute_panel_circle <- function(data, scales, n_vertices = 15){
-  
-  data |> 
-    mutate(group = row_number()) |> 
-    crossing(tibble(z = 0:n_vertices)) |>
-    mutate(around = 2*pi*z/max(z)) |> 
-    mutate(x = x0 + cos(around)*r,
-           y = y0 + sin(around)*r) 
-  
-}
-
-geom_circle <- function(...){
-  
-  define_layer_temp(
-    compute_panel = compute_panel_circle,
-    ...)
-  
-}
-
-library(ggplot2)
-data.frame(x0 = 0:1, y0 = 0:1, r = 1:2/3) |>
-  ggplot() +
-  aes(x0 = x0, y0 = y0, r = r) +
-  geom_circle(n_vertices = 5) +
-  aes(fill = r)
 ```
 
 
-```{r}
-compute_group_xy_summary <- function(data, scales){
-  
-  data |> 
-    summarize(x = mean(x),
-              y = mean(y))
-  
-}
-
-geom_xy_summary <- function(...){
-  
-  define_layer_temp(
-    compute_panel = compute_group_xy_summary,
-    ...)
-  
-}
-
-mtcars |>
-  ggplot() +
-  aes(x = wt, y = mpg) +
-  geom_point() + 
-  geom_xy_summary(size = 8)
-
-last_plot() + 
-  aes(color = factor(gear))
 
 
-```
 
-### On the fly Stat mutation?
+
+## On the fly Stat mutation?
+
+ggbuilder and pipe note might have something to do with more dynamic, on-the-fly internal data manipulation and stat creation...
 
 ```{r}
 StatIdentity2 <- ggproto(NULL, ggplot2::StatIdentity)
@@ -315,11 +351,16 @@ mtcars |>
 ### pipe note from Teun vd Brand
 
 
+
 ```{r}
+library(tidyverse)
 piped <- . %>% summarise(x = mean(x)) %>%
   mutate(x = x + 1)
 
 piped
+
+magrittr::functions(piped)
+
 ```
 
 
