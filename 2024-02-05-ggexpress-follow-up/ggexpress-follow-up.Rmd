@@ -21,13 +21,19 @@ options(tidyverse.quiet = TRUE)
 
 I've learned other people think would be nice to have lighter syntax layer creation, and have worked on this problem, including Elio Campitelli who writes about his similar motivation: 
 
-> But still, creating a geom from scratch is an involved process that doesn’t lend itself to simple transformations. -- Elio Campitelli  *Pero aún así, hacer un stat específico cada vez que uno quiere hacer un plot en particular es demasiado complicado.*
+> But still, creating a geom from scratch is an involved process that doesn’t lend itself to simple transformations. -- Elio Campitelli  
 
-I worked with stat_rasa and it is good.  It seems very similar to the ggtemp goals.  I think ggtemp might be motivated by the idea that eventually you might want to move to full, standard extension syntax, and then maybe you'd be more positioned to do that? 
+The Spanish is slightly different, and maybe a little more to the point: 
 
-I heard about https://github.com/mjskay/ggbuilder from June Choe and think that is about even more flexibility?  Redefine compute internals on the fly?  I'm not sure. I also include some code on piping, but to be honest, practical implications are not clear to me. 😭
+> Pero aún así, hacer un stat específico cada vez que uno quiere hacer un plot en particular es demasiado complicado.*
 
-I tried to make some changes to ggtemp functions to make the internal code more compact... but I think (hope) my ggplot2::stat knowledge is failing me, and hope there is a solution.
+I worked with stat_rasa() - it is good!  It seems very similar to the ggtemp goals and implementation.  I think ggtemp might be coming from something that looks more like the full, standard extension syntax, and then maybe you'd be more positioned to migrate to that? 
+
+I also heard about https://github.com/mjskay/ggbuilder from June Choe and think that is about even stat modulations right in the plot build?  Redefine compute internals on the fly?  I'm not sure. 
+
+I also include some code Teun Van Der Brand offered on piping, but to be honest, practical implications and connection to this problem are not yet clear to me. 😭
+
+Progessing with ggtemp::define_layer_temp(), I tried to make some changes to make the internal code more compact... but I think (hope) my ggplot2::stat knowledge is failing me, and hope there is a solution.  I want to make all the relevant ggproto slots accesible, setting NULL as default, and then filling them in with Stat$compute_group, or what have you if you user doesn't define the slot.  The StatRasa implementation has the function working in compute_group only, whereas I think there would be a lot of interest in a function that works in compute panel arena. 
 
 I worked on a project with ggtemp and it was fun!  I think more fun than it would have been w/ traditional syntax. https://github.com/EvaMaeRey/ggcircleof5ths
 
@@ -112,7 +118,7 @@ y <- x^2 + rnorm(30)*0.5
 df <- data.frame(x = x, y = y)
 
 ggplot(df, aes(x, y)) +
-  geom_line(aes(color = "original")) +
+  geom_line(aes(color = "raw data")) +
   geom_smooth(aes(color = "loess smoothing"),
               alpha = .3) + 
   stat_smooth(geom = "point", 
@@ -189,7 +195,7 @@ mtcars |>
 ```
 
 
-## Compare with ggtemp formulation {.tabset}
+## ggtemp: define_layer_temp and concision troubles{.tabset}
 
 ### Backend ggtemp:::define_layer_temp()
 
@@ -311,39 +317,21 @@ StatTemp <- ggproto(
 ```
 
 
+# stat_rasa X ggtemp?
+
+- allow functions to work in compute_group, compute_panel, compute_layer slot
+- write functions such that they can be used in more standard extension syntax
+- write (danger?) create_* function w/ assign()
 
 
 
 
 ## On the fly Stat mutation?
 
-ggbuilder and pipe note might have something to do with more dynamic, on-the-fly internal data manipulation and stat creation...
+ggbuilder https://github.com/mjskay/ggbuilder and pipe note might have something to do with more dynamic, on-the-fly internal data manipulation and stat creation...
 
 ```{r}
-StatIdentity2 <- ggproto(NULL, ggplot2::StatIdentity)
 
-
-mtcars |>
-  ggplot() + 
-  aes(x = wt,
-      y = mpg) + 
-  geom_point(stat = StatIdentity2) 
-
-
-
-StatIdentity2$compute_group <- function(data, scales){
-  
-  data |>
-    summarize(x = mean(x),
-              y = mean(y))
-  
-}
-
-mtcars |>
-  ggplot() + 
-  aes(x = wt,
-      y = mpg) + 
-  geom_point(stat = StatIdentity2) 
 ```
 
 
