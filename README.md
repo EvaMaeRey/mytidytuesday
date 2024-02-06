@@ -331,5 +331,5 @@ new_experiment <- function(name){
 
 }   
 
-new_experiment(name = "ggexpress-follow-up")
+new_experiment(name = "world-heritage")
 ```

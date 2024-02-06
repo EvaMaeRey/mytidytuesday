@@ -1,0 +1,114 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r cars}
+library(tidyverse)
+heritage_wide <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-02-06/heritage.csv') 
+
+heritage <- heritage_wide |>
+  pivot_longer(-1, names_to = "year", values_to = "count") |>
+  mutate(year = as.numeric(year)) |>
+  mutate(country = as.factor(country))
+
+
+```
+
+## Experiment
+
+```{r}
+ggplot(heritage) + 
+  aes(color = country, fill = country) + 
+  scale_fill_manual(values = alpha(c("darkred", "navy", "darkolivegreen"), .5)) + 
+  scale_color_manual(values = alpha(c("darkred", "navy", "darkolivegreen"), .8)) + 
+  aes(x = year, y = count) + 
+  theme_minimal() ->
+base_plot
+
+base_plot + 
+  aes(x = year, y = count) + 
+  geom_col()
+
+base_plot + 
+  geom_col(position = "fill")
+
+base_plot + 
+  geom_line() +
+  geom_point() 
+
+
+
+## insta- extend
+compute_post <- function(data, scales){
+  
+  data |>
+    mutate(xend = x) |>
+    mutate(yend = 0)
+  
+}
+
+ggtemp:::create_layer_temp("geom_post",
+                           compute_group = compute_post,
+                           required_aes = c("x", "y"),
+                           geom = "segment")
+
+base_plot + 
+  geom_post() + 
+  facet_wrap(~country) + 
+  geom_point()
+
+base_plot + 
+  ggwedge:::geom_pie() + 
+  aes(weight = count) +
+  coord_polar() + 
+  facet_wrap(~year) + 
+  aes(r = 1) + #pie4
+  ggwedge:::geom_pie_label(r = .2)
+
+
+compute_percent <- function(data, scales){
+  
+  data |>
+    group_by(time_period) |>
+    mutate(y = 100* x/sum(x)) 
+  
+}
+
+ggtemp:::create_layer_temp("geom_val_percent",
+                           compute_panel = compute_percent,
+                           required_aes = c("x", "time_period"),
+                           geom = "path")
+
+
+base_plot + aes(y = NULL) +
+  aes(x = count, time_period = year) +
+  geom_val_percent(arrow = arrow(), geom = "point")
+
+
+```
+
+
+
+<!-- #Error in plot$scales$clone() : attempt to apply non-function -->
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

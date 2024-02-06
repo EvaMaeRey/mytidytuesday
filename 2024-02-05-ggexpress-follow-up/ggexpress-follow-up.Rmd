@@ -1,5 +1,5 @@
 ---
-title: "gg express"
+title: "gg express follow-up"
 author: "Evangeline Reynolds"
 date: "`r Sys.Date()`"
 output: 
@@ -13,29 +13,56 @@ options(tidyverse.quiet = TRUE)
 ```
 
 
+## TL&DR
 
+Abbreviated syntax for layers that employ new computations (via Stat), is probably useful. Mostly, I've looked at Elio C.'s work in a 2018 blog post. Some pretty plots were made - step-by-step of detrending! 
 
-## gg express? why abbreviate syntax for new layers where computation is performed under the hood...
+## gg express? why an abbreviated syntax for new layers where computation is performed under the hood...
 
-[ggtemp/ggexpress](https://github.com/EvaMaeRey/ggtemp) project exists because syntax to generate new layer seems a little more verbose and not proportionate to what you are trying to accomplish.
+[ggtemp/ggexpress](https://github.com/EvaMaeRey/ggtemp) project exists because syntax to define a new layer with new compute seems a little more verbose and not proportionate to what you are trying to accomplish.  It would be nice to have some friendly within-script routine that doesn't consume 15 lines of code.  New layer functions, e.g. geom_xmean, can make plotting code more succinct and readable; but right now this might be at the price of new Stat definition code.
 
-I've learned other people think would be nice to have lighter syntax layer creation, and have worked on this problem, including Elio Campitelli who writes about his similar motivation: 
+I've learned other people think would be nice to have short-cut syntax to layer creation, and have worked on this problem, including Elio Campitelli who writes about his similar motivation (June Choe referred me): 
 
 > But still, creating a geom from scratch is an involved process that doesn’t lend itself to simple transformations. -- Elio Campitelli  
 
-The Spanish is slightly different, and maybe a little more to the point: 
+The Spanish is slightly different, and maybe a little more to the point and from the gut: 
 
 > Pero aún así, hacer un stat específico cada vez que uno quiere hacer un plot en particular es demasiado complicado.*
 
-I worked with stat_rasa() - it is good!  It seems very similar to the ggtemp goals and implementation.  I think ggtemp might be coming from something that looks more like the full, standard extension syntax, and then maybe you'd be more positioned to migrate to that? 
+I worked with Elio Campitelli's proposed stat_rasa() below - it is very nice.  
 
-I also heard about https://github.com/mjskay/ggbuilder from June Choe and think that is about even stat modulations right in the plot build?  Redefine compute internals on the fly?  I'm not sure. 
+It seems very similar to the ggtemp goals, and several decisions are the same like default geom is point, default position is identity. I think ggtemp might be coming from something that looks more like the full, standard extension syntax, and then maybe you'd be more positioned to migrate to that.  Maybe.  stat_rasa's approach feels safer, because you aren't creating new proto object on the fly within a function.  Switching out which function to call *within* a ggproto object is something that is done in a lot of other contexts. 
+
+Elio's StatRasa serves the case where computation happens group-wise.  With define_layer_temp(), I'd started with compute_panel definition (just because of the motivating computation) and expanded back to compute_group.  A general solution (w/ compute_layer too) or split would be good; like there could be a stat_rasa_group(), stat_rasa_panel(), stat_rasa_layer() for example. 
+
+I also heard about https://github.com/mjskay/ggbuilder from June Choe and think that is about even stat definitions within the plot build?  I have given this less attention. So I'm not sure.
 
 I also include some code Teun Van Der Brand offered on piping, but to be honest, practical implications and connection to this problem are not yet clear to me. 😭
 
-Progessing with ggtemp::define_layer_temp(), I tried to make some changes to make the internal code more compact... but I think (hope) my ggplot2::stat knowledge is failing me, and hope there is a solution.  I want to make all the relevant ggproto slots accesible, setting NULL as default, and then filling them in with Stat$compute_group, or what have you if you user doesn't define the slot.  The StatRasa implementation has the function working in compute_group only, whereas I think there would be a lot of interest in a function that works in compute panel arena. 
+Progessing with ggtemp::define_layer_temp(), I tried to make some changes to make the internal code more compact... but I think (hope) my ggplot2::Stat knowledge is failing me, and hope there is a solution.  I want to make all the relevant ggproto slots accesible, setting NULL as default, and then filling them in with Stat$compute_group and the like if the user doesn't define the slot.  The StatRasa implementation blog example has the function working for compute_group only, whereas I think there would be a lot of use cases for the function that works in compute_panel arena. 
 
-I worked on a project with ggtemp and it was fun!  I think more fun than it would have been w/ traditional syntax. https://github.com/EvaMaeRey/ggcircleof5ths
+I worked on a project with ggtemp and it was fun!  I think more fun than it would have been w/ traditional syntax. https://github.com/EvaMaeRey/ggcircleof5ths  We feed in a data frame contain a variable 'chord', which contains the progression F, A, Bb and Bbm, and *see* the harmonic moves being made! Which are discussed in https://switchedonpop.com/episodes/olivia-rodrigo-guts-vampire-bad-idea-right.  Here, we're looking at the out-of-key use of A chord instead of Am (in the key of F), and chromaticism and creepyness is introduced.  Its followed by the Bb to Bbm change - more chromaticism - and to sad minor key!  
+
+```{r, eval = F}
+tibble::tribble(~ lyric, ~chord, 
+"Hate to give ... ", "F",
+"...now, How's ...", "A",
+"-bout? Just   ...", "Bb",
+"...you, cool guy,", "Bbm") |>
+  ggplot() + 
+    aes(x0 = 0, 
+        y0 = 0, 
+        chord = chord) + 
+    geom_chord_cof(r = .45, key = "F") + 
+    coord_equal() +
+  facet_wrap(~fct_inorder(lyric %>% str_wrap(25)), nrow = 1) +
+    labs(title = "Vampire (& Creep) chord progression")
+```
+
+
+```{r}
+knitr::include_graphics("https://github.com/EvaMaeRey/ggcircleof5ths/blob/main/README_files/figure-gfm/unnamed-chunk-6-1.png?raw=true")
+```
 
 
 ## Campitelli:  stat_rasa {.tabset}
@@ -276,7 +303,7 @@ last_plot() +
 
 This is giving me more problems; I thought I would be able to start with a lot of null elements, and use generic slot fillers like ggplot2::Stat$compute_panel... But strategy doesn't seem to be working.
 
-```{r}
+```{r, eval = F}
 define_layer_temp <- function(
   compute_group = NULL,
   compute_panel = NULL, 
@@ -290,9 +317,13 @@ define_layer_temp <- function(
   inherit.aes = TRUE, 
   ...) {
 
-  if(is.null(compute_group)){compute_group <- ggplot2::Stat$compute_group}
-  if(is.null(compute_panel)){compute_panel <- ggplot2::Stat$compute_panel}
-  if(is.null(required_aes)) {required_aes  <- ggplot2::Stat$required_aes}
+  StatEmpty <- ggproto(
+  `_class` = "StatEmpty",
+  `_inherit` = ggplot2::Stat)
+  
+  if(is.null(compute_group)){compute_group <- ggplot2::StatEmpty$compute_group}
+  if(is.null(compute_panel)){compute_panel <- ggplot2::StatEmpty$compute_panel}
+  if(is.null(required_aes)) {required_aes  <- ggplot2::StatEmpty$required_aes}
      
      
 StatTemp <- ggproto(
@@ -314,15 +345,133 @@ StatTemp <- ggproto(
     params = list(na.rm = na.rm, ...)
   )
 }
+
+
+compute_group_xy_summary <- function(data, scales){
+  
+  data |> 
+    summarize(x = mean(x),
+              y = mean(y))
+  
+}
+
+geom_xy_means <- function(...){define_layer_temp(compute_group = compute_group_xy_summary, ...)}
+
+ggplot(mtcars) + 
+  aes(x = wt, y = mpg) + 
+  geom_point() + 
+  geom_xy_means()
+
+
 ```
 
 
-# stat_rasa X ggtemp?
 
-- allow functions to work in compute_group, compute_panel, compute_layer slot
-- write functions such that they can be used in more standard extension syntax
-- write (danger?) create_* function w/ assign()
 
+
+<!-- # stat_rasa X ggtemp? -->
+
+<!-- - allow functions to work in compute_group, compute_panel, compute_layer slot -->
+<!-- - write functions such that they can be used in more standard extension syntax -->
+<!-- - write (danger?) create_* function w/ assign() -->
+
+
+```{r, echo = F, eval = F}
+prep_args <- function(fun, fun.args){
+     args <- formals(fun)
+     for (i in seq_along(fun.args)) {
+        if (names(fun.args[i]) %in% names(fun.args)) {
+           args[[names(fun.args[i])]] <- fun.args[[i]]
+        } 
+     }
+     args
+}
+
+
+StatComputeonthefly <- ggplot2::ggproto(
+  "StatComputeonthefly", 
+  ggplot2::Stat,
+  compute_group = function(data, scales, fun_group, fun.args_group) {
+     formals(fun_group) <- prep_args(fun_group, fun.args_group)
+     fun(data)
+     }, 
+  compute_panel = function(data, scales, fun_panel, fun.args_panel) {
+     formals(fun_panel) <- prep_args(fun_panel, fun.args)
+     fun(data)
+     }, 
+
+)
+
+
+compute_identity <- function(data){
+  
+  data
+  
+}
+
+# stat function used in ggplot
+stat_rasa <- function(mapping = NULL, data = NULL,
+                      geom = "point", 
+                      position = "identity",
+                      fun_group = compute_identity,
+                      fun_panel = compute_identity,
+                      ...,
+                      show.legend = NA,
+                      inherit.aes = TRUE) {
+   # Check arguments 
+   if (!is.function(fun_group)) stop("fun must be a function")
+   
+   # Pass dotted arguments to a list
+   fun.args <- match.call(expand.dots = FALSE)$`...`
+   
+   ggplot2::layer(
+      data = data,
+      mapping = mapping,
+      stat = StatComputeonthefly,
+      geom = geom,
+      position = position,
+      show.legend = show.legend,
+      inherit.aes = inherit.aes,
+      check.aes = FALSE,
+      check.param = FALSE,
+      params = list(
+         fun_group = fun_group, 
+         fun_panel = fun_panel,
+         fun.args = fun.args,
+         na.rm = FALSE,
+         ...
+      )
+   )
+}
+
+summarize_xy <- function(data, sum_fun = mean){
+  
+  data |>
+    summarize(
+      x = sum_fun(x),
+      y = sum_fun(y)
+    )
+  
+}
+
+
+mtcars |>
+  ggplot() + 
+  aes(x = wt,
+      y = mpg) + 
+  geom_point() + 
+  stat_rasa(fun_group = summarize_xy, 
+            size = 8,
+            aes(color = "means")) + 
+  stat_rasa(fun_group = summarize_xy, 
+            sum_fun = median, 
+            size = 8, 
+            aes(color = "medians")) + 
+  labs(color = "centroid")
+
+
+
+```
 
 
 
@@ -330,8 +479,15 @@ StatTemp <- ggproto(
 
 ggbuilder https://github.com/mjskay/ggbuilder and pipe note might have something to do with more dynamic, on-the-fly internal data manipulation and stat creation...
 
-```{r}
-
+```{r, eval = F}
+df |>
+  ggplot(aes(x = condition, y = response, color = condition)) +
+  geom_boxplot() +
+  plot_data() |>
+    dplyr::filter(condition %in% c("B", "C")) |>
+    dplyr::group_by(condition) |>
+    dplyr::slice_max(response) |>
+    geom_("label", aes(label = response))
 ```
 
 
