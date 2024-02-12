@@ -17,6 +17,25 @@ options(tidyverse.quiet = TRUE)
 
 ## Intro Thoughts
 
+```{r}
+StatCircle <- ggplot2::ggproto(
+  `_class` = "StatCircle",
+  `_inherit` = ggplot2::Stat,
+  compute_group = function(data, scales){},
+  required_aes = c("x0", "y0", "r"))
+
+length(StatCircle)
+
+StatCircle2 <- ggplot2::ggproto(
+  `_class` = "StatCircle",
+  `_inherit` = ggplot2::Stat,
+  compute_panel = function(data, scales){},
+  required_aes = c("x0", "y0", "r"))
+
+waldo::compare(StatCircle, StatCircle2)
+
+```
+
 
 ## Status Quo
 
@@ -126,6 +145,21 @@ last_plot()
 
 tictoc::toc()
 
+
+ggtemp:::create_layer_temp("geom_circle2",
+                           compute_panel = compute_panel_equilateral,
+                           required_aes = c("x0", "y0", "r"))
+
+tictoc::tic()
+
+data.frame(x0 = 0:1, y0 = 0:1, r = 1:2/3) |> 
+  ggplot() + 
+  aes(x0 = x0, y0 = y0, r = r) + 
+  geom_circle2() + 
+  aes(fill = r)
+
+
+tictoc::toc()
 
 ```
 
