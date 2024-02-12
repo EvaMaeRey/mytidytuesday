@@ -1,0 +1,140 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r cars}
+library(tidyverse)
+compute_panel_equilateral <- function(data, scales, n = 15){
+  
+  data |> 
+    mutate(group = row_number()) |> 
+    crossing(tibble(z = 0:n)) |>
+    mutate(around = 2*pi*z/max(z)) |> 
+    mutate(x = x0 + cos(around)*r,
+           y = y0 + sin(around)*r) 
+  
+}
+
+
+compute_group_default <-  function (self, data, scales) {
+    cli::cli_abort("Not implemented.")
+}
+
+
+library(ggplot2)
+compute_layer_default <- function (self, data, params, layout) {
+    ggplot2:::check_required_aesthetics(self$required_aes, c(names(data), 
+        names(params)), ggplot2:::snake_class(self))
+    required_aes <- intersect(names(data), unlist(strsplit(self$required_aes, 
+        "|", fixed = TRUE)))
+    data <- remove_missing(data, params$na.rm, c(required_aes, 
+        self$non_missing_aes), ggplot2:::snake_class(self), finite = TRUE)
+    params <- params[intersect(names(params), self$parameters())]
+    args <- c(list(data = quote(data), scales = quote(scales)), 
+        params)
+    ggplot2:::dapply(data, "PANEL", function(data) {
+        scales <- layout$get_scales(data$PANEL[1])
+          rlang::try_fetch(rlang::inject(self$compute_panel(data = data, scales = scales, 
+            !!!params)), error = function(cnd) {
+            cli::cli_warn("Computation failed in {.fn {ggplot2:::snake_class(self)}}.", 
+                parent = cnd)
+            ggplot2:::data_frame0()
+        })
+    })
+}
+
+
+
+
+StatCircle <- ggproto(
+  `_class` = "StatCircle",
+  `_inherit` = ggplot2::Stat,
+  
+  # setup_data
+  compute_panel = compute_panel_equilateral,
+  compute_group = compute_group_default,
+  compute_layer = compute_layer_default,
+  # finish_layer = 
+  # retransform
+  # extra_params =
+  # setup_params
+  # parameters
+  default_aes = ggplot2::aes(),
+  required_aes = character(),
+  dropped_aes = character(), 
+  optional_aes = character(),
+  non_missing_aes = character(),
+  )
+
+
+names(StatCircle)
+
+
+Stat$compute_panel
+
+geom_circle <- function(
+  mapping = NULL,
+  data = NULL,
+  position = "identity",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatCircle,  # proto object from Step 2
+    geom = ggplot2::GeomPolygon,  # inherit other behavior
+    data = data,
+    mapping = mapping,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+
+
+tictoc::tic()
+
+data.frame(x0 = 0:1, y0 = 0:1, r = 1:2/3) |> 
+  ggplot() + 
+  aes(x0 = x0, y0 = y0, r = r) + 
+  geom_circle() + 
+  aes(fill = r)
+
+tictoc::toc()
+
+tictoc::tic()
+
+last_plot()
+
+tictoc::toc()
+
+
+```
+
+## Experiment
+
+```{r}
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
