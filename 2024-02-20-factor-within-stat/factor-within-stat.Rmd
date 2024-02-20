@@ -1,0 +1,116 @@
+---
+title: "Create factor var in stat?"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = T)
+options(tidyverse.quiet = TRUE)
+```
+
+## Intro Thoughts
+
+### stats are really flexible and let you compute to different x and y vals
+
+### but when you want a factor scale for positional aesthetics, where the factor is not the original input, I'm not sure what tools to use.
+
+### What extensions already do this?
+
+
+
+
+## Status Quo:  Do computation yourself, and plot with factor variables that you create.
+
+```{r cars}
+library(tidyverse)
+
+mtcars |> 
+  mutate(side_of_mean_mpg = mpg > mean(mpg)) |>
+  mutate(side_of_mean_mpg = ifelse(side_of_mean_mpg, "greater", " less")) |>
+  count(side_of_mean_mpg) |>
+  ggplot() + 
+  aes(x = side_of_mean_mpg, y = n) + 
+  geom_col()
+```
+
+## Want to do:  Have layer do this computation for us. 
+
+
+### First look at numeric only x creation... We produce almost the same plot, but x var values are 0 and 1
+
+```{r}
+
+compute_group_rel_to_mean <- function(data, scales){
+  
+  data |> 
+  mutate(x = as.numeric(x > mean(x))) |>
+  # mutate(x = factor(ifelse(x, "greater", " less"))) |>
+  count(x) |>
+  mutate(y = n)
+  
+}
+
+mtcars |>
+  rename(x = mpg) |>
+  compute_group_rel_to_mean()
+
+StatReltomean <- ggproto(`_class` = "StatReltomean", 
+                         `_inherit` = ggplot2::Stat,
+                         compute_group = compute_group_rel_to_mean)
+
+
+stat_rel_to_mean <- function(geom = ggplot2::GeomCol, 
+  mapping = NULL,
+  data = NULL,
+  position = "identity",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE, ...) {
+  
+  ggplot2::layer(
+    stat = StatReltomean,  # proto object from step 2
+    geom = geom,  # inherit other behavior
+    data = data,
+    mapping = mapping,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+  
+}
+
+ggplot(mtcars) + 
+  aes(x = mpg) + 
+  stat_rel_to_mean()
+```
+
+
+# Second, we try to convert x, to factor, by plot fails.
+
+```{r}
+compute_group_rel_to_mean_mod <- function(data, scales){
+  
+  data |> 
+  mutate(x = x > mean(x)) |>
+  mutate(x = factor(ifelse(x, "greater", " less"))) |>
+  count(x) |>
+  mutate(y = n)
+  
+}
+
+
+StatReltomean$compute_group <- compute_group_rel_to_mean_mod
+
+
+ggplot(mtcars) + 
+  aes(x = mpg) + 
+  stat_rel_to_mean()
+
+
+```
+
