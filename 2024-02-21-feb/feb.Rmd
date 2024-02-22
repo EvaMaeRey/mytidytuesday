@@ -1,0 +1,126 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r cars}
+library(tidyverse)
+```
+
+## Experiment
+
+```{r}
+compute_group_date_in_month <- function(data, scales){
+
+  data %>%
+    dplyr::mutate(num_day_of_week = lubridate::wday(.data$date)) %>%
+    dplyr::mutate(day_of_week = lubridate::wday(.data$date, label = TRUE, abbr = TRUE)) %>%
+    dplyr::mutate(week_of_month = (- lubridate::wday(.data$date) + lubridate::day(.data$date)) %/% 7 + 1 +
+                    ifelse(lubridate::wday(lubridate::floor_date(lubridate::as_date(.data$date), "month")) == 1, -1, 0)
+                  ) %>%
+    dplyr::mutate(date_of_month = lubridate::day(.data$date)) %>%
+    dplyr::mutate(which_year = lubridate::year(.data$date) - 2018) %>%
+    dplyr::mutate(month = lubridate::month(.data$date, abbr = TRUE, label = TRUE)) %>%
+    dplyr::mutate(hour = lubridate::hour(.data$date)) %>%
+    dplyr::mutate(academic_year =  lubridate::year(.data$date) +
+                    ifelse(lubridate::month(date) >
+                             6, 1, 0)) %>%
+    dplyr::mutate(academic_month = .data$month %>%
+                    factor(levels = c("Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+                                      "Jan", "Feb", "Mar", "Apr", "May", "Jun"))) |>
+    dplyr::mutate(x = as.numeric(day_of_week) ) |>
+    dplyr::mutate(y = week_of_month)
+
+}
+
+ggtemp:::create_layer_temp(fun_name = "stat_calendar",
+                           compute_group = compute_group_date_in_month,
+                           required_aes = "date",
+                           default_aes = aes(label = after_stat(date_of_month)))
+
+ggcalendar:::return_dates_month("2022-02") |>
+  head() |>
+  compute_group_date_in_month()
+
+
+ggplot(ggcalendar:::return_dates_month("2022-02")) + 
+  aes(date = date) + 
+  stat_calendar(geom = "text") + 
+  coord_trans(y = "reverse")
+
+waldo::compare(CoordTrans, CoordFixed)
+```  
+
+
+
+```{r}
+
+# 
+# CoordPoster <- ggproto(`_class` = "CoordPoster",
+#                        `_inherit` = CoordFixed)  
+# 
+# CoordPoster$range <- function (panel_params) 
+# {
+#     list(x = panel_params$x$dimension(), y = rev(panel_params$y$dimension()))
+# }
+# 
+# 
+# 
+# CoordPoster$setup_panel_params <- function (self, scale_x, scale_y, params = list()) {
+#     c(ggplot2:::view_scales_from_scale(scale_x, self$limits$x, self$expand), 
+#         ggplot2:::view_scales_from_scale(scale_y, self$limits$y, self$expand))
+# }
+# 
+# CoordPoster$setup_panel_params <- function (self, scale_x, scale_y, params = list()) {
+#     c(ggplot2:::view_scales_from_scale(scale_x, self$limits$x, self$expand), 
+#         ggplot2:::view_scales_from_scale(scale_y, self$limits$y, self$expand))
+# }
+# 
+# CoordPoster$transform <- function (data, panel_params) 
+# {
+#     data <- transform_position(data, panel_params$x$rescale, 
+#         panel_params$y$rescale)
+#     
+#     transform_position(data, squish_infinite, squish_infinite)
+# }
+# 
+# CoordRadial
+# 
+# coord_poster <- function (ratio = 1, xlim = NULL, ylim = NULL, expand = TRUE, 
+#     clip = "on") 
+# {
+#     ggplot2:::check_coord_limits(xlim)
+#     ggplot2:::check_coord_limits(ylim)
+#     ggproto(NULL, CoordPoster, limits = list(x = xlim, y = ylim), 
+#         ratio = ratio, expand = expand, clip = clip)
+# }
+# 
+# coord_fixed(ratio = -1)
+# 
+# 
+
+# 
+# CoordPoster$range
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
