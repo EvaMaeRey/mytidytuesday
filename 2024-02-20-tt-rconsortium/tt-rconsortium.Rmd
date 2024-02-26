@@ -160,12 +160,14 @@ theme_mono <- function(color = "goldenrod4"){
                               n_colors = 6)
   
   theme_gray() %+replace%
-  theme(panel.background = element_rect(fill = palette[4]),
+  theme(panel.background = element_rect(fill = palette[4], color = palette[3]),
         panel.grid = element_line(color = palette[6]),
         plot.background = element_rect(fill = palette[5], color = palette[4]),
         text = element_text(color = palette[1]),
         axis.text = element_text(color = palette[1]),
-        axis.ticks = element_line(palette[1]))
+        axis.ticks = element_line(palette[1]),
+        strip.background = element_rect(fill = palette[3], color = palette[2]), 
+        strip.text = element_text(color = palette[1]), complete = T)
 
 }
 
