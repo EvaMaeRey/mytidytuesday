@@ -1,26 +1,32 @@
 ---
-title: "Are there statistically fewer births on Feb 29: An evaluation using 2000-2014 data"
-author: "Evangeline Reynolds"
+title: "Is there statistical evidence of fewer births on Feb 29 in the US?" 
+subtitle: "An evaluation using 2000-2014 data"
+author: "Evangeline Reynolds, PhD"
 date: "`r Sys.Date()`"
-output: 
-  html_document:
-    toc: TRUE
+output: rmdformats::readthedown
 ---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+# knitr::opts_knit$set(root.dir = '../')
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>", 
+  eval = T,
+  cache = F,
+  warning = F,
+  message = F) 
+```
+
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 options(tidyverse.quiet = TRUE)
 ```
 
-
-
-
-## Intro Thoughts
-
-
-## Status Quo
-
-```{r cars}
+```{r data_prep, echo = F}
 library(tidyverse)
 
 births_path <- "https://raw.githubusercontent.com/EvaMaeRey/tableau/9e91c2b5ee803bfef10d35646cf4ce6675b92b55/tidytuesday_data/2018-10-02-us_births_2000-2014.csv"
@@ -28,15 +34,17 @@ births_path <- "https://raw.githubusercontent.com/EvaMaeRey/tableau/9e91c2b5ee80
 library(ggcalendar)
 
 readr::read_csv(births_path) %>% 
+  filter(year != 2015) %>%
   mutate(month = str_pad(month, 2, pad = "0"),
          date_of_month = str_pad(date_of_month, 2, pad = "0")) %>% 
   mutate(date = paste(year, month, date_of_month, sep = "-") %>% as_date()) %>% 
   mutate(ind_holiday = 
            (month == "12" & date_of_month %in% 24:31) |
-           (month == "07" & date_of_month == "04") |
-           (month == "01" & date_of_month == "01") | 
+           (month == "07" & date_of_month %in% c("04", "05")) |
+           (month == "01" & date_of_month %in% c("01", "02")) | 
            (month == "10" & date_of_month == "31") | 
-           (month == "11" & date_of_month %in% 20:30)
+           (month == "11" & date_of_month %in% 20:30) |
+           (month == "02" & date_of_month %in% 14)
            ) |>
   mutate(date_in_2020 = paste(2020, month, date_of_month, sep = "-") %>% as_date()) |>
   mutate(ind_weekend = wday(date) == 1 | wday(date) == 7) |>
@@ -44,7 +52,18 @@ readr::read_csv(births_path) %>%
   mutate(ind_13th = day(date) == 13) |>
   mutate(ind_Fri13th = wday(date) == 6 & day(date) == 13) ->
 births_df
+```
 
+
+
+
+## Leap day aversion? A 2012 calandar of births.
+
+Is there statistical evidence of fewer births on Feb 29 in the US?  The 2012 calendar below, showing number of birth as represented by color and bubble size, makes it apparent that there can be quite a lot of variation in the number of births from one day to another.  For example December 25th's recorded number of births is small compared with its neighbors, and births on the weekends appear to be much lower than their weekday counterparts.  
+
+With February 29th coming up this week, you might wonder, are there also relatively fewer births on February 29th, circled on the calendar.  Feb 29th is a weird birthday to have -- only truly 'celebrated' every four years. But it's hard to draw any conclusions about a *statistical evidence* from this visualization and a single year of data.  In what follows, we'll assess the question, 'Is there statistical evidence of fewer births on February 29th based on number of births in the U.S. over a 15 year period, 2000 to 2014?' 
+
+```{r calendar_plot}
 births_df %>%
   filter(year == 2012) %>% 
   ggcalendar() + 
@@ -52,21 +71,83 @@ births_df %>%
   geom_point_calendar() +
   aes(size = births) +
   aes(color = births) +
-  geom_text_calendar(aes(label = day(date)), color = "oldlace", size = 2) + 
+  geom_text_calendar(aes(label = day(date)), 
+                     color = "oldlace", 
+                     size = 2) + 
   guides(
     colour = guide_legend("Births"),
     size = guide_legend("Births")
  ) + 
   geom_point_calendar(data = data.frame(date =
-                                      as_date("2012-12-25")),
-                      size = 5, color = "red", shape = 21) + 
+                                      as_date("2012-02-29")),
+                      size = 7, color = "red", shape = 21, stroke = 2) + 
   scale_color_viridis_c() + 
-  labs(title = "The year in 2000 in births")
-```  
+  labs(title = "The year in 2012 in births")
+```
+
+Zooming in on the week of February 29, 2012 in the figure below, it's easier to appreciate the dip in number of births that is observed on February 29th. But the question remains, Is this variability usual, or is there an aversion to birthing on February 29th that is statistically detectable?
+
 
 
 ```{r}
-ggchalkboard:::geoms_chalk_on()
+births_df |>
+  filter(date >= as.Date("2012-02-26") &
+           date <= as.Date("2012-03-03")) |>
+  ggplot() + 
+  aes(x = date, y = births) +
+  geom_point() + 
+  geom_line(linetype = "dashed") + 
+  geom_label(aes(label = wday(date, label = T))) + 
+  geom_point(data = . %>% filter(date == as.Date("2012-02-29")),
+             color = "red", shape = 1, size = 20, stroke = 2, alpha = .8) +
+  labs(title = "Births the week of Feb 29, 2012")
+```  
+
+*I begin the analysis with a visual format that's familiar to the audience, and where we can be pretty sure of the effects of relevant variables just by inspection*
+
+## 2000-2014 U.S. Births Data
+
+The 15 years of data we'll look at was available via the #TidyTuesday project -- their [October 2, 2018 dataset](https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-10-02).  Some data cleaning is required including constructing a full date variable from year, month and date_of_month variables.  I also normalize the dates (to 2020) for superimposed within-year comparisons - importantly 2020 is a leap year so Feb 29th dates are valid and not dropped. I further include indicator variables that I anticipate to be important as well as an indicator variable that captures the condition of interest, ind_Feb_29th. 
+
+```{r, code = knitr::knit_code$get("data_prep")}
+
+
+
+```
+
+# Visual exploration
+
+## Baseline visualization of the time series
+
+Visualizing the U.S. births time series, we see that there is tremendous variability in number of birth per day.  The standard deviation is `r round(sd(births_df$births))` in this time span, with the average number of births around 11400, as marked in the visualization below.
+
+
+```{r}
+births_df |> 
+  ggplot() + 
+  aes(x = date, y = births) + 
+  geom_point(size = .2) ->
+time_series_base
+
+
+add_y_mean <- function(){
+  list(ggxmean::geom_y_mean(linetype = "dotted"),
+  ggxmean::geom_y_mean_label() )
+}
+
+time_series_base + 
+  add_y_mean()
+
+
+round(sd(births_df$births))
+```
+
+## Univariate distribution
+
+Looking at the univariate distribution of births per day, the bi-modal pattern is striking.
+
+```{r}
+# ggchalkboard:::geoms_chalk_on()
 
 ggplot(births_df) + 
   aes(x = births) + 
@@ -75,100 +156,283 @@ ggplot(births_df) +
   ggxmean::geom_x_mean_label() + 
   geom_rug(alpha = .2) + 
   labs(x = "Number of births") + 
-  ggchalkboard::theme_chalkboard() + 
-  labs(title = "Distribution of Number of Births in the U.S. each day from 2000-2014" %>% str_wrap(45))
-
-last_plot() + 
-  facet_wrap(~ind2cat::ind_recode(ind_weekend), ncol = 1) + 
-  labs(title = "We explore the bimodal distribution looking at 'weekend effects'" %>% str_wrap(45))
-
-last_plot() %+%
-  facet_wrap(~ind2cat::ind_recode(ind_holiday), ncol = 1) 
-
-(last_plot() + 
-  facet_wrap(~ind2cat::ind_recode(ind_weekend), ncol = 1) + 
-  labs(title = "We explore the bimodal distribution looking at 'weekend effects'" %>% str_wrap(45))) %+%
-  (births_df |> filter(!ind_holiday))
+  # ggchalkboard::theme_chalkboard() + 
+  labs(title = "Distribution of Number of Births in the U.S. each day from 2000-2014" %>% str_wrap(45)) ->
+univariate_base; univariate_base
 
 
 ```
 
+## Exploring bi-modality with weekend indicator
 
+Breaking this data up, we explore the hypothesis that preference for scheduled birth (inducements or c-sections) is for weekdays.  In the figure below see that most of the bimodality is explained by weekend v. weekday effects.  The difference in means for these groups is substantial - around 4650 difference in number of births! 
+
+```{r}
+univariate_base +
+  facet_wrap(~ind2cat::ind_recode(ind_weekend), ncol = 1) 
+```
+
+## Day of weeks effects
+
+When we return to our time-series plot, but breaking the plots up by weekend, you may notice further bimodality within the 'weekend' subplot suggesting differences within the weekend for Saturday and Sunday.  
+
+```{r}
+time_series_base + 
+  facet_wrap(~ind2cat::ind_recode(ind_weekend), ncol = 1) + 
+  labs(title = "We explore the bimodal distribution looking at 'weekend effects'" %>% str_wrap(45))
+```
+
+Following on that observation, we investigate by-weekday (Sunday, Monday, Tuesday etc) differences in number of births below.  We look first at the histogram and then the time series plot. 
+
+
+```{r, fig.height=6, fig.width=4}
+univariate_base +
+  facet_wrap(~wday(date, label = T, week_start = "Monday"), ncol = 1) 
+```
+
+We add a confidence interval around the mean based on a [t-test](). 
 
 ```{r}
 last_plot() + 
-  facet_wrap(~ind2cat::ind_recode(ind_13th, rev = T), ncol = 1) + 
-  labs(title = "We also look supersticion around the number 13 might impact number of births" %>% str_wrap(45))
-
-last_plot() + 
-  facet_grid(wday(date, label = T) ~
-               ind2cat::ind_recode(ind_13th, rev = T))  + 
-  labs(title = "For fun, we break the data up by day of the week and 13th" %>% str_wrap(45))
-
-last_plot() + 
-  facet_grid(wday(date, label = T) ~
-               ind2cat::ind_recode(ind_Feb_29th)) + 
-  labs(title = "Finally, we turn to Feb 29th - how does birth rate compare to other days?" %>% str_wrap(45))
+  ggxmean:::geom_tdist(color = "red")
+```
 
 
-last_plot() %+%
-  (births_df |> 
-     filter(date_in_2020 >= as.Date("2020-02-26")) |>
-     filter(date_in_2020 <= as.Date("2020-03-03")) 
-   ) + 
-  geom_rug() + 
-  labs(title = "We narrow our comparisons to February 26 to March 3 in each year" %>% str_wrap(45)) +
-  labs(subtitle = "Between Feb 27 and March 3rd by day of week and Feb 19 indicator " %>% str_wrap(55))
+```{r}
+time_series_base + 
+  facet_wrap(~wday(date, label = T, 
+                   week_start = "Monday"), ncol = 2) + 
+  labs(title = "Number of births 2000-2014 by day of week" %>% str_wrap(45))
+```
+
+# Holidays and outlying observations
+
+The by-day-of-the-week exploration (and weekend vs. weekday) further exposes some outlying observations.  We next explore if these lower-than-usual their counterparts are by and large holiday or holiday adjacent days.  Due to time constraints, I'm relying a quick indicator variable that I created that include many holiday and adjacent dates. 
+
+```{r}
+last_plot() -> tplot
+tplot[[2]] <- NULL
+
+tplot + 
+  geom_point(alpha = .5, size = .5) + 
+  aes(color = ind2cat::ind_recode(ind_holiday)) +
+  labs(color = NULL) + 
+  theme(legend.position = 'top', legend.justification = "left")
+```
+
+This exploration suggests that holidays drive much of the out-of-character observations.
+
+Outlyingness might also be due to aversion due to superstition - for example the 13th of each month, especially Fridays the 13th, and Halloween might be more outlying though not holidays.  
+
+Also, holiday adjacency might also lead to lower number of births - for example federal holidays that fall on the weekend are often observed on a Monday.  The outliers that we observe on Monday are not categorized as holiday, but this likely due to the imperfect ind_holiday coding. President's day was not captured in my coding, for example and always falls on a Monday.  
+
+Because February 29 is not a holiday or holiday-adjacent, it is appropriate to prune our data to relevant comparisons and try to remove likely holidays; this should lead to more precise estimates in our final analysis.   
+
+Due to time constraints and convenience, our pruning will be statistical instead of using substantive knowledge (i.e. using lists of federal and celebrated holidays, etc).
+
+The approach is to prune observations for which a simple linear model's error is greater than 3 standard deviations from the mean residual error (zero).
+
+The linear model contain date and day of the week as categories.
+
+To start, I visualize the parallel lines model fit.  
+
+```{r}
+compute_panel_lm_parallel <- function(data, scales){
   
+  model <- lm(y ~ x + category, data = data)
+  
+  data |>
+    mutate(y = model$fitted)
+  
+}
 
-births_df |>
-  filter(!ind_holiday) |>
-  filter(!ind_13th) |>
-  ggplot() + 
-  aes(x = date_in_2020, y = births) + 
-  geom_line() + 
-  aes(color = year) + 
+StatParallel <- ggplot2::ggproto(`_class` = "StatParallel",
+                           `_inherit` = ggplot2::Stat,
+                           required_aes = c("x", "y", "category"),
+                           compute_panel = compute_panel_lm_parallel,
+                           default_aes = aes(color = after_stat(category)))
+
+geom_ols_linear_parallel <- function(mapping = NULL, data = NULL,
+                           position = "identity", na.rm = FALSE,
+                           show.legend = NA,
+                           inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatParallel, # proto object from Step 2
+    geom = ggplot2::GeomLine, # inherit other behavior
+    data = data,
+    mapping = mapping,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+
+ggplot(births_df) +
+  aes(x = date, y = births,
+      color = wday(date, label = T), category = wday(date, label = T)) +
+  geom_point(alpha = .15) + 
+  geom_ols_linear_parallel()
+```
+
+Now, we estimate model outside of the visualization tool, and collect the residuals.  Then we visualize the distribution of the residuals and mark the bound of 3 standard deviations from the mean, beyond which we'll prune our dataset. 
+
+```{r}
+m <- lm(births ~ date + wday(date, label = T), data = births_df)
+births_df$residuals_wday <- m$residuals
+
+ggplot(births_df) +
+  aes(x = residuals_wday) +
+  geom_histogram() + 
+  ggxmean::geom_x_mean() + 
+  ggxmean:::geom_x3sd(linetype = "dashed")
+
+sd(births_df$residuals_wday)
+```
+
+Dropping the large residuals results in  116 days dropped from our dataset. 
+
+```{r}
+births_df_pruned <- births_df |>
+  filter(abs(residuals_wday) < 
+           3*sd(births_df$residuals_wday))
+
+time_series_base %+% births_df_pruned +
+  facet_wrap(~wday(date, label = T), ncol = 2) + 
+  labs(title = "Outlier pruned" %>% str_wrap(45)) 
+
+dim(births_df) - dim(births_df_pruned)
+
+```
+
+
+In the remainder of the exploration and analysis, we'll use the pruned version of the data, unless otherwise specified. 
+
+## Seasonality and longer term trends
+
+To look at the within-year periodicity, we use a normalized date variable, 'date_in_2020'.  We see summer and fall surges in number of births.
+
+```{r}
+ggplot(births_df_pruned) + 
+  aes(x = date_in_2020, 
+      y = births) +
+  geom_point() + 
+  aes(color = factor(year)) +
+  labs(color = NULL) +
   facet_wrap(~wday(date, label = T)) + 
-  # geom_vline(xintercept = as.Date("2020-02-29")) + 
+  facet_wrap(~ind2cat::ind_recode(ind_weekend), ncol = 2) +
+  geom_smooth() +
+  labs(title = "Using loess smoothing within year and weekend v. weekday" ) + 
+  scale_x_date(labels = c("Jan", "April", "July", "Oct", "Jan")) + 
+  labs(x = NULL)
+```
+
+In the plot above, we also see differences in the rate of births by year.  Exploring that more directly, we look at the distributions of number of daily birth by year (this is done with the unpruned data). Diamonds mark the mean for each year.
+
+```{r}
+ggplot(births_df) + 
+  aes(x = births, y = factor(year)) + 
+  # geom_histogram() + 
+  ggridges::geom_density_ridges() + 
+  stat_summary(fun.y = mean, geom = "point", col = "goldenrod3", 
+               size = 10, shape = "diamond") + 
+  labs(x = "Daily births")
+  # facet_wrap(~ind2cat::ind_recode(ind_weekend, rev = T), ncol = 2)
+```
+
+While, we are here, we summarize to the total number of births for each year in this period in the U.S. That number hovers around 4 million. 
+
+```{r}
+ggplot(births_df) + 
+  aes(x = year, weight = births/1000000) + 
+  ggchalkboard:::theme_chalkboard() +
+  geom_bar(fill = "lightyellow", alpha = .75) + 
+  stat_count(geom = "text", 
+             linetype = "dashed",
+             aes(label = after_stat(round(count, 1))),
+             vjust = 1.4, size = 3,
+             color = "darkseagreen4") + 
+  labs(y = "Number of births (millions)") + 
+  labs(title = "Number of births in the U.S. (millions)") + 
+  scale_x_continuous(breaks = 2000:2014, labels = c("2000", "", "", "","'04", "", "", "","'08", "", "", "","'12", "", "'14"))
+```
+
+
+
+
+
+
+
+
+
+## Modeling...
+
+```{r}
+births_df_pruned
+births_base_model <- lm(formula = 
+                          births ~ factor(year) + month + factor(day_of_week), 
+                        data = births_df_pruned) 
+
+ggplot(fortify(births_base_model)) + 
+  aes(x = .fitted, y = .resid) + 
+  geom_point(alpha = .2) + 
+  geom_hline(yintercept = 0, color = "darkred") + 
   geom_smooth()
 
+births_base_model_feb29 <- lm(formula = 
+                          births ~ factor(year) + month + factor(day_of_week) + ind_Feb_29th, 
+                        data = births_df_pruned) 
 
-lm(births ~ year + month, births_df)
+summary(births_base_model_feb29)
 ```
+
+# Narrow to calendar peers
+
 
 
 ```{r, fig.width=15, fig.height=12}
 # ggchalkboard:::geoms_chalk_off()
 
 births_df |> 
-     filter(date_in_2020 >= as.Date("2020-02-24")) |>
-     filter(date_in_2020 <= as.Date("2020-03-05")) |>
+     filter(date_in_2020 >= as.Date("2020-02-20")) |>
+     filter(date_in_2020 <= as.Date("2020-03-13")) |>
   ggplot() + 
   aes(x = date_in_2020, y  = births) + 
-  geom_line(color = "black", alpha= .2) +
-  geom_point(aes(shape = ind_weekend, 
-                 color = ind_Feb_29th,
-                 size = ind_Feb_29th)) +
+  geom_line( alpha= .2) +
+  geom_point(aes(shape = ind2cat::ind_recode(ind_weekend), 
+                 fill = ind2cat::ind_recode(ind_Feb_29th),
+                 size = ind2cat::ind_recode(ind_Feb_29th)),
+             shape = 21) +
   geom_text(aes(label = wday(date, label = T)), 
-            vjust = -0.2) + 
+            vjust = -0.52, size = 3) + 
   # geom_text(aes(label = births), 
   #           vjust = 1.2) + 
-  facet_wrap(~year)
+  facet_wrap(~year) +
+  scale_size_discrete(range = c(4,6))
 
 last_plot() +
-  aes(linetype = ind_weekend)
-   
+  aes(linetype = ind2cat::ind_recode(ind_weekend))
 
 
-
+last_plot() + 
+  facet_null() + 
+  aes(group = paste(year, ind_weekend, isoweek(date))) + 
+  aes(color = year)
 ```
 
-## Experiment
 
 ```{r}
+births_model_feb29_peers <- lm(formula = 
+                          births ~ factor(year) + date_in_2020 + factor(day_of_week) + ind_Feb_29th, 
+                        data = births_df_pruned |> 
+     filter(date_in_2020 >= as.Date("2020-02-16")) |>
+     filter(date_in_2020 <= as.Date("2020-03-9"))) 
+
+summary(births_model_feb29_peers)
+
+
+
 
 ```
 
 
-
-## Closing remarks, Other Relevant Work, Caveats
