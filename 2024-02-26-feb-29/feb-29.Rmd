@@ -33,10 +33,12 @@ births_path <- "https://raw.githubusercontent.com/EvaMaeRey/tableau/9e91c2b5ee80
 
 readr::read_csv(births_path) %>% 
   filter(year != 2015) %>%
+  rename(num_births = births) %>%
   mutate(month = str_pad(month, 2, pad = "0"),
          date_of_month = str_pad(date_of_month, 2, pad = "0")) %>% 
   mutate(date = paste(year, month, date_of_month, sep = "-") %>% as_date()) %>% 
   mutate(day_of_week = wday(date, label = T, week_start = "Monday") %>% factor(ordered = FALSE)) %>%
+  mutate(date_as_numeric = as.numeric(date)) |>
   mutate(ind_holiday = 
            (month == "12" & date_of_month %in% 24:31) |
            (month == "07" & date_of_month %in% c("04", "05")) |
@@ -74,8 +76,8 @@ births_df %>%
   ggcalendar() + 
   aes(date = date) + 
   geom_point_calendar() +
-  aes(size = births) +
-  aes(color = births) +
+  aes(size = num_births) +
+  aes(color = num_births) +
   geom_text_calendar(aes(label = day(date)), 
                      color = "oldlace", 
                      size = 2) + 
@@ -99,7 +101,7 @@ births_df |>
   filter(date >= as.Date("2012-02-26") &
            date <= as.Date("2012-03-03")) |>
   ggplot() + 
-  aes(x = date, y = births) +
+  aes(x = date, y = num_births) +
   geom_point() + 
   geom_line(linetype = "dashed") + 
   geom_label(aes(label = day_of_week)) + 
@@ -136,7 +138,7 @@ Visualizing the U.S. births time series, we see that there is tremendous variabi
 ```{r}
 births_df |> 
   ggplot() + 
-  aes(x = date, y = births) + 
+  aes(x = date, y = num_births) + 
   geom_point(size = .2) ->
 time_series_base
 
@@ -150,7 +152,7 @@ time_series_base +
   add_y_mean()
 
 
-round(sd(births_df$births))
+round(sd(births_df$num_births))
 ```
 
 ## Univariate distribution
@@ -161,12 +163,12 @@ Looking at the time series above or the univariate distribution of daily births 
 
 ```{r}
 ggplot(births_df) + 
-  aes(x = births) + 
+  aes(x = num_births) + 
   geom_histogram() + 
   ggxmean::geom_x_mean() +
   ggxmean::geom_x_mean_label(size = 3) + 
   geom_rug(alpha = .2) + 
-  labs(x = "Number of births") + 
+  labs(x = "Number of daily births") + 
   labs(title = "Distribution of Number of Births in the U.S. each day from 2000-2014" %>% str_wrap(65)) ->
 univariate_base; univariate_base
 ```
@@ -237,7 +239,7 @@ To look at the within-year periodicity, we use a normalized date variable, 'date
 ```{r}
 ggplot(births_df) + 
   aes(x = date_as_if_2020, 
-      y = births) +
+      y = num_births) +
   geom_point(alpha = .2) + 
   aes(color = factor(year)) +
   labs(color = NULL) +
@@ -252,7 +254,7 @@ In the plot above, we also see differences in the rate of births by year.  Explo
 
 ```{r}
 ggplot(births_df) + 
-  aes(x = births, y = factor(year)) + 
+  aes(x = num_births, y = factor(year)) + 
   ggridges::geom_density_ridges() + 
   stat_summary(fun.y = mean, geom = "point", col = "goldenrod3", 
                size = 10, shape = "diamond") + 
@@ -266,7 +268,7 @@ As a more general point of interest, here we summarize to the total number of bi
 
 ```{r}
 ggplot(births_df) + 
-  aes(x = year, weight = births/1000000) + 
+  aes(x = year, weight = num_births/1000000) + 
   ggchalkboard:::theme_chalkboard() +
   geom_bar(fill = "lightyellow", alpha = .75) + 
   stat_count(geom = "text", 
@@ -312,7 +314,7 @@ ggtemp:::create_layer_temp(fun_name = "geom_ols_linear_parallel",
                            geom_default = GeomLine)
 
 ggplot(births_df) +
-  aes(x = date, y = births,
+  aes(x = date, y = num_births,
       color = day_of_week, category = day_of_week) +
   geom_point(alpha = .15) + 
   geom_ols_linear_parallel()
@@ -323,7 +325,7 @@ Now, we estimate model outside of the visualization tool.
 ```{r}
 births_df$x <- as.numeric(births_df$date)
 
-m <- lm(births ~ x*day_of_week + I(x^2) + I(x^3)+ I(x^4), data = births_df)
+m <- lm(num_births ~ x*day_of_week + I(x^2) + I(x^3)+ I(x^4), data = births_df)
 
 births_df$residuals_wday <- m$residuals
 ```
@@ -383,7 +385,7 @@ We account for long term trends by using indicator variables for each year; for 
 
 
 ```{r}
-births_base_model <- lm(formula = births ~
+births_base_model <- lm(formula = num_births ~
                           ind_Feb_29th +
                           day_of_week +
                           month + 
@@ -420,7 +422,7 @@ births_df |>
      filter(date_as_if_2020 >= as.Date("2020-02-25")) |>
      filter(date_as_if_2020 <= as.Date("2020-03-4")) |>
   ggplot() + 
-  aes(x = date_as_if_2020, y  = births) + 
+  aes(x = date_as_if_2020, y  = num_births) + 
   geom_vline(xintercept = as.Date("2020-02-29"), 
              linetype = "dotted",
              color = "magenta3",
@@ -445,7 +447,7 @@ We model with slightly more calendar peers than are presenting in the visualizat
 
 ```{r}
 births_model_feb29_peers <- lm(formula = 
-                                 births ~ 
+                                 num_births ~ 
                                  ind_Feb_29th +
                                  day_of_week + 
                                  date_as_if_2020 + 
@@ -468,5 +470,101 @@ stargazer::stargazer(births_base_model, births_model_feb29_peers, type = "html",
                      omit.yes.no = c("yes", "no"))
 ```
 
+## Detrending
+
+```{r}
+births_df_pruned |>
+  ggplot() + 
+  aes(date, num_births, group = day_of_week) + 
+  geom_point() + 
+  stat_smooth()
+
+
+models <- list() 
+models_df <- list()
+detrended_lt_wd_df <- data.frame()
+
+for (i in 1:7){
+ 
+  pruned_wday <- births_df_pruned |> filter(as.numeric(day_of_week) == i)
+
+  models[[i]] <- loess(num_births ~ date_as_numeric, 
+                 data = pruned_wday, span = .75)
+   
+  models_df[[i]] <- data.frame(date_as_numeric = pruned_wday$date_as_numeric,
+                               num_births_detrend = models[[i]]$residuals)
+
+  detrended_lt_wd_df <- bind_rows(detrended_lt_wd_df, models_df[[i]])
+    
+}
+
+births_df_pruned |>
+  left_join(detrended_lt_wd_df) ->
+births_df_pruned_detrend_1
+
+births_df_pruned_detrend_1 |>
+  ggplot() + 
+  aes(x = date, y = num_births_detrend) + 
+  geom_point(alpha = .4) +
+  labs(title = "Long term and day of week detrend via LOESS smoothing") + 
+  geom_hline(yintercept = 0, color = "magenta", linetype = "dashed")
+
+last_plot() + 
+  facet_wrap(~ day_of_week)
+```
+
+
+
+```{r}
+last_plot() + 
+  facet_null() +
+  aes(x = date_as_if_2020) + 
+  aes(color = year) + 
+  geom_smooth() + 
+  labs(title = "Toward seasonality detrend via OLS")
+```
+
+```{r}
+last_plot() + 
+  stat_smooth(xseq = as.numeric(births_df_pruned_detrend_1$date_as_if_2020),
+              yend = births_df_pruned_detrend_1$num_births_detrend,
+              xend = births_df_pruned_detrend_1$date_as_if_2020,
+              color = "darkred",
+              geom = "segment",
+              alpha = .05
+              )
+  
+model_detrend_2 <- loess(num_births_detrend ~ as.numeric(date_as_if_2020), 
+                 data = births_df_pruned_detrend_1, span = .75)
+
+births_df_pruned_detrend_1$num_births_detrend_2x <- model_detrend_2$residuals
+   
+ 
+ggplot(births_df_pruned_detrend_1) + 
+  aes(date_as_if_2020, num_births_detrend_2x) + 
+  geom_point(alpha = .2) + 
+  aes(color = year) +
+  geom_hline(yintercept = 0, color = "magenta", linetype = "dashed") + 
+  labs(title = "Seaonsonally detrended")
+
+last_plot() %+% 
+  arrange(births_df_pruned_detrend_1, ind_Feb_29th) +
+  aes(color = ind_Feb_29th) + 
+  ggxmean::geom_y_mean() + 
+  labs(title = "Seaonsonally detrended, comparing Feb 29th mean to other days")
+
+ggplot(births_df_pruned_detrend_1) + 
+  aes(num_births_detrend_2x) + 
+  geom_histogram() + 
+  ggxmean::geom_x_mean() + 
+  ggxmean::geom_x_mean_label() + 
+  facet_wrap(~ind2cat:::ind_recode(ind_Feb_29th), ncol = 1) + 
+  labs(title = "Distribution of number of births after seasonal and long term detrending") + 
+  geom_rug()
+
+t.test(num_births_detrend_2x ~ ind_Feb_29th, 
+       data = births_df_pruned_detrend_1, 
+       var.equal = TRUE)
+```
 
 <!-- ### Detrending -->
