@@ -36,6 +36,7 @@ readr::read_csv(births_path) %>%
   mutate(month = str_pad(month, 2, pad = "0"),
          date_of_month = str_pad(date_of_month, 2, pad = "0")) %>% 
   mutate(date = paste(year, month, date_of_month, sep = "-") %>% as_date()) %>% 
+  mutate(day_of_week = wday(date, label = T, week_start = "Monday") %>% factor(ordered = FALSE)) %>%
   mutate(ind_holiday = 
            (month == "12" & date_of_month %in% 24:31) |
            (month == "07" & date_of_month %in% c("04", "05")) |
@@ -44,7 +45,7 @@ readr::read_csv(births_path) %>%
            (month == "11" & date_of_month %in% 20:30) |
            (month == "02" & date_of_month %in% 14)
            ) |>
-  mutate(date_as_if_in_2020 = paste(2020, month, date_of_month, sep = "-") %>% as_date()) |>
+  mutate(date_as_if_2020 = paste(2020, month, date_of_month, sep = "-") %>% as_date()) |>
   mutate(ind_weekend = wday(date) == 1 | wday(date) == 7) |>
   mutate(ind_Feb_29th = month(date) == 2 & day(date) == 29) |>
   mutate(ind_13th = day(date) == 13) |>
@@ -100,7 +101,7 @@ births_df |>
   aes(x = date, y = births) +
   geom_point() + 
   geom_line(linetype = "dashed") + 
-  geom_label(aes(label = wday(date, label = T))) + 
+  geom_label(aes(label = day_of_week)) + 
   geom_point(data = . %>% filter(date == as.Date("2012-02-29")),
              color = "red", shape = 1, 
              size = 20, stroke = 2, alpha = .8) +
@@ -125,7 +126,7 @@ The 15 years of data we'll look at was available via the #TidyTuesday project --
 
 Visualizing the U.S. births time series, we see that there is tremendous variability in number of birth per day.  The standard deviation for daily births is `r round(sd(births_df$births))` in this time span, with the average number of births around 11400, as marked in the visualization below.
 
-*I use [ggxmean](https://github.com/EvaMaeRey/ggxmean) functions to show the mean value for daily births.*
+*I use [ggxmean](https://github.com/EvaMaeRey/ggxmean) functions to show the mean value for the number of daily births across the time span.*
 
 
 ```{r}
@@ -152,23 +153,18 @@ round(sd(births_df$births))
 
 Looking at the time series above or the univariate distribution of daily births below, the bi-modal pattern is striking.
 
-*I use function geom_x_mean() 
+*I use function geom_x_mean() from [ggxmean](https://github.com/EvaMaeRey/ggxmean) to quickly show and annotate the mean value.*
 
 ```{r}
-# ggchalkboard:::geoms_chalk_on()
-
 ggplot(births_df) + 
   aes(x = births) + 
   geom_histogram() + 
   ggxmean::geom_x_mean() +
-  ggxmean::geom_x_mean_label() + 
+  ggxmean::geom_x_mean_label(size = 3) + 
   geom_rug(alpha = .2) + 
   labs(x = "Number of births") + 
-  # ggchalkboard::theme_chalkboard() + 
-  labs(title = "Distribution of Number of Births in the U.S. each day from 2000-2014" %>% str_wrap(45)) ->
+  labs(title = "Distribution of Number of Births in the U.S. each day from 2000-2014" %>% str_wrap(65)) ->
 univariate_base; univariate_base
-
-
 ```
 
 ## Exploring bi-modality with weekend indicator
@@ -189,52 +185,47 @@ When we return to our time-series plot, but breaking the plots up by weekend, yo
 ```{r}
 time_series_base + 
   facet_wrap(~ind2cat::ind_recode(ind_weekend), ncol = 1) + 
-  labs(title = "We explore the bimodal distribution looking at 'weekend effects'" %>% str_wrap(45))
+  labs(title = "We explore the bimodal distribution looking at 'weekend effects'" %>% str_wrap(65))
 ```
 
 Following on that observation, we investigate by-weekday (Sunday, Monday, Tuesday etc) differences in number of births below.  We look first at the histogram and then the time series plot. 
 
+For each day we plot the 95% confidence interval around the mean based on [t-tests](https://github.com/EvaMaeRey/ggxmean/blob/master/R/ttest.R); these are visualized as a red horizontal segment at the base of the histogram.  The intervals are calculated independently by panel. 
 
-```{r, fig.height=6, fig.width=4}
+```{r, fig.height=6, fig.width=6}
 univariate_base +
-  facet_wrap(~wday(date, label = T, week_start = "Monday"), ncol = 1) 
+  facet_wrap(~wday(date, label = T, week_start = "Monday"), ncol = 1)  + 
+  ggxmean:::geom_tdist(color = "red", linewidth = 2)
 ```
 
-We add a confidence interval around the mean based on a [t-test](). 
 
-```{r}
-last_plot() + 
-  ggxmean:::geom_tdist(color = "red")
-```
-
+We return to the time series display to look at the joint distribution with the time dimension. 
 
 ```{r}
 time_series_base + 
-  facet_wrap(~wday(date, label = T, 
-                   week_start = "Monday"), ncol = 2) + 
+  facet_wrap(~day_of_week, ncol = 2) + 
   labs(title = "Number of births 2000-2014 by day of week" %>% str_wrap(45))
 ```
 
 # Holidays and outlying observations
 
-The by-day-of-the-week exploration (and weekend vs. weekday) further exposes some outlying observations.  We next explore if these lower-than-usual their counterparts are by and large holiday or holiday adjacent days.  Due to time constraints, I'm relying a quick indicator variable that I created that include many holiday and adjacent dates. 
+The above by-day-of-the-week exploration (and weekend vs. weekday) further exposes some outlying observations.  We next explore if these lower-than-usual their counterparts are by and large holiday or holiday adjacent days.  Due to time constraints, I'm relying a quickly coded indicator variable that I created that include many, but not all holiday and adjacent dates. 
 
 ```{r}
-last_plot() -> tplot
-tplot[[2]] <- NULL
-
-tplot + 
-  geom_point(alpha = .5, size = .5) + 
+last_plot() + 
   aes(color = ind2cat::ind_recode(ind_holiday)) +
   labs(color = NULL) + 
-  theme(legend.position = 'top', legend.justification = "left")
+  theme(legend.position = 'top', legend.justification = "left") + 
+  scale_color_manual(values = c("grey75", "red"))
 ```
 
 This exploration suggests that holidays drive much of the out-of-character observations.
 
-Outlyingness might also be due to aversion due to superstition - for example the 13th of each month, especially Fridays the 13th, and Halloween might be more outlying though not holidays.  
+Outlyingness might also be due to aversion to birth days due to superstition - for example the 13th of each month, especially Fridays the 13th, and Halloween might be more outlying though not official holidays.  
 
 Also, holiday adjacency might also lead to lower number of births - for example federal holidays that fall on the weekend are often observed on a Monday.  The outliers that we observe on Monday are not categorized as holiday, but this likely due to the imperfect ind_holiday coding. President's day was not captured in my coding, for example and always falls on a Monday.  
+
+# Data pruning
 
 Because February 29 is not a holiday or holiday-adjacent, it is appropriate to prune our data to relevant comparisons and try to remove likely holidays; this should lead to more precise estimates in our final analysis.   
 
@@ -242,16 +233,16 @@ Due to time constraints and convenience, our pruning will be based on outlyingne
 
 We'll prune observations for which a linear model's error is greater than 3 standard deviations from the mean residual error (which will be zero).
 
-The linear model contain date and day of the week as categories that explain number of daily births.
+The linear model contain date and day of the week as categories that explain number of daily births; the date variable is fourth order with the first order term interacted with the day of the week.
 
-To start, I visualize the parallel lines model fit.  
+To start, I visualize the 'parallel lines' model fit.  
 
-*This visualization uses ggplot2 Stat extension via the new and experimental [ggtemp](https://github.com/EvaMaeRey/ggtemp) package which allows creating new geom_ and stat_ functions with less 'boiler plate' code.  A more syntactically conventional construction of this layer function is [featured in the ggplot2 extension cookbook](https://evamaerey.github.io/ggplot2-extension-cookbook/#geom_ols_linear_parallel-nkw-interdependence) *
+*This visualization uses ggplot2 Stat extension via the new and experimental [ggtemp](https://github.com/EvaMaeRey/ggtemp) package which allows creating new geom_ and stat_ functions with less 'boiler plate' code.  A model of a more syntactically conventional construction of this layer function is [featured in the ggplot2 extension cookbook](https://evamaerey.github.io/ggplot2-extension-cookbook/#geom_ols_linear_parallel-nkw-interdependence).*
 
 ```{r}
 compute_panel_lm_parallel <- function(data, scales){
   
-  model <- lm(y ~ x + I(x^2) + I(x^3)+ I(x^4) + category, data = data)
+  model <- lm(y ~ x*category + I(x^2) + I(x^3)+ I(x^4), data = data)
   
   data |>
     mutate(y = model$fitted)
@@ -266,21 +257,26 @@ ggtemp:::create_layer_temp(fun_name = "geom_ols_linear_parallel",
 
 ggplot(births_df) +
   aes(x = date, y = births,
-      color = wday(date, label = T), category = wday(date, label = T)) +
+      color = day_of_week, category = day_of_week) +
   geom_point(alpha = .15) + 
   geom_ols_linear_parallel()
 ```
 
-Now, we estimate model outside of the visualization tool.  Then we visualize the distribution of the model residuals and mark the threshold of 3 standard deviations from the mean, beyond which we'll prune observations. 
-
-*For convenience, we again use some functions from [ggxmean](https://github.com/EvaMaeRey/ggxmean)*
+Now, we estimate model outside of the visualization tool.  
 
 ```{r}
 births_df$x <- as.numeric(births_df$date)
 
-m <- lm(births ~ x + I(x^2) + I(x^3)+ I(x^4) + wday(date, label = T), data = births_df)
+m <- lm(births ~ x*day_of_week + I(x^2) + I(x^3)+ I(x^4), data = births_df)
 births_df$residuals_wday <- m$residuals
+```
 
+Then we visualize the distribution of the model residuals and mark the threshold of 3 standard deviations from the mean, beyond which we'll prune observations. 
+
+*For convenience, we again use some functions from [ggxmean](https://github.com/EvaMaeRey/ggxmean)*
+
+
+```{r}
 ggplot(births_df) +
   aes(x = residuals_wday) +
   geom_histogram() + 
@@ -290,41 +286,50 @@ ggplot(births_df) +
 sd(births_df$residuals_wday)
 ```
 
-Dropping the large residuals results in  116 days dropped from our dataset. 
+The code below prunes the data and shows a basic time series plot with the new 
 
 ```{r}
+births_df$residuals_large <- abs(births_df$residuals_wday) > 
+           3*sd(births_df$residuals_wday)
+
 births_df_pruned <- births_df |>
-  filter(abs(residuals_wday) < 
-           3*sd(births_df$residuals_wday))
+  filter(!residuals_large)
 
-time_series_base %+% births_df_pruned +
-  facet_wrap(~wday(date, label = T), ncol = 2) + 
-  labs(title = "Outlier pruned" %>% str_wrap(45)) 
+time_series_base %+% 
+  births_df + # updating data which now has additional varialbes
+  facet_wrap(~day_of_week, ncol = 2) + 
+  labs(title = "Outlier pruning visualization" %>% str_wrap(50)) + 
+  aes(color = residuals_large) + 
+  scale_color_manual(values = c("grey", "magenta2"), 
+                     labels = c("kept", "dropped")) + 
+  theme(legend.position = "top", legend.justification = "left") +
+  labs(color = NULL)
+  
 
-dim(births_df) - dim(births_df_pruned)
+num_dropped <- dim(births_df)[1] - dim(births_df_pruned)[1]
 
 ```
 
+Dropping the large residuals results in `r num_dropped` observations dropped from our dataset. 
 
-In the remainder of the exploration and analysis, we'll use the pruned version of the data, unless otherwise specified. 
+In the remainder of the exploration and analysis, we'll use the pruned version of the data, unless otherwise stated. 
 
 ## Seasonality and longer term trends
 
-To look at the within-year periodicity, we use a normalized date variable, 'date_as_if_in_2020'.  We see summer and fall surges in number of births.
+To look at the within-year periodicity, we use a normalized date variable, 'date_as_if_2020'.  We see summer and fall surges in number of births.
 
 ```{r}
 ggplot(births_df_pruned) + 
-  aes(x = date_as_if_in_2020, 
+  aes(x = date_as_if_2020, 
       y = births) +
   geom_point() + 
   aes(color = factor(year)) +
   labs(color = NULL) +
-  facet_wrap(~wday(date, label = T)) + 
   facet_wrap(~ind2cat::ind_recode(ind_weekend), ncol = 2) +
   geom_smooth() +
   labs(title = "Using loess smoothing within year and weekend v. weekday" ) + 
   scale_x_date(labels = c("Jan", "April", "July", "Oct", "Jan")) + 
-  labs(x = NULL)
+  labs(x = NULL) 
 ```
 
 In the plot above, we also see differences in the rate of births by year.  Exploring that more directly, we look at the distributions of number of daily birth by year (this is done with the unpruned data). Diamonds mark the mean for each year.
@@ -332,15 +337,16 @@ In the plot above, we also see differences in the rate of births by year.  Explo
 ```{r}
 ggplot(births_df) + 
   aes(x = births, y = factor(year)) + 
-  # geom_histogram() + 
   ggridges::geom_density_ridges() + 
   stat_summary(fun.y = mean, geom = "point", col = "goldenrod3", 
                size = 10, shape = "diamond") + 
-  labs(x = "Daily births")
-  # facet_wrap(~ind2cat::ind_recode(ind_weekend, rev = T), ncol = 2)
+  labs(x = "Daily births", y = NULL) +
+  labs(title = "Number of daily Births distributions and means (diamond) by year in the US" %>% str_wrap(65))
 ```
 
 As a more general point of interest, here we summarize to the total number of births for each year in this period in the United States. Then number of annual births hovers around 4 million, reaching a height of almost 4.4 million births in 2007.
+
+*This plot just features some thematic work done with [ggchalkboard](https://github.com/EvaMaeRey/ggchalkboard).*
 
 ```{r}
 ggplot(births_df) + 
@@ -352,7 +358,7 @@ ggplot(births_df) +
              aes(label = after_stat(round(count, 2))),
              vjust = 1.4, size = 3,
              color = "darkseagreen4") + 
-  labs(y = "Number of births (millions)") + 
+  labs(y = NULL, x = NULL) + 
   labs(title = "Number of births in the U.S. (millions)") + 
   scale_x_continuous(breaks = 2000:2014, labels = c("2000", "", "", "","'04", "", "", "","'08", "", "", "","'12", "", "'14"))
 ```
@@ -367,11 +373,11 @@ We account for long term trends by using indicator variables for each year; for 
 
 
 ```{r}
-births_base_model <- lm(formula = 
-                          births ~ factor(year) + 
+births_base_model <- lm(formula = births ~
+                          ind_Feb_29th +
+                          day_of_week +
                           month + 
-                          factor(day_of_week)  +
-                          ind_Feb_29th, 
+                          factor(year),
                         data = births_df_pruned) 
 ```
 
@@ -383,66 +389,59 @@ plot(births_base_model)
 ```
 
 
-```{r}
-births_base_model_feb29 <- lm(formula = 
-                          births ~ factor(year) + month + factor(day_of_week) + ind_Feb_29th, 
-                        data = births_df_pruned) 
-
-summary(births_base_model_feb29)
+```{r, results = "asis"}
+stargazer::stargazer(births_base_model, type = "html", 
+                     omit = c("year", "month", "day_of_week"), 
+                     omit.labels=c("year", "month", "day of week"), 
+                     omit.yes.no = c("yes", "no"))
 ```
 
-# Narrow to calendar peers
+# Narrowing to calendar date peers
 
 ```{r, fig.width=15, fig.height=12}
-# ggchalkboard:::geoms_chalk_off()
-
 births_df |> 
-     filter(date_as_if_in_2020 >= as.Date("2020-02-20")) |>
-     filter(date_as_if_in_2020 <= as.Date("2020-03-13")) |>
+     filter(date_as_if_2020 >= as.Date("2020-02-25")) |>
+     filter(date_as_if_2020 <= as.Date("2020-03-4")) |>
   ggplot() + 
-  aes(x = date_as_if_in_2020, y  = births) + 
-  geom_line( alpha= .2) +
-  geom_point(aes(shape = ind2cat::ind_recode(ind_weekend), 
-                 fill = ind2cat::ind_recode(ind_Feb_29th),
-                 size = ind2cat::ind_recode(ind_Feb_29th)),
-             shape = 21) +
-  geom_text(aes(label = wday(date, label = T)), 
-            vjust = -0.52, size = 3) + 
-  # geom_text(aes(label = births), 
-  #           vjust = 1.2) + 
+  aes(x = date_as_if_2020, y  = births) + 
+  geom_vline(xintercept = as.Date("2020-02-29"), 
+             linetype = "dotted",
+             color = "magenta3",
+             linewidth = 1
+             ) + 
+  geom_line( alpha = .2) +
+  geom_label(aes(label = wday(date, label = T), fill = ind2cat::ind_recode(ind_Feb_29th)), 
+            size = 4, 
+            ) + 
   facet_wrap(~year) +
-  scale_size_discrete(range = c(4,6))
-
-last_plot() +
-  aes(linetype = ind2cat::ind_recode(ind_weekend))
-
+  aes(group = paste(year, ind_weekend, isoweek(date))) + 
+  scale_size_discrete(range = c(4,6)) + 
+  scale_fill_manual(values = c("white", "magenta1")) + 
+  theme(legend.position = "top", legend.justification = "left")
 
 last_plot() + 
   facet_null() + 
-  aes(group = paste(year, ind_weekend, isoweek(date))) + 
   aes(color = year)
 ```
 
 
 ```{r}
 births_model_feb29_peers <- lm(formula = 
-                                 births ~ factor(year) + 
-                                 date_as_if_in_2020 + 
-                                 factor(day_of_week) + 
-                                 ind_Feb_29th, 
+                                 births ~ 
+                                 ind_Feb_29th +
+                                 day_of_week + 
+                                 date_as_if_2020 + 
+                                 factor(year), 
                                data = births_df_pruned |> 
-     filter(date_as_if_in_2020 >= as.Date("2020-02-16")) |>
-     filter(date_as_if_in_2020 <= as.Date("2020-03-9"))) 
-
-summary(births_model_feb29_peers)
-
-ggplot(fortify(births_model_feb29_peers)) + 
-  aes(x = .fitted, y = .resid) + 
-  geom_point(alpha = .2) + 
-  geom_hline(yintercept = 0, color = "darkred") + 
-  geom_smooth()
-
+     filter(date_as_if_2020 >= as.Date("2020-02-16")) |>
+     filter(date_as_if_2020 <= as.Date("2020-03-9"))) 
 
 ```
 
 
+```{r, results = "asis"}
+stargazer::stargazer(births_base_model, births_model_feb29_peers, type = "html", 
+                     omit = c("year", "month", "day_of_week"), 
+                     omit.labels=c("year", "month", "day of week"), 
+                     omit.yes.no = c("yes", "no"))
+```
