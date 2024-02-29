@@ -88,7 +88,7 @@ births_df %>%
                                       as_date("2012-02-29")),
                       size = 7, color = "red", shape = 21, stroke = 2) + 
   scale_color_viridis_c() + 
-  labs(title = "The year in 2012 in births")
+  labs(title = "The year 2012 in daily births")
 ```
 
 Zooming in on the week of February 29, 2012 in the figure below, it's easier to appreciate the dip in number of births that is observed on February 29th. But the question remains, Is this variability usual, or is there an aversion to birthing on February 29th that is statistically detectable looking at more leap days?
@@ -107,7 +107,8 @@ births_df |>
   geom_point(data = . %>% filter(date == as.Date("2012-02-29")),
              color = "red", shape = 1, 
              size = 20, stroke = 2, alpha = .8) +
-  labs(title = "Births the week of Feb 29, 2012") 
+  labs(title = "Daily births the week of Feb 29, 2012 in the U.S.",
+       y = "Number of births") 
 ```  
 
 *I begin the analysis with a visual format that's familiar to the audience, and where we can be pretty sure of the effects of relevant variables just by inspection*
@@ -156,7 +157,7 @@ round(sd(births_df$num_births))
 
 ## Univariate distribution
 
-Looking at the time series above or the univariate distribution of daily births below, the bi-modal pattern is striking.
+Looking at the time series above or the univariate distribution of daily births below, the bi-modal pattern is even more striking.
 
 *I use function geom_x_mean() from [ggxmean](https://github.com/EvaMaeRey/ggxmean) to quickly show and annotate the mean value.  The annotation label functions shows 3 significant digits by default to not overwhelm the reader.*
 
@@ -172,9 +173,9 @@ ggplot(births_df) +
 univariate_base; univariate_base
 ```
 
-## Exploring bi-modality with weekend indicator
+## Bi-modality with weekend indicator
 
-Breaking this data up, we explore the hypothesis that preference for scheduled birth (inducements or c-sections) is for weekdays.  In the figure below see that most of the bimodality is explained by weekend v. weekday effects.  The difference in means for these groups is substantial - around 4650 difference in number of births! 
+Breaking this data up, we explore the hypothesis that preference for scheduled birth (inducements or c-sections) is for weekdays.  In the figure below see that most of the bi-modality is explained by weekend v. weekday effects.  The difference in means for these groups is substantial - around 4650 difference in the number of daily births! 
 
 *I use the ind_recode function from the [ind2cat](https://github.com/EvaMaeRey/ind2cat) package which automatically recodes the indicator variable to meaningful categories.  If the T/F indicator variable is used directly, in this plot facet labels would be TRUE and FALSE, and would be hard to interpret without looking a the plot source code.*
 
@@ -195,7 +196,7 @@ time_series_base +
 
 Following on the observation that their's bimodality within the weekend observations, we investigate by-weekday (Sunday, Monday, Tuesday etc) differences in number of births below.  We look first at the histogram and then the time series plot. 
 
-For each day we plot the 95% confidence interval around the mean based on [t-tests](https://github.com/EvaMaeRey/ggxmean/blob/master/R/ttest.R); these are visualized as a red horizontal segment at the base of the histogram.  The intervals are calculated independently by day of the week. 
+For each day we plot the 95% confidence interval around the mean based on [t-tests](https://github.com/EvaMaeRey/ggxmean/blob/master/R/ttest.R); these confidence intervals are visualized as a red horizontal segment at the base of the histogram.  The intervals are calculated independently by day of the week. 
 
 ```{r, fig.height=6, fig.width=6}
 univariate_base +
@@ -204,7 +205,7 @@ univariate_base +
 ```
 
 
-We return to the time series display to look at the joint distribution with the time dimension. 
+We return to the time series display to look at the joint distribution with the time dimension by day of the week. 
 
 ```{r}
 time_series_base + 
@@ -214,7 +215,7 @@ time_series_base +
 
 ## Holidays and outlying observations
 
-The above by-day-of-the-week exploration (and weekend vs. weekday) further exposes some outlying observations.  We next explore if these lower-than-usual their counterparts are by and large holiday or holiday adjacent days.  Due to time constraints, I'm relying a quickly coded indicator variable that I created that include many, but not all holiday and adjacent dates. 
+The above by-day-of-the-week exploration highlights outlying observations.  We next explore if these lower-than-usual their counterparts are by and large holiday or holiday adjacent days.  Due to time constraints, I'm relying a quickly coded indicator variable that I created that include many -- but not all -- holiday and adjacent dates. 
 
 ```{r}
 last_plot() + 
@@ -224,16 +225,16 @@ last_plot() +
   scale_color_manual(values = c("grey75", "red"))
 ```
 
-This exploration suggests that holidays drive much of the out-of-character observations.
+This exploration suggests that holidays drive much of the out-of-character observations, depressing the number of births.
 
-Outlyingness might also be due to aversion to birth days due to superstition - for example the 13th of each month, especially Fridays the 13th, and Halloween might be more outlying though not official holidays.  
+Outlyingness by date might also be due to aversion to birth days due to superstition - for example the 13th of each month, especially Fridays the 13th, and Halloween might be more outlying though not official holidays.  
 
-Also, holiday adjacency might also lead to lower number of births - for example federal holidays that fall on the weekend are often observed on a Monday.  The outliers that we observe on Monday are not categorized as holiday, but this likely due to the imperfect ind_holiday coding. President's day was not captured in my coding, for example and always falls on a Monday.  
+Also, holiday *adjacency* might also lead to lower number of births - for example federal holidays that fall on the weekend are often observed on a Monday. It's worth noting that my quick holiday indicator coding doesn't capture holidays whose dates celebrated move, for example President's day was not captured in my coding, for example and always falls on a Monday and are not celebrated by date alone.  
 
 
-## Seasonality and longer term trends
+## Seasonality
 
-To look at the within-year periodicity, we use a normalized date variable, 'date_as_if_2020'.  We see summer and fall surges in number of births.
+We will return to outlyingess observations in the data pruning section, but before that we look at within-year periodicity.  We use a normalizing date variable, 'date_as_if_2020' to see year-on-year patterns.  We observe summer and fall surges in number of births.
 
 ```{r}
 ggplot(births_df) + 
@@ -248,8 +249,9 @@ ggplot(births_df) +
   scale_x_date(labels = c("Jan", "April", "July", "Oct", "Jan")) + 
   labs(x = NULL) 
 ```
+# Long-run trends
 
-In the plot above, we also see differences in the rate of births by year.  Exploring that more directly, we look at the distributions of number of daily birth by year (this is done with the unpruned data). Diamonds mark the mean for each year.
+In the plot above, we also see differences in the rate of births by year.  Exploring that more directly, we look at the distributions of number of daily birth by year. Diamonds mark the mean for each year.
 
 ```{r}
 ggplot(births_df) + 
@@ -401,14 +403,14 @@ Looking at the summary below, we see that there's an estimation of `r round(feb2
 ```{r, results = "asis"}
 stargazer::stargazer(births_base_model, type = "html", 
                      omit = c("year", "month", "day_of_week"), 
-                     omit.labels=c("year", "month", "day of week"), 
+                     omit.labels=c("year indicators", "month indicators", "day-of-week indicators"), 
                      omit.yes.no = c("yes", "no"))
 ```
 
 Based on model diagnostic plots, the inclusion of some observations do deserve additional review.
 
 
-```{r, out.width="49%"}
+```{r, out.width="38%", fig.show="hold"}
 plot(births_base_model)
 ```
 
