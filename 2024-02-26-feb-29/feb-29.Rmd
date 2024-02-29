@@ -70,7 +70,6 @@ With February 29th (leap day) coming up this week, you might wonder, are there a
 
 ```{r calendar_plot}
 library(ggcalendar)
-ggcalendar:::StatCalendar
 births_df %>%
   filter(year == 2012) %>% 
   ggcalendar() + 
@@ -159,7 +158,7 @@ round(sd(births_df$num_births))
 
 Looking at the time series above or the univariate distribution of daily births below, the bi-modal pattern is striking.
 
-*I use function geom_x_mean() from [ggxmean](https://github.com/EvaMaeRey/ggxmean) to quickly show and annotate the mean value.*
+*I use function geom_x_mean() from [ggxmean](https://github.com/EvaMaeRey/ggxmean) to quickly show and annotate the mean value.  The annotation label functions shows 3 significant digits by default to not overwhelm the reader.*
 
 ```{r}
 ggplot(births_df) + 
@@ -196,7 +195,7 @@ time_series_base +
 
 Following on the observation that their's bimodality within the weekend observations, we investigate by-weekday (Sunday, Monday, Tuesday etc) differences in number of births below.  We look first at the histogram and then the time series plot. 
 
-For each day we plot the 95% confidence interval around the mean based on [t-tests](https://github.com/EvaMaeRey/ggxmean/blob/master/R/ttest.R); these are visualized as a red horizontal segment at the base of the histogram.  The intervals are calculated independently by panel. 
+For each day we plot the 95% confidence interval around the mean based on [t-tests](https://github.com/EvaMaeRey/ggxmean/blob/master/R/ttest.R); these are visualized as a red horizontal segment at the base of the histogram.  The intervals are calculated independently by day of the week. 
 
 ```{r, fig.height=6, fig.width=6}
 univariate_base +
@@ -374,7 +373,9 @@ Dropping the large residuals results in `r num_dropped` observations dropped fro
 In the remainder of the exploration and analysis, we'll use the pruned version of the data, unless otherwise stated. 
 
 
-# Modeling
+# Three modeling strategies
+
+Below we look at several strategies to estimate the possible effect of 'being leap day' on the number of daily births.  All the approaches lead to an estimate of aroun 800 fewer births due to February 29th aversion.  Confidence intervals are rather wide  - several hundreds of births in all cases, but all analyses also indicate a statistically significant effect.
 
 ## Multiple linear regression modeling w/ year, month, and day indicators
 
@@ -413,7 +414,7 @@ plot(births_base_model)
 
 
 
-## Narrowing to calendar date peers; modeling with year and day-of-week indicator and date in year (continuous) variables
+## Model with to calendar date neighbors only; modeling with year and day-of-week indicator and date in year (continuous) variables
 
 
 
@@ -472,14 +473,19 @@ stargazer::stargazer(births_base_model, births_model_feb29_peers, type = "html",
 
 ## Detrending
 
+In an approach that favors detrending, we start by looking at long-term trends by day of the week, visualizing loess smoothing for each day of the week.
+
 ```{r}
 births_df_pruned |>
   ggplot() + 
   aes(date, num_births, group = day_of_week) + 
   geom_point() + 
-  stat_smooth()
+  stat_smooth(span = .5)
+```
 
+Outside of the visualization tool, we estimate each LOESS model to collect the detrened observations.
 
+```{r}
 models <- list() 
 models_df <- list()
 detrended_lt_wd_df <- data.frame()
@@ -489,7 +495,7 @@ for (i in 1:7){
   pruned_wday <- births_df_pruned |> filter(as.numeric(day_of_week) == i)
 
   models[[i]] <- loess(num_births ~ date_as_numeric, 
-                 data = pruned_wday, span = .75)
+                 data = pruned_wday, span = .5)
    
   models_df[[i]] <- data.frame(date_as_numeric = pruned_wday$date_as_numeric,
                                num_births_detrend = models[[i]]$residuals)
@@ -501,7 +507,11 @@ for (i in 1:7){
 births_df_pruned |>
   left_join(detrended_lt_wd_df) ->
 births_df_pruned_detrend_1
+```
 
+We plot the detrended number of births in a single plot, and then by day to examine the detrending.
+
+```{r}
 births_df_pruned_detrend_1 |>
   ggplot() + 
   aes(x = date, y = num_births_detrend) + 
@@ -513,18 +523,19 @@ last_plot() +
   facet_wrap(~ day_of_week)
 ```
 
-
+Plotting this same data but wrapping year on year (using the date_as_if_2020 variable), we plot the seasonality trend, also with a LOESS model. 
 
 ```{r}
-last_plot() + 
-  facet_null() +
-  aes(x = date_as_if_2020) + 
-  aes(color = year) + 
-  geom_smooth() + 
-  labs(title = "Toward seasonality detrend via OLS")
+births_df_pruned_detrend_1 |>
+  ggplot() + 
+  aes(x = date_as_if_2020, y = num_births_detrend) + 
+  geom_point(alpha = .25, aes(color = year) ) +
+  geom_smooth(method = "loess", span = .25) + 
+  labs(title = "Toward seasonality detrend")
 ```
 
-```{r}
+
+```{r, include=F}
 last_plot() + 
   stat_smooth(xseq = as.numeric(births_df_pruned_detrend_1$date_as_if_2020),
               yend = births_df_pruned_detrend_1$num_births_detrend,
@@ -533,9 +544,16 @@ last_plot() +
               geom = "segment",
               alpha = .05
               )
+
+```
+
+
+We detrend by estimating the LOESS model outside the visualization tool, and show the detrended result in a visualization.  
+
+```{r}
   
 model_detrend_2 <- loess(num_births_detrend ~ as.numeric(date_as_if_2020), 
-                 data = births_df_pruned_detrend_1, span = .75)
+                 data = births_df_pruned_detrend_1, span = .25)
 
 births_df_pruned_detrend_1$num_births_detrend_2x <- model_detrend_2$residuals
    
@@ -546,13 +564,21 @@ ggplot(births_df_pruned_detrend_1) +
   aes(color = year) +
   geom_hline(yintercept = 0, color = "magenta", linetype = "dashed") + 
   labs(title = "Seaonsonally detrended")
+```
 
+Finally, we show the Feb 29th detrended numbers of births and their mean in the context of the other detrended data.
+
+```{r}
 last_plot() %+% 
   arrange(births_df_pruned_detrend_1, ind_Feb_29th) +
   aes(color = ind_Feb_29th) + 
   ggxmean::geom_y_mean() + 
   labs(title = "Seaonsonally detrended, comparing Feb 29th mean to other days")
+```
 
+Showing the distribution of detrended numbers of births as two histograms with means marked, we see almost a 800 birth depression for the Feb 29th date.
+
+```{r}
 ggplot(births_df_pruned_detrend_1) + 
   aes(num_births_detrend_2x) + 
   geom_histogram() + 
@@ -561,7 +587,11 @@ ggplot(births_df_pruned_detrend_1) +
   facet_wrap(~ind2cat:::ind_recode(ind_Feb_29th), ncol = 1) + 
   labs(title = "Distribution of number of births after seasonal and long term detrending") + 
   geom_rug()
+```
 
+Performing a t.test, we see that this result is statistically significant.
+
+```{r}
 t.test(num_births_detrend_2x ~ ind_Feb_29th, 
        data = births_df_pruned_detrend_1, 
        var.equal = TRUE)
