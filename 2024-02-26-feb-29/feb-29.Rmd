@@ -1,5 +1,5 @@
 ---
-title: "Is there statistical evidence of fewer births on Feb 29 in the US?" 
+title: "Is there statistical evidence of aversion to Feb 29 births in the US?" 
 subtitle: "An evaluation using 2000-2014 data"
 author: "Evangeline Reynolds, PhD"
 date: "`r Sys.Date()`"
@@ -418,7 +418,7 @@ plot(births_base_model)
 
 
 
-## Model with to calendar date neighbors only; modeling with year and day-of-week indicator and date in year (continuous) variables
+## Modeling with calendar date neighbors only; model is with year and day-of-week indicator and date in year (continuous) variables
 
 
 
@@ -434,13 +434,15 @@ births_df |>
   geom_label(aes(fill = ind2cat::ind_recode(ind_Feb_29th)), 
             size = 4, 
             ) +
-  labs(fill = NULL) +
+  labs(fill = NULL, x = NULL) +
   facet_wrap(~year) +
   aes(group = paste(year, ind_weekend, isoweek(date))) + 
   scale_size_discrete(range = c(4,6)) + 
   scale_fill_manual(values = c("white", "magenta1")) + 
-  theme(legend.position = "top", legend.justification = "left") +
-  labs(title = "Comparison of daily births on 8 days around Feb 29, 2000-2014") ->
+  labs(title = "Comparison of daily births on 8 days around Feb 29, 2000-2014") + 
+  theme_gray(base_size = 18) +
+  theme(legend.position = "top",
+        legend.justification = "left") ->
 feb_march_base_plot
 
 dotted_on_feb29 <- geom_vline(xintercept = as.Date("2020-02-29"), 
@@ -464,7 +466,8 @@ feb_march_base_plot +
   aes(label = paste(month(date, label = T), 
                     day(date), year)) +
   facet_null()  +
-  labs(title = "Comparison of daily births on 8 days around Feb 29, 2000-2014; aligned by day of week") 
+  labs(x = NULL) +
+  labs(title = "Comparison of daily births on 8 days around Feb 29, 2000-2014; aligned by day of week" %>% str_wrap(55)) 
 
 last_plot() + 
   facet_wrap(~year)
