@@ -139,7 +139,8 @@ Visualizing the U.S. births time series, we see that there is tremendous variabi
 births_df |> 
   ggplot() + 
   aes(x = date, y = num_births) + 
-  geom_point(size = .2) ->
+  geom_point(size = .2) +
+  labs(title = "Number of births in the U.S. by calendar date, 2020-2014" %>% str_wrap(65)) ->
 time_series_base
 
 
@@ -249,6 +250,7 @@ ggplot(births_df) +
   scale_x_date(labels = c("Jan", "April", "July", "Oct", "Jan")) + 
   labs(x = NULL) 
 ```
+
 # Long-run trends
 
 In the plot above, we also see differences in the rate of births by year.  Exploring that more directly, we look at the distributions of number of daily birth by year. Diamonds mark the mean for each year.
@@ -410,7 +412,7 @@ stargazer::stargazer(births_base_model, type = "html",
 Based on model diagnostic plots, the inclusion of some observations do deserve additional review.
 
 
-```{r, out.width="38%", fig.show="hold"}
+```{r, out.width="45%", fig.show="hold"}
 plot(births_base_model)
 ```
 
@@ -422,31 +424,54 @@ plot(births_base_model)
 
 ```{r, fig.width=15, fig.height=12}
 births_df |> 
+  arrange(year %in% (2000 + c(0,4,8,12))) |>
      filter(date_as_if_2020 >= as.Date("2020-02-25")) |>
      filter(date_as_if_2020 <= as.Date("2020-03-4")) |>
   ggplot() + 
   aes(x = date_as_if_2020, y  = num_births) + 
-  geom_vline(xintercept = as.Date("2020-02-29"), 
-             linetype = "dotted",
-             color = "magenta3",
-             linewidth = 1
-             ) + 
   geom_line( alpha = .2) +
-  geom_label(aes(label = wday(date, label = T), fill = ind2cat::ind_recode(ind_Feb_29th)), 
+  aes(label = wday(date, label = T)) + 
+  geom_label(aes(fill = ind2cat::ind_recode(ind_Feb_29th)), 
             size = 4, 
-            ) + 
+            ) +
+  labs(fill = NULL) +
   facet_wrap(~year) +
   aes(group = paste(year, ind_weekend, isoweek(date))) + 
   scale_size_discrete(range = c(4,6)) + 
   scale_fill_manual(values = c("white", "magenta1")) + 
-  theme(legend.position = "top", legend.justification = "left")
+  theme(legend.position = "top", legend.justification = "left") +
+  labs(title = "Comparison of daily births on 8 days around Feb 29, 2000-2014") ->
+feb_march_base_plot
+
+dotted_on_feb29 <- geom_vline(xintercept = as.Date("2020-02-29"), 
+             linetype = "dotted",
+             color = "magenta3",
+             linewidth = 1
+             )
+
+feb_march_base_plot + 
+  dotted_on_feb29
+
+feb_march_base_plot + 
+  facet_null() + 
+  aes(color = year) + 
+  labs(year = NULL) +
+  dotted_on_feb29
+
+
+feb_march_base_plot + 
+  aes(x = day_of_week) + 
+  aes(label = paste(month(date, label = T), 
+                    day(date), year)) +
+  facet_null()  +
+  labs(title = "Comparison of daily births on 8 days around Feb 29, 2000-2014; aligned by day of week") 
 
 last_plot() + 
-  facet_null() + 
-  aes(color = year)
+  facet_wrap(~year)
+
 ```
 
-We model with slightly more calendar peers than are presenting in the visualization, from Feb 17 to March 9th
+We model with slightly more calendar peers than are presenting in the visualization, from Feb 17 to March 9th.
 
 ```{r}
 births_model_feb29_peers <- lm(formula = 
@@ -482,7 +507,8 @@ births_df_pruned |>
   ggplot() + 
   aes(date, num_births, group = day_of_week) + 
   geom_point() + 
-  stat_smooth(span = .5)
+  stat_smooth(span = .5) +
+  labs(title = "LOESS smoothed number of daily births 2000-2014, within day of week")
 ```
 
 Outside of the visualization tool, we estimate each LOESS model to collect the detrened observations.
