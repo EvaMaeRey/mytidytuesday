@@ -31,7 +31,7 @@ library(tidyverse)
 compute_panel_prop <- function(data, scales, success_cat = T, width = .2){
   
   data %>%
-    mutate(outcome = cat == success_cat) %>%
+    mutate(outcome = as.numeric(cat == success_cat)) %>%
     group_by(outcome) %>%
     summarise(count = sum(weight)) %>%
     mutate(ymin = 0) %>%
@@ -44,12 +44,32 @@ Titanic |>
   select(cat = Survived, weight = Freq) |>
   compute_panel_prop(success_cat = "Yes")
 
+compute_panel_prop_balance <- function(data, scales, success_cat = T){
+  
+    data %>%
+    mutate(outcome = as.numeric(cat == success_cat)) %>%
+    uncount(weight) %>%
+    summarise(x = mean(outcome)) %>%
+    mutate(y = 0)
+  
+}
+
+Titanic |>
+  data.frame() |>
+  select(cat = Survived, weight = Freq) |>
+  compute_panel_prop_balance(success_cat = "Yes")
+```  
+
+
+```{r}
 StatProp <- ggplot2::ggproto(`_class` = "StatProp",
                                   `_inherit` = ggplot2::Stat,
                                   required_aes = c("cat", "weight"),
-                                  compute_group = compute_panel_prop,
+                                  compute_panel = compute_panel_prop,
                              default_aes = aes(ymax = after_stat(count),
                                                xmin = after_stat(outcome + width/2),
+                                               x = after_stat(outcome),
+                                               y = after_stat(count),
                                                xmax = after_stat(outcome - width/2),
                                                weight = NULL,
                                                ))
@@ -72,12 +92,17 @@ geom_prop <- function(mapping = NULL, data = NULL,
   )
 }
 
+StatPropbalance <- ggplot2::ggproto(`_class` = "StatPropbalance",
+                                  `_inherit` = ggplot2::Stat,
+                                  required_aes = c("cat", "weight"),
+                                  compute_panel = compute_panel_prop_balance)
+
 geom_balance <- function(mapping = NULL, data = NULL,
                            position = "identity", na.rm = FALSE,
                            show.legend = NA,
                            inherit.aes = TRUE, ...) {
   ggplot2::layer(
-    stat = StatProp,        # proto object from step 2
+    stat = StatPropbalance,        # proto object from step 2
     geom = ggplot2::GeomPoint,   # inherit other behavior
     data = data, 
     mapping = mapping,
@@ -94,8 +119,8 @@ Titanic |>
   ggplot() + 
   aes(cat = Survived, weight = Freq) + 
   geom_prop(success_cat = "Yes", width = .2) + 
-  ma206distributions::scale_x_counting() #+ 
-  geom_balance()
+  ma206distributions::scale_x_counting() + 
+  geom_balance(success_cat = "Yes")
 
 
 ```
