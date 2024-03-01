@@ -1,0 +1,105 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r cars}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+compute_panel_prop <- function(data, scales, success_cat = T, width = .2){
+  
+  data %>%
+    mutate(outcome = cat == success_cat) %>%
+    group_by(outcome) %>%
+    summarise(count = sum(weight)) %>%
+    mutate(ymin = 0) %>%
+    mutate(width = width)
+  
+}
+
+Titanic |>
+  data.frame() |>
+  select(cat = Survived, weight = Freq) |>
+  compute_panel_prop(success_cat = "Yes")
+
+StatProp <- ggplot2::ggproto(`_class` = "StatProp",
+                                  `_inherit` = ggplot2::Stat,
+                                  required_aes = c("cat", "weight"),
+                                  compute_group = compute_panel_prop,
+                             default_aes = aes(ymax = after_stat(count),
+                                               xmin = after_stat(outcome + width/2),
+                                               xmax = after_stat(outcome - width/2),
+                                               weight = NULL,
+                                               ))
+
+
+
+geom_prop <- function(mapping = NULL, data = NULL,
+                           position = "identity", na.rm = FALSE,
+                           show.legend = NA,
+                           inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatProp,        # proto object from step 2
+    geom = ggplot2::GeomRect,   # inherit other behavior
+    data = data, 
+    mapping = mapping,
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+
+geom_balance <- function(mapping = NULL, data = NULL,
+                           position = "identity", na.rm = FALSE,
+                           show.legend = NA,
+                           inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatProp,        # proto object from step 2
+    geom = ggplot2::GeomPoint,   # inherit other behavior
+    data = data, 
+    mapping = mapping,
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+
+
+Titanic |>
+  data.frame() |>
+  ggplot() + 
+  aes(cat = Survived, weight = Freq) + 
+  geom_prop(success_cat = "Yes", width = .2) + 
+  ma206distributions::scale_x_counting() #+ 
+  geom_balance()
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
