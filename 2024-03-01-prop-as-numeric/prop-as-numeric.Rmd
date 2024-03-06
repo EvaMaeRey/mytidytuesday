@@ -30,6 +30,8 @@ library(tidyverse)
 ```{r}
 compute_panel_prop <- function(data, scales, success_cat = T, width = .2){
   
+  if(is.null(data$weight)){data$weight <- 1}
+  
   data %>%
     mutate(outcome = as.numeric(cat == success_cat)) %>%
     group_by(outcome) %>%
@@ -45,6 +47,8 @@ Titanic |>
   compute_panel_prop(success_cat = "Yes")
 
 compute_panel_prop_balance <- function(data, scales, success_cat = T){
+  
+    if(is.null(data$weight)){data$weight <- 1}
   
     data %>%
     mutate(outcome = as.numeric(cat == success_cat)) %>%
@@ -64,7 +68,7 @@ Titanic |>
 ```{r}
 StatProp <- ggplot2::ggproto(`_class` = "StatProp",
                                   `_inherit` = ggplot2::Stat,
-                                  required_aes = c("cat", "weight"),
+                                  required_aes = c("cat"),
                                   compute_panel = compute_panel_prop,
                              default_aes = aes(ymax = after_stat(count),
                                                xmin = after_stat(outcome + width/2),
