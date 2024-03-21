@@ -17,7 +17,7 @@ The packaging journey often goes something like this:
 
 - Step 000.  Do a thing happily with some existing tools 1-20x
 - Step 00. Do a thing again 21-1000+x with some existing tools
-- Step 0. Decide you've had enough, or flash of 'what-if' insight
+- Step 0. Decide you've had enough/flash of 'what-if there's another way' insight
 - Step 1. Write functionality
 - Step 2. Prepare a package to *deliver* functionality
 
@@ -31,9 +31,9 @@ The packaging journey often goes something like this:
 
 
 
-The intent of [{readme2pkg}](https://github.com/EvaMaeRey/readme2pkg) is to let you build quick packages right from a README.Rmd. The function readme2pkg::chunk_to_dir (and friends) lets you send code chunk contents to a new file in a subdirectory. This means you don’t have to manage a bunch of files that constitute a package - at least in the early stages.
+The intent of [{readme2pkg}](https://github.com/EvaMaeRey/readme2pkg) is to let you build quick packages right from a README.Rmd. The function readme2pkg::chunk_to_dir (and friends) lets you send code chunk contents to a new file in a subdirectory. This means you don’t have to manage a bunch of function files that constitute a package - at least in the early stages.  Instead you can work with them in your README.Rmd.
 
-Also, the [EvaMaeRey/readme2pkg.template](https://github.com/EvaMaeRey/readme2pkg.template) repo on github template repository that meant to complement the readme2pkg workflow. Using the README.Rmd in the template, you can populate the sections with your material (introduction and functions, etc). And this README template contains a ‘living’ checklist that will help you get through the steps of creating a package, including building the file architecture, licensing, documentation, and builds. The checklist items are run through {devtools} and {usethis} packages. Code is included that lets you ‘check-off’ the items as you run the code.
+Also, the [EvaMaeRey/readme2pkg.template](https://github.com/EvaMaeRey/readme2pkg.template) repo on github is a template repository meant to complement the readme2pkg workflow. Using the README.Rmd in the template, you can populate the sections with your material (introduction and functions, etc). And this README template contains a ‘living’ checklist that will help you get through the steps of creating a package, including building the file architecture, licensing, documentation, and builds. The checklist items are run through {devtools} and {usethis} packages. Code is included that lets you ‘check-off’ the items as you run the code.
 
 The template breaks down package building into phases:
 
@@ -51,21 +51,18 @@ The template breaks down package building into phases:
 
 Part of the readme2pkg philosophy is that there are many reasonable pausing, stopping, and even scratch-the-project points along this progression, and the workshop will try to highlight those.  
 
-# Workshop requirements
+In the Denver R-Ladies meeting, I hope to get through function documentation (adding a roxygen skeleton) in Part 3 of the readme2pkg.template.
 
-packages: 
+# Mini workshop requirements
+
+A. Installed Packages: 
 
   - on CRAN: `usethis`; `devtools`; `ggplot2` or `stringr` (depending on worked example below)
   - on Github: `remotes::install_github("EvaMaeRey/readme2pkg")`
   
-template repo:
+B. Template repo: [EvaMaeRey/readme2pkg.template](https://github.com/EvaMaeRey/readme2pkg.template) 
 
-  [EvaMaeRey/readme2pkg.template](https://github.com/EvaMaeRey/readme2pkg.template) 
-
-  
-  
-- github account linked to RStudio
-- 
+C. Github account linked to RStudio
 
 
 ### Option 1:  {redhistogram} package
