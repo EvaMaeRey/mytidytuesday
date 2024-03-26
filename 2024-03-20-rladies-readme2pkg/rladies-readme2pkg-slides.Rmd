@@ -25,9 +25,13 @@ class: inverse
 background-image: url(https://images.unsplash.com/photo-1509239129736-8c395375220d?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)
 background-size: cover
 
-# .Large[[{readme2pkg}](https://github.com/EvaMaeRey/readme2pkg): overview and motivations]
-<!-- ## .small[Readme as a point of entry for new developers, as a package story board, and centralized contributor meeting place.] -->
-#### .small[Dr. Evangeline Reynolds | 2024-03-27 | ASA, COWY, Image credit: Jamie Templeton, Upsplash]
+# .Large[[{readme2pkg}](https://github.com/EvaMaeRey/readme2pkg)]
+
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+## .small[Package construction and storytelling from a README.Rmd]
+
+#### .small[Gina Reynolds | 2024-03-27 | Denver RLadies, Image credit: Jamie Templeton, Upsplash]
 
 
 ???
@@ -43,48 +47,59 @@ library(flipbookr)
 ---
 
 
-R packages are composed of many files. 
-
-These multiple, un-ordered constituents may yield an unclear big-picture package narrative.
+# R packages are composed of many files. 
 
 --
 
-Some folks hope to try to provide the possibility of creating 'narrative arc' to packages using a single higher level document to manage constituent files and speak to how all the components relate. (litr; fusen; readme2pkg)
-
---
-
-readme2pkg proposes the *README.Rmd* to be used as this control file.  
+# These multiple, un-ordered constituents oftene fail to yield a clear big-picture package narrative.
 
 ---
 
-Supporting functionality includes:
-
-- `readme2pkg::chunk_to_dir()`
+# But greater 'narrative arc' could be preserved/created by using a single meta-document to manage constituent files and their content.
 
 --
 
-```{r, eval = FALSE}
-readme2pkg::chunk_to_dir(chunk_name = "my_awesome_function",
-                         dir = "./R")
-```
-
---
-
-- readme2pkg::chunk_to_r()
-- readme2pkg::chunk_to_tests_testthat()
+# Such a document could tell the story of motivations for the package and speak to how all the components relate. 
 
 ---
 
-Dependencies:
+# Recent initiatives include helper packages {litr}, {fusen}, and {readme2pkg}.
 
-- knitr (knit)
-- rstudioapi (for interactively sending code chunk to directory)
-- stringr
+--
+
+# readme2pkg proposes the *README.Rmd* to be used as this control file.  
+
+---
+
+# Supporting functionality includes:
+
+# `readme2pkg::chunk_to_dir()`
+
+## usage:
+
+
+#### `chunk_to_dir(chunk_name = "my_function",  dir = "R/")`
+
+
 
 
 ---
 
-And template; https://github.com/EvaMaeRey/readme2pkg.template
+#  readme2pkg dependencies:
+
+# - knitr (knit)
+# - rstudioapi (live session use of chunk_to_dir; via flair - Kelly Bodwin)
+# - stringr
+
+
+---
+
+## The workflow also assumes use of a template, that prompts users through devtools and usethis package building functions
+
+https://github.com/EvaMaeRey/readme2pkg.template
+
+---
+
 
 ```{r}
 knitr::include_url("https://github.com/EvaMaeRey/readme2pkg.template")
@@ -92,12 +107,14 @@ knitr::include_url("https://github.com/EvaMaeRey/readme2pkg.template")
 
 ---
 
-Readme as:
 
-1. a point of entry for new comers to development (readme template can be used as a getting started template)
-2. checklist for more seasoned developers
-3. As a package story board, 
-4. Centralized contributor meeting place (facilitates pointing potential contributors...)
+```{r}
+knitr::include_graphics("template_screenshot.png")
+
+```
+
+
+
 
 
 
@@ -123,53 +140,55 @@ The template breaks down package building into phases:
 
 ---
 
-Part of the readme2pkg philosophy is that there are many reasonable pausing, stopping, and even ditch-the-project points along this progression, and the workshop will try to highlight those.  
+Template walk through...
+
+## github.com/EvaMaeRey/readme2pkg.template
 
 
 
 ---
 
+# Part of the readme2pkg philosophy is that there are many reasonable pausing, stopping, and even ditch-the-project points along this progression, and the workshop will try to highlight those.  
 
 
-```{r}
-knitr::include_graphics("template_screenshot.png")
+---
 
-```
+## readme2pkg sees readme as:
 
+1. a point of entry for new comers to development (readme template can be used as a getting started template)
 
+--
 
+2. checklist for more seasoned developers
 
+--
 
-This is a reference sheet for the readme2pkg part of the RLadies ['Literate packaging' March 2024 meetup](
-https://www.meetup.com/rladies-denver/events/299879858/) which will allow for a comparative look at litr, fusen, and readme2pkg.
+3. As a package story board, 
 
-The packaging journey often goes something like this:
+--
 
-- Step 000.  Do a thing happily with some existing tools 1-20x
-- Step 00. Do a thing again 21-1000+x with some existing tools
-- Step 0. Decide you've had enough/flash of 'what-if there's another way' insight
-- Step 1. Write functionality
-- Step 2. Prepare a package to *deliver* functionality
-
-  - Step 2a
-  - Step 2b
-  - Step 2c...
-  - Step 2y
-  - Step 2z
-
-- Step 3. Maintain package
+4. Centralized contributor meeting place (facilitates pointing potential contributors...)
 
 
 
-The intent of [{readme2pkg}](https://github.com/EvaMaeRey/readme2pkg) is to let you build quick packages right from a README.Rmd. The function readme2pkg::chunk_to_dir (and friends) lets you send code chunk contents to a new file in a subdirectory. This means you don’t have to manage a bunch of function files that constitute a package - at least in the early stages.  Instead you can work with them in your README.Rmd.
+---
+
+# Summary:
+
+
+
+The intent of [{readme2pkg}](https://github.com/EvaMaeRey/readme2pkg) is to let you build quick packages right from a README.Rmd. The function readme2pkg::chunk_to_dir (and friends) lets you send code chunk contents to a new file in a sub-directory. This means you don’t have to manage a bunch of function files that constitute a package - at least in the early stages.  Instead you can work with them in your README.Rmd.
+
+--
 
 Also, the [EvaMaeRey/readme2pkg.template](https://github.com/EvaMaeRey/readme2pkg.template) repo on github is a template repository meant to complement the readme2pkg workflow. Using the README.Rmd in the template, you can populate the sections with your material (introduction and functions, etc). And this README template contains a ‘living’ checklist that will help you get through the steps of creating a package, including building the file architecture, licensing, documentation, and builds. The checklist items are run through {devtools} and {usethis} packages. Code is included that lets you ‘check-off’ the items as you run the code.
 
 
+---
 
-Part of the readme2pkg philosophy is that there are many reasonable pausing, stopping, and even scratch-the-project points along this progression, and the workshop will try to highlight those.  
+# Pkg building workshop w/ readme2pkg... 
 
-In the Denver R-Ladies meeting, I hope to get through function documentation (adding a roxygen skeleton) in Part 3 of the readme2pkg.template.
+If we had time for a demo, I hope to get through function documentation (adding a roxygen skeleton) in Part 3 of the readme2pkg.template.
 
 # Mini workshop requirements
 
@@ -182,6 +201,7 @@ B. Template repo: [EvaMaeRey/readme2pkg.template](https://github.com/EvaMaeRey/r
 
 C. Github account linked to RStudio
 
+--
 
 ### Option 1:  {redhistogram} package
 
