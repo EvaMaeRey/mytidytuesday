@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>RLadies Denver, March meeting readme2pkg proposal/motivations</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gina Reynolds" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+class: inverse
+background-image: url(https://images.unsplash.com/photo-1509239129736-8c395375220d?q=80&amp;w=1470&amp;auto=format&amp;fit=crop&amp;ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)
+background-size: cover
+
+# .Large[[{readme2pkg}](https://github.com/EvaMaeRey/readme2pkg): overview and motivations]
+&lt;!-- ## .small[Readme as a point of entry for new developers, as a package story board, and centralized contributor meeting place.] --&gt;
+#### .small[Dr. Evangeline Reynolds | 2024-03-27 | ASA, COWY, Image credit: Jamie Templeton, Upsplash]
+
+
+???
+
+Title slide
+
+
+---
+
+
+R packages are composed of many files. 
+
+These multiple, un-ordered constituents may yield an unclear big-picture package narrative.
+
+--
+
+Some folks hope to try to provide the possibility of creating 'narrative arc' to packages using a single higher level document to manage constituent files and speak to how all the components relate. (litr; fusen; readme2pkg)
+
+--
+
+readme2pkg proposes the *README.Rmd* to be used as this control file.  
+
+---
+
+Supporting functionality includes:
+
+- `readme2pkg::chunk_to_dir()`
+
+--
+
+
+```r
+readme2pkg::chunk_to_dir(chunk_name = "my_awesome_function",
+                         dir = "./R")
+```
+
+--
+
+- readme2pkg::chunk_to_r()
+- readme2pkg::chunk_to_tests_testthat()
+
+---
+
+Dependencies:
+
+- knitr (knit)
+- rstudioapi (for interactively sending code chunk to directory)
+- stringr
+
+
+---
+
+And template; https://github.com/EvaMaeRey/readme2pkg.template
+
+
+```r
+knitr::include_url("https://github.com/EvaMaeRey/readme2pkg.template")
+```
+
+&lt;iframe src="https://github.com/EvaMaeRey/readme2pkg.template" width="100%" height="400px" data-external="1"&gt;&lt;/iframe&gt;
+
+---
+
+Readme as:
+
+1. a point of entry for new comers to development (readme template can be used as a getting started template)
+2. checklist for more seasoned developers
+3. As a package story board, 
+4. Centralized contributor meeting place (facilitates pointing potential contributors...)
+
+
+
+
+
+---
+
+
+The template breaks down package building into phases:
+
+- Part 1. Goals definition; what package functionality should deliver
+
+- Part 2. Construct functions and a minimal viable package
+
+- Part 3. Listen and iterate; (soliciting feedback)
+
+- Part 4. Refine and make robust
+
+- Part 5. Spread the good news; seek a wider audience
+
+- Part 6. Commit.  Share on CRAN or R-Universe
+
+
+---
+
+Part of the readme2pkg philosophy is that there are many reasonable pausing, stopping, and even ditch-the-project points along this progression, and the workshop will try to highlight those.  
+
+
+
+---
+
+
+
+
+```r
+knitr::include_graphics("template_screenshot.png")
+```
+
+&lt;img src="template_screenshot.png" width="1641" /&gt;
+
+
+
+
+
+This is a reference sheet for the readme2pkg part of the RLadies ['Literate packaging' March 2024 meetup](
+https://www.meetup.com/rladies-denver/events/299879858/) which will allow for a comparative look at litr, fusen, and readme2pkg.
+
+The packaging journey often goes something like this:
+
+- Step 000.  Do a thing happily with some existing tools 1-20x
+- Step 00. Do a thing again 21-1000+x with some existing tools
+- Step 0. Decide you've had enough/flash of 'what-if there's another way' insight
+- Step 1. Write functionality
+- Step 2. Prepare a package to *deliver* functionality
+
+  - Step 2a
+  - Step 2b
+  - Step 2c...
+  - Step 2y
+  - Step 2z
+
+- Step 3. Maintain package
+
+
+
+The intent of [{readme2pkg}](https://github.com/EvaMaeRey/readme2pkg) is to let you build quick packages right from a README.Rmd. The function readme2pkg::chunk_to_dir (and friends) lets you send code chunk contents to a new file in a subdirectory. This means you don’t have to manage a bunch of function files that constitute a package - at least in the early stages.  Instead you can work with them in your README.Rmd.
+
+Also, the [EvaMaeRey/readme2pkg.template](https://github.com/EvaMaeRey/readme2pkg.template) repo on github is a template repository meant to complement the readme2pkg workflow. Using the README.Rmd in the template, you can populate the sections with your material (introduction and functions, etc). And this README template contains a ‘living’ checklist that will help you get through the steps of creating a package, including building the file architecture, licensing, documentation, and builds. The checklist items are run through {devtools} and {usethis} packages. Code is included that lets you ‘check-off’ the items as you run the code.
+
+
+
+Part of the readme2pkg philosophy is that there are many reasonable pausing, stopping, and even scratch-the-project points along this progression, and the workshop will try to highlight those.  
+
+In the Denver R-Ladies meeting, I hope to get through function documentation (adding a roxygen skeleton) in Part 3 of the readme2pkg.template.
+
+# Mini workshop requirements
+
+A. Installed Packages: 
+
+  - on CRAN: `usethis`; `devtools`; `ggplot2` or `stringr` (depending on worked example below)
+  - on Github: `remotes::install_github("EvaMaeRey/readme2pkg")`
+  
+B. Template repo: [EvaMaeRey/readme2pkg.template](https://github.com/EvaMaeRey/readme2pkg.template) 
+
+C. Github account linked to RStudio
+
+
+### Option 1:  {redhistogram} package
+
+The goal of {redhistogram} is to make ... easier.
+
+
+Without the package, we live in the effort-ful world that follows 🏋:
+
+
+```r
+library(ggplot2)
+
+ggplot(data = cars, aes(x = dist)) + 
+  geom_histogram(fill = "red")
+```
+
+![](rladies-readme2pkg-slides_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
+  
+With the {redhistogram} package, we'll live in a different world (🦄 🦄 🦄) where the task is a snap 🫰: 
+
+Proposed API:
+
+```
+
+library(redhistogram)
+library(ggplot2)
+
+ggplot(data = cars, aes(x = dist)) + 
+  geom_histogram_red()
+
+```
+
+
+
+# Part I. Work out functionality  ✅ 
+
+Here is a function that will do some work...
+
+
+
+```r
+library(ggplot2)
+geom_histogram_red &lt;- function(...){
+  
+  geom_histogram(fill = "red", ...)
+  
+}
+```
+
+
+## Try it out
+
+
+```r
+ggplot(data = cars, aes(x = dist)) + 
+  geom_histogram_red()
+```
+
+![](rladies-readme2pkg-slides_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+
+
+
+
+### Option 2:  {ind.recode} package (based on real-life [{ind2cat}]()). 
+
+The goal of {ind.recode} is to make ... easier.
+
+
+Without the package, we live in the effort-ful world that follows 🏋:
+
+
+```r
+december_grad &lt;- c(1,1,1,0)
+
+cat_december_grad &lt;- ifelse(december_grad, 
+                            "december grad",
+                            "not december grad")
+```
+
+  
+With the {ind.recode} package, we'll live in a different world (🦄 🦄 🦄) where the task is a snap 🫰: 
+
+Proposed API:
+
+```
+
+library(ind.recode)
+
+december_grad &lt;- c(1,1,1,0)
+
+cat_december_grad &lt;- ind.recode::ind_recode(x = december_grad)
+
+```
+
+
+
+# Part I. Work out functionality  ✅ 
+
+Here is a function that will do some work...
+
+
+
+```r
+library(stringr)
+ind_recode &lt;- function(x){
+  
+  cat_true &lt;- deparse(substitute(x)) |&gt; 
+      str_replace_all("_", " ")
+  
+  cat_false &lt;- paste("not", cat_true)
+  
+  factor(x, labels = c(cat_false, cat_true))
+  
+}
+```
+
+
+## Try it out
+
+
+```r
+december_grad &lt;- c(1,1,1,0)
+ind_recode(december_grad)
+```
+
+```
+[1] december grad     december grad     december grad     not december grad
+Levels: not december grad december grad
+```
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"seal": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

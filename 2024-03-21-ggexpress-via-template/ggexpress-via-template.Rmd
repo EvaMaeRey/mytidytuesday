@@ -1,0 +1,136 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r cars}
+library(tidyverse)
+```
+
+## Experiment
+
+```{r, eval = T}
+function_template <- 
+'say_hello <- function(){
+  
+  "hello"
+  
+}'
+
+tmp <- tempfile()
+
+
+function_template |>
+  stringr::str_replace_all("hello", "bye") |>
+  writeLines(con = tmp)
+
+source(tmp)
+
+say_bye()
+```
+
+
+```{r, eval = T}
+function_template <- 
+'say_hello <- function(){
+  
+  "hello"
+  
+}'
+
+write_new_from_template <- function(pattern = "hello", replacement = "hi"){
+  
+  tmp <- tempfile()
+  
+  function_template |>
+    stringr::str_replace_all(pattern = pattern,
+                         replacement = replacement) |>
+    writeLines(con = tmp)
+
+  source(tmp)
+
+  }
+
+write_new_from_template()
+
+say_hi()
+
+
+
+```
+
+
+
+
+```{r}
+library(tidyverse)
+compute_panel_equilateral <- function(data, scales, n = 15){
+  
+  data |> 
+    mutate(group = row_number()) |> 
+    crossing(tibble(z = 0:n)) |>
+    mutate(around = 2*pi*z/max(z)) |> 
+    mutate(x = x0 + cos(around)*r,
+           y = y0 + sin(around)*r) 
+  
+}
+```
+
+
+
+```{r}
+StatCircle <- ggproto(
+  `_class` = "StatCircle",
+  `_inherit` = ggplot2::Stat,
+  compute_panel = compute_panel_equilateral,
+  required_aes = c("x0", "y0", "r"))
+
+geom_circle <- function(
+  mapping = NULL,
+  data = NULL,
+  position = "identity",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatCircle,  # proto object from Step 2
+    geom = ggplot2::GeomPolygon,  # inherit other behavior
+    data = data,
+    mapping = mapping,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+```
+
+
+
+```{r}
+data.frame(x0 = 0:1, y0 = 0:1, r = 1:2/3) |> 
+  ggplot() + 
+  aes(x0 = x0, y0 = y0, r = r) + 
+  geom_circle() + 
+  aes(fill = r)
+```
+
+
+## Closing remarks, Other Relevant Work, Caveats
