@@ -24,7 +24,7 @@ background-size: cover
 
 
 &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
-## .small[Package construction and storytelling from a README.Rmd]
+## .small[Package construction and narrative from README.Rmd]
 
 #### .small[Gina Reynolds | 2024-03-27 | Denver RLadies, Image credit: Jamie Templeton, Upsplash]
 
@@ -41,62 +41,82 @@ Title slide
 
 --
 
-# These multiple, un-ordered constituents oftene fail to yield a clear big-picture package narrative.
+# These multiple, un-ordered (alphabetical) constituents often fail to yield a clear big-picture package narrative.
+
+---
+class: inverse, center, middle
+
+# But, could using a single meta-document to manage constituent files and their content help preserve a 'narrative arc'?
+
+---
+class: inverse, center, middle
+
+
+## Such a meta document could explain motivations for the package and design descision while clarify how functions relate. 
 
 ---
 
-# But greater 'narrative arc' could be preserved/created by using a single meta-document to manage constituent files and their content.
+# Recent initiatives include helper packages [{litr}](https://jacobbien.github.io/litr-project/), [{fusen}](https://github.com/Thinkr-open/fusen/), and {readme2pkg} that implement this vision; see also [{rlp}](https://yihui.org/rlp/).
 
 --
 
-# Such a document could tell the story of motivations for the package and speak to how all the components relate. 
+# readme2pkg proposes the *README.Rmd* to be used as this meta document.  
 
 ---
 
-# Recent initiatives include helper packages {litr}, {fusen}, and {readme2pkg}.
-
---
-
-# readme2pkg proposes the *README.Rmd* to be used as this control file.  
-
----
-
-# Supporting functionality includes:
+# Main function:
 
 # `readme2pkg::chunk_to_dir()`
 
-## usage:
+---
+
+## usage
 
 
-#### `chunk_to_dir(chunk_name = "my_function",  dir = "R/")`
+````default
+
+```{r times_two}
+times_two &lt;- function(x){
+  
+  x*2
+  
+}
+```
+
+```{r}
+readme2pkg::chunk_to_r(chunk_name = "times_two")
+
+```
+
+````
 
 
+--
 
+### Function 'home' is .Rmd, but code is copied into files which is required to package them.
 
 ---
 
 #  readme2pkg dependencies:
 
-# - knitr (knit)
-# - rstudioapi (live session use of chunk_to_dir; via flair - Kelly Bodwin)
-# - stringr
+
+# - {knitr} (knit::knit_code$get())
+
+--
+
+# - {rstudioapi} (live session use of chunk_to_dir; via flair - Kelly Bodwin)
+# - {stringr}
 
 
 ---
 
-## The workflow also assumes use of a template, that prompts users through devtools and usethis package building functions
+## The workflow also assumes use of a template.  https://github.com/EvaMaeRey/readme2pkg.template
 
-https://github.com/EvaMaeRey/readme2pkg.template
+--
 
----
+It prompts users to use {devtools} and {usethis} functions to build their package.
 
 
-
-```r
-knitr::include_url("https://github.com/EvaMaeRey/readme2pkg.template")
-```
-
-&lt;iframe src="https://github.com/EvaMaeRey/readme2pkg.template" width="100%" height="400px" data-external="1"&gt;&lt;/iframe&gt;
 
 ---
 
@@ -118,51 +138,73 @@ knitr::include_graphics("template_screenshot.png")
 ---
 
 
-The template breaks down package building into phases:
+## The template breaks down package building into phases:
 
-- Part 1. Goals definition; what package functionality should deliver
+### - Part 1. Goals definition; what package functionality should deliver
+--
 
-- Part 2. Construct functions and a minimal viable package
+### - Part 2. Construct functions and *minimal viable package*
+--
 
-- Part 3. Listen and iterate; (soliciting feedback)
+### - Part 3. Listen and iterate; (soliciting feedback)
+--
 
-- Part 4. Refine and make robust
+### - Part 4. Refine and make robust
+--
 
-- Part 5. Spread the good news; seek a wider audience
+### - Part 5. Spread the good news; seek a wider audience
+--
 
-- Part 6. Commit.  Share on CRAN or R-Universe
+### - Part 6. Commit.  Share on CRAN or R-Universe
+
+
+
 
 
 ---
 
-Template walk through...
+# Noteworthy?  readme2pkg *pragmatic* packaging philosophy. 
 
-## github.com/EvaMaeRey/readme2pkg.template
+--
 
+# There are many reasonable pausing, stopping, and even abandon-the-project points along this progression.  
 
+--
 
----
-
-# Part of the readme2pkg philosophy is that there are many reasonable pausing, stopping, and even ditch-the-project points along this progression, and the workshop will try to highlight those.  
+# you can't CRAN-orphan a package if you never submit it to CRAN.
 
 
 ---
 
 ## readme2pkg sees readme as:
 
-1. a point of entry for new comers to development (readme template can be used as a getting started template)
+###  1. a point of entry for new comers to development (readme template can be used as a getting started template)
 
 --
 
-2. checklist for more seasoned developers
+### 2. checklist for more seasoned developers
 
 --
 
-3. As a package story board, 
+### 3. As a package story board, 
 
 --
 
-4. Centralized contributor meeting place (facilitates pointing potential contributors...)
+### 4. Centralized contributor meeting place (facilitates pointing potential contributors to trouble spots in context)
+
+
+
+---
+
+# Template walk through, time permiting.
+
+## https://github.com/EvaMaeRey/readme2pkg.template
+
+---
+
+class: inverse, center, middle
+
+# End
 
 
 
@@ -181,7 +223,10 @@ Also, the [EvaMaeRey/readme2pkg.template](https://github.com/EvaMaeRey/readme2pk
 
 ---
 
-# Pkg building workshop w/ readme2pkg... 
+# Proposed future-date demo:  *Package building with {readme2pkg}*
+
+
+---
 
 If we had time for a demo, I hope to get through function documentation (adding a roxygen skeleton) in Part 3 of the readme2pkg.template.
 
@@ -196,7 +241,7 @@ B. Template repo: [EvaMaeRey/readme2pkg.template](https://github.com/EvaMaeRey/r
 
 C. Github account linked to RStudio
 
---
+---
 
 ### Option 1:  {redhistogram} package
 
@@ -216,6 +261,8 @@ ggplot(data = cars, aes(x = dist)) +
 ![](rladies-readme2pkg-slides_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
 
   
+---
+  
 With the {redhistogram} package, we'll live in a different world (🦄 🦄 🦄) where the task is a snap 🫰: 
 
 Proposed API:
@@ -230,7 +277,7 @@ ggplot(data = cars, aes(x = dist)) +
 
 ```
 
-
+---
 
 # Part I. Work out functionality  ✅ 
 
@@ -247,6 +294,7 @@ geom_histogram_red &lt;- function(...){
 }
 ```
 
+---
 
 ## Try it out
 
@@ -259,7 +307,7 @@ ggplot(data = cars, aes(x = dist)) +
 ![](rladies-readme2pkg-slides_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
 
 
-
+---
 
 ### Option 2:  {ind.recode} package (based on real-life [{ind2cat}]()). 
 
@@ -278,6 +326,8 @@ cat_december_grad &lt;- ifelse(december_grad,
 ```
 
   
+---
+  
 With the {ind.recode} package, we'll live in a different world (🦄 🦄 🦄) where the task is a snap 🫰: 
 
 Proposed API:
@@ -292,7 +342,7 @@ cat_december_grad &lt;- ind.recode::ind_recode(x = december_grad)
 
 ```
 
-
+---
 
 # Part I. Work out functionality  ✅ 
 
@@ -314,6 +364,7 @@ ind_recode &lt;- function(x){
 }
 ```
 
+---
 
 ## Try it out
 
