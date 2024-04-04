@@ -1,0 +1,98 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo: do it with ggplot2
+
+```{r cars}
+library(tidyverse)
+
+palmerpenguins::penguins %>% 
+  lm(bill_length_mm ~ species - 1, data  = .) |>
+  # anova() | %>% >
+  summary() %>%
+  .$coefficients  %>% 
+  as.data.frame() |>
+  rownames_to_column("var") |>
+  ggplot() + 
+  aes(x = Estimate - `Std. Error`) + 
+  aes(xend = Estimate + `Std. Error`) + 
+  aes(y = var %>% str_remove("species"), yend = var %>% str_remove("species")) + 
+  geom_segment(color = "red") + 
+  geom_point(aes(x = Estimate), color = "red") + 
+  geom_point(shape = "|", data = palmerpenguins::penguins,
+             aes(y = species, x = bill_length_mm, xend = NULL, yend = NULL))
+
+
+
+
+
+```
+
+## to geom
+
+```{r}
+
+
+
+compute_panel_pm_se <- function(data, scales){
+  
+  data$y <- as.factor(data$y)
+  
+data %>% 
+  lm(x ~ y - 1, data  = .) |>
+  summary() %>%
+  .$coefficients  %>% 
+  as.data.frame() |>
+  rownames_to_column("var") |>
+  mutate(x = Estimate - `Std. Error`) |>
+  mutate(xend = Estimate + `Std. Error`) |>
+  
+  mutate(y = var %>%  str_remove("y") %>% as.numeric() , 
+         yend = var %>%  str_remove("y") %>% as.numeric() )
+    
+}
+
+palmerpenguins::penguins |>
+  select(y = species, x = bill_length_mm) |>
+  compute_panel_pm_se()
+
+
+ggtemp:::create_layer_temp("geom_plusminus_se",
+                           compute_panel = compute_panel_pm_se,
+                           geom_default = "segment")
+```
+
+```{r}
+palmerpenguins::penguins |>
+  ggplot() + 
+    aes(x = flipper_length_mm, y = island) + 
+  geom_point(alpha = .2, shape ="|") + 
+  ggxmean::geom_xy_means(color = "red") + 
+  geom_plusminus_se(color = "red") 
+  
+  
+last_plot() + 
+  ggxmean::geom_x_mean(aes(y = NULL), linetype = "dashed")
+
+
+layer_data(i = 2)
+```
+
+## Closing remarks, Other Relevant Work, Caveats

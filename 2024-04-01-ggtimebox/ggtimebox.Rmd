@@ -1,0 +1,179 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r cars}
+library(tidyverse)
+
+        # "Done - laundry in", 10,
+        # "Done - to Wendy", 5,
+        # "Done - to Yihui", 10,
+        # "done - Linked in cover photo", 5,
+        # "Done - Linked in on RLadies", 12,
+        # "Done - email sharla West Point...", 15,
+        # "Done - examples strategy", 10,
+        #"gather library returns", 10, # steam train, LLD, LRS, Bluey...
+
+```
+
+## Experiment
+
+```{r}
+data <- tribble(~my_task, ~time_minutes,
+        "task 1", 1,
+        "task 2", 1,
+        "t3", 5,
+        "t4", 5,
+        "t5", 5,
+        "t6", 2,
+        "t7", 3,
+        "t8", 7,
+        "t9", 2,
+        "t10", 8,
+        "t11", 6
+        ) 
+
+
+compute_panel_timebox <- function(data, scales, break_time = 3, start_time = 9){
+  
+  start_time_scalar <- start_time*60*60
+  
+  data |> 
+    mutate(full_time = minutes*60 + break_time*60) |>
+    mutate(end_time_seconds = cumsum(full_time) + start_time_scalar) |>
+    mutate(start_time_seconds = lag(end_time_seconds) |> replace_na(start_time_scalar)) |>
+    mutate(clock_start = Sys.Date() + seconds(start_time_seconds)) |>
+    mutate(clock_end = Sys.Date() + seconds(end_time_seconds)) |>
+    mutate(y = start_time_seconds) |>
+    mutate(x = 0)  |>
+    mutate(ymin = start_time_seconds,
+           ymax = end_time_seconds) |>
+    mutate(xmin = x + .08,
+           xmax = x + 1.08)
+  
+}
+
+stamp_workday <- function(...){
+  annotate(geom = "rect", 
+           ymin = 0*60, ymax = -8*60, 
+           xmin = -.45, xmax = .45, ... )
+}
+
+stamp_currenttime <- function(..., color = "magenta", alpha = .5){
+  
+  current_time <- Sys.time() |> hms::as_hms() |> as.numeric()
+  
+  geom_hline(yintercept = current_time, color = color, alpha = alpha, ...)
+  
+  
+  }
+
+data |> 
+  select(task = my_task, minutes = time_minutes) |>
+  compute_panel_timebox()
+
+
+Sys.Date() + hours(9) + hours()
+
+ggtemp:::create_layer_temp("stat_timebox",
+                           required_aes = c("task", "minutes"),
+                           compute_panel = compute_panel_timebox, 
+                           geom_default = GeomRect,
+                           default_aes = aes(label =
+                                          after_stat(paste(hms::as_hms(clock_start) %>%
+                                                             str_remove("...$") ," ",  
+                                                           task,  minutes, "mins"))))
+```
+
+
+```{r fig.height=20}
+CoordFixed$aspect
+```
+
+```{r}
+CoordTrans$aspect <- function (self, ranges){
+    diff(ranges$y.range)/diff(ranges$x.range) * self$ratio
+}
+
+coord_trans <- function (x = "identity", y = "identity", xlim = NULL, ylim = NULL, 
+    limx = lifecycle::deprecated(), limy = lifecycle::deprecated(), clip = "on", expand = TRUE, ratio = 1) 
+{
+    if (lifecycle::is_present(limx)) {
+        deprecate_warn0("3.3.0", "coord_trans(limx)", "coord_trans(xlim)")
+        xlim <- limx
+    }
+    if (lifecycle::is_present(limy)) {
+        deprecate_warn0("3.3.0", "coord_trans(limy)", "coord_trans(ylim)")
+        ylim <- limy
+    }
+    ggplot2:::check_coord_limits(xlim)
+    ggplot2:::check_coord_limits(ylim)
+    if (is.character(x)) 
+        x <- scales::as.transform(x)
+    if (is.character(y)) 
+        y <- scales::as.transform(y)
+    ggproto(NULL, CoordTrans, trans = list(x = x, y = y), limits = list(x = xlim, 
+        y = ylim), expand = expand, clip = clip, ratio = ratio)
+}
+
+
+ggplot(data = data) +
+  aes(task = my_task, minutes = time_minutes) + 
+  # stamp_workday(alpha = .25, fill = "magenta") +
+  stat_timebox(color = "grey35", alpha = .25, fill = "cadetblue") + 
+  stat_timebox(geom = "text", color = "grey30", 
+               vjust = 1.2, hjust = 0,
+               lineheight = .7) + 
+  coord_trans(y = "reverse", ratio = 1/4000) 
+  # theme_void() +
+  # stamp_currenttime()
+
+
+```
+
+
+
+```{r}
+
+geom_segment(arrow = arrow(angle = 90, ends  = "both"))
+
+60*60*24
+
+
+365*24*60
+
+```
+
+
+
+```{r}
+ggplot(cars) + 
+  aes(dist, speed) +
+  geom_point() + 
+  coord_trans(y = "reverse") +
+  theme(aspect.ratio = 1) 
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
