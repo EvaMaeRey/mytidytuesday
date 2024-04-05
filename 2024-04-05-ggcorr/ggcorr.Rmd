@@ -1,0 +1,70 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r cars}
+library(tidyverse)
+
+mtcars |>
+  select(1:4) |> plot()
+
+mtcars |>
+  select(1:4) |>
+  rownames_to_column() |>
+  pivot_longer(cols = 2:5) ->
+one_way
+
+one_way |> left_join(one_way, by = "rowname") |>
+  group_by(name.x, name.y) |>
+  mutate(value.x = (value.x - min(value.x))/((range(value.x) |> diff()))) |>
+  mutate(value.y = (value.y - min(value.y))/((range(value.y) |> diff()))) |> 
+  mutate(name.x = fct_inorder(name.x)) |>
+  mutate(name.y = fct_inorder(name.y) |> fct_rev()) ->
+two_way_df
+
+```
+
+
+```{r,warning=F, message = F}
+ggplot(two_way_df) + 
+  aes(value.x, value.y) + 
+  facet_grid(vars(name.x), vars(name.y)) +
+  geom_point(aes(alpha = name.x != name.y)) + 
+  coord_fixed() +
+  ggxmean::geom_xy_means() + 
+  ggxmean:::geom_diffsmultiplied() +
+  ggxmean:::geom_rsq1(fill = "plum", alpha = 1) + 
+  ggxmean:::geom_xydiffsmean(fill = "magenta", alpha = .8) + 
+  ggxmean:::geom_x1sd(linetype = "dotted") + 
+  ggxmean:::geom_y1sd(linetype = "dotted") # +
+  # ggxmean:::geom_corrlabel()
+  
+```
+
+## Experiment
+
+```{r}
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
