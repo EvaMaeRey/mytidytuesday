@@ -49,8 +49,34 @@ ggplot(cars) +
   layer(stat = StatXymeans,
         geom = GeomText,
         position = "identity",
-        params = list(nudge_x = .2, color = "red") ## Warning: Ignoring unknown parameters: `nudge_x`
+        params = list(nudge_x = 3, color = "red") 
         )
+```
+
+# Adding nudges yourself
+
+```{r}
+compute_group_xy_means2 <- function(data, scales, nudge_x = 0, nudge_y = 0){
+  
+  data |>
+    summarise(x = mean(x) + nudge_x,
+              y = mean(y) + nudge_y,
+              label = paste0("(", round(x),",", (round(y)), ")"))
+  
+}
+
+# updating compute
+StatXymeans$compute_group <- compute_group_xy_means2
+
+ggplot(cars) +
+  aes(speed, dist) + 
+  geom_point() + 
+  layer(stat = StatXymeans,
+        geom = GeomText,
+        position = "identity",
+        params = list(nudge_x = 10, color = "red") 
+        )
+
 ```
 
 
