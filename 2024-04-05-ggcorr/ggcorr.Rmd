@@ -43,7 +43,7 @@ two_way_df
 ```
 
 
-```{r,warning=F, message = F}
+```{r, message = F}
 ggplot(two_way_df) + 
   aes(value.x, value.y) + 
   facet_grid(vars(name.x), vars(name.y)) +
@@ -57,11 +57,32 @@ ggplot(two_way_df) +
   ggxmean:::geom_y1sd(linetype = "dotted") # +
   # ggxmean:::geom_corrlabel()
   
+
 ```
 
 ## Experiment
 
 ```{r}
+one_way |> left_join(one_way, by = "rowname") |>
+  group_by(name.x, name.y) |>
+  mutate(value.x = (value.x - mean(value.x))/sd(value.x)) |>
+  mutate(value.y = (value.y - mean(value.y))/sd(value.y)) |> 
+  mutate(name.x = fct_inorder(name.x)) |>
+  mutate(name.y = fct_inorder(name.y) |> fct_rev()) ->
+two_way_df
+
+
+ggplot(two_way_df) + 
+  aes(value.x, value.y) + 
+  facet_grid(vars(name.x), vars(name.y)) +
+  geom_point(aes(alpha = name.x != name.y)) +
+  coord_fixed() +
+  ggxmean::geom_xy_means() + 
+  ggxmean:::geom_diffsmultiplied() +
+  ggxmean:::geom_rsq1(fill = "plum", alpha = 1) + 
+  ggxmean:::geom_xydiffsmean(fill = "magenta", alpha = .8) + 
+  ggxmean:::geom_x1sd(linetype = "dotted") + 
+  ggxmean:::geom_y1sd(linetype = "dotted")
 
 ```
 

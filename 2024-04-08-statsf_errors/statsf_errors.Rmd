@@ -1,0 +1,56 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r cars}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r, error  = T}
+sf::st_read(system.file("shape/nc.shp", package="sf")) |> 
+  head()
+  
+sf::st_read(system.file("shape/nc.shp", package="sf")) |>
+  ggplot() + 
+  aes(fips = BIR74) +
+  geom_sf() 
+    
+last_plot() +
+  geom_text(data = cars, aes(x = speed, 
+                             y = dist, 
+                             label = "hi"))
+  
+last_plot() + 
+  aes(time = a_variable)
+  
+  
+StatSf$required_aes
+
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

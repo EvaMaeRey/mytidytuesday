@@ -1,0 +1,148 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r cars}
+
+```
+
+## Experiment
+
+```{r, error = TRUE}
+library(tidyverse)
+
+compute_group_xmean <- function(data, scales){
+  
+  data |>
+    summarise(xintercept = mean(x)) 
+  
+}
+
+GeomVline$required_aes
+
+StatXmean <- ggproto("StatXmean",
+                     Stat,
+                     compute_group = compute_group_xmean)
+
+ggplot(cars) + 
+  aes(x = speed) + 
+  layer(GeomVline, 
+        StatXmean, 
+        position = "identity")
+
+StatXmean$dropped_aes <- "x"
+
+ggplot(cars) + 
+  aes(x = speed) + 
+  layer(GeomVline, 
+        StatXmean, 
+        position = "identity")
+
+layer_data()
+```
+
+
+You can use segment, but it doesn't draw unless there is a y var, which doesn't seem ideal.
+
+```{r}
+library(tidyverse)
+
+compute_group_xmean2 <- function(data, scales){
+  
+  data |>
+    summarize(x = mean(x)) |>
+    mutate(xend = x,
+           y = -Inf,
+           yend = Inf)
+  
+}
+
+GeomSegment$required_aes
+
+StatXmean2 <- ggproto("StatXmean2",
+                     Stat,
+                     compute_group = compute_group_xmean2)
+
+ggplot(cars) + 
+  aes(x = speed) + 
+  layer(GeomSegment, 
+        StatXmean2, 
+        position = "identity") + 
+  geom_rug()
+
+last_plot() + 
+  geom_histogram()
+
+```
+
+
+
+```{r}
+library(tidyverse)
+
+draw_panel_xline = function(data, panel_params, coord) {
+
+  ranges <- coord$backtransform_range(panel_params)
+
+  data$x    <- data$x
+  data$xend <- data$x
+  data$y    <- ranges$y[1]
+  data$yend <- ranges$y[2]
+
+  GeomSegment$draw_panel(data, panel_params, coord)
+
+}
+
+
+GeomXline <- ggplot2::ggproto("GeomXline", ggplot2::Geom,
+                     draw_panel = draw_panel_xline,
+                     default_aes = ggplot2::aes(colour = "black", size = 0.5,
+                                       linetype = 1, alpha = NA),
+                     required_aes = "x",
+                     draw_key = ggplot2::draw_key_vline
+)
+
+
+compute_group_xmean3 <- function(data, scales){
+  
+  data |>
+    summarize(x = mean(x))
+  
+}
+
+
+StatXmean3 <- ggproto("StatXmean3",
+                     Stat,
+                     compute_group = compute_group_xmean3)
+
+
+ggplot(cars) + 
+  aes(x = speed) + 
+  layer(GeomXline,  #<<<<<
+        StatXmean3, 
+        position = "identity") + 
+  geom_rug()
+
+
+layer_data()
+
+
+```
