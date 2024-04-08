@@ -1,0 +1,93 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r cars}
+library(tidyverse)
+
+data_frame(x = 0, y = 0, xend = 1, yend = 1) |>
+  ggplot() + 
+  aes(x, y, xend = xend, yend = yend) + 
+  geom_point(alpha = .15, color = "red") +
+  geom_label(label = "Insightful\nComment", 
+             label.padding = unit(0.3, "lines"),
+             vjust = .5, 
+             hjust = 1,
+             linehight = .7,
+             alpha = 0, # remove background
+             label.size = 0) +
+  annotate(geom = "point", x = 1, y = 1, color = "blue")
+
+last_plot() +
+  geom_segment(arrow = 
+               arrow(ends = "last", length = unit(.1, "inches")))
+
+ggwipe::last_plot_wipe_last() +
+  geom_curve(arrow = 
+               arrow(ends = "last", length = unit(.1, "inches")),
+             curvature = .25)
+
+
+
+ggwipe::last_plot_wipe_last() +
+  geom_path(data = data.frame(x = 0:50/50, y = 0:50/50),
+            aes(xend = NULL, yend = NULL),
+            arrow = 
+               arrow(ends = "last", length = unit(.1, "inches")))
+
+
+# from ggbump
+sigmoid <- function(x_from, x_to, y_from, y_to, smooth = 5, n = 100, direction = "x") {
+  if(!direction %in% c("x", "y")) {stop("Only the directions x or y is allowed.")}
+
+  if(direction == "x") {
+    x <- seq(-smooth, smooth, length = n)
+    y <- exp(x) / (exp(x) + 1)
+    out <- data.frame(x = (x + smooth) / (smooth * 2) * (x_to - x_from) + x_from,
+                      y = y * (y_to - y_from) + y_from)
+  }
+
+  if(direction == "y") {
+    y <- seq(-smooth, smooth, length = n)
+    x <- exp(y) / (exp(y) + 1)
+    out <- data.frame(y = (y + smooth) / (smooth * 2) * (y_to - y_from) + y_from,
+                      x = x * (x_to - x_from) + x_from)
+  }
+  out
+}
+
+sigmoid(x_from = 0, x_to = 1, y_from = 0, y_to = 1, smooth = 5) ->
+  sigmoid_path
+
+
+ggwipe::last_plot_wipe_last() +
+  geom_path(data = sigmoid_path,
+            aes(xend = NULL, yend = NULL),
+            arrow = 
+               arrow(ends = "last", length = unit(.1, "inches")))
+
+```
+
+
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
