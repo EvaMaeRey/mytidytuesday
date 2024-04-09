@@ -12,7 +12,11 @@ knitr::opts_chunk$set(echo = TRUE)
 options(tidyverse.quiet = TRUE)
 ```
 
+```{r}
 
+
+
+```
 
 
 ## Intro Thoughts
@@ -23,15 +27,16 @@ options(tidyverse.quiet = TRUE)
 ```{r cars}
 library(tidyverse)
 
-data_frame(x = 0, y = 0, xend = 1, yend = 1) |>
+data.frame(x = -1, y = -1, xend = 1, yend = 1) |>
   ggplot() + 
+  coord_cartesian(xlim = c(-2,2), ylim = c(-2,2)) +
   aes(x, y, xend = xend, yend = yend) + 
   geom_point(alpha = .15, color = "red") +
   geom_label(label = "Insightful\nComment", 
              label.padding = unit(0.3, "lines"),
              vjust = .5, 
              hjust = 1,
-             linehight = .7,
+             lineheight = .7,
              alpha = 0, # remove background
              label.size = 0) +
   annotate(geom = "point", x = 1, y = 1, color = "blue")
@@ -48,7 +53,7 @@ ggwipe::last_plot_wipe_last() +
 
 
 ggwipe::last_plot_wipe_last() +
-  geom_path(data = data.frame(x = 0:50/50, y = 0:50/50),
+  geom_path(data = data.frame(x = -50:50/50, y = -50:50/50),
             aes(xend = NULL, yend = NULL),
             arrow = 
                arrow(ends = "last", length = unit(.1, "inches")))
@@ -74,7 +79,7 @@ sigmoid <- function(x_from, x_to, y_from, y_to, smooth = 5, n = 100, direction =
   out
 }
 
-sigmoid(x_from = 0, x_to = 1, y_from = 0, y_to = 1, smooth = 5) ->
+sigmoid(x_from = -1, x_to = 1, y_from = -1, y_to = 1, smooth = 5) ->
   sigmoid_path
 
 

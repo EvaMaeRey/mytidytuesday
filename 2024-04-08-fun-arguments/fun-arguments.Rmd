@@ -1,0 +1,127 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+What's it doing?
+
+What's it buying us? 
+
+```{r cars}
+library(tidyverse)
+
+detrend <- function(data, method = "loess", span = 0.75) {
+   if (method == "loess") {
+      data$y <- resid(loess(y ~ x, span = span, data = data))
+   } else {
+      data$y <- resid(lm(y ~ x, data = data))
+   }
+   as.data.frame(data)
+   }
+
+compute_group_generic = function(data, scales, fun = detrend, fun.args = NULL) {
+  
+     # Change default arguments of the function to the 
+     # values in fun.args
+     args <- formals(fun)
+     
+     for (i in seq_along(fun.args)) {
+        if (names(fun.args[i]) %in% names(fun.args)) {
+           args[[names(fun.args[i])]] <- fun.args[[i]]
+        } 
+     }
+     
+     formals(fun) <- args
+     
+     # Apply function to data
+     fun(data)
+}
+
+
+
+args <- formals(detrend)
+fun.args = NULL
+     
+     for (i in seq_along(fun.args)) {
+        if (names(fun.args[i]) %in% names(fun.args)) {
+           args[[names(fun.args[i])]] <- fun.args[[i]]
+        } 
+     }
+     
+
+args
+
+
+
+cars |>
+  select(x = speed, y = dist) ->
+cars_prep ; head(cars_prep)
+
+cars_prep |>
+  compute_group_generic(fun = detrend) |> 
+  head()
+
+cars_prep |>
+  detrend(span = .5) |> 
+  head()
+
+
+```
+
+## Experiment
+
+```{r}
+# stat function used in ggplot
+stat_rasa <- function(mapping = NULL, data = NULL,
+                      geom = "point", 
+                      position = "identity",
+                      fun = NULL,
+                      ...,
+                      show.legend = NA,
+                      inherit.aes = TRUE) {
+   # Check arguments 
+   if (!is.function(fun)) stop("fun must be a function")
+   
+   # Pass dotted arguments to a list
+   fun.args <- match.call(expand.dots = FALSE)$`...`
+   
+   ggplot2::layer(
+      data = data,
+      mapping = mapping,
+      stat = StatRasa,
+      geom = geom,
+      position = position,
+      show.legend = show.legend,
+      inherit.aes = inherit.aes,
+      check.aes = FALSE,
+      check.param = FALSE,
+      params = list(
+         fun = fun, 
+         fun.args = fun.args,
+         na.rm = FALSE,
+         ...
+      )
+   )
+}
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
