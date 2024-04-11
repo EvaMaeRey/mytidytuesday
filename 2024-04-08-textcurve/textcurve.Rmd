@@ -33,7 +33,7 @@ data.frame(x = -1, y = -1, xend = 1, yend = 1) |>
   aes(x, y, xend = xend, yend = yend) + 
   geom_point(alpha = .15, color = "red") +
   geom_label(label = "Insightful\nComment", 
-             label.padding = unit(0.3, "lines"),
+             label.padding = unit(0.7, "lines"),
              vjust = .5, 
              hjust = 1,
              lineheight = .7,
@@ -43,7 +43,7 @@ data.frame(x = -1, y = -1, xend = 1, yend = 1) |>
 
 last_plot() +
   geom_segment(arrow = 
-               arrow(ends = "last", length = unit(.1, "inches")))
+               arrow(ends = "last", length = unit(.1, "inches"), type = "closed"))
 
 ggwipe::last_plot_wipe_last() +
   geom_curve(arrow = 
@@ -91,8 +91,176 @@ ggwipe::last_plot_wipe_last() +
 
 ```
 
+```{r}
+ggplot(cars) + 
+  aes(speed, dist) + 
+  geom_point() + 
+  geom_point(data = . %>% .[1,], color = "red")
+  # geom_label_link(data = . %>% [1,],
+  #                 label = "a single experiment",
+  #                 label_distance_sd = 2, 
+  #                 label_direction = "SW",
+  #                 exit_position = "SW",
+  #                 pointer_pad)
+`%||%` <- ggplot2:::`%||%`
+
+compute_labellink <- function(data, scales, label_direction = 180+45, num_sds = .5, pointer_pad = .25, hjust = NULL, vjust = NULL, which_index = NULL, which_label = NULL){
+  
+  if(is.null(which_index)){which_index <- which(data$label == which_label)}
+  
+  sdx <- sd(data$x)
+  sdy <- sd(data$y) # look at range of plot?
+  xdir <- cos(pi*label_direction/180)
+  ydir <- sin(pi*label_direction/180)
+  xpush <- sdx*num_sds * xdir
+  ypush <- sdy*num_sds * ydir
+  
+  more_x_than_y <- abs(xdir) > abs(ydir)
+  
+  if(is.null(hjust)){hjust <- ifelse(more_x_than_y, sign(xdir) != 1, .5)}
+  if(is.null(vjust)){vjust <- ifelse(more_x_than_y, .5, sign(ydir) != 1)}
+
+  data |> 
+    mutate(x = x + xpush) |>
+    mutate(y = y + ypush) |>
+    mutate(xend = x - xpush*(1-pointer_pad)) |>
+    mutate(yend = y - ypush*(1-pointer_pad)) |>
+    mutate(hjust = hjust) |>
+    mutate(vjust = vjust) |> 
+    slice(which_index)
+  
+}
+
+StatLabellink <- ggproto("Labellink",
+                         Stat,
+                         compute_group = compute_labellink
+                         )
+
+ggplot(cars) + 
+  aes(speed, dist) + 
+  geom_point() + 
+  layer("segment", 
+        "labellink", 
+        position = "identity", 
+        # data = cars[23,], 
+        params = list(which_index = 23, arrow = 
+                        arrow(ends = "last", 
+                              length = unit(.1, "inches"), 
+                              type = "closed"))) +
+  layer("label", 
+        "labellink", 
+        position = "identity",  
+        # data = cars[23,],
+        params = list(which_index = 23, 
+                      label = "let me tell you about this point" |> str_wrap(15),
+                      alpha = 0,
+                      lineheight = .8,
+                      label.size = 0,
+                      label.padding = unit(0.7, "lines"))) + 
+  layer("point",
+        "labellink",
+        position = "identity",
+        # data = cars[23,],
+        params = list(which_index = 23, 
+                      color = "red"))
 
 
+
+```
+
+
+```{r}
+geom_labellink <- function(  mapping = NULL,
+  data = NULL,
+  position = "identity",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE, ...){
+
+  
+  list( 
+    
+    layer("segment", 
+        "labellink", 
+        position = position, 
+        data = data, 
+        mapping = mapping,
+            show.legend = show.legend,
+    inherit.aes = inherit.aes,
+        params = list(arrow = 
+                        arrow(ends = "last", 
+                              length = unit(.1, "inches"), 
+                              type = "closed"), na.rm = na.rm,
+                      ...)),
+    
+  layer("label", 
+        "labellink", 
+        position = position, 
+        data = data, 
+        mapping = mapping, 
+            show.legend = show.legend,
+    inherit.aes = inherit.aes,
+        params = list(
+                      alpha = 0,
+                      lineheight = .8,
+                      label.size = 0,
+                      label.padding = unit(0.7, "lines"), 
+                      na.rm = na.rm,
+                      ...)) 
+  )
+
+  
+}
+```
+
+
+```{r}
+ggplot(cars, aes(speed, dist)) +
+  geom_point() + 
+  geom_labellink(which_index = 23,
+                 label = "hello.\nI'm a\nlabel link.",
+                 vjust = .5) + 
+  geom_labellink(which_index = 29,
+                 label = "Here's another\npoint of interest",
+                 label_direction = -45,
+                 vjust = .5,
+                 num_sds = 1.2,
+                 pointer_pad = .1)
+
+
+gapminder::gapminder |>
+  filter(year == 2002) |>
+ggplot() + 
+  aes(gdpPercap, lifeExp) +
+  geom_point(color = "darkgray") + 
+  aes(label = country) + 
+  geom_labellink(which_index = 5,
+                 label_direction = -54,
+                 num_sds = .5, 
+                 hjust = .3,
+                 pointer_pad = .05)
+
+last_plot() + 
+  scale_x_log10()
+
+
+gapminder::gapminder |>
+  filter(year == 2002) |>
+ggplot() + 
+  aes(gdpPercap, lifeExp) +
+  geom_point(color = "darkgray") + 
+  geom_labellink(which_label = "Chile",
+                 aes(label = country),
+                 label_direction = 26,
+                 num_sds = .4, 
+                 vjust = .4,
+                 pointer_pad = .2)
+
+```
 
 
 ## Closing remarks, Other Relevant Work, Caveats
+
+
+
+

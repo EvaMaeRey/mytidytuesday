@@ -23,16 +23,24 @@ options(tidyverse.quiet = TRUE)
 ```{r cars}
 library(ggplot2)
 library(tidyverse)
+
+# a minimal pie w geom bar
 ggplot(diamonds) + 
   aes(y = .5, fill = cut) + 
   geom_bar() + 
   coord_polar()
 
+  
+
+
 ggplot(diamonds) + 
   aes(y = .5, fill = cut) + 
   layer(geom = "bar", stat = "count", position = "stack") + 
   coord_polar()
+```
 
+
+```{r}
 names(ggplot2::StatCount)
 
 StatPie <- ggproto("StatPie", StatCount)
@@ -54,6 +62,14 @@ ggplot(diamonds) +
 ggplot(diamonds) + 
   aes(fill = cut) + 
   layer(geom = "bar", stat = "pie", position = "stack") + 
+  coord_polar()
+
+ggplot(diamonds) + 
+  aes(fill = cut) + 
+  layer(geom = "bar",  
+        stat = "pie", 
+        position = "stack",
+        mapping = aes(y = .5)) + 
   coord_polar()
 
 

@@ -20,9 +20,18 @@ options(tidyverse.quiet = TRUE)
 
 ## Status Quo
 
-```{r cars}
+```{r cars, error = T}
 library(tidyverse)
 
+head(cars)
+
+ggplot(cars) + 
+  aes(x = speed, y = dist, 
+      label = speed) + 
+  geom_text()
+
+last_plot() + 
+  aes(fill = other_var)
 ```
 
 ## Experiment
