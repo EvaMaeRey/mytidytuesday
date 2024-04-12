@@ -104,16 +104,22 @@ ggplot(cars) +
   #                 pointer_pad)
 `%||%` <- ggplot2:::`%||%`
 
-compute_labellink <- function(data, scales, label_direction = 180+45, num_sds = .5, pointer_pad = .25, hjust = NULL, vjust = NULL, which_index = NULL, which_label = NULL){
+compute_labellink <- function(data, scales, label_direction = 180 + 45, prop_range = .1, prop_pointer_pad = .175, hjust = NULL, vjust = NULL, which_index = NULL, which_id = NULL){
   
-  if(is.null(which_index)){which_index <- which(data$label == which_label)}
+  if(is.null(data$id)){data$id <- "hello world"}
+  if(is.null(which_index)){which_index <- which(data$id == which_id)}
   
-  sdx <- sd(data$x)
-  sdy <- sd(data$y) # look at range of plot?
+  data$default_label <- data$id
+  
+  xmean <- mean(data$x)
+  ymean <- mean(data$y)
+  
+  range_x <- diff(range(data$x))
+  range_y <- diff(range(data$y)) # look at range of plot?
   xdir <- cos(pi*label_direction/180)
   ydir <- sin(pi*label_direction/180)
-  xpush <- sdx*num_sds * xdir
-  ypush <- sdy*num_sds * ydir
+  xpush <- range_x * prop_range * xdir
+  ypush <- range_y * prop_range * ydir
   
   more_x_than_y <- abs(xdir) > abs(ydir)
   
@@ -123,8 +129,8 @@ compute_labellink <- function(data, scales, label_direction = 180+45, num_sds = 
   data |> 
     mutate(x = x + xpush) |>
     mutate(y = y + ypush) |>
-    mutate(xend = x - xpush*(1-pointer_pad)) |>
-    mutate(yend = y - ypush*(1-pointer_pad)) |>
+    mutate(xend = x - xpush*(1-prop_pointer_pad)) |>
+    mutate(yend = y - ypush*(1-prop_pointer_pad)) |>
     mutate(hjust = hjust) |>
     mutate(vjust = vjust) |> 
     slice(which_index)
@@ -133,9 +139,47 @@ compute_labellink <- function(data, scales, label_direction = 180+45, num_sds = 
 
 StatLabellink <- ggproto("Labellink",
                          Stat,
-                         compute_group = compute_labellink
+                         compute_panel = compute_labellink,
+                         default_aes = aes(label = after_stat(default_label))
                          )
+```
 
+
+```{r}
+gapminder::gapminder |>
+  filter(year == 2002) |> 
+  select(id = country, x = lifeExp, y = gdpPercap) |>
+  compute_labellink(which_id = "Chile")
+
+gapminder::gapminder |>
+  filter(year == 2002) |> 
+  select(id = country, x = lifeExp, y = gdpPercap) |>
+  compute_labellink(which_index = 3)
+
+
+gapminder::gapminder |>
+  filter(year == 2002) |> 
+  select(x = lifeExp, y = gdpPercap) |>
+  compute_labellink(which_index = 3)
+
+gapminder::gapminder |>
+  filter(year == 2002) |> 
+  select(id = country, x = lifeExp, y = gdpPercap) |>
+  ggplot() + 
+  aes(x = x, y = y, id = id) + 
+  geom_point() + 
+  layer("label", "labellink", position = "identity",
+        params = list(which_id = "Chile")) + 
+  layer("segment", "labellink", position = "identity",
+        params = list(which_id = "Chile")) + 
+  scale_x_log10()
+
+layer_data(i = 2)
+```
+
+
+
+```{r}
 ggplot(cars) + 
   aes(speed, dist) + 
   geom_point() + 
@@ -204,7 +248,7 @@ geom_labellink <- function(  mapping = NULL,
                       alpha = 0,
                       lineheight = .8,
                       label.size = 0,
-                      label.padding = unit(0.7, "lines"), 
+                      label.padding = unit(0.4, "lines"), 
                       na.rm = na.rm,
                       ...)) 
   )
@@ -224,8 +268,7 @@ ggplot(cars, aes(speed, dist)) +
                  label = "Here's another\npoint of interest",
                  label_direction = -45,
                  vjust = .5,
-                 num_sds = 1.2,
-                 pointer_pad = .1)
+                 prop_pointer_pad = .1)
 
 
 gapminder::gapminder |>
@@ -236,26 +279,46 @@ ggplot() +
   aes(label = country) + 
   geom_labellink(which_index = 5,
                  label_direction = -54,
-                 num_sds = .5, 
+                 prop_range = .5, 
                  hjust = .3,
-                 pointer_pad = .05)
+                 prop_pointer_pad = .05)
 
 last_plot() + 
   scale_x_log10()
+```
 
 
+```{r}
 gapminder::gapminder |>
   filter(year == 2002) |>
 ggplot() + 
   aes(gdpPercap, lifeExp) +
   geom_point(color = "darkgray") + 
-  geom_labellink(which_label = "Chile",
-                 aes(label = country),
-                 label_direction = 26,
-                 num_sds = .4, 
-                 vjust = .4,
-                 pointer_pad = .2)
+  geom_labellink(which_id = "Chile",
+                 aes(id = country),
+                 label_direction = 45) + 
+  geom_labellink(which_id = "United States",
+                 aes(id = country),
+                 label = "The US is here",
+                 label_direction = -100)
 
+last_plot() + 
+  scale_x_log10()
+
+
+
+gapminder::gapminder |>
+  filter(year == 2002) |>
+ggplot() + 
+  aes(gdpPercap, lifeExp, id = country) +
+  geom_point(color = "darkgray") + 
+  geom_labellink(which_id = "Brazil",
+                 label = "People want to\nknow about Brazil",
+                 label_direction = -70,
+                 prop_range = .2) + 
+  geom_labellink(which_id = "Norway",
+                 label = "Here is Norway",
+                 label_direction = -120)
 ```
 
 
