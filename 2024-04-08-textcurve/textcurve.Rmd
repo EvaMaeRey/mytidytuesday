@@ -104,35 +104,48 @@ ggplot(cars) +
   #                 pointer_pad)
 `%||%` <- ggplot2:::`%||%`
 
-compute_labellink <- function(data, scales, label_direction = 180 + 45, prop_range = .1, prop_pointer_pad = .175, hjust = NULL, vjust = NULL, which_index = NULL, which_id = NULL){
+compute_labellink <- function(data, scales, label_direction = 180, prop_range = .1, prop_pointer_pad = .01, hjust = NULL, vjust = NULL, which_index = NULL, which_id = NULL){
   
   if(is.null(data$id)){data$id <- "hello world"}
   if(is.null(which_index)){which_index <- which(data$id == which_id)}
   
   data$default_label <- data$id
   
-  xmean <- mean(data$x)
-  ymean <- mean(data$y)
   
   range_x <- diff(range(data$x))
   range_y <- diff(range(data$y)) # look at range of plot?
-  xdir <- cos(pi*label_direction/180)
-  ydir <- sin(pi*label_direction/180)
-  xpush <- range_x * prop_range * xdir
-  ypush <- range_y * prop_range * ydir
+  data$x_in_range <- (data$x-mean(range(data$x)))/range_x
+  data$y_in_range <- (data$y-mean(range(data$y)))/range_y
   
-  more_x_than_y <- abs(xdir) > abs(ydir)
+  data$angle_from_midrange_degrees <- sign(data$y_in_range)* 
+    atan(data$y_in_range/data$x_in_range)/pi*180
+  if(is.null(label_direction)){
+    data$label_direction <- data$angle_from_midrange_degrees
+    } else {
+    data$label_direction <- label_direction
+  }
   
-  if(is.null(hjust)){hjust <- ifelse(more_x_than_y, sign(xdir) != 1, .5)}
-  if(is.null(vjust)){vjust <- ifelse(more_x_than_y, .5, sign(ydir) != 1)}
+  data$xdir <- cos(pi*data$label_direction / 180)
+  data$ydir <- sin(pi*data$label_direction / 180)
+  data$xpush <- range_x * prop_range * data$xdir
+  data$ypush <- range_y * prop_range * data$ydir
+  data$hjust_default <- sign(data$xdir) != 1
+  data$vjust_default <- sign(data$ydir) != 1
+
+  data$more_x_than_y <- abs(data$xdir) > abs(data$ydir)
+  
+  if(is.null(hjust)){data$hjust <- ifelse(data$more_x_than_y, data$hjust_default, .5)
+  }else{data$hjust <- hjust}
+  if(is.null(vjust)){data$vjust <- ifelse(data$more_x_than_y, .5, data$vjust_default)
+  }else{data$vjust <- vjust}
 
   data |> 
     mutate(x = x + xpush) |>
     mutate(y = y + ypush) |>
-    mutate(xend = x - xpush*(1-prop_pointer_pad)) |>
-    mutate(yend = y - ypush*(1-prop_pointer_pad)) |>
-    mutate(hjust = hjust) |>
-    mutate(vjust = vjust) |> 
+    mutate(xend = x - (xpush)) |>
+    mutate(yend = y - (ypush)) |>
+    # mutate(hjust = hjust) |>
+    # mutate(vjust = vjust) |> 
     slice(which_index)
   
 }
@@ -155,7 +168,6 @@ gapminder::gapminder |>
   filter(year == 2002) |> 
   select(id = country, x = lifeExp, y = gdpPercap) |>
   compute_labellink(which_index = 3)
-
 
 gapminder::gapminder |>
   filter(year == 2002) |> 
@@ -322,8 +334,26 @@ ggplot() +
 ```
 
 
-## Closing remarks, Other Relevant Work, Caveats
+## Alternative: contributed from Teun Van Den Brand (https://github.com/teunbrand/ggplot-extension-club/discussions/8)
 
 
+```{r,fig.height=4, fig.width=4}
+gapminder::gapminder |>
+  filter(year == 2002) |>
+  ggplot() +
+  aes(gdpPercap, lifeExp) +
+  geom_point(colour = "darkgrey") +
+  ggrepel::geom_text_repel(
+    aes(label = c("Chile" = "Chile", 
+                  "United States" = 
+                    "The US is here")[as.character(country)]),
+    na.rm = TRUE, 
+    box.padding = unit(1, "cm"),
+    point.padding = unit(5, "mm"),
+    arrow = arrow(length = unit(2, "mm"), 
+                  type = "closed")
+  )
 
+layer_data()
+```
 
