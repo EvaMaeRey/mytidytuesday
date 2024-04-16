@@ -122,6 +122,45 @@ stat_rasa <- function(mapping = NULL, data = NULL,
 }
 ```
 
+---
 
+
+```{r}
+compute_means <- function(data, scales){
+   
+   data |>
+      summarise(x = mean(x),
+                y = mean(y))
+   
+}
+
+StatMeans <- ggproto("StatMeans",
+                     Stat,
+                     compute_group = compute_means)
+
+ggplot(cars) + 
+   aes(speed, dist) + 
+   geom_point() + 
+   layer("point", "means", position = "identity",
+         params = list(size = 5))
+
+
+geom_point_xy_means <- function(mapping = NULL, data = NULL,
+                           position = "identity", na.rm = FALSE,
+                           show.legend = NA,
+                           inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    geom = ggplot2::GeomPoint,   # inherit other behavior
+    stat = StatMeans,        # proto object from step 2
+    data = data, 
+    mapping = mapping,
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+
+```
 
 ## Closing remarks, Other Relevant Work, Caveats

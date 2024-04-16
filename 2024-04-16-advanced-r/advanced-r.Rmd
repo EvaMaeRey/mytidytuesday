@@ -1,0 +1,140 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r cars}
+library(tidyverse)
+
+```
+
+## Experiment
+
+1. What are the three components of a function?
+
+> The formals(), the list of arguments that control how you call the function.
+
+> The body(), the code inside the function.
+
+> The environment(), the data structure that determines how the function finds the values associated with the names.
+
+2. What does the following code return?
+
+
+```{r}
+x <- 10
+f1 <- function(x) {
+  function() {
+    x + 10
+  }
+}
+
+
+f1(x = 1)()
+f1(1)
+```
+3. How would you usually write this code?
+
+```{r}
+`+`(1, `*`(2, 3))
+
+2*3 + 1
+```
+
+4. easier to read?
+
+```{r}
+# trim, na.rm, x
+mean(, TRUE, x = c(1:10, NA))
+
+# explicit
+mean(trim = 0, na.rm = TRUE, x = c(1:10, NA))
+
+# moving to usual positions
+mean(c(1:10, NA), na.rm = T)
+```
+
+# Does the following code throw an error when executed? Why or why not?
+
+```{r, error = T}
+f2 <- function(a, b) {
+  a * 10
+}
+
+f2(a = 10, b = stop("This is an error!"))
+
+f2(a = stop("This is an error"))
+
+```
+
+# What is an infix function? How do you write it? What’s a replacement function? How do you write it?
+
+> Infix functions get their name from the fact the function name comes inbetween its arguments, and hence have two arguments. R comes with a number of built-in infix operators
+
+> replacement: functions that replace values by assignment, like names(df) <- c("a", "b", "c") . They actually look like prefix functions.
+
+> replace() function in R Programming Language is used to replace the values in the specified string vector x with indices given in the list by those given in values.
+
+
+---
+
+
+```{r}
+# bind function to a name
+myfun <- function(x){x + 1}
+
+# don't
+
+# fun in a list
+funs <- list(
+  half = function(x) x / 2,
+  double = function(x) x * 2
+)
+
+funs$double(10)
+```
+
+
+# do.call
+
+```{r}
+args <- list(x = 1:10, na.rm = TRUE)
+
+
+do.call(mean, args)
+
+
+```
+
+- Given a name, like "mean", match.fun() lets you find a function. Given a function, can you find its name? Why doesn’t that make sense in R?
+
+
+- It’s possible (although typically not useful) to call an anonymous function. Which of the two approaches below is correct? Why?
+# 
+
+```
+
+
+# How do you ensure that cleanup action occurs regardless of how a function exits?
+
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

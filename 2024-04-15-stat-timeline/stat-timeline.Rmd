@@ -73,27 +73,28 @@ timeline_df |>
         params = list(y = 0))
 
 
-geom_timeline <- function(){
+geom_timeline_basic <- function(){
   
   list(
     
   geom_hline(yintercept = 0),   
   layer(GeomSegment, StatTimeline, position = "identity"),
-  layer(GeomPoint, StatTimeline, position = "identity"),
-  layer(GeomLabel, StatTimeline, position = "identity"),
-  layer(GeomPoint, StatTimeline, position = "identity",
+  layer(GeomPoint,   StatTimeline, position = "identity"),
+  layer(GeomLabel,   StatTimeline, position = "identity"),
+  layer(GeomPoint,   StatTimeline, position = "identity", 
         params = list(y = 0))
-  
   )
   
 }
 
 
 
+
+
 timeline_df |>
   ggplot() + 
   aes(x = x, label = event_descr) + 
-  geom_timeline()
+  geom_timeline_basic()
 
 
 ```
