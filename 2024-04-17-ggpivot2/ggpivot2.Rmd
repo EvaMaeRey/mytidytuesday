@@ -1,0 +1,60 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r cars}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+compute_pivot <- function(data, scales, var = 1){
+  
+  fun = length
+  
+  data |> 
+    group_by(x, y) |>
+    mutate(label = fun(var)) |>
+    distinct()
+    
+} 
+
+
+StatPivot <- ggproto("StatPivot",
+                     Stat,
+                     compute_layer = compute_pivot)
+
+tidytitanic::tidy_titanic %>% 
+  ggplot() + 
+  aes(x = sex, y = age) + 
+  layer(geom = "text", stat = "pivot", position = "identity"#,
+        # params = list(fun = length)
+        )
+  
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
