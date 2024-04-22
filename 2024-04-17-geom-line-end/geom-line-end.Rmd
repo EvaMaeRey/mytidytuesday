@@ -21,12 +21,12 @@ options(tidyverse.quiet = TRUE)
 ## Status Quo
 
 ```{r cars, error=T}
-library(tidyverse)
+library(ggplot2)
 
 compute_line_end <- function(data, scales){
   
   data |>
-    filter(x == max(x))
+    dplyr::filter(x == max(x))
   
 }
 
@@ -52,6 +52,17 @@ gapminder::gapminder |>
 
 last_plot() + 
   layer("label", "lineend", position = "identity")
+
+gapminder::gapminder |>
+  filter(continent == "Oceania") |>
+  ggplot() + 
+  aes(x = year, y = gdpPercap, 
+      color = country, label = country) + 
+  geom_label() + 
+  geom_label(data = . %>% filter(year == max(year)), color = "black")
+
+sessionInfo()
+
 
 ```
 
