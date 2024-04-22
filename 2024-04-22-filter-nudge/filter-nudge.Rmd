@@ -45,7 +45,7 @@ ggplot(cars) +
 
 
 ```{r}
-add_callout <- function(data = data, label = "Hello World!", nudge_x = 0, nudge_y = 0, pad_x = 0, pad_y = 0, ...){
+add_callout <- function(data = data, label = "Hello World!", nudge_x = 0, nudge_y = 0, prop_pad_x = .1, prop_pad_y = .1, ...){
   
   list(
     geom_text(data = data,
@@ -57,8 +57,8 @@ add_callout <- function(data = data, label = "Hello World!", nudge_x = 0, nudge_
             ...
             ),
     geom_segment(data = data,
-               aes(xend = after_stat(x) + nudge_x + pad_x,
-                   yend = after_stat(y) + nudge_y + pad_y,
+               aes(xend = after_stat(x) + nudge_x - prop_pad_x*nudge_x,
+                   yend = after_stat(y) + nudge_y - prop_pad_y*nudge_y,
                    # x = after_stat(x) - pad_x,
                    # y = after_stat(y) - pad_y
                    )),
@@ -91,9 +91,7 @@ gapminder::gapminder %>%
                 filter(country == "Australia"),
               nudge_x = 1500,
               nudge_y = -10,
-              label = "Here we have Australia",
-              pad_x = 100,
-              pad_y = 1)
+              label = "Here we have Australia")
 
 
 
