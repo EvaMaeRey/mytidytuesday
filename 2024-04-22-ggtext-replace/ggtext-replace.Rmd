@@ -1,0 +1,130 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r cars}
+library(tidyverse)
+```
+
+## Experiment
+
+```{r}
+iris %>% 
+  group_by(Species) %>% 
+  summarize(mean_petal_width = mean(Petal.Width)) %>% 
+  ungroup() ->
+data  
+  
+data |>
+ ggplot(aes(Species, mean_petal_width,
+             fill = Species)) +
+  geom_col(show.legend = FALSE) +
+  scale_fill_viridis_d() +
+  labs(x = NULL,
+       y = NULL,
+       title = "<span style = 'color: red;'>Virginica irises</span> have the largest average sepal width") +
+  theme(plot.title = ggtext::element_markdown())
+
+p <- last_plot()
+
+fill_values <- layer_data(p)$fill 
+fill_var <- p$mapping$fill |> capture.output() %>% .[2] %>% str_extract("\\^.+") %>% str_remove("\\^")
+fill_representations <- p$data %>% .[fill_var] %>% pull() %>%   levels()
+html_statements <- paste("<span style = 'color: ", fill_values, 
+                         "'>", fill_representations, "</span>") 
+
+
+grab_fill_info <- function(plot){
+  
+  fill_values <- layer_data(plot)$fill 
+  
+  fill_var <- plot$mapping$fill |> capture.output() %>% .[2] %>% 
+    str_extract("\\^.+") %>% str_remove("\\^")
+  
+  fill_representations <- plot$data %>% .[fill_var] %>% pull() %>%   levels()
+  
+  html_statements <- paste("<span style = 'color: ", fill_values, 
+                         "'>", fill_representations, "</span>") 
+  
+  data.frame(fill_values, fill_representations, html_statements)
+  
+}
+
+grab_fill_info(p)
+
+
+```
+
+
+
+```{r}
+for(i in 1:length(fill_values)){
+
+  start <- "virginica have the largest average sapel width"
+  
+  start <- start |> str_replace(fill_representations[i], html_statements[i])
+
+start
+  
+}
+
+
+
+auto_color_html <- function(x, fill_df ){
+  
+ for(i in 1:nrow(fill_df)){
+
+  x <- x |> str_replace(fill_df$fill_representations[i], fill_df$html_statements[i])
+  
+ }
+  
+  x
+  
+}
+
+
+auto_color_html("", grab_fill_info(p))
+
+data |>
+ ggplot(aes(Species, mean_petal_width,
+             fill = Species)) +
+  geom_col(show.legend = FALSE) +
+  scale_fill_viridis_d() +
+  labs(x = NULL,
+       y = NULL,
+       title = "The setosa iris has the smallest average sapel width<br>and the virginica irises have largest average sapel width<br> while versicolor is in-between") +
+  theme(plot.title = ggtext::element_markdown())
+
+q <- last_plot()
+
+q_fill_df <- grab_fill_info(q)
+  
+q + 
+  labs(title = "The setosa iris has the smallest average sapel width<br>and the virginica irises have largest average sapel width<br> while versicolor is in-between" |> 
+        auto_color_html(q_fill_df)) +
+  theme(plot.title = ggtext::element_markdown())
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
