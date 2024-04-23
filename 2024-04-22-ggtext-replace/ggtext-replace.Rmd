@@ -40,7 +40,7 @@ data |>
   scale_fill_viridis_d() +
   labs(x = NULL,
        y = NULL,
-       title = "<span style = 'color: red;'>Virginica irises</span> have the largest average sepal width") +
+       title = "<span style = 'color: red;'>Virginica irises</span> have the largest average petal width") +
   theme(plot.title = ggtext::element_markdown())
 
 p <- last_plot()
@@ -78,7 +78,7 @@ grab_fill_info(p)
 ```{r}
 for(i in 1:length(fill_values)){
 
-  start <- "virginica have the largest average sapel width"
+  start <- "virginica have the largest average petal width"
   
   start <- start |> str_replace(fill_representations[i], html_statements[i])
 
@@ -110,7 +110,7 @@ data |>
   scale_fill_viridis_d() +
   labs(x = NULL,
        y = NULL,
-       title = "The setosa iris has the smallest average sapel width<br>and the virginica irises have largest average sapel width<br> while versicolor is in-between") +
+       title = "The setosa iris has the smallest average petal width<br>and the virginica irises have largest average petal width<br> while versicolor is in-between") +
   theme(plot.title = ggtext::element_markdown())
 
 q <- last_plot()
@@ -118,7 +118,7 @@ q <- last_plot()
 q_fill_df <- grab_fill_info(q)
   
 q + 
-  labs(title = "The setosa iris has the smallest average sapel width<br>and the virginica irises have largest average sapel width<br> while versicolor is in-between" |> 
+  labs(title = "The setosa iris has the smallest average petal width<br>and the virginica irises have largest average petal width<br> while versicolor is in-between" |> 
         auto_color_html(q_fill_df)) +
   theme(plot.title = ggtext::element_markdown())
 ```
