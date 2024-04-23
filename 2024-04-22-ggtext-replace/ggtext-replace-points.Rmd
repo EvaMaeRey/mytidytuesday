@@ -98,7 +98,7 @@ fill_var <- plot$data %>% .[,fill_var_name]
 fill_var_df <- tibble(fill_var, group = as.numeric(fill_var)) %>% distinct()
 
 
-left_join(fill_values_df, fill_var_df) %>% 
+left_join(fill_values_df, fill_var_df, by = join_by(group)) %>% 
   mutate(html_statements = paste0("<span style = 'color: ", fill, 
                          "'>", fill_var, "</span></strong>") )
   
@@ -188,7 +188,7 @@ use_fill_scale_in_title_words <- function(plot){
   out$labels$title <- out$labels$title |> 
         auto_color_html(plot_fill_df)
 
-  print(out)
+  return(out)
   
 }
 ```
