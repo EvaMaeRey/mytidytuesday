@@ -1,0 +1,157 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r cars}
+library(tidyverse)
+```
+
+## Experiment
+
+```{r}
+iris  |>
+ ggplot(aes(Sepal.Length, Sepal.Width,
+             fill = Species)) +
+  geom_point(show.legend = FALSE, size = 7, alpha = .8, shape = 21, color = "white") +
+  scale_fill_viridis_d(end = .8) +
+  labs(x = NULL,
+       y = NULL,
+       title = "<span style = 'color: red;'>Virginica irises</span> have the largest average sepal width") +
+  theme(plot.title = ggtext::element_markdown())
+
+plot <- last_plot()
+
+fill_values_df <- layer_data(plot) %>%  .[,c("fill", "group")] |> distinct()
+fill_var_name <- plot$mapping$fill |> capture.output() %>% .[2] %>% str_extract("\\^.+") %>% str_remove("\\^")
+fill_var <- plot$data %>% .[,fill_var_name] 
+fill_var_df <- tibble(fill_var, group = as.numeric(fill_var)) %>% distinct()
+
+
+left_join(fill_values_df, fill_var_df) %>% 
+  mutate(html_statements = paste("<span style = 'color: ", fill, 
+                         "'>", fill_var, "</span>") )
+
+```
+
+
+```{r}
+
+grab_fill_info <- function(plot){
+  
+fill_values_df <- layer_data(plot) %>%  .[,c("fill", "group")] |> distinct()
+fill_var_name <- plot$mapping$fill |> capture.output() %>% .[2] %>% str_extract("\\^.+") %>% str_remove("\\^")
+fill_var <- plot$data %>% .[,fill_var_name] 
+fill_var_df <- tibble(fill_var, group = as.numeric(fill_var)) %>% distinct()
+
+
+left_join(fill_values_df, fill_var_df) %>% 
+  mutate(html_statements = paste("<span style = 'color: ", fill, 
+                         "'>", fill_var, "</span></strong>") )
+  
+}
+
+grab_fill_info(plot)
+
+
+```
+
+
+
+```{r}
+fill_df <- grab_fill_info(plot)
+
+
+for(i in 1:nrow(fill_df)){
+
+  start <- "virginica have the largest average sapel width"
+  
+  start <- start |> str_replace(fill_df$fill_var[i] %>% as.character(), fill_df$html_statements[i])
+
+start %>% print()
+  
+}
+
+
+
+auto_color_html <- function(x, fill_df ){
+  
+ for(i in 1:nrow(fill_df)){
+
+  x <- x |> str_replace(fill_df$fill_var[i] %>% as.character, fill_df$html_statements[i])
+  
+ }
+  
+  x
+  
+}
+
+
+auto_color_html("setosa", grab_fill_info(plot))
+```
+
+
+```{r}
+iris |>
+ ggplot(aes(Sepal.Length, Sepal.Width,
+             fill = Species)) +
+  geom_point(show.legend = FALSE, shape = 21, color = "white", size = 8) +
+  scale_fill_viridis_d(end = .8, begin = .2) +
+  labs(x = NULL,
+       y = NULL,
+       title = "The setosa iris has the smallest average sapel width<br>and the virginica irises have largest average sapel width<br> while versicolor is in-between") +
+  theme(plot.title = ggtext::element_markdown())
+
+q <- last_plot()
+
+q_fill_df <- grab_fill_info(q)
+
+colorful_title <- "The **setosa** iris has the smallest average sapel width<br>and the **virginica** irises have largest average sapel width<br> while versicolor is in-between" |> 
+        auto_color_html(q_fill_df)
+
+q + 
+  labs(title = colorful_title) +
+  theme(plot.title = ggtext::element_markdown())
+```
+
+
+
+```{r}
+plot_color_scale_in_title <- function(plot){
+  
+  out <- plot
+  plot_fill_df <- grab_fill_info(plot)
+  
+  out$labels$title <- out$labels$title |> 
+        auto_color_html(plot_fill_df)
+
+  print(out)
+  
+  
+}
+
+plot_color_scale_in_title(plot = q)
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
