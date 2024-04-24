@@ -45,7 +45,18 @@ ggplot(cars) +
 
 
 ```{r}
-add_callout <- function(data = data, label = "Hello World!", nudge_x = 0, nudge_y = 0, prop_pad_x = .1, prop_pad_y = .1, curvature = 0, ... ){
+add_callout <- function(data = data, 
+                        label = "Hello World!", 
+                        nudge_x = .00001, # no zero length allowed for curves.
+                        nudge_y = .00001, 
+                        prop_pad_x = .1, 
+                        prop_pad_y = .1, 
+                        curvature = 0, 
+                        hjust = NULL, 
+                        vjust = NULL, ... ){
+
+  if(is.null(hjust)){hjust = -sign(nudge_x) == 1}
+  if(is.null(vjust)){vjust = -sign(nudge_y) == 1}
 
   
   list(
@@ -53,15 +64,15 @@ add_callout <- function(data = data, label = "Hello World!", nudge_x = 0, nudge_
             label = label,
             nudge_x = nudge_x,
             nudge_y = nudge_y, 
-            vjust = -sign(nudge_y) == 1 ,
-            hjust = -sign(nudge_x) == 1,
+            vjust = vjust,
+            hjust = hjust,
             ...
             ),
     geom_curve(data = data,
                aes(xend = after_stat(x) + nudge_x - prop_pad_x*nudge_x,
                    yend = after_stat(y) + nudge_y - prop_pad_y*nudge_y,
-                   # x = after_stat(x) - pad_x,
-                   # y = after_stat(y) - pad_y
+                   # x = after_scale(x) + prop_pad_x*nudge_x,
+                   # y = after_scale(y) + prop_pad_y*nudge_y
                    ),
                curvature = curvature),
     ...
@@ -94,7 +105,23 @@ gapminder::gapminder %>%
               nudge_x = 1500,
               nudge_y = -10,
               label = "Here we have Australia",
+              hjust = .25,
               curvature = -.2)
+
+
+last_plot() + 
+  aes(color = lifeExp)
+
+
+gapminder::gapminder %>% 
+  filter(year == 2002) %>% 
+  ggplot() + 
+  aes(x = gdpPercap, y = lifeExp, color = gdpPercap) + 
+  geom_point() + 
+  add_callout(data = . %>% 
+                filter(country == "United States"),
+              label = "US has high GDP per capita,\nbut low life expectancy compared with peers")
+  
 
 
 
