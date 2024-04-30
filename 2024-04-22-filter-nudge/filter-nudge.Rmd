@@ -1,5 +1,5 @@
 ---
-title: "another experiment"
+title: "Add call out via filter-nudge"
 author: "Evangeline Reynolds"
 date: "`r Sys.Date()`"
 output: 
@@ -9,7 +9,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-options(tidyverse.quiet = TRUE)
+options(tidyverse.quiet = FALSE)
 ```
 
 
@@ -17,8 +17,9 @@ options(tidyverse.quiet = TRUE)
 
 ## Intro Thoughts
 
+This is a 
 
-## Status Quo
+## A nudge x, nudge y strategy to labeling, with after_stat() for segment linkages
 
 ```{r cars}
 library(tidyverse)
@@ -38,11 +39,15 @@ ggplot(cars) +
             vjust = -sign(nudge_y),
             hjust = -sign(nudge_x),
             ) +
-  geom_segment(data = . %>% slice(15),
+     geom_segment(data = . %>% slice(15),
                aes(xend = after_stat(x) + nudge_x + pad_x,
-                   yend = after_stat(y) + nudge_y + pad_y))
+                   yend = after_stat(y) + nudge_y + pad_y,
+                   # x = after_scale(x) 
+                   ))
+
 ```
 
+# Make it a list layer function `add_callout`
 
 ```{r}
 add_callout <- function(data = data, 
@@ -81,12 +86,20 @@ add_callout <- function(data = data,
 }
 
 
+
+
+```
+
+# Try it out...
+
+
+```{r}
+
 ggplot(cars) +
   aes(speed, dist) + 
   geom_point() + 
   add_callout(data = . %>% slice(3), 
-              nudge_y = -10, 
-              nudge_x = 1)
+              nudge_y = -10)
 
 
 gapminder::gapminder %>% 
@@ -121,18 +134,206 @@ gapminder::gapminder %>%
   add_callout(data = . %>% 
                 filter(country == "United States"),
               label = "US has high GDP per capita,\nbut low life expectancy compared with peers")
-  
-
-
-
 ```
 
-## Experiment
+
+## Notes: point padding not available in this iteration.
+
+
+---
+
+# Check out geom_spoke
+
+But depricated... so...
+
+
 
 ```{r}
 
+df <- expand.grid(x = 1:10, y=1:10)
+
+set.seed(1)
+df$angle <- runif(100, 0, 2*pi)
+df$speed <- runif(100, 0, sqrt(0.1 * df$x))
+
+ggplot(df, aes(x, y)) +
+  geom_point() +
+  geom_spoke(aes(angle = angle, radius = speed))
+
+ggplot(cars) + 
+  aes(speed, dist) +
+  geom_point() + 
+  geom_spoke(data = . %>% slice(1),
+             aes(angle = pi/2, radius = 9)) + 
+  theme(aspect.ratio = 1)
+
+stat_spoke  
+
+
+```
+
+# Next, a native plots coordinate approach - text label will be at specified npc location.
+
+
+```{r}
+npc_end_x <- .2
+npc_end_y <- .4 
+
+ggplot(cars) + 
+  aes(x = speed, y = dist) + 
+  geom_point(color = "grey") + 
+  geom_point(data = . %>% slice(1)) + 
+  geom_text(data = . %>% slice(1),
+            aes(x = I(npc_end_x), y = I(npc_end_y)),
+            label = "This is the first\nexperimental outcome\nin the correlation study",
+            vjust = 0) +
+  geom_segment(data = . %>% slice(1),
+            aes(xend = I(npc_end_x - .025), 
+                yend = I(npc_end_y - .025),
+                # x = speed + I(.025), DAE
+                ))
+```
+
+
+Put it in a function...
+
+```{r}
+add_npc_callout <- function(data, npc_end_x = .5, npc_end_y = .5, label = "Hello World!"){
+  
+  list( 
+
+  geom_segment(data = data,
+            aes(xend = I(npc_end_x - .025), 
+                yend = I(npc_end_y - .025),
+                # x = speed + I(.025), 
+                )),
+     geom_label(data = data,
+            aes(x = I(npc_end_x), y = I(npc_end_y)),
+            label = label) 
+  )
+  
+  
+}
+```
+
+
+## Seems nice for call outs that apply to multiple observations.
+
+```{r}
+my_lab <- "This is the first\nexperimental outcome\nin the correlation study"
+
+ggplot(cars) +
+  aes(speed, dist) + 
+  geom_point() + 
+  add_npc_callout(data = . %>% slice(1),
+                  npc_end_x = .2,
+                  label = my_lab)
+
+ggplot(cars) +
+  aes(speed, dist) + 
+  geom_point() + 
+  add_npc_callout(data = . %>% tibble())
+
+ggplot(cars) +
+  aes(speed, dist) + 
+  geom_point() + 
+  add_npc_callout(data = . %>% filter(dist > 50, speed > 20),
+                  npc_end_x = .8, npc_end_y = .2,
+                  label = "These guys\nare interesting")
+
+?labeller
+
+```
+
+
+# Nudge by Native plot coordinates? So aes(x = speed + I(.2))??!?
+
+I don't think I've seen this mixing and matching and this naive approach doesn't seem to do much that's interesting or predictable.
+
+```{r}
+
+ggplot(cars) + 
+  aes(speed, dist) +
+  geom_point() + 
+  geom_text(mapping = aes(x = speed + I(.1)), 
+            label = "A wild idea")
+
+
+ggplot(cars) + 
+  aes(speed, dist) +
+  geom_point() + 
+    geom_text(data = . %>% slice(15),
+              mapping = aes(x = speed + I(.1)), 
+              label = "A wild idea")
+
+```
+
+# or geom_spoke StatSpoke w/ I()...  Seems like it's incompatable
+
+```{r}
+ggplot(cars) + 
+  aes(speed, dist) +
+  geom_point() + 
+  geom_spoke(data = . %>% slice(1),
+             aes(angle = pi/2, radius = I(.01)))
 ```
 
 
 
-## Closing remarks, Other Relevant Work, Caveats
+
+```{r}
+p1 <- ggplot(mtcars, aes(x = mpg, y = wt)) + geom_point()
+
+# You can assign different labellers to variables:
+p1 + facet_grid(
+  vs + am ~ gear,
+  labeller = labeller(vs = label_both, am = label_value)
+)
+
+# Or whole margins:
+p1 + facet_grid(
+  vs + am ~ gear,
+  labeller = labeller(.rows = label_both, .cols = label_value)
+)
+
+# You can supply functions operating on strings:
+capitalize <- function(string) {
+  substr(string, 1, 1) <- toupper(substr(string, 1, 1))
+  string
+}
+p2 <- ggplot(msleep, aes(x = sleep_total, y = awake)) + geom_point()
+p2 + facet_grid(vore ~ conservation, labeller = labeller(vore = capitalize))
+
+# Or use character vectors as lookup tables:
+conservation_status <- c(
+  cd = "Conservation Dependent",
+  en = "Endangered",
+  lc = "Least concern",
+  nt = "Near Threatened",
+  vu = "Vulnerable",
+  domesticated = "Domesticated"
+)
+## Source: http://en.wikipedia.org/wiki/Wikipedia:Conservation_status
+
+p2 + facet_grid(vore ~ conservation, labeller = labeller(
+  .default = capitalize,
+  conservation = conservation_status
+))
+
+# In the following example, we rename the levels to the long form,
+# then apply a wrap labeller to the columns to prevent cropped text
+idx <- match(msleep$conservation, names(conservation_status))
+msleep$conservation2 <- conservation_status[idx]
+
+p3 <- ggplot(msleep, aes(x = sleep_total, y = awake)) + geom_point()
+p3 +
+  facet_grid(vore ~ conservation2,
+    labeller = labeller(conservation2 = label_wrap_gen(10))
+  )
+
+# labeller() is especially useful to act as a global labeller. You
+# can set it up once and use it on a range of different plots with
+# different facet specifications.
+```
+
+

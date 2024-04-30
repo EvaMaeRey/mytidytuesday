@@ -92,14 +92,14 @@ Let's put this in a function. The function will let us go straight from a ggplot
 
 grab_fill_info <- function(plot){
   
-fill_values_df <- layer_data(plot) %>%  .[,c("fill", "group")] |> distinct()
+fill_values_df <- ggplot2::layer_data(plot) %>%  .[,c("fill", "group")] |> dplyr::distinct()
 fill_var_name <- plot$mapping$fill |> capture.output() %>% .[2] %>% str_extract("\\^.+") %>% str_remove("\\^")
 fill_var <- plot$data %>% .[,fill_var_name] 
-fill_var_df <- tibble(fill_var, group = as.numeric(fill_var)) %>% distinct()
+fill_var_df <- tibble::tibble(fill_var, group = as.numeric(fill_var)) %>% dplyr::distinct()
 
 
-left_join(fill_values_df, fill_var_df, by = join_by(group)) %>% 
-  mutate(html_statements = paste0("<span style = 'color: ", fill, 
+dplyr::left_join(fill_values_df, fill_var_df, by = dplyr::join_by(group)) %>% 
+  dplyr::mutate(html_statements = paste0("<span style = 'color: ", fill, 
                          "'>", fill_var, "</span></strong>") )
   
 }
@@ -130,12 +130,12 @@ start %>% print()
 
 Let's put the for loop in a function:
 
-```{r}
+```{r auto_color_html}
 auto_color_html <- function(x, fill_df ){
   
  for(i in 1:nrow(fill_df)){
 
-  x <- x |> str_replace(fill_df$fill_var[i] %>% as.character, fill_df$html_statements[i])
+  x <- x |> stringr::str_replace(fill_df$fill_var[i] %>% as.character, fill_df$html_statements[i])
   
  }
   
