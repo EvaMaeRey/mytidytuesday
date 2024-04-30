@@ -8,7 +8,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, error = T)
 options(tidyverse.quiet = TRUE)
 ```
 
@@ -77,72 +77,6 @@ stat_rasa <- function(mapping = NULL, data = NULL,
 }
 ```
 
-### UI, stat_rasa(fun = detrend)
-
-```{r}
-# using .75 span to match ggplot2 geom_smooth
-Detrend <- function(data, method = "lm", span = 0.75) {
-   if (method == "lm") {
-      data$y <- resid(lm(y ~ x, data = data))
-   } else {
-      data$y <- resid(loess(y ~ x, span = span, data = data))
-   }
-   as.data.frame(data)
-   }
-   
-   
-library(ggplot2)
-set.seed(42)
-x <- seq(-1, 3, length.out = 30)
-y <- x^2 + rnorm(30)*0.5
-df <- data.frame(x = x, y = y)
-
-ggplot(df, aes(x, y)) +
-  geom_line(aes(color = "raw data")) +
-  geom_smooth(aes(color = "loess smoothing"),
-              alpha = .3) + 
-  stat_smooth(geom = "point", 
-              aes(color = "loess smoothing"),
-              xseq = df$x) +
-  stat_rasa(geom = "line", 
-             compute_group_fun = Detrend, 
-             method = "smooth",
-             aes(color = "detrended")) +
-  geom_hline(yintercept = 0, 
-             linetype = "dashed") + 
-  scale_color_discrete(breaks = 
-                         fct_inorder(c("raw data",
-                                       "loess smoothing",
-                                       "detrended"))) +
-  labs(title = "detrending with loess smoothing")
-```  
-  
-### UI, stat_rasa -> stat_detrend
-  
-```{r}  
-stat_detrend <- function(...) {
-   stat_rasa(compute_group_fun = Detrend, geom = "line", ...)
-}
-
-ggplot(df, aes(x, y)) + 
-  geom_line(aes(color = "raw data")) +
-  geom_smooth(method = "lm", 
-              aes(color = "linear model")) +
-  stat_smooth(method = "lm", geom = "segment",
-              xend = df$x, yend = df$y,
-              xseq = df$x, alpha = .2
-              ) +
-  stat_detrend(method = "lm", 
-                aes(color = "detrended")) +
-  geom_hline(yintercept = 0, 
-             linetype = "dashed") + 
-  scale_color_discrete(breaks = 
-                         fct_inorder(c("raw data",
-                                       "linear model",
-                                       "detrended"))) + 
-  labs(title = "Linear detrending",
-       color = NULL)
-```
 
 ### stat_rasa(fun = summarize_xy)
 
@@ -158,9 +92,6 @@ group_means <- function(data){
 geom_means <- function(...){
   stat_rasa(compute_group_fun = group_means, ...)
 }
-
-
-
 
 ggxmean:::StatXymean$compute_group
 
@@ -199,6 +130,23 @@ palmerpenguins::penguins |>
   aes(x = bill_length_mm,
       y = bill_depth_mm) +
   geom_point(aes(color = species)) +
+  geom_center_label(aes(label = species))
+
+last_plot() + 
+  aes(color = species)
+
+
+geom_center_label <- function(...){
+  stat_rasa(compute_group_fun = group_label_at_center, geom = GeomText, ...)
+}
+
+
+palmerpenguins::penguins |>
+  ggplot() +
+  aes(x = bill_length_mm,
+      y = bill_depth_mm) +
+  geom_point() +
+  aes(color = species) +
   geom_center_label(aes(label = species))
 
 
@@ -274,6 +222,103 @@ mtcars |>
   geom_point() + 
   geom_quantile(size = 8) + 
   geom_quantile(size = 8, q = .75)
+
+```
+
+
+### UI, stat_rasa(fun = detrend)
+
+```{r}
+# using .75 span to match ggplot2 geom_smooth
+Detrend <- function(data, method = "lm", span = 0.75) {
+   if (method == "lm") {
+      data$y <- resid(lm(y ~ x, data = data))
+   } else {
+      data$y <- resid(loess(y ~ x, span = span, data = data))
+   }
+   as.data.frame(data)
+   }
+   
+   
+library(ggplot2)
+set.seed(42)
+x <- seq(-1, 3, length.out = 30)
+y <- x^2 + rnorm(30)*0.5
+df <- data.frame(x = x, y = y)
+
+ggplot(df, aes(x, y)) +
+  geom_line(aes(color = "raw data")) +
+  geom_smooth(aes(color = "loess smoothing"),
+              alpha = .3) + 
+  stat_smooth(geom = "point", 
+              aes(color = "loess smoothing"),
+              xseq = df$x) +
+  stat_rasa(geom = "line", 
+             compute_group_fun = Detrend, 
+             method = "smooth",
+             aes(color = "detrended")) +
+  geom_hline(yintercept = 0, 
+             linetype = "dashed") + 
+  scale_color_discrete(breaks = 
+                         fct_inorder(c("raw data",
+                                       "loess smoothing",
+                                       "detrended"))) +
+  labs(title = "detrending with loess smoothing")
+```  
+  
+### UI, stat_rasa -> stat_detrend
+  
+```{r}  
+stat_detrend <- function(...) {
+   stat_rasa(compute_group_fun = Detrend, geom = "line", ...)
+}
+
+ggplot(df, aes(x, y)) + 
+  geom_line(aes(color = "raw data")) +
+  geom_smooth(method = "lm", 
+              aes(color = "linear model")) +
+  stat_smooth(method = "lm", geom = "segment",
+              xend = df$x, yend = df$y,
+              xseq = df$x, alpha = .2
+              ) +
+  stat_detrend(method = "lm", 
+                aes(color = "detrended")) +
+  geom_hline(yintercept = 0, 
+             linetype = "dashed") + 
+  scale_color_discrete(breaks = 
+                         fct_inorder(c("raw data",
+                                       "linear model",
+                                       "detrended"))) + 
+  labs(title = "Linear detrending",
+       color = NULL)
+```
+
+
+## Stat Rasa one-liners
+
+if we reorganize, we'll use positioning, we can do oneliners.
+
+```{r}
+stat_r <- function(compute_group_fun, geom, ...){
+  
+  stat_rasa(compute_group_fun = compute_group_fun, geom = geom, ...)
+  
+}
+
+
+```
+
+```{r, warning=F}
+geom_xmean <- function(...){stat_r(function(df) df |> summarize(xintercept = mean(x)), "vline", ...)}
+
+ggplot(cars) +
+  aes(speed, dist) + 
+  geom_point() + 
+  geom_xmean(linetype = 'dashed')
+  
+last_plot() + 
+  aes(color = dist > 50)
+
 
 ```
 
