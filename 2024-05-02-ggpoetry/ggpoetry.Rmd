@@ -1,0 +1,63 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r cars}
+ggplot(data = cars) + 
+  aes(x = speed, y = dist) + 
+  geom_point() 
+```
+
+
+
+```{r}
+knitrExtra::chunk_code_get("cars") ->
+plot_code
+
+plot_code %>% 
+  paste(collapse = "\n") %>% 
+  paste("# source: \n", .) ->
+display_code
+
+display_code %>% paste(collapse = " ") %>% parse(text = .) %>% eval() + 
+  annotate(geom = "label", 
+           x = I(-.05),
+           y = I(.9),
+           label = display_code,
+           hjust = 0,
+           vjust = 1,
+           lineheight = .8,
+           color = "darkred",
+           angle = 0,
+           size = 6,
+           font.family = "helvetica") + 
+  coord_cartesian(clip = "off")
+```
+
+
+## Closing remarks, Other Relevant Work, Caveats

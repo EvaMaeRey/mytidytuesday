@@ -280,6 +280,23 @@ ggplot(cars) +
 
 
 
+---
+
+```{r}
+
+
+gapminder::gapminder |>
+  filter(year == 2002) |>
+  ggplot() +
+  aes(gdpPercap, lifeExp) +
+  geom_point(colour = "darkgrey") +
+  aes(label = country) +
+  ggrepel::geom_text_repel(data = . %>% filter(country == "Norway"),
+                           nudge_y = -8,
+                           nudge_x = -3000,
+                           label = "Norway is a\ncountry of interest")
+```
+
 
 ```{r}
 p1 <- ggplot(mtcars, aes(x = mpg, y = wt)) + geom_point()

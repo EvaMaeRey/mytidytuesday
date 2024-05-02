@@ -76,7 +76,7 @@ https://evamaerey.github.io/featurette/2023-11-02-help-quote-mtcars/help-quote-m
 
 https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/mtcars.html
 
-```{r}
+```{r, eval=F}
 # tidytuesday data
 library(magrittr)
 tmp <- tempfile()
@@ -89,7 +89,23 @@ pandoc::pandoc_convert(file = tmp,
                        to = 'markdown') ->
   md
 
+wwbi_series %>% 
+  filter(indicator_code == "BI.EMP.PWRK.PB.HE.ZS") %>% 
+  .[2] ->
+y_var
 
+wwbi_data %>% 
+  filter(indicator_code == "BI.EMP.PWRK.PB.HE.ZS"	 ) %>% 
+  left_join(wwbi_country) %>% 
+  filter(region == "Latin America & Caribbean") %>% 
+  mutate(is_select_country = short_name %in% 
+                                     c("Peru","Colombia")) %>% 
+  mutate(select_countries = ifelse(is_select_country,
+                                   short_name, NA)) %>% 
+  arrange(is_select_country) %>% 
+  ggplot() + 
+  aes(iso3c = iso3c) + 
+  geom_country()
 ```
 
 

@@ -93,9 +93,6 @@ geom_means <- function(...){
   stat_rasa(compute_group_fun = group_means, ...)
 }
 
-ggxmean:::StatXymean$compute_group
-
-
 mtcars |>
   ggplot() + 
   aes(x = wt,
@@ -129,14 +126,15 @@ palmerpenguins::penguins |>
   ggplot() +
   aes(x = bill_length_mm,
       y = bill_depth_mm) +
-  geom_point(aes(color = species)) +
+  aes(color = species) +
+  geom_point() +
   geom_center_label(aes(label = species))
 
 last_plot() + 
   aes(color = species)
 
 
-geom_center_label <- function(...){
+geom_center_text <- function(...){
   stat_rasa(compute_group_fun = group_label_at_center, geom = GeomText, ...)
 }
 
@@ -147,9 +145,13 @@ palmerpenguins::penguins |>
       y = bill_depth_mm) +
   geom_point() +
   aes(color = species) +
-  geom_center_label(aes(label = species))
+  geom_center_text(aes(label = species), 
+                    color = "Black", 
+                    alpha = .8,
+                   size = 5, 
+                   fontface = "bold")
 
-
+layer_data(i = 2)
 ```
 
 
@@ -296,20 +298,19 @@ ggplot(df, aes(x, y)) +
 
 ## Stat Rasa one-liners
 
-if we reorganize, we'll use positioning, we can do oneliners.
+if we reorganize, we can use positioning for arguments, and we can do one-liners.
 
 ```{r}
-stat_r <- function(compute_group_fun, geom, ...){
+rasa_g <- function(compute_group_fun, geom, ...){
   
   stat_rasa(compute_group_fun = compute_group_fun, geom = geom, ...)
   
 }
-
-
 ```
 
 ```{r, warning=F}
-geom_xmean <- function(...){stat_r(function(df) df |> summarize(xintercept = mean(x)), "vline", ...)}
+library(tidyverse)
+geom_xmean <- function(...){rasa_g(function(df) df |> summarize(xintercept = mean(x)), "vline", ...)}
 
 ggplot(cars) +
   aes(speed, dist) + 
@@ -318,8 +319,6 @@ ggplot(cars) +
   
 last_plot() + 
   aes(color = dist > 50)
-
-
 ```
 
 
@@ -327,19 +326,35 @@ last_plot() +
 ## Status Quo
 
 ```{r cars}
-library(tidyverse)
+geom_post <- function(...){rasa_g(function(df) df |> mutate(xend = x, yend = 0), "segment", ...)}
 
-
-
-
-
-
+ggplot(cars) +
+  aes(speed, dist) + 
+  geom_post() +
+  geom_point() 
 ```
 
 ## Experiment
 
 ```{r}
+geom_means <- function(...){rasa_g(function(df) df |> summarize(x = mean(x, na.rm = T), y = mean(y, na.rm = T)), "point", ...)}
 
+palmerpenguins::penguins %>% 
+  ggplot() + 
+  aes(bill_length_mm, bill_depth_mm) + 
+  geom_point() + 
+  geom_means(size = 7)
+```
+
+
+```{r}
+geom_grouplabel <-  function(...){rasa_g(function(df) df |> group_by(label) |> summarize(x = mean(x, na.rm = T), y = mean(y, na.rm = T)), "label", ...)}
+
+palmerpenguins::penguins %>% 
+  ggplot() + 
+  aes(bill_length_mm, bill_depth_mm, label = species, group = species) + 
+  geom_point() + 
+  geom_grouplabel(size = 7)
 ```
 
 
