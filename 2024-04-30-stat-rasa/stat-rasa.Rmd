@@ -104,10 +104,7 @@ last_plot() +
   aes(color = factor(cyl))
 ```
 
-Not very satisfying...
-  
 ```{r}
-
 group_label_at_center <- function(data){
   
  data %>% 
@@ -126,12 +123,13 @@ palmerpenguins::penguins |>
   ggplot() +
   aes(x = bill_length_mm,
       y = bill_depth_mm) +
-  aes(color = species) +
   geom_point() +
-  geom_center_label(aes(label = species))
+  aes(label = "All") +
+  geom_center_label()
 
-last_plot() + 
-  aes(color = species)
+
+last_plot() +
+  aes(color = species, label = species)
 
 
 geom_center_text <- function(...){
@@ -328,11 +326,45 @@ last_plot() +
 ```{r cars}
 geom_post <- function(...){rasa_g(function(df) df |> mutate(xend = x, yend = 0), "segment", ...)}
 
-ggplot(cars) +
-  aes(speed, dist) + 
+data.frame(prob = c(.4,.6), outcome = c(0, 1)) %>% 
+ggplot(data = .) +
+  aes(outcome, prob) + 
   geom_post() +
   geom_point() 
+
+geom_expectedvalue <- function(...){rasa_g(function(df) df |> summarise(x = sum(x*y), y = 0), "point", ...)} 
+
+last_plot() + 
+  geom_expectedvalue()
+
+geom_expectedvalue_label <- function(...){rasa_g(function(df) df |> summarise(x = sum(x*y), y = 0) |> mutate(label = round(x, 2)), "text", hjust = 1, vjust = 0, ...)} 
+
+last_plot() +
+  geom_expectedvalue_label()
 ```
+
+```{r}
+rep(1, 15) |> 
+  c(0) %>% 
+  data.frame(outcome = .) |>
+  ggplot() + 
+  aes(x = outcome, y = 0) + 
+  geom_dotplot()
+
+geom_proportion <- function(...){rasa_g(function(df) df |> summarise(x = sum(x)/length(x), y = 0), "point", ...)}   # this should work for T/F too when rasa_p is in play
+
+last_plot() + 
+  geom_proportion()
+
+geom_proportion_label <- function(...){rasa_g(function(df) df |> summarise(x = sum(x)/length(x), y = 0) |> mutate(label = round(x)), vjust = 0, "text", ...)}   # this should work for T/F too when rasa_p is in play
+
+last_plot() + 
+  geom_proportion_label()
+
+last_plot()
+
+```
+
 
 ## Experiment
 
