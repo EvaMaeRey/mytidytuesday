@@ -424,7 +424,8 @@ gapminder::gapminder %&gt;%
 <pre class="r"><code>statHighlight &lt;- ggproto(&quot;statHighlight&quot;,
                          Stat,
                          compute_panel = compute_panel_highlight_lines,
-                         default_aes = aes(color = after_stat(ind_id))
+                         default_aes = aes(color = after_stat(ind_id)),
+                         required_aes = c(&quot;x&quot;, &quot;y&quot;, &quot;id&quot;)
                          )
 
 # test.
