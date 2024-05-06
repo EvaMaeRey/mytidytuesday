@@ -216,11 +216,11 @@ geom_quantile <- function(...){
 }
 
 mtcars |>
-  ggplot() + 
+  ggplot() +
   aes(x = wt,
-      y = mpg) + 
-  geom_point() + 
-  geom_quantile(size = 8) + 
+      y = mpg) +
+  geom_point() +
+  geom_quantile(size = 8) +
   geom_quantile(size = 8, q = .75)
 
 ```
@@ -308,20 +308,29 @@ rasa_g <- function(compute_group_fun, geom, ...){
 
 ```{r, warning=F}
 library(tidyverse)
-geom_xmean <- function(...){rasa_g(function(df) df |> summarize(xintercept = mean(x)), "vline", ...)}
+geom_xmean_line <- function(...){rasa_g(function(df) df |> summarize(xintercept = mean(x)), "vline", ...)}
 
 ggplot(cars) +
   aes(speed, dist) + 
   geom_point() + 
-  geom_xmean(linetype = 'dashed')
+  geom_xmean_line(linetype = 'dashed')
   
 last_plot() + 
   aes(color = dist > 50)
+
+
+geom_xmean <- function(...){rasa_g(function(df) df |> summarize(x = mean(x), y = I(.05)), "point", ...)}
+
+
+ggplot(cars) +
+  aes(speed, dist) + 
+  geom_point() + 
+  geom_xmean(size = 8, shape = "diamond") 
+
+
 ```
 
 
-
-## Status Quo
 
 ```{r cars}
 geom_post <- function(...){rasa_g(function(df) df |> mutate(xend = x, yend = 0), "segment", ...)}
@@ -356,7 +365,7 @@ geom_proportion <- function(...){rasa_g(function(df) df |> summarise(x = sum(x)/
 last_plot() + 
   geom_proportion()
 
-geom_proportion_label <- function(...){rasa_g(function(df) df |> summarise(x = sum(x)/length(x), y = 0) |> mutate(label = round(x)), vjust = 0, "text", ...)}   # this should work for T/F too when rasa_p is in play
+geom_proportion_label <- function(...){rasa_g(function(df) df |> summarise(x = sum(x)/length(x), y = 0) |> mutate(label = round(x,3)), vjust = 0, "text", ...)}   # this should work for T/F too when rasa_p is in play
 
 last_plot() + 
   geom_proportion_label()
@@ -380,13 +389,13 @@ palmerpenguins::penguins %>%
 
 
 ```{r}
-geom_grouplabel <-  function(...){rasa_g(function(df) df |> group_by(label) |> summarize(x = mean(x, na.rm = T), y = mean(y, na.rm = T)), "label", ...)}
+geom_grouplabel_at_means <-  function(...){rasa_g(function(df) df |> group_by(label) |> summarize(x = mean(x, na.rm = T), y = mean(y, na.rm = T)), "label", ...)}
 
 palmerpenguins::penguins %>% 
   ggplot() + 
   aes(bill_length_mm, bill_depth_mm, label = species, group = species) + 
   geom_point() + 
-  geom_grouplabel(size = 7)
+  geom_grouplabel_at_means(size = 7)
 ```
 
 

@@ -1,0 +1,145 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Step 0. Status Quo: base ggplot2
+
+```{r cars}
+library(tidyverse)
+
+gapminder::gapminder %>% 
+  filter(continent == "Americas") %>% 
+  mutate(is_argentina = country == "Argentina") %>% 
+  arrange(is_argentina) %>%
+  mutate(country = fct_inorder(country)) %>% 
+  ggplot() + 
+    aes(x = year, y = lifeExp, group = country) + 
+  geom_point() + 
+  geom_line(lwd = 3) + 
+  aes(color = is_argentina) + 
+  scale_color_manual(values = c("grey50", "magenta"))
+```
+
+## Step 1. define compute. test.
+
+```{r}
+compute_panel_highlight_lines <- function(data, scales, which_id = "Argentina"){
+
+data %>% 
+  mutate(is_id = id %in% which_id) %>% 
+  arrange(is_id) %>%
+  mutate(group = fct_inorder(id))
+  
+}
+
+gapminder::gapminder %>% 
+  filter(continent == "Americas") %>% 
+  select(x = year, y = lifeExp, id = country) %>% 
+  compute_panel_highlight_lines
+```
+
+# step 2 pass to ggproto. test
+
+```{r}
+statHighlight <- ggproto("statHighlight",
+                         Stat,
+                         compute_panel = compute_panel_highlight_lines,
+                         default_aes = aes(color = after_stat(is_id))
+                         )
+
+gapminder::gapminder %>% 
+  filter(continent == "Americas") %>% 
+  ggplot() + 
+  aes(x = year, y = lifeExp, group = country, id = country) + 
+  geom_point() + 
+  geom_line(color = "grey") + 
+  layer(geom = "line", stat = statHighlight, position = "identity",
+        params = list(linewidth = 3, alpha = 1, which_id = "Peru"))
+```
+
+# 3. make user-facing function. test (not done right.)
+
+```{r}
+geom_highlight <- function(which_id = "Peru") {
+  
+  layer(geom = "line", stat = statHighlight, position = "identity",
+        params = list(linewidth = 3, alpha = 1, which_id = which_id))
+  
+}
+
+```
+
+
+
+
+# 2. For this application... custom scale function?
+
+```{r}
+scale_color_manual_2 <- function(val1 = "grey", val2 = "red"){
+  
+  scale_color_manual(values = c(val1, val2))
+  
+}
+
+```
+  
+  
+```{r}
+gapminder::gapminder %>% 
+  filter(continent == "Americas") %>% 
+  ggplot() + 
+  aes(x = year, y = lifeExp, group = country, id = country) + 
+  geom_point() + 
+  geom_highlight() + 
+  scale_color_manual_2()
+```
+  
+# 3. pseudo geom (layer+scale). test in using in 'layer'
+
+```{r}
+geom_highlight_w_scale <- function(which_id, val1 = "grey", val2 = "pink"){
+  
+  list(
+      layer(geom = "line", stat = statHighlight, position = "identity",
+        params = list(linewidth = 3, alpha = 1)),
+      scale_color_manual_2(val1 = val1, val2 = val2)
+  )
+      
+}
+```
+
+
+  
+```{r}  
+gapminder::gapminder %>% 
+  filter(continent == "Americas") %>% 
+  ggplot() + 
+  aes(x = year, y = lifeExp, group = country, id = country) + 
+  geom_point() + 
+  geom_highlight_w_scale(which_id = "Chile", 
+                         val1 = "white", 
+                         val2 = "darkred")
+
+last_plot() + 
+  scale_color_viridis_d()
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
