@@ -48,6 +48,7 @@ data %>%
   
 }
 
+# test
 gapminder::gapminder %>% 
   filter(continent == "Americas") %>% 
   select(x = year, y = lifeExp, id = country) %>% 
@@ -63,6 +64,7 @@ statHighlight <- ggproto("statHighlight",
                          default_aes = aes(color = after_stat(ind_id))
                          )
 
+# test.
 gapminder::gapminder %>% 
   filter(continent == "Americas") %>% 
   ggplot() + 
@@ -73,22 +75,41 @@ gapminder::gapminder %>%
         params = list(linewidth = 3, alpha = 1, which_id = "Peru"))
 ```
 
-# 3. make user-facing function. (Return to this to do argument passing in the right way...)
+# Step 3. make user-facing function & test. (I'm not being very careful here)
 
 ```{r}
-geom_line_highlight <- function(...) {
+geom_line_highlight <- function(mapping = NULL, # global aesthetics will be used if NULL
+  data = NULL, # global data will be used if NULL
+  position = "identity", 
+  na.rm = FALSE, 
+  show.legend = NA,
+  inherit.aes = TRUE, 
+  ...  ) {
   
-  layer(geom = "line", stat = statHighlight, position = "identity",
-        params = list(...))
+  layer(geom = "line", stat = statHighlight, 
+    data = data, 
+    mapping = mapping,
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+  
   
 }
 
+# test
+gapminder::gapminder %>% 
+  filter(continent == "Americas") %>% 
+  ggplot() + 
+  aes(x = year, y = lifeExp, id = country) + 
+  geom_point() + 
+  geom_line_highlight(which_id = "Bolivia") 
 ```
 
+# Step 4. Specific request: preset colors - an geom + scale approach
 
-
-
-# 2. For this application... custom scale function?
+# Step 4.aa Create custom 2 color manual scale function.
 
 ```{r}
 scale_color_manual_2 <- function(val1 = "grey", val2 = "red"){
@@ -99,6 +120,7 @@ scale_color_manual_2 <- function(val1 = "grey", val2 = "red"){
 
 ```
   
+# Step 4.ab. test both components together
   
 ```{r}
 gapminder::gapminder %>% 
@@ -110,21 +132,19 @@ gapminder::gapminder %>%
   scale_color_manual_2()
 ```
   
-# 3. pseudo geom (layer+scale). test in using in 'layer'
+# Step 4.ba. bundle into pseudo geom (layer+scale)
 
 ```{r}
-geom_line_highlight_w_scale <- function(val1 = "grey", val2 = "pink", ...){
+geom_line_highlight_w_scale <- function(val1 = "grey", highlight_color = "pink", ...){
   
-  list(
-      layer(geom = "line", stat = statHighlight, position = "identity",
-        params = list(linewidth = 3, alpha = 1, ...)),
-      scale_color_manual_2(val1 = val1, val2 = val2)
+  list(geom_line_highlight(...),
+      scale_color_manual_2(val1 = val1, val2 = highlight_color)
   )
       
 }
 ```
 
-
+# Step 4bb test the geom-scale
   
 ```{r}  
 gapminder::gapminder %>% 
@@ -132,15 +152,33 @@ gapminder::gapminder %>%
   ggplot() + 
   aes(x = year, y = lifeExp, id = country) + 
   geom_point() + 
+  geom_line_highlight_w_scale(which_id = "Colombia",
+                              linewidth = 4,
+                              highlight_color = "goldenrod3")
+
+gapminder::gapminder %>% 
+  filter(continent == "Americas") %>% 
+  ggplot() + 
+  aes(x = year, y = lifeExp, id = country) + 
+  geom_point() + 
   geom_line_highlight_w_scale(which_id = "Chile", 
                          val1 = "white", 
-                         val2 = "darkred")
+                         highlight_color = "darkred",
+                         linewidth = 2)
+```
 
+# 4bb test overwrite scale
+
+```{r}
 last_plot() + 
-  scale_color_viridis_d()
+  scale_color_manual(values = c("gray", "red"), 
+                     breaks = c(F,T), 
+                     labels = c("Peers", "Chile"))
 ```
 
 ---
+
+# Other data.
 
 
 ```{r}
@@ -180,22 +218,15 @@ data <- tibble::tribble(
 
 ```{r}
 data %>% 
-  mutate(my_groups = factor(group)) %>% 
-  mutate(my_x = as.numeric(factor(x))) %>% 
+  mutate(group = factor(group)) %>% 
+  mutate(x = factor(x)) %>% 
 ggplot() +
-  aes(x = my_x, y = y, id = my_groups) + 
-  geom_point() +
-  layer(geom = "line", stat = statHighlight, position = "identity",
-        params = list(linewidth = 3, alpha = 1, which_id = "aaa"))
-
-data %>% 
-  mutate(my_groups = factor(group)) %>% 
-  mutate(my_x = as.numeric(factor(x))) %>% 
-ggplot() +
-  aes(x = my_x, y = y, id = my_groups) + 
+  aes(x = x, y = y, id = group) + 
   geom_line_highlight_w_scale(which_id = "ccc", 
-                         val1 = "white", 
-                         val2 = "darkred")
+                              linewidth = 3,
+                         highlight_color = "darkred")
+
+  
 ```
 
 
