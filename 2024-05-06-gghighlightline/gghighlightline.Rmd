@@ -66,20 +66,20 @@ statHighlight <- ggproto("statHighlight",
 gapminder::gapminder %>% 
   filter(continent == "Americas") %>% 
   ggplot() + 
-  aes(x = year, y = lifeExp, group = country, id = country) + 
+  aes(x = year, y = lifeExp, id = country) + 
   geom_point() + 
   geom_line(color = "grey") + 
   layer(geom = "line", stat = statHighlight, position = "identity",
         params = list(linewidth = 3, alpha = 1, which_id = "Peru"))
 ```
 
-# 3. make user-facing function. test (not done right.)
+# 3. make user-facing function. (Return to this to do argument passing in the right way...)
 
 ```{r}
-geom_highlight <- function(which_id = "Peru") {
+geom_highlight <- function(...) {
   
   layer(geom = "line", stat = statHighlight, position = "identity",
-        params = list(linewidth = 3, alpha = 1, which_id = which_id))
+        params = list(...))
   
 }
 
@@ -104,9 +104,9 @@ scale_color_manual_2 <- function(val1 = "grey", val2 = "red"){
 gapminder::gapminder %>% 
   filter(continent == "Americas") %>% 
   ggplot() + 
-  aes(x = year, y = lifeExp, group = country, id = country) + 
+  aes(x = year, y = lifeExp, id = country) + 
   geom_point() + 
-  geom_highlight() + 
+  geom_highlight(which_id = "Bolivia") + 
   scale_color_manual_2()
 ```
   
