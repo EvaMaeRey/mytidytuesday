@@ -42,8 +42,8 @@ gapminder::gapminder %>%
 compute_panel_highlight_lines <- function(data, scales, which_id = "Argentina"){
 
 data %>% 
-  mutate(is_id = id %in% which_id) %>% 
-  arrange(is_id) %>%
+  mutate(ind_id = id %in% which_id) %>% 
+  arrange(ind_id) %>%
   mutate(group = fct_inorder(id))
   
 }
@@ -60,7 +60,7 @@ gapminder::gapminder %>%
 statHighlight <- ggproto("statHighlight",
                          Stat,
                          compute_panel = compute_panel_highlight_lines,
-                         default_aes = aes(color = after_stat(is_id))
+                         default_aes = aes(color = after_stat(ind_id))
                          )
 
 gapminder::gapminder %>% 
@@ -76,7 +76,7 @@ gapminder::gapminder %>%
 # 3. make user-facing function. (Return to this to do argument passing in the right way...)
 
 ```{r}
-geom_highlight <- function(...) {
+geom_line_highlight <- function(...) {
   
   layer(geom = "line", stat = statHighlight, position = "identity",
         params = list(...))
@@ -106,18 +106,18 @@ gapminder::gapminder %>%
   ggplot() + 
   aes(x = year, y = lifeExp, id = country) + 
   geom_point() + 
-  geom_highlight(which_id = "Bolivia") + 
+  geom_line_highlight(which_id = "Bolivia") + 
   scale_color_manual_2()
 ```
   
 # 3. pseudo geom (layer+scale). test in using in 'layer'
 
 ```{r}
-geom_highlight_w_scale <- function(which_id, val1 = "grey", val2 = "pink"){
+geom_line_highlight_w_scale <- function(val1 = "grey", val2 = "pink", ...){
   
   list(
       layer(geom = "line", stat = statHighlight, position = "identity",
-        params = list(linewidth = 3, alpha = 1)),
+        params = list(linewidth = 3, alpha = 1, ...)),
       scale_color_manual_2(val1 = val1, val2 = val2)
   )
       
@@ -130,15 +130,74 @@ geom_highlight_w_scale <- function(which_id, val1 = "grey", val2 = "pink"){
 gapminder::gapminder %>% 
   filter(continent == "Americas") %>% 
   ggplot() + 
-  aes(x = year, y = lifeExp, group = country, id = country) + 
+  aes(x = year, y = lifeExp, id = country) + 
   geom_point() + 
-  geom_highlight_w_scale(which_id = "Chile", 
+  geom_line_highlight_w_scale(which_id = "Chile", 
                          val1 = "white", 
                          val2 = "darkred")
 
 last_plot() + 
   scale_color_viridis_d()
 ```
+
+---
+
+
+```{r}
+data <- tibble::tribble(
+    ~x,  ~group,        ~y, ~measure,  ~base,
+"FY18",   "aaa", 0.5603448,      260,    464,
+"FY15",   "aaa", 0.5081269,     1313,   2584,
+"FY19",   "aaa", 0.5799373,      185,    319,
+"FY16",   "aaa", 0.5225225,      580,   1110,
+"FY13",   "aaa", 0.4779116,      595,   1245,
+"FY17",   "aaa", 0.5502471,      334,    607,
+"FY14",   "aaa", 0.5339007,     1882,   3525,
+"FY20",   "aaa", 0.4960998,      318,    641,
+"FY21",   "aaa", 0.4765840,      173,    363,
+"FY21",   "bbb", 0.5135802,      208,    405,
+"FY20",   "bbb", 0.5384615,      259,    481,
+"FY17",   "bbb", 0.4628099,       56,    121,
+"FY18",   "bbb", 0.5474453,       75,    137,
+"FY15",   "bbb", 0.4705882,       72,    153,
+"FY19",   "bbb", 0.6083916,       87,    143,
+"FY14",   "bbb", 0.5097087,      105,    206,
+"FY16",   "bbb", 0.5395683,       75,    139,
+"FY13",   "bbb", 0.5432099,      132,    243,
+"FY14",   "ccc", 0.5326591,     2528,   4746,
+"FY21",   "ccc", 0.4320038,      899,   2081,
+"FY13",   "ccc", 0.5420887,     3265,   6023,
+"FY16",   "ccc", 0.5075188,      810,   1596,
+"FY15",   "ccc", 0.5116469,     1252,   2447,
+"FY18",   "ccc", 0.4206349,      477,   1134,
+"FY17",   "ccc", 0.4564565,      456,    999,
+"FY19",   "ccc", 0.4651429,      407,    875,
+"FY20",   "ccc", 0.4759398,      633,   1330
+)
+
+```
+
+
+```{r}
+data %>% 
+  mutate(my_groups = factor(group)) %>% 
+  mutate(my_x = as.numeric(factor(x))) %>% 
+ggplot() +
+  aes(x = my_x, y = y, id = my_groups) + 
+  geom_point() +
+  layer(geom = "line", stat = statHighlight, position = "identity",
+        params = list(linewidth = 3, alpha = 1, which_id = "aaa"))
+
+data %>% 
+  mutate(my_groups = factor(group)) %>% 
+  mutate(my_x = as.numeric(factor(x))) %>% 
+ggplot() +
+  aes(x = my_x, y = y, id = my_groups) + 
+  geom_line_highlight_w_scale(which_id = "ccc", 
+                         val1 = "white", 
+                         val2 = "darkred")
+```
+
 
 
 
