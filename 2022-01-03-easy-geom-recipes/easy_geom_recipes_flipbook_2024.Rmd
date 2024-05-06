@@ -96,7 +96,7 @@ code.r.hljs.remark-code:hover{
 
 ### Grab an .Rmd worksheet version [here](https://raw.githubusercontent.com/EvaMaeRey/mytidytuesday/master/2022-01-03-easy-geom-recipes/easy_geom_recipes_2024.Rmd).
 
-### or you can browse the rendered version of that [here](https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/easy_geom_recipes.html).
+### or you can browse the rendered version of that [here](https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/easy_geom_recipes_2024.html).
 
 ---
 
@@ -209,13 +209,13 @@ compute_group_xy_medians <- function(data,
                                      scales){
   data %>% 
     summarize(x = median(x),
-            y = median(y))
+              y = median(y))
 }
 
 penguins %>%
-  # function requires data 
+  # function requires dataframe
   # with columns named x and y
-  rename(x = bill_depth_mm, 
+  select(x = bill_depth_mm, 
          y = bill_length_mm) %>%
   compute_group_xy_medians()
 ```
@@ -235,25 +235,51 @@ class: inverse, middle, center
 ---
 
 
-`r flipbookr::chunk_reveal("StatXYMedians", left_assign = "detect")`
+`r flipbookr::chunk_reveal("StatXymedians", left_assign = "detect", widths = c(1,.2), break_type = 1)`
 
 
-```{r StatXYMedians, include = FALSE}
-StatXYMedians <- ggplot2::ggproto(
-  `_class` = "StatXYMedians",
-  `_inherit` = ggplot2::Stat,
-  required_aes = c("x", "y"),
-  compute_group = compute_group_xy_medians
+```{r StatXymedians, include = TRUE}
+StatXymedians <- ggplot2::ggproto(
+  `_class` = "StatXymedians",    # declare new Stat
+  `_inherit` = ggplot2::Stat,    # inherit behavior of generic stat
+  required_aes = c("x", "y"),    # declare required variable mappings
+  compute_group = compute_group_xy_medians    # pass computation definition for stat
   )
+```
+
+---
+
+Try using the stat in long-form, layer function. 
+
+`r flipbookr::chunk_reveal("layerStatXymedians", left_assign = "detect", break_type = 1)`
+
+
+```{r layerStatXYMedians, include=F}
+penguins %>% 
+  ggplot() + 
+  aes(x = bill_depth_mm) + 
+  aes(y = bill_length_mm) + 
+  geom_point() + 
+  layer(
+    # define a geometry
+    geom = GeomPoint, 
+    # pass in your newly defined stat
+    stat = StatXymedians,
+    # the position argument has no default
+    # we will use identity throughout these exercises
+    position = "identity", 
+    # params is where you pass a number of arguments
+    # here we will set size to show off our new layer
+    params = list(size = 8) 
+    )
 ```
 
 ---
 class: inverse, middle, center
 
-## Step 3: define geom_* function
+## Step 3: define user-facing geom_* function
 
-
---
+For ease of use, we'll wrap the layer function into something that looks more familiar.  We also take care to manage arguments like mapping, data, position, na.rm, show.legend, inherit.aes, etc, so that your new, user-facing function will behaive similarly to other user-facing geom_*s.
 
 - define the stat and geom for your layer
 
@@ -265,16 +291,19 @@ class: inverse, middle, center
 
 ```{r geom_point_xy_medians, include = FALSE} 
 geom_point_xy_medians <- function(
-  mapping = NULL, 
-  data = NULL,
+  mapping = NULL, # global aesthetics will be used if NULL
+  data = NULL, # global data will be used if NULL
   position = "identity", 
-  na.rm = FALSE,
+  na.rm = FALSE, 
   show.legend = NA,
-  inherit.aes = TRUE, ...) {
+  inherit.aes = TRUE, 
+  ...   # many other arguments can be used specific to 
+        # the Geom thats used in layer and to computation definition
+  ) {
   
   ggplot2::layer(
-    stat = StatXYMedians, # proto object from step 2
-    geom = ggplot2::GeomPoint, # inherit other behavior
+    stat = StatXYMedians, 
+    geom = ggplot2::GeomPoint, 
     data = data, 
     mapping = mapping,
     position = position, 
@@ -304,7 +333,7 @@ penguins %>%
   ggplot()+
   aes(x = bill_depth_mm, 
       y = bill_length_mm) +
-  geom_point()+
+  geom_point() +
   geom_point_xy_medians(color = "red")
 ```
 
@@ -321,11 +350,11 @@ class: inverse, middle, center
 
 ```{r conditional_penguins, include = FALSE}
 penguins %>%
-  ggplot()+
+  ggplot() +
   aes(x = bill_depth_mm, 
       y = bill_length_mm, 
-      color = species)+
-  geom_point()+
+      color = species) +
+  geom_point() +
   geom_point_xy_medians(size = 4)
 ```
 
@@ -403,7 +432,7 @@ compute_group_row_number <- function(data,
 # step 1b test the computation function 
 cars %>% 
   # input must have required aesthetic inputs as columns
-  rename(x = speed, 
+  select(x = speed, 
          y = dist) %>% 
   compute_group_row_number()
 ```
@@ -432,7 +461,26 @@ StatRownumber <- ggplot2::ggproto(
 ---
 class: inverse, middle, center
 
-## Step 3: define geom_* function
+## Step 2.b: test
+
+
+
+```{r}
+cars %>% 
+  mutate(id_number = 1:n()) %>% 
+  ggplot() + 
+  aes(x = speed, y = dist) + 
+  geom_point() + 
+  layer(geom = GeomText,
+        stat = StatRownumber,
+        position = "identity")
+```
+
+
+---
+class: inverse, middle, center
+
+## Step 3: define user-facing geom_* function
 
 ---
 
@@ -498,7 +546,8 @@ class: inverse, middle, center
 
 ```{r conditional_compute, include = FALSE}
 last_plot() + 
-  aes(color = dist > 60) # Computation is within group
+  # Note, computation is within group so ID #1 is seen twice
+  aes(color = dist > 60) 
 ```
 
 
@@ -586,9 +635,9 @@ compute_group_lm_fitted<- function(data,
 
 # test out the function
 penguins %>%
-  # rename to explicitly state the x and y inputs
-  rename(x = bill_depth_mm, 
-         y = bill_length_mm)%>%
+  # select to explicitly state the x and y inputs
+  select(x = bill_depth_mm, 
+         y = bill_length_mm) %>%
   compute_group_lm_fitted()
 ```
 
@@ -661,8 +710,8 @@ penguins %>%
   ggplot() + 
   aes(x = bill_depth_mm, y = bill_length_mm) +
   geom_point() + 
-  geom_smooth(method="lm", se= F)+
-  geom_point_lm_fitted(color="blue")
+  geom_smooth(method = "lm", se = F)+
+  geom_point_lm_fitted(color = "blue")
 ```
 
 ---
