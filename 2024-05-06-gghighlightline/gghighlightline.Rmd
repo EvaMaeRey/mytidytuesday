@@ -76,7 +76,7 @@ gapminder::gapminder %>%
         params = list(linewidth = 3, alpha = 1, which_id = "Peru"))
 ```
 
-# Step 3. make user-facing function & test. (I'm not being very careful here)
+# Step 3. make user-facing function & test. (I'm not being very careful here about default selection)
 
 ```{r}
 geom_line_highlight <- function(mapping = NULL, # global aesthetics will be used if NULL
@@ -230,6 +230,78 @@ ggplot() +
   
 ```
 
+
+
+# gghighlight
+
+
+```{r}
+library(tidyverse)
+
+gapminder::gapminder %>% 
+  filter(continent == "Oceania") %>% 
+  filter(year > 1995) %>% 
+  ggplot() + 
+  aes(x = year, y = lifeExp, group = country, color = country) + 
+  geom_line()
+
+last_plot()$layers |> length()
+
+last_plot() +
+  gghighlight::gghighlight(country %in% c("New Zealand"), 
+                           unhighlighted_colour = "darkgrey", 
+                           use_direct_label = F) 
+
+last_plot()$layers
+
+layer_data(i = 1) 
+
+layer_data(i = 2)
+
+gapminder::gapminder %>% 
+  filter(continent == "Americas") %>% 
+  ggplot() + 
+  aes(x = year, y = lifeExp, group = country, color = country) +
+  geom_line() +
+  scale_color_viridis_d() +
+  gghighlight::gghighlight(country %in% c("Bolivia", "Chile"), 
+                           unhighlighted_colour = "darkgrey", 
+                           use_direct_label = F) 
+
+last_plot() +
+  scale_color_manual(values = c("orange", "orange")) + 
+  facet_wrap(~country)
+```
+
+---
+
+# Function approach
+
+
+```{r}
+
+my_lines_w_highlight_plotter <- function(data, x, y, group, ids){
+  
+data %>% 
+  mutate(ind_in_ids = {{group}} %in% ids) %>% 
+  arrange(ind_in_ids) %>%
+  mutate(group = fct_inorder({{group}})) %>% 
+  ggplot() + 
+    aes(x = {{x}}, y = {{y}}, group = {{group}}) + 
+  geom_point() + 
+  geom_line(lwd = 3) + 
+  aes(color = ind_in_ids) + 
+  scale_color_manual(values = c("grey50", "magenta"))
+  
+}
+
+gapminder::gapminder %>% 
+  filter(continent == "Americas") %>% 
+  my_lines_w_highlight_plotter(x = year, y = lifeExp, 
+                               group = country, ids = "Argentina")
+
+
+```
 
 
 

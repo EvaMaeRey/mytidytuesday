@@ -1,5 +1,5 @@
 ---
-title: "another experiment"
+title: "layer one liners"
 author: "Evangeline Reynolds"
 date: "`r Sys.Date()`"
 output: 
@@ -18,16 +18,18 @@ options(tidyverse.quiet = TRUE)
 ## Intro Thoughts
 
 
-## Campitelli:  stat_rasa 
+## Campitelli:  stat_rasa (now stat_group() and extending to stat_panel()) 
 
 https://eliocamp.github.io/codigo-r/en/2018/05/how-to-make-a-generic-stat-in-ggplot2/
 
-### Backend StatRasa, stat_rasa() 
+### Backend StatRasa, stat_group() 
+
+Define group-wise computation.
 
 ```{r}
 library(tidyverse)
 
-StatRasa <- ggplot2::ggproto("StatRasa", ggplot2::Stat,
+StatRasagroup <- ggplot2::ggproto("StatRasagroup", ggplot2::Stat,
   compute_group = function(data, scales, compute_group_fun, fun.args) {
      # Change default arguments of the function to the 
      # values in fun.args
@@ -43,11 +45,16 @@ StatRasa <- ggplot2::ggproto("StatRasa", ggplot2::Stat,
      compute_group_fun(data)
 })
 
-# stat function used in ggplot
-stat_rasa <- function(mapping = NULL, data = NULL,
-                      geom = "point", 
-                      position = "identity",
-                      compute_group_fun = NULL,
+# stat function used in ggplot - but reordered from conventional!
+stat_group <- function(
+                       compute_group_fun = NULL,
+                       geom = "point", 
+                       mapping = NULL, 
+                       data = NULL,
+                       position = "identity",
+                       required_aes = NULL, 
+                       default_aes = NULL, 
+                       dropped_aes = NULL,
                       ...,
                       show.legend = NA,
                       inherit.aes = TRUE) {
@@ -57,10 +64,14 @@ stat_rasa <- function(mapping = NULL, data = NULL,
    # Pass dotted arguments to a list
    fun.args <- match.call(expand.dots = FALSE)$`...`
    
+   if(!is.null(required_aes)){StatRasagroup$required_aes <- required_aes}
+   if(!is.null(default_aes)){StatRasagroup$default_aes <- default_aes}
+   if(!is.null(dropped_aes)){StatRasagroup$dropped_aes <- dropped_aes}
+   
    ggplot2::layer(
       data = data,
       mapping = mapping,
-      stat = StatRasa,
+      stat = StatRasagroup,
       geom = geom,
       position = position,
       show.legend = show.legend,
@@ -78,7 +89,75 @@ stat_rasa <- function(mapping = NULL, data = NULL,
 ```
 
 
-### stat_rasa(fun = summarize_xy)
+
+---
+
+# extending: Define panel-wise computation
+
+```{r}
+library(tidyverse)
+
+StatRasapanel <- ggplot2::ggproto("StatRasapanel", ggplot2::Stat,
+  compute_panel = function(data, scales, compute_panel_fun, fun.args) {
+     # Change default arguments of the function to the 
+     # values in fun.args
+     args <- formals(compute_panel_fun)
+     for (i in seq_along(fun.args)) {
+        if (names(fun.args[i]) %in% names(fun.args)) {
+           args[[names(fun.args[i])]] <- fun.args[[i]]
+        } 
+     }
+     formals(compute_panel_fun) <- args
+     
+     # Apply function to data
+     compute_panel_fun(data)
+})
+
+# stat function used in ggplot - we reorder from conventional
+stat_panel <- function(compute_panel_fun = NULL, 
+                       geom = "point", 
+                       mapping = NULL, data = NULL,
+                      position = "identity",
+                      required_aes = NULL,
+                      default_aes = NULL,
+                      dropped_aes = NULL,
+                      ...,
+                      show.legend = NA,
+                      inherit.aes = TRUE) {
+   # Check arguments 
+   if (!is.function(compute_panel_fun)) stop("compute_panel_fun must be a function")
+   
+   # Pass dotted arguments to a list
+   fun.args <- match.call(expand.dots = FALSE)$`...`
+   
+   if(!is.null(required_aes)){StatRasapanel$required_aes <- required_aes}
+   if(!is.null(default_aes)){StatRasapanel$default_aes <- default_aes}
+   if(!is.null(dropped_aes)){StatRasapanel$dropped_aes <- dropped_aes}
+
+   ggplot2::layer(
+      data = data,
+      mapping = mapping,
+      stat = StatRasapanel,
+      geom = geom,
+      position = position,
+      show.legend = show.legend,
+      inherit.aes = inherit.aes,
+      check.aes = FALSE,
+      check.param = FALSE,
+      params = list(
+         compute_panel_fun = compute_panel_fun, 
+         fun.args = fun.args,
+         na.rm = FALSE,
+         ...
+      )
+   )
+}
+```
+
+
+
+
+### stat_group(fun = summarize_xy)
 
 ```{r}
 group_means <- function(data){
@@ -90,7 +169,7 @@ group_means <- function(data){
 }
 
 geom_means <- function(...){
-  stat_rasa(compute_group_fun = group_means, ...)
+  stat_group(compute_group_fun = group_means, ...)
 }
 
 mtcars |>
@@ -115,7 +194,7 @@ group_label_at_center <- function(data){
 }
 
 geom_center_label <- function(...){
-  stat_rasa(compute_group_fun = group_label_at_center, geom = GeomLabel, ...)
+  stat_group(compute_group_fun = group_label_at_center, geom = GeomLabel, ...)
 }
 
 
@@ -133,7 +212,7 @@ last_plot() +
 
 
 geom_center_text <- function(...){
-  stat_rasa(compute_group_fun = group_label_at_center, geom = GeomText, ...)
+  stat_group(compute_group_fun = group_label_at_center, geom = GeomText, ...)
 }
 
 
@@ -163,7 +242,7 @@ compute_post <- function(data){
 }
 
 geom_post <- function(...){
-  stat_rasa(compute_group_fun = compute_post, geom = "segment", ...)
+  stat_group(compute_group_fun = compute_post, geom = "segment", ...)
 }
 
 
@@ -188,7 +267,8 @@ compute_xmean <- function(data){
 }
 
 geom_xmean <- function(...){
-  stat_rasa(compute_group_fun = compute_xmean, geom = "vline", ...)
+  stat_group(compute_group_fun = compute_xmean, geom = "vline", 
+             dropped_aes = c("x", "y"), ...)
 }
 
 mtcars |>
@@ -212,7 +292,7 @@ compute_xy_quantile <- function(data, q = .25){
 }
 
 geom_quantile <- function(...){
-  stat_rasa(compute_group_fun = compute_xy_quantile, geom = "point", ...)
+  stat_group(compute_group_fun = compute_xy_quantile, geom = "point", ...)
 }
 
 mtcars |>
@@ -226,7 +306,139 @@ mtcars |>
 ```
 
 
-### UI, stat_rasa(fun = detrend)
+
+
+
+## Stat Rasa one-liners
+
+Since were organize with variable function input in first position and geom in secton position, and we can do one-liners (or two) use positioning for arguments.
+
+
+```{r}
+library(tidyverse)
+geom_xmean_line <- function(...){stat_group(function(df) df |> summarize(xintercept = mean(x)), "vline", dropped_aes = c("x", "y"), ...)}
+
+ggplot(cars) +
+  aes(speed, dist) + 
+  geom_point() + 
+  geom_xmean_line(linetype = 'dashed')
+  
+last_plot() + 
+  aes(color = dist > 50)
+
+
+geom_xmean <- function(...){stat_group(function(df) df |> summarize(x = mean(x), y = I(.05)), "point", ...)}
+
+
+ggplot(cars) +
+  aes(speed, dist) + 
+  geom_point() + 
+  geom_xmean(size = 8, shape = "diamond") 
+
+
+```
+
+
+
+```{r cars}
+geom_post <- function(...){stat_group(function(df) df |> mutate(xend = x, yend = 0), "segment", ...)}
+
+data.frame(prob = c(.4,.6), outcome = c(0, 1)) %>% 
+ggplot(data = .) +
+  aes(outcome, prob) + 
+  geom_post() +
+  geom_point() 
+
+geom_expectedvalue <- function(...){stat_group(function(df) df |> summarise(x = sum(x*y), y = 0), "point", ...)} 
+
+last_plot() + 
+  geom_expectedvalue()
+
+geom_expectedvalue_label <- function(...){stat_group(function(df) df |> summarise(x = sum(x*y), y = 0) |> mutate(label = round(x, 2)), "text", hjust = 1, vjust = 0, ...)} 
+
+last_plot() +
+  geom_expectedvalue_label()
+```
+
+```{r}
+rep(1, 15) |> 
+  c(0) %>% 
+  data.frame(outcome = .) |>
+  ggplot() + 
+  aes(x = outcome, y = 0) + 
+  geom_dotplot()
+
+geom_proportion <- function(...){stat_group(function(df) df |> summarise(x = sum(x)/length(x), y = 0), "point", ...)}   # this should work for T/F too when rasa_p is in play
+
+last_plot() + 
+  geom_proportion()
+
+geom_proportion_label <- function(...){stat_group(function(df) df |> summarise(x = sum(x)/length(x), y = 0) |> mutate(label = round(x,3)), vjust = 0, "text", ...)}   # this should work for T/F too when rasa_p is in play
+
+last_plot() + 
+  geom_proportion_label()
+
+last_plot()
+
+```
+
+
+## Experiment
+
+```{r}
+geom_means <- function(...){stat_group(function(df) df |> summarize(x = mean(x, na.rm = T), y = mean(y, na.rm = T)), "point", ...)}
+
+palmerpenguins::penguins %>% 
+  ggplot() + 
+  aes(bill_length_mm, bill_depth_mm) + 
+  geom_point() + 
+  geom_means(size = 7)
+```
+
+
+```{r}
+geom_grouplabel_at_means <-  function(...){stat_group(function(df) df |> group_by(label) |> summarize(x = mean(x, na.rm = T), y = mean(y, na.rm = T)), "label", ...)}
+
+palmerpenguins::penguins %>% 
+  ggplot() + 
+  aes(bill_length_mm, bill_depth_mm, label = species, group = species) + 
+  geom_point() + 
+  geom_grouplabel_at_means(size = 7)
+```
+
+
+
+```{r}
+compute_panel_highlight_lines <- function(data, which_id = "Argentina"){
+
+data %>% 
+  mutate(ind_id = id %in% which_id) %>% 
+  arrange(ind_id) %>%
+  mutate(group = fct_inorder(id))
+  
+}
+
+geom_line_highlight <- function(...){stat_panel(compute_panel_fun = compute_panel_highlight_lines, 
+             geom = "line", 
+             which_id = NULL,
+             linewidth = 3,
+             default_aes = aes(color = after_stat(ind_id)),...)
+}
+
+gapminder::gapminder %>% 
+  filter(continent == "Americas") %>% 
+  ggplot() + 
+  aes(x = year, y = lifeExp, id = country) + 
+  geom_point() + 
+  geom_line_highlight(which_id = "Bolivia")
+
+```
+
+
+## Closing remarks, Other Relevant Work, Caveats
+
+
+### Original example and variant
 
 ```{r}
 # using .75 span to match ggplot2 geom_smooth
@@ -253,7 +465,7 @@ ggplot(df, aes(x, y)) +
   stat_smooth(geom = "point", 
               aes(color = "loess smoothing"),
               xseq = df$x) +
-  stat_rasa(geom = "line", 
+  stat_group(geom = "line", 
              compute_group_fun = Detrend, 
              method = "smooth",
              aes(color = "detrended")) +
@@ -266,11 +478,11 @@ ggplot(df, aes(x, y)) +
   labs(title = "detrending with loess smoothing")
 ```  
   
-### UI, stat_rasa -> stat_detrend
+### UI, stat_group -> stat_detrend
   
 ```{r}  
 stat_detrend <- function(...) {
-   stat_rasa(compute_group_fun = Detrend, geom = "line", ...)
+   stat_group(compute_group_fun = Detrend, geom = "line", ...)
 }
 
 ggplot(df, aes(x, y)) + 
@@ -292,112 +504,3 @@ ggplot(df, aes(x, y)) +
   labs(title = "Linear detrending",
        color = NULL)
 ```
-
-
-## Stat Rasa one-liners
-
-if we reorganize, we can use positioning for arguments, and we can do one-liners.
-
-```{r}
-rasa_g <- function(compute_group_fun, geom, ...){
-  
-  stat_rasa(compute_group_fun = compute_group_fun, geom = geom, ...)
-  
-}
-```
-
-```{r, warning=F}
-library(tidyverse)
-geom_xmean_line <- function(...){rasa_g(function(df) df |> summarize(xintercept = mean(x)), "vline", ...)}
-
-ggplot(cars) +
-  aes(speed, dist) + 
-  geom_point() + 
-  geom_xmean_line(linetype = 'dashed')
-  
-last_plot() + 
-  aes(color = dist > 50)
-
-
-geom_xmean <- function(...){rasa_g(function(df) df |> summarize(x = mean(x), y = I(.05)), "point", ...)}
-
-
-ggplot(cars) +
-  aes(speed, dist) + 
-  geom_point() + 
-  geom_xmean(size = 8, shape = "diamond") 
-
-
-```
-
-
-
-```{r cars}
-geom_post <- function(...){rasa_g(function(df) df |> mutate(xend = x, yend = 0), "segment", ...)}
-
-data.frame(prob = c(.4,.6), outcome = c(0, 1)) %>% 
-ggplot(data = .) +
-  aes(outcome, prob) + 
-  geom_post() +
-  geom_point() 
-
-geom_expectedvalue <- function(...){rasa_g(function(df) df |> summarise(x = sum(x*y), y = 0), "point", ...)} 
-
-last_plot() + 
-  geom_expectedvalue()
-
-geom_expectedvalue_label <- function(...){rasa_g(function(df) df |> summarise(x = sum(x*y), y = 0) |> mutate(label = round(x, 2)), "text", hjust = 1, vjust = 0, ...)} 
-
-last_plot() +
-  geom_expectedvalue_label()
-```
-
-```{r}
-rep(1, 15) |> 
-  c(0) %>% 
-  data.frame(outcome = .) |>
-  ggplot() + 
-  aes(x = outcome, y = 0) + 
-  geom_dotplot()
-
-geom_proportion <- function(...){rasa_g(function(df) df |> summarise(x = sum(x)/length(x), y = 0), "point", ...)}   # this should work for T/F too when rasa_p is in play
-
-last_plot() + 
-  geom_proportion()
-
-geom_proportion_label <- function(...){rasa_g(function(df) df |> summarise(x = sum(x)/length(x), y = 0) |> mutate(label = round(x,3)), vjust = 0, "text", ...)}   # this should work for T/F too when rasa_p is in play
-
-last_plot() + 
-  geom_proportion_label()
-
-last_plot()
-
-```
-
-
-## Experiment
-
-```{r}
-geom_means <- function(...){rasa_g(function(df) df |> summarize(x = mean(x, na.rm = T), y = mean(y, na.rm = T)), "point", ...)}
-
-palmerpenguins::penguins %>% 
-  ggplot() + 
-  aes(bill_length_mm, bill_depth_mm) + 
-  geom_point() + 
-  geom_means(size = 7)
-```
-
-
-```{r}
-geom_grouplabel_at_means <-  function(...){rasa_g(function(df) df |> group_by(label) |> summarize(x = mean(x, na.rm = T), y = mean(y, na.rm = T)), "label", ...)}
-
-palmerpenguins::penguins %>% 
-  ggplot() + 
-  aes(bill_length_mm, bill_depth_mm, label = species, group = species) + 
-  geom_point() + 
-  geom_grouplabel_at_means(size = 7)
-```
-
-
-
-## Closing remarks, Other Relevant Work, Caveats
