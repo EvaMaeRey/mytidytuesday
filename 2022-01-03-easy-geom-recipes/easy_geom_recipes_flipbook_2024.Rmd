@@ -235,10 +235,10 @@ class: inverse, middle, center
 ---
 
 
-`r flipbookr::chunk_reveal("StatXymedians", left_assign = "detect", widths = c(1,.2), break_type = 1)`
+`r flipbookr::chunk_reveal("StatXymedians", widths = c(1,.2), break_type = 1)`
 
 
-```{r StatXymedians, include = TRUE}
+```{r StatXymedians, include = F}
 StatXymedians <- ggplot2::ggproto(
   `_class` = "StatXymedians",    # declare new Stat
   `_inherit` = ggplot2::Stat,    # inherit behavior of generic stat
@@ -247,32 +247,26 @@ StatXymedians <- ggplot2::ggproto(
   )
 ```
 
+
+
 ---
 
 Try using the stat in long-form, layer function. 
 
-`r flipbookr::chunk_reveal("layerStatXymedians", left_assign = "detect", break_type = 1)`
+`r flipbookr::chunk_reveal("layerStatXymedians")`
 
 
-```{r layerStatXYMedians, include=F}
+```{r layerStatXymedians, include=F}
 penguins %>% 
   ggplot() + 
   aes(x = bill_depth_mm) + 
   aes(y = bill_length_mm) + 
   geom_point() + 
-  layer(
-    # define a geometry
-    geom = GeomPoint, 
-    # pass in your newly defined stat
-    stat = StatXymedians,
-    # the position argument has no default
-    # we will use identity throughout these exercises
-    position = "identity", 
-    # params is where you pass a number of arguments
-    # here we will set size to show off our new layer
-    params = list(size = 8) 
-    )
+  layer(geom = GeomPoint, stat = StatXymedians, 
+        position = "identity", params = list(size = 8)) 
 ```
+
+
 
 ---
 class: inverse, middle, center
@@ -286,7 +280,7 @@ For ease of use, we'll wrap the layer function into something that looks more fa
 ---
 
 
-`r flipbookr::chunk_reveal("geom_point_xy_medians", left_assign = "detect")`
+`r flipbookr::chunk_reveal("geom_point_xy_medians",  break_type = 1)`
 
 
 ```{r geom_point_xy_medians, include = FALSE} 
@@ -297,12 +291,9 @@ geom_point_xy_medians <- function(
   na.rm = FALSE, 
   show.legend = NA,
   inherit.aes = TRUE, 
-  ...   # many other arguments can be used specific to 
-        # the Geom thats used in layer and to computation definition
-  ) {
-  
-  ggplot2::layer(
-    stat = StatXYMedians, 
+  ...  ){ # many other arguments can be used specific to  the Geom thats used in layer and to computation definition
+ggplot2::layer(
+    stat = StatXymedians, 
     geom = ggplot2::GeomPoint, 
     data = data, 
     mapping = mapping,
@@ -446,7 +437,7 @@ class: inverse, middle, center
 ---
 
 
-`r flipbookr::chunk_reveal("StatRownumber", left_assign = "detect")`
+`r flipbookr::chunk_reveal("StatRownumber", break_type = 1)`
 
 
 ```{r StatRownumber, include = FALSE}
@@ -485,7 +476,7 @@ class: inverse, middle, center
 ---
 
 
-`r flipbookr::chunk_reveal("geom_label_row_number", left_assign = "detect")`
+`r flipbookr::chunk_reveal("geom_label_row_number", break_type = 1)`
 
 
 ```{r geom_label_row_number, include = FALSE}
@@ -546,7 +537,6 @@ class: inverse, middle, center
 
 ```{r conditional_compute, include = FALSE}
 last_plot() + 
-  # Note, computation is within group so ID #1 is seen twice
   aes(color = dist > 60) 
 ```
 
@@ -592,7 +582,7 @@ class: inverse, middle, center
 ---
 
 
-`r flipbookr::chunk_reveal("fitted_1", left_assign = "detect")`
+`r flipbookr::chunk_reveal("fitted_1")`
 
 
 ```{r fitted_1, include = FALSE}
@@ -622,11 +612,11 @@ class: inverse, middle, center
 ---
 
 
-`r flipbookr::chunk_reveal("fitted_2", left_assign = "detect")`
+`r flipbookr::chunk_reveal("fitted_2")`
 
 
 ```{r fitted_2, include = FALSE}
-compute_group_lm_fitted<- function(data,
+compute_group_lm_fitted <- function(data,
                                    scales){
   model<-lm(formula= y ~ x, data = data)
   data %>% 
@@ -647,7 +637,7 @@ penguins %>%
 ---
 
 
-`r flipbookr::chunk_reveal("fitted_3", left_assign = "detect")`
+`r flipbookr::chunk_reveal("fitted_3", break_type = 1)`
 
 
 ```{r fitted_3, include = FALSE}
@@ -666,7 +656,7 @@ StatLmFitted <- ggplot2::ggproto(
 ---
 
 
-`r flipbookr::chunk_reveal("fitted_4", left_assign = "detect")`
+`r flipbookr::chunk_reveal("fitted_4", break_type = 1)`
 
 
 ```{r fitted_4, include = FALSE}
