@@ -350,13 +350,14 @@ base_plot2 +
   geom_text_s(
     position = position_nudge_line(y = 4, x = 1000, method = "spline",
                                    direction = "split")
-  )
-#> Warning: Using alpha for a discrete variable is not advised.
+  ) + 
+  labs_tag_enumerate()
+
 ```
 
 ## In plot `r i`, Using 'ggpp' + 'ggrepel'... I set max.overlaps = 30 so that 'ggrepel' does not give up too early
 
- ------------------------------------------------
+------------------------------------------------
 
 The examples above tend to work, but there is no guarantee of no overlaps, so combining them with repulsion is safer. The more dispersion there is in the data points the more necessary repulsion becomes.
 
