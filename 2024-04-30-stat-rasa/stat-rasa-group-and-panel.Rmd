@@ -48,7 +48,8 @@ compute_group_rasa <- function(data, scales, compute_group_fun, fun.args) {
 StatRasagroup <- ggplot2::ggproto(
   `_class` = "StatRasagroup", 
   `_inherit` = ggplot2::Stat,
-  compute_group = compute_group_rasa)
+  compute_group = compute_group_rasa
+  )
 
 # stat function used in ggplot - but reordered from conventional!
 stat_group <- function(
@@ -102,8 +103,7 @@ stat_group <- function(
 ```{r}
 library(tidyverse)
 
-StatRasapanel <- ggplot2::ggproto("StatRasapanel", ggplot2::Stat,
-  compute_panel = function(data, scales, compute_panel_fun, fun.args) {
+compute_panel_rasa <- function(data, scales, compute_panel_fun, fun.args) {
      # Change default arguments of the function to the 
      # values in fun.args
      args <- formals(compute_panel_fun)
@@ -116,7 +116,14 @@ StatRasapanel <- ggplot2::ggproto("StatRasapanel", ggplot2::Stat,
      
      # Apply function to data
      compute_panel_fun(data)
-})
+}
+
+
+StatRasapanel <- 
+  ggplot2::ggproto("StatRasapanel", 
+                   ggplot2::Stat,
+                   compute_panel = compute_panel_rasa)
+
 
 # stat function used in ggplot - we reorder from conventional
 stat_panel <- function(compute_panel_fun = NULL, 
@@ -158,6 +165,7 @@ stat_panel <- function(compute_panel_fun = NULL,
    )
 }
 ```
+
 
 
 
@@ -470,73 +478,93 @@ gapminder::gapminder %>%
 
 ```
 
+# Attempting a unified approach - allowing compute_panel or compute group to be defined.  
+
+## then we'll write helpers stat_group and stat_panel from this larger function
+
+
+
+```{r}
+StatRasa <- 
+  ggplot2::ggproto("StatRasa", 
+                   ggplot2::Stat)
+
+# stat function used in ggplot - we reorder from conventional
+stat_rasa <- function(mapping = NULL, 
+                       data = NULL,
+                       compute_panel_fun = NULL, 
+                       compute_group_fun = NULL, 
+
+                       geom = "point", 
+                      position = "identity",
+                      required_aes = NULL,
+                      default_aes = NULL,
+                      dropped_aes = NULL,
+                      ...,
+                      show.legend = NA,
+                      inherit.aes = TRUE) {
+   # Check arguments 
+   # if (!is.function(compute_panel_fun)) stop("compute_panel_fun must be a function")
+   
+
+   if(!is.null(compute_group_fun)){StatRasa$compute_group <- compute_group_rasa}
+   if(!is.null(compute_panel_fun)){StatRasa$compute_panel <- compute_panel_rasa}
+   
+   if(!is.null(required_aes)){StatRasa$required_aes <- required_aes}
+   if(!is.null(default_aes)){StatRasa$default_aes <- default_aes}
+   if(!is.null(dropped_aes)){StatRasa$dropped_aes <- dropped_aes}
+
+   # Pass dotted arguments to a list
+   fun.args <- match.call(expand.dots = FALSE)$`...`
+   
+   ggplot2::layer(
+      data = data,
+      mapping = mapping,
+      stat = StatRasa,
+      geom = geom,
+      position = position,
+      show.legend = show.legend,
+      inherit.aes = inherit.aes,
+      check.aes = FALSE,
+      check.param = FALSE,
+      params = list(
+         compute_panel_fun = compute_panel_fun, 
+         compute_group_fun = compute_group_fun,
+         fun.args = fun.args,
+         na.rm = FALSE,
+         ...
+      )
+   )
+}
+
+
+group_means <- function(data){
+  
+ data %>% 
+    summarise(x = mean(x),
+              y = mean(y))
+  
+}
+
+geom_means <- function(...){
+  stat_rasa(compute_group_fun = group_means, ...)
+}
+
+
+mtcars |>
+  ggplot() + 
+  aes(x = wt,
+      y = mpg) + 
+  geom_point() + 
+  geom_means(size = 6)
+
+last_plot() + 
+  aes(color = factor(cyl))
+```
+
+
 
 ## Closing remarks, Other Relevant Work, Caveats
 
 
-### Original example and variant
-
-```{r}
-# using .75 span to match ggplot2 geom_smooth
-Detrend <- function(data, method = "lm", span = 0.75) {
-   if (method == "lm") {
-      data$y <- resid(lm(y ~ x, data = data))
-   } else {
-      data$y <- resid(loess(y ~ x, span = span, data = data))
-   }
-   as.data.frame(data)
-   }
-   
-   
-library(ggplot2)
-set.seed(42)
-x <- seq(-1, 3, length.out = 30)
-y <- x^2 + rnorm(30)*0.5
-df <- data.frame(x = x, y = y)
-
-ggplot(df, aes(x, y)) +
-  geom_line(aes(color = "raw data")) +
-  geom_smooth(aes(color = "loess smoothing"),
-              alpha = .3) + 
-  stat_smooth(geom = "point", 
-              aes(color = "loess smoothing"),
-              xseq = df$x) +
-  stat_group(geom = "line", 
-             compute_group_fun = Detrend, 
-             method = "smooth",
-             aes(color = "detrended")) +
-  geom_hline(yintercept = 0, 
-             linetype = "dashed") + 
-  scale_color_discrete(breaks = 
-                         fct_inorder(c("raw data",
-                                       "loess smoothing",
-                                       "detrended"))) +
-  labs(title = "detrending with loess smoothing")
-```  
-  
-### UI, stat_group -> stat_detrend
-  
-```{r}  
-stat_detrend <- function(...) {
-   stat_group(compute_group_fun = Detrend, geom = "line", ...)
-}
-
-ggplot(df, aes(x, y)) + 
-  geom_line(aes(color = "raw data")) +
-  geom_smooth(method = "lm", 
-              aes(color = "linear model")) +
-  stat_smooth(method = "lm", geom = "segment",
-              xend = df$x, yend = df$y,
-              xseq = df$x, alpha = .2
-              ) +
-  stat_detrend(method = "lm", 
-                aes(color = "detrended")) +
-  geom_hline(yintercept = 0, 
-             linetype = "dashed") + 
-  scale_color_discrete(breaks = 
-                         fct_inorder(c("raw data",
-                                       "linear model",
-                                       "detrended"))) + 
-  labs(title = "Linear detrending",
-       color = NULL)
-```
+See Elio's blog post for details

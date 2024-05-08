@@ -104,13 +104,13 @@ It's a good idea to clarify what needs to happen without getting into the extens
 
 **Step 1. Define computation.** 
 --
-Wrap the necessary computation into a function that your target geom_*() function will perform. Test.
+Wrap the necessary computation into a function that your target geom_*() function will perform. Try it out.
 
 --
 
 **Step 2. Define a new Stat.** 
 --
-ggproto objects allow your extension  to work together with base ggplot2 functions!  You'll use the computation function from step 1 to help define it. Test.
+ggproto objects allow your extension  to work together with base ggplot2 functions!  You'll use the computation function from step 1 to help define it. TryTrTrye
 
 --
 
@@ -937,7 +937,7 @@ penguins %&gt;%
 ---
 class: inverse, middle, center
 
-## Step 3: define user-facing geom_* function
+## Step 3: define user-facing geom\_\* function
 
 For ease of use, we'll wrap the layer function into something that looks more familiar.  We also take care to manage arguments like mapping, data, position, na.rm, show.legend, inherit.aes, etc, so that your new, user-facing function will behaive similarly to other user-facing geom_*s.
 
@@ -1015,7 +1015,7 @@ ggplot2::layer(
 class: inverse, middle, center
 
 
-## Step 4: Enjoy! Use your function
+## Step 3.b: Enjoy! Use your function
 
 
 ---
@@ -1028,8 +1028,6 @@ count: false
 
 ```r
 *penguins
-
-NA
 ```
 ]
  
@@ -1096,10 +1094,6 @@ NA
 55 Adelie  Biscoe              35.7          16.9               185        3150 female  2008
 # ℹ 278 more rows
 ```
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -1111,17 +1105,11 @@ count: false
 ```r
 penguins %&gt;%
 * ggplot()
-
-NA
 ```
 ]
  
 .panel2-enjoy_penguins-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/enjoy_penguins_auto_02_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -1135,17 +1123,11 @@ penguins %&gt;%
   ggplot()+
 * aes(x = bill_depth_mm,
 *     y = bill_length_mm)
-
-NA
 ```
 ]
  
 .panel2-enjoy_penguins-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/enjoy_penguins_auto_03_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -1160,17 +1142,11 @@ penguins %&gt;%
   aes(x = bill_depth_mm,
       y = bill_length_mm) +
 * geom_point()
-
-NA
 ```
 ]
  
 .panel2-enjoy_penguins-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/enjoy_penguins_auto_04_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -1186,17 +1162,11 @@ penguins %&gt;%
       y = bill_length_mm) +
   geom_point() +
 * geom_point_xy_medians(color = "red")
-
-NA
 ```
 ]
  
 .panel2-enjoy_penguins-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/enjoy_penguins_auto_05_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 &lt;style&gt;
@@ -1246,8 +1216,6 @@ count: false
 
 ```r
 *penguins
-
-NA
 ```
 ]
  
@@ -1314,10 +1282,6 @@ NA
 55 Adelie  Biscoe              35.7          16.9               185        3150 female  2008
 # ℹ 278 more rows
 ```
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -1329,17 +1293,11 @@ count: false
 ```r
 penguins %&gt;%
 * ggplot()
-
-NA
 ```
 ]
  
 .panel2-conditional_penguins-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/conditional_penguins_auto_02_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -1354,17 +1312,11 @@ penguins %&gt;%
 * aes(x = bill_depth_mm,
 *     y = bill_length_mm,
 *     color = species)
-
-NA
 ```
 ]
  
 .panel2-conditional_penguins-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/conditional_penguins_auto_03_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -1380,17 +1332,11 @@ penguins %&gt;%
       y = bill_length_mm,
       color = species) +
 * geom_point()
-
-NA
 ```
 ]
  
 .panel2-conditional_penguins-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/conditional_penguins_auto_04_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -1407,17 +1353,11 @@ penguins %&gt;%
       color = species) +
   geom_point() +
 * geom_point_xy_medians(size = 4)
-
-NA
 ```
 ]
  
 .panel2-conditional_penguins-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/conditional_penguins_auto_05_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 &lt;style&gt;
@@ -1731,7 +1671,7 @@ cars %&gt;%
 ---
 class: inverse, middle, center
 
-## Step 1: computation
+## Step 1: define computation
 
 
 
@@ -1754,16 +1694,11 @@ count: false
 *   mutate(label = 1:n())
 
 *} 
-
-NA
 ```
 ]
  
 .panel2-compute_group_row_number-auto[
 
-```
-[1] NA
-```
 ]
 
 ---
@@ -1786,8 +1721,6 @@ compute_group_row_number &lt;- function(data,
 
 # step 1b test the computation function
 *cars
-
-NA
 ```
 ]
  
@@ -1846,10 +1779,6 @@ NA
 49    24  120
 50    25   85
 ```
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -1875,8 +1804,6 @@ cars %&gt;%
 # input must have required aesthetic inputs as columns
 * select(x = speed,
 *        y = dist)
-
-NA
 ```
 ]
  
@@ -1935,10 +1862,6 @@ NA
 49 24 120
 50 25  85
 ```
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -1965,8 +1888,6 @@ cars %&gt;%
   select(x = speed,
          y = dist) %&gt;%
 * compute_group_row_number()
-
-NA
 ```
 ]
  
@@ -2025,10 +1946,6 @@ NA
 49 24 120    49
 50 25  85    50
 ```
-
-```
-[1] NA
-```
 ]
 
 &lt;style&gt;
@@ -2066,7 +1983,7 @@ NA
 ---
 class: inverse, middle, center
 
-## Step 2: define ggproto
+## Step 2: define Stat
 
 
 ---
@@ -2075,7 +1992,27 @@ class: inverse, middle, center
 count: false
  
 
-.panel1-StatRownumber-1[
+.panel1-StatRownumber-auto[
+
+```r
+*StatRownumber &lt;- ggplot2::ggproto(
+* `_class` = "StatRownumber",
+* `_inherit` = ggplot2::Stat,
+* required_aes = c("x", "y"),
+* compute_group = compute_group_row_number
+* )
+```
+]
+ 
+.panel2-StatRownumber-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-StatRownumber-auto[
 
 ```r
 StatRownumber &lt;- ggplot2::ggproto(
@@ -2084,15 +2021,262 @@ StatRownumber &lt;- ggplot2::ggproto(
   required_aes = c("x", "y"),
   compute_group = compute_group_row_number
   )
+
+
+## Step 2.b: test
+*cars
 ```
 ]
  
-.panel2-StatRownumber-1[
+.panel2-StatRownumber-auto[
 
+```
+   speed dist
+1      4    2
+2      4   10
+3      7    4
+4      7   22
+5      8   16
+6      9   10
+7     10   18
+8     10   26
+9     10   34
+10    11   17
+11    11   28
+12    12   14
+13    12   20
+14    12   24
+15    12   28
+16    13   26
+17    13   34
+18    13   34
+19    13   46
+20    14   26
+21    14   36
+22    14   60
+23    14   80
+24    15   20
+25    15   26
+26    15   54
+27    16   32
+28    16   40
+29    17   32
+30    17   40
+31    17   50
+32    18   42
+33    18   56
+34    18   76
+35    18   84
+36    19   36
+37    19   46
+38    19   68
+39    20   32
+40    20   48
+41    20   52
+42    20   56
+43    20   64
+44    22   66
+45    23   54
+46    24   70
+47    24   92
+48    24   93
+49    24  120
+50    25   85
+```
+]
+
+---
+count: false
+ 
+
+.panel1-StatRownumber-auto[
+
+```r
+StatRownumber &lt;- ggplot2::ggproto(
+  `_class` = "StatRownumber",
+  `_inherit` = ggplot2::Stat,
+  required_aes = c("x", "y"),
+  compute_group = compute_group_row_number
+  )
+
+
+## Step 2.b: test
+cars %&gt;%
+* mutate(id_number = 1:n())
+```
+]
+ 
+.panel2-StatRownumber-auto[
+
+```
+   speed dist id_number
+1      4    2         1
+2      4   10         2
+3      7    4         3
+4      7   22         4
+5      8   16         5
+6      9   10         6
+7     10   18         7
+8     10   26         8
+9     10   34         9
+10    11   17        10
+11    11   28        11
+12    12   14        12
+13    12   20        13
+14    12   24        14
+15    12   28        15
+16    13   26        16
+17    13   34        17
+18    13   34        18
+19    13   46        19
+20    14   26        20
+21    14   36        21
+22    14   60        22
+23    14   80        23
+24    15   20        24
+25    15   26        25
+26    15   54        26
+27    16   32        27
+28    16   40        28
+29    17   32        29
+30    17   40        30
+31    17   50        31
+32    18   42        32
+33    18   56        33
+34    18   76        34
+35    18   84        35
+36    19   36        36
+37    19   46        37
+38    19   68        38
+39    20   32        39
+40    20   48        40
+41    20   52        41
+42    20   56        42
+43    20   64        43
+44    22   66        44
+45    23   54        45
+46    24   70        46
+47    24   92        47
+48    24   93        48
+49    24  120        49
+50    25   85        50
+```
+]
+
+---
+count: false
+ 
+
+.panel1-StatRownumber-auto[
+
+```r
+StatRownumber &lt;- ggplot2::ggproto(
+  `_class` = "StatRownumber",
+  `_inherit` = ggplot2::Stat,
+  required_aes = c("x", "y"),
+  compute_group = compute_group_row_number
+  )
+
+
+## Step 2.b: test
+cars %&gt;%
+  mutate(id_number = 1:n()) %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-StatRownumber-auto[
+![](easy_geom_recipes_flipbook_2024_files/figure-html/StatRownumber_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-StatRownumber-auto[
+
+```r
+StatRownumber &lt;- ggplot2::ggproto(
+  `_class` = "StatRownumber",
+  `_inherit` = ggplot2::Stat,
+  required_aes = c("x", "y"),
+  compute_group = compute_group_row_number
+  )
+
+
+## Step 2.b: test
+cars %&gt;%
+  mutate(id_number = 1:n()) %&gt;%
+  ggplot() +
+* aes(x = speed, y = dist)
+```
+]
+ 
+.panel2-StatRownumber-auto[
+![](easy_geom_recipes_flipbook_2024_files/figure-html/StatRownumber_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-StatRownumber-auto[
+
+```r
+StatRownumber &lt;- ggplot2::ggproto(
+  `_class` = "StatRownumber",
+  `_inherit` = ggplot2::Stat,
+  required_aes = c("x", "y"),
+  compute_group = compute_group_row_number
+  )
+
+
+## Step 2.b: test
+cars %&gt;%
+  mutate(id_number = 1:n()) %&gt;%
+  ggplot() +
+  aes(x = speed, y = dist) +
+* geom_point()
+```
+]
+ 
+.panel2-StatRownumber-auto[
+![](easy_geom_recipes_flipbook_2024_files/figure-html/StatRownumber_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-StatRownumber-auto[
+
+```r
+StatRownumber &lt;- ggplot2::ggproto(
+  `_class` = "StatRownumber",
+  `_inherit` = ggplot2::Stat,
+  required_aes = c("x", "y"),
+  compute_group = compute_group_row_number
+  )
+
+
+## Step 2.b: test
+cars %&gt;%
+  mutate(id_number = 1:n()) %&gt;%
+  ggplot() +
+  aes(x = speed, y = dist) +
+  geom_point() +
+* layer(geom = GeomText,
+*       stat = StatRownumber,
+*       position = "identity")
+```
+]
+ 
+.panel2-StatRownumber-auto[
+![](easy_geom_recipes_flipbook_2024_files/figure-html/StatRownumber_auto_07_output-1.png)&lt;!-- --&gt;
 ]
 
 &lt;style&gt;
-.panel1-StatRownumber-1 {
+.panel1-StatRownumber-auto {
   color: black;
   width: 38.6060606060606%;
   hight: 32%;
@@ -2100,7 +2284,7 @@ StatRownumber &lt;- ggplot2::ggproto(
   padding-left: 1%;
   font-size: 80%
 }
-.panel2-StatRownumber-1 {
+.panel2-StatRownumber-auto {
   color: black;
   width: 59.3939393939394%;
   hight: 32%;
@@ -2108,7 +2292,7 @@ StatRownumber &lt;- ggplot2::ggproto(
   padding-left: 1%;
   font-size: 80%
 }
-.panel3-StatRownumber-1 {
+.panel3-StatRownumber-auto {
   color: black;
   width: NA%;
   hight: 33%;
@@ -2123,32 +2307,11 @@ StatRownumber &lt;- ggplot2::ggproto(
 
 
 
----
-class: inverse, middle, center
-
-## Step 2.b: test
-
-
-
-
-```r
-cars %&gt;% 
-  mutate(id_number = 1:n()) %&gt;% 
-  ggplot() + 
-  aes(x = speed, y = dist) + 
-  geom_point() + 
-  layer(geom = GeomText,
-        stat = StatRownumber,
-        position = "identity")
-```
-
-![](easy_geom_recipes_flipbook_2024_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
-
 
 ---
 class: inverse, middle, center
 
-## Step 3: define user-facing geom_* function
+## Step 3: define user-facing geom\_\* function
 
 ---
 
@@ -2223,7 +2386,7 @@ geom_label_row_number &lt;- function(
 class: inverse, middle, center
 
 
-## Step 4: Enjoy! Use your function
+## Step 3.b: Enjoy! Use your function
 
 
 ---
@@ -2236,8 +2399,6 @@ count: false
 
 ```r
 *cars
-
-NA
 ```
 ]
  
@@ -2296,10 +2457,6 @@ NA
 49    24  120
 50    25   85
 ```
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -2311,17 +2468,11 @@ count: false
 ```r
 cars %&gt;%
 * ggplot()
-
-NA
 ```
 ]
  
 .panel2-enjoy_again-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/enjoy_again_auto_02_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -2334,17 +2485,11 @@ count: false
 cars %&gt;%
   ggplot() +
 * aes(x = speed, y = dist)
-
-NA
 ```
 ]
  
 .panel2-enjoy_again-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/enjoy_again_auto_03_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -2358,17 +2503,11 @@ cars %&gt;%
   ggplot() +
   aes(x = speed, y = dist) +
 * geom_point()
-
-NA
 ```
 ]
  
 .panel2-enjoy_again-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/enjoy_again_auto_04_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -2383,17 +2522,11 @@ cars %&gt;%
   aes(x = speed, y = dist) +
   geom_point() +
 * geom_label_row_number(hjust = 1.2)  # function in action
-
-NA
 ```
 ]
  
 .panel2-enjoy_again-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/enjoy_again_auto_05_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 &lt;style&gt;
@@ -2443,17 +2576,11 @@ count: false
 
 ```r
 *last_plot()
-
-NA
 ```
 ]
  
 .panel2-conditional_compute-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/conditional_compute_auto_01_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -2465,17 +2592,11 @@ count: false
 ```r
 last_plot() +
 * aes(color = dist &gt; 60)
-
-NA
 ```
 ]
  
 .panel2-conditional_compute-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/conditional_compute_auto_02_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 &lt;style&gt;
@@ -2858,7 +2979,7 @@ penguins %&gt;%
 ---
 class: inverse, middle, center
 
-## Step 1: computation
+## Step 1: define computation
 
 ---
 
@@ -3174,7 +3295,7 @@ penguins %&gt;%
 
 
 
-## Step 2: define ggproto
+## Step 2: define new Stat
 
 ---
 
@@ -3231,7 +3352,7 @@ StatLmFitted &lt;- ggplot2::ggproto(
 
 
 
-## Step 3: define geom_* function
+## Step 3: define user-facing geom\_\* function
 
 
 ---
@@ -3305,7 +3426,7 @@ geom_point_lm_fitted &lt;- function(
 class: inverse, middle, center
 
 
-## Step 4: Enjoy! Use your function
+## Step 3.b: Enjoy! Use your function
 
 
 
@@ -3319,8 +3440,6 @@ count: false
 
 ```r
 *penguins
-
-NA
 ```
 ]
  
@@ -3387,10 +3506,6 @@ NA
 55 Adelie  Biscoe              35.7          16.9               185        3150 female  2008
 # ℹ 278 more rows
 ```
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -3402,17 +3517,11 @@ count: false
 ```r
 penguins %&gt;%
 * ggplot()
-
-NA
 ```
 ]
  
 .panel2-fitted_5-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/fitted_5_auto_02_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -3425,17 +3534,11 @@ count: false
 penguins %&gt;%
   ggplot() +
 * aes(x = bill_depth_mm, y = bill_length_mm)
-
-NA
 ```
 ]
  
 .panel2-fitted_5-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/fitted_5_auto_03_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -3449,17 +3552,11 @@ penguins %&gt;%
   ggplot() +
   aes(x = bill_depth_mm, y = bill_length_mm) +
 * geom_point()
-
-NA
 ```
 ]
  
 .panel2-fitted_5-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/fitted_5_auto_04_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -3474,17 +3571,11 @@ penguins %&gt;%
   aes(x = bill_depth_mm, y = bill_length_mm) +
   geom_point() +
 * geom_smooth(method = "lm", se = F)
-
-NA
 ```
 ]
  
 .panel2-fitted_5-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/fitted_5_auto_05_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -3500,17 +3591,11 @@ penguins %&gt;%
   geom_point() +
   geom_smooth(method = "lm", se = F)+
 * geom_point_lm_fitted(color = "blue")
-
-NA
 ```
 ]
  
 .panel2-fitted_5-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/fitted_5_auto_06_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 &lt;style&gt;
@@ -3561,8 +3646,6 @@ count: false
 
 ```r
 *penguins
-
-NA
 ```
 ]
  
@@ -3629,10 +3712,6 @@ NA
 55 Adelie  Biscoe              35.7          16.9               185        3150 female  2008
 # ℹ 278 more rows
 ```
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -3644,17 +3723,11 @@ count: false
 ```r
 penguins %&gt;%
 * ggplot()
-
-NA
 ```
 ]
  
 .panel2-fitted_6-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/fitted_6_auto_02_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -3668,17 +3741,11 @@ penguins %&gt;%
   ggplot() +
 * aes(x = bill_depth_mm,
 *     y = bill_length_mm)
-
-NA
 ```
 ]
  
 .panel2-fitted_6-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/fitted_6_auto_03_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -3693,17 +3760,11 @@ penguins %&gt;%
   aes(x = bill_depth_mm,
       y = bill_length_mm) +
 * geom_point()
-
-NA
 ```
 ]
  
 .panel2-fitted_6-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/fitted_6_auto_04_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -3719,17 +3780,11 @@ penguins %&gt;%
       y = bill_length_mm) +
   geom_point() +
 * geom_smooth(method="lm", se= F)
-
-NA
 ```
 ]
  
 .panel2-fitted_6-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/fitted_6_auto_05_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -3746,17 +3801,11 @@ penguins %&gt;%
   geom_point() +
   geom_smooth(method="lm", se= F) +
 * geom_point_lm_fitted()
-
-NA
 ```
 ]
  
 .panel2-fitted_6-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/fitted_6_auto_06_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -3774,17 +3823,11 @@ penguins %&gt;%
   geom_smooth(method="lm", se= F) +
   geom_point_lm_fitted() +
 * facet_wrap(facets = vars(species))
-
-NA
 ```
 ]
  
 .panel2-fitted_6-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/fitted_6_auto_07_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 &lt;style&gt;
@@ -4139,36 +4182,15 @@ penguins %&gt;%
 
 
 ---
-class: inverse, center, middle
-background-image: url(https://images.unsplash.com/photo-1630297169944-1316e5e011f8?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTc1fHxiYWtlcnl8ZW58MHx8MHx8&amp;auto=format&amp;fit=crop&amp;w=400&amp;q=60)
-background-size: cover
-
-
-## Not interested in writing your own geoms?  
-
---
-
-### Check out some ready-to-go geoms that might be of interest in the [{ggxmean}](https://evamaerey.github.io/ggxmean/) package... or [other extension packages](https://exts.ggplot2.tidyverse.org/).
-
-
---
-
-## Or interested in working a bit more with geoms and making them available to more folks, but not interested in writing your own package?
-
---
-
-
-### Join in on the development and validation of the ggxmean package for statistical educators and everyday analysis.
-
----
-
-
 
 #### Photo Credits: Thalia Ruiz, Jennifer Pallian, Lisa Hanly, John Dancy, Piper Bchamp
 
 #### More comprehensive extension resources: 
 
+- 
+
 - https://www.youtube.com/watch?v=uj7A3i2fi54
+
 - https://cran.r-project.org/web/packages/ggplot2/vignettes/extending-ggplot2.html
 
 - https://ggplot2-book.org/extensions.html

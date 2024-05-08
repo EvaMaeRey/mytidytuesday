@@ -257,7 +257,7 @@ penguins %>%
 ---
 class: inverse, middle, center
 
-## Step 3: define user-facing geom_* function
+## Step 3: define user-facing geom\_\* function
 
 For ease of use, we'll wrap the layer function into something that looks more familiar.  We also take care to manage arguments like mapping, data, position, na.rm, show.legend, inherit.aes, etc, so that your new, user-facing function will behaive similarly to other user-facing geom_*s.
 
@@ -296,13 +296,13 @@ ggplot2::layer(
 class: inverse, middle, center
 
 
-## Step 4: Enjoy! Use your function
+## Step 3.b: Enjoy! Use your function
 
 
 ---
 
 
-`r flipbookr::chunk_reveal("enjoy_penguins", left_assign = "detect")`
+`r flipbookr::chunk_reveal("enjoy_penguins")`
 
 
 ```{r enjoy_penguins, include = FALSE}
@@ -322,7 +322,7 @@ class: inverse, middle, center
 ---
 
 
-`r flipbookr::chunk_reveal("conditional_penguins", left_assign = "detect")`
+`r flipbookr::chunk_reveal("conditional_penguins")`
 
 
 ```{r conditional_penguins, include = FALSE}
@@ -384,14 +384,14 @@ cars %>%
 ---
 class: inverse, middle, center
 
-## Step 1: computation
+## Step 1: define computation
 
 
 
 ---
 
 
-`r flipbookr::chunk_reveal("compute_group_row_number", left_assign = "detect")`
+`r flipbookr::chunk_reveal("compute_group_row_number")`
 
 
 ```{r compute_group_row_number, include = FALSE}
@@ -417,13 +417,13 @@ cars %>%
 ---
 class: inverse, middle, center
 
-## Step 2: define ggproto
+## Step 2: define Stat
 
 
 ---
 
 
-`r flipbookr::chunk_reveal("StatRownumber", break_type = 1)`
+`r flipbookr::chunk_reveal("StatRownumber")`
 
 
 ```{r StatRownumber, include = FALSE}
@@ -433,16 +433,9 @@ StatRownumber <- ggplot2::ggproto(
   required_aes = c("x", "y"),
   compute_group = compute_group_row_number
   )
-```
 
----
-class: inverse, middle, center
 
 ## Step 2.b: test
-
-
-
-```{r}
 cars %>% 
   mutate(id_number = 1:n()) %>% 
   ggplot() + 
@@ -457,7 +450,7 @@ cars %>%
 ---
 class: inverse, middle, center
 
-## Step 3: define user-facing geom_* function
+## Step 3: define user-facing geom\_\* function
 
 ---
 
@@ -493,13 +486,13 @@ geom_label_row_number <- function(
 class: inverse, middle, center
 
 
-## Step 4: Enjoy! Use your function
+## Step 3.b: Enjoy! Use your function
 
 
 ---
 
 
-`r flipbookr::chunk_reveal("enjoy_again", left_assign = "detect")`
+`r flipbookr::chunk_reveal("enjoy_again")`
 
 
 ```{r enjoy_again, include = FALSE}
@@ -518,7 +511,7 @@ class: inverse, middle, center
 ---
 
 
-`r flipbookr::chunk_reveal("conditional_compute", left_assign = "detect")`
+`r flipbookr::chunk_reveal("conditional_compute")`
 
 
 ```{r conditional_compute, include = FALSE}
@@ -593,7 +586,7 @@ penguins %>%
 ---
 class: inverse, middle, center
 
-## Step 1: computation
+## Step 1: define computation
 
 ---
 
@@ -618,7 +611,7 @@ penguins %>%
 ```
 
 
-## Step 2: define ggproto
+## Step 2: define new Stat
 
 ---
 
@@ -636,7 +629,7 @@ StatLmFitted <- ggplot2::ggproto(
 ```
 
 
-## Step 3: define geom_* function
+## Step 3: define user-facing geom\_\* function
 
 
 ---
@@ -671,14 +664,14 @@ geom_point_lm_fitted <- function(
 class: inverse, middle, center
 
 
-## Step 4: Enjoy! Use your function
+## Step 3.b: Enjoy! Use your function
 
 
 
 ---
 
 
-`r flipbookr::chunk_reveal("fitted_5", left_assign = "detect")`
+`r flipbookr::chunk_reveal("fitted_5")`
 
 
 ```{r fitted_5, include = FALSE}
@@ -699,7 +692,7 @@ class: inverse, middle, center
 ---
 
 
-`r flipbookr::chunk_reveal("fitted_6", left_assign = "detect")`
+`r flipbookr::chunk_reveal("fitted_6")`
 
 
 ```{r fitted_6, include = FALSE}
@@ -757,36 +750,15 @@ penguins %>%
 ```
 
 ---
-class: inverse, center, middle
-background-image: url(https://images.unsplash.com/photo-1630297169944-1316e5e011f8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTc1fHxiYWtlcnl8ZW58MHx8MHx8&auto=format&fit=crop&w=400&q=60)
-background-size: cover
-
-
-## Not interested in writing your own geoms?  
-
---
-
-### Check out some ready-to-go geoms that might be of interest in the [{ggxmean}](https://evamaerey.github.io/ggxmean/) package... or [other extension packages](https://exts.ggplot2.tidyverse.org/).
-
-
---
-
-## Or interested in working a bit more with geoms and making them available to more folks, but not interested in writing your own package?
-
---
-
-
-### Join in on the development and validation of the ggxmean package for statistical educators and everyday analysis.
-
----
-
-
 
 #### Photo Credits: Thalia Ruiz, Jennifer Pallian, Lisa Hanly, John Dancy, Piper Bchamp
 
 #### More comprehensive extension resources: 
 
+- 
+
 - https://www.youtube.com/watch?v=uj7A3i2fi54
+
 - https://cran.r-project.org/web/packages/ggplot2/vignettes/extending-ggplot2.html
 
 - https://ggplot2-book.org/extensions.html
