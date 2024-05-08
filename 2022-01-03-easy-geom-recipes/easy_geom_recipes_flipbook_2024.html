@@ -76,7 +76,7 @@ code.r.hljs.remark-code:hover{
 
 ---
 
-### With your new geom_ function, calculation is done under the hood by the ggplot2 system; with these geom_* functions, you can write graphical poems with consice new language you've tailored for yourself! 
+### With your new geom\_\* function, calculation is done under the hood by the ggplot2 system; with these geom\_\* functions, you can write graphical poems with concise new language you've tailored for yourself! 
 
 ---
 
@@ -102,27 +102,22 @@ It's a good idea to clarify what needs to happen without getting into the extens
 
 --
 
-**Step 1. Write a computation function.** 
+**Step 1. Define computation.** 
 --
-Wrap the necessary computation into a function that your target geom_*() function will perform.
+Wrap the necessary computation into a function that your target geom_*() function will perform. Test.
 
 --
 
-**Step 2. Define a ggproto object.** 
+**Step 2. Define a new Stat.** 
 --
-ggproto objects allow your extension  to work together with base ggplot2 functions!  You'll use the computation function from step 1 to help define it.
+ggproto objects allow your extension  to work together with base ggplot2 functions!  You'll use the computation function from step 1 to help define it. Test.
 
 --
 
-**Step 3. Write your geom function!** 
+**Step 3. Define a user-facing geom\_\* function.** 
 --
-You're ready to write your function.  You will incorporate the ggproto from step 2.  
+You're ready to write your function.  You will incorporate the ggproto from step 2.  Test/Enjoy!
 
---
-
-**Step 4. Test/Enjoy!** 
---
-Take your new geom for a spin! Check out group-wise computation behavior!
 
 
 
@@ -135,11 +130,8 @@ class: inverse, middle, center
 
 --
 
-##`geom_point_xy_medians()`
+## `geom_point_xy_medians()`
 
---
-
-- This will be a point at the median of x and y
 
 
 ---
@@ -157,16 +149,11 @@ count: false
 
 ```r
 *library(tidyverse)
-
-NA
 ```
 ]
  
 .panel2-penguins-auto[
 
-```
-[1] NA
-```
 ]
 
 ---
@@ -178,16 +165,11 @@ count: false
 ```r
 library(tidyverse)
 *library(palmerpenguins)
-
-NA
 ```
 ]
  
 .panel2-penguins-auto[
 
-```
-[1] NA
-```
 ]
 
 ---
@@ -201,16 +183,11 @@ library(tidyverse)
 library(palmerpenguins)
 
 *penguins &lt;- remove_missing(penguins)
-
-NA
 ```
 ]
  
 .panel2-penguins-auto[
 
-```
-[1] NA
-```
 ]
 
 ---
@@ -226,8 +203,6 @@ library(palmerpenguins)
 penguins &lt;- remove_missing(penguins)
 
 *penguins
-
-NA
 ```
 ]
  
@@ -294,10 +269,6 @@ NA
 55 Adelie  Biscoe              35.7          16.9               185        3150 female  2008
 # ℹ 278 more rows
 ```
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -315,8 +286,6 @@ penguins &lt;- remove_missing(penguins)
 penguins %&gt;%
 * summarize(bill_length_mm_median = median(bill_length_mm),
 *           bill_depth_mm_median = median(bill_depth_mm))
-
-NA
 ```
 ]
  
@@ -327,10 +296,6 @@ NA
   bill_length_mm_median bill_depth_mm_median
                   &lt;dbl&gt;                &lt;dbl&gt;
 1                  44.5                 17.3
-```
-
-```
-[1] NA
 ```
 ]
 
@@ -350,16 +315,11 @@ penguins %&gt;%
   summarize(bill_length_mm_median = median(bill_length_mm),
             bill_depth_mm_median = median(bill_depth_mm)) -&gt;
 *penguins_medians
-
-NA
 ```
 ]
  
 .panel2-penguins-auto[
 
-```
-[1] NA
-```
 ]
 
 ---
@@ -380,8 +340,6 @@ penguins %&gt;%
 penguins_medians
 
 *penguins
-
-NA
 ```
 ]
  
@@ -447,10 +405,6 @@ NA
 54 Adelie  Biscoe              37.6          19.1               194        3750 male    2008
 55 Adelie  Biscoe              35.7          16.9               185        3150 female  2008
 # ℹ 278 more rows
-```
-
-```
-[1] NA
 ```
 ]
 
@@ -473,17 +427,11 @@ penguins_medians
 
 penguins %&gt;%
 * ggplot()
-
-NA
 ```
 ]
  
 .panel2-penguins-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/penguins_auto_08_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -506,17 +454,11 @@ penguins_medians
 penguins %&gt;%
   ggplot() +
 * aes(x = bill_depth_mm)
-
-NA
 ```
 ]
  
 .panel2-penguins-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/penguins_auto_09_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -540,17 +482,11 @@ penguins %&gt;%
   ggplot() +
   aes(x = bill_depth_mm) +
 * aes(y = bill_length_mm)
-
-NA
 ```
 ]
  
 .panel2-penguins-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/penguins_auto_10_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -575,17 +511,11 @@ penguins %&gt;%
   aes(x = bill_depth_mm) +
   aes(y = bill_length_mm) +
 * geom_point()
-
-NA
 ```
 ]
  
 .panel2-penguins-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/penguins_auto_11_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 ---
@@ -614,17 +544,11 @@ penguins %&gt;%
 *   color = "red", size = 4,
 *            aes(x = bill_depth_mm_median,
 *                y = bill_length_mm_median))
-
-NA
 ```
 ]
  
 .panel2-penguins-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/penguins_auto_12_output-1.png)&lt;!-- --&gt;
-
-```
-[1] NA
-```
 ]
 
 &lt;style&gt;
@@ -667,8 +591,8 @@ class: inverse, middle, center
 --
 
 - define computation that ggplot2 should do for you, before plotting
-  - here it's computing a variable with labels for each observation
-- test that functionality!
+- here it's computing a variable with labels for each observation
+- test that functionality
 
 ---
 
@@ -685,22 +609,11 @@ count: false
 *   summarize(x = median(x),
 *             y = median(y))
 *} 
-
-compute_group_xy_medians
 ```
 ]
  
 .panel2-compute_group_xy_medians-auto[
 
-```
-function(data,  #&lt;&lt;
-                                     scales){  #&lt;&lt;
-  data %&gt;%  #&lt;&lt;
-    summarize(x = median(x),  #&lt;&lt;
-              y = median(y))  #&lt;&lt;
-}
-&lt;environment: 0x7fc1f190f6d0&gt;
-```
 ]
 
 ---
@@ -717,9 +630,8 @@ compute_group_xy_medians &lt;- function(data,
               y = median(y))
 }
 
+# And use computation function to test it
 *penguins
-
-compute_group_xy_medians
 ```
 ]
  
@@ -786,16 +698,6 @@ compute_group_xy_medians
 55 Adelie  Biscoe              35.7          16.9               185        3150 female  2008
 # ℹ 278 more rows
 ```
-
-```
-function(data,
-                                     scales){
-  data %&gt;%
-    summarize(x = median(x),
-              y = median(y))
-}
-&lt;environment: 0x7fc1f190f6d0&gt;
-```
 ]
 
 ---
@@ -812,13 +714,12 @@ compute_group_xy_medians &lt;- function(data,
               y = median(y))
 }
 
+# And use computation function to test it
 penguins %&gt;%
 # function requires dataframe
 # with columns named x and y
 * select(x = bill_depth_mm,
 *        y = bill_length_mm)
-
-compute_group_xy_medians
 ```
 ]
  
@@ -885,16 +786,6 @@ compute_group_xy_medians
 55  16.9  35.7
 # ℹ 278 more rows
 ```
-
-```
-function(data,
-                                     scales){
-  data %&gt;%
-    summarize(x = median(x),
-              y = median(y))
-}
-&lt;environment: 0x7fc1f190f6d0&gt;
-```
 ]
 
 ---
@@ -911,14 +802,13 @@ compute_group_xy_medians &lt;- function(data,
               y = median(y))
 }
 
+# And use computation function to test it
 penguins %&gt;%
 # function requires dataframe
 # with columns named x and y
   select(x = bill_depth_mm,
          y = bill_length_mm) %&gt;%
 * compute_group_xy_medians()
-
-compute_group_xy_medians
 ```
 ]
  
@@ -929,16 +819,6 @@ compute_group_xy_medians
       x     y
   &lt;dbl&gt; &lt;dbl&gt;
 1  17.3  44.5
-```
-
-```
-function(data,
-                                     scales){
-  data %&gt;%
-    summarize(x = median(x),
-              y = median(y))
-}
-&lt;environment: 0x7fc1f190f6d0&gt;
 ```
 ]
 
@@ -982,9 +862,9 @@ class: inverse, middle, center
 
 --
 
-- what's the naming convention for the proto object?
-- which aesthetics are required as inputs?
-- where does the function from above go?
+# What's the naming convention for the proto object?
+# Which aesthetics are required as inputs?
+# Where does the function from above go?
 
 ---
 
@@ -995,17 +875,29 @@ count: false
 .panel1-StatXymedians-1[
 
 ```r
+# define new Stat
 StatXymedians &lt;- ggplot2::ggproto(
   `_class` = "StatXymedians",  # declare new Stat
   `_inherit` = ggplot2::Stat,  # inherit behavior of generic stat
   required_aes = c("x", "y"),  # declare required variable mappings
   compute_group = compute_group_xy_medians  # pass computation definition for stat
   )
+
+# test new stat w ggplot2 layer function
+penguins %&gt;%
+  ggplot() +
+  aes(x = bill_depth_mm) +
+  aes(y = bill_length_mm) +
+  geom_point() +
+  layer(geom = GeomPoint,
+        stat = StatXymedians,
+        position = "identity",
+        params = list(size = 8))
 ```
 ]
  
 .panel2-StatXymedians-1[
-
+![](easy_geom_recipes_flipbook_2024_files/figure-html/StatXymedians_1_01_output-1.png)&lt;!-- --&gt;
 ]
 
 &lt;style&gt;
@@ -1026,210 +918,6 @@ StatXymedians &lt;- ggplot2::ggproto(
   font-size: 80%
 }
 .panel3-StatXymedians-1 {
-  color: black;
-  width: NA%;
-  hight: 33%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-&lt;/style&gt;
-
-
-
-
-
-
-
-
----
-
-Try using the stat in long-form, layer function. 
-
-count: false
- 
-
-.panel1-layerStatXymedians-auto[
-
-```r
-*penguins
-```
-]
- 
-.panel2-layerStatXymedians-auto[
-
-```
-# A tibble: 333 × 8
-   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g sex     year
-   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt;  &lt;int&gt;
- 1 Adelie  Torgersen           39.1          18.7               181        3750 male    2007
- 2 Adelie  Torgersen           39.5          17.4               186        3800 female  2007
- 3 Adelie  Torgersen           40.3          18                 195        3250 female  2007
- 4 Adelie  Torgersen           36.7          19.3               193        3450 female  2007
- 5 Adelie  Torgersen           39.3          20.6               190        3650 male    2007
- 6 Adelie  Torgersen           38.9          17.8               181        3625 female  2007
- 7 Adelie  Torgersen           39.2          19.6               195        4675 male    2007
- 8 Adelie  Torgersen           41.1          17.6               182        3200 female  2007
- 9 Adelie  Torgersen           38.6          21.2               191        3800 male    2007
-10 Adelie  Torgersen           34.6          21.1               198        4400 male    2007
-11 Adelie  Torgersen           36.6          17.8               185        3700 female  2007
-12 Adelie  Torgersen           38.7          19                 195        3450 female  2007
-13 Adelie  Torgersen           42.5          20.7               197        4500 male    2007
-14 Adelie  Torgersen           34.4          18.4               184        3325 female  2007
-15 Adelie  Torgersen           46            21.5               194        4200 male    2007
-16 Adelie  Biscoe              37.8          18.3               174        3400 female  2007
-17 Adelie  Biscoe              37.7          18.7               180        3600 male    2007
-18 Adelie  Biscoe              35.9          19.2               189        3800 female  2007
-19 Adelie  Biscoe              38.2          18.1               185        3950 male    2007
-20 Adelie  Biscoe              38.8          17.2               180        3800 male    2007
-21 Adelie  Biscoe              35.3          18.9               187        3800 female  2007
-22 Adelie  Biscoe              40.6          18.6               183        3550 male    2007
-23 Adelie  Biscoe              40.5          17.9               187        3200 female  2007
-24 Adelie  Biscoe              37.9          18.6               172        3150 female  2007
-25 Adelie  Biscoe              40.5          18.9               180        3950 male    2007
-26 Adelie  Dream               39.5          16.7               178        3250 female  2007
-27 Adelie  Dream               37.2          18.1               178        3900 male    2007
-28 Adelie  Dream               39.5          17.8               188        3300 female  2007
-29 Adelie  Dream               40.9          18.9               184        3900 male    2007
-30 Adelie  Dream               36.4          17                 195        3325 female  2007
-31 Adelie  Dream               39.2          21.1               196        4150 male    2007
-32 Adelie  Dream               38.8          20                 190        3950 male    2007
-33 Adelie  Dream               42.2          18.5               180        3550 female  2007
-34 Adelie  Dream               37.6          19.3               181        3300 female  2007
-35 Adelie  Dream               39.8          19.1               184        4650 male    2007
-36 Adelie  Dream               36.5          18                 182        3150 female  2007
-37 Adelie  Dream               40.8          18.4               195        3900 male    2007
-38 Adelie  Dream               36            18.5               186        3100 female  2007
-39 Adelie  Dream               44.1          19.7               196        4400 male    2007
-40 Adelie  Dream               37            16.9               185        3000 female  2007
-41 Adelie  Dream               39.6          18.8               190        4600 male    2007
-42 Adelie  Dream               41.1          19                 182        3425 male    2007
-43 Adelie  Dream               36            17.9               190        3450 female  2007
-44 Adelie  Dream               42.3          21.2               191        4150 male    2007
-45 Adelie  Biscoe              39.6          17.7               186        3500 female  2008
-46 Adelie  Biscoe              40.1          18.9               188        4300 male    2008
-47 Adelie  Biscoe              35            17.9               190        3450 female  2008
-48 Adelie  Biscoe              42            19.5               200        4050 male    2008
-49 Adelie  Biscoe              34.5          18.1               187        2900 female  2008
-50 Adelie  Biscoe              41.4          18.6               191        3700 male    2008
-51 Adelie  Biscoe              39            17.5               186        3550 female  2008
-52 Adelie  Biscoe              40.6          18.8               193        3800 male    2008
-53 Adelie  Biscoe              36.5          16.6               181        2850 female  2008
-54 Adelie  Biscoe              37.6          19.1               194        3750 male    2008
-55 Adelie  Biscoe              35.7          16.9               185        3150 female  2008
-# ℹ 278 more rows
-```
-]
-
----
-count: false
- 
-
-.panel1-layerStatXymedians-auto[
-
-```r
-penguins %&gt;%
-* ggplot()
-```
-]
- 
-.panel2-layerStatXymedians-auto[
-![](easy_geom_recipes_flipbook_2024_files/figure-html/layerStatXymedians_auto_02_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-layerStatXymedians-auto[
-
-```r
-penguins %&gt;%
-  ggplot() +
-* aes(x = bill_depth_mm)
-```
-]
- 
-.panel2-layerStatXymedians-auto[
-![](easy_geom_recipes_flipbook_2024_files/figure-html/layerStatXymedians_auto_03_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-layerStatXymedians-auto[
-
-```r
-penguins %&gt;%
-  ggplot() +
-  aes(x = bill_depth_mm) +
-* aes(y = bill_length_mm)
-```
-]
- 
-.panel2-layerStatXymedians-auto[
-![](easy_geom_recipes_flipbook_2024_files/figure-html/layerStatXymedians_auto_04_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-layerStatXymedians-auto[
-
-```r
-penguins %&gt;%
-  ggplot() +
-  aes(x = bill_depth_mm) +
-  aes(y = bill_length_mm) +
-* geom_point()
-```
-]
- 
-.panel2-layerStatXymedians-auto[
-![](easy_geom_recipes_flipbook_2024_files/figure-html/layerStatXymedians_auto_05_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-layerStatXymedians-auto[
-
-```r
-penguins %&gt;%
-  ggplot() +
-  aes(x = bill_depth_mm) +
-  aes(y = bill_length_mm) +
-  geom_point() +
-* layer(geom = GeomPoint, stat = StatXymedians,
-*       position = "identity", params = list(size = 8))
-```
-]
- 
-.panel2-layerStatXymedians-auto[
-![](easy_geom_recipes_flipbook_2024_files/figure-html/layerStatXymedians_auto_06_output-1.png)&lt;!-- --&gt;
-]
-
-&lt;style&gt;
-.panel1-layerStatXymedians-auto {
-  color: black;
-  width: 38.6060606060606%;
-  hight: 32%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-.panel2-layerStatXymedians-auto {
-  color: black;
-  width: 59.3939393939394%;
-  hight: 32%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-.panel3-layerStatXymedians-auto {
   color: black;
   width: NA%;
   hight: 33%;

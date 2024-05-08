@@ -1,24 +1,41 @@
 ---
-title: "another experiment"
-author: "Evangeline Reynolds"
+title: "ggrepel/ggpp"
+runningheader: "ggrepel/ggpp" # only for pdf output
+subtitle: "w/ tufte margin plots" # only for html output
 date: "`r Sys.Date()`"
-output: 
-  html_document:
-    toc: TRUE
+output:
+  tufte::tufte_html: default
+  tufte::tufte_handout:
+    citation_package: natbib
+    latex_engine: xelatex
+  tufte::tufte_book:
+    citation_package: natbib
+    latex_engine: xelatex
+bibliography: skeleton.bib
+link-citations: yes
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, warning=F}
+library(tufte)
+# invalidate cache when the tufte version changes
+knitr::opts_chunk$set(cache.extra = packageVersion('tufte'), warning = F, message = F)
+options(htmltools.dir.version = FALSE)
+```
+
+
+```{r bib, include=FALSE}
+# create a bib file for the R packages used in this document
+knitr::write_bib(c('base', 'rmarkdown'), file = 'skeleton.bib')
+```
+
+
+```{r , include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 options(tidyverse.quiet = TRUE)
 ```
 
 
-@EvaMaeRey I am glad to be able to contribute! Thanks for the invitation to talk!
-I give here some examples using only 'ggrepel', starting from Teun's code. As you already noticed, repulsion in 'ggrepel' uses a random displacement, so running the same code can result in a different position of labels in a plot. In addition, as the repulsion is applied during rendering, the position of repulsed labels depends on the size used to render the plot. Repulsion can disabled or restricted to one direction. Force can be adjusted as well and maximum number of overlaps at which the repulsion algorithm gives up.
 
-By setting labels to `""`, 'ggrepel' does not attempt to change their positions, however, it repulses other labels away from the unlabelled points. Is this slower? yes to some extent, but not much, I think. It is at least much faster that repulsing actuals labels for every point. (If the labels are set to `NA` the whole row is removed from `data` before the plot is rendered. This is why `""` was chosen as the marker for no label.)
-
-While position functions from 'ggplot2' only modify `x` and `y`, the `position_nudge_repel()` retains in data a copy of the original values of `x` and `y`.  (I copied this approach in 'ggpp', but using a slightly different naming scheme, so that the position functions in 'ggpp' could remain compatible with normal geoms from 'ggplot2' and extensions).
 
 ```{r}
 library(tidyverse)
@@ -30,15 +47,43 @@ gap2002_americas_df
 select_countries <- c("Chile" = "Chile", "United States" = "The US is here")
 
 select_countries[as.character(gap2002_americas_df$country)]
+
+
+
 ```
 
+# Setting up an auto-enumerate tagger {.tabset}
 
+---
 
 ```{r}
+
+i = 0
+
+labs_tag_enumerate <- function(){
+  
+  i <<- i + 1
+
+  # print(cat("Above code returns Plot", i - 1,"\n"))
+  
+  return(labs(tag = paste("Plot", i - 1)))
+  
+  
+  
+}
+
+
+```
+
+## Baseplot, plot `r i`. 
+
+Sometimes labels overlap the points, depending on the random numbers seed
+
+```{r, fig.margin = T}
 library(tidyverse)
 library(ggrepel)
 
-# sometimes labels overlap the points, depending on the random numbers seed
+
 gapminder::gapminder |>
   filter(year == 2002) |>
   ggplot() +
@@ -55,72 +100,94 @@ geom_text_repel_favs <- function(...){
     arrow = arrow(length = unit(2, "mm"), 
                   type = "closed"), ...)
 }
+```
 
+---
+
+```{r, fig.margin = T}
 base_plot + 
   aes_label_nas +
-  geom_text_repel_favs()
+  geom_text_repel_favs() +
+  labs_tag_enumerate()
 
 ```
 
+---
 
+## In Plot `r i` labels never overlap the points as long as there is space, because we use an empty string in the vector
 
-```{r}
-# labels never overlap the points as long as there is space
+```{r, fig.margin = T}
 aes_label_empty_string <- aes(label = select_countries[as.character(country)] %>% 
         replace_na(""))
+```
 
+---
+
+```{r, fig.margin = T}
 base_plot + 
   aes_label_empty_string +   # New label
   geom_text_repel_favs(
         max.overlaps = 30    # overlaps
-  )
+  ) +
+  labs_tag_enumerate()
 
 ```
 
 
-```{r}
-# In this case we can restrict repulsion to the vertical axis
 
+## In Plot `r i`, we can restrict repulsion to the vertical axis
+
+---
+
+```{r, fig.margin = T}
 base_plot + 
   aes_label_empty_string + 
   geom_text_repel_favs(
     direction = "y",       #<< direction y
     max.overlaps = 30
-  )
+  )  +
+  labs_tag_enumerate()
 ```
 
 
-```{r}
-# Using nudging to start movement upwards
+
+## Plot `r i` uses nudging to start movement upwards
+
+---
+
+```{r, fig.margin = T}
 base_plot + 
   aes_label_empty_string + 
   geom_text_repel_favs(
     nudge_y = 3,           #<< New
     direction = "y",
     max.overlaps = 30
-  )
+  )  +
+  labs_tag_enumerate()
 ```
 
+## We set the repel force and pull force to zero in plot Plot `r i` 
 
-```{r}
+---
+
+```{r, fig.margin = T}
 base_plot + 
   aes_label_empty_string + 
   geom_text_repel_favs(
     nudge_y = 4,
     direction = "y",
-    force = 0,          #<< force changes
-    force_pull = 0,     #<< force changes
-  )
+    force = 0,         
+    force_pull = 0,    
+  )  + 
+  labs_tag_enumerate()
 ```
 
----
+## Conclusions
 
 In this case, the best approach seems to be the 4th: nudging + repulsion along _y_.
 
 Tomorrow I should have a bit more time, and I will post here some variations using 'ggpp'.
 
-
----
 
 
 Hi. 
@@ -128,24 +195,16 @@ Hi.
 Here are some examples with 'ggpp' and with 'ggrepel'. I do not think any automatic approach can provide plots as nice as those than be obtained by manual placement. One important difference between 'ggrepel' and 'ggpp' is that `geom_text_repel()` avoids clipping of labels at the edge of the plotting area, while `geom_text_s()` behaves like `geom_text()` and may clip part  of labels. Of course, the solution is to manually expand the axis limits.
 
 Padding 'ggpp' does not support 'grid' units, differemtly to 'ggrepel'.
+  
+##  In Plot `r i` I label the same two countries as in the original example to show the geom_text_s behavior starting
 
-```{r}
+---
+
+```{r, fig.margin = T}
 library(tidyverse)
 library(ggpp)
-#> Registered S3 methods overwritten by 'ggpp':
-#>   method                  from   
-#>   heightDetails.titleGrob ggplot2
-#>   widthDetails.titleGrob  ggplot2
-#> 
-#> Attaching package: 'ggpp'
-#> The following object is masked from 'package:ggplot2':
-#> 
-#>     annotate
 library(ggrepel)
 
-# Using 'ggpp' ------------------------------------------------------------
-
-# I label the same two countries as in the original example
 
 geom_text_s_favs <- function(...){
   geom_text_s(
@@ -155,60 +214,74 @@ geom_text_s_favs <- function(...){
     arrow = arrow(length = unit(2, "mm"), type = "closed"), ...
   )
 }
+```
 
 
+---
+
+```{r, fig.margin = T}
 # Using non-repulsive geom
 base_plot +
   aes_label_nas + 
   geom_text_s_favs(
     nudge_y = 4
-  )
+  ) + 
+  labs_tag_enumerate()
 
 ```
 
+##  In Plot `r i` Justification changes the attachment of the arrow
 
-```{r}
+---
 
-# Justification changes the attachment of the arrow
+```{r, fig.margin = T}
 base_plot +
   aes_label_nas +
   geom_text_s_favs(
     aes(label = c("Chile" = "Chile", "United States" = "The US is here")[as.character(country)]),
     nudge_y = 4, nudge_x = 1000,
     hjust = "left"
-  )
+  )  + 
+  labs_tag_enumerate()
 ```
 
+##  In Plot `r i` we see that nudge can be a vector (it will be recycled if necessary)
 
-```{r}
+---
 
-# Nudge can be a vector (it will be recycled if necessary)
+```{r, fig.margin = T}
+
 base_plot +
   aes_label_nas + 
   geom_text_s_favs(
     nudge_y = c(-4, 4), nudge_x = 1000,
     hjust = "left",
-  )
+  )  + 
+  labs_tag_enumerate()
 ```
 
+##  In Plot `r i` nudging to a target position is performed
 
-```{r}
-# Nudging to a target position
+---
+
+```{r, fig.margin = T}
+
 base_plot +
   aes_label_nas +
   geom_text_s_favs(
     position = position_nudge_to(y = 82),
     hjust = "left"
-  )
+  )  + 
+  labs_tag_enumerate()
 ```
 
+## in Plot `r i`, I label more countries than in the original example
 
-```{r}
+---
 
-# Here I label more countries than in the original example
-
+```{r, fig.margin = T}
 some.countries <- c("Chile" = "Chile",
-                    "Argentina" = "Argentina is an interesting case" %>% str_wrap(20),
+                    "Argentina" = "Argentina",
                     "Paraguay" = "Paraguay",
                     "Bolivia" = "Bolivia",
                     "Peru" = "Perú",
@@ -216,8 +289,14 @@ some.countries <- c("Chile" = "Chile",
                     "United States" = "The US is here")
 
 aes_label_some_countries <- aes(label = some.countries[as.character(country)])
+```
 
-# Nudging away from the cloud of points, which does not work well without repulsion
+---
+
+## In plot `r i`, which does not work well without repulsion we nudging away from the cloud of points 
+
+```{r, fig.margin = T}
+
 base_plot +
   geom_point(aes(alpha = country %in% names(some.countries)), show.legend = FALSE) ->
 base_plot2
@@ -227,40 +306,45 @@ base_plot2 +
   geom_text_s_favs(
     position = position_nudge_line(y = 4, x = 1000, method = "spline"),
     hjust = "outward"
-  )
-#> Warning: Using alpha for a discrete variable is not advised.
+  )  + 
+  labs_tag_enumerate()
 ```
 
 
-```{r}
+## In plot `r i`, nudging away from the cloud of points  increasing nudging helps.
 
+---
 
-# Nudging away from the cloud of points, increasing nudging helps
+```{r, fig.margin = T}
 base_plot2 +
   aes_label_some_countries +
   geom_text_s_favs(
     position = position_nudge_line(y = 6, x =2500, method = "spline")
-  )
-#> Warning: Using alpha for a discrete variable is not advised.
+  )  + 
+  labs_tag_enumerate()
 ```
 
+## In plot `r i`,  Nudging away from the cloud of points, increasing nudging and setting hjust 
 
-```{r}
+---
 
-# Nudging away from the cloud of points, increasing nudging and setting hjust
+```{r, fig.margin = T}
+
 base_plot2 +
   aes_label_some_countries +
   geom_text_s(
     position = position_nudge_line(y = 6, x =2500, method = "spline"),
     hjust = "outward"
-  )
+  )  + 
+  labs_tag_enumerate()
 #> Warning: Using alpha for a discrete variable is not advised.
 ```
 
+## In plot `r i`, nudging away from the cloud of points, setting nudging direction to "split"
 
-```{r}
+---
 
-# Nudging away from the cloud of points, setting nudging direction to "split"
+```{r, fig.margin = T}
 base_plot2 +
   aes_label_some_countries +
   geom_text_s(
@@ -270,108 +354,121 @@ base_plot2 +
 #> Warning: Using alpha for a discrete variable is not advised.
 ```
 
+## In plot `r i`, Using 'ggpp' + 'ggrepel'... I set max.overlaps = 30 so that 'ggrepel' does not give up too early
 
-```{r}
+ ------------------------------------------------
 
-# Using 'ggpp' + 'ggrepel' ------------------------------------------------
+The examples above tend to work, but there is no guarantee of no overlaps, so combining them with repulsion is safer. The more dispersion there is in the data points the more necessary repulsion becomes.
 
-# The examples above tend to work, but there is no guarantee of no overlaps,
-# so combining them with repulsion is safer. The more dispersion there is
-# in the data points the more necessary repulsion becomes.
 
-# I set max.overlaps = 30 so that 'ggrepel' does not give up too early
+## Nudging away based on a spline fitted to the cloud of points in plot `r i`
 
-# Nudging away based on a spline fitted to the cloud of points
+---
+
+```{r, fig.margin = T}
 base_plot2 +
   aes_label_some_countries +
   geom_text_repel_favs(
     position = position_nudge_line(y = 5, x = 3000, method = "spline"),
-  )
-#> Warning: Using alpha for a discrete variable is not advised.
+  ) + 
+  labs_tag_enumerate()
 ```
 
+## In plot `r i`, Nudging away based on a spline fitted to the cloud of points with repulsion and hjust in plot `r i`
 
-```{r}
+The effect of justification is different in the geoms from 'ggrepel' and 'ggpp'!
 
-# Nudging away based on a spline fitted to the cloud of points with repulsion and hjust
-# The effect of justification is different in the geoms from 'ggrepel' and 'ggpp'!
+
+---
+
+```{r, fig.margin = T}
 aes_label_some_countries_empty_string <- aes(label = ifelse(country %in% names(some.countries),
                        some.countries[as.character(country)],
                        ""))
 
 base_plot2 +
   aes_label_some_countries_empty_string  +
-  geom_text_repel_favs(
-    position = position_nudge_line(y = 5, 
-                                   x = 3000, method = "spline"),
-    hjust = "outward" # <- added
-  )
-#> Warning: Using alpha for a discrete variable is not advised.
+  geom_text_repel(
+    position = position_nudge_line(y = 5, x = 3000, method = "spline"),
+    hjust = "outward", # <- added
+    na.rm = TRUE, 
+    arrow = arrow(length = unit(2, "mm"), type = "closed"),
+    max.overlaps = 30
+  ) + 
+  labs_tag_enumerate()
 ```
 
+## In plot `r i`, nudging away from the cloud of points with nudging with direction away from fitted spline in plot `r i`
 
-```{r}
+---
 
-# Nudging away from the cloud of points with nudging with direction away from
-# fitted spline.
+```{r, fig.margin = T}
+
 base_plot2 +
   aes_label_some_countries_empty_string  +
-  geom_text_repel_favs(
+  geom_text_repel(
     position = position_nudge_line(y = 5, x = 3000, method = "spline",
                                   direction = "split"), # <-- added
     hjust = "outward",
-    max.overlaps = 50
-  )
-#> Warning: Using alpha for a discrete variable is not advised.
+    na.rm = TRUE, 
+    max.overlaps = 50,
+    arrow = arrow(length = unit(2, "mm"), type = "closed")
+  ) + 
+  labs_tag_enumerate()
 ```
 
+## In plot `r i`,  Nudging away from the cloud of points with repulsion, a different option for direction in plot `r i`
 
-```{r}
-# Nudging away from the cloud of points with repulsion, a different option for
-# direction.
+---
+
+```{r, fig.margin = T}
 base_plot2 +
     aes_label_some_countries_empty_string  +
-  geom_text_repel_favs(
-
+  geom_text_repel(
     position = position_nudge_line(y = 5, x = 3000, method = "spline",
                                    direction = "automatic"), # <-- added
+    na.rm = TRUE, 
     max.overlaps = 50,
-  )
-#> Warning: Using alpha for a discrete variable is not advised.
+    arrow = arrow(length = unit(2, "mm"), type = "closed")
+  ) + 
+  labs_tag_enumerate()
 ```
 
+## In plot `r i`,  Nudging away from the cloud of points with repulsion, adding a minimum distance from the fitted line for the nudging that is 1.5 times the nudging of observations in plot `r i`
 
-```{r}
+---
 
-# Nudging away from the cloud of points with repulsion, adding a minimum
-# distance from the fitted line for the nudging that is 1.5 times the
-# nudging of observations.
+```{r, fig.margin = T}
 base_plot2 +
     aes_label_some_countries_empty_string +
-  geom_text_repel_favs(
+  geom_text_repel(
     position = position_nudge_line(y = 5, x = 3000, method = "spline",
                                    direction = "automatic",
                                    line_nudge = 1.5),
-    max.overlaps = 50
-  )
-#> Warning: Using alpha for a discrete variable is not advised.
+    na.rm = TRUE, 
+    max.overlaps = 50,
+    arrow = arrow(length = unit(2, "mm"), type = "closed")
+  ) + 
+  labs_tag_enumerate()
 ```
 
+## In plot `r i`, nudging away from the cloud of points with repulsion, adding a minimum adding a minimum distance from the fitted line that is 2 times the nudging for individual observations, while reducing the amount of nudging for observations.
 
-```{r}
-# Nudging away from the cloud of points with repulsion, adding a minimum
-# distance from the fitted line that is 2 times the nudging for individual
-# observations, while reducing the amount of nudging for observations.
+---
+
+```{r, fig.margin = T}
 base_plot2 +
   aes_label_some_countries_empty_string +
-  geom_text_repel_favs(
+  geom_text_repel(
     position = position_nudge_line(y = 3, x = 2000, method = "spline",
                                    direction = "split",
                                    line_nudge = 2),
+    na.rm = TRUE, 
     max.overlaps = 50,
     min.segment.length = 0,
-  )
-#> Warning: Using alpha for a discrete variable is not advised.
+    arrow = arrow(length = unit(2, "mm"), type = "closed")
+  ) + 
+  labs_tag_enumerate()
 ```
 
 

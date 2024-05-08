@@ -86,7 +86,7 @@ code.r.hljs.remark-code:hover{
 
 ---
 
-### With your new geom_ function, calculation is done under the hood by the ggplot2 system; with these geom_* functions, you can write graphical poems with consice new language you've tailored for yourself! 
+### With your new geom\_\* function, calculation is done under the hood by the ggplot2 system; with these geom\_\* functions, you can write graphical poems with concise new language you've tailored for yourself! 
 
 ---
 
@@ -112,27 +112,22 @@ It's a good idea to clarify what needs to happen without getting into the extens
 
 --
 
-**Step 1. Write a computation function.** 
+**Step 1. Define computation.** 
 --
-Wrap the necessary computation into a function that your target geom_*() function will perform.
+Wrap the necessary computation into a function that your target geom_*() function will perform. Try it out.
 
 --
 
-**Step 2. Define a ggproto object.** 
+**Step 2. Define a new Stat.** 
 --
-ggproto objects allow your extension  to work together with base ggplot2 functions!  You'll use the computation function from step 1 to help define it.
+ggproto objects allow your extension  to work together with base ggplot2 functions!  You'll use the computation function from step 1 to help define it. TryTrTrye
 
 --
 
-**Step 3. Write your geom function!** 
+**Step 3. Define a user-facing geom\_\* function.** 
 --
-You're ready to write your function.  You will incorporate the ggproto from step 2.  
+You're ready to write your function.  You will incorporate the ggproto from step 2.  Test/Enjoy!
 
---
-
-**Step 4. Test/Enjoy!** 
---
-Take your new geom for a spin! Check out group-wise computation behavior!
 
 
 
@@ -147,11 +142,8 @@ class: inverse, middle, center
 
 --
 
-##`geom_point_xy_medians()`
+## `geom_point_xy_medians()`
 
---
-
-- This will be a point at the median of x and y
 
 
 ---
@@ -162,7 +154,7 @@ class: inverse, middle, center
 ---
 
 
-`r flipbookr::chunk_reveal("penguins", left_assign = "detect")`
+`r flipbookr::chunk_reveal("penguins")`
 
 
 ```{r penguins, include = FALSE}
@@ -195,13 +187,13 @@ class: inverse, middle, center
 --
 
 - define computation that ggplot2 should do for you, before plotting
-  - here it's computing a variable with labels for each observation
-- test that functionality!
+- here it's computing a variable with labels for each observation
+- test that functionality
 
 ---
 
 
-`r flipbookr::chunk_reveal("compute_group_xy_medians", left_assign = "detect")`
+`r flipbookr::chunk_reveal("compute_group_xy_medians")`
 
 
 ```{r compute_group_xy_medians, include = FALSE}
@@ -212,6 +204,7 @@ compute_group_xy_medians <- function(data,
               y = median(y))
 }
 
+# And use computation function to test it
 penguins %>%
   # function requires dataframe
   # with columns named x and y
@@ -228,9 +221,9 @@ class: inverse, middle, center
 
 --
 
-- what's the naming convention for the proto object?
-- which aesthetics are required as inputs?
-- where does the function from above go?
+# What's the naming convention for the proto object?
+# Which aesthetics are required as inputs?
+# Where does the function from above go?
 
 ---
 
@@ -239,31 +232,24 @@ class: inverse, middle, center
 
 
 ```{r StatXymedians, include = F}
+# define new Stat
 StatXymedians <- ggplot2::ggproto(
   `_class` = "StatXymedians",    # declare new Stat
   `_inherit` = ggplot2::Stat,    # inherit behavior of generic stat
   required_aes = c("x", "y"),    # declare required variable mappings
-  compute_group = compute_group_xy_medians    # pass computation definition for stat
+  compute_group = compute_group_xy_medians  # pass computation definition for stat
   )
-```
 
-
-
----
-
-Try using the stat in long-form, layer function. 
-
-`r flipbookr::chunk_reveal("layerStatXymedians")`
-
-
-```{r layerStatXymedians, include=F}
+# test new stat w ggplot2 layer function
 penguins %>% 
   ggplot() + 
   aes(x = bill_depth_mm) + 
   aes(y = bill_length_mm) + 
   geom_point() + 
-  layer(geom = GeomPoint, stat = StatXymedians, 
-        position = "identity", params = list(size = 8)) 
+  layer(geom = GeomPoint, 
+        stat = StatXymedians, 
+        position = "identity", 
+        params = list(size = 8)) 
 ```
 
 
