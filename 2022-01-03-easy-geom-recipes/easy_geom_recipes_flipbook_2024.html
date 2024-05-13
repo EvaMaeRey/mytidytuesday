@@ -19,7 +19,7 @@ background-size: cover
 
 
 
-# Easy geom_*() recipes
+# Easy geom_*() recipes, 2024
 
 ###Gina Reynolds and Morgan Brown
 
@@ -64,19 +64,19 @@ code.r.hljs.remark-code:hover{
 
 --
 
-### An exciting extension mechanism is inheriting from existing Geoms.  Particularly important to statisticians and mathematicians is writing new geom_* functions that perform and visualize calculations.  
+### An exciting extension mechanism that allows more plotting fluidity is to create new, custom 'Stats' and combine them with existing 'Geoms' (GeomPoint, GeomText, GeomSegment, etc)into new geom\_\* or stat\_\* functions.  
 
 ---
 
-### To get your feet wet in this world and give you a taste of patterns for geom extension, we provide three *introductory* examples of the geom_ functions that inherit from *existing* geoms (GeomPoint, GeomText, GeomSegment, etc) along with practice exercises.  
-
---
-
-### (You may only be familiar with the user-facing geom_point(), geom_text(), geom_segment() layer functions that use these more primitive objects under the hood, and that's okay.) 
+### By the way, you might only be familiar with the user-facing geom_point(), geom_text(), geom_segment() layer functions that use the more primitive GeomPoint, GeomText, and GeomSegment under the hood, and that's okay.  You might also have a feel for existing stats like StatCount and StatBin, specify computation in user-facing functions like geom_bar() and geom_histogram(). 
 
 ---
 
-### With your new geom\_\* function, calculation is done under the hood by the ggplot2 system; with these geom\_\* functions, you can write graphical poems with concise new language you've tailored for yourself! 
+### To get your feet wet in this world and give you a taste of patterns for new-Stat-plus-existing-Geom extension, we provide three *introductory* recipes (A, B, and C) for geom\_\* functions that make use of newly defined 'Stats' and *existing* 'Geoms' along with three practice exercises: *Easy geom\_() recipes*
+
+---
+
+### With your new geom\_\*() function, calculation is done under the hood by the ggplot2 system; with these geom\_\*() functions, you can write graphical poems with concise new language you've tailored for goals! 
 
 ---
 
@@ -90,33 +90,40 @@ code.r.hljs.remark-code:hover{
 
 ---
 
-# Preview
+## *Recipes Form Preview:*
 
-Our recipes will take form:
-
---
-
-**Step 0. Get the job done with 'base' ggplot2.**  
---
-It's a good idea to clarify what needs to happen without getting into the extension architecture
 
 --
 
-**Step 1. Define computation.** 
---
-Wrap the necessary computation into a function that your target geom_*() function will perform. Try it out.
+## **Step 0. Get the job done with 'base' ggplot2.**  
+
+
+
+&lt;!-- ## *It's a good idea to clarify what needs to happen without getting into the extension architecture* --&gt;
 
 --
 
-**Step 2. Define a new Stat.** 
---
-ggproto objects allow your extension  to work together with base ggplot2 functions!  You'll use the computation function from step 1 to help define it. TryTrTrye
+## **Step 1. Use base build experience to help define compute and test.** 
+
+
+
+&lt;!-- ## *Define compute that will transform your input data before rendering it. Try it out.* --&gt;
 
 --
 
-**Step 3. Define a user-facing geom\_\* function.** 
+## **Step 2. Use compute definition to define a new Stat and test.** 
+
+
+
+&lt;!-- ## *Stats, which are ggproto objects, allow your  to get compute done within a ggplot2 build!  You'll use the computation function from Step 1 to build your Stat. Then, use the stat with the generic ggplot `layer()` function to test it out.  `layer()` lets you combine stats and geoms for very flexible expression and used to create the user-facing layer functions that you're familiar with geom_point, geom_histogram, etc.* --&gt;
+
 --
-You're ready to write your function.  You will incorporate the ggproto from step 2.  Test/Enjoy!
+
+## **Step 3. Use your new Stat to define a user-facing geom\_\*() function and test.** 
+
+
+
+&lt;!-- ## *You're ready to write your target function!  We'll define a user-facing function using `layer()` function and the newly defined stat from Step 2.  Test/Enjoy!* --&gt;
 
 
 
@@ -126,7 +133,7 @@ You're ready to write your function.  You will incorporate the ggproto from step
 ---
 class: inverse, middle, center
 
-# Recipe #1
+# Recipe A.
 
 --
 
@@ -590,8 +597,7 @@ class: inverse, middle, center
 
 --
 
-- define computation that ggplot2 should do for you, before plotting
-- here it's computing a variable with labels for each observation
+- define computation that should be done before plotting
 - test that functionality
 
 ---
@@ -1161,7 +1167,7 @@ penguins %&gt;%
   aes(x = bill_depth_mm,
       y = bill_length_mm) +
   geom_point() +
-* geom_point_xy_medians(color = "red")
+* geom_point_xy_medians(size = 8)
 ```
 ]
  
@@ -1215,73 +1221,12 @@ count: false
 .panel1-conditional_penguins-auto[
 
 ```r
-*penguins
+*last_plot()
 ```
 ]
  
 .panel2-conditional_penguins-auto[
-
-```
-# A tibble: 333 × 8
-   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g sex     year
-   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt;  &lt;int&gt;
- 1 Adelie  Torgersen           39.1          18.7               181        3750 male    2007
- 2 Adelie  Torgersen           39.5          17.4               186        3800 female  2007
- 3 Adelie  Torgersen           40.3          18                 195        3250 female  2007
- 4 Adelie  Torgersen           36.7          19.3               193        3450 female  2007
- 5 Adelie  Torgersen           39.3          20.6               190        3650 male    2007
- 6 Adelie  Torgersen           38.9          17.8               181        3625 female  2007
- 7 Adelie  Torgersen           39.2          19.6               195        4675 male    2007
- 8 Adelie  Torgersen           41.1          17.6               182        3200 female  2007
- 9 Adelie  Torgersen           38.6          21.2               191        3800 male    2007
-10 Adelie  Torgersen           34.6          21.1               198        4400 male    2007
-11 Adelie  Torgersen           36.6          17.8               185        3700 female  2007
-12 Adelie  Torgersen           38.7          19                 195        3450 female  2007
-13 Adelie  Torgersen           42.5          20.7               197        4500 male    2007
-14 Adelie  Torgersen           34.4          18.4               184        3325 female  2007
-15 Adelie  Torgersen           46            21.5               194        4200 male    2007
-16 Adelie  Biscoe              37.8          18.3               174        3400 female  2007
-17 Adelie  Biscoe              37.7          18.7               180        3600 male    2007
-18 Adelie  Biscoe              35.9          19.2               189        3800 female  2007
-19 Adelie  Biscoe              38.2          18.1               185        3950 male    2007
-20 Adelie  Biscoe              38.8          17.2               180        3800 male    2007
-21 Adelie  Biscoe              35.3          18.9               187        3800 female  2007
-22 Adelie  Biscoe              40.6          18.6               183        3550 male    2007
-23 Adelie  Biscoe              40.5          17.9               187        3200 female  2007
-24 Adelie  Biscoe              37.9          18.6               172        3150 female  2007
-25 Adelie  Biscoe              40.5          18.9               180        3950 male    2007
-26 Adelie  Dream               39.5          16.7               178        3250 female  2007
-27 Adelie  Dream               37.2          18.1               178        3900 male    2007
-28 Adelie  Dream               39.5          17.8               188        3300 female  2007
-29 Adelie  Dream               40.9          18.9               184        3900 male    2007
-30 Adelie  Dream               36.4          17                 195        3325 female  2007
-31 Adelie  Dream               39.2          21.1               196        4150 male    2007
-32 Adelie  Dream               38.8          20                 190        3950 male    2007
-33 Adelie  Dream               42.2          18.5               180        3550 female  2007
-34 Adelie  Dream               37.6          19.3               181        3300 female  2007
-35 Adelie  Dream               39.8          19.1               184        4650 male    2007
-36 Adelie  Dream               36.5          18                 182        3150 female  2007
-37 Adelie  Dream               40.8          18.4               195        3900 male    2007
-38 Adelie  Dream               36            18.5               186        3100 female  2007
-39 Adelie  Dream               44.1          19.7               196        4400 male    2007
-40 Adelie  Dream               37            16.9               185        3000 female  2007
-41 Adelie  Dream               39.6          18.8               190        4600 male    2007
-42 Adelie  Dream               41.1          19                 182        3425 male    2007
-43 Adelie  Dream               36            17.9               190        3450 female  2007
-44 Adelie  Dream               42.3          21.2               191        4150 male    2007
-45 Adelie  Biscoe              39.6          17.7               186        3500 female  2008
-46 Adelie  Biscoe              40.1          18.9               188        4300 male    2008
-47 Adelie  Biscoe              35            17.9               190        3450 female  2008
-48 Adelie  Biscoe              42            19.5               200        4050 male    2008
-49 Adelie  Biscoe              34.5          18.1               187        2900 female  2008
-50 Adelie  Biscoe              41.4          18.6               191        3700 male    2008
-51 Adelie  Biscoe              39            17.5               186        3550 female  2008
-52 Adelie  Biscoe              40.6          18.8               193        3800 male    2008
-53 Adelie  Biscoe              36.5          16.6               181        2850 female  2008
-54 Adelie  Biscoe              37.6          19.1               194        3750 male    2008
-55 Adelie  Biscoe              35.7          16.9               185        3150 female  2008
-# ℹ 278 more rows
-```
+![](easy_geom_recipes_flipbook_2024_files/figure-html/conditional_penguins_auto_01_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -1291,73 +1236,13 @@ count: false
 .panel1-conditional_penguins-auto[
 
 ```r
-penguins %&gt;%
-* ggplot()
+last_plot() +
+* aes(color = species)
 ```
 ]
  
 .panel2-conditional_penguins-auto[
 ![](easy_geom_recipes_flipbook_2024_files/figure-html/conditional_penguins_auto_02_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-conditional_penguins-auto[
-
-```r
-penguins %&gt;%
-  ggplot() +
-* aes(x = bill_depth_mm,
-*     y = bill_length_mm,
-*     color = species)
-```
-]
- 
-.panel2-conditional_penguins-auto[
-![](easy_geom_recipes_flipbook_2024_files/figure-html/conditional_penguins_auto_03_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-conditional_penguins-auto[
-
-```r
-penguins %&gt;%
-  ggplot() +
-  aes(x = bill_depth_mm,
-      y = bill_length_mm,
-      color = species) +
-* geom_point()
-```
-]
- 
-.panel2-conditional_penguins-auto[
-![](easy_geom_recipes_flipbook_2024_files/figure-html/conditional_penguins_auto_04_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-conditional_penguins-auto[
-
-```r
-penguins %&gt;%
-  ggplot() +
-  aes(x = bill_depth_mm,
-      y = bill_length_mm,
-      color = species) +
-  geom_point() +
-* geom_point_xy_medians(size = 4)
-```
-]
- 
-.panel2-conditional_penguins-auto[
-![](easy_geom_recipes_flipbook_2024_files/figure-html/conditional_penguins_auto_05_output-1.png)&lt;!-- --&gt;
 ]
 
 &lt;style&gt;
@@ -1411,7 +1296,7 @@ class: inverse, middle, center
 ---
 class: inverse, middle, center
 
-# Recipe #2
+# Recipe B.
 
 --
 
@@ -2659,7 +2544,7 @@ Hint: `paste0("(", 1, ", ",3., ")")`
 ---
 class: inverse, middle, center
 
-# Recipe #3:  
+# Recipe C.  
 
 --
 
@@ -4187,13 +4072,13 @@ penguins %&gt;%
 
 #### More comprehensive extension resources: 
 
-- 
+- [ggplot2-extension-cookbook: an example-rich Stat-focused resource](https://evamaerey.github.io/ggplot2-extension-cookbook/) Gina Reynolds
 
-- https://www.youtube.com/watch?v=uj7A3i2fi54
+- [Extending your ability to extend ggplot2: StatCircle demo and high level overview](https://www.youtube.com/watch?v=uj7A3i2fi54) Thomas Lin Pederson
 
-- https://cran.r-project.org/web/packages/ggplot2/vignettes/extending-ggplot2.html
+- [Extending ggplot2 package Vignette: walkthough many extension  mechanisms](https://cran.r-project.org/web/packages/ggplot2/vignettes/extending-ggplot2.html) 
 
-- https://ggplot2-book.org/extensions.html
+- [Extending ggplot2 chapter](https://ggplot2-book.org/extensions.html)
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

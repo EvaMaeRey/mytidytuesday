@@ -29,31 +29,30 @@ Define group-wise computation.
 ```{r}
 library(tidyverse)
 
-compute_group_rasa <- function(data, scales, compute_group_fun, fun.args) {
+compute_rasa <- function(data, scales, compute_fun, fun.args) {
      # Change default arguments of the function to the 
      # values in fun.args
-     args <- formals(compute_group_fun)
+     args <- formals(compute_fun)
      for (i in seq_along(fun.args)) {
         if (names(fun.args[i]) %in% names(fun.args)) {
            args[[names(fun.args[i])]] <- fun.args[[i]]
         } 
      }
-     formals(compute_group_fun) <- args
+     formals(compute_fun) <- args
      
      # Apply function to data
-     compute_group_fun(data)
+     compute_fun(data)
 }
 
 
 StatRasagroup <- ggplot2::ggproto(
   `_class` = "StatRasagroup", 
   `_inherit` = ggplot2::Stat,
-  compute_group = compute_group_rasa
+  compute_group = compute_rasa
   )
 
 # stat function used in ggplot - but reordered from conventional!
-stat_group <- function(
-                       compute_group_fun = NULL,
+stat_group <- function(compute_fun = NULL,
                        geom = "point", 
                        mapping = NULL, 
                        data = NULL,
@@ -65,7 +64,7 @@ stat_group <- function(
                       show.legend = NA,
                       inherit.aes = TRUE) {
    # Check arguments 
-   if (!is.function(compute_group_fun)) stop("compute_group_fun must be a function")
+   if (!is.function(compute_fun)) stop("compute_group_fun must be a function")
    
    # Pass dotted arguments to a list
    fun.args <- match.call(expand.dots = FALSE)$`...`
@@ -85,7 +84,7 @@ stat_group <- function(
       check.aes = FALSE,
       check.param = FALSE,
       params = list(
-         compute_group_fun = compute_group_fun, 
+         compute_fun = compute_fun, 
          fun.args = fun.args,
          na.rm = FALSE,
          ...
@@ -103,30 +102,15 @@ stat_group <- function(
 ```{r}
 library(tidyverse)
 
-compute_panel_rasa <- function(data, scales, compute_panel_fun, fun.args) {
-     # Change default arguments of the function to the 
-     # values in fun.args
-     args <- formals(compute_panel_fun)
-     for (i in seq_along(fun.args)) {
-        if (names(fun.args[i]) %in% names(fun.args)) {
-           args[[names(fun.args[i])]] <- fun.args[[i]]
-        } 
-     }
-     formals(compute_panel_fun) <- args
-     
-     # Apply function to data
-     compute_panel_fun(data)
-}
-
 
 StatRasapanel <- 
   ggplot2::ggproto("StatRasapanel", 
                    ggplot2::Stat,
-                   compute_panel = compute_panel_rasa)
+                   compute_panel = compute_rasa)
 
 
 # stat function used in ggplot - we reorder from conventional
-stat_panel <- function(compute_panel_fun = NULL, 
+stat_panel <- function(compute_fun = NULL, 
                        geom = "point", 
                        mapping = NULL, data = NULL,
                       position = "identity",
@@ -137,7 +121,7 @@ stat_panel <- function(compute_panel_fun = NULL,
                       show.legend = NA,
                       inherit.aes = TRUE) {
    # Check arguments 
-   if (!is.function(compute_panel_fun)) stop("compute_panel_fun must be a function")
+   if (!is.function(compute_fun)) stop ("compute_fun must be a function")
    
    # Pass dotted arguments to a list
    fun.args <- match.call(expand.dots = FALSE)$`...`
@@ -157,7 +141,7 @@ stat_panel <- function(compute_panel_fun = NULL,
       check.aes = FALSE,
       check.param = FALSE,
       params = list(
-         compute_panel_fun = compute_panel_fun, 
+         compute_fun = compute_fun, 
          fun.args = fun.args,
          na.rm = FALSE,
          ...
@@ -182,7 +166,7 @@ group_means <- function(data){
 }
 
 geom_means <- function(...){
-  stat_group(compute_group_fun = group_means, ...)
+  stat_group(compute_fun = group_means, ...)
 }
 
 mtcars |>
@@ -207,7 +191,7 @@ group_label_at_center <- function(data){
 }
 
 geom_center_label <- function(...){
-  stat_group(compute_group_fun = group_label_at_center, geom = GeomLabel, ...)
+  stat_group(compute_fun = group_label_at_center, geom = GeomLabel, ...)
 }
 
 
@@ -225,7 +209,7 @@ last_plot() +
 
 
 geom_center_text <- function(...){
-  stat_group(compute_group_fun = group_label_at_center, geom = GeomText, ...)
+  stat_group(compute_fun = group_label_at_center, geom = GeomText, ...)
 }
 
 
@@ -233,10 +217,11 @@ palmerpenguins::penguins |>
   ggplot() +
   aes(x = bill_length_mm,
       y = bill_depth_mm) +
-  geom_point() +
+  geom_point(x = 42, aes(color = bill_length_mm)) +
   aes(color = species) +
-  geom_center_text(aes(label = species), 
-                    color = "Black", 
+  geom_center_text(color = "Black",
+    aes(label = species), 
+                     
                     alpha = .8,
                    size = 5, 
                    fontface = "bold")
@@ -255,7 +240,7 @@ compute_post <- function(data){
 }
 
 geom_post <- function(...){
-  stat_group(compute_group_fun = compute_post, geom = "segment", ...)
+  stat_group(compute_fun = compute_post, geom = "segment", ...)
 }
 
 
@@ -280,7 +265,7 @@ compute_xmean <- function(data){
 }
 
 geom_xmean <- function(...){
-  stat_group(compute_group_fun = compute_xmean, geom = "vline", 
+  stat_group(compute_fun = compute_xmean, geom = "vline", 
              dropped_aes = c("x", "y"), ...)
 }
 
@@ -305,7 +290,7 @@ compute_xy_quantile <- function(data, q = .25){
 }
 
 geom_quantile <- function(...){
-  stat_group(compute_group_fun = compute_xy_quantile, geom = "point", ...)
+  stat_group(compute_fun = compute_xy_quantile, geom = "point", ...)
 }
 
 mtcars |>
@@ -437,6 +422,9 @@ palmerpenguins::penguins %>%
   aes(bill_length_mm, bill_depth_mm) + 
   geom_point() + 
   geom_means(size = 7)
+
+last_plot() +
+  geom_means(size = 5, aes(color = bill_depth_mm > 17))
 ```
 ## `geom_grouplabel_at_means()`
 
@@ -478,10 +466,15 @@ gapminder::gapminder %>%
 
 ```
 
-# Attempting a unified approach - allowing compute_panel or compute group to be defined.  
+# Attempting a unified approach - allowing compute_panel or compute_group to be defined.  
 
 ## then we'll write helpers stat_group and stat_panel from this larger function
 
+
+```{r}
+knitr::knit_exit()
+
+```
 
 
 ```{r}
@@ -491,11 +484,10 @@ StatRasa <-
 
 # stat function used in ggplot - we reorder from conventional
 stat_rasa <- function(mapping = NULL, 
-                       data = NULL,
-                       compute_panel_fun = NULL, 
-                       compute_group_fun = NULL, 
-
-                       geom = "point", 
+                      data = NULL,
+                      compute_panel_fun = NULL, 
+                      compute_fun = NULL, 
+                      geom = "point", 
                       position = "identity",
                       required_aes = NULL,
                       default_aes = NULL,
@@ -503,17 +495,13 @@ stat_rasa <- function(mapping = NULL,
                       ...,
                       show.legend = NA,
                       inherit.aes = TRUE) {
-   # Check arguments 
-   # if (!is.function(compute_panel_fun)) stop("compute_panel_fun must be a function")
-   
-
-   if(!is.null(compute_group_fun)){StatRasa$compute_group <- compute_group_rasa}
-   if(!is.null(compute_panel_fun)){StatRasa$compute_panel <- compute_panel_rasa}
    
    if(!is.null(required_aes)){StatRasa$required_aes <- required_aes}
    if(!is.null(default_aes)){StatRasa$default_aes <- default_aes}
    if(!is.null(dropped_aes)){StatRasa$dropped_aes <- dropped_aes}
 
+   if(!is.null(compute_fun)){StatRasa$compute_group <- compute_group_rasa}
+   if(!is.null(compute_panel_fun)){StatRasa$compute_panel <- compute_panel_rasa}
    # Pass dotted arguments to a list
    fun.args <- match.call(expand.dots = FALSE)$`...`
    
@@ -529,7 +517,7 @@ stat_rasa <- function(mapping = NULL,
       check.param = FALSE,
       params = list(
          compute_panel_fun = compute_panel_fun, 
-         compute_group_fun = compute_group_fun,
+         compute_fun = compute_fun,
          fun.args = fun.args,
          na.rm = FALSE,
          ...
@@ -547,9 +535,8 @@ group_means <- function(data){
 }
 
 geom_means <- function(...){
-  stat_rasa(compute_group_fun = group_means, ...)
+  stat_rasa(compute_fun = group_means, ...)
 }
-
 
 mtcars |>
   ggplot() + 
@@ -560,6 +547,69 @@ mtcars |>
 
 last_plot() + 
   aes(color = factor(cyl))
+```
+
+
+
+## And a sf targetted one; uses GeomSF as default and the list2. In
+
+
+```{r, eval = F}
+nc <- sf::st_read(system.file("shape/nc.shp", package="sf"))
+
+geo_reference_northcarolina_county <- nc |>
+  dplyr::select(county_name = NAME, fips = FIPS) |>
+  sf2stat:::sf_df_prep_for_stat(id_col_name = "county_name")
+
+compute_panel_sf_fun <- function(df, ref_data){
+  
+  data |> dplyr::left_join(ref_data)
+  
+}
+
+nc %>% 
+  sf::st_drop_geometry() %>% 
+  select(fips = fips) %>% 
+  compute_panel_sf_fun(ref_data = geo_reference_northcarolina_county)
+```
+
+```{r, eval = F}
+StatSfrasa <- ggplot2::ggproto(`_class` = "StatSfrasa",
+                               `_inherit` = ggplot2::Stat)
+
+stat_region_rasa <- function(mapping = NULL, 
+                       data = NULL,
+                       ref_data = NULL, 
+                       compute_panel_sf_fun = NULL, 
+                       compute_group_fun = NULL, 
+
+                      required_aes = NULL,
+                      default_aes = NULL,
+                      dropped_aes = NULL,
+      geom = ggplot2::GeomSf,
+      position = "identity",
+      na.rm = FALSE,
+      show.legend = NA,
+      inherit.aes = TRUE,
+      crs = "NAD27", # "NAD27", 5070, "WGS84", "NAD83", 4326 , 3857
+      ...) {
+
+  c(ggplot2::layer_sf(
+              stat = StatSfrasa,  # proto object from step 2
+              geom = geom,  # inherit other behavior
+              data = data,
+              mapping = mapping,
+              position = position,
+              show.legend = show.legend,
+              inherit.aes = inherit.aes,
+              params = rlang::list2(na.rm = na.rm, ...)
+              ),
+    coord_sf(crs = crs,
+            default_crs = sf::st_crs(crs),
+            datum = crs,
+            default = TRUE)
+     )
+  }
 ```
 
 

@@ -1,0 +1,133 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Step 0. Status Quo: base ggplot2
+
+```{r cars}
+library(tidyverse)
+
+gapminder::gapminder %>% 
+  filter(continent == "Americas") %>% 
+  mutate(is_argentina = country == "Argentina") %>% 
+  arrange(is_argentina) %>%
+  mutate(country = fct_inorder(country)) %>% 
+  ggplot() + 
+    aes(x = year, y = lifeExp, group = country) + 
+  geom_point() + 
+  geom_line(lwd = 3) + 
+  aes(color = is_argentina) + 
+  scale_color_manual(values = c("grey50", "magenta"))
+```
+
+## Step 1. define compute. test.
+
+```{r}
+compute_panel_highlight_lines <- function(data, scales){
+
+data %>% 
+  arrange(highlight_condition) %>%
+  mutate(group = fct_inorder(grouping))
+  
+}
+
+# test
+gapminder::gapminder %>% 
+  filter(continent == "Americas") %>% 
+  mutate(highlight_condition = country == "Argentina") %>% 
+  select(x = year, y = lifeExp, grouping = country, highlight_condition) %>% 
+  compute_panel_highlight_lines()
+```
+
+# step 2 pass to ggproto. test
+
+```{r}
+statHighlight <- ggproto("statHighlight",
+                         Stat,
+                         compute_panel = compute_panel_highlight_lines,
+                         default_aes = aes(color = after_stat(highlight_condition)),
+                         required_aes = c("x", "y", "grouping","highlight_condition")
+                         )
+
+# test.
+gapminder::gapminder %>% 
+  filter(continent == "Americas") %>% 
+  ggplot() + 
+  aes(x = year, y = lifeExp, 
+      grouping = country, 
+      highlight_condition = country == "Argentina") + 
+  geom_point() + 
+  geom_line(color = "grey") + 
+  layer(geom = "line", stat = statHighlight, position = "identity",
+        params = list(linewidth = 3, alpha = 1))
+
+```
+
+# Step 3. make user-facing function & test. (I'm not being very careful here about default selection)
+
+```{r}
+geom_line_highlight <- function(mapping = NULL, # global aesthetics will be used if NULL
+  data = NULL, # global data will be used if NULL
+  position = "identity", 
+  na.rm = FALSE, 
+  show.legend = NA,
+  inherit.aes = TRUE, 
+  ...  ) {
+  
+  layer(geom = "line", stat = statHighlight, 
+    data = data, 
+    mapping = mapping,
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+  
+  
+}
+
+# test
+gapminder::gapminder %>% 
+  filter(continent == "Americas") %>% 
+  ggplot() + 
+  aes(x = year, y = lifeExp, 
+      grouping = country,
+      highlight_condition = country == "Bolivia") + 
+  geom_point() + 
+  geom_line_highlight(linewidth = 3) 
+```
+
+```{r}
+knitr::knit_exit()
+
+```
+
+# Step 4. Specific request: preset colors - an geom + scale approach
+
+# Step 4.aa Create custom 2 color manual scale function.
+
+```{r}
+scale_color_manual_2 <- function(val1 = "grey", val2 = "red"){
+  
+  scale_color_manual(values = c(val1, val2))
+  
+}
+
+```
+  

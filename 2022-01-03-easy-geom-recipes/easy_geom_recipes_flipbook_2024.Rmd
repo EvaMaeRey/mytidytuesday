@@ -21,7 +21,7 @@ background-size: cover
 
 
 
-# Easy geom_*() recipes
+# Easy geom_*() recipes, 2024
 
 ###Gina Reynolds and Morgan Brown
 
@@ -74,19 +74,19 @@ code.r.hljs.remark-code:hover{
 
 --
 
-### An exciting extension mechanism is inheriting from existing Geoms.  Particularly important to statisticians and mathematicians is writing new geom_* functions that perform and visualize calculations.  
+### An exciting extension mechanism that allows more plotting fluidity is to create new, custom 'Stats' and combine them with existing 'Geoms' (GeomPoint, GeomText, GeomSegment, etc)into new geom\_\* or stat\_\* functions.  
 
 ---
 
-### To get your feet wet in this world and give you a taste of patterns for geom extension, we provide three *introductory* examples of the geom_ functions that inherit from *existing* geoms (GeomPoint, GeomText, GeomSegment, etc) along with practice exercises.  
-
---
-
-### (You may only be familiar with the user-facing geom_point(), geom_text(), geom_segment() layer functions that use these more primitive objects under the hood, and that's okay.) 
+### By the way, you might only be familiar with the user-facing geom_point(), geom_text(), geom_segment() layer functions that use the more primitive GeomPoint, GeomText, and GeomSegment under the hood, and that's okay.  You might also have a feel for existing stats like StatCount and StatBin, specify computation in user-facing functions like geom_bar() and geom_histogram(). 
 
 ---
 
-### With your new geom\_\* function, calculation is done under the hood by the ggplot2 system; with these geom\_\* functions, you can write graphical poems with concise new language you've tailored for yourself! 
+### To get your feet wet in this world and give you a taste of patterns for new-Stat-plus-existing-Geom extension, we provide three *introductory* recipes (A, B, and C) for geom\_\* functions that make use of newly defined 'Stats' and *existing* 'Geoms' along with three practice exercises: *Easy geom\_() recipes*
+
+---
+
+### With your new geom\_\*() function, calculation is done under the hood by the ggplot2 system; with these geom\_\*() functions, you can write graphical poems with concise new language you've tailored for goals! 
 
 ---
 
@@ -100,33 +100,40 @@ code.r.hljs.remark-code:hover{
 
 ---
 
-# Preview
+## *Recipes Form Preview:*
 
-Our recipes will take form:
-
---
-
-**Step 0. Get the job done with 'base' ggplot2.**  
---
-It's a good idea to clarify what needs to happen without getting into the extension architecture
 
 --
 
-**Step 1. Define computation.** 
---
-Wrap the necessary computation into a function that your target geom_*() function will perform. Try it out.
+## **Step 0. Get the job done with 'base' ggplot2.**  
+
+
+
+<!-- ## *It's a good idea to clarify what needs to happen without getting into the extension architecture* -->
 
 --
 
-**Step 2. Define a new Stat.** 
---
-ggproto objects allow your extension  to work together with base ggplot2 functions!  You'll use the computation function from step 1 to help define it. TryTrTrye
+## **Step 1. Use base build experience to help define compute and test.** 
+
+
+
+<!-- ## *Define compute that will transform your input data before rendering it. Try it out.* -->
 
 --
 
-**Step 3. Define a user-facing geom\_\* function.** 
+## **Step 2. Use compute definition to define a new Stat and test.** 
+
+
+
+<!-- ## *Stats, which are ggproto objects, allow your  to get compute done within a ggplot2 build!  You'll use the computation function from Step 1 to build your Stat. Then, use the stat with the generic ggplot `layer()` function to test it out.  `layer()` lets you combine stats and geoms for very flexible expression and used to create the user-facing layer functions that you're familiar with geom_point, geom_histogram, etc.* -->
+
 --
-You're ready to write your function.  You will incorporate the ggproto from step 2.  Test/Enjoy!
+
+## **Step 3. Use your new Stat to define a user-facing geom\_\*() function and test.** 
+
+
+
+<!-- ## *You're ready to write your target function!  We'll define a user-facing function using `layer()` function and the newly defined stat from Step 2.  Test/Enjoy!* -->
 
 
 
@@ -138,7 +145,7 @@ knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
 ---
 class: inverse, middle, center
 
-# Recipe #1
+# Recipe A.
 
 --
 
@@ -186,8 +193,7 @@ class: inverse, middle, center
 
 --
 
-- define computation that ggplot2 should do for you, before plotting
-- here it's computing a variable with labels for each observation
+- define computation that should be done before plotting
 - test that functionality
 
 ---
@@ -311,7 +317,7 @@ penguins %>%
   aes(x = bill_depth_mm, 
       y = bill_length_mm) +
   geom_point() +
-  geom_point_xy_medians(color = "red")
+  geom_point_xy_medians(size = 8)
 ```
 
 ---
@@ -326,13 +332,8 @@ class: inverse, middle, center
 
 
 ```{r conditional_penguins, include = FALSE}
-penguins %>%
-  ggplot() +
-  aes(x = bill_depth_mm, 
-      y = bill_length_mm, 
-      color = species) +
-  geom_point() +
-  geom_point_xy_medians(size = 4)
+last_plot() +
+  aes(color = species)
 ```
 
 ---
@@ -354,7 +355,7 @@ class: inverse, middle, center
 ---
 class: inverse, middle, center
 
-# Recipe #2
+# Recipe B.
 
 --
 
@@ -547,7 +548,7 @@ Hint: `paste0("(", 1, ", ",3., ")")`
 ---
 class: inverse, middle, center
 
-# Recipe #3:  
+# Recipe C.  
 
 --
 
@@ -755,10 +756,10 @@ penguins %>%
 
 #### More comprehensive extension resources: 
 
-- 
+- [ggplot2-extension-cookbook: an example-rich Stat-focused resource](https://evamaerey.github.io/ggplot2-extension-cookbook/) Gina Reynolds
 
-- https://www.youtube.com/watch?v=uj7A3i2fi54
+- [Extending your ability to extend ggplot2: StatCircle demo and high level overview](https://www.youtube.com/watch?v=uj7A3i2fi54) Thomas Lin Pederson
 
-- https://cran.r-project.org/web/packages/ggplot2/vignettes/extending-ggplot2.html
+- [Extending ggplot2 package Vignette: walkthough many extension  mechanisms](https://cran.r-project.org/web/packages/ggplot2/vignettes/extending-ggplot2.html) 
 
-- https://ggplot2-book.org/extensions.html
+- [Extending ggplot2 chapter](https://ggplot2-book.org/extensions.html)
