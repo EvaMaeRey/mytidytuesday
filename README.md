@@ -14,22 +14,22 @@ write prose\!
 Initially, I planned to work on \#tidytuesday stuff, but I ended up just
 working on problems that arose in my work and personal interests.
 
-1.  [2024-05-06-gghighlightline/gghighlightline2.html](https://evamaerey.github.io/mytidytuesday/2024-05-06-gghighlightline/gghighlightline2.html)
+1.  [2024-05-13-knock-out-boxing/knock-out-boxing.html](https://evamaerey.github.io/mytidytuesday/2024-05-13-knock-out-boxing/knock-out-boxing.html)
+    **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-05-13-knock-out-boxing/knock-out-boxing.Rmd)**
+2.  [2024-05-06-gghighlightline/gghighlightline2.html](https://evamaerey.github.io/mytidytuesday/2024-05-06-gghighlightline/gghighlightline2.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-05-06-gghighlightline/gghighlightline2.Rmd)**
-2.  [2024-05-06-gghighlightline/gghighlightline.html](https://evamaerey.github.io/mytidytuesday/2024-05-06-gghighlightline/gghighlightline.html)
+3.  [2024-05-06-gghighlightline/gghighlightline.html](https://evamaerey.github.io/mytidytuesday/2024-05-06-gghighlightline/gghighlightline.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-05-06-gghighlightline/gghighlightline.Rmd)**
-3.  [2024-05-02-ggpoetry/ggpoetry.html](https://evamaerey.github.io/mytidytuesday/2024-05-02-ggpoetry/ggpoetry.html)
+4.  [2024-05-02-ggpoetry/ggpoetry.html](https://evamaerey.github.io/mytidytuesday/2024-05-02-ggpoetry/ggpoetry.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-05-02-ggpoetry/ggpoetry.Rmd)**
-4.  [2024-05-01-margins-w-ggwipe/margins-w-ggwipe.html](https://evamaerey.github.io/mytidytuesday/2024-05-01-margins-w-ggwipe/margins-w-ggwipe.html)
+5.  [2024-05-01-margins-w-ggwipe/margins-w-ggwipe.html](https://evamaerey.github.io/mytidytuesday/2024-05-01-margins-w-ggwipe/margins-w-ggwipe.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-05-01-margins-w-ggwipe/margins-w-ggwipe.Rmd)**
-5.  [2024-05-01-ggrepel-nudge-ggpp/ggrepel-nudge-ggpp.html](https://evamaerey.github.io/mytidytuesday/2024-05-01-ggrepel-nudge-ggpp/ggrepel-nudge-ggpp.html)
+6.  [2024-05-01-ggrepel-nudge-ggpp/ggrepel-nudge-ggpp.html](https://evamaerey.github.io/mytidytuesday/2024-05-01-ggrepel-nudge-ggpp/ggrepel-nudge-ggpp.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-05-01-ggrepel-nudge-ggpp/ggrepel-nudge-ggpp.Rmd)**
-6.  [2024-04-30-stat-rasa/stat-rasa.html](https://evamaerey.github.io/mytidytuesday/2024-04-30-stat-rasa/stat-rasa.html)
+7.  [2024-04-30-stat-rasa/stat-rasa.html](https://evamaerey.github.io/mytidytuesday/2024-04-30-stat-rasa/stat-rasa.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-04-30-stat-rasa/stat-rasa.Rmd)**
-7.  [2024-04-30-stat-rasa/stat-rasa-group-and-panel.html](https://evamaerey.github.io/mytidytuesday/2024-04-30-stat-rasa/stat-rasa-group-and-panel.html)
+8.  [2024-04-30-stat-rasa/stat-rasa-group-and-panel.html](https://evamaerey.github.io/mytidytuesday/2024-04-30-stat-rasa/stat-rasa-group-and-panel.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-04-30-stat-rasa/stat-rasa-group-and-panel.Rmd)**
-8.  [2024-04-29-time-box/time-box.html](https://evamaerey.github.io/mytidytuesday/2024-04-29-time-box/time-box.html)
-    **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-04-29-time-box/time-box.Rmd)**
 9.  [2024-04-24-try-lightparser/try-lightparser.html](https://evamaerey.github.io/mytidytuesday/2024-04-24-try-lightparser/try-lightparser.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-04-24-try-lightparser/try-lightparser.Rmd)**
 10. [2024-04-22-ggtext-replace/ggtext-replace.html](https://evamaerey.github.io/mytidytuesday/2024-04-22-ggtext-replace/ggtext-replace.html)
