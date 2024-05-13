@@ -1,0 +1,121 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+box_df <- tribble(
+~ task, ~minutes,
+"start timeboxing", 1,
+"weather", 3,
+"clean kitchen & news", 7,
+"grab tidytuedsday data url", 5,
+"plan meet up w mom", 12, 
+"tidypivot motivation", 16,
+"ggverbatim motivation", 11,
+"R Ladies Denver minimal viable package", 17,
+"ggexpress as discussion", 15,
+"break and dinner prep", 14,
+"Break - kitchen cleanup", 13,
+"ggcallout step 0 work", 19,
+"ggtimebox", 20,
+"get vinager", 2,
+"get cucumber", 4
+)
+```
+
+
+
+```{r}
+box_df |>
+  ggplot() +
+  aes(x = minutes, label = task, y = 0) + 
+  geom_text_repel(na.rm = TRUE, 
+    box.padding = unit(1, "cm"),
+    point.padding = unit(5, "mm"),
+    arrow = arrow(length = unit(2, "mm"), 
+                  type = "closed"),
+    direction = "y",
+    max.overlaps = 100,
+    force_pull = 0,
+    hjust = 1)
+
+
+coffee_survey <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-05-14/coffee_survey.csv')
+
+coffee_survey$age %>% 
+  unique() %>% 
+  sort() ->
+alphabetical_age; alphabetical_age
+
+age_cats <- alphabetical_age[c(1,3:7, 2)]
+
+coffee_survey %>% 
+  ggplot() + 
+  labs(title = "Age distribution of respondents in 'coffee survey'") +
+  aes(y = factor(age, age_cats)) + 
+  geom_bar() + 
+  aes(label = after_stat(count)) +
+  stat_count(geom = "label", hjust = 0) + 
+  scale_x_continuous(expand = expansion(c(0, .1))) + 
+  scale_y_discrete(breaks = age_cats, labels = age_cats |> str_replace(" years old", "yrs")) + 
+  theme_minimal() + 
+  theme(panel.grid.major.y = element_blank()) + 
+  theme(panel.grid.minor.y = element_blank()) +
+  labs(y = NULL) 
+
+ggwipe::last_plot_wipe_last() + 
+  stat_count(geom = "label", 
+             hjust = 0, 
+             alpha = .8,
+             label.size = NA # Size of label border, in mm.
+             )
+
+ggwipe::last_plot_wipe(index = 1) + 
+  geom_bar(fill = "seagreen4", alpha = .7)
+
+bars_info <- layer_data(i = 2)
+
+last_plot() + 
+  geom_label(data = bars_info[3,], 
+           aes(x = quantile(c(xmin, xmax), .7) + 200,
+               y = quantile(c(ymin, ymax), .8) + 3,
+               label = "the most populous age category is 25-35 year olds" %>% str_wrap(35)),
+           vjust = 0) + 
+  geom_curve(data = bars_info[3,], 
+           aes(x = quantile(c(xmin, xmax), .7) + 200,
+               y = quantile(c(ymin, ymax), .8) + 3,
+               xend = quantile(c(xmin, xmax), .7),
+               yend = quantile(c(ymin, ymax), .8),
+               label = NULL),
+               curvature = .1)
+  
+  
+```
+
+
+## Closing remarks, Other Relevant Work, Caveats
