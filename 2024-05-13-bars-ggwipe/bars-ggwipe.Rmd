@@ -125,7 +125,7 @@ bar_callout <- function(data,
 ## Use in plot
 
 ```{r, warning=F}
-my_callout <- "25-35 year olds are well represented in this survey.  With almost two thousand respondents, it has more than double the number of respondents than any other age category."
+my_callout <- "25-34 year olds are well represented in this survey.  With almost two thousand respondents, it has more than double the number of respondents than any other age category."
 
 last_plot() +
   bar_callout(data = layer_data(plot = last_plot(), # looking at data 
@@ -141,4 +141,37 @@ last_plot() +
              color = "grey35", curvature = .1) + 
   labs(x = NULL) +
   labs(tag = "Plot 6")
-```  
+```
+
+
+```{r}
+ggwipe::last_plot_wipe_last() 
+
+ggwipe::last_plot_wipe_last() %+%
+  (coffee_survey %>% filter(!is.na(favorite))) +
+  aes(y = favorite |> str_wrap(20) |> fct_infreq() |> fct_rev()) + 
+  labs(y = NULL) +
+  scale_y_discrete() + 
+  labs(title = "Number of responses that drink type was the favorite ")
+```
+
+
+```{r}
+ggwipe::last_plot_wipe() %+%
+  (coffee_survey %>% 
+  filter(!is.na(age), !is.na(favorite)) %>% 
+  group_by(age, favorite) %>% 
+  summarize(n = n()) %>% 
+  mutate(prop = n/sum(n))) +
+  aes(x = age |> factor(age_cats), label = NULL) + 
+  aes(y = favorite |> str_wrap(25) |> fct_reorder(n) ) +
+  scale_x_discrete() + 
+  geom_tile(aes(fill = prop), show.legend = F) + 
+  scale_fill_viridis_c(end = .7) + 
+  geom_text(aes(label = 100*round(prop,2)),
+            color = "white") + 
+  labs(x = NULL, y = NULL, tag = NULL) + 
+  coord_flip()
+
+last_plot()$layers
+```

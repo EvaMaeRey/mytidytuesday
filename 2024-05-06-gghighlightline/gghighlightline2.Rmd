@@ -60,6 +60,8 @@ gapminder::gapminder %>%
 ```{r}
 statHighlight <- ggproto("statHighlight",
                          Stat,
+                         # panel is needed to ensure 
+                         # that highlighted groups sits on top.
                          compute_panel = compute_panel_highlight_lines,
                          default_aes = aes(color = after_stat(highlight_condition)),
                          required_aes = c("x", "y", "grouping","highlight_condition")
