@@ -1,0 +1,59 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+ggplot(data = diamonds) + 
+  aes(y = .5, fill = cut) + 
+  geom_bar(width = 1)
+  
+ggplot(data = diamonds) + 
+  aes(fill = cut) + 
+  geom_bar(width = 1, aes(y = .5))
+
+ggplot(diamonds) + 
+  aes(fill = cut, y = .5) +
+  layer(geom = "bar", stat = "count", 
+        position = "stack", check.aes = F)
+  
+StatCount$default_aes <- aes(y = .5)
+StatCount$required_aes <- "fill"
+GeomBar$required_aes <- "fill"
+
+
+ggplot(diamonds) + 
+  aes(fill = cut) +
+  layer(geom = "bar", stat = "count", 
+        position = "stack", check.aes = F)
+
+```
+
+## Experiment
+
+```{r}
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

@@ -15,20 +15,15 @@ options(tidyverse.quiet = TRUE)
 
 
 
-## Intro Thoughts
 
 
-## Campitelli:  stat_rasa (now stat_group() and extending to stat_panel()) 
+## From Campitelli 2018 which creats stat_rasa, now stat_group() and stat_panel() and stat_panel_sf
 
 https://eliocamp.github.io/codigo-r/en/2018/05/how-to-make-a-generic-stat-in-ggplot2/
 
-### Backend StatRasa, stat_group() 
-
-Define group-wise computation.
+# `compute_rasa()`
 
 ```{r}
-library(tidyverse)
-
 compute_rasa <- function(data, scales, compute_fun, fun.args) {
      # Change default arguments of the function to the 
      # values in fun.args
@@ -43,8 +38,11 @@ compute_rasa <- function(data, scales, compute_fun, fun.args) {
      # Apply function to data
      compute_fun(data)
 }
+```
 
+# then define StatRasagroup and stat_group()
 
+```{r}
 StatRasagroup <- ggplot2::ggproto(
   `_class` = "StatRasagroup", 
   `_inherit` = ggplot2::Stat,
@@ -97,7 +95,7 @@ stat_group <- function(compute_fun = NULL,
 
 ---
 
-# extending: Define panel-wise computation
+# define StatRasapanel and stat_panel
 
 ```{r}
 library(tidyverse)
@@ -150,8 +148,83 @@ stat_panel <- function(compute_fun = NULL,
 }
 ```
 
+---
 
+# define `stat_panel_sf()`
 
+```{r}
+# stat function used in ggplot - we reorder from conventional
+stat_panel_sf <- function(geo_ref_data = NULL,
+                          compute_fun = NULL, 
+                       geom = "sf", 
+                       mapping = NULL, 
+                       data = NULL,
+                      position = "identity",
+                      required_aes = NULL,
+                      default_aes = NULL,
+                      dropped_aes = NULL,
+                      ...,
+                      show.legend = NA,
+                      inherit.aes = TRUE,
+                      na.rm = FALSE,
+                      crs = "NAD27" # "NAD27", 5070, "WGS84", "NAD83", 4326 , 3857
+) {
+  
+    if(!is.null(geo_ref_data) & is.null(compute_fun)){
+    
+      
+      compute_fun <- function(data, keep_id = NULL, 
+                                       drop_id = NULL, 
+                                       stamp = FALSE){
+  
+             if(!stamp){data <- dplyr::inner_join(data, geo_ref_data)}
+             if( stamp){data <- geo_ref_data }
+             
+             if(!is.null(keep_id)){ data <- dplyr::filter(data, id_col %in% keep_id) }
+             if(!is.null(drop_id)){ data <- dplyr::filter(data, !(id_col %in% drop_id))}
+             
+             data
+  
+      }
+    
+    
+  }
+  
+  
+   # Check arguments 
+   if (!is.function(compute_fun)) stop ("compute_fun must be a function")
+   
+   # Pass dotted arguments to a list
+   fun.args <- match.call(expand.dots = FALSE)$`...`
+   
+   if(!is.null(required_aes)){StatRasapanel$required_aes <- required_aes}
+   if(!is.null(default_aes)){StatRasapanel$default_aes <- default_aes}
+   if(!is.null(dropped_aes)){StatRasapanel$dropped_aes <- dropped_aes}
+   
+     c(ggplot2::layer_sf(
+              data = data,
+              mapping = mapping,
+              stat = StatRasapanel,  # proto object from step 2
+              geom = geom,  # inherit other behavior
+              position = position,
+              show.legend = show.legend,
+              inherit.aes = inherit.aes,
+              check.aes = FALSE,
+              check.param = FALSE,
+              params = rlang::list2(
+                compute_fun = compute_fun, 
+                fun.args = fun.args,
+                na.rm = na.rm, ...)
+              ),
+              
+              coord_sf(crs = crs,
+                       default_crs = sf::st_crs(crs),
+                       datum = crs,
+                       default = TRUE)
+     )
+   
+}
+```
 
 
 ### stat_group(fun = summarize_xy)
@@ -466,155 +539,28 @@ gapminder::gapminder %>%
 
 ```
 
-# Attempting a unified approach - allowing compute_panel or compute_group to be defined.  
-
-## then we'll write helpers stat_group and stat_panel from this larger function
-
+# Then using stat_panel_sf
 
 ```{r}
-knitr::knit_exit()
-
-```
-
-
-```{r}
-StatRasa <- 
-  ggplot2::ggproto("StatRasa", 
-                   ggplot2::Stat)
-
-# stat function used in ggplot - we reorder from conventional
-stat_rasa <- function(mapping = NULL, 
-                      data = NULL,
-                      compute_panel_fun = NULL, 
-                      compute_fun = NULL, 
-                      geom = "point", 
-                      position = "identity",
-                      required_aes = NULL,
-                      default_aes = NULL,
-                      dropped_aes = NULL,
-                      ...,
-                      show.legend = NA,
-                      inherit.aes = TRUE) {
-   
-   if(!is.null(required_aes)){StatRasa$required_aes <- required_aes}
-   if(!is.null(default_aes)){StatRasa$default_aes <- default_aes}
-   if(!is.null(dropped_aes)){StatRasa$dropped_aes <- dropped_aes}
-
-   if(!is.null(compute_fun)){StatRasa$compute_group <- compute_group_rasa}
-   if(!is.null(compute_panel_fun)){StatRasa$compute_panel <- compute_panel_rasa}
-   # Pass dotted arguments to a list
-   fun.args <- match.call(expand.dots = FALSE)$`...`
-   
-   ggplot2::layer(
-      data = data,
-      mapping = mapping,
-      stat = StatRasa,
-      geom = geom,
-      position = position,
-      show.legend = show.legend,
-      inherit.aes = inherit.aes,
-      check.aes = FALSE,
-      check.param = FALSE,
-      params = list(
-         compute_panel_fun = compute_panel_fun, 
-         compute_fun = compute_fun,
-         fun.args = fun.args,
-         na.rm = FALSE,
-         ...
-      )
-   )
-}
-
-
-group_means <- function(data){
-  
- data %>% 
-    summarise(x = mean(x),
-              y = mean(y))
-  
-}
-
-geom_means <- function(...){
-  stat_rasa(compute_fun = group_means, ...)
-}
-
-mtcars |>
-  ggplot() + 
-  aes(x = wt,
-      y = mpg) + 
-  geom_point() + 
-  geom_means(size = 6)
-
-last_plot() + 
-  aes(color = factor(cyl))
-```
-
-
-
-## And a sf targetted one; uses GeomSF as default and the list2. In
-
-
-```{r, eval = F}
 nc <- sf::st_read(system.file("shape/nc.shp", package="sf"))
 
 geo_reference_northcarolina_county <- nc |>
   dplyr::select(county_name = NAME, fips = FIPS) |>
   sf2stat:::sf_df_prep_for_stat(id_col_name = "county_name")
 
-compute_panel_sf_fun <- function(df, ref_data){
+# failing with default aes... :-(
+
+stat_nc_counties <- function(...){
   
-  data |> dplyr::left_join(ref_data)
+  stat_panel_sf(geo_ref_data = geo_reference_northcarolina_county, ...)
   
 }
 
-nc %>% 
+geo_reference_northcarolina_county %>% 
   sf::st_drop_geometry() %>% 
-  select(fips = fips) %>% 
-  compute_panel_sf_fun(ref_data = geo_reference_northcarolina_county)
+ggplot() + 
+  aes(fips = fips) +
+  stat_nc_counties() + 
+  stat_nc_counties(geom = "text", 
+                   mapping = aes(label = after_stat(id_col)))
 ```
-
-```{r, eval = F}
-StatSfrasa <- ggplot2::ggproto(`_class` = "StatSfrasa",
-                               `_inherit` = ggplot2::Stat)
-
-stat_region_rasa <- function(mapping = NULL, 
-                       data = NULL,
-                       ref_data = NULL, 
-                       compute_panel_sf_fun = NULL, 
-                       compute_group_fun = NULL, 
-
-                      required_aes = NULL,
-                      default_aes = NULL,
-                      dropped_aes = NULL,
-      geom = ggplot2::GeomSf,
-      position = "identity",
-      na.rm = FALSE,
-      show.legend = NA,
-      inherit.aes = TRUE,
-      crs = "NAD27", # "NAD27", 5070, "WGS84", "NAD83", 4326 , 3857
-      ...) {
-
-  c(ggplot2::layer_sf(
-              stat = StatSfrasa,  # proto object from step 2
-              geom = geom,  # inherit other behavior
-              data = data,
-              mapping = mapping,
-              position = position,
-              show.legend = show.legend,
-              inherit.aes = inherit.aes,
-              params = rlang::list2(na.rm = na.rm, ...)
-              ),
-    coord_sf(crs = crs,
-            default_crs = sf::st_crs(crs),
-            datum = crs,
-            default = TRUE)
-     )
-  }
-```
-
-
-
-## Closing remarks, Other Relevant Work, Caveats
-
-
-See Elio's blog post for details

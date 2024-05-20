@@ -171,7 +171,78 @@ ggwipe::last_plot_wipe() %+%
   geom_text(aes(label = 100*round(prop,2)),
             color = "white") + 
   labs(x = NULL, y = NULL, tag = NULL) + 
-  coord_flip()
+  coord_polar()
 
 last_plot()$layers
+```
+
+
+```{r}
+coffee_survey %>% 
+  count(age, favorite) %>% 
+  ggplot2::remove_missing() %>% 
+  mutate(x_point = as.numeric(as.factor(age)), y_point = as.numeric(as.factor(favorite))) %>% 
+  select(x_point, y_point) ->
+coords_points
+
+library(sp)
+spdf <- SpatialPointsDataFrame(coords = coords_points, data = coords_points,
+                               proj4string = CRS("+init=EPSG:32618")) # Define own reference system
+plot(spdf)
+
+plot(spdf)
+
+
+upper_left_x <- 5000
+upper_left_y <- 5000
+L <- 2000 # dimension from upper_left to bottom_left
+dx <- 200 # delta in L dimension
+M <- 1000 # dimension from upper_left to upper_right
+dy <- 200 # delta in M dimension
+angle <- pi/6  # angle between M dimension and horizontal. IMPORTANT IN RADIANS
+
+
+coords_points <- data.frame(x_point = double(),
+                            y_point = double(),
+                            stringsAsFactors=FALSE)
+
+# Delta L
+deltaL <- coords_points
+for (i in seq(0, L, dx)){
+  deltaL_x_point <- + dx*i*cos(pi/2 -angle)
+  deltaL_y_point <- - dx*i*sin(pi/2 - angle)
+  
+  deltaL <- rbind(deltaL, c(deltaL_x_point, deltaL_y_point))
+}
+
+# Delta M
+deltaM <- coords_points
+for (i in seq(0, M, dy)){
+  deltaM_x_point <- dy*i*cos(angle)
+  deltaM_y_point <- dy*i*sin(angle)
+  
+  deltaM <- rbind(deltaM, c(deltaM_x_point, deltaM_y_point))
+}
+
+
+coords_dataframe <- as.data.frame(cbind(rep(upper_left_x, (L/dx+1)*(M/dy+1)), rep(upper_left_y, M/dy+1)))
+deltaL_dataframe <- deltaL[rep(seq_len(nrow(deltaL)), times=M/dy+1),]
+deltaM_dataframe <- deltaM[rep(seq_len(nrow(deltaM)), each=L/dx+1),]
+
+
+coords_points <- coords_dataframe + deltaL_dataframe + deltaM_dataframe
+
+coords_points %>% 
+  ggplot() + 
+  aes(x = V1, V2) + 
+  geom_point() + 
+  coord_equal()
+
+coords_points %>% 
+  ggplot() +
+  aes(x = V1, V2) + 
+  geom_point() + 
+  coord_equal()
+
+
 ```
