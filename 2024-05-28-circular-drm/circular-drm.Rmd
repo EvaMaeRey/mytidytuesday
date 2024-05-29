@@ -1,0 +1,129 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r, fig.height=12, fig.width=12 }
+library(tidyverse)
+
+compute_panel_circle_drm <- function(data, scales){
+  
+  data$id <- 1:nrow(data)
+  data$around <- 1:nrow(data)/nrow(data)
+  data$circ_angle <- -data$around*2*pi - pi/2
+  data$x <- data$dist * cos(data$circ_angle)
+  data$y <- data$dist * sin(data$circ_angle)
+  data$angle <- -data$around*360 +180
+  
+  data
+  
+}
+
+ggdoremi:::join_phrases_drm_lyrics() %>% 
+  # head(30) %>% 
+  mutate(dist = as.numeric(drm) + 10) %>% 
+  compute_panel_circle_drm() %>% 
+  ggplot() + 
+  ggstamp::stamp_circle(radius = 8+10, alpha = 0, size = .25, linetype = "dotted") +
+  ggstamp::stamp_circle(radius = 8+12, alpha = 0, size = .25, linetype = "dotted") +
+  ggstamp::stamp_circle(radius = 8+14, alpha = 0, size = .25, linetype = "dotted") +
+  aes(x = x, dist = dist, y = y, label = lyric, angle = angle) + 
+  geom_segment(xend = 0, yend = 0) +
+  geom_point(shape = 21, size = 16, fill = "white") +
+  # aes(color = doremi) +
+  geom_text() +
+  coord_equal() 
+  
+
+lyrics_abc <- "a b c d e f g
+h i j k l m n o p
+q r s t u v
+w x y z
+Now I know my A B Cs
+Next time won't you sing with me"
+
+
+drm_abc <- "ddsslls
+ffmmrrrrd
+ssfmmr
+sfmr
+ddsslls
+ffmmrrd"
+
+
+ggdoremi:::join_phrases_drm_lyrics(drm_abc, lyrics_phrases = lyrics_abc %>% str_to_title()) %>% 
+  # head(30) %>% 
+  mutate(dist = as.numeric(drm) + 10) %>% 
+  compute_panel_circle_drm() %>% 
+  ggplot() + 
+  ggstamp::stamp_circle(radius = 8+10, alpha = 0, size = .25, linetype = "dotted") +
+  ggstamp::stamp_circle(radius = 8+12, alpha = 0, size = .25, linetype = "dotted") +
+  ggstamp::stamp_circle(radius = 8+14, alpha = 0, size = .25, linetype = "dotted") +
+  aes(x = x, dist = dist, y = y, label = lyric, angle = angle) + 
+  geom_segment(xend = 0, yend = 0) +
+  geom_point(shape = 21, size = 16, fill = "white") +
+  # aes(color = doremi) +
+  geom_text() +
+  coord_equal() 
+
+
+lyrics_doe_a_deer <-
+'Doe a deer a fe-male deer
+ray a drop of gol-den sun
+me a name I call my-self
+far a long long way to run
+sew a need-le pull-ing thread
+la a note to fol-low sol
+tea a drink with jam and bread
+that will bring us back to do o o o'
+
+drm_doe_a_deer <-
+'drmrmrm
+rmffmrf
+mfsmsms
+fsllsfl
+sdrmfsl
+lrmfslt
+tmfslt1
+1tlsts1smr'
+
+
+ggdoremi:::join_phrases_drm_lyrics(drm_doe_a_deer, lyrics_phrases = lyrics_doe_a_deer) %>%
+  # head(30) %>%
+  mutate(dist = as.numeric(drm) + 10) %>%
+  compute_panel_circle_drm() %>%
+  ggplot() +
+  ggstamp::stamp_circle(radius = 8+10, alpha = 0, size = .25, linetype = "dotted") +
+  ggstamp::stamp_circle(radius = 8+12, alpha = 0, size = .25, linetype = "dotted") +
+  ggstamp::stamp_circle(radius = 8+14, alpha = 0, size = .25, linetype = "dotted") +
+  ggstamp::stamp_circle(radius = 8+16, alpha = 0, size = .25, linetype = "dotted") +
+  aes(x = x, dist = dist, y = y, label = lyric, angle = angle) +
+  geom_segment(xend = 0, yend = 0) +
+  geom_point(shape = 21, size = 16, fill = "white") +
+  aes(color = doremi) +
+  geom_text() +
+  coord_equal()
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

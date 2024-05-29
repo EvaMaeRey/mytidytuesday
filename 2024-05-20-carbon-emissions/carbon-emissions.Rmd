@@ -28,31 +28,39 @@ options(scipen = 10)
 emissions %>% 
   group_by(parent_entity, year) %>% 
   summarise(total_emissions_MtCO2e = sum(total_emissions_MtCO2e)) %>% 
-  mutate(total_cum = sum(total_emissions_MtCO2e)) %>% 
-  arrange(-total_cum) %>% 
+  mutate(cummulative = cumsum(total_emissions_MtCO2e)) %>% 
+  # arrange(-total_cum) %>% 
   ggplot() + 
-  aes(year, total_emissions_MtCO2e) + 
+  aes(year, cummulative) + 
   geom_line(color = "grey") +
   aes(group = parent_entity) + 
-  scale_y_log10() +
+  scale_y_log10()  +
+  NULL
+
+last_plot() + 
   geom_line(data = . %>% 
               filter(parent_entity %in% 
                        c("Abu Dhabi National Oil Company",
                          "Adani Enterprises",
                          "Adaro Energy")), 
             aes(color = parent_entity),
-            linewidth = 2) + 
-  aes(id = paste(parent_entity, year)) +
-  ggcallout:::geom_labellink_nww(
-    which_id = "Abu Dhabi National Oil Company 1976", link_prop = .3) + 
-  ggcallout:::geom_labellink_south(which_id = "Adaro Energy 1992", link_prop = .25) + 
-  ggcallout:::geom_labellink_south(which_id = "Adani Enterprises 2012",
-      link_prop = .2) + 
-  aes(label = parent_entity %>% str_wrap(12)) + 
-  guides(color = "none") + 
-  labs(x = NULL)
-            
+            linewidth = 2)
+
+last_plot() +
+  aes(id = paste(parent_entity, year)) +  ggcallout:::geom_labellink_swss(which_id = "Adaro Energy 1992", 
+                                  link_prop = .25)  
   
+
+
+last_plot() + 
+  guides(color = "none") + 
+
+  ggcallout:::geom_labellink_nww(which_id = "Abu Dhabi National Oil Company 1976",
+                                 link_prop = .3) +
+  ggcallout:::geom_labellink_south(which_id = "Adani Enterprises 2012",
+                                   link_prop = .2) +
+  aes(label = parent_entity %>% str_wrap(12)) + 
+  labs(x = NULL)
 
 
 ```

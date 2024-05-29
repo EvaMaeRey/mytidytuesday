@@ -23,14 +23,14 @@ unique0 <- ggplot2:::unique0
 
 # geom-bar.R
 
-```{r, code = readr::read_lines("https://raw.githubusercontent.com/tidyverse/ggplot2/main/R/geom-bar.R")}
+```{r, code = readr::read_lines("https://raw.githubusercontent.com/tidyverse/ggplot2/main/R/geom-bar.R"), eval = F}
 
 ```
 
 # stat-count.R
 
 
-```{r, code = readr::read_lines("https://raw.githubusercontent.com/tidyverse/ggplot2/main/R/stat-count.R")}
+```{r, code = readr::read_lines("https://raw.githubusercontent.com/tidyverse/ggplot2/main/R/stat-count.R"), eval = F}
 
 ```
 
@@ -46,12 +46,19 @@ diamonds |>
 
 last_plot() +
   coord_polar()
+
+diamonds |>
+  dplyr::sample_n(15) |>
+  ggplot() + 
+  aes(fill = color) + 
+  aes(y = "all") + 
+  geom_bar()
 ```
 
 
 # Start fiddling
 
-```{r}
+```{r, eval = T}
 GeomBar$required_aes <- "fill"
 
 
@@ -112,13 +119,23 @@ StatCount <- ggproto("StatCount", Stat,
 
 ```
 
-```{r}
+```{r, eval = T}
 diamonds |>
   dplyr::sample_n(15) |>
   ggplot() + 
   aes(fill = color) + 
   aes(x = "all") + 
   geom_bar() +
+  coord_polar(theta = "y")
+
+
+diamonds |>
+  dplyr::sample_n(15) |>
+  ggplot() + 
+  aes(fill = color) + 
+  aes(x = "all") + 
+  geom_bar() +
+  # layer(geom = GeomBar, stat = StatCount, position = "stack") +
   coord_polar(theta = "y")
 ```
 
