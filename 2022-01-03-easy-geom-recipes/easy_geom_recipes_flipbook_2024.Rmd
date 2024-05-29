@@ -109,7 +109,7 @@ code.r.hljs.remark-code:hover{
 
 
 
-<!-- ## *It's a good idea to clarify what needs to happen without getting into the extension architecture* -->
+<!-- ## *It's a good idea to clarify what needs to happen without getting into the extension architecture.* -->
 
 --
 
@@ -149,7 +149,7 @@ class: inverse, middle, center
 
 --
 
-## `geom_point_xy_medians()`
+## `geom_medians()`
 
 
 
@@ -158,10 +158,14 @@ class: inverse, middle, center
 
 ## Step 0: use base ggplot2 to get the job done
 
+--
+
+### *Clarify what needs to happen without getting into the extension architecture.* 
+
 ---
 
 
-`r flipbookr::chunk_reveal("penguins")`
+`r flipbookr::chunk_reveal("penguins", break_type = "user")`
 
 
 ```{r penguins, include = FALSE}
@@ -170,40 +174,45 @@ library(palmerpenguins)
 
 penguins <- remove_missing(penguins)
 
-penguins %>% 
-  summarize(bill_length_mm_median = median(bill_length_mm),
-            bill_depth_mm_median = median(bill_depth_mm)) ->
-penguins_medians
+penguins %>% #BREAK
+  summarize(bill_length_mm_median = 
+              median(bill_length_mm),
+            bill_depth_mm_median = 
+              median(bill_depth_mm)) -> #BREAK
+penguins_medians #BREAK
 
 penguins %>% 
   ggplot() + 
   aes(x = bill_depth_mm) + 
   aes(y = bill_length_mm) + 
-  geom_point() + 
+  geom_point() + #BREAK
   geom_point(data = penguins_medians,
-    color = "red", size = 4,
+             color = "red", 
+             size = 4,
              aes(x = bill_depth_mm_median,
-                 y = bill_length_mm_median))
+                 y = bill_length_mm_median)) #BREAK
+
+# Have a quick look at the layer_data medians layer
+layer_data(plot = last_plot(), i = 2) #BREAK
 ```
 
 ---
 class: inverse, middle, center
 
-## Step 1: computation
+## Step 1: Define Compute and test.
 
 --
 
-- define computation that should be done before plotting
-- test that functionality
+### *Define the compute that will transform your input data before rendering it. Try it out.* 
 
 ---
 
 
-`r flipbookr::chunk_reveal("compute_group_xy_medians")`
+`r flipbookr::chunk_reveal("compute_group_medians")`
 
 
-```{r compute_group_xy_medians, include = FALSE}
-compute_group_xy_medians <- function(data, 
+```{r compute_group_medians, include = FALSE}
+compute_group_medians <- function(data, 
                                      scales){
   data %>% 
     summarize(x = median(x),
@@ -216,46 +225,52 @@ penguins %>%
   # with columns named x and y
   select(x = bill_depth_mm, 
          y = bill_length_mm) %>%
-  compute_group_xy_medians()
+  compute_group_medians()
 ```
 
 
 ---
 class: inverse, middle, center
 
-## Step 2: define ggproto
+## Step 2: define a new Stat
 
 --
 
-# What's the naming convention for the proto object?
-# Which aesthetics are required as inputs?
-# Where does the function from above go?
+### *Stats, which are ggproto objects, allow your  to get compute done within a ggplot2 build.  You'll use the computation function from Step 1 to define your Stat.* 
+
+--
+
+### *To test out the Stat behavior you can use the generic `ggplot2::layer()` function.  `layer()` lets you combine Stats and Geoms for very flexible expression.  It is used to define the user-facing layer functions that you're familiar with like geom_point, geom_histogram, etc.*
 
 ---
 
 
-`r flipbookr::chunk_reveal("StatXymedians", widths = c(1,.2), break_type = 1)`
+`r flipbookr::chunk_reveal("StatMedians", break_type = "user")`
 
 
-```{r StatXymedians, include = F}
+```{r StatMedians, include = F}
 # define new Stat
-StatXymedians <- ggplot2::ggproto(
-  `_class` = "StatXymedians",    # declare new Stat
-  `_inherit` = ggplot2::Stat,    # inherit behavior of generic stat
-  required_aes = c("x", "y"),    # declare required variable mappings
-  compute_group = compute_group_xy_medians  # pass computation definition for stat
-  )
+StatMedians <- ggplot2::ggproto(
+  # declare new Stat
+  `_class` = "StatMedians",    
+  # inherit behavior of generic stat
+  `_inherit` = ggplot2::Stat,    
+  # state required variable mappings
+  required_aes = c("x", "y"),    
+  # declare computation definition for stat
+  compute_group = compute_group_medians  
+  ) #BREAK
 
-# test new stat w ggplot2 layer function
+# test new stat w ggplot::layer() function
 penguins %>% 
   ggplot() + 
   aes(x = bill_depth_mm) + 
   aes(y = bill_length_mm) + 
-  geom_point() + 
+  geom_point() + #BREAK
   layer(geom = GeomPoint, 
-        stat = StatXymedians, 
+        stat = StatMedians, 
         position = "identity", 
-        params = list(size = 8)) 
+        params = list(size = 8)) #BREAK
 ```
 
 
@@ -265,27 +280,28 @@ class: inverse, middle, center
 
 ## Step 3: define user-facing geom\_\* function
 
-For ease of use, we'll wrap the layer function into something that looks more familiar.  We also take care to manage arguments like mapping, data, position, na.rm, show.legend, inherit.aes, etc, so that your new, user-facing function will behaive similarly to other user-facing geom_*s.
 
-- define the stat and geom for your layer
+--
+
+### *For ease of use, we'll wrap the layer function into a familiar `geom` function.*  
+
+### *We manage arguments like mapping, data, position, na.rm, show.legend, inherit.aes, etc, so that the new, user-facing function will behave similarly to other user-facing geom functions that you are familiar with.*
 
 ---
 
 
-`r flipbookr::chunk_reveal("geom_point_xy_medians",  break_type = 1)`
+`r flipbookr::chunk_reveal("geom_medians",  break_type = "user")`
 
 
-```{r geom_point_xy_medians, include = FALSE} 
-geom_point_xy_medians <- function(
-  mapping = NULL, # global aesthetics will be used if NULL
-  data = NULL, # global data will be used if NULL
-  position = "identity", 
-  na.rm = FALSE, 
-  show.legend = NA,
-  inherit.aes = TRUE, 
-  ...  ){ # many other arguments can be used specific to  the Geom thats used in layer and to computation definition
+```{r geom_medians, include = FALSE} 
+geom_medians <- function(
+  mapping = NULL, data = NULL, 
+  position = "identity", na.rm = FALSE, 
+  show.legend = NA,  inherit.aes = TRUE, 
+  ...  ){
+  
 ggplot2::layer(
-    stat = StatXymedians, 
+    stat = StatMedians, 
     geom = ggplot2::GeomPoint, 
     data = data, 
     mapping = mapping,
@@ -295,35 +311,21 @@ ggplot2::layer(
     params = list(na.rm = na.rm, ...)
   )
   
-}
-```
-
----
-class: inverse, middle, center
+} #BREAK
 
 
-## Step 3.b: Enjoy! Use your function
-
-
----
-
-
-`r flipbookr::chunk_reveal("enjoy_penguins")`
-
-
-```{r enjoy_penguins, include = FALSE}
 penguins %>%
-  ggplot()+
+  ggplot() +
   aes(x = bill_depth_mm, 
       y = bill_length_mm) +
-  geom_point() +
-  geom_point_xy_medians(size = 8)
+  geom_point() + #BREAK
+  geom_medians(size = 8) #BREAK
 ```
 
 ---
 class: inverse, middle, center
 
-### And check out conditionality!
+### And check out group-wise behavior!
 
 ---
 
@@ -350,7 +352,7 @@ class: inverse, middle, center
 
 --
 
-### Create the function `geom_point_xy_means()`
+### Create the function `geom_means()`
 
 ---
 class: inverse, middle, center
@@ -387,8 +389,6 @@ class: inverse, middle, center
 
 ## Step 1: define computation
 
-
-
 ---
 
 
@@ -418,7 +418,7 @@ cars %>%
 ---
 class: inverse, middle, center
 
-## Step 2: define Stat
+## Step 2: define new Stat
 
 
 ---
@@ -508,6 +508,10 @@ cars %>%
 class: inverse, middle, center
 
 ### And check out conditionality!
+
+--
+
+Note: Because computation is *group-wise*, (i.e. computation is done within discrete group-defining variables) row numbers are computed within group, so rows 1, 2, 3 may be present multiple times.
 
 ---
 
