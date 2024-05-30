@@ -1,0 +1,94 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+
+```{r carsplot}
+ggplot(cars) + 
+  aes(speed, dist) + 
+  geom_point()
+```
+
+
+```{r}
+co <- function(x) paste(x, collapse = " ")
+
+flipbookr:::chunk_code_get("carsplot") %>% 
+  flipbookr:::code_parse() %>% 
+  flipbookr:::parsed_return_partial_code_sequence(
+    which_highlight = NULL) %>% 
+  lapply(., co) %>% 
+  unlist() ->
+plot_definition
+
+plot_definition
+
+str(plot_definition)
+
+flipbookr:::chunk_code_get("carsplot") %>% 
+  flipbookr:::code_parse() %>% 
+  flipbookr:::parsed_return_partial_code() ->
+last_add
+
+last_add
+```
+
+
+```{r}
+
+p <- list()
+for(i in 1:length(plot_definition)){
+  
+  p[[i]] <- i
+  
+  p[[i]] <- eval(parse(text = plot_definition[i]))
+  
+ print(eval(parse(text = plot_definition[i]))
+       
+       )
+  
+  p[[i]] <- p[[i]] + annotate(geom = "text",
+                              x = I(.05),
+                              y = I(.95), 
+                              hjust = 0,
+                              vjust = 1,
+                              label = last_add[i],
+                              color = "red"
+                              )
+  # 
+}
+
+
+p
+
+
+# eval(parse(text = "ggplot(cars)"))
+```
+
+
+## Closing remarks, Other Relevant Work, Caveats
