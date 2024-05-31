@@ -35,6 +35,58 @@ ggplot(cars) +
 ```
 
 
+
+```{r}
+knitrExtra::chunk_code_get("carsplot")
+
+knitrExtra::chunk_code_get("carsplot") ->
+  code
+
+unconnected_code <- code %>% str_trim() %>% str_remove("\\+$")
+
+
+partialcode <- c()
+
+
+
+for(i in 1:length(code)){
+  
+  partialcode[i] <- paste(unconnected_code[1:i], collapse = " + ")
+  
+}
+
+
+p <- list()
+for(i in 1:length(partialcode)){
+  
+  p[[i]] <- eval(parse(text = partialcode[i]))
+  
+ label <- ifelse(i > 1, paste("+", unconnected_code[i]), unconnected_code[i])
+ 
+  p[[i]] <- p[[i]] + annotate(geom = "text",
+                              x = I(.025),
+                              y = I(.95), 
+                              hjust = 0,
+                              vjust = 1,
+                              label = label,
+                              color = "red"
+                              )
+  # 
+}
+
+
+patchwork::wrap_plots(p, ncol = 2)
+
+```
+
+
+```{r}
+knitr::knit_exit()
+
+```
+
+
+
 ```{r}
 co <- function(x) paste(x, collapse = " ")
 
@@ -44,11 +96,11 @@ flipbookr:::chunk_code_get("carsplot") %>%
     which_highlight = NULL) %>% 
   lapply(., co) %>% 
   unlist() ->
-plot_definition
+plot_code
 
-plot_definition
+plot_code
 
-str(plot_definition)
+str(plot_code)
 
 flipbookr:::chunk_code_get("carsplot") %>% 
   flipbookr:::code_parse() %>% 
@@ -59,16 +111,19 @@ last_add
 ```
 
 
+
+
+
 ```{r}
 
 p <- list()
-for(i in 1:length(plot_definition)){
+for(i in 1:length(plot_code)){
   
   p[[i]] <- i
   
-  p[[i]] <- eval(parse(text = plot_definition[i]))
+  p[[i]] <- eval(parse(text = plot_code[i]))
   
- print(eval(parse(text = plot_definition[i]))
+ print(eval(parse(text = plot_code[i]))
        
        )
   
@@ -89,6 +144,9 @@ p
 
 # eval(parse(text = "ggplot(cars)"))
 ```
+
+
+
 
 
 ## Closing remarks, Other Relevant Work, Caveats
