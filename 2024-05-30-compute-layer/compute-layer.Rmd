@@ -79,13 +79,48 @@ base +
         position = "identity") + 
   aes(color = speed > 15) +
   facet_wrap(facets = vars(speed > 15))
-
-
 ```
+
+
 
 ## Experiment
 
 ```{r}
+library(tidyverse)
+
+compute_mean <- function(data, ...){
+  
+  data %>% 
+    distinct(PANEL) ->
+  panel_df
+  
+  data %>% 
+    summarise(x = mean(x),
+              y = mean(y)) %>% 
+    crossing(panel_df)
+      
+  
+}
+
+########  groupwise computation via compute group ####
+StatMeanlayer <- ggproto(`_class` = "StatMeanlayer",
+                         `_inherit` = Stat,
+                         compute_layer = compute_mean)
+
+ggplot(cars) + 
+  aes(speed, dist) + 
+  geom_point(size = .15) +
+  layer(geom = "point", 
+        stat = StatMeanlayer, 
+        position = "identity")
+
+last_plot() +
+  facet_wrap(facets = vars(speed > 10)) 
+
+layer_data(i = 2)
+
+last_plot() +
+  aes(color = dist > 30)
 
 ```
 
