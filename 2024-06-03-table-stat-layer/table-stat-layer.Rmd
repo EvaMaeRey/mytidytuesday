@@ -1,0 +1,75 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+
+
+```
+
+## Experiment
+
+```{r}
+compute_layer_prop <- function(data = mtcars, ...){
+  
+  if(is.null(data$value)){data$value <- 1}
+  
+  global_sum <- sum(data$value)
+  
+  data %>% 
+    group_by(PANEL) %>% 
+    summarize(sum = sum(value)) %>% 
+    mutate(label = round(100* sum/global_sum, 1)) %>% 
+    mutate(x = 0, y = 0)
+
+}
+
+Titanic %>% 
+  data.frame() %>%  
+  uncount(Freq) %>% 
+  group_by(Sex, Survived) %>% 
+  mutate(PANEL = paste(Sex, Survived, sep = "-")) %>% 
+  compute_layer_prop()
+
+
+
+StatProp <- ggproto(`_class` = "StatProp",
+                    `_inherit` = Stat,
+                    compute_layer = compute_layer_prop)
+
+Titanic %>% 
+  data.frame() %>%  
+  uncount(Freq) %>% 
+  ggplot() + 
+  facet_grid(Sex ~ Survived) + 
+  layer(geom = "text", 
+        stat = StatProp, 
+        position = "identity")
+
+layer_data()
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

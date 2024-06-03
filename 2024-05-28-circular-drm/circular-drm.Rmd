@@ -25,14 +25,22 @@ library(tidyverse)
 
 compute_panel_circle_drm <- function(data, scales){
   
+  spacer_df <- tibble(spacer = 1)
+  
+  data <- bind_rows(spacer_df, data, spacer_df)
+  
   data$id <- 1:nrow(data)
-  data$around <- 1:nrow(data)/nrow(data)
-  data$circ_angle <- -data$around*2*pi - pi/2
+  # nrow(data)
+  data$around <- 1:(nrow(data))/nrow(data)
+  data$circ_angle <- -data$around*2*pi - 
+    pi/2 + 2*pi/nrow(data)/2 
   data$x <- data$dist * cos(data$circ_angle)
   data$y <- data$dist * sin(data$circ_angle)
-  data$angle <- -data$around*360 +180
+  data$angle <- -data$around*360 + 180
   
-  data
+  data %>% 
+    slice(-1) %>% 
+    slice(-nrow(.))
   
 }
 
@@ -45,11 +53,12 @@ ggdoremi:::join_phrases_drm_lyrics() %>%
   ggstamp::stamp_circle(radius = 8+12, alpha = 0, size = .25, linetype = "dotted") +
   ggstamp::stamp_circle(radius = 8+14, alpha = 0, size = .25, linetype = "dotted") +
   aes(x = x, dist = dist, y = y, label = lyric, angle = angle) + 
-  geom_segment(xend = 0, yend = 0) +
+  geom_segment(xend = 0, yend = 0, color = "black", linewidth = .5) +
   geom_point(shape = 21, size = 16, fill = "white") +
   # aes(color = doremi) +
   geom_text() +
-  coord_equal() 
+  coord_equal()  + 
+  theme_void()
   
 
 lyrics_abc <- "a b c d e f g
@@ -77,12 +86,15 @@ ggdoremi:::join_phrases_drm_lyrics(drm_abc, lyrics_phrases = lyrics_abc %>% str_
   ggstamp::stamp_circle(radius = 8+12, alpha = 0, size = .25, linetype = "dotted") +
   ggstamp::stamp_circle(radius = 8+14, alpha = 0, size = .25, linetype = "dotted") +
   aes(x = x, dist = dist, y = y, label = lyric, angle = angle) + 
-  geom_segment(xend = 0, yend = 0) +
-  geom_point(shape = 21, size = 16, fill = "white") +
+  geom_segment(xend = 0, yend = 0, color = "black") +
+  geom_point(size = 16, color = "white") +
   # aes(color = doremi) +
-  geom_text() +
-  coord_equal() 
+  geom_text(size = 8) +
+  coord_equal()  + 
+  theme_void()
+```
 
+```{r}
 
 lyrics_doe_a_deer <-
 'Doe a deer a fe-male deer
@@ -115,11 +127,12 @@ ggdoremi:::join_phrases_drm_lyrics(drm_doe_a_deer, lyrics_phrases = lyrics_doe_a
   ggstamp::stamp_circle(radius = 8+14, alpha = 0, size = .25, linetype = "dotted") +
   ggstamp::stamp_circle(radius = 8+16, alpha = 0, size = .25, linetype = "dotted") +
   aes(x = x, dist = dist, y = y, label = lyric, angle = angle) +
-  geom_segment(xend = 0, yend = 0) +
+  geom_segment(xend = 0, yend = 0, color = "black") +
   geom_point(shape = 21, size = 16, fill = "white") +
-  aes(color = doremi) +
+  # aes(color = doremi) +
   geom_text() +
-  coord_equal()
+  coord_equal() + 
+  theme_void()
 
 
 ```
