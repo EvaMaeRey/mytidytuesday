@@ -152,11 +152,19 @@ last_plot() %+%
 
 last_plot() + 
   facet_grid(rows = vars(Sex),
-             cols = vars(Survived, Age)) +
+             cols = vars(Age, Survived)) +
   aes(within = Sex)
 
+both <- paste
+
+
 last_plot() +
-  aes(within = paste(Survived, Age))
+  aes(within = both(Survived, Age))
+
+layer_data()
+
+last_plot() + 
+  facet_grid(rows = vars(Age))
 
 ```
 
