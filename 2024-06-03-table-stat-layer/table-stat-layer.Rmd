@@ -39,7 +39,8 @@ compute_layer_prop <- function(data = mtcars, ...){
   data %>% 
     group_by(PANEL) %>% 
     summarize(sum = sum(value)) %>% 
-    mutate(label = round(100* sum/global_sum, 1)) %>% 
+    mutate(prop = sum/global_sum) %>% 
+    mutate(label = round(100 * prop, 1) %>% paste0("%")) %>% 
     mutate(x = 0, y = 0)
 
 }
@@ -48,10 +49,9 @@ Titanic %>%
   data.frame() %>%  
   uncount(Freq) %>% 
   group_by(Sex, Survived) %>% 
-  mutate(PANEL = paste(Sex, Survived, sep = "-")) %>% 
+  mutate(cell = paste(Sex, Survived, sep = "-")) %>%  
+  mutate(PANEL = paste(as.numeric(Sex), as.numeric(Survived), sep = "-")) %>%
   compute_layer_prop()
-
-
 
 StatProp <- ggproto(`_class` = "StatProp",
                     `_inherit` = Stat,
@@ -60,16 +60,105 @@ StatProp <- ggproto(`_class` = "StatProp",
 Titanic %>% 
   data.frame() %>%  
   uncount(Freq) %>% 
-  ggplot() + 
+  ggplot(aes(fill = after_stat(prop))) + 
   facet_grid(Sex ~ Survived) + 
+  layer(geom = "tile", 
+        stat = StatProp, 
+        position = "identity") +
   layer(geom = "text", 
         stat = StatProp, 
         position = "identity")
 
 layer_data()
 
+
+
 ```
 
+```{r, eval = T}
+Titanic %>% 
+  data.frame() %>%  
+  uncount(Freq) ->
+tidy_titanic
+
+tidy_titanic %>% 
+  group_by(Sex) %>% 
+  mutate(local_sum = n())
+
+compute_layer_prop_within <- function(data = tidy_titanic, ...){
+  
+  if(is.null(data$value)){data$value <- 1}
+  if(is.null(data$within)){data$within <- 1}
+  if(is.null(data$wt)){data$wt <- 1}
+  
+  data$value <- data$value * data$wt
+  
+  data %>% 
+    group_by(within) %>% 
+    summarize(group_sum = sum(.data$value)) ->
+  group_sum_df
+  
+  data %>% 
+    left_join(group_sum_df) %>% 
+    group_by(PANEL) %>% 
+    summarize(sum = sum(.data$value),
+              group_sum = mean(.data$group_sum)) %>% 
+    mutate(prop = sum/group_sum) %>% 
+    mutate(label = round(100 * prop, 1) %>% paste0("%")) %>% 
+    mutate(x = 0, y = 0)
+
+}
+```
+
+```{r}
+tidy_titanic %>% 
+  mutate(within = Sex) %>% 
+  # group_by(Sex, Survived, within) %>% 
+  # mutate(PANEL = paste(Sex, Survived, sep = "-")) %>%  
+  mutate(PANEL = paste(as.numeric(Sex), 
+                       as.numeric(Survived), sep = "-")) %>%
+  ungroup() %>% 
+  compute_layer_prop_within()
+
+
+StatPropwithin <- ggproto(`_class` = "StatPropwithin",
+                    `_inherit` = Stat,
+                    compute_layer = compute_layer_prop_within)
+
+Titanic %>% 
+  data.frame() %>%  
+  uncount(Freq) %>% 
+  ggplot() + 
+  aes(within = Sex) + 
+  facet_grid(Sex ~ Survived) + 
+  aes(fill = after_stat(prop)) +
+  layer(geom = "tile", 
+        stat = StatPropwithin, 
+        position = "identity") +
+  layer(geom = "text", 
+        stat = StatPropwithin, 
+        position = "identity",
+        params = list(color = "gray85")
+        )
+
+layer_data()
+
+last_plot() + 
+  aes(within = NULL)
+
+last_plot() %+% 
+  (Titanic %>% data.frame()) +
+  aes(wt = Freq)
+
+last_plot() + 
+  facet_grid(rows = vars(Sex),
+             cols = vars(Survived, Age)) +
+  aes(within = Sex)
+
+last_plot() +
+  aes(within = paste(Survived, Age))
+
+```
 
 
 ## Closing remarks, Other Relevant Work, Caveats
