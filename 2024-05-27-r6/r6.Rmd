@@ -47,6 +47,47 @@ Person <- R6Class("Person",
     }
   )
 )
+
+
+Pivot <- R6Class("Pivot",
+  public = list(
+    data = NULL,
+    rows = NULL,
+    cols = NULL,
+    initialize = function(data = NULL, rows = NULL, cols = NULL){
+      self$data <- data
+      self$rows <- rows
+      self$cols <- cols
+      self$return_table()
+    }, 
+    set_data = function(val){
+      self$data <- val
+    },
+    set_rows = function(val){
+      self$rows <- val
+    },
+    set_cols = function(val){
+      self$cols <- val
+    },
+    return_table = function(){
+      "my table!"
+      
+      # data %>% group_by(across(rows, cols)) %>% 
+      #   count() %>% 
+      #   pivot_wider(cols = cols)
+      
+    }
+    
+    )
+  )
+
+
+mutablething <- Pivot$new(data = tidytitanic::tidy_titanic, rows = "Sex")
+mutablething
+mutablething$set_cols("survived")
+mutablething$cols
+mutablething$initialize()
+mutablething$return_table()
 ```
 
 ```{r}

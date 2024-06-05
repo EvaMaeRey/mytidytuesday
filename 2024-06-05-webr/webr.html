@@ -358,6 +358,8 @@ pre code {
 </ul>
 </div>
 
+<pre class="{webr-r}"><code>1 + 1
+</code></pre>
 <div id="intro-thoughts" class="section level2">
 <h2>Intro Thoughts</h2>
 </div>
@@ -367,124 +369,6 @@ pre code {
 </div>
 <div id="experiment" class="section level2">
 <h2>Experiment</h2>
-<pre class="r"><code>library(R6)
-
-Person &lt;- R6Class(&quot;Person&quot;,
-  public = list(
-    name = NULL,
-    hair = NULL,
-    initialize = function(name = NA, hair = NA) {
-      self$name &lt;- name
-      self$hair &lt;- hair
-      self$greet()
-    },
-    set_hair = function(val) {
-      self$hair &lt;- val
-    },
-    greet = function() {
-      cat(paste0(&quot;Hello, my name is &quot;, self$name, &quot;.\n&quot;))
-    }
-  )
-)
-
-
-Pivot &lt;- R6Class(&quot;Pivot&quot;,
-  public = list(
-    data = NULL,
-    rows = NULL,
-    cols = NULL,
-    initialize = function(data = NULL, rows = NULL, cols = NULL){
-      self$data &lt;- data
-      self$rows &lt;- rows
-      self$cols &lt;- cols
-      self$return_table()
-    }, 
-    set_data = function(val){
-      self$data &lt;- val
-    },
-    set_rows = function(val){
-      self$rows &lt;- val
-    },
-    set_cols = function(val){
-      self$cols &lt;- val
-    },
-    return_table = function(){
-      &quot;my table!&quot;
-      
-      # data %&gt;% group_by(across(rows, cols)) %&gt;% 
-      #   count() %&gt;% 
-      #   pivot_wider(cols = cols)
-      
-    }
-    
-    )
-  )
-
-
-mutablething &lt;- Pivot$new(data = tidytitanic::tidy_titanic, rows = &quot;Sex&quot;)
-mutablething</code></pre>
-<pre><code>## &lt;Pivot&gt;
-##   Public:
-##     clone: function (deep = FALSE) 
-##     cols: NULL
-##     data: data.frame
-##     initialize: function (data = NULL, rows = NULL, cols = NULL) 
-##     return_table: function () 
-##     rows: Sex
-##     set_cols: function (val) 
-##     set_data: function (val) 
-##     set_rows: function (val)</code></pre>
-<pre class="r"><code>mutablething$set_cols(&quot;survived&quot;)
-mutablething$cols</code></pre>
-<pre><code>## [1] &quot;survived&quot;</code></pre>
-<pre class="r"><code>mutablething$initialize()</code></pre>
-<pre><code>## [1] &quot;my table!&quot;</code></pre>
-<pre class="r"><code>mutablething$return_table()</code></pre>
-<pre><code>## [1] &quot;my table!&quot;</code></pre>
-<pre class="r"><code>ann &lt;- Person$new(&quot;Ann&quot;, &quot;black&quot;)</code></pre>
-<pre><code>## Hello, my name is Ann.</code></pre>
-<pre class="r"><code>ann</code></pre>
-<pre><code>## &lt;Person&gt;
-##   Public:
-##     clone: function (deep = FALSE) 
-##     greet: function () 
-##     hair: black
-##     initialize: function (name = NA, hair = NA) 
-##     name: Ann
-##     set_hair: function (val)</code></pre>
-<pre class="r"><code>ann$hair</code></pre>
-<pre><code>## [1] &quot;black&quot;</code></pre>
-<pre class="r"><code>ann$greet()</code></pre>
-<pre><code>## Hello, my name is Ann.</code></pre>
-<pre class="r"><code>ann$set_hair(&quot;red&quot;)
-ann$hair</code></pre>
-<pre><code>## [1] &quot;red&quot;</code></pre>
-<pre class="r"><code>Queue &lt;- R6Class(&quot;Queue&quot;,
-  public = list(
-    initialize = function(...) {
-      for (item in list(...)) {
-        self$add(item)
-      }
-    },
-    add = function(x) {
-      private$queue &lt;- c(private$queue, list(x))
-      invisible(self)
-    },
-    remove = function() {
-      if (private$length() == 0) return(NULL)
-      # Can use private$queue for explicit access
-      head &lt;- private$queue[[1]]
-      private$queue &lt;- private$queue[-1]
-      head
-    }
-  ),
-  private = list(
-    queue = list(),
-    length = function() base::length(private$queue)
-  )
-)
-
-q &lt;- Queue$new(5, 6, &quot;foo&quot;)</code></pre>
 </div>
 <div id="closing-remarks-other-relevant-work-caveats" class="section level2">
 <h2>Closing remarks, Other Relevant Work, Caveats</h2>

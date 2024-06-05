@@ -25,37 +25,64 @@ library(tidyverse)
 
 
 Adder <- ggproto("Adder",
-  x = 0,
+  out = 0,
   add = function(self, n) {
-    self$x <- self$x + n
-    self$x
+    self$out <- self$out + n
+    self$out
   }
  )
 
 is.ggproto(Adder)
 #> [1] TRUE
 
-Adder$add(10)
-#> [1] 10
-Adder$add(10)
-#> [1] 20
+Adder$add(3)
+Adder$add(5)
 
-Doubler <- ggproto("Doubler", Adder,
-  add = function(self, n) {
-    ggproto_parent(Adder, self)$add(n * 2)
-  }
-)
+Doubler <- ggproto("Doubler", 
+                   Adder,
+                   add = function(self, n) {
+                     ggproto_parent(Adder, self)$add(n = n ^ 2)
+                     }
+                   )
 
-Doubler$x
-#> [1] 20
+Doubler$out
 Doubler$add(10)
-#> [1] 40
+
+
 
 ```
 
 ## Experiment
 
 ```{r}
+Grouper <- ggproto("Grouper",
+  out = Titanic %>% data.frame() ,
+  grouprows = function(self, group) {
+    self$out <- group_by(self$out, {{group}})
+    self$out
+  }
+ )
+
+GrouperCols <- ggproto("GrouperCols", 
+                   Adder,
+                   add = function(self, n) {
+                     ggproto_parent(Adder, self)$out(group_by({{col}}))
+                     }
+                   )
+
+GrouperRows$grouprows(Sex) |> GrouperCols$groupcols(Survived)
+
+
+# 
+# GrouperCols <- ggproto("GrouperCols", GrouperRows,
+#   groupcols = function(self, cols) {
+#     ggproto_parent(GrouperRows, self)$grouprows(group_by({{cols}}))
+#   }
+# )
+# 
+# 
+# GrouperCols$groupcows(Survived)
+
 
 ```
 
