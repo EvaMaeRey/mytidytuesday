@@ -54,7 +54,7 @@ Pivot <- R6Class("Pivot",
     data = NULL,
     rows = NULL,
     cols = NULL,
-    initialize = function(data = NULL, rows = NULL, cols = NULL){
+    initialize = function(data, rows = NULL, cols = NULL){
       self$data <- data
       self$rows <- rows
       self$cols <- cols
@@ -71,10 +71,10 @@ Pivot <- R6Class("Pivot",
     },
     return_table = function(){
       "my table!"
-      
-      # data %>% group_by(across(rows, cols)) %>% 
-      #   count() %>% 
-      #   pivot_wider(cols = cols)
+
+      self$data %>% #group_by(across(c({{rows}}, {{cols}}))) %>% 
+         count() #%>% 
+         # pivot_wider(cols = cols)
       
     }
     
@@ -82,11 +82,12 @@ Pivot <- R6Class("Pivot",
   )
 
 
-mutablething <- Pivot$new(data = tidytitanic::tidy_titanic, rows = "Sex")
+mutablething <- Pivot$new(data = tidytitanic::tidy_titanic, rows = "sex")
 mutablething
 mutablething$set_cols("survived")
 mutablething$cols
-mutablething$initialize()
+mutablething$initialize(data = tidytitanic::tidy_titanic)
+mutablething
 mutablething$return_table()
 ```
 
@@ -98,6 +99,12 @@ ann$greet()
 ann$set_hair("red")
 ann$hair
 ```
+
+```{r}
+knitr::knit_exit()
+
+```
+
 
 ```{r}
 Queue <- R6Class("Queue",
