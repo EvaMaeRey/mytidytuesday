@@ -1,5 +1,5 @@
 ---
-title: "another experiment"
+title: "pipeable, declarative table building"
 author: "Evangeline Reynolds"
 date: "`r Sys.Date()`"
 output: 
@@ -12,56 +12,102 @@ knitr::opts_chunk$set(echo = TRUE)
 options(tidyverse.quiet = TRUE)
 ```
 
+# all in one count and pivot function.
 
+Here we write a nice declarative (describe it and get it) table making function... This one just counts.  More functionality is worked out in https://github.com/EvaMaeRey/tidypivot. 
 
+```{r}
+pivot_count <- function(data, rows = NULL, cols = NULL){
+  
+  cols_quo <- rlang::enquo(cols)
+  rows_quo <- rlang::enquo(rows)
 
-## Intro Thoughts
+  if(rlang::quo_is_null(cols_quo) & rlang::quo_is_null(rows_quo)){
+    data %>% 
+      count() ->
+    outdata
+    
+  }else{
+  data %>% 
+    group_by(across(c({{rows}}, {{cols}}))) %>% 
+    count() ->
+  outdata
+  }
+  
+  if(!rlang::quo_is_null(cols_quo)){
+   outdata %>%
+      pivot_wider(names_from = {{cols}}, values_from = n) ->
+    outdata
+  }
+  
+  outdata
+}
+```
 
+## let's use it on a version of the Titanic data ('titanic')  {.tabset}
 
-## Status Quo
 
 ```{r}
 library(tidyverse)
+Titanic %>% 
+  data.frame() %>% 
+  uncount(Freq) ->
+titanic
 
+names(titanic) <- tolower(names(titanic))
+
+head(titanic)
 ```
 
-## Experiment
+### Example 1
+
+```{r}
+pivot_count(data = titanic, rows = survived, cols = sex)
+```
+
+### Example 2
+
+```{r}
+pivot_count(data = titanic, cols = sex)
+```
+
+### Example 3
+
+```{r}
+pivot_count(data = titanic) 
+```
+
+### Example 4
+
+```{r}
+pivot_count(data = titanic, rows = survived, cols = c(sex, age))
+```
+
+# Making declarations incremental with OOP
+
+But we might want to do step-wise (piped) declarations, this will require OOP.  I choose R6 encapsulated/classical.  I think people find it easier just starting off as is my case!
+
 
 ```{r}
 library(R6)
-
-Person <- R6Class("Person",
-  public = list(
-    name = NULL,
-    hair = NULL,
-    initialize = function(name = NA, hair = NA) {
-      self$name <- name
-      self$hair <- hair
-      self$greet()
-    },
-    set_hair = function(val) {
-      self$hair <- val
-    },
-    greet = function() {
-      cat(paste0("Hello, my name is ", self$name, ".\n"))
-    }
-  )
-)
-
-
 Pivot <- R6Class("Pivot",
   public = list(
     data = NULL,
     rows = NULL,
     cols = NULL,
-    initialize = function(data, rows = NULL, cols = NULL){
+    initialize = function(data = NULL, rows = NULL, cols = NULL){
       self$data <- data
       self$rows <- rows
       self$cols <- cols
-      self$return_table()
+      
+      theData <<- data   # hacky?
+
     }, 
     set_data = function(val){
       self$data <- val
+      
+      theData <<- self$data  # hacky?
+
     },
     set_rows = function(val){
       self$rows <- val
@@ -69,74 +115,217 @@ Pivot <- R6Class("Pivot",
     set_cols = function(val){
       self$cols <- val
     },
-    return_table = function(){
-      "my table!"
+    return_table_code = function(){
 
-      self$data %>% #group_by(across(c({{rows}}, {{cols}}))) %>% 
-         count() #%>% 
-         # pivot_wider(cols = cols)
+      out <- 'pivot_count(data = theData, rows, cols)' 
+      
+      str_replace_or_null <- function(x, pattern, replacement){
+        
+        if(is.null(replacement)){x %>% str_replace(pattern, 'NULL')}
+        else{x %>% str_replace(pattern, replacement)}
+        
+      }
+      
+      # out <- str_replace(out, "data", self$data)
+      out <- str_replace_or_null(out, "rows", self$rows)
+      out <- str_replace_or_null(out, "cols", self$cols)
+      out <- str_replace_or_null(out, "fun", self$fun)
+      out <- str_replace_or_null(out, "value", self$value)
+      out <- str_replace_or_null(out, "wt", self$wt)
+
+      eval(parse(text = out))    # hacky?
       
     }
     
     )
   )
 
-
-mutablething <- Pivot$new(data = tidytitanic::tidy_titanic, rows = "sex")
-mutablething
-mutablething$set_cols("survived")
-mutablething$cols
-mutablething$initialize(data = tidytitanic::tidy_titanic)
-mutablething
-mutablething$return_table()
 ```
 
+
+## Let's try it out {.tabset}
+
+### Step 1: Declare new table specification
+
 ```{r}
-ann <- Person$new("Ann", "black")
-ann
-ann$hair
-ann$greet()
-ann$set_hair("red")
-ann$hair
+table_specification <- Pivot$new()
+table_specification
+```
+
+
+### Step 2: Set data
+
+```{r}
+table_specification$set_data(tidytitanic::tidy_titanic)
+table_specification
+table_specification$return_table_code()
+```
+
+
+### Step 3: Set Rows
+
+```{r}
+table_specification$set_rows("survived")
+table_specification
+table_specification$return_table_code()
+```
+
+
+### Step 4: Set Cols
+
+```{r}
+table_specification$set_cols("sex")
+table_specification
+table_specification$return_table_code()
+```
+
+
+### Step 5: Over write which var defines rows
+
+```{r}
+table_specification$set_rows("age")
+table_specification
+table_specification$return_table_code()
+```
+
+
+
+
+# Now try to create user-facing interface for piping
+
+```{r}
+
+ggtable <- function(data, rows = NULL, cols = NULL){
+
+  ts <- Pivot$new()
+  ts$set_data(data)
+  ts$set_rows(deparse(substitute(rows)))   # hacky?
+  ts$set_cols(deparse(substitute(cols)))
+  ts$return_table_code()
+
+}
+
+
+set_rows <- function(piping_spacer, # hacky?
+                     vars){
+  
+  ts$set_rows(val = deparse(substitute(vars)))
+  ts$return_table_code()
+
+}
+
+
+set_cols <- function(piping_spacer, vars){
+  
+  ts$set_cols(val = deparse(substitute(vars)))
+  ts$return_table_code()
+
+}
+
+last_table <- function(){
+  
+    ts
+  
+}
+
+```
+
+## Try it out {.tabset}
+
+### Step 1: Set data featuring ugly prestep
+
+```{r}
+# it seemed like I needed this before any of the following would get going
+ts <- Pivot$new()    # hacky? ugly?
+
+ggtable(data = tidytitanic::tidy_titanic)
+```
+
+### Step 2: Set rows
+
+```{r} 
+ggtable(data = tidytitanic::tidy_titanic) |>
+  set_rows(sex) 
+```
+
+### Step 3: Set cols
+
+```{r}
+ggtable(data = tidytitanic::tidy_titanic) |>
+  set_rows(sex) |>
+  set_cols(survived)
+```
+
+### Step 4: Reset cols
+
+```{r}
+ggtable(data = tidytitanic::tidy_titanic) |>
+  set_rows(sex) |>
+  set_cols(age)
+```
+
+
+### Step 5: NULL rows
+
+```{r}
+ggtable(data = tidytitanic::tidy_titanic) |>
+  set_rows(sex) |>
+  set_cols(age) |>
+  set_rows(NULL)
+```
+
+### Step 6: Reset to multiple rows 
+
+```{r}
+ggtable(data = tidytitanic::tidy_titanic) |>
+  set_rows(sex) |>
+  set_cols(age) |>
+  set_rows(NULL) |>
+  set_rows(c(sex,survived))
+```
+
+
+### Step 7: Reset to multiple cols 
+
+```{r}
+ggtable(data = tidytitanic::tidy_titanic) |>
+  set_rows(sex) |>
+  set_cols(age) |>
+  set_rows(NULL) |>
+  set_rows(c(sex,survived)) |>
+  set_cols(c(age, class))
+```
+
+
+### Step 8: not piping
+
+```{r}
+ggtable(data = tidytitanic::tidy_titanic, age, class)
+
+```
+
+
+### Step 9: Another dataset: mtcars
+
+```{r}
+ggtable(data = mtcars, rows = cyl)
+```
+
+
+### Step 9: last_table potential
+
+
+```{r, error = T}
+# ts$return_table_code()
+last_table <- function(){    
+  ts
+}
+
+last_table() |>
+  set_cols(am)
 ```
 
 ```{r}
 knitr::knit_exit()
 
 ```
-
-
-```{r}
-Queue <- R6Class("Queue",
-  public = list(
-    initialize = function(...) {
-      for (item in list(...)) {
-        self$add(item)
-      }
-    },
-    add = function(x) {
-      private$queue <- c(private$queue, list(x))
-      invisible(self)
-    },
-    remove = function() {
-      if (private$length() == 0) return(NULL)
-      # Can use private$queue for explicit access
-      head <- private$queue[[1]]
-      private$queue <- private$queue[-1]
-      head
-    }
-  ),
-  private = list(
-    queue = list(),
-    length = function() base::length(private$queue)
-  )
-)
-
-q <- Queue$new(5, 6, "foo")
-
-```
-
-
-
-
-## Closing remarks, Other Relevant Work, Caveats
