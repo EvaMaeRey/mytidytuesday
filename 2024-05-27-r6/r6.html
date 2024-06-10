@@ -11,7 +11,7 @@
 
 <meta name="author" content="Evangeline Reynolds" />
 
-<meta name="date" content="2024-06-06" />
+<meta name="date" content="2024-06-07" />
 
 <title>pipeable, declarative table building</title>
 
@@ -345,12 +345,13 @@ pre code {
 
 <h1 class="title toc-ignore">pipeable, declarative table building</h1>
 <h4 class="author">Evangeline Reynolds</h4>
-<h4 class="date">2024-06-06</h4>
+<h4 class="date">2024-06-07</h4>
 
 </div>
 
 <div id="TOC">
 <ul>
+<li><a href="#synopsis">synopsis</a></li>
 <li><a href="#all-in-one-count-and-pivot-function.">all in one count and pivot function.</a><ul>
 <li><a href="#lets-use-it-on-a-version-of-the-titanic-data-titanic">let’s use it on a version of the Titanic data (‘titanic’)</a><ul>
 <li><a href="#example-1">Example 1</a></li>
@@ -379,15 +380,30 @@ pre code {
 <li><a href="#step-7-reset-to-multiple-cols">Step 7: Reset to multiple cols</a></li>
 <li><a href="#step-8-not-piping">Step 8: not piping</a></li>
 <li><a href="#step-9-another-dataset-mtcars">Step 9: Another dataset: mtcars</a></li>
-<li><a href="#step-9-last_table-potential">Step 9: last_table potential</a></li>
+<li><a href="#step-9-using-last_table-to-print-a-family-of-tables">Step 9: using last_table() to print a family of tables</a></li>
+<li><a href="#step-10-definitely-not-doing-print-the-right-way">Step 10: Definitely not doing print the right way…</a></li>
+<li><a href="#step-11-on-the-fly-variable-definition---like-ggplot2">Step 11: on the fly variable definition - like ggplot2</a></li>
 </ul></li>
 </ul></li>
+<li><a href="#references">References</a></li>
 </ul>
 </div>
 
+<div id="synopsis" class="section level1">
+<h1>synopsis</h1>
+<p>Proposes group, compute and pivot to table in a succinct function, eg:</p>
+<p><code>pivot_count(data = titanic, rows = survived, cols = c(sex, age))</code></p>
+<p>Uses R6 to update table specification and creates user facing functions to incrementally build tables, eg:</p>
+<pre class="r"><code>ggtable(data = tidytitanic::tidy_titanic) |&gt; # overall count
+  set_rows(sex) |&gt; # within sex
+  set_cols(age) |&gt; # within age and sex
+  set_rows(NULL) |&gt; # overwrites previous declarations
+  set_rows(c(sex,survived)) |&gt; 
+  set_cols(c(age, class))</code></pre>
+</div>
 <div id="all-in-one-count-and-pivot-function." class="section level1">
 <h1>all in one count and pivot function.</h1>
-<p>Here we write a nice declarative (describe it and get it) table making function… This one just counts. More functionality is worked out in <a href="https://github.com/EvaMaeRey/tidypivot" class="uri">https://github.com/EvaMaeRey/tidypivot</a>.</p>
+<p>Here we write a nice declarative (describe it and get it) table making function… This one just counts. More functionality is worked out in the pivotr function here: <a href="https://github.com/EvaMaeRey/tidypivot" class="uri">https://github.com/EvaMaeRey/tidypivot</a>.</p>
 <pre class="r"><code>pivot_count &lt;- function(data, rows = NULL, cols = NULL){
   
   cols_quo &lt;- rlang::enquo(cols)
@@ -632,11 +648,15 @@ table_specification</code></pre>
 <h1>Now try to create user-facing interface for piping</h1>
 <pre class="r"><code>ggtable &lt;- function(data, rows = NULL, cols = NULL){
 
-  ts &lt;- Pivot$new()
+  # ts &lt;- Pivot$new()
+  ts$initialize()
   ts$set_data(data)
   ts$set_rows(deparse(substitute(rows)))   # hacky?
   ts$set_cols(deparse(substitute(cols)))
-  ts$return_table_code()
+
+  print(ts$return_table_code())
+  
+  invisible(ts)
 
 }
 
@@ -646,6 +666,11 @@ set_rows &lt;- function(piping_spacer, # hacky?
   
   ts$set_rows(val = deparse(substitute(vars)))
   ts$return_table_code()
+  
+  
+  print(ts$return_table_code())
+  
+  invisible(ts)
 
 }
 
@@ -653,13 +678,18 @@ set_rows &lt;- function(piping_spacer, # hacky?
 set_cols &lt;- function(piping_spacer, vars){
   
   ts$set_cols(val = deparse(substitute(vars)))
-  ts$return_table_code()
+
+    print(ts$return_table_code())
+  
+  invisible(ts)
 
 }
 
 last_table &lt;- function(){
   
-    ts
+  print(ts$return_table_code())
+  
+  invisible(ts)
   
 }</code></pre>
 <div id="try-it-out" class="section level2 tabset">
@@ -700,6 +730,7 @@ ggtable(data = tidytitanic::tidy_titanic)</code></pre>
 <h3>Step 4: Reset cols</h3>
 <pre class="r"><code>ggtable(data = tidytitanic::tidy_titanic) |&gt;
   set_rows(sex) |&gt;
+  set_cols(survived) |&gt;
   set_cols(age)</code></pre>
 <pre><code>## # A tibble: 2 × 3
 ## # Groups:   sex [2]
@@ -712,6 +743,7 @@ ggtable(data = tidytitanic::tidy_titanic)</code></pre>
 <h3>Step 5: NULL rows</h3>
 <pre class="r"><code>ggtable(data = tidytitanic::tidy_titanic) |&gt;
   set_rows(sex) |&gt;
+  set_cols(survived) |&gt;
   set_cols(age) |&gt;
   set_rows(NULL)</code></pre>
 <pre><code>## # A tibble: 1 × 2
@@ -723,6 +755,7 @@ ggtable(data = tidytitanic::tidy_titanic)</code></pre>
 <h3>Step 6: Reset to multiple rows</h3>
 <pre class="r"><code>ggtable(data = tidytitanic::tidy_titanic) |&gt;
   set_rows(sex) |&gt;
+  set_cols(survived) |&gt;
   set_cols(age) |&gt;
   set_rows(NULL) |&gt;
   set_rows(c(sex,survived))</code></pre>
@@ -739,9 +772,10 @@ ggtable(data = tidytitanic::tidy_titanic)</code></pre>
 <h3>Step 7: Reset to multiple cols</h3>
 <pre class="r"><code>ggtable(data = tidytitanic::tidy_titanic) |&gt;
   set_rows(sex) |&gt;
+  set_cols(survived) |&gt;
   set_cols(age) |&gt;
   set_rows(NULL) |&gt;
-  set_rows(c(sex,survived)) |&gt;
+  set_rows(c(sex, survived)) |&gt;
   set_cols(c(age, class))</code></pre>
 <pre><code>## # A tibble: 4 × 9
 ## # Groups:   sex, survived [4]
@@ -774,23 +808,82 @@ ggtable(data = tidytitanic::tidy_titanic)</code></pre>
 ## 2     6     7
 ## 3     8    14</code></pre>
 </div>
-<div id="step-9-last_table-potential" class="section level3">
-<h3>Step 9: last_table potential</h3>
-<pre class="r"><code># ts$return_table_code()
-last_table &lt;- function(){    
-  ts
-}
+<div id="step-9-using-last_table-to-print-a-family-of-tables" class="section level3">
+<h3>Step 9: using last_table() to print a family of tables</h3>
+<pre class="r"><code>ggtable(data = titanic)</code></pre>
+<pre><code>##      n
+## 1 2201</code></pre>
+<pre class="r"><code>last_table() |&gt;
+  set_cols(sex)</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##    Male Female
+##   &lt;int&gt;  &lt;int&gt;
+## 1  1731    470</code></pre>
+<pre class="r"><code>last_table() |&gt;
+  set_rows(survived)</code></pre>
+<pre><code>## # A tibble: 2 × 3
+## # Groups:   survived [2]
+##   survived  Male Female
+##   &lt;fct&gt;    &lt;int&gt;  &lt;int&gt;
+## 1 No        1364    126
+## 2 Yes        367    344</code></pre>
+<pre class="r"><code>last_table() |&gt;
+  set_cols(NULL)</code></pre>
+<pre><code>## # A tibble: 2 × 2
+## # Groups:   survived [2]
+##   survived     n
+##   &lt;fct&gt;    &lt;int&gt;
+## 1 No        1490
+## 2 Yes        711</code></pre>
+</div>
+<div id="step-10-definitely-not-doing-print-the-right-way" class="section level3">
+<h3>Step 10: Definitely not doing print the right way…</h3>
+<p>print is not done in the right way yet. A collect function will be nice to output the printed table, versus the specification.</p>
+<pre class="r"><code>my_table &lt;- ggtable(data = mtcars, rows = cyl) # shouldn&#39;t print</code></pre>
+<pre><code>## # A tibble: 3 × 2
+## # Groups:   cyl [3]
+##     cyl     n
+##   &lt;dbl&gt; &lt;int&gt;
+## 1     4    11
+## 2     6     7
+## 3     8    14</code></pre>
+<pre class="r"><code>str(my_table) # object is specification yay!</code></pre>
+<pre><code>## Classes &#39;Pivot&#39;, &#39;R6&#39; &lt;Pivot&gt;
+##   Public:
+##     clone: function (deep = FALSE) 
+##     cols: NULL
+##     data: data.frame
+##     initialize: function (data = NULL, rows = NULL, cols = NULL) 
+##     return_table_code: function () 
+##     rows: cyl
+##     set_cols: function (val) 
+##     set_data: function (val) 
+##     set_rows: function (val)</code></pre>
+<pre class="r"><code>my_table |&gt;       # pipes in okay way.
+  set_cols(am)</code></pre>
+<pre><code>## # A tibble: 3 × 3
+## # Groups:   cyl [3]
+##     cyl   `0`   `1`
+##   &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
+## 1     4     3     8
+## 2     6     4     3
+## 3     8    12     2</code></pre>
+</div>
+<div id="step-11-on-the-fly-variable-definition---like-ggplot2" class="section level3">
+<h3>Step 11: on the fly variable definition - like ggplot2</h3>
+<pre class="r"><code>ggtable(data = mtcars, rows = cyl)
 
 last_table() |&gt;
-  set_cols(am)</code></pre>
-<pre><code>## Error in `group_by()`:
-## ℹ In argument: `across(c(c(sex, survived), am))`.
-## Caused by error in `across()`:
-## ! Can&#39;t select columns that don&#39;t exist.
-## ✖ Column `sex` doesn&#39;t exist.</code></pre>
-<pre class="r"><code>knitr::knit_exit()</code></pre>
+  set_cols(ifelse(am, &quot;manual&quot;, &quot;auto&quot;))</code></pre>
 </div>
 </div>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<ul>
+<li><a href="https://r6.r-lib.org/articles/Introduction.html#fields-containing-reference-objects" class="uri">https://r6.r-lib.org/articles/Introduction.html#fields-containing-reference-objects</a></li>
+<li><a href="https://adv-r.hadley.nz/r6.html" class="uri">https://adv-r.hadley.nz/r6.html</a></li>
+</ul>
 </div>
 
 

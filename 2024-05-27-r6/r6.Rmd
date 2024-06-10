@@ -12,9 +12,31 @@ knitr::opts_chunk$set(echo = TRUE)
 options(tidyverse.quiet = TRUE)
 ```
 
+# synopsis
+
+Proposes group, compute and pivot to table in a succinct function, eg: 
+
+`pivot_count(data = titanic, rows = survived, cols = c(sex, age))`
+
+Uses R6 to update table specification and creates user facing functions to incrementally build tables, eg:
+
+```{r, eval = F}
+
+ggtable(data = tidytitanic::tidy_titanic) |> # overall count
+  set_rows(sex) |> # within sex
+  set_cols(age) |> # within age and sex
+  set_rows(NULL) |> # overwrites previous declarations
+  set_rows(c(sex,survived)) |> 
+  set_cols(c(age, class))
+
+```
+
+
+
+
 # all in one count and pivot function.
 
-Here we write a nice declarative (describe it and get it) table making function... This one just counts.  More functionality is worked out in https://github.com/EvaMaeRey/tidypivot. 
+Here we write a nice declarative (describe it and get it) table making function... This one just counts.  More functionality is worked out in the pivotr function here: https://github.com/EvaMaeRey/tidypivot. 
 
 ```{r}
 pivot_count <- function(data, rows = NULL, cols = NULL){
@@ -197,11 +219,15 @@ table_specification$return_table_code()
 
 ggtable <- function(data, rows = NULL, cols = NULL){
 
-  ts <- Pivot$new()
+  # ts <- Pivot$new()
+  ts$initialize()
   ts$set_data(data)
   ts$set_rows(deparse(substitute(rows)))   # hacky?
   ts$set_cols(deparse(substitute(cols)))
-  ts$return_table_code()
+
+  print(ts$return_table_code())
+  
+  invisible(ts)
 
 }
 
@@ -211,6 +237,11 @@ set_rows <- function(piping_spacer, # hacky?
   
   ts$set_rows(val = deparse(substitute(vars)))
   ts$return_table_code()
+  
+  
+  print(ts$return_table_code())
+  
+  invisible(ts)
 
 }
 
@@ -218,13 +249,18 @@ set_rows <- function(piping_spacer, # hacky?
 set_cols <- function(piping_spacer, vars){
   
   ts$set_cols(val = deparse(substitute(vars)))
-  ts$return_table_code()
+
+    print(ts$return_table_code())
+  
+  invisible(ts)
 
 }
 
 last_table <- function(){
   
-    ts
+  print(ts$return_table_code())
+  
+  invisible(ts)
   
 }
 
@@ -261,6 +297,7 @@ ggtable(data = tidytitanic::tidy_titanic) |>
 ```{r}
 ggtable(data = tidytitanic::tidy_titanic) |>
   set_rows(sex) |>
+  set_cols(survived) |>
   set_cols(age)
 ```
 
@@ -270,6 +307,7 @@ ggtable(data = tidytitanic::tidy_titanic) |>
 ```{r}
 ggtable(data = tidytitanic::tidy_titanic) |>
   set_rows(sex) |>
+  set_cols(survived) |>
   set_cols(age) |>
   set_rows(NULL)
 ```
@@ -279,6 +317,7 @@ ggtable(data = tidytitanic::tidy_titanic) |>
 ```{r}
 ggtable(data = tidytitanic::tidy_titanic) |>
   set_rows(sex) |>
+  set_cols(survived) |>
   set_cols(age) |>
   set_rows(NULL) |>
   set_rows(c(sex,survived))
@@ -290,9 +329,10 @@ ggtable(data = tidytitanic::tidy_titanic) |>
 ```{r}
 ggtable(data = tidytitanic::tidy_titanic) |>
   set_rows(sex) |>
+  set_cols(survived) |>
   set_cols(age) |>
   set_rows(NULL) |>
-  set_rows(c(sex,survived)) |>
+  set_rows(c(sex, survived)) |>
   set_cols(c(age, class))
 ```
 
@@ -312,20 +352,50 @@ ggtable(data = mtcars, rows = cyl)
 ```
 
 
-### Step 9: last_table potential
+### Step 9: using last_table() to print a family of tables
 
 
 ```{r, error = T}
-# ts$return_table_code()
-last_table <- function(){    
-  ts
-}
+ggtable(data = titanic)
 
 last_table() |>
+  set_cols(sex)
+
+last_table() |>
+  set_rows(survived)
+
+last_table() |>
+  set_cols(NULL)
+```
+
+### Step 10: Definitely not doing print the right way...
+
+print is not done in the right way yet. A collect function will be nice to output the printed table, versus the specification.
+
+```{r}
+my_table <- ggtable(data = mtcars, rows = cyl) # shouldn't print
+
+str(my_table) # object is specification yay!
+
+my_table |>       # pipes in okay way.
   set_cols(am)
 ```
 
-```{r}
-knitr::knit_exit()
+
+### Step 11: on the fly variable definition - like ggplot2
+
+
+```{r, eval = F}
+ggtable(data = mtcars, rows = cyl)
+
+last_table() |>
+  set_cols(ifelse(am, "manual", "auto"))
 
 ```
+
+
+# References
+
+- https://r6.r-lib.org/articles/Introduction.html#fields-containing-reference-objects
+- https://adv-r.hadley.nz/r6.html
+
