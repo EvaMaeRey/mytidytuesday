@@ -87,5 +87,82 @@ ggplot(two_way_df) +
 ```
 
 
+# ggtwoway
+
+
+```{r}
+library(tidyverse)
+
+
+data_prep_twoway <- function(data, twoway_vars){
+
+data |>
+  rownames_to_column() |>
+  pivot_longer(cols = {{twoway_vars}}) ->
+one_way
+  one_way
+
+one_way |> left_join(one_way, by = "rowname") |>
+  group_by(name.x, name.y) |>
+  # mutate(value.x = (value.x - min(value.x))/((range(value.x) |> diff()))) |>
+  # mutate(value.y = (value.y - min(value.y))/((range(value.y) |> diff()))) |> 
+  mutate(name.x = fct_inorder(name.x)) |>
+  mutate(name.y = fct_inorder(name.y) |> fct_rev()) ->
+two_way_df
+
+two_way_df %>% 
+  rename(.name.x = name.x,
+         .name.y = name.y,
+         .value.x = value.x,
+         .value.y = value.y)
+}
+
+
+data_prep_twoway(data = mtcars, 
+         twoway_vars = c(am, vs))
+
+twoway_df_to_plot <- function(prepped_df){
+
+prepped_df %>% 
+  ggplot() + 
+  facet_grid(.name.y ~ .name.x, scales = "free")
+
+}
+
+data_prep_twoway(data = mtcars, 
+         twoway_vars = c(am, vs)) %>% 
+  twoway_df_to_plot()
+
+
+ggtwoway <- function(data, twoway_vars){
+  
+  data_prep_twoway(data, {{twoway_vars}}) %>% 
+  twoway_df_to_plot()
+    
+  
+}
+
+ggtwoway(data = mtcars, 
+         twoway_vars = c(am, vs))
+
+last_plot() + 
+  aes(x = .value.x) +
+  geom_histogram() + 
+  aes(fill = .name.x)
+
+ggtwoway(data = mtcars, 
+         twoway_vars = c(am, vs, cyl)) +
+  aes(x = .value.x, y = .value.y) +
+  geom_jitter(width = .1, height = .1)
+
+ggtwoway(data = mtcars, 
+         twoway_vars = c(mpg, disp)) +
+  aes(x = .value.x, y = .value.y) +
+  geom_count()
+
+```
+
+
 
 ## Closing remarks, Other Relevant Work, Caveats
+

@@ -8,7 +8,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, eval = F)
 options(tidyverse.quiet = TRUE)
 ```
 
@@ -56,9 +56,9 @@ Doubler$add(10)
 
 ```{r}
 Grouper <- ggproto("Grouper",
-  out = Titanic %>% data.frame() ,
+  out = Titanic %>% data.frame(),
   grouprows = function(self, group) {
-    self$out <- group_by(self$out, {{group}})
+    self$out <- group_by(self$out, {{group}}, .drop = F)
     self$out
   }
  )

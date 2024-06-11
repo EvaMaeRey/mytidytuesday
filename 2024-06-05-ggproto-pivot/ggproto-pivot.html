@@ -11,7 +11,7 @@
 
 <meta name="author" content="Evangeline Reynolds" />
 
-<meta name="date" content="2024-06-05" />
+<meta name="date" content="2024-06-10" />
 
 <title>another experiment</title>
 
@@ -345,7 +345,7 @@ pre code {
 
 <h1 class="title toc-ignore">another experiment</h1>
 <h4 class="author">Evangeline Reynolds</h4>
-<h4 class="date">2024-06-05</h4>
+<h4 class="date">2024-06-10</h4>
 
 </div>
 
@@ -367,63 +367,58 @@ pre code {
 
 
 Adder &lt;- ggproto(&quot;Adder&quot;,
-  x = 0,
+  out = 0,
   add = function(self, n) {
-    self$x &lt;- self$x + n
-    self$x
+    self$out &lt;- self$out + n
+    self$out
   }
  )
 
-is.ggproto(Adder)</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<pre class="r"><code>#&gt; [1] TRUE
+is.ggproto(Adder)
+#&gt; [1] TRUE
 
-Adder$add(3)</code></pre>
-<pre><code>## [1] 3</code></pre>
-<pre class="r"><code>Adder$add(5)</code></pre>
-<pre><code>## [1] 8</code></pre>
-<pre class="r"><code>Doubler &lt;- ggproto(&quot;Doubler&quot;, Adder,
-  add = function(self, n) {
-    ggproto_parent(Adder, self)$add(n = n * 2)
-  }
-)
+Adder$add(3)
+Adder$add(5)
 
-Doubler$x</code></pre>
-<pre><code>## [1] 8</code></pre>
-<pre class="r"><code>Doubler$add(10)</code></pre>
-<pre><code>## [1] 28</code></pre>
+Doubler &lt;- ggproto(&quot;Doubler&quot;, 
+                   Adder,
+                   add = function(self, n) {
+                     ggproto_parent(Adder, self)$add(n = n ^ 2)
+                     }
+                   )
+
+Doubler$out
+Doubler$add(10)</code></pre>
 </div>
 <div id="experiment" class="section level2">
 <h2>Experiment</h2>
-<pre class="r"><code>GrouperRows &lt;- ggproto(&quot;GrouperRows&quot;,
-  x = Titanic %&gt;% data.frame() ,
-  grouprows = function(self, rows) {
-    self$x &lt;- self$x |&gt; group_by({{rows}})
-    self$x
+<pre class="r"><code>Grouper &lt;- ggproto(&quot;Grouper&quot;,
+  out = Titanic %&gt;% data.frame(),
+  grouprows = function(self, group) {
+    self$out &lt;- group_by(self$out, {{group}}, .drop = F)
+    self$out
   }
  )
 
-GrouperRows$grouprows(Sex)</code></pre>
-<pre><code>## # A tibble: 32 × 5
-## # Groups:   Sex [2]
-##    Class Sex    Age   Survived  Freq
-##    &lt;fct&gt; &lt;fct&gt;  &lt;fct&gt; &lt;fct&gt;    &lt;dbl&gt;
-##  1 1st   Male   Child No           0
-##  2 2nd   Male   Child No           0
-##  3 3rd   Male   Child No          35
-##  4 Crew  Male   Child No           0
-##  5 1st   Female Child No           0
-##  6 2nd   Female Child No           0
-##  7 3rd   Female Child No          17
-##  8 Crew  Female Child No           0
-##  9 1st   Male   Adult No         118
-## 10 2nd   Male   Adult No         154
-## # ℹ 22 more rows</code></pre>
-<pre class="r"><code>GrouperCols &lt;- ggproto(&quot;GrouperCols&quot;, GrouperRows,
-  groupcols = function(self, cols) {
-    ggproto_parent(GrouperRows, self)$grouprows(group_by())
-  }
-)</code></pre>
+GrouperCols &lt;- ggproto(&quot;GrouperCols&quot;, 
+                   Adder,
+                   add = function(self, n) {
+                     ggproto_parent(Adder, self)$out(group_by({{col}}))
+                     }
+                   )
+
+GrouperRows$grouprows(Sex) |&gt; GrouperCols$groupcols(Survived)
+
+
+# 
+# GrouperCols &lt;- ggproto(&quot;GrouperCols&quot;, GrouperRows,
+#   groupcols = function(self, cols) {
+#     ggproto_parent(GrouperRows, self)$grouprows(group_by({{cols}}))
+#   }
+# )
+# 
+# 
+# GrouperCols$groupcows(Survived)</code></pre>
 </div>
 <div id="closing-remarks-other-relevant-work-caveats" class="section level2">
 <h2>Closing remarks, Other Relevant Work, Caveats</h2>

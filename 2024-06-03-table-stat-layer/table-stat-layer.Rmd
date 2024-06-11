@@ -10,26 +10,18 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 options(tidyverse.quiet = TRUE)
+
 ```
 
 
 
 
-## Intro Thoughts
+## Save information about the entire data set (not panel-wise) in compute_layer_prop.
 
-
-## Status Quo
+Seems 
 
 ```{r}
 library(tidyverse)
-
-
-
-```
-
-## Experiment
-
-```{r}
 compute_layer_prop <- function(data = mtcars, ...){
   
   if(is.null(data$value)){data$value <- 1}
