@@ -102,7 +102,9 @@ data |>
 one_way
   one_way
 
-one_way |> left_join(one_way, by = "rowname") |>
+one_way |> 
+  select(c(rowname, name, value)) |>
+  left_join(one_way, by = "rowname") |>
   group_by(name.x, name.y) |>
   # mutate(value.x = (value.x - min(value.x))/((range(value.x) |> diff()))) |>
   # mutate(value.y = (value.y - min(value.y))/((range(value.y) |> diff()))) |> 
@@ -156,9 +158,40 @@ ggtwoway(data = mtcars,
   geom_jitter(width = .1, height = .1)
 
 ggtwoway(data = mtcars, 
-         twoway_vars = c(mpg, disp)) +
+         twoway_vars = c(mpg, disp, wt)) +
   aes(x = .value.x, y = .value.y) +
-  geom_count()
+  geom_point() 
+
+last_plot() +
+  aes(color = am)
+
+last_plot() + 
+  aes(alpha = .name.x == "wt" & .name.y == "mpg")
+
+last_plot() + 
+  aes(alpha = as.numeric(as.factor(.name.x)) > as.numeric(as.factor(.name.y)))
+
+ggplot(mtcars) + 
+  ggforce::facet_matrix(rows = vars(mpg, disp, wt), flip.rows = T,
+                        alternate.axes = T) + 
+  ggforce::geom_autopoint()
+
+
+ggtwoway(data = mtcars, 
+         twoway_vars = c(am, vs, wt)) +
+  aes(x = .value.x, y = .value.y) +
+  geom_point() + 
+  aes(color = cyl)
+
+
+
+ggplot(mtcars) + 
+  ggforce::facet_matrix(rows = vars(am, vs, wt), flip.rows = T,
+                        alternate.axes = T) + 
+  aes(x = .panel_x, y = .panel_y) +
+  geom_point() + 
+  aes(color = cyl)
+  
 
 ```
 

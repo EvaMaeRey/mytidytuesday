@@ -1,0 +1,229 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## ordr PCA statistical story telling
+
+```{r}
+library(tidyverse)
+library(ordr)
+
+(penguins_pca <- ordinate(palmerpenguins::penguins %>% select(c(1, 3:6)) %>%
+                            remove_missing(), 
+                      cols = 2:5, model = ~ prcomp(., scale. = TRUE)))
+
+
+ggbiplot(penguins_pca, sec.axes = "cols", scale.factor = 2) +
+  aes(color = species, shape = species) +
+  geom_rows_point() +
+  stat_rows_ellipse(alpha = .5, level = .99) +
+  geom_cols_vector() +
+  geom_cols_text_radiate(aes(label = name)) +
+  expand_limits(y = c(-3.5, NA)) +
+  labs(title = "PCA of penguins") +
+  labs(subtitle = "99% confidence ellipses; variables use top & right axes")
+
+ggbiplot(penguins_pca, axis.type = "predictive", axis.percents = FALSE) +
+  aes(color = species, shape = species) +
+  geom_rows_point() +
+  stat_rows_center(size = 5, alpha = .5, fun.data = mean_se) +
+  aes(label = name, center = center, scale = scale) +
+  geom_cols_axis() +
+  labs(subtitle = "Predictive biplot of Anderson's iris measurements")
+  labs(caption = "Project a marker onto an axis to approximate its measurement") +
+  theme_biplot()
+```
+
+# a ggplot() + stat approach
+
+```{r}
+compute_panel_pca <- function(data, scales, what = "rows"){
+  
+  data %>% 
+    select(outcome, a, b, c) %>% # as proof of concept 3 predictors a b c
+    remove_missing() %>% 
+    ordinate(cols = 2:4, model = ~ prcomp(., scale. = TRUE)) ->
+  pca
+  
+  if(what == "rows"){
+  
+  pca$x %>% 
+    as.data.frame() %>% 
+    bind_cols(data["outcome"]) ->
+  out
+  
+  }
+  
+  
+  out
+    
+}
+
+penguins_pca$rotation %>% data.frame() %>% 
+  rownames_to_column() %>% 
+      dplyr::rename(var_name = rowname)
+```
+
+
+```{r}
+palmerpenguins::penguins %>%
+  remove_missing() %>%
+  rename(outcome = species, a = bill_length_mm, b = bill_depth_mm, c = flipper_length_mm) %>%
+  compute_panel_pca() %>%
+  head()
+
+```
+
+
+```{r}
+StatPcarows <- ggproto(`_class` = "StatPcarows", 
+                       `_inherit` = Stat,
+                       required_aes = c("outcome", "a", "b", "c"),
+                       default_aes = aes(color = after_stat(outcome),
+                                         x = after_stat(PC1),
+                                         y = after_stat(PC2)),
+                       compute_panel = compute_panel_pca
+                       )
+
+
+ggplot(palmerpenguins::penguins)  + 
+  aes(outcome = species, 
+      a = bill_length_mm,
+      b = bill_depth_mm,
+      c = flipper_length_mm) + 
+  layer(geom = "point", 
+        position = "identity",
+        stat = StatPcarows)
+  
+
+stat_pca <- function(
+                       mapping = NULL, 
+                       geom = "point", 
+                       data = NULL,
+                       position = "identity",
+                       required_aes = NULL, 
+                       default_aes = NULL, 
+                       dropped_aes = NULL,
+                      ...,
+                      show.legend = NA,
+                      inherit.aes = TRUE,
+                      computation_scope = "group"
+                  ) {
+    ggplot2::layer(
+       mapping = mapping,
+       data = data,
+       stat = StatPcarows,
+       geom = geom,
+       position = position,
+       show.legend = show.legend,
+       inherit.aes = inherit.aes,
+       check.aes = FALSE,
+       check.param = FALSE,
+       params = list(
+          na.rm = FALSE,
+          ...
+       )
+    )
+}
+                       
+geom_point_pca <- stat_pca
+
+ggplot(palmerpenguins::penguins)  + 
+  aes(outcome = species, 
+      a = bill_length_mm,
+      b = bill_depth_mm,
+      c = flipper_length_mm) + 
+  geom_point_pca() + 
+  stat_pca()
+```
+
+
+## statexpress + w/ ggplot() as plot entry point...
+
+```{r}
+compute_panel_pca <- function(data){
+  
+  data %>%  remove_missing() ->
+    data
+
+  data %>% 
+    select(outcome, a, b, c) %>% # as proof of concept 3 predictors a b c
+    ordinate(cols = 2:4, model = ~ prcomp(., scale. = TRUE)) %>% 
+  .$x %>% 
+    as.data.frame() %>% 
+    bind_cols(data["outcome"])
+    
+}
+
+geom_pca_point <- function(...){
+  statexpress::stat_panel(compute_panel_pca, "point", 
+                          default_aes = aes(x = after_stat(PC1), 
+                                            y = after_stat(PC2), 
+                                            color = after_stat(outcome)), ...)}
+
+palmerpenguins::penguins %>% 
+  ggplot() + 
+  aes(outcome = species, a = bill_length_mm, b = bill_depth_mm, c = flipper_length_mm) +
+  geom_pca_point()
+
+
+compute_panel_pca_col <- function(data){
+  
+  data %>%  remove_missing() ->
+    data
+
+  data %>% 
+    select(outcome, a, b, c) %>% # as proof of concept 3 predictors a b c
+    ordinate(cols = 2:4, model = ~ prcomp(., scale. = TRUE)) %>% 
+    .$rotation %>% 
+    as.data.frame() %>% 
+    rownames_to_column()
+    
+}
+
+
+palmerpenguins::penguins %>% 
+  rename(outcome = species, a = bill_length_mm, b = bill_depth_mm, c = flipper_length_mm) %>%
+  compute_panel_pca_col()
+
+geom_pca_label <- function(geom = "text", ...){
+  statexpress::stat_panel(fun = compute_panel_pca_col, 
+                          geom = geom, 
+                          default_aes = aes(x = after_stat(PC1), 
+                                            y = after_stat(PC2), 
+                                            xend = after_stat(0),
+                                            yend = after_stat(0), 
+                                            label = paste("Variable", after_stat(rowname))), 
+                          ...)}
+
+
+last_plot() + 
+  geom_pca_label(hjust = "outward") + 
+  geom_pca_label(geom = "segment", arrow = arrow(ends = "first"))
+
+```
+
+## Closing remarks, Other Relevant Work, Caveats

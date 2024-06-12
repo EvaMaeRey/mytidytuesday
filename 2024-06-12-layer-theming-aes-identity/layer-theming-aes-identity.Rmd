@@ -1,0 +1,137 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+library(tidyverse)
+
+# a nice plot
+cars %>% 
+  ggplot() + 
+  aes(x = speed, y = dist) +
+  geom_point() -> q; q
+
+# theming, but uh-oh default aes look so bad
+q +
+  ggchalkboard::theme_chalkboard() 
+
+# you can make layer unmapped aes match theme with I() 
+# and do it outside layer to make it general and global
+last_plot() +
+  aes(color = I("lightyellow")) +
+  aes(size = I(7)) + 
+  aes(alpha = I(.5))
+
+# we can save this set of aes in a function to be added as a list of ggplot2 aes specifications
+global_unmapped_aes_chalk <- function(aes_color = aes(color = I(alpha("lightyellow", .4))),
+                                aes_size  = aes(size = I(8)),
+                                aes_alpha = aes(alpha = I(.5)),
+                                aes_fill  = aes(fill = I(alpha("lightyellow", .4)))){
+  
+ list(aes_color,aes_size, aes_alpha, aes_fill)
+  
+}
+
+
+# we see a 'look' miss-match between theme elements and layer default aes
+cars %>% 
+  ggplot() + 
+  aes(x = speed, y = dist) +
+  geom_point() +
+  ggchalkboard::theme_chalkboard()
+
+# Using the layer theme harmonizer...
+last_plot() +
+  global_unmapped_aes_chalk()
+
+
+# wrapping theme chalkboard w/ layering.
+theme_chalkboard_w_layer_themeing <- function(
+  aes_color = aes(color = I(alpha("lightyellow", .4))),
+                                aes_size = aes(size = I(8)),
+                                aes_linewidth  = aes(linewidth = I(.25)),
+                                aes_alpha = aes(alpha = I(.65)),
+                                aes_fill  = aes(fill = I(alpha("lightyellow", .4)))){
+  
+ list(ggchalkboard::theme_chalkboard(), aes_color,aes_size, aes_alpha, aes_fill)
+  
+}
+
+# Using combo theme-layer defaults function
+cars %>% 
+  ggplot() + 
+  aes(x = speed, y = dist) +
+  geom_point() + 
+  theme_chalkboard_w_layer_themeing()
+
+# One problem is with polygons where size and color seem to make things all messy
+# Is size truly deprecated for lines
+palmerpenguins::penguins %>% 
+  ggplot() + 
+  aes(x = bill_length_mm) +
+  geom_histogram() +
+  theme_chalkboard_w_layer_themeing() 
+
+
+# In this case we can set the aes_color to null, so that it doesn't update (and we only have fill at work)
+palmerpenguins::penguins %>% 
+  ggplot() + 
+  aes(x = bill_length_mm) +
+  geom_histogram() +
+  theme_chalkboard_w_layer_themeing(aes_color = NULL) 
+
+# lets see how we can still use mapped aesthetics
+last_plot() +
+  aes(fill = species)
+   
+# Another concern is default aesthetics which wm might not want to be overridden.
+tibble(event = letters[1:3], change = c(3, -5, 6)) %>% 
+  ggplot() + 
+  aes(x = event, change = change) +
+  ggwaterfall::geom_waterfall() + 
+  ggwaterfall::geom_waterfall_label() -> p; p 
+
+# layer unmapped aesthetics overrides the fill default mapped aesthic
+p +
+  theme_chalkboard_w_layer_themeing() 
+
+
+# There's not a perfect solution, I think because 'size' is still playing a role where only linewidth should be. :-(
+p +
+  theme_chalkboard_w_layer_themeing(aes_fill = NULL, aes_color = NULL) 
+
+# There's not a perfect solution, I think because 'size' is still playing a role where only linewidth should be. :-(
+p +
+  theme_chalkboard_w_layer_themeing(aes_fill = NULL, aes_size = NULL) 
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
