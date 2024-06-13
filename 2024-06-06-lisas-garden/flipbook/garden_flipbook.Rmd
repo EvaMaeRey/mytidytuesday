@@ -1,0 +1,108 @@
+---
+title: "garden"
+subtitle: ""
+author: ""
+output:
+  xaringan::moon_reader:
+    seal: FALSE
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r, include = F}
+options(knitr.duplicate.label = "allow")
+knitr::opts_chunk$set(out.height = "20%", message = FALSE, warning = FALSE, comment = "", cache = F)
+library(flipbookr)
+library(tidyverse)
+load("current_image.Rdata")
+```
+
+
+```{r, echo = F, eval = FALSE , message = F, warning = F}
+xaringanExtra::use_share_again()
+```
+
+
+```{r the_chunk, include = F}
+library(tidyverse)
+
+harvest_2021 <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-05-28/harvest_2021.csv')
+spending_2021 <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-05-28/spending_2021.csv')
+
+
+spending_2021 %>% 
+  ggplot() + 
+  labs(title = "Total Spending") +
+  aes(area = price, id = "All") + 
+  ggcirclepack::geom_circlepack(linewidth = .15) + 
+  coord_equal() + 
+  aes(fill = I("lightsteelblue")) +
+  ggcirclepack::geom_circlepack_text(show.legend = F) +
+  ggstamp::theme_void_fill(fill = "whitesmoke") + 
+  theme(text = element_text(color = "grey25"))  + 
+  aes(label = after_stat(paste0(id, "\n$", area))) + 
+  aes(color = I("grey25")) -> 
+p1
+
+last_plot() + aes(id = vegetable) + 
+  labs(title = "Spending breakdown") + 
+  aes(label = after_stat(paste0(id, "\n$", area))) ->
+p2
+
+last_plot() %+% harvest_2021 + aes(area = weight) + 
+  aes(label = after_stat(
+    paste0(id, "\n", 
+           round(area/1000), "kg"))) +
+  aes(fill = I("rosybrown3")) + 
+  labs(title = "Harvest Breakdown") ->
+p3
+
+last_plot() +
+  aes(id = "All") + 
+  labs(title = "Total Harvest") ->
+p4
+
+library(patchwork)
+(p1 + p4 + p2 + p3) &
+  plot_annotation(
+    title = "Lisa's Garden Spending and Harvest 2021", 
+    theme = theme(
+      text = element_text(color = "grey25"),
+      plot.background = element_rect(fill = "whitesmoke"))
+    )
+
+```
+
+`r chunk_reveal(chunk_name = "the_chunk", break_type = "auto")`
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 60%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+

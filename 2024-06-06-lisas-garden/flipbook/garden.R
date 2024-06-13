@@ -1,26 +1,3 @@
----
-title: "another experiment"
-author: "Evangeline Reynolds"
-date: "`r Sys.Date()`"
-output: 
-  html_document:
-    toc: TRUE
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-options(tidyverse.quiet = TRUE)
-```
-
-
-
-
-## Intro Thoughts
-
-
-## Status Quo
-
-```{r garden, out.width="44%", fig.show='hold', message=F, warning=F, fig.width=6, fig.height=6}
 library(tidyverse)
 
 harvest_2021 <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-05-28/harvest_2021.csv')
@@ -58,9 +35,3 @@ last_plot() +
 
 harvest_2021 %>% 
   count(wt = weight)
-```
-
-
-
-
-## Closing remarks, Other Relevant Work, Caveats

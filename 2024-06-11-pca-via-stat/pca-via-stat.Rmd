@@ -226,4 +226,101 @@ last_plot() +
 
 ```
 
+
+```{r}
+knitr::knit_exit()
+
+
+
+```
+
+# okay and what if x and y were some of the vars?
+
+
+```{r}
+compute_panel_pca <- function(data){
+  
+  data %>%  remove_missing() ->
+    data
+
+  data %>% 
+    select(outcome, x, y, z) %>% # as proof of concept 3 predictors a b c
+    ordinate(cols = 2:4, model = ~ prcomp(., scale. = TRUE)) %>% 
+  .$x %>% 
+    as.data.frame() %>% 
+    bind_cols(data["outcome"]) %>% 
+    rename(x = PC1,
+           y = PC2)
+    
+}
+
+geom_pca_point <- function(...){
+  statexpress::stat_panel(compute_panel_pca, "point", 
+                          default_aes = aes(
+                                            color = after_stat(outcome)), ...)}
+
+palmerpenguins::penguins %>% 
+  ggplot() + 
+  aes(x = bill_length_mm, y = bill_depth_mm, z = flipper_length_mm) +
+  geom_point(aes(color = species))
+
+ggwipe::last_plot_wipe() +
+  aes(outcome = species) +
+  geom_pca_point() #+ 
+  # aes(color = NULL)
+
+
+compute_panel_pca_col <- function(data){
+  
+  data %>%  remove_missing() ->
+    data
+
+  data %>% 
+    select(outcome, x, y, z) %>% # as proof of concept 3 predictors a b c
+    ordinate(cols = 2:4, model = ~ prcomp(., scale. = TRUE)) %>% 
+    .$rotation %>% 
+    as.data.frame() %>% 
+    mutate(x = PC1, y = PC2) %>% 
+    rownames_to_column()
+    
+}
+
+
+palmerpenguins::penguins %>% 
+  rename(outcome = species, x = bill_length_mm, y = bill_depth_mm, z  = flipper_length_mm) %>%
+  compute_panel_pca_col()
+
+geom_pca_label <- function(geom = "text", ...){
+  statexpress::stat_panel(fun = compute_panel_pca_col, 
+                          geom = geom, 
+                          default_aes = aes(
+                                            xend = after_stat(0),
+                                            yend = after_stat(0), 
+                                            label = paste("Variable", after_stat(rowname))), 
+                          ...)}
+
+
+last_plot() + 
+  geom_pca_label(hjust = "outward") + 
+  geom_pca_label(geom = "segment", arrow = arrow(ends = "first"))
+
+```
+
+
+
+
+
+```{r}
+
+
+
+
+
+
+```
+
+
+
+
+
 ## Closing remarks, Other Relevant Work, Caveats
