@@ -52,8 +52,7 @@ spending_2021 %>%
 p1
 
 last_plot() + aes(id = vegetable) + 
-  labs(title = "Spending breakdown") + 
-  aes(label = after_stat(paste0(id, "\n$", area))) ->
+  labs(title = "Spending breakdown") ->
 p2
 
 last_plot() %+% harvest_2021 + aes(area = weight) + 
@@ -81,6 +80,68 @@ library(patchwork)
 ```
 
 `r chunk_reveal(chunk_name = "the_chunk", break_type = "auto")`
+
+
+---
+
+
+`r chunk_reveal(chunk_name = "the_chunk2", break_type = "auto")`
+
+---
+
+```{r the_chunk2, include = T}
+spending_2021 %>% 
+  ggplot() + 
+  labs(title = "Total Spending") +
+  aes(weight = price, y = "All") + 
+  geom_bar(linewidth = .15) + 
+  labs(x = NULL, y = NULL) +
+  aes(fill = I("lightsteelblue")) +
+  aes(label = after_stat(paste("$", count))) + 
+  stat_count(geom = "label", 
+             alpha = 0, 
+             label.size = 0) +
+  aes(hjust = 1) +
+  ggstamp::theme_void_fill(fill = "whitesmoke") +
+  theme(axis.text.y = element_text(hjust = 1), 
+    text = element_text(color = "grey25"))  + 
+  aes(color = I("grey25")) -> 
+p1
+
+last_plot() + aes(y = fct_reorder(vegetable, price, .fun = sum)) + 
+  labs(title = "Spending breakdown") + 
+  aes(label = after_stat(paste0("$", count))) +
+  aes(hjust = after_stat(count > quantile(count, .55))) ->
+p2
+
+last_plot() %+% 
+  harvest_2021 + aes(weight = weight, 
+                     y = fct_reorder(vegetable, weight, .fun = sum)) + 
+  aes(hjust = after_stat(count > quantile(count, .85))) +
+  aes(label = after_stat(
+    paste0(round(count/1000), "kg"))) +
+  aes(fill = I("rosybrown3")) + 
+  labs(title = "Harvest Breakdown") ->
+p3
+
+last_plot() +
+  aes(y = "All") + 
+  labs(title = "Total Harvest") + 
+  aes(hjust = 1) ->
+p4
+
+library(patchwork)
+(p1 + p4 + p2 + (p3 + aes(size = I(2)) + theme(axis.text.y = element_text(size = 4)))) &
+  plot_annotation(
+    title = "Lisa's Garden Spending and Harvest 2021", 
+    theme = theme(
+      text = element_text(color = "grey25"),
+      plot.background = element_rect(fill = "whitesmoke")) 
+  ) 
+
+```
+
+
 
 
 
