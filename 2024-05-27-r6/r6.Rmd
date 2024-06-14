@@ -117,10 +117,18 @@ Pivot <- R6Class("Pivot",
     data = NULL,
     rows = NULL,
     cols = NULL,
-    initialize = function(data = NULL, rows = NULL, cols = NULL){
+    value = NULL,
+    wt = NULL,
+    fun = NULL,
+    initialize = function(data = NULL, rows = NULL, cols = NULL, 
+                          value = NULL, wt = NULL,
+                          fun = NULL){
       self$data <- data
       self$rows <- rows
       self$cols <- cols
+      self$value <- value
+      self$wt <- wt
+      self$fun <- fun
       
       theData <<- data   # hacky?
 
@@ -137,9 +145,20 @@ Pivot <- R6Class("Pivot",
     set_cols = function(val){
       self$cols <- val
     },
+    set_value = function(val){
+      self$value <- val
+    },
+    set_wt = function(val){
+      self$wt <- val
+    },
+    set_fun = function(val){
+      self$fun <- val
+    },
     return_table_code = function(){
 
-      out <- 'pivot_count(data = theData, rows, cols)' 
+      # out <- 'pivot_count(data = theData, rows, cols)' 
+      
+      out <- 'tidypivot::pivot_helper(data = theData, rows, cols, value, wt, fun)'
       
       str_replace_or_null <- function(x, pattern, replacement){
         
@@ -154,12 +173,15 @@ Pivot <- R6Class("Pivot",
       out <- str_replace_or_null(out, "fun", self$fun)
       out <- str_replace_or_null(out, "value", self$value)
       out <- str_replace_or_null(out, "wt", self$wt)
+      out <- str_replace_or_null(out, "fun", self$fun)
 
       eval(parse(text = out))    # hacky?
       
     }
     
-    )
+    ),
+  
+  
   )
 
 ```
@@ -238,7 +260,6 @@ set_rows <- function(piping_spacer, # hacky?
   ts$set_rows(val = deparse(substitute(vars)))
   ts$return_table_code()
   
-  
   print(ts$return_table_code())
   
   invisible(ts)
@@ -249,12 +270,48 @@ set_rows <- function(piping_spacer, # hacky?
 set_cols <- function(piping_spacer, vars){
   
   ts$set_cols(val = deparse(substitute(vars)))
+  ts$return_table_code()
 
-    print(ts$return_table_code())
+  print(ts$return_table_code())
   
   invisible(ts)
 
 }
+
+
+set_value <- function(piping_spacer, vars){
+  
+  ts$set_value(val = deparse(substitute(vars)))
+  ts$return_table_code()
+
+  print(ts$return_table_code())
+  
+  invisible(ts)
+
+}
+
+set_wt <- function(piping_spacer, vars){
+  
+  ts$set_wt(val = deparse(substitute(vars)))
+  ts$return_table_code()
+
+  print(ts$return_table_code())
+  
+  invisible(ts)
+
+}
+
+set_fun <- function(piping_spacer, fun){
+  
+  ts$set_fun(val = deparse(substitute(fun)))
+  ts$return_table_code()
+
+  print(ts$return_table_code())
+  
+  invisible(ts)
+
+}
+
 
 last_table <- function(){
   
@@ -326,7 +383,7 @@ ggtable(data = tidytitanic::tidy_titanic) |>
 
 ### Step 7: Reset to multiple cols 
 
-```{r}
+```{r tablebuildup}
 ggtable(data = tidytitanic::tidy_titanic) |>
   set_rows(sex) |>
   set_cols(survived) |>
@@ -382,7 +439,7 @@ my_table |>       # pipes in okay way.
 ```
 
 
-### Step 11: on the fly variable definition - like ggplot2
+### Step 11: Nice to have in the future... on the fly variable definition - like ggplot2
 
 
 ```{r, eval = F}
@@ -393,6 +450,20 @@ last_table() |>
 
 
 ```
+
+## Functions, weighting
+
+
+```{r}
+ts <- Pivot$new()    # hacky? ugly?
+
+ggtable(mtcars) |>
+  set_value(mpg)
+
+
+```
+
+
 
 
 # References

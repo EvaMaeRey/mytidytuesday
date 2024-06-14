@@ -11,7 +11,7 @@
 
 <meta name="author" content="Evangeline Reynolds" />
 
-<meta name="date" content="2024-06-10" />
+<meta name="date" content="2024-06-14" />
 
 <title>pipeable, declarative table building</title>
 
@@ -345,7 +345,7 @@ pre code {
 
 <h1 class="title toc-ignore">pipeable, declarative table building</h1>
 <h4 class="author">Evangeline Reynolds</h4>
-<h4 class="date">2024-06-10</h4>
+<h4 class="date">2024-06-14</h4>
 
 </div>
 
@@ -382,8 +382,9 @@ pre code {
 <li><a href="#step-9-another-dataset-mtcars">Step 9: Another dataset: mtcars</a></li>
 <li><a href="#step-9-using-last_table-to-print-a-family-of-tables">Step 9: using last_table() to print a family of tables</a></li>
 <li><a href="#step-10-definitely-not-doing-print-the-right-way">Step 10: Definitely not doing print the right way…</a></li>
-<li><a href="#step-11-on-the-fly-variable-definition---like-ggplot2">Step 11: on the fly variable definition - like ggplot2</a></li>
+<li><a href="#step-11-nice-to-have-in-the-future-on-the-fly-variable-definition---like-ggplot2">Step 11: Nice to have in the future… on the fly variable definition - like ggplot2</a></li>
 </ul></li>
+<li><a href="#functions-weighting">Functions, weighting</a></li>
 </ul></li>
 <li><a href="#references">References</a></li>
 </ul>
@@ -492,10 +493,18 @@ Pivot &lt;- R6Class(&quot;Pivot&quot;,
     data = NULL,
     rows = NULL,
     cols = NULL,
-    initialize = function(data = NULL, rows = NULL, cols = NULL){
+    value = NULL,
+    wt = NULL,
+    fun = NULL,
+    initialize = function(data = NULL, rows = NULL, cols = NULL, 
+                          value = NULL, wt = NULL,
+                          fun = NULL){
       self$data &lt;- data
       self$rows &lt;- rows
       self$cols &lt;- cols
+      self$value &lt;- value
+      self$wt &lt;- wt
+      self$fun &lt;- fun
       
       theData &lt;&lt;- data   # hacky?
 
@@ -512,9 +521,20 @@ Pivot &lt;- R6Class(&quot;Pivot&quot;,
     set_cols = function(val){
       self$cols &lt;- val
     },
+    set_value = function(val){
+      self$value &lt;- val
+    },
+    set_wt = function(val){
+      self$wt &lt;- val
+    },
+    set_fun = function(val){
+      self$fun &lt;- val
+    },
     return_table_code = function(){
 
-      out &lt;- &#39;pivot_count(data = theData, rows, cols)&#39; 
+      # out &lt;- &#39;pivot_count(data = theData, rows, cols)&#39; 
+      
+      out &lt;- &#39;tidypivot::pivot_helper(data = theData, rows, cols, value, wt, fun)&#39;
       
       str_replace_or_null &lt;- function(x, pattern, replacement){
         
@@ -529,12 +549,15 @@ Pivot &lt;- R6Class(&quot;Pivot&quot;,
       out &lt;- str_replace_or_null(out, &quot;fun&quot;, self$fun)
       out &lt;- str_replace_or_null(out, &quot;value&quot;, self$value)
       out &lt;- str_replace_or_null(out, &quot;wt&quot;, self$wt)
+      out &lt;- str_replace_or_null(out, &quot;fun&quot;, self$fun)
 
       eval(parse(text = out))    # hacky?
       
     }
     
-    )
+    ),
+  
+  
   )</code></pre>
 <div id="lets-try-it-out" class="section level2 tabset">
 <h2>Let’s try it out</h2>
@@ -547,12 +570,18 @@ table_specification</code></pre>
 ##     clone: function (deep = FALSE) 
 ##     cols: NULL
 ##     data: NULL
-##     initialize: function (data = NULL, rows = NULL, cols = NULL) 
+##     fun: NULL
+##     initialize: function (data = NULL, rows = NULL, cols = NULL, value = NULL, 
 ##     return_table_code: function () 
 ##     rows: NULL
 ##     set_cols: function (val) 
 ##     set_data: function (val) 
-##     set_rows: function (val)</code></pre>
+##     set_fun: function (val) 
+##     set_rows: function (val) 
+##     set_value: function (val) 
+##     set_wt: function (val) 
+##     value: NULL
+##     wt: NULL</code></pre>
 </div>
 <div id="step-2-set-data" class="section level3">
 <h3>Step 2: Set data</h3>
@@ -563,15 +592,23 @@ table_specification</code></pre>
 ##     clone: function (deep = FALSE) 
 ##     cols: NULL
 ##     data: data.frame
-##     initialize: function (data = NULL, rows = NULL, cols = NULL) 
+##     fun: NULL
+##     initialize: function (data = NULL, rows = NULL, cols = NULL, value = NULL, 
 ##     return_table_code: function () 
 ##     rows: NULL
 ##     set_cols: function (val) 
 ##     set_data: function (val) 
-##     set_rows: function (val)</code></pre>
+##     set_fun: function (val) 
+##     set_rows: function (val) 
+##     set_value: function (val) 
+##     set_wt: function (val) 
+##     value: NULL
+##     wt: NULL</code></pre>
 <pre class="r"><code>table_specification$return_table_code()</code></pre>
-<pre><code>##      n
-## 1 2201</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   value
+##   &lt;dbl&gt;
+## 1  2201</code></pre>
 </div>
 <div id="step-3-set-rows" class="section level3">
 <h3>Step 3: Set Rows</h3>
@@ -582,17 +619,22 @@ table_specification</code></pre>
 ##     clone: function (deep = FALSE) 
 ##     cols: NULL
 ##     data: data.frame
-##     initialize: function (data = NULL, rows = NULL, cols = NULL) 
+##     fun: NULL
+##     initialize: function (data = NULL, rows = NULL, cols = NULL, value = NULL, 
 ##     return_table_code: function () 
 ##     rows: survived
 ##     set_cols: function (val) 
 ##     set_data: function (val) 
-##     set_rows: function (val)</code></pre>
+##     set_fun: function (val) 
+##     set_rows: function (val) 
+##     set_value: function (val) 
+##     set_wt: function (val) 
+##     value: NULL
+##     wt: NULL</code></pre>
 <pre class="r"><code>table_specification$return_table_code()</code></pre>
 <pre><code>## # A tibble: 2 × 2
-## # Groups:   survived [2]
-##   survived     n
-##   &lt;fct&gt;    &lt;int&gt;
+##   survived value
+##   &lt;fct&gt;    &lt;dbl&gt;
 ## 1 No        1490
 ## 2 Yes        711</code></pre>
 </div>
@@ -605,17 +647,22 @@ table_specification</code></pre>
 ##     clone: function (deep = FALSE) 
 ##     cols: sex
 ##     data: data.frame
-##     initialize: function (data = NULL, rows = NULL, cols = NULL) 
+##     fun: NULL
+##     initialize: function (data = NULL, rows = NULL, cols = NULL, value = NULL, 
 ##     return_table_code: function () 
 ##     rows: survived
 ##     set_cols: function (val) 
 ##     set_data: function (val) 
-##     set_rows: function (val)</code></pre>
+##     set_fun: function (val) 
+##     set_rows: function (val) 
+##     set_value: function (val) 
+##     set_wt: function (val) 
+##     value: NULL
+##     wt: NULL</code></pre>
 <pre class="r"><code>table_specification$return_table_code()</code></pre>
 <pre><code>## # A tibble: 2 × 3
-## # Groups:   survived [2]
 ##   survived  Male Female
-##   &lt;fct&gt;    &lt;int&gt;  &lt;int&gt;
+##   &lt;fct&gt;    &lt;dbl&gt;  &lt;dbl&gt;
 ## 1 No        1364    126
 ## 2 Yes        367    344</code></pre>
 </div>
@@ -628,17 +675,22 @@ table_specification</code></pre>
 ##     clone: function (deep = FALSE) 
 ##     cols: sex
 ##     data: data.frame
-##     initialize: function (data = NULL, rows = NULL, cols = NULL) 
+##     fun: NULL
+##     initialize: function (data = NULL, rows = NULL, cols = NULL, value = NULL, 
 ##     return_table_code: function () 
 ##     rows: age
 ##     set_cols: function (val) 
 ##     set_data: function (val) 
-##     set_rows: function (val)</code></pre>
+##     set_fun: function (val) 
+##     set_rows: function (val) 
+##     set_value: function (val) 
+##     set_wt: function (val) 
+##     value: NULL
+##     wt: NULL</code></pre>
 <pre class="r"><code>table_specification$return_table_code()</code></pre>
 <pre><code>## # A tibble: 2 × 3
-## # Groups:   age [2]
 ##   age    Male Female
-##   &lt;fct&gt; &lt;int&gt;  &lt;int&gt;
+##   &lt;fct&gt; &lt;dbl&gt;  &lt;dbl&gt;
 ## 1 Child    64     45
 ## 2 Adult  1667    425</code></pre>
 </div>
@@ -667,7 +719,6 @@ set_rows &lt;- function(piping_spacer, # hacky?
   ts$set_rows(val = deparse(substitute(vars)))
   ts$return_table_code()
   
-  
   print(ts$return_table_code())
   
   invisible(ts)
@@ -678,12 +729,48 @@ set_rows &lt;- function(piping_spacer, # hacky?
 set_cols &lt;- function(piping_spacer, vars){
   
   ts$set_cols(val = deparse(substitute(vars)))
+  ts$return_table_code()
 
-    print(ts$return_table_code())
+  print(ts$return_table_code())
   
   invisible(ts)
 
 }
+
+
+set_value &lt;- function(piping_spacer, vars){
+  
+  ts$set_value(val = deparse(substitute(vars)))
+  ts$return_table_code()
+
+  print(ts$return_table_code())
+  
+  invisible(ts)
+
+}
+
+set_wt &lt;- function(piping_spacer, vars){
+  
+  ts$set_wt(val = deparse(substitute(vars)))
+  ts$return_table_code()
+
+  print(ts$return_table_code())
+  
+  invisible(ts)
+
+}
+
+set_fun &lt;- function(piping_spacer, fun){
+  
+  ts$set_fun(val = deparse(substitute(fun)))
+  ts$return_table_code()
+
+  print(ts$return_table_code())
+  
+  invisible(ts)
+
+}
+
 
 last_table &lt;- function(){
   
@@ -700,17 +787,18 @@ last_table &lt;- function(){
 ts &lt;- Pivot$new()    # hacky? ugly?
 
 ggtable(data = tidytitanic::tidy_titanic)</code></pre>
-<pre><code>##      n
-## 1 2201</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   value
+##   &lt;dbl&gt;
+## 1  2201</code></pre>
 </div>
 <div id="step-2-set-rows" class="section level3">
 <h3>Step 2: Set rows</h3>
 <pre class="r"><code>ggtable(data = tidytitanic::tidy_titanic) |&gt;
   set_rows(sex) </code></pre>
 <pre><code>## # A tibble: 2 × 2
-## # Groups:   sex [2]
-##   sex        n
-##   &lt;fct&gt;  &lt;int&gt;
+##   sex    value
+##   &lt;fct&gt;  &lt;dbl&gt;
 ## 1 Male    1731
 ## 2 Female   470</code></pre>
 </div>
@@ -720,9 +808,8 @@ ggtable(data = tidytitanic::tidy_titanic)</code></pre>
   set_rows(sex) |&gt;
   set_cols(survived)</code></pre>
 <pre><code>## # A tibble: 2 × 3
-## # Groups:   sex [2]
 ##   sex       No   Yes
-##   &lt;fct&gt;  &lt;int&gt; &lt;int&gt;
+##   &lt;fct&gt;  &lt;dbl&gt; &lt;dbl&gt;
 ## 1 Male    1364   367
 ## 2 Female   126   344</code></pre>
 </div>
@@ -733,9 +820,8 @@ ggtable(data = tidytitanic::tidy_titanic)</code></pre>
   set_cols(survived) |&gt;
   set_cols(age)</code></pre>
 <pre><code>## # A tibble: 2 × 3
-## # Groups:   sex [2]
 ##   sex    Child Adult
-##   &lt;fct&gt;  &lt;int&gt; &lt;int&gt;
+##   &lt;fct&gt;  &lt;dbl&gt; &lt;dbl&gt;
 ## 1 Male      64  1667
 ## 2 Female    45   425</code></pre>
 </div>
@@ -748,7 +834,7 @@ ggtable(data = tidytitanic::tidy_titanic)</code></pre>
   set_rows(NULL)</code></pre>
 <pre><code>## # A tibble: 1 × 2
 ##   Child Adult
-##   &lt;int&gt; &lt;int&gt;
+##   &lt;dbl&gt; &lt;dbl&gt;
 ## 1   109  2092</code></pre>
 </div>
 <div id="step-6-reset-to-multiple-rows" class="section level3">
@@ -760,9 +846,8 @@ ggtable(data = tidytitanic::tidy_titanic)</code></pre>
   set_rows(NULL) |&gt;
   set_rows(c(sex,survived))</code></pre>
 <pre><code>## # A tibble: 4 × 4
-## # Groups:   sex, survived [4]
 ##   sex    survived Child Adult
-##   &lt;fct&gt;  &lt;fct&gt;    &lt;int&gt; &lt;int&gt;
+##   &lt;fct&gt;  &lt;fct&gt;    &lt;dbl&gt; &lt;dbl&gt;
 ## 1 Male   No          35  1329
 ## 2 Male   Yes         29   338
 ## 3 Female No          17   109
@@ -777,33 +862,30 @@ ggtable(data = tidytitanic::tidy_titanic)</code></pre>
   set_rows(NULL) |&gt;
   set_rows(c(sex, survived)) |&gt;
   set_cols(c(age, class))</code></pre>
-<pre><code>## # A tibble: 4 × 9
-## # Groups:   sex, survived [4]
-##   sex    survived Child_3rd Adult_1st Adult_2nd Adult_3rd Adult_Crew Child_1st
-##   &lt;fct&gt;  &lt;fct&gt;        &lt;int&gt;     &lt;int&gt;     &lt;int&gt;     &lt;int&gt;      &lt;int&gt;     &lt;int&gt;
-## 1 Male   No              35       118       154       387        670        NA
-## 2 Male   Yes             13        57        14        75        192         5
-## 3 Female No              17         4        13        89          3        NA
-## 4 Female Yes             14       140        80        76         20         1
-## # ℹ 1 more variable: Child_2nd &lt;int&gt;</code></pre>
+<pre><code>## # A tibble: 4 × 10
+##   sex    survived Child_1st Child_2nd Child_3rd Child_Crew Adult_1st Adult_2nd
+##   &lt;fct&gt;  &lt;fct&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 Male   No               0         0        35          0       118       154
+## 2 Male   Yes              5        11        13          0        57        14
+## 3 Female No               0         0        17          0         4        13
+## 4 Female Yes              1        13        14          0       140        80
+## # ℹ 2 more variables: Adult_3rd &lt;dbl&gt;, Adult_Crew &lt;dbl&gt;</code></pre>
 </div>
 <div id="step-8-not-piping" class="section level3">
 <h3>Step 8: not piping</h3>
 <pre class="r"><code>ggtable(data = tidytitanic::tidy_titanic, age, class)</code></pre>
 <pre><code>## # A tibble: 2 × 5
-## # Groups:   age [2]
 ##   age   `1st` `2nd` `3rd`  Crew
-##   &lt;fct&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
-## 1 Child     6    24    79    NA
+##   &lt;fct&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 Child     6    24    79     0
 ## 2 Adult   319   261   627   885</code></pre>
 </div>
 <div id="step-9-another-dataset-mtcars" class="section level3">
 <h3>Step 9: Another dataset: mtcars</h3>
 <pre class="r"><code>ggtable(data = mtcars, rows = cyl)</code></pre>
 <pre><code>## # A tibble: 3 × 2
-## # Groups:   cyl [3]
-##     cyl     n
-##   &lt;dbl&gt; &lt;int&gt;
+##     cyl value
+##   &lt;dbl&gt; &lt;dbl&gt;
 ## 1     4    11
 ## 2     6     7
 ## 3     8    14</code></pre>
@@ -811,28 +893,28 @@ ggtable(data = tidytitanic::tidy_titanic)</code></pre>
 <div id="step-9-using-last_table-to-print-a-family-of-tables" class="section level3">
 <h3>Step 9: using last_table() to print a family of tables</h3>
 <pre class="r"><code>ggtable(data = titanic)</code></pre>
-<pre><code>##      n
-## 1 2201</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   value
+##   &lt;dbl&gt;
+## 1  2201</code></pre>
 <pre class="r"><code>last_table() |&gt;
   set_cols(sex)</code></pre>
 <pre><code>## # A tibble: 1 × 2
 ##    Male Female
-##   &lt;int&gt;  &lt;int&gt;
+##   &lt;dbl&gt;  &lt;dbl&gt;
 ## 1  1731    470</code></pre>
 <pre class="r"><code>last_table() |&gt;
   set_rows(survived)</code></pre>
 <pre><code>## # A tibble: 2 × 3
-## # Groups:   survived [2]
 ##   survived  Male Female
-##   &lt;fct&gt;    &lt;int&gt;  &lt;int&gt;
+##   &lt;fct&gt;    &lt;dbl&gt;  &lt;dbl&gt;
 ## 1 No        1364    126
 ## 2 Yes        367    344</code></pre>
 <pre class="r"><code>last_table() |&gt;
   set_cols(NULL)</code></pre>
 <pre><code>## # A tibble: 2 × 2
-## # Groups:   survived [2]
-##   survived     n
-##   &lt;fct&gt;    &lt;int&gt;
+##   survived value
+##   &lt;fct&gt;    &lt;dbl&gt;
 ## 1 No        1490
 ## 2 Yes        711</code></pre>
 </div>
@@ -841,9 +923,8 @@ ggtable(data = tidytitanic::tidy_titanic)</code></pre>
 <p>print is not done in the right way yet. A collect function will be nice to output the printed table, versus the specification.</p>
 <pre class="r"><code>my_table &lt;- ggtable(data = mtcars, rows = cyl) # shouldn&#39;t print</code></pre>
 <pre><code>## # A tibble: 3 × 2
-## # Groups:   cyl [3]
-##     cyl     n
-##   &lt;dbl&gt; &lt;int&gt;
+##     cyl value
+##   &lt;dbl&gt; &lt;dbl&gt;
 ## 1     4    11
 ## 2     6     7
 ## 3     8    14</code></pre>
@@ -853,29 +934,46 @@ ggtable(data = tidytitanic::tidy_titanic)</code></pre>
 ##     clone: function (deep = FALSE) 
 ##     cols: NULL
 ##     data: data.frame
-##     initialize: function (data = NULL, rows = NULL, cols = NULL) 
+##     fun: NULL
+##     initialize: function (data = NULL, rows = NULL, cols = NULL, value = NULL, 
 ##     return_table_code: function () 
 ##     rows: cyl
 ##     set_cols: function (val) 
 ##     set_data: function (val) 
-##     set_rows: function (val)</code></pre>
+##     set_fun: function (val) 
+##     set_rows: function (val) 
+##     set_value: function (val) 
+##     set_wt: function (val) 
+##     value: NULL
+##     wt: NULL</code></pre>
 <pre class="r"><code>my_table |&gt;       # pipes in okay way.
   set_cols(am)</code></pre>
 <pre><code>## # A tibble: 3 × 3
-## # Groups:   cyl [3]
 ##     cyl   `0`   `1`
-##   &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1     4     3     8
 ## 2     6     4     3
 ## 3     8    12     2</code></pre>
 </div>
-<div id="step-11-on-the-fly-variable-definition---like-ggplot2" class="section level3">
-<h3>Step 11: on the fly variable definition - like ggplot2</h3>
+<div id="step-11-nice-to-have-in-the-future-on-the-fly-variable-definition---like-ggplot2" class="section level3">
+<h3>Step 11: Nice to have in the future… on the fly variable definition - like ggplot2</h3>
 <pre class="r"><code>ggtable(data = mtcars, rows = cyl)
 
 last_table() |&gt;
   set_cols(ifelse(am, &quot;manual&quot;, &quot;auto&quot;))</code></pre>
 </div>
+</div>
+<div id="functions-weighting" class="section level2">
+<h2>Functions, weighting</h2>
+<pre class="r"><code>mtcars |&gt;
+  ggtable() |&gt;
+  set_value(mpg)</code></pre>
+<pre><code>## # A tibble: 3 × 3
+##     cyl   `0`   `1`
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     4  68.7 225. 
+## 2     6  76.5  61.7
+## 3     8 181.   30.8</code></pre>
 </div>
 </div>
 <div id="references" class="section level1">
