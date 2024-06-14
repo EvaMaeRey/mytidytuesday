@@ -39,8 +39,8 @@ spending_2021 <- readr::read_csv('https://raw.githubusercontent.com/rfordatascie
 
 spending_2021 %>% 
   ggplot() + 
-  labs(title = "Total Spending") +
-  aes(area = price, id = "All") + 
+  labs(title = "Spending Breakdown") +
+  aes(area = price, id = vegetable) + 
   ggcirclepack::geom_circlepack(linewidth = .15) + 
   coord_equal() + 
   aes(fill = I("lightsteelblue")) +
@@ -51,25 +51,26 @@ spending_2021 %>%
   aes(color = I("grey25")) -> 
 p1
 
-last_plot() + aes(id = vegetable) + 
-  labs(title = "Spending breakdown") ->
+last_plot() + 
+  aes(id = "All") + 
+  labs(title = "Total Spending") ->
 p2
 
 last_plot() %+% harvest_2021 + aes(area = weight) + 
+  aes(fill = I("rosybrown3")) + 
   aes(label = after_stat(
     paste0(id, "\n", 
            round(area/1000), "kg"))) +
-  aes(fill = I("rosybrown3")) + 
-  labs(title = "Harvest Breakdown") ->
+  labs(title = "Total Harvest") ->
 p3
 
 last_plot() +
-  aes(id = "All") + 
-  labs(title = "Total Harvest") ->
+  aes(id = vegetable) + 
+  labs(title = "Harvest Breakdown") ->
 p4
 
 library(patchwork)
-(p1 + p4 + p2 + p3) &
+(p2 + p3 + p1 + p4) &
   plot_annotation(
     title = "Lisa's Garden Spending and Harvest 2021", 
     theme = theme(
@@ -92,8 +93,9 @@ library(patchwork)
 ```{r the_chunk2, include = T}
 spending_2021 %>% 
   ggplot() + 
-  labs(title = "Total Spending") +
-  aes(weight = price, y = "All") + 
+  labs(title = "Spending Breakdown") +
+  aes(weight = price) + 
+  aes(y = fct_reorder(vegetable, price, .fun = sum)) +
   geom_bar(linewidth = .15) + 
   labs(x = NULL, y = NULL) +
   aes(fill = I("lightsteelblue")) +
@@ -104,33 +106,32 @@ spending_2021 %>%
   aes(hjust = 1) +
   ggstamp::theme_void_fill(fill = "whitesmoke") +
   theme(axis.text.y = element_text(hjust = 1), 
-    text = element_text(color = "grey25"))  + 
+    text = element_text(color = "grey25")) + 
+  aes(hjust = after_stat(count > quantile(count, .55))) +
   aes(color = I("grey25")) -> 
 p1
 
-last_plot() + aes(y = fct_reorder(vegetable, price, .fun = sum)) + 
-  labs(title = "Spending breakdown") + 
-  aes(hjust = after_stat(count > quantile(count, .55))) ->
+last_plot() + 
+  aes(y = "All")  + 
+  aes(hjust = 1) + 
+  labs(title = "Total Spending")  ->
 p2
 
 last_plot() %+% 
-  harvest_2021 + aes(weight = weight, 
-                     y = fct_reorder(vegetable, weight, .fun = sum)) + 
-  aes(hjust = after_stat(count > quantile(count, .85))) +
-  aes(label = after_stat(
-    paste0(round(count/1000), "kg"))) +
+  harvest_2021 + aes(weight = weight) + 
   aes(fill = I("rosybrown3")) + 
-  labs(title = "Harvest Breakdown") ->
+  aes(label = after_stat(paste0(round(count/1000), "kg"))) +
+  labs(title = "Total Harvest") ->
 p3
 
 last_plot() +
-  aes(y = "All") + 
-  labs(title = "Total Harvest") + 
-  aes(hjust = 1) ->
+  aes(y = fct_reorder(vegetable, weight, .fun = sum)) +
+  aes(hjust = after_stat(count > quantile(count, .85))) +
+  labs(title = "Harvest Breakdown") ->
 p4
 
 library(patchwork)
-(p1 + p4 + p2 + (p3 + aes(size = I(2)) + 
+(p2 + p3 + p1 + (p4 + aes(size = I(2)) + 
        theme(axis.text.y = element_text(size = 7)))) +
   plot_layout(heights = c(1, 3)) &
   plot_annotation(

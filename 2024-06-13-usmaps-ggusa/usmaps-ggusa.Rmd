@@ -1,0 +1,159 @@
+---
+title: "When places are positional aesthetics"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+usmapdata::us_map("states") %>% 
+  rename(state_name = full) %>% 
+  rename(state_abbr = abbr) %>% 
+  rename(geometry = geom) %>% 
+  sf2stat:::sf_df_prep_for_stat(id_col_name = "state_name") ->
+usmaprefdata
+
+usmaprefdata %>% head()
+
+usmaprefdata %>% 
+  ggplot() +
+  aes(geometry = geometry) +
+  geom_sf()
+
+stat_states <- function(...){
+  statexpress:::stat_panel_sf(usmaprefdata, crs = "NAD27", ...)}
+
+state.name %>% 
+  data.frame(state = .) %>% 
+  mutate(is_aeiou = state %>% str_detect("^[AEIOU]")) %>% 
+  ggplot() + 
+  aes(state_name = state) + 
+  stat_states() + 
+  aes(fill = is_aeiou)
+
+data.frame(state.abb, state.region) %>% 
+  ggplot() + 
+  aes(state_abbr = state.abb) + 
+  stat_states() + 
+  aes(fill = state.region) + 
+  scale_fill_viridis_d() + 
+  stat_states(keep_id = "Iowa", color = "red", linewidth = 1)
+
+
+```
+
+```{r}
+ggseg::aseg %>% 
+  data.frame() %>% 
+  rename(region_id = label) %>% 
+  remove_missing() %>% 
+  sf2stat:::sf_df_prep_for_stat(id_col_name = "region_id") ->
+reference_aseg
+
+
+stat_aseg <- function(...){
+  statexpress:::stat_panel_sf(reference_aseg, 
+                              default_aes = aes(label = after_stat(region_id)), ...)}
+
+
+
+reference_aseg %>% 
+  sf::st_drop_geometry() %>% 
+  ggplot() + 
+  aes(region_id = region_id) + 
+  stat_aseg() + 
+  stat_aseg(geom = "text", 
+            check_overlap = T)
+  
+
+reference_aseg %>% 
+  sf::st_drop_geometry() %>% 
+  ggplot() + 
+  aes(region_id = region_id) + 
+  stat_aseg() + 
+  stat_aseg(geom = "text", 
+            check_overlap = T,
+            size = 2) + 
+  aes(fill = hemi) +
+  ggstamp::stamp_wash() +
+  stat_aseg(keep_id = "Right-Amygdala", fill = "darkred")
+
+```
+
+
+## Experiment
+
+```{r}
+library(tidyverse)
+library(gganatogram)
+a <- gganatogram(data=hgFemale_key, outline = T, fillOutline='#a6bddb', organism='human', sex='female', fill="colour") 
+
+hgFemale_list[[156]]
+# str(hgFemale_list)
+
+hgFemale_df <- data.frame()
+
+for (i in c(1:length(hgFemale_list))){
+  
+  hgFemale_df <- bind_rows(hgFemale_df, hgFemale_list[[i]] %>% mutate(group = as.character(group)))
+
+}
+  
+
+a +
+  coord_equal()
+# gganatogram:::get_anatogram()  
+
+a + 
+  ggstamp::stamp_wash() +
+  geom_path(data = hgFemale_list$brain, aes(x = x, y = -y), color = "red", size = .5, linetype = "dashed") +
+  coord_equal()
+
+# hgFemale_df %>% sf::st_as_sf(coords = c("x", "y"))
+
+# str(last_plot())
+
+hgFemale_df %>% 
+  left_join(hgFemale_key, by = join_by(id == organ)) %>% 
+  ggplot() + 
+  aes(x = x, y = -y) + 
+  geom_polygon(color = "lightgrey", aes(fill = I(colour))) +
+  coord_equal() + 
+  aes(group = group) + 
+  # aes(fill = id == "pancreas") + 
+  geom_polygon(data = . %>% filter( id == "pancreas"),
+               fill = "blue") + 
+  facet_wrap(~type, nrow = 2)
+  
+  
+  
+  
+
+```
+
+
+
+```{r}
+
+
+
+```
+
+
+## Closing remarks, Other Relevant Work, Caveats

@@ -164,31 +164,26 @@ ggplot(palmerpenguins::penguins)  +
 ## statexpress + w/ ggplot() as plot entry point...
 
 ```{r}
-compute_panel_pca <- function(data){
+library(tidyverse)
+
+compute_panel_pca_rows <- function(data){
   
   data %>%  remove_missing() ->
     data
 
   data %>% 
     select(outcome, a, b, c) %>% # as proof of concept 3 predictors a b c
-    ordinate(cols = 2:4, model = ~ prcomp(., scale. = TRUE)) %>% 
+    ordr::ordinate(cols = 2:4, model = ~ prcomp(., scale. = TRUE)) %>% 
   .$x %>% 
     as.data.frame() %>% 
     bind_cols(data["outcome"])
     
 }
 
-geom_pca_point <- function(...){
-  statexpress::stat_panel(compute_panel_pca, "point", 
-                          default_aes = aes(x = after_stat(PC1), 
-                                            y = after_stat(PC2), 
-                                            color = after_stat(outcome)), ...)}
-
 palmerpenguins::penguins %>% 
-  ggplot() + 
-  aes(outcome = species, a = bill_length_mm, b = bill_depth_mm, c = flipper_length_mm) +
-  geom_pca_point()
-
+  rename(outcome = species, a = bill_length_mm, b = bill_depth_mm, c = flipper_length_mm) %>%
+  compute_panel_pca_rows() %>% 
+  head()
 
 compute_panel_pca_col <- function(data){
   
@@ -197,19 +192,26 @@ compute_panel_pca_col <- function(data){
 
   data %>% 
     select(outcome, a, b, c) %>% # as proof of concept 3 predictors a b c
-    ordinate(cols = 2:4, model = ~ prcomp(., scale. = TRUE)) %>% 
+    ordr::ordinate(cols = 2:4, model = ~ prcomp(., scale. = TRUE)) %>% 
     .$rotation %>% 
     as.data.frame() %>% 
     rownames_to_column()
     
 }
 
-
 palmerpenguins::penguins %>% 
   rename(outcome = species, a = bill_length_mm, b = bill_depth_mm, c = flipper_length_mm) %>%
   compute_panel_pca_col()
 
-geom_pca_label <- function(geom = "text", ...){
+geom_pca_point <- function(...){
+  statexpress::stat_panel(compute_panel_pca_rows, "point", 
+                          default_aes = aes(x = after_stat(PC1), 
+                                            y = after_stat(PC2), 
+                                            color = after_stat(outcome)),
+                          ...)}
+
+
+stat_pca_cols <- function(geom = "text", ...){
   statexpress::stat_panel(fun = compute_panel_pca_col, 
                           geom = geom, 
                           default_aes = aes(x = after_stat(PC1), 
@@ -220,9 +222,13 @@ geom_pca_label <- function(geom = "text", ...){
                           ...)}
 
 
-last_plot() + 
-  geom_pca_label(hjust = "outward") + 
-  geom_pca_label(geom = "segment", arrow = arrow(ends = "first"))
+palmerpenguins::penguins %>% 
+  ggplot() + 
+  aes(outcome = species, a = bill_length_mm, b = bill_depth_mm, c = flipper_length_mm) +
+  geom_pca_point() + 
+  stat_pca_cols(hjust = "outward") + 
+  stat_pca_cols(geom = "segment", 
+                arrow = arrow(ends = "first"))
 
 ```
 
