@@ -18,33 +18,62 @@ options(tidyverse.quiet = TRUE)
 ## Intro Thoughts
 
 
-## Status Quo
+## US map
 
 ```{r}
 library(tidyverse)
+
+usmapdata::us_map("states") %>% 
+  ggplot() +
+  aes(geometry = geom) +
+  geom_sf() -> p; p
+
+p$coordinates$crs
+
+usmapdata::us_map("states")
+```
+
+
+### prep reference data
+
+
+
+```{r}
 usmapdata::us_map("states") %>% 
   rename(state_name = full) %>% 
   rename(state_abbr = abbr) %>% 
   rename(geometry = geom) %>% 
   sf2stat:::sf_df_prep_for_stat(id_col_name = "state_name") ->
 usmaprefdata
+```
 
-usmaprefdata %>% head()
+## quick prep stat_states demo w/ statexpress
 
-usmaprefdata %>% 
-  ggplot() +
-  aes(geometry = geometry) +
-  geom_sf()
-
+```{r}
 stat_states <- function(...){
-  statexpress:::stat_panel_sf(usmaprefdata, crs = "NAD27", ...)}
+  statexpress:::stat_panel_sf(usmaprefdata, crs = NULL, 
+                              default_aes = aes(label = after_stat(state_name)), ...)}
 
+geom_states <- stat_states
+geom_states_text <- function(geom = "text", ...){
+  stat_states(geom = geom, ...)
+}
+```
+
+## demo UI
+
+```{r}
 state.name %>% 
   data.frame(state = .) %>% 
-  mutate(is_aeiou = state %>% str_detect("^[AEIOU]")) %>% 
+  mutate(is_aeiou = state %>% str_detect("^[AEIOU]")) ->
+vowel_start_states_df
+
+vowel_start_states_df %>% head()
+
+vowel_start_states_df |>
   ggplot() + 
   aes(state_name = state) + 
-  stat_states() + 
+  geom_states() + 
   aes(fill = is_aeiou)
 
 data.frame(state.abb, state.region) %>% 
@@ -53,10 +82,16 @@ data.frame(state.abb, state.region) %>%
   stat_states() + 
   aes(fill = state.region) + 
   scale_fill_viridis_d() + 
-  stat_states(keep_id = "Iowa", color = "red", linewidth = 1)
+  stat_states(keep_id = "Iowa", color = "red", linewidth = 1) + 
+  geom_states_text(keep_id = "Iowa", angle = 8)
 
 
 ```
+
+
+# Brain map
+
+## prepare reference data
 
 ```{r}
 ggseg::aseg %>% 
@@ -65,14 +100,28 @@ ggseg::aseg %>%
   remove_missing() %>% 
   sf2stat:::sf_df_prep_for_stat(id_col_name = "region_id") ->
 reference_aseg
+```
 
+## prepare demo layer functions
 
+```{r}
 stat_aseg <- function(...){
   statexpress:::stat_panel_sf(reference_aseg, 
-                              default_aes = aes(label = after_stat(region_id)), ...)}
+                              default_aes = aes(label = after_stat(region_id)), crs = NULL, ...)}
+
+geom_aseg <- stat_aseg
+
+geom_aseg_text <- function(geom = "text", ...){
+  
+  stat_aseg(...)
+  
+}
+```
 
 
+## Use... Not really clear when you might use framework with external data. 
 
+```{r}
 reference_aseg %>% 
   sf::st_drop_geometry() %>% 
   ggplot() + 
@@ -97,7 +146,7 @@ reference_aseg %>%
 ```
 
 
-## Experiment
+## Body map - not really fitting the mold - just trying to figure out the structure of the data.
 
 ```{r}
 library(tidyverse)
@@ -140,8 +189,6 @@ hgFemale_df %>%
   geom_polygon(data = . %>% filter( id == "pancreas"),
                fill = "blue") + 
   facet_wrap(~type, nrow = 2)
-  
-  
   
   
 
