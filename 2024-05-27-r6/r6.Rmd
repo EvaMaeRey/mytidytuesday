@@ -1,5 +1,5 @@
 ---
-title: "pipeable, declarative table building"
+title: "Toward *pipeable*, declarative table construction"
 author: "Evangeline Reynolds"
 date: "`r Sys.Date()`"
 output: 
@@ -14,7 +14,7 @@ options(tidyverse.quiet = TRUE)
 
 # synopsis
 
-Proposes group, compute and pivot to table in a succinct function, eg: 
+Tidypivot function proposes group, compute and pivot to table in a succinct function, eg: 
 
 `pivot_count(data = titanic, rows = survived, cols = c(sex, age))`
 
@@ -455,10 +455,11 @@ last_table() |>
 
 
 ```{r}
-ts <- Pivot$new()    # hacky? ugly?
+# ts <- Pivot$new()    # hacky? ugly?
 
 ggtable(mtcars) |>
   set_value(mpg)
+
 
 
 ```
