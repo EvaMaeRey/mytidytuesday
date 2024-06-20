@@ -119,13 +119,26 @@ ggplot(pride_it) +
   aes(area = students) + 
   aes(fill = rating == 5) +
   geom_circlepack(linewidth = 0.2, color = "grey99") +
-  aes(label = after_stat(id %>% str_wrap(10)) ) +
-  ggcirclepack:::geom_circlepack_text(aes(render = rating == 5)) + 
+  aes(label = after_stat(id %>% str_wrap(20)) ) +
+  ggcirclepack:::geom_circlepack_text(aes(render = rating == 5), lineheight = .8) + 
   facet_wrap(facets = vars(community_type)) + 
   scale_size(range = c(2,3))
 
 last_plot() + 
   aes(label = campus_name)
+
+ggplot(pride_it) +
+  aes(id = campus_name) + 
+  aes(area = students) + 
+  aes(fill = rating == 5) +
+  geom_circlepack(linewidth = 0.2, color = "grey99") +
+  aes(label = after_stat(id %>% str_wrap(20)) ) +
+  ggcirclepack:::stat_circlepack_center(
+    aes(render = rating == 5), 
+    geom = ggrepel::GeomTextRepel,
+    lineheight = .8) + 
+  facet_wrap(facets = vars(community_type)) + 
+  scale_size(range = c(2,3))
 
 
 ggcirclepack:::StatCirclepackcenter$default_aes
