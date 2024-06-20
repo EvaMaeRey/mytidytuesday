@@ -18,7 +18,9 @@ options(tidyverse.quiet = TRUE)
 ## Intro Thoughts
 
 
-## Status Quo
+## G. Karamanis' plots, beautifully labelled
+
+Karamanis labels plots with care. 
 
 ```{r, fig.width = 10, fig.height = 8.5,}
 library(tidyverse)
@@ -108,7 +110,12 @@ ggplot() +
   )
 
 ```
+## Update: `aes(render = render_condition)`
 
+So we think this is a pretty general problem, so updating ggcirclepack to allow for conditional label of circles w/ aes(render = render_condition)
+
+
+### use with geom_circlepack_text
 
 ```{r, error=T}
 
@@ -120,12 +127,19 @@ ggplot(pride_it) +
   aes(fill = rating == 5) +
   geom_circlepack(linewidth = 0.2, color = "grey99") +
   aes(label = after_stat(id %>% str_wrap(20)) ) +
-  ggcirclepack:::geom_circlepack_text(aes(render = rating == 5), lineheight = .8) + 
+  ggcirclepack:::geom_circlepack_text(
+    aes(render = rating == 5), 
+    lineheight = .8) + 
   facet_wrap(facets = vars(community_type)) + 
   scale_size(range = c(2,3))
+```
 
+### use with (new!) stat_circlepack_center()XGeomTextRepel
+
+
+```{r, error=T}
 last_plot() + 
-  aes(label = campus_name)
+  aes(label = campus_name)  # may feel weird that this doesn't just work. 
 
 ggplot(pride_it) +
   aes(id = campus_name) + 
