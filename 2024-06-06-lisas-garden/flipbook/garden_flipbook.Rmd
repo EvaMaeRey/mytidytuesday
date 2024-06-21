@@ -49,12 +49,12 @@ spending_2021 %>%
   theme(text = element_text(color = "grey25"))  + 
   aes(label = after_stat(paste0(id, "\n$", area))) + 
   aes(color = I("grey25")) -> 
-p1
+spending_by_veg
 
 last_plot() + 
   aes(id = "All") + 
   labs(title = "Total Spending") ->
-p2
+spending_all
 
 last_plot() %+% harvest_2021 + aes(area = weight) + 
   aes(fill = I("rosybrown3")) + 
@@ -62,15 +62,16 @@ last_plot() %+% harvest_2021 + aes(area = weight) +
     paste0(id, "\n", 
            round(area/1000), "kg"))) +
   labs(title = "Total Harvest") ->
-p3
+harvest_all
 
 last_plot() +
   aes(id = vegetable) + 
   labs(title = "Harvest Breakdown") ->
-p4
+harvest_by_veg
 
 library(patchwork)
-(p2 + p3 + p1 + p4) &
+(spending_all + harvest_all + 
+    spending_by_veg + harvest_by_veg) &
   plot_annotation(
     title = "Lisa's Garden Spending and Harvest 2021", 
     theme = theme(
@@ -90,7 +91,7 @@ library(patchwork)
 
 ---
 
-```{r the_chunk2, include = T}
+```{r the_chunk2, include = F}
 spending_2021 %>% 
   ggplot() + 
   labs(title = "Spending Breakdown") +
@@ -109,29 +110,30 @@ spending_2021 %>%
     text = element_text(color = "grey25")) + 
   aes(hjust = after_stat(count > quantile(count, .55))) +
   aes(color = I("grey25")) -> 
-p1
+spending_by_veg
 
 last_plot() + 
   aes(y = "All")  + 
   aes(hjust = 1) + 
   labs(title = "Total Spending")  ->
-p2
+spending_all
 
 last_plot() %+% 
   harvest_2021 + aes(weight = weight) + 
   aes(fill = I("rosybrown3")) + 
   aes(label = after_stat(paste0(round(count/1000), "kg"))) +
   labs(title = "Total Harvest") ->
-p3
+harvest_all
 
 last_plot() +
   aes(y = fct_reorder(vegetable, weight, .fun = sum)) +
   aes(hjust = after_stat(count > quantile(count, .85))) +
   labs(title = "Harvest Breakdown") ->
-p4
+harvest_by_veg
 
 library(patchwork)
-(p2 + p3 + p1 + (p4 + aes(size = I(2)) + 
+(spending_all + harvest_all + 
+    spending_by_veg + (harvest_by_veg + aes(size = I(2)) + 
        theme(axis.text.y = element_text(size = 7)))) +
   plot_layout(heights = c(1, 3)) &
   plot_annotation(
@@ -148,7 +150,7 @@ library(patchwork)
 
 
 ```{css, eval = TRUE, echo = FALSE}
-.remark-code{line-height: 1.5; font-size: 60%}
+.remark-code{line-height: 1.5; font-size: 53%}
 
 @media print {
   .has-continuation {
