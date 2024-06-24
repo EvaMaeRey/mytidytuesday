@@ -68,30 +68,28 @@ layer_data()
 ```
 
 ```{r, eval = T}
+library(tidyverse)
+
 Titanic %>% 
   data.frame() %>%  
   uncount(Freq) ->
 tidy_titanic
 
-tidy_titanic %>% 
-  group_by(Sex) %>% 
-  mutate(local_sum = n())
-
 compute_layer_prop_within <- function(data = tidy_titanic, ...){
   
   if(is.null(data$value)){data$value <- 1}
-  if(is.null(data$within)){data$within <- 1}
+  if(is.null(data$prop_within)){data$prop_within <- 1}
   if(is.null(data$wt)){data$wt <- 1}
   
   data$value <- data$value * data$wt
   
   data %>% 
-    group_by(within) %>% 
+    group_by(prop_within) %>% 
     summarize(group_sum = sum(.data$value)) ->
   group_sum_df
   
   data %>% 
-    left_join(group_sum_df) %>% 
+    left_join(group_sum_df, join_by = "prop_within") %>% 
     group_by(PANEL) %>% 
     summarize(sum = sum(.data$value),
               group_sum = mean(.data$group_sum)) %>% 
@@ -100,13 +98,11 @@ compute_layer_prop_within <- function(data = tidy_titanic, ...){
     mutate(x = 0, y = 0)
 
 }
-```
 
-```{r}
+
+# test compute layer
 tidy_titanic %>% 
-  mutate(within = Sex) %>% 
-  # group_by(Sex, Survived, within) %>% 
-  # mutate(PANEL = paste(Sex, Survived, sep = "-")) %>%  
+  mutate(prop_by = Sex) %>% 
   mutate(PANEL = paste(as.numeric(Sex), 
                        as.numeric(Survived), sep = "-")) %>%
   ungroup() %>% 
@@ -117,46 +113,48 @@ StatPropwithin <- ggproto(`_class` = "StatPropwithin",
                     `_inherit` = Stat,
                     compute_layer = compute_layer_prop_within)
 
-Titanic %>% 
-  data.frame() %>%  
-  uncount(Freq) %>% 
-  ggplot() + 
-  aes(within = Sex) + 
-  facet_grid(Sex ~ Survived) + 
-  aes(fill = after_stat(prop)) +
-  layer(geom = "tile", 
+stat_prop <- function(geom = "text"){
+  
+    layer(geom = geom, 
         stat = StatPropwithin, 
-        position = "identity") +
-  layer(geom = "text", 
-        stat = StatPropwithin, 
-        position = "identity",
-        params = list(color = "gray85")
-        )
+        position = "identity")
+  
+}
 
-layer_data()
+tidy_titanic %>% 
+  ggplot() + 
+  facet_wrap(~Sex) + 
+  stat_prop()
 
 last_plot() + 
-  aes(within = NULL)
+  facet_grid(Sex ~ Survived)
 
-last_plot() %+% 
-  (Titanic %>% data.frame()) +
-  aes(wt = Freq)
+last_plot() + 
+  aes(prop_within = Sex)
+
 
 last_plot() + 
   facet_grid(rows = vars(Sex),
-             cols = vars(Age, Survived)) +
-  aes(within = Sex)
+             cols = vars(Age, Survived))
 
-both <- paste
+and <- paste  # not super careful category combos
 
 
 last_plot() +
-  aes(within = both(Survived, Age))
+  aes(prop_within = and(Survived, Age))
 
 layer_data()
 
+# implementation does not protect you from illogical specification. 
+# (prop within both Survived and age, but table only breaks down by age.)
 last_plot() + 
   facet_grid(rows = vars(Age))
+
+last_plot() +
+  aes(prop_within = Age)
+
+last_plot() + 
+  aes(prop_within = NULL)
 
 layer_data()
 
