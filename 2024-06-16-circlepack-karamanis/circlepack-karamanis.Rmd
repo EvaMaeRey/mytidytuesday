@@ -121,14 +121,25 @@ So we think this is a pretty general problem, so updating ggcirclepack to allow 
 
 pride_it %>% head()
 
+pride_it %>% 
+  mutate(render = rating == 5) %>% 
+  rename(id = campus_name,
+         area = students,
+         fill = rating) %>% 
+  ggcirclepack:::StatCirclepackcenter$compute_panel() %>% 
+  tibble()
+
 ggplot(pride_it) +
   aes(id = campus_name) + 
   aes(area = students) + 
   aes(fill = rating == 5) +
   geom_circlepack(linewidth = 0.2, color = "grey99") +
-  aes(label = after_stat(id %>% str_wrap(20)) ) +
+  # aes() +
   ggcirclepack:::geom_circlepack_text(
-    aes(render = rating == 5), 
+    aes(render = rating == 5, 
+        # label = after_stat(auto_label) %>% # auto label is not in StatCirclepack
+        #   str_wrap(20)
+        ), 
     lineheight = .8) + 
   facet_wrap(facets = vars(community_type)) + 
   scale_size(range = c(2,3))
@@ -139,16 +150,17 @@ ggplot(pride_it) +
 
 ```{r, error=T}
 last_plot() + 
-  aes(label = campus_name)  # may feel weird that this doesn't just work. 
+  aes(label = campus_name)  
 
 ggplot(pride_it) +
   aes(id = campus_name) + 
   aes(area = students) + 
   aes(fill = rating == 5) +
   geom_circlepack(linewidth = 0.2, color = "grey99") +
-  aes(label = after_stat(id %>% str_wrap(20)) ) +
   ggcirclepack:::stat_circlepack_center(
-    aes(render = rating == 5), 
+    aes(render = rating == 5, 
+        label = after_stat(auto_label %>% str_wrap(20))
+        ), 
     geom = ggrepel::GeomTextRepel,
     lineheight = .8) + 
   facet_wrap(facets = vars(community_type)) + 

@@ -97,6 +97,18 @@ timeline_df |>
   geom_timeline_basic()
 
 
+data.frame(time = hms::as_hms(c("08:30:00", 
+                                "09:20:00",
+                                "10:00:00")),
+           event = c("Arrival",
+                     "Drive to Bus Station",
+                     "Bus Arrives")) %>% 
+  ggplot() + 
+  aes(x = time, 
+      label = paste(time, event, sep = "\n")) + 
+  geom_timeline_basic() + 
+  labs(title = "Thurs 27")
+
 ```
 
 ## Experiment

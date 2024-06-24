@@ -1,0 +1,154 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+palmerpenguins::penguins %>% 
+  ggplot() + 
+  facet_wrap(~species) + 
+  geom_text(data = . %>% 
+              distinct(species) %>% 
+              mutate(a_note = ifelse(species == "Chinstrap", 
+                                     "sometext", NA)),
+            aes(label = a_note), x = I(.05), y = I(.95),
+            hjust = 0)
+
+
+stamp_text_facet <- function(facet, which, text = "sometext", 
+                             x = I(.05), y = I(.95), hjust = 0,...){
+  
+    geom_text(data = . %>% 
+              distinct({{facet}}) %>% 
+              mutate(a_note = ifelse({{facet}} %in% which, 
+                                    text, NA)),
+            aes(label = a_note), x = x, y = y,
+            hjust = hjust, ...)
+  
+  
+}
+
+palmerpenguins::penguins %>% 
+  ggplot() + 
+  facet_wrap(~species) +
+  stamp_text_facet(facet = species, 
+                   "Adelie", 
+                   "As you can see...")
+```
+
+
+```{r}
+
+# compute_layer_annotate <- function(data, i = 1, annotation = "Hello!", ...){
+#   
+#   data %>% 
+#     distinct(PANEL) %>% 
+#     filter(PANEL %in% i) ->
+#   panel_df
+#   
+#   data %>% 
+#     summarise(x = quantile(range(x),.5),
+#               y = quantile(range(y),.5)) %>% 
+#     crossing(panel_df) %>% 
+#     mutate(label = "annotation")
+#   
+# }
+# 
+# 
+# palmerpenguins::penguins %>% 
+#   remove_missing() %>% 
+#   rename(x = bill_length_mm, y = bill_depth_mm) %>% 
+#   mutate(PANEL = as.numeric(species)) %>% 
+#   compute_layer_annotate()
+# 
+# 
+# 
+# 
+# StatAnnotateLayer <- ggproto(`_class` = "StatAnnotateLayer",
+#                              `_inherit` = Stat,
+#                              compute_layer = compute_layer_annotate)
+# 
+# 
+# palmerpenguins::penguins %>% 
+#   remove_missing() %>% 
+#   ggplot() + 
+#   aes(x = bill_length_mm, y = bill_depth_mm) +
+#   geom_point() +
+#   facet_wrap(~species) + 
+#   layer(geom = "point", 
+#         stat = StatAnnotateLayer,
+#         position = "identity",
+#         params = list(color = "red"))
+# 
+# # layer_data(2)
+
+library(tidyverse)
+
+compute_annotation2_spot <- function(data, ...){
+
+  data %>% 
+    distinct(PANEL) %>%
+    filter(PANEL == 2)
+      
+  
+}
+
+########  groupwise computation via compute group ####
+StatAnnotateLayerPanel2 <- ggproto(`_class` = "StatAnnotateLayerPanel2",
+                         `_inherit` = Stat,
+                         compute_layer = compute_annotation2_spot)
+
+stamp_text_panel_two <- function(label = "Let's talk about\nthe 'TRUE' case",
+                      x = I(.025),
+                      y = I(.975),
+                      hjust = 0,
+                      vjust = 1){
+  
+  layer(geom = "text", 
+        stat = StatAnnotateLayerPanel2, 
+        position = "identity",
+        params = list(label = label,
+                      x = x,
+                      y = y,
+                      hjust = hjust,
+                      vjust = vjust)) 
+  
+} 
+
+ggplot(cars) + 
+  aes(speed, dist) + 
+  geom_point(size = .15) +
+  facet_wrap(facets = vars(speed > 10)) +
+  stamp_text_panel_two("Panel two is\nthe best panel!")
+
+
+```
+
+## Experiment
+
+```{r}
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
