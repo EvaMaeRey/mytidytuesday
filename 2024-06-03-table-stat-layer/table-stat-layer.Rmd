@@ -89,7 +89,7 @@ compute_layer_prop_within <- function(data = tidy_titanic, ...){
   group_sum_df
   
   data %>% 
-    left_join(group_sum_df, join_by = "prop_within") %>% 
+    left_join(group_sum_df, by = "prop_within") %>% 
     group_by(PANEL) %>% 
     summarize(sum = sum(.data$value),
               group_sum = mean(.data$group_sum)) %>% 
@@ -113,7 +113,7 @@ StatPropwithin <- ggproto(`_class` = "StatPropwithin",
                     `_inherit` = Stat,
                     compute_layer = compute_layer_prop_within)
 
-stat_prop <- function(geom = "text"){
+stat_tableprop <- function(geom = "text"){
   
     layer(geom = geom, 
         stat = StatPropwithin, 
@@ -124,7 +124,7 @@ stat_prop <- function(geom = "text"){
 tidy_titanic %>% 
   ggplot() + 
   facet_wrap(~Sex) + 
-  stat_prop()
+  stat_tableprop()
 
 last_plot() + 
   facet_grid(Sex ~ Survived)
@@ -135,7 +135,8 @@ last_plot() +
 
 last_plot() + 
   facet_grid(rows = vars(Sex),
-             cols = vars(Age, Survived))
+             cols = vars(Age, Survived)) + 
+  aes(prop_within = Sex)
 
 and <- paste  # not super careful category combos
 

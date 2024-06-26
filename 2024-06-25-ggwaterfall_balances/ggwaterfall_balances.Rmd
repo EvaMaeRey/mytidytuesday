@@ -1,0 +1,158 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+data.frame(event = c(
+                     "Sales", 
+                     "Refunds",
+                     "Payouts", 
+                     "Court Losses", 
+                     "Court Wins", 
+                     "Contracts", 
+                     "Fees"),
+           change = c(6400, -1100, 
+                      -100, -4200, 3800, 
+                      1400, -2800)) %>% 
+  mutate(event = factor(event)) ->
+flow_df
+  
+flow_df %>%   # maybe add factor in order if factor is not defined...
+  mutate(x_pos = event %>% as.numeric()) %>% 
+  arrange(x_pos) %>% 
+  mutate(balance = cumsum(c(0, 
+                            change[-nrow(.)]))) %>% 
+  mutate(flow = factor(sign(change))) ->
+balance_df
+
+ggplot(balance_df) +
+          geom_rect(
+            aes(xmin = x_pos - 0.45, 
+                xmax = x_pos + 0.45, 
+                ymin = balance, 
+                ymax = balance + change)) +
+          geom_text(aes(x = event, 
+                        y = pmin(balance, 
+                                 balance + change) - 50, 
+                        label = balance))
+
+
+```
+
+
+```{r}
+compute_panel_waterfall <- function(data, scales, width = .90,  starting = 0){
+  
+
+  if(is.null(starting)){starting <- 0}
+  
+  data %>% 
+  dplyr::mutate(x_pos = .data$x %>% as.numeric()) %>% 
+  dplyr::arrange(.data$x_pos) %>%
+  dplyr::mutate(balance = cumsum(c(starting,
+                             .data$change[-nrow(.)]))) %>%
+  dplyr::mutate(direction = factor(sign(.data$change))) %>% 
+  dplyr::mutate(xmin = .data$x_pos - width/2,
+                xmax = .data$x_pos + width/2,
+                ymin = .data$balance,
+                ymax = .data$balance + .data$change) %>% 
+  dplyr::mutate(x = .data$x_pos) %>% 
+  dplyr::mutate(y = .data$ymax) %>% 
+  dplyr::mutate(gain_loss = ifelse(.data$direction == 1, "gain", "loss"))
+  
+
+}
+
+### Step 1.1 Test compute 
+flow_df %>% 
+  rename(x = event) %>% 
+  compute_panel_waterfall(starting = 55) 
+
+## Step 2. Pass compute to ggproto 
+
+stat_waterfall <- function(geom = "rect", ...){
+  statexpress::stat_panel(compute_panel_waterfall, geom = geom, ...)
+}
+
+
+
+flow_df %>% 
+  ggplot() + 
+  aes(x = event, change = change) + 
+  stat_waterfall(starting = 1000, alpha = .7)
+
+
+compute_panel_starting_balance <- function(data, scales, starting = 0, width = .90){
+  
+  data.frame(x = 0, y = 0, ymin = 0, ymax = starting) %>% 
+    mutate(xmin = x -  width/2, 
+           xmax = x + width/2) %>% 
+    mutate(x = x - .75) # so that it renders
+  
+}
+
+stat_waterfall_start <- function(geom = "rect", ...){
+  
+  statexpress::stat_panel(compute_panel_starting_balance, geom, ...)
+  
+}
+
+
+last_plot() +
+  stat_waterfall_start(starting = 1000)
+
+
+compute_panel_final_balance <- function(data, scales, starting = 0, width = .90){
+  
+   compute_panel_waterfall(data, starting = starting, width = width) ->
+   data
+  
+  data %>% 
+    slice(nrow(data)) %>% 
+    mutate(ymin = ymax) %>% 
+    mutate(ymax = 0) %>% 
+    mutate(x = max(x) + 1) %>% 
+    mutate(xmin = x - width/2,
+           xmax = x + width/2) %>% 
+    mutate(x = x + .75) # spacing
+  
+}
+
+
+flow_df %>% 
+  rename(x = event, change = change) %>% 
+  compute_panel_final_balance() 
+  
+
+stat_waterfall_end <- function(geom = "rect", ...){
+  
+  statexpress::stat_panel(compute_panel_final_balance, geom, ...)
+  
+}
+
+last_plot() + 
+  stat_waterfall_end(starting = 1000)
+
+
+```
+
+
