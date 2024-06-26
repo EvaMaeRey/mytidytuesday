@@ -13,10 +13,10 @@ write prose!
 Initially, I planned to work on \#tidytuesday stuff, but I ended up just
 working on problems that arose in my work and personal interests.
 
-1.  [\_extensions/coatless/webr/qwebr-monaco-editor-init.html](https://evamaerey.github.io/mytidytuesday/_extensions/coatless/webr/qwebr-monaco-editor-init.html)
-    **[source](https://github.com/evamaerey/mytidytuesday/blob/master/_extensions/coatless/webr/qwebr-monaco-editor-init.Rmd)**
-2.  [2024-06-26-webr/webr2.html](https://evamaerey.github.io/mytidytuesday/2024-06-26-webr/webr2.html)
+1.  [2024-06-26-webr/webr2.html](https://evamaerey.github.io/mytidytuesday/2024-06-26-webr/webr2.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-06-26-webr/webr2.Rmd)**
+2.  [2024-06-26-webr/\_extensions/coatless/webr/qwebr-monaco-editor-init.html](https://evamaerey.github.io/mytidytuesday/2024-06-26-webr/_extensions/coatless/webr/qwebr-monaco-editor-init.html)
+    **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-06-26-webr/_extensions/coatless/webr/qwebr-monaco-editor-init.Rmd)**
 3.  [2024-06-26-webr/Untitled.html](https://evamaerey.github.io/mytidytuesday/2024-06-26-webr/Untitled.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-06-26-webr/Untitled.Rmd)**
 4.  [2024-06-25-ggwaterfall_balances/ggwaterfall_balances.html](https://evamaerey.github.io/mytidytuesday/2024-06-25-ggwaterfall_balances/ggwaterfall_balances.html)
