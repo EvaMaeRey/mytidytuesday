@@ -33,48 +33,41 @@ library(tidyverse)
 ggtable <- function(data){
   
   ggplot(data) + 
-    aes(x = "All", y = "All") + 
+    aes(x = 0, y = 0) + 
     geom_count() ->>
   p
   
-  layer_data(p)
+  layer_data(p) %>% 
+    select(n)
   
 }
 
+
+ggtable(palmerpenguins::penguins)
 
 set_cols <- function(pipe_spacer, cols){
   
   p + 
-    aes(x = {{cols}}) ->>
+    aes(cols = {{cols}}) ->>
   p
 
-  x_values_df <- layer_data(p, i = 1) %>%  .[,c("x", "group")] |> distinct()
-  x_var_name <- p$mapping$x |> capture.output() %>% .[2] %>% str_extract("\\^.+") %>% str_remove("\\^")
-  x_var_df <- p$data[x_var_name] %>% distinct()
-  names(x_var_df) <- "x_var"
-  x_var_df <- mutate(x_var_df, group = as.numeric(x_var))
-  x_numeric_cat_crosswalk <- left_join(x_values_df, x_var_df, by = join_by(group))
+ layer_data(p) #%>% 
+     # select(any_of(c("rows", "cols", "n"))) ->
+  # tp            
   
+  # tp
   
-  y_values_df <- layer_data(p, i = 1) %>%  .[,c("y", "group")] |> distinct()
-  y_var_name <- p$mapping$y |> capture.output() %>% .[2] %>% str_extract("\\^.+") %>% str_remove("\\^")
-  y_var_df <- p$data[y_var_name] %>% distinct()
-  names(y_var_df) <- "y_var"
-  y_var_df <- mutate(y_var_df, group = as.numeric(y_var))
-  y_numeric_cat_crosswalk <- left_join(y_values_df, y_var_df, by = join_by(group))
-  
-  # print(p)
-   layer_data(p) %>% 
-     mutate(x = factor(x, 
-                       levels = x_numeric_cat_crosswalk$group, 
-                       labels = x_numeric_cat_crosswalk$x_var)) %>% 
-    mutate(y = factor(y,  
-                      levels = y_numeric_cat_crosswalk$group, 
-                      labels = y_numeric_cat_crosswalk$y_var)) %>% 
-     select(x, y, n) %>% 
-     pivot_wider(names_from = x, values_from = n)
+  # if(!is.null(tplong$cols)) {
+  #   
+  #     tplong %>% 
+  #       pivot_wider(names_from = cols, values_from = n) ->
+  #   tp
+  # }
   
 }
+
+ggtable(data = penguins) %>% 
+  set_cols(species)
 
 set_rows <- function(pipe_spacer, rows){
   
@@ -82,27 +75,10 @@ set_rows <- function(pipe_spacer, rows){
     aes(y = {{rows}}) ->>
   p
   
-  x_values_df <- layer_data(p, i = 1) %>%  .[,c("x", "group")] |> distinct()
-  x_var_name <- p$mapping$x |> capture.output() %>% .[2] %>% str_extract("\\^.+") %>% str_remove("\\^")
-  x_var_df <- p$data[x_var_name] %>% distinct()
-  names(x_var_df) <- "x_var"
-  x_var_df <- mutate(x_var_df, group = as.numeric(x_var))
-  x_numeric_cat_crosswalk <- left_join(x_values_df, x_var_df, by = join_by(group))
-  
-  y_values_df <- layer_data(p, i = 1) %>%  .[,c("y", "group")] |> distinct()
-  y_var_name <- p$mapping$y |> capture.output() %>% .[2] %>% str_extract("\\^.+") %>% str_remove("\\^")
-  y_var_df <- p$data[y_var_name] %>% distinct()
-  names(y_var_df) <- "y_var"
-  y_var_df <- mutate(y_var_df, group = as.numeric(y_var))
-  y_numeric_cat_crosswalk <- left_join(y_values_df, y_var_df, by = join_by(group))
+
   
   layer_data(p) %>% 
-    mutate(x = factor(x,  
-                      levels = x_numeric_cat_crosswalk$group, 
-                      labels = x_numeric_cat_crosswalk$x_var)) %>% 
-    mutate(y = factor(y,  
-                      levels = y_numeric_cat_crosswalk$group, 
-                      labels = y_numeric_cat_crosswalk$y_var)) %>% 
+
     select(x, y, n) %>% 
     pivot_wider(names_from = x, values_from = n)
   
@@ -111,8 +87,8 @@ set_rows <- function(pipe_spacer, rows){
 
 library(palmerpenguins)
 
-ggtable(penguins) 
-  set_rows(species) 
+ggtable(data =penguins) %>% 
+  set_rows(species) %>% 
   set_cols(island)
 
 
@@ -124,3 +100,46 @@ ggtable(penguins)
 
 
 ## Closing remarks, Other Relevant Work, Caveats
+
+
+```{r, eval = F}
+
+    mutate(x = factor(x,  
+                      levels = x_numeric_cat_crosswalk$group, 
+                      labels = x_numeric_cat_crosswalk$x_var)) %>% 
+    mutate(y = factor(y,  
+                      levels = y_numeric_cat_crosswalk$group, 
+                      labels = y_numeric_cat_crosswalk$y_var)) %>% 
+
+  x_values_df <- layer_data(p, i = 1) %>%  .[,c("x", "group")] |> distinct()
+  x_var_name <- p$mapping$x |> capture.output() %>% .[2] %>% str_extract("\\^.+") %>% str_remove("\\^")
+  x_var_df <- p$data[x_var_name] %>% distinct()
+  names(x_var_df) <- "x_var"
+  x_var_df <- mutate(x_var_df, group = as.numeric(x_var))
+  x_numeric_cat_crosswalk <- left_join(x_values_df, x_var_df, by = join_by(group))
+  
+  y_values_df <- layer_data(p, i = 1) %>%  .[,c("y", "group")] |> distinct()
+  y_var_name <- p$mapping$y |> capture.output() %>% .[2] %>% str_extract("\\^.+") %>% str_remove("\\^")
+  y_var_df <- p$data[y_var_name] %>% distinct()
+  names(y_var_df) <- "y_var"
+  y_var_df <- mutate(y_var_df, group = as.numeric(y_var))
+  y_numeric_cat_crosswalk <- left_join(y_values_df, y_var_df, by = join_by(group))
+
+  
+    x_values_df <- layer_data(p, i = 1) %>%  .[,c("x", "group")] |> distinct()
+  x_var_name <- p$mapping$x |> capture.output() %>% .[2] %>% str_extract("\\^.+") %>% str_remove("\\^")
+  x_var_df <- p$data[x_var_name] %>% distinct()
+  names(x_var_df) <- "x_var"
+  x_var_df <- mutate(x_var_df, group = as.numeric(x_var))
+  x_numeric_cat_crosswalk <- left_join(x_values_df, x_var_df, by = join_by(group))
+  
+  
+  y_values_df <- layer_data(p, i = 1) %>%  .[,c("y", "group")] |> distinct()
+  y_var_name <- p$mapping$y |> capture.output() %>% .[2] %>% str_extract("\\^.+") %>% str_remove("\\^")
+  y_var_df <- p$data[y_var_name] %>% distinct()
+  names(y_var_df) <- "y_var"
+  y_var_df <- mutate(y_var_df, group = as.numeric(y_var))
+  y_numeric_cat_crosswalk <- left_join(y_values_df, y_var_df, by = join_by(group))
+  
+```
+

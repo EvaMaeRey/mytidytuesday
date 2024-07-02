@@ -1,0 +1,84 @@
+---
+title: "demo"
+subtitle: ""
+author: ""
+output:
+  xaringan::moon_reader:
+    seal: FALSE
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r, include = F}
+options(knitr.duplicate.label = "allow")
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F)
+library(flipbookr)
+library(tidyverse)
+load("current_image.Rdata")
+```
+
+
+```{r, echo = F, eval = FALSE , message = F, warning = F}
+xaringanExtra::use_share_again()
+```
+
+
+```{r the_chunk, include = F}
+tidy_titanic %>% 
+  ggplot() + 
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid = element_blank(),
+        text = element_text(size = 22)) +
+  guides(fill = "none") +
+  stat_tableprop(geom = "tile") + 
+  stat_tableprop() + 
+  facet_grid(~ Sex) + # specify table layout
+  facet_grid(Sex ~ Survived) + 
+  aes(label = after_stat(prop_label)) +
+  aes(label = after_stat(percent_label)) + 
+  aes(prop_within = Sex) + 
+  aes(label = after_stat(count_percent_label)) +
+  aes(label = after_stat(percent_count_label)) +
+  facet_grid(rows = vars(Sex),
+             cols = vars(Age, Survived)) + 
+  aes(prop_within = Sex) + 
+  aes(prop_within = Age) +
+  facet_grid(rows = vars(Age)) +
+  aes(prop_within = NULL) + 
+  aes(label = after_stat(sum))
+```
+
+`r chunk_reveal(chunk_name = "the_chunk", break_type = "auto")`
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 80%%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+

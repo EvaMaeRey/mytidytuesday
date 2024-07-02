@@ -1,5 +1,5 @@
 ---
-title: "another experiment"
+title: "a ggplot2 layer tabulation demonstration"
 author: "Evangeline Reynolds"
 date: "`r Sys.Date()`"
 output: 
@@ -10,11 +10,7 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 options(tidyverse.quiet = TRUE)
-
 ```
-
-
-
 
 ## Save information about the entire data set (not panel-wise) in compute_layer_prop.
 
@@ -75,29 +71,42 @@ Titanic %>%
   uncount(Freq) ->
 tidy_titanic
 
-compute_layer_prop_within <- function(data = tidy_titanic, ...){
+compute_layer_prop_by <- function(data = tidy_titanic, ...){
   
   if(is.null(data$value)){data$value <- 1}
-  if(is.null(data$prop_within)){data$prop_within <- 1}
+  if(is.null(data$prop_by)){data$prop_by <- 1}
   if(is.null(data$wt)){data$wt <- 1}
   
   data$value <- data$value * data$wt
   
   data %>% 
-    group_by(prop_within) %>% 
+    group_by(prop_by) %>% 
     summarize(group_sum = sum(.data$value)) ->
   group_sum_df
   
   data %>% 
-    left_join(group_sum_df, by = "prop_within") %>% 
-    group_by(PANEL) %>% 
+    left_join(group_sum_df, by = "prop_by") %>% 
+    group_by(PANEL, prop_by) %>% 
     summarize(sum = sum(.data$value),
               group_sum = mean(.data$group_sum)) %>% 
     mutate(prop = sum/group_sum) %>% 
-    mutate(label = round(100 * prop, 1) %>% paste0("%")) %>% 
-    mutate(x = 0, y = 0)
+    mutate(prop_label = round(prop, 3)) %>% 
+    mutate(percent_label = paste0(prop_label * 100, "%")) %>% 
+    mutate(count_percent_label = paste0(sum, "\n(", percent_label, ")" )) %>% 
+    mutate(percent_count_label = paste0(percent_label, "\n(", sum, ")" )) %>% 
+    mutate(x = 0, y = 0) 
 
 }
+
+
+aes_label_count_percent <- function(){ 
+  aes(label = after_stat(paste0(sum, "\n(", percent_label, ")" ))) 
+  }
+
+
+aes_label_percent_count <- function(){
+  aes(label = after_stat(paste0(percent_label, "\n(", sum, ")" ))) 
+  }
 
 
 # test compute layer
@@ -106,59 +115,131 @@ tidy_titanic %>%
   mutate(PANEL = paste(as.numeric(Sex), 
                        as.numeric(Survived), sep = "-")) %>%
   ungroup() %>% 
-  compute_layer_prop_within()
+  compute_layer_prop_by()
 
 
-StatPropwithin <- ggproto(`_class` = "StatPropwithin",
+StatPropby <- ggproto(`_class` = "StatPropby",
                     `_inherit` = Stat,
-                    compute_layer = compute_layer_prop_within)
+                    compute_layer = compute_layer_prop_by,
+                    default_aes = aes(label = after_stat(sum),
+                                      fill = after_stat(prop_by)))
 
 stat_tableprop <- function(geom = "text"){
   
     layer(geom = geom, 
-        stat = StatPropwithin, 
-        position = "identity")
+        stat = StatPropby, 
+        position = "identity",
+        params = list(size = 8, color = "whitesmoke"))
   
 }
-
-tidy_titanic %>% 
-  ggplot() + 
-  facet_wrap(~Sex) + 
-  stat_tableprop()
-
-last_plot() + 
-  facet_grid(Sex ~ Survived)
-
-last_plot() + 
-  aes(prop_within = Sex)
-
-
-last_plot() + 
-  facet_grid(rows = vars(Sex),
-             cols = vars(Age, Survived)) + 
-  aes(prop_within = Sex)
 
 and <- paste  # not super careful category combos
 
 
-last_plot() +
-  aes(prop_within = and(Survived, Age))
+```
+
+
+```{r demo}
+tidy_titanic %>% 
+  ggplot() + 
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid = element_blank(),
+        text = element_text(size = 22)) +
+  guides(fill = "none") +
+  stat_tableprop(geom = "tile") + 
+  stat_tableprop() + 
+  facet_grid(~ Sex) + # specify table layout
+  facet_grid(Sex ~ Survived) + 
+  aes(label = after_stat(prop_label)) +
+  aes(label = after_stat(percent_label)) + 
+  aes(prop_by = Sex) + 
+  aes(label = after_stat(count_percent_label)) +
+  aes(label = after_stat(percent_count_label)) +
+  facet_grid(rows = vars(Sex),
+             cols = vars(Age, Survived)) + 
+  aes(prop_by = Sex) + 
+  aes(prop_by = Age) +
+  facet_grid(rows = vars(Age)) +
+  aes(prop_by = NULL) + 
+  aes(label = after_stat(sum))
+
 
 layer_data()
+```
 
-# implementation does not protect you from illogical specification. 
-# (prop within both Survived and age, but table only breaks down by age.)
+```{r}
+knitr::knit_exit()
+
+
+```
+
+
+
+```{r}
+ggtable <- function(data){
+
+data %>% 
+  ggplot() + 
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid = element_blank(),
+        text = element_text(size = 22)) +
+  guides(fill = "none") +
+  stat_tableprop(geom = "tile") + 
+  stat_tableprop()
+  
+}
+
+
+display <- function(var){
+  
+  aes(label = after_stat({{vars}}))
+  
+}
+
+prop_scope <- function(var){
+  
+  aes(prop_by = {{vars}})
+  
+}
+```
+
+
+
+```{r demo2}
+tidy_titanic %>% 
+  ggtable() + 
+  facet_grid(~ Sex) + # specify table layout
+  facet_grid(Sex ~ Survived) + 
+  display(prop_label) +
+  display(percent_label) + 
+  prop_scope(Sex) + 
+  aes_label_count_percent() +
+  prop_scope(Survived) + 
+  aes_label_percent_count() + 
+  facet_grid(rows = vars(Sex),
+             cols = vars(Age, Survived)) + 
+  prop_scope(Sex) + 
+  prop_scope(Age) +
+  facet_grid(rows = vars(Age)) +
+  prop_scope(NULL)
+
+
+```
+
+
+```{r, eval = F}
+flipbookr:::embed_flipbook("demo", font_size = "80%")
+```
+
+
+```{r}
 last_plot() + 
-  facet_grid(rows = vars(Age))
-
-last_plot() +
-  aes(prop_within = Age)
-
-last_plot() + 
-  aes(prop_within = NULL)
-
-layer_data()
-
+  stat_tableprop(geom = "tile") + 
+  aes(fill = after_stat(prop)) +
+  scale_fill_gradient2(low = alpha("magenta4", .2), 
+                       high = alpha("magenta4", .6))
 ```
 
 

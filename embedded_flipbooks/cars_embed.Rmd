@@ -1,0 +1,115 @@
+---
+title: "cars"
+subtitle: ""
+author: ""
+output:
+  xaringan::moon_reader:
+    seal: FALSE
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r, include = F}
+options(knitr.duplicate.label = "allow")
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F)
+library(flipbookr)
+library(tidyverse)
+load("current_image.Rdata")
+```
+
+
+```{r, echo = F, eval = FALSE , message = F, warning = F}
+xaringanExtra::use_share_again()
+```
+
+
+```{r the_chunk, include = F}
+library(tidyverse)
+library(ggcirclepack)
+read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-02-20/isc_grants.csv") |>
+  ggplot() + 
+  aes(area = funded, 
+      id = proposed_by %>% str_replace(" ", "\n"), 
+      fill = group) + 
+  geom_circlepack(fun = mean) + 
+  geom_circlepack_text(fun = mean, lineheight = .8,
+                       color = "whitesmoke") +
+  coord_equal() + 
+  aes(text = title) + 
+  aes(label = after_stat(paste(id,"\n", area))) + 
+  facet_wrap(~year) + 
+  ggstamp::theme_void_fill("whitesmoke") + 
+  scale_size(range = c(-3, 5), transform = "sqrt")
+
+
+read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-02-20/isc_grants.csv") |>
+  ggplot() + 
+  aes(area = funded, 
+      id = "All") + 
+  geom_circlepack(fun = mean) + 
+  geom_circlepack_text(fun = mean, 
+                       lineheight = .8,
+                       color = "whitesmoke")  + 
+  aes(label = round(after_stat(area))) +
+  coord_equal()
+
+last_plot() + 
+  facet_wrap(~year)
+
+last_plot() + 
+  aes(fill = group)
+
+last_plot() + 
+  aes(id = proposed_by)
+
+last_plot() + 
+  aes(label = str_wrap(after_stat(paste(id, round(area))), 5))
+  
+
+
+read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-02-20/isc_grants.csv") |>
+  ggplot() + 
+  aes(area = funded, 
+      id = "All") + 
+  geom_circlepack() + 
+  geom_circlepack_text(
+                       lineheight = .8,
+                       color = "whitesmoke")  + 
+  aes(label = round(after_stat(area))) +
+  coord_equal()
+
+```
+
+`r chunk_reveal(chunk_name = "the_chunk", break_type = "auto")`
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 120%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+

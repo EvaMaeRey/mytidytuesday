@@ -1,0 +1,221 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+eval_out <- function(){
+  
+      out <- 'tidypivot::pivot_helper(data, rows, cols, value, wt, fun)'
+      
+      str_replace_or_null <- function(x, pattern, replacement){
+        
+        if(is.null(replacement)){x %>% str_replace(pattern, 'NULL')}
+        else{x %>% str_replace(pattern, replacement)}
+        
+      }
+      
+      out <- str_replace(out, "data", the_tp$data)
+      out <- str_replace_or_null(out, "rows", the_tp$rows)
+      out <- str_replace_or_null(out, "cols", the_tp$cols)
+      out <- str_replace_or_null(out, "fun", the_tp$fun)
+      out <- str_replace_or_null(out, "value", the_tp$value)
+      out <- str_replace_or_null(out, "wt", the_tp$wt)
+      out <- str_replace_or_null(out, "fun", the_tp$fun)
+
+      eval(parse(text = out))    # hacky?
+  
+}
+
+
+the_tp <- list(data = NULL, rows = NULL, cols = NULL, 
+     value = NULL, wt = NULL, fun = NULL, out = NULL)
+
+update_tp <- function(data = NULL, rows = NULL, cols = NULL, 
+     value = NULL, wt = NULL, fun = NULL, out = NULL){
+    
+  if(is.null(the_tp$data)){the_tp$data <- data}
+  if(is.null(the_tp$rows)){the_tp$rows <- rows}
+  if(is.null(the_tp$cols)){the_tp$cols <- cols}
+  if(is.null(the_tp$fun)){the_tp$fun <- fun}
+  if(is.null(the_tp$value)){the_tp$value <- value}
+  if(is.null(the_tp$wt)){the_tp$wt <- wt}
+
+  the_tp <<- the_tp
+  the_tp$out
+  
+  eval_out()
+  
+}
+
+update_tp("mtcars")
+
+update_tp(rows = "cyl")
+```
+
+
+
+
+```{r, eval = T}
+clear_table <- function(){
+  
+    the_tp <<- list(data = NULL, rows = NULL, cols = NULL, 
+     value = NULL, wt = NULL, fun = NULL, out = NULL)
+  
+}
+
+
+ggtable <- function(data){
+  
+  the_tp <<- list(data = NULL, rows = NULL, cols = NULL, 
+     value = NULL, wt = NULL, fun = NULL, out = NULL)
+  
+  update_tp(deparse(substitute(data)))
+  
+}
+
+ggtable(mtcars)
+
+
+set_rows <- function(placekeeper, rows){
+  
+    update_tp(rows = deparse(substitute(rows)))
+  
+}
+
+the_tp
+
+ggtable(mtcars) |> # this doesn't seem to 'take' (reinitiate) in piped setting
+  set_rows(cyl)
+
+the_tp
+
+set_cols <- function(placekeeper, cols){
+  
+    update_tp(cols = deparse(substitute(cols)))
+  
+}
+
+ggtable(mtcars) ; the_tp
+ggtable(mtcars) %>%  # this doesn't seem to 'take' (reinitiate) in piped setting
+  set_cols(am)
+
+the_tp
+
+ggtable(mtcars) ; the_tp
+ggtable(mtcars) %>%  # this doesn't seem to 'take' (reinitiate) in piped setting
+  set_rows(cyl) |>
+  set_cols(am) 
+
+the_tp
+
+```
+
+
+
+
+```{r, eval = F}
+Pivot <- R6Class("Pivot",
+  public = list(
+    data = NULL,
+    rows = NULL,
+    cols = NULL,
+    value = NULL,
+    wt = NULL,
+    fun = NULL,
+    initialize = function(data = NULL, rows = NULL, cols = NULL, 
+                          value = NULL, wt = NULL,
+                          fun = NULL){
+      self$data <- data
+      self$rows <- rows
+      self$cols <- cols
+      self$value <- value
+      self$wt <- wt
+      self$fun <- fun
+      
+      theData <<- data   # hacky?
+
+    }, 
+    set_data = function(val){
+      self$data <- val
+      
+      theData <<- self$data  # hacky?
+
+    },
+    set_rows = function(val){
+      self$rows <- val
+    },
+    set_cols = function(val){
+      self$cols <- val
+    },
+    set_value = function(val){
+      self$value <- val
+    },
+    set_wt = function(val){
+      self$wt <- val
+    },
+    set_fun = function(val){
+      self$fun <- val
+    },
+    return_table_code = function(){
+
+      # out <- 'pivot_count(data = theData, rows, cols)' 
+      
+      out <- 'tidypivot::pivot_helper(data = theData, rows, cols, value, wt, fun)'
+      
+      str_replace_or_null <- function(x, pattern, replacement){
+        
+        if(is.null(replacement)){x %>% str_replace(pattern, 'NULL')}
+        else{x %>% str_replace(pattern, replacement)}
+        
+      }
+      
+      # out <- str_replace(out, "data", self$data)
+      out <- str_replace_or_null(out, "rows", self$rows)
+      out <- str_replace_or_null(out, "cols", self$cols)
+      out <- str_replace_or_null(out, "fun", self$fun)
+      out <- str_replace_or_null(out, "value", self$value)
+      out <- str_replace_or_null(out, "wt", self$wt)
+      out <- str_replace_or_null(out, "fun", self$fun)
+
+      eval(parse(text = out))    # hacky?
+      
+    }
+    
+    ),
+  
+  
+  )
+
+
+
+```
+
+## Experiment
+
+```{r}
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

@@ -1,0 +1,203 @@
+---
+title: "StatTable: flexible, declarative table creation using ggplot2"
+subtitle: "An early 'compute_layer' exercize"
+author: "Gina Reynolds"
+output:
+  xaringan::moon_reader:
+    seal: FALSE
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r, include = F}
+options(knitr.duplicate.label = "allow")
+knitr::opts_chunk$set(fig.width = 7, message = FALSE, warning = FALSE, comment = "", cache = F)
+library(flipbookr)
+library(tidyverse)
+load("current_image.Rdata")
+```
+
+---
+
+# Step 0: Use base ggplot2
+
+---
+
+
+```{r}
+
+
+
+
+```
+
+
+---
+
+
+```{r}
+Titanic %>% 
+  data.frame() %>%  
+  uncount(Freq) ->
+tidy_titanic
+
+tidy_titanic %>% 
+  group_by(Sex, Survived) %>%  # cross tab def
+  count() %>% 
+  group_by(Sex) %>% # scope for proportion
+  mutate(prop = n/sum(n)) %>% 
+  ggplot() + 
+  facet_grid(rows = vars(Sex), cols = vars(Survived)) + 
+  geom_text(aes(x = 0, y = 0, label = round(prop, 3)))
+```
+
+
+---
+
+
+# Step 1: Define compute!
+
+
+---
+
+We will have our cells within ggplot2 panels (facets).  Another route is x and y to define cells, but facet_grid allows you to include an arbitrary number of panels.
+
+---
+
+
+```{r, eval = T, include = F}
+library(tidyverse)
+
+compute_layer_prop_by <- function(data, ...){
+  
+  if(is.null(data$value)){data$value <- 1}
+  if(is.null(data$prop_by)){data$prop_by <- 1}
+  if(is.null(data$wt)){data$wt <- 1}
+  
+  data$value <- data$value * data$wt
+  
+  data %>% 
+    group_by(prop_by) %>% 
+    summarize(group_sum = sum(.data$value)) ->
+  group_sum_df
+  
+  data %>% 
+    left_join(group_sum_df, by = "prop_by") %>% 
+    group_by(PANEL, prop_by) %>% 
+    summarize(sum = sum(.data$value),
+              group_sum = mean(.data$group_sum)) %>% 
+    mutate(prop = sum/group_sum) %>% 
+    mutate(prop_label = round(prop, 3)) %>% 
+    mutate(percent_label = paste0(prop_label * 100, "%")) %>% 
+    mutate(count_percent_label = paste0(sum, "\n(", percent_label, ")" )) %>% 
+    mutate(percent_count_label = paste0(percent_label, "\n(", sum, ")" )) %>% 
+    mutate(x = 0, y = 0) 
+
+}
+```
+
+---
+
+# Step 1.b - test
+
+
+```{r}
+tidy_titanic %>% 
+  mutate(prop_by = Sex) %>% 
+  mutate(PANEL = paste(as.numeric(Sex), 
+                       as.numeric(Survived), 
+                       sep = "-")) %>%
+  ungroup() %>% 
+  compute_layer_prop_by()
+```
+
+
+```{r}
+StatPropby <- ggproto(`_class` = "StatPropby",
+                    `_inherit` = Stat,
+                    compute_layer = compute_layer_prop_by,
+                    default_aes = aes(label = after_stat(sum)))
+```
+
+
+```{r}
+stat_table <- function(geom = "text"){
+  
+    layer(geom = geom, 
+        stat = StatPropby, 
+        position = "identity",
+        params = list(size = 8, color = "whitesmoke"))
+  
+}
+
+geom_table_text <- stat_table
+geom_table_tile <- function(){stat_table(geom = "tile")}
+
+
+and <- paste  # not super careful category combos
+```
+
+
+```{r, echo = F, eval = FALSE , message = F, warning = F}
+xaringanExtra::use_share_again()
+```
+
+
+```{r the_chunk, include = F}
+tidy_titanic %>% 
+  ggplot() + 
+  facet_grid(~Sex) + # specify table layout
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid = element_blank(),
+        text = element_text(size = 22)) +
+  geom_table_tile() + 
+  geom_table_text() + 
+  facet_grid(Sex ~ Survived) + 
+  aes(label = after_stat(prop_label)) +
+  aes(label = after_stat(percent_label)) + 
+  aes(prop_by = Sex) + 
+  aes(fill = after_stat(prop_by)) + 
+  aes_label_count_percent() +
+  aes_label_percent_count() + 
+  facet_grid(rows = vars(Sex),
+             cols = vars(Age, Survived)) + 
+  aes(prop_by = NULL) +
+  facet_grid(rows = vars(Age)) 
+```
+
+---
+
+`r chunk_reveal(chunk_name = "the_chunk", break_type = "auto", widths = c(3,2))`
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 80%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+

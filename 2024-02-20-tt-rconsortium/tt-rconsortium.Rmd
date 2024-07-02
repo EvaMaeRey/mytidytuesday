@@ -19,132 +19,176 @@ options(tidyverse.quiet = TRUE)
 
 
 
-```{r}
-library(tidyverse)
+<!-- ```{r} -->
+<!-- library(tidyverse) -->
 
-# Step 1
-compute_panel_circlepack <- function(data, scales){
+<!-- # Step 1 -->
+<!-- compute_panel_circlepack <- function(data, scales){ -->
 
-  data_w_id <- data |>
-    mutate(id = row_number())
+<!--   data_w_id <- data |> -->
+<!--     mutate(id = row_number()) -->
 
-  if(is.null(data$area)){
+<!--   if(is.null(data$area)){ -->
 
-    data_w_id <- data_w_id |>
-      mutate(area = 1)
+<!--     data_w_id <- data_w_id |> -->
+<!--       mutate(area = 1) -->
 
-  }
+<!--   } -->
 
-  data_w_id |>
-    pull(area) |>
-    packcircles::circleProgressiveLayout(
-      sizetype = 'area') |>
-    packcircles::circleLayoutVertices(npoints = 50) |>
-    left_join(data_w_id) |>
-    mutate(group = id)
+<!--   data_w_id |> -->
+<!--     pull(area) |> -->
+<!--     packcircles::circleProgressiveLayout( -->
+<!--       sizetype = 'area') |> -->
+<!--     packcircles::circleLayoutVertices(npoints = 50) |> -->
+<!--     left_join(data_w_id) |> -->
+<!--     mutate(group = id) -->
 
-}
+<!-- } -->
 
-data.frame(id = 1) |>
-  compute_panel_circlepack()
-
-
-compute_panel_circlepack_centers <- function(data, scales){
-
-  data_w_id <- data |>
-    mutate(id = row_number())
-
-  if(is.null(data$area)){
-
-    data_w_id <- data_w_id |>
-      mutate(area = 1)
-
-  }
-
-  data_w_id |>
-    pull(area) |>
-    packcircles::circleProgressiveLayout(
-      sizetype = 'area') |>
-    mutate(id = row_number()) |>
-    left_join(data_w_id) |>
-    mutate(group = id)
-
-}
-
-data.frame(id = 1) |>
-  compute_panel_circlepack_centers()
+<!-- data.frame(id = 1) |> -->
+<!--   compute_panel_circlepack() -->
 
 
-StatCirclepack <- ggplot2::ggproto(`_class` = "StatCirclepack",
-                                  `_inherit` = ggplot2::Stat,
-                                  required_aes = c("id"),
-                                  compute_panel = compute_panel_circlepack#,
-                                  )
+<!-- compute_panel_circlepack_centers <- function(data, scales){ -->
+
+<!--   data_w_id <- data |> -->
+<!--     mutate(id = row_number()) -->
+
+<!--   if(is.null(data$area)){ -->
+
+<!--     data_w_id <- data_w_id |> -->
+<!--       mutate(area = 1) -->
+
+<!--   } -->
+
+<!--   data_w_id |> -->
+<!--     pull(area) |> -->
+<!--     packcircles::circleProgressiveLayout( -->
+<!--       sizetype = 'area') |> -->
+<!--     mutate(id = row_number()) |> -->
+<!--     left_join(data_w_id) |> -->
+<!--     mutate(group = id) -->
+
+<!-- } -->
+
+<!-- data.frame(id = 1) |> -->
+<!--   compute_panel_circlepack_centers() -->
 
 
-StatCirclepackcenter <- ggplot2::ggproto(`_class` = "StatCirclepackcenter",
-                                  `_inherit` = ggplot2::Stat,
-                                  required_aes = c("id"),
-                                  compute_panel = compute_panel_circlepack_centers#,
-                                  )
-
-geom_circlepack <- function(mapping = NULL, data = NULL,
-                           position = "identity", na.rm = FALSE,
-                           show.legend = NA,
-                           inherit.aes = TRUE, ...) {
-  ggplot2::layer(
-    stat = StatCirclepack, # proto object from Step 2
-    geom = ggplot2::GeomPolygon, # inherit other behavior
-    data = data,
-    mapping = mapping,
-    position = position,
-    show.legend = show.legend,
-    inherit.aes = inherit.aes,
-    params = list(na.rm = na.rm, ...)
-  )
-}
+<!-- StatCirclepack <- ggplot2::ggproto(`_class` = "StatCirclepack", -->
+<!--                                   `_inherit` = ggplot2::Stat, -->
+<!--                                   required_aes = c("id"), -->
+<!--                                   compute_panel = compute_panel_circlepack#, -->
+<!--                                   ) -->
 
 
-geom_circlepack_text <- function(mapping = NULL, data = NULL,
-                           position = "identity", na.rm = FALSE,
-                           show.legend = NA,
-                           inherit.aes = TRUE, ...) {
-  ggplot2::layer(
-    stat = StatCirclepackcenter, # proto object from Step 2
-    geom = ggplot2::GeomText, # inherit other behavior
-    data = data,
-    mapping = mapping,
-    position = position,
-    show.legend = show.legend,
-    inherit.aes = inherit.aes,
-    params = list(na.rm = na.rm, ...)
-  )
-}
+<!-- StatCirclepackcenter <- ggplot2::ggproto(`_class` = "StatCirclepackcenter", -->
+<!--                                   `_inherit` = ggplot2::Stat, -->
+<!--                                   required_aes = c("id"), -->
+<!--                                   compute_panel = compute_panel_circlepack_centers#, -->
+<!--                                   ) -->
+
+<!-- geom_circlepack <- function(mapping = NULL, data = NULL, -->
+<!--                            position = "identity", na.rm = FALSE, -->
+<!--                            show.legend = NA, -->
+<!--                            inherit.aes = TRUE, ...) { -->
+<!--   ggplot2::layer( -->
+<!--     stat = StatCirclepack, # proto object from Step 2 -->
+<!--     geom = ggplot2::GeomPolygon, # inherit other behavior -->
+<!--     data = data, -->
+<!--     mapping = mapping, -->
+<!--     position = position, -->
+<!--     show.legend = show.legend, -->
+<!--     inherit.aes = inherit.aes, -->
+<!--     params = list(na.rm = na.rm, ...) -->
+<!--   ) -->
+<!-- } -->
 
 
+<!-- geom_circlepack_text <- function(mapping = NULL, data = NULL, -->
+<!--                            position = "identity", na.rm = FALSE, -->
+<!--                            show.legend = NA, -->
+<!--                            inherit.aes = TRUE, ...) { -->
+<!--   ggplot2::layer( -->
+<!--     stat = StatCirclepackcenter, # proto object from Step 2 -->
+<!--     geom = ggplot2::GeomText, # inherit other behavior -->
+<!--     data = data, -->
+<!--     mapping = mapping, -->
+<!--     position = position, -->
+<!--     show.legend = show.legend, -->
+<!--     inherit.aes = inherit.aes, -->
+<!--     params = list(na.rm = na.rm, ...) -->
+<!--   ) -->
+<!-- } -->
+
+
+<!-- ``` -->
+
+
+```{r helloworld}
+library(ggplot2)
+ggplot(cars) +
+  aes(speed, dist) + 
+  geom_point()
 ```
 
 
 
 ```{r cars, fig.height=12, fig.width=12}
+library(tidyverse)
+library(ggcirclepack)
 read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-02-20/isc_grants.csv") |>
-  group_by(proposed_by) |>
-  summarize(funded = sum(funded),
-            title = paste(title, collapse = ";")
-            ) |>
   ggplot() + 
-  aes(area = sqrt(funded), id = proposed_by, fill = funded) + 
-  geom_circlepack() + 
-  geom_circlepack_text(aes(label =
-                             str_wrap(paste(proposed_by,
-                                            funded, sep = "\n"), 10),
-                           size = funded),
-                       line_height = .8,
-                       check_overlap= T,
-                       color = "oldlace"
-                      ) +
+  aes(area = funded, 
+      id = proposed_by %>% str_replace(" ", "\n"), 
+      fill = group) + 
+  geom_circlepack(fun = mean) + 
+  geom_circlepack_text(fun = mean, lineheight = .8,
+                       color = "whitesmoke") +
   coord_equal() + 
-  aes(text = title) 
+  aes(text = title) + 
+  aes(label = after_stat(paste(id,"\n", area))) + 
+  facet_wrap(~year) + 
+  ggstamp::theme_void_fill("whitesmoke") + 
+  scale_size(range = c(-3, 5), transform = "sqrt")
+
+
+read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-02-20/isc_grants.csv") |>
+  ggplot() + 
+  aes(area = funded, 
+      id = "All") + 
+  geom_circlepack(fun = mean) + 
+  geom_circlepack_text(fun = mean, 
+                       lineheight = .8,
+                       color = "whitesmoke")  + 
+  aes(label = round(after_stat(area))) +
+  coord_equal()
+
+last_plot() + 
+  facet_wrap(~year)
+
+last_plot() + 
+  aes(fill = group)
+
+last_plot() + 
+  aes(id = proposed_by)
+
+last_plot() + 
+  aes(label = str_wrap(after_stat(paste(id, round(area))), 5))
+  
+
+
+read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-02-20/isc_grants.csv") |>
+  ggplot() + 
+  aes(area = funded, 
+      id = "All") + 
+  geom_circlepack() + 
+  geom_circlepack_text(
+                       lineheight = .8,
+                       color = "whitesmoke")  + 
+  aes(label = round(after_stat(area))) +
+  coord_equal()
+
 ```
 
 ```{r, fig.show='hold', out.width="49%", warning=F, message=F}  
