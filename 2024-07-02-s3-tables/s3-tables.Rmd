@@ -41,168 +41,173 @@ create_my_object <- function(data = data.frame(), rows = NULL, columns = NULL, v
   
 }
 
-return_table_code = function(tp){
 
-      # out <- 'pivot_count(data = theData, rows, cols)' 
-      
-      out <- 'tidypivot::pivot_helper(data = theData, rows, cols, value, wt, fun)'
-      
+return_specified_table = function(tp){
+
+      out <- 'tidypivot::pivot_helper(thedata, rows, cols, value, wt, fun)'
+
+  
       str_replace_or_null <- function(x, pattern, replacement){
         
-        if(is.null(replacement)){x %>% str_replace(pattern, 'NULL')}
-        else{x %>% str_replace(pattern, replacement)}
+        if(is.null(replacement)){x |> str_replace(pattern, 'NULL')}
+        else{x |> str_replace(pattern, replacement)}
         
       }
       
-      # out <- str_replace(out, "data", self$data)
-      out <- str_replace_or_null(out, "rows", tp$rows)
-      out <- str_replace_or_null(out, "cols", tp$cols)
-      # out <- str_replace_or_null(out, "fun", tp$fun)
+      # out <- str_replace_or_null(out, "data",  tp$data)
+      out <- str_replace_or_null(out, "rows",  tp$rows)
+      out <- str_replace_or_null(out, "cols",  tp$cols)
+      out <- str_replace_or_null(out, "fun",   tp$fun)
       out <- str_replace_or_null(out, "value", tp$value)
-      out <- str_replace_or_null(out, "wt", tp$wt)
+      out <- str_replace_or_null(out, "wt",    tp$wt)
+      out <- str_replace_or_null(out, "fun",    tp$fun)
 
-      eval(parse(text = out))    # hacky?
+      eval(parse(text = out))         
       
-    }
-    
+            
+}
 
 
 
 # Define a print method for 'my_object'
-  print.my_object <- function(x, print_flag = TRUE) {
+  print.my_object <- function(tp, print_flag = TRUE) {
     if (print_flag) {
-    cat("----------------------\nTable specification:\n")
-    cat("Data:", "how to quote?", "\n")
-    # print(x$data)
-    cat("Rows:", x$rows, "\n")
-    cat("Columns:", x$cols, "\n")
-    cat("Function:", "how to quote it?", "\n")
+      # print(return_specified_table(tp))
+      print("An new table or update to specification just happened")
+    # cat("----------------------\nTable specification:\n")
+    # cat("Data:", x$data, "\n")
+    # # print(x$data)
+    # cat("Rows:", x$rows, "\n")
+    # cat("Columns:", x$cols, "\n")
+    # cat("Function:", x$fun, "\n")
     # cat("Value:", x$value, "\n")
     # cat("Weight:", x$weight, "\n")
     }
   }
   
 ggtable <- function(data){
+  
+  thedata <<- data
 
-tp <- create_my_object(data)
+tp <- create_my_object(deparse(substitute(thedata)))
     
   tp |>
   print.my_object()
   
   invisible(tp)
   
+    last_tp <<- tp
+
 }
 
 set_rows <- function(tp, rows = NULL){
   
-  # if(!is.null(rows)){
 tp$rows <- deparse(substitute(rows))
-# }
 
   tp |>
   print.my_object()
   
   invisible(tp)
   
+    last_tp <<- tp
+
 }
 
 set_cols <- function(tp, cols = NULL){
   
-  # if(!is.null(rows)){
 tp$cols <- deparse(substitute(cols))
-# }
 
   tp |>
   print.my_object()
   
   invisible(tp)
   
+    last_tp <<- tp
 }
 
 
 set_fun <- function(tp, fun = sum){
 
-  # if(!is.null(rows)){
-tp$fun <- fun
-# }
+tp$fun <- deparse(substitute(fun))
+
 
   tp |>
   print.my_object()
 
   invisible(tp)
 
+    last_tp <<- tp
+
+  
 }
 
 set_value <- function(tp, value = NULL){
   
-  # if(!is.null(rows)){
 tp$value <- deparse(substitute(value))
-# }
-
-tp$data$value = tp$data[,tp$value]
 
   tp |>
   print.my_object()
   
   invisible(tp)
+  
+  last_tp <<- tp
   
 }
 
 set_weight <- function(tp, weight = NULL){
   
-  # if(!is.null(rows)){
 tp$weight <- deparse(substitute(weight))
-# }
-
-tp$data$weight = tp$data[,tp$weight]
 
   tp |>
   print.my_object()
   
   invisible(tp)
   
+  last_tp <<- tp
+  
 }
 
 
 
 
-ggtable(cars) |>
-  str()
-
-ggtable(cars) |>
-  set_rows(speed) |>
-  set_rows() |>
-  str()
-
-
-
-ggtable(cars) %>% str()
+ggtable(cars) |> str()
   
 
-return_table_code2 = function(tp){
 
-  if(is.null(tp$data$value)){value <- NULL}
-  if(is.null(tp$data$weight)){weight <- NULL}
 
+last_table <- function(){
   
-      tidypivot::pivot_helper(data = tp$data,
-                              rows = tp$rows,
-                              cols = tp$cols,
-                              value = value,
-                              fun = tp$fun,
-                              wt = weight
-                              )
-      
+  last_tp
+  
 }
 
-ggtable(mtcars) %>% 
-  set_rows(cyl) %>% 
-  set_cols(am) %>% 
-  set_cols(gear) %>% 
-  set_fun(sum) %>%
-  set_value(mpg) %>%
-  set_weight(cyl) %>%
-  return_table_code2() 
+
+Titanic |> 
+  data.frame() |>
+  uncount(Freq) |> 
+  ggtable() |> 
+  set_rows(Survived) |> 
+  return_specified_table()
+
+last_table() |> 
+  set_cols(c(Sex, Class)) |>
+  return_specified_table() 
+
+ggtable(mtcars) |> 
+  set_rows(cyl) |> 
+  set_cols(am) |>
+  set_cols(c(gear, am)) |> 
+  set_fun(sum) |>
+  set_value(mpg) |>
+  set_weight(cyl) |>
+  return_specified_table() 
+
+ggtable(mpg) |> 
+  set_rows(class) |>
+  return_specified_table()
+
+
+
 ```
 
 
@@ -210,182 +215,3 @@ ggtable(mtcars) %>%
 knitr::knit_exit()
 
 ```
-
-## Experiment
-
-```{r}
-create_my_object <- function(data, rows, columns, value, weight) {
-  
-  # Create a list with specified components
-  obj <- list(
-    data = data,
-    rows = rows,
-    columns = columns,
-    value = value,
-    weight = weight
-  )
-  
-  # Set the class attribute to indicate this is of class 'my_object'
-  class(obj) <- "my_object"
-  
-  # Define a print method for 'my_object'
-  print.my_object <- function(x, ...) {
-    if (is_last_in_pipeline()) {
-      # Print if it's the last function in a pipeline
-      cat("Custom print method for my_object:\n")
-      cat("Data:\n")
-      print(x$data)
-      cat("Rows:", x$rows, "\n")
-      cat("Columns:", x$columns, "\n")
-      cat("Value:", x$value, "\n")
-      cat("Weight:", x$weight, "\n")
-    } else {
-      # Don't print if piped to any function
-      invisible(x)
-    }
-  }
-  
-  # Helper function to check if last in pipeline
-  is_last_in_pipeline <- function() {
-    if (length(sys.calls()) > 1) {
-      next_call <- sys.calls()[[2]]
-      if (next_call$has_piped_output) {
-        return(TRUE)
-      }
-    }
-    FALSE
-  }
-  
-  # Return the created object invisibly
-  invisible(obj)
-}
-
-# Function to set the data for my_object
-set_data <- function(obj, new_data) {
-  obj$data <- new_data
-  
-  # Use print method conditionally
-  print(obj)
-  return(obj)
-}
-
-# Example usage in a pipeline
-my_obj <- create_my_object(
-  data = matrix(1:12, nrow = 3),  # Example data (a 3x4 matrix)
-  rows = 3,                      # Number of rows
-  columns = 4,                   # Number of columns
-  value = "example value",       # Example value
-  weight = 0.5                   # Example weight
-)
-
-my_obj %>% str()
-
-# Use the object in a pipeline, demonstrating conditional printing
-my_obj %>%
-  set_data(matrix(21:32, nrow = 3)) %>%
-  str()  # Won't print within str()
-
-my_obj %>%
-  set_data(matrix(21:32, nrow = 3))  # Will print because it's the last in pipeline
-
-```
-
-
-```{r}
-
-# Define a function to create the S3 object
-create_my_object <- function(data, rows, columns, value, weight) {
-  
-  # Create a list with specified components
-  obj <- list(
-    data = data,
-    rows = rows,
-    columns = columns,
-    value = value,
-    weight = weight
-  )
-  
-
-  # Set the class attribute to indicate this is of class 'my_object'
-  class(obj) <- "my_object"
-  
-  # Define a print method for 'my_object'
-  print.my_object <- function(x, ...) {
-    if (is_last_in_pipeline()) {
-      # Print if it's the last function in a pipeline
-      cat("Custom print method for my_object:\n")
-      cat("Data:\n")
-      print(x$data)
-      cat("Rows:", x$rows, "\n")
-      cat("Columns:", x$columns, "\n")
-      cat("Value:", x$value, "\n")
-      cat("Weight:", x$weight, "\n")
-    } else {
-      # Don't print if piped to any function
-      invisible(x)
-    }
-  }
-  
-  # Helper function to check if last in pipeline
-  is_last_in_pipeline <- function() {
-    if (length(sys.calls()) > 1) {
-      next_call <- sys.calls()[[2]]
-      if (next_call$has_piped_output) {
-        return(TRUE)
-      }
-    }
-    FALSE
-  }
-  
-  # Return the created object invisibly
-  print.my_object(obj)
-}
-
-# Function to set the data for my_object
-ggtable <- function(obj, new_data) {
-  
-  obj$data <- new_data
-  
-  # Return the object
-  return(obj)
-}
-
-# Example usage in a pipeline
-my_obj <- create_my_object(
-  data = matrix(1:12, nrow = 3),  # Example data (a 3x4 matrix)
-  rows = 3,                      # Number of rows
-  columns = 4,                   # Number of columns
-  value = "example value",       # Example value
-  weight = 0.5                   # Example weight
-)
-
-# Use the object in a pipeline, demonstrating conditional printing
-my_obj %>%
-  ggtable(matrix(21:32, nrow = 3)) %>%
-  str(.)  # Print within str(), then return
-
-my_obj %>%
-  ggtable(matrix(21:32, nrow = 3))  # Wi
-
-
-create_my_object(
-  data = matrix(1:12, nrow = 3),  # Example data (a 3x4 matrix)
-  rows = 3,                      # Number of rows
-  columns = 4,                   # Number of columns
-  value = "example value",       # Example value
-  weight = 0.5                   # Example weight
-)
-
-create_my_object(
-  data = matrix(1:12, nrow = 3),  # Example data (a 3x4 matrix)
-  rows = 3,                      # Number of rows
-  columns = 4,                   # Number of columns
-  value = "example value",       # Example value
-  weight = 0.5                   # Example weight
-) %>% 
-  str()
-
-```
-
-
-## Closing remarks, Other Relevant Work, Caveats

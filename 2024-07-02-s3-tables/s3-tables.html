@@ -389,267 +389,210 @@ create_my_object &lt;- function(data = data.frame(), rows = NULL, columns = NULL
   
 }
 
-return_table_code = function(tp){
 
-      # out &lt;- &#39;pivot_count(data = theData, rows, cols)&#39; 
-      
-      out &lt;- &#39;tidypivot::pivot_helper(data = theData, rows, cols, value, wt, fun)&#39;
-      
+return_specified_table = function(tp){
+
+      out &lt;- &#39;tidypivot::pivot_helper(thedata, rows, cols, value, wt, fun)&#39;
+
+  
       str_replace_or_null &lt;- function(x, pattern, replacement){
         
-        if(is.null(replacement)){x %&gt;% str_replace(pattern, &#39;NULL&#39;)}
-        else{x %&gt;% str_replace(pattern, replacement)}
+        if(is.null(replacement)){x |&gt; str_replace(pattern, &#39;NULL&#39;)}
+        else{x |&gt; str_replace(pattern, replacement)}
         
       }
       
-      # out &lt;- str_replace(out, &quot;data&quot;, self$data)
-      out &lt;- str_replace_or_null(out, &quot;rows&quot;, tp$rows)
-      out &lt;- str_replace_or_null(out, &quot;cols&quot;, tp$cols)
-      # out &lt;- str_replace_or_null(out, &quot;fun&quot;, tp$fun)
+      # out &lt;- str_replace_or_null(out, &quot;data&quot;,  tp$data)
+      out &lt;- str_replace_or_null(out, &quot;rows&quot;,  tp$rows)
+      out &lt;- str_replace_or_null(out, &quot;cols&quot;,  tp$cols)
+      out &lt;- str_replace_or_null(out, &quot;fun&quot;,   tp$fun)
       out &lt;- str_replace_or_null(out, &quot;value&quot;, tp$value)
-      out &lt;- str_replace_or_null(out, &quot;wt&quot;, tp$wt)
+      out &lt;- str_replace_or_null(out, &quot;wt&quot;,    tp$wt)
+      out &lt;- str_replace_or_null(out, &quot;fun&quot;,    tp$fun)
 
-      eval(parse(text = out))    # hacky?
+      eval(parse(text = out))         
       
-    }
-    
+            
+}
 
 
 
 # Define a print method for &#39;my_object&#39;
-  print.my_object &lt;- function(x, print_flag = TRUE) {
+  print.my_object &lt;- function(tp, print_flag = TRUE) {
     if (print_flag) {
-    cat(&quot;----------------------\nTable specification:\n&quot;)
-    cat(&quot;Data:&quot;, &quot;how to quote?&quot;, &quot;\n&quot;)
-    # print(x$data)
-    cat(&quot;Rows:&quot;, x$rows, &quot;\n&quot;)
-    cat(&quot;Columns:&quot;, x$cols, &quot;\n&quot;)
-    cat(&quot;Function:&quot;, &quot;how to quote it?&quot;, &quot;\n&quot;)
+      # print(return_specified_table(tp))
+      print(&quot;An new table or update to specification just happened&quot;)
+    # cat(&quot;----------------------\nTable specification:\n&quot;)
+    # cat(&quot;Data:&quot;, x$data, &quot;\n&quot;)
+    # # print(x$data)
+    # cat(&quot;Rows:&quot;, x$rows, &quot;\n&quot;)
+    # cat(&quot;Columns:&quot;, x$cols, &quot;\n&quot;)
+    # cat(&quot;Function:&quot;, x$fun, &quot;\n&quot;)
     # cat(&quot;Value:&quot;, x$value, &quot;\n&quot;)
     # cat(&quot;Weight:&quot;, x$weight, &quot;\n&quot;)
     }
   }
   
 ggtable &lt;- function(data){
+  
+  thedata &lt;&lt;- data
 
-tp &lt;- create_my_object(data)
+tp &lt;- create_my_object(deparse(substitute(thedata)))
     
   tp |&gt;
   print.my_object()
   
   invisible(tp)
   
+    last_tp &lt;&lt;- tp
+
 }
 
 set_rows &lt;- function(tp, rows = NULL){
   
-  # if(!is.null(rows)){
 tp$rows &lt;- deparse(substitute(rows))
-# }
 
   tp |&gt;
   print.my_object()
   
   invisible(tp)
   
+    last_tp &lt;&lt;- tp
+
 }
 
 set_cols &lt;- function(tp, cols = NULL){
   
-  # if(!is.null(rows)){
 tp$cols &lt;- deparse(substitute(cols))
-# }
 
   tp |&gt;
   print.my_object()
   
   invisible(tp)
   
+    last_tp &lt;&lt;- tp
 }
 
 
 set_fun &lt;- function(tp, fun = sum){
 
-  # if(!is.null(rows)){
-tp$fun &lt;- fun
-# }
+tp$fun &lt;- deparse(substitute(fun))
+
 
   tp |&gt;
   print.my_object()
 
   invisible(tp)
 
+    last_tp &lt;&lt;- tp
+
+  
 }
 
 set_value &lt;- function(tp, value = NULL){
   
-  # if(!is.null(rows)){
 tp$value &lt;- deparse(substitute(value))
-# }
-
-tp$data$value = tp$data[,tp$value]
 
   tp |&gt;
   print.my_object()
   
   invisible(tp)
+  
+  last_tp &lt;&lt;- tp
   
 }
 
 set_weight &lt;- function(tp, weight = NULL){
   
-  # if(!is.null(rows)){
 tp$weight &lt;- deparse(substitute(weight))
-# }
-
-tp$data$weight = tp$data[,tp$weight]
 
   tp |&gt;
   print.my_object()
   
   invisible(tp)
   
-}
-
-
-
-
-ggtable(cars) |&gt;
-  str()</code></pre>
-<pre><code>## ----------------------
-## Table specification:
-## Data: how to quote? 
-## Rows: 
-## Columns: 
-## Function: how to quote it? 
-## List of 5
-##  $ data   :&#39;data.frame&#39;: 50 obs. of  2 variables:
-##   ..$ speed: num [1:50] 4 4 7 7 8 9 10 10 10 11 ...
-##   ..$ dist : num [1:50] 2 10 4 22 16 10 18 26 34 17 ...
-##  $ rows   : NULL
-##  $ columns: NULL
-##  $ value  : NULL
-##  $ weight : NULL
-##  - attr(*, &quot;class&quot;)= chr &quot;my_object&quot;</code></pre>
-<pre class="r"><code>ggtable(cars) |&gt;
-  set_rows(speed) |&gt;
-  set_rows() |&gt;
-  str()</code></pre>
-<pre><code>## ----------------------
-## Table specification:
-## Data: how to quote? 
-## Rows: 
-## Columns: 
-## Function: how to quote it? 
-## ----------------------
-## Table specification:
-## Data: how to quote? 
-## Rows: speed 
-## Columns: 
-## Function: how to quote it? 
-## ----------------------
-## Table specification:
-## Data: how to quote? 
-## Rows: NULL 
-## Columns: 
-## Function: how to quote it? 
-## List of 5
-##  $ data   :&#39;data.frame&#39;: 50 obs. of  2 variables:
-##   ..$ speed: num [1:50] 4 4 7 7 8 9 10 10 10 11 ...
-##   ..$ dist : num [1:50] 2 10 4 22 16 10 18 26 34 17 ...
-##  $ rows   : chr &quot;NULL&quot;
-##  $ columns: NULL
-##  $ value  : NULL
-##  $ weight : NULL
-##  - attr(*, &quot;class&quot;)= chr &quot;my_object&quot;</code></pre>
-<pre class="r"><code>ggtable(cars) %&gt;% str()</code></pre>
-<pre><code>## ----------------------
-## Table specification:
-## Data: how to quote? 
-## Rows: 
-## Columns: 
-## Function: how to quote it? 
-## List of 5
-##  $ data   :&#39;data.frame&#39;: 50 obs. of  2 variables:
-##   ..$ speed: num [1:50] 4 4 7 7 8 9 10 10 10 11 ...
-##   ..$ dist : num [1:50] 2 10 4 22 16 10 18 26 34 17 ...
-##  $ rows   : NULL
-##  $ columns: NULL
-##  $ value  : NULL
-##  $ weight : NULL
-##  - attr(*, &quot;class&quot;)= chr &quot;my_object&quot;</code></pre>
-<pre class="r"><code>return_table_code2 = function(tp){
-
-  if(is.null(tp$data$value)){value &lt;- NULL}
-  if(is.null(tp$data$weight)){weight &lt;- NULL}
-
+  last_tp &lt;&lt;- tp
   
-      tidypivot::pivot_helper(data = tp$data,
-                              rows = tp$rows,
-                              cols = tp$cols,
-                              value = value,
-                              fun = tp$fun,
-                              wt = weight
-                              )
-      
 }
 
-ggtable(mtcars) %&gt;% 
-  set_rows(cyl) %&gt;% 
-  set_cols(am) %&gt;% 
-  set_cols(gear) %&gt;% 
-  set_fun(sum) %&gt;%
-  set_value(mpg) %&gt;%
-  set_weight(cyl) %&gt;%
-  return_table_code2() </code></pre>
-<pre><code>## ----------------------
-## Table specification:
-## Data: how to quote? 
-## Rows: 
-## Columns: 
-## Function: how to quote it? 
-## ----------------------
-## Table specification:
-## Data: how to quote? 
-## Rows: cyl 
-## Columns: 
-## Function: how to quote it? 
-## ----------------------
-## Table specification:
-## Data: how to quote? 
-## Rows: cyl 
-## Columns: am 
-## Function: how to quote it? 
-## ----------------------
-## Table specification:
-## Data: how to quote? 
-## Rows: cyl 
-## Columns: gear 
-## Function: how to quote it? 
-## ----------------------
-## Table specification:
-## Data: how to quote? 
-## Rows: cyl 
-## Columns: gear 
-## Function: how to quote it? 
-## ----------------------
-## Table specification:
-## Data: how to quote? 
-## Rows: cyl 
-## Columns: gear 
-## Function: how to quote it? 
-## ----------------------
-## Table specification:
-## Data: how to quote? 
-## Rows: cyl 
-## Columns: gear 
-## Function: how to quote it?</code></pre>
-<pre><code>## # A tibble: 3 × 4
-##     cyl   `3`   `4`   `5`
-##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1     4  21.5  215.  56.4
-## 2     6  39.5   79   19.7
-## 3     8 181.    NA   30.8</code></pre>
+
+
+
+ggtable(cars) |&gt; str()</code></pre>
+<pre><code>## [1] &quot;An new table or update to specification just happened&quot;
+## List of 5
+##  $ data   : chr &quot;thedata&quot;
+##  $ rows   : NULL
+##  $ columns: NULL
+##  $ value  : NULL
+##  $ weight : NULL
+##  - attr(*, &quot;class&quot;)= chr &quot;my_object&quot;</code></pre>
+<pre class="r"><code>last_table &lt;- function(){
+  
+  last_tp
+  
+}
+
+
+Titanic |&gt; 
+  data.frame() |&gt;
+  uncount(Freq) |&gt; 
+  ggtable() |&gt; 
+  set_rows(Survived) |&gt; 
+  return_specified_table()</code></pre>
+<pre><code>## [1] &quot;An new table or update to specification just happened&quot;
+## [1] &quot;An new table or update to specification just happened&quot;</code></pre>
+<pre><code>## # A tibble: 2 × 2
+##   Survived value
+##   &lt;fct&gt;    &lt;dbl&gt;
+## 1 No        1490
+## 2 Yes        711</code></pre>
+<pre class="r"><code>last_table() |&gt; 
+  set_cols(c(Sex, Class)) |&gt;
+  return_specified_table() </code></pre>
+<pre><code>## [1] &quot;An new table or update to specification just happened&quot;</code></pre>
+<pre><code>## # A tibble: 2 × 9
+##   Survived Male_1st Male_2nd Male_3rd Male_Crew Female_1st Female_2nd Female_3rd
+##   &lt;fct&gt;       &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+## 1 No            118      154      422       670          4         13        106
+## 2 Yes            62       25       88       192        141         93         90
+## # ℹ 1 more variable: Female_Crew &lt;dbl&gt;</code></pre>
+<pre class="r"><code>ggtable(mtcars) |&gt; 
+  set_rows(cyl) |&gt; 
+  set_cols(am) |&gt;
+  set_cols(c(gear, am)) |&gt; 
+  set_fun(sum) |&gt;
+  set_value(mpg) |&gt;
+  set_weight(cyl) |&gt;
+  return_specified_table() </code></pre>
+<pre><code>## [1] &quot;An new table or update to specification just happened&quot;
+## [1] &quot;An new table or update to specification just happened&quot;
+## [1] &quot;An new table or update to specification just happened&quot;
+## [1] &quot;An new table or update to specification just happened&quot;
+## [1] &quot;An new table or update to specification just happened&quot;
+## [1] &quot;An new table or update to specification just happened&quot;
+## [1] &quot;An new table or update to specification just happened&quot;</code></pre>
+<pre><code>## # A tibble: 3 × 5
+##     cyl `3_0` `4_0` `4_1` `5_1`
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     4  21.5  47.2  168.  56.4
+## 2     6  39.5  37     42   19.7
+## 3     8 181.   NA     NA   30.8</code></pre>
+<pre class="r"><code>ggtable(mpg) |&gt; 
+  set_rows(class) |&gt;
+  return_specified_table()</code></pre>
+<pre><code>## [1] &quot;An new table or update to specification just happened&quot;
+## [1] &quot;An new table or update to specification just happened&quot;</code></pre>
+<pre><code>## # A tibble: 7 × 2
+##   class      value
+##   &lt;chr&gt;      &lt;dbl&gt;
+## 1 2seater        5
+## 2 compact       47
+## 3 midsize       41
+## 4 minivan       11
+## 5 pickup        33
+## 6 subcompact    35
+## 7 suv           62</code></pre>
 <pre class="r"><code>knitr::knit_exit()</code></pre>
 </div>
 
