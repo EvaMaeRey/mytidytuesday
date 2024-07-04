@@ -370,7 +370,7 @@ Thoughts</a></li>
 <div id="status-quo" class="section level2">
 <h2>Status Quo</h2>
 <pre class="r"><code>library(tidyverse)
-create_my_object &lt;- function(data = data.frame(), rows = NULL, columns = NULL, value = NULL, weight = NULL) {
+create_tidypivot &lt;- function(data = data.frame(), rows = NULL, columns = NULL, value = NULL, weight = NULL) {
   
   # Create a list with specified components
   obj &lt;- list(
@@ -381,8 +381,8 @@ create_my_object &lt;- function(data = data.frame(), rows = NULL, columns = NULL
     weight = weight
   )
   
-  # Set the class attribute to indicate this is of class &#39;my_object&#39;
-  class(obj) &lt;- &quot;my_object&quot;
+  # Set the class attribute to indicate this is of class &#39;tidypivot&#39;
+  class(obj) &lt;- &quot;tidypivot&quot;
   
   # Return the created object
   invisible(obj)
@@ -390,7 +390,7 @@ create_my_object &lt;- function(data = data.frame(), rows = NULL, columns = NULL
 }
 
 
-return_specified_table = function(tp){
+print_specified_table = function(tp){
 
       out &lt;- &#39;tidypivot::pivot_helper(thedata, rows, cols, value, wt, fun)&#39;
 
@@ -417,10 +417,10 @@ return_specified_table = function(tp){
 
 
 
-# Define a print method for &#39;my_object&#39;
-  print.my_object &lt;- function(tp, print_flag = TRUE) {
+# Define a print method for &#39;tidypivot&#39;
+  print.tidypivot &lt;- function(tp, print_flag = TRUE) {
     if (print_flag) {
-      # print(return_specified_table(tp))
+      # print(print_specified_table(tp))
       print(&quot;An new table or update to specification just happened&quot;)
     # cat(&quot;----------------------\nTable specification:\n&quot;)
     # cat(&quot;Data:&quot;, x$data, &quot;\n&quot;)
@@ -437,10 +437,10 @@ ggtable &lt;- function(data){
   
   thedata &lt;&lt;- data
 
-tp &lt;- create_my_object(deparse(substitute(thedata)))
+tp &lt;- create_tidypivot(deparse(substitute(thedata)))
     
   tp |&gt;
-  print.my_object()
+  print.tidypivot()
   
   invisible(tp)
   
@@ -453,7 +453,7 @@ set_rows &lt;- function(tp, rows = NULL){
 tp$rows &lt;- deparse(substitute(rows))
 
   tp |&gt;
-  print.my_object()
+  print.tidypivot()
   
   invisible(tp)
   
@@ -466,7 +466,7 @@ set_cols &lt;- function(tp, cols = NULL){
 tp$cols &lt;- deparse(substitute(cols))
 
   tp |&gt;
-  print.my_object()
+  print.tidypivot()
   
   invisible(tp)
   
@@ -480,7 +480,7 @@ tp$fun &lt;- deparse(substitute(fun))
 
 
   tp |&gt;
-  print.my_object()
+  print.tidypivot()
 
   invisible(tp)
 
@@ -494,7 +494,7 @@ set_value &lt;- function(tp, value = NULL){
 tp$value &lt;- deparse(substitute(value))
 
   tp |&gt;
-  print.my_object()
+  print.tidypivot()
   
   invisible(tp)
   
@@ -507,7 +507,7 @@ set_weight &lt;- function(tp, weight = NULL){
 tp$weight &lt;- deparse(substitute(weight))
 
   tp |&gt;
-  print.my_object()
+  print.tidypivot()
   
   invisible(tp)
   
@@ -526,7 +526,7 @@ ggtable(cars) |&gt; str()</code></pre>
 ##  $ columns: NULL
 ##  $ value  : NULL
 ##  $ weight : NULL
-##  - attr(*, &quot;class&quot;)= chr &quot;my_object&quot;</code></pre>
+##  - attr(*, &quot;class&quot;)= chr &quot;tidypivot&quot;</code></pre>
 <pre class="r"><code>last_table &lt;- function(){
   
   last_tp
@@ -539,7 +539,7 @@ Titanic |&gt;
   uncount(Freq) |&gt; 
   ggtable() |&gt; 
   set_rows(Survived) |&gt; 
-  return_specified_table()</code></pre>
+  print_specified_table()</code></pre>
 <pre><code>## [1] &quot;An new table or update to specification just happened&quot;
 ## [1] &quot;An new table or update to specification just happened&quot;</code></pre>
 <pre><code>## # A tibble: 2 × 2
@@ -549,7 +549,7 @@ Titanic |&gt;
 ## 2 Yes        711</code></pre>
 <pre class="r"><code>last_table() |&gt; 
   set_cols(c(Sex, Class)) |&gt;
-  return_specified_table() </code></pre>
+  print_specified_table() </code></pre>
 <pre><code>## [1] &quot;An new table or update to specification just happened&quot;</code></pre>
 <pre><code>## # A tibble: 2 × 9
 ##   Survived Male_1st Male_2nd Male_3rd Male_Crew Female_1st Female_2nd Female_3rd
@@ -564,7 +564,7 @@ Titanic |&gt;
   set_fun(sum) |&gt;
   set_value(mpg) |&gt;
   set_weight(cyl) |&gt;
-  return_specified_table() </code></pre>
+  print_specified_table() </code></pre>
 <pre><code>## [1] &quot;An new table or update to specification just happened&quot;
 ## [1] &quot;An new table or update to specification just happened&quot;
 ## [1] &quot;An new table or update to specification just happened&quot;
@@ -580,7 +580,7 @@ Titanic |&gt;
 ## 3     8 181.   NA     NA   30.8</code></pre>
 <pre class="r"><code>ggtable(mpg) |&gt; 
   set_rows(class) |&gt;
-  return_specified_table()</code></pre>
+  print_specified_table()</code></pre>
 <pre><code>## [1] &quot;An new table or update to specification just happened&quot;
 ## [1] &quot;An new table or update to specification just happened&quot;</code></pre>
 <pre><code>## # A tibble: 7 × 2

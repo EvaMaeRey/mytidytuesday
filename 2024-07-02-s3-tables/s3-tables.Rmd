@@ -22,7 +22,7 @@ options(tidyverse.quiet = TRUE)
 
 ```{r}
 library(tidyverse)
-create_my_object <- function(data = data.frame(), rows = NULL, columns = NULL, value = NULL, weight = NULL) {
+create_tidypivot <- function(data = data.frame(), rows = NULL, columns = NULL, value = NULL, weight = NULL) {
   
   # Create a list with specified components
   obj <- list(
@@ -33,8 +33,8 @@ create_my_object <- function(data = data.frame(), rows = NULL, columns = NULL, v
     weight = weight
   )
   
-  # Set the class attribute to indicate this is of class 'my_object'
-  class(obj) <- "my_object"
+  # Set the class attribute to indicate this is of class 'tidypivot'
+  class(obj) <- "tidypivot"
   
   # Return the created object
   invisible(obj)
@@ -42,7 +42,7 @@ create_my_object <- function(data = data.frame(), rows = NULL, columns = NULL, v
 }
 
 
-return_specified_table = function(tp){
+print_specified_table = function(tp){
 
       out <- 'tidypivot::pivot_helper(thedata, rows, cols, value, wt, fun)'
 
@@ -69,10 +69,10 @@ return_specified_table = function(tp){
 
 
 
-# Define a print method for 'my_object'
-  print.my_object <- function(tp, print_flag = TRUE) {
+# Define a print method for 'tidypivot'
+  print.tidypivot <- function(tp, print_flag = TRUE) {
     if (print_flag) {
-      # print(return_specified_table(tp))
+      # print(print_specified_table(tp))
       print("An new table or update to specification just happened")
     # cat("----------------------\nTable specification:\n")
     # cat("Data:", x$data, "\n")
@@ -89,10 +89,10 @@ ggtable <- function(data){
   
   thedata <<- data
 
-tp <- create_my_object(deparse(substitute(thedata)))
+tp <- create_tidypivot(deparse(substitute(thedata)))
     
   tp |>
-  print.my_object()
+  print.tidypivot()
   
   invisible(tp)
   
@@ -105,7 +105,7 @@ set_rows <- function(tp, rows = NULL){
 tp$rows <- deparse(substitute(rows))
 
   tp |>
-  print.my_object()
+  print.tidypivot()
   
   invisible(tp)
   
@@ -118,7 +118,7 @@ set_cols <- function(tp, cols = NULL){
 tp$cols <- deparse(substitute(cols))
 
   tp |>
-  print.my_object()
+  print.tidypivot()
   
   invisible(tp)
   
@@ -132,7 +132,7 @@ tp$fun <- deparse(substitute(fun))
 
 
   tp |>
-  print.my_object()
+  print.tidypivot()
 
   invisible(tp)
 
@@ -146,7 +146,7 @@ set_value <- function(tp, value = NULL){
 tp$value <- deparse(substitute(value))
 
   tp |>
-  print.my_object()
+  print.tidypivot()
   
   invisible(tp)
   
@@ -159,7 +159,7 @@ set_weight <- function(tp, weight = NULL){
 tp$weight <- deparse(substitute(weight))
 
   tp |>
-  print.my_object()
+  print.tidypivot()
   
   invisible(tp)
   
@@ -187,11 +187,11 @@ Titanic |>
   uncount(Freq) |> 
   ggtable() |> 
   set_rows(Survived) |> 
-  return_specified_table()
+  print_specified_table()
 
 last_table() |> 
   set_cols(c(Sex, Class)) |>
-  return_specified_table() 
+  print_specified_table() 
 
 ggtable(mtcars) |> 
   set_rows(cyl) |> 
@@ -200,11 +200,11 @@ ggtable(mtcars) |>
   set_fun(sum) |>
   set_value(mpg) |>
   set_weight(cyl) |>
-  return_specified_table() 
+  print_specified_table() 
 
 ggtable(mpg) |> 
   set_rows(class) |>
-  return_specified_table()
+  print_specified_table()
 
 
 
