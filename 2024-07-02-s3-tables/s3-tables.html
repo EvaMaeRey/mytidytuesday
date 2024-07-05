@@ -359,8 +359,17 @@ specification</h1>
 
 <div id="TOC">
 <ul>
-<li><a href="#part-0.-objective" id="toc-part-0.-objective">Part 0.
-<strong>Objective… </strong></a></li>
+<li><a href="#part-0.-objective-take-many-argument-function-where-arguments-are-orthogonal-and-make-a-pipable-interface" id="toc-part-0.-objective-take-many-argument-function-where-arguments-are-orthogonal-and-make-a-pipable-interface">Part
+0. <strong>Objective</strong> take many argument function, where
+arguments are orthogonal, and make a pipable interface</a>
+<ul>
+<li><a href="#pivot_count-create-count-table-based-on-direct-user-inputs" id="toc-pivot_count-create-count-table-based-on-direct-user-inputs"><code>pivot_count()</code>
+create count table based on direct user inputs</a></li>
+<li><a href="#status-quo-usage-enter-arguments-at-once" id="toc-status-quo-usage-enter-arguments-at-once">status quo usage:
+enter arguments at once</a></li>
+<li><a href="#desired-usage-piped" id="toc-desired-usage-piped">Desired
+usage: Piped</a></li>
+</ul></li>
 <li><a href="#part.-1.-implementation" id="toc-part.-1.-implementation">Part. 1.
 <strong>Implementation</strong></a>
 <ul>
@@ -372,10 +381,9 @@ which defines components in ‘<code>tp</code>’ a 3S object.</a></li>
 manipulation to produce the table - we use a routine from the
 {tidypivot} package.</a>
 <ul>
-<li><a href="#pivot_count-create-table-based-on-direct-user-inputs" id="toc-pivot_count-create-table-based-on-direct-user-inputs"><code>pivot_count()</code>
-create table based on direct user inputs</a></li>
 <li><a href="#return_specified_table-create-table-based-on-table-specification-tp" id="toc-return_specified_table-create-table-based-on-table-specification-tp"><code>return_specified_table()</code>
-create table based on table specification (<code>tp</code>)</a></li>
+create table based on table <em>specification</em>
+(<code>tp</code>)</a></li>
 <li><a href="#print.tidypivot-declare-print-method-for-tp-the-3s-objects" id="toc-print.tidypivot-declare-print-method-for-tp-the-3s-objects"><code>print.tidypivot</code>
 declare print method for <code>tp</code>, the 3S objects</a></li>
 </ul></li>
@@ -404,13 +412,57 @@ environmenst</a></li>
 </ul>
 </div>
 
-<div id="part-0.-objective" class="section level1">
-<h1>Part 0. <strong>Objective… </strong></h1>
+<div id="part-0.-objective-take-many-argument-function-where-arguments-are-orthogonal-and-make-a-pipable-interface" class="section level1">
+<h1>Part 0. <strong>Objective</strong> take many argument function,
+where arguments are orthogonal, and make a pipable interface</h1>
+<div id="pivot_count-create-count-table-based-on-direct-user-inputs" class="section level2">
+<h2><code>pivot_count()</code> create count table based on direct user
+inputs</h2>
+<pre class="r"><code>library(tidyverse)
+pivot_count &lt;- function (data, rows = NULL, cols = NULL) {
+    
+  cols_quo &lt;- rlang::enquo(cols)
+  
+  grouped &lt;- data %&gt;% dplyr::group_by(
+    dplyr::across(c({{cols}}, {{rows}})))
+  
+  summarized &lt;- grouped |&gt; 
+    dplyr::count() |&gt; 
+    dplyr::ungroup()
+
+    if (rlang::quo_is_null(cols_quo)) {
+        summarized
+    }
+    else {
+        summarized %&gt;% tidyr::pivot_wider(names_from = {{cols}}, 
+                                    values_from = n)
+    }
+}</code></pre>
+</div>
+<div id="status-quo-usage-enter-arguments-at-once" class="section level2">
+<h2>status quo usage: enter arguments at once</h2>
+<pre class="r"><code>Titanic |&gt; 
+  data.frame() |&gt;
+  uncount(Freq) -&gt;
+tidy_titanic
+
+pivot_count(data = tidy_titanic,
+            rows = Survived,
+            cols = c(Sex, Age))</code></pre>
+<pre><code>## # A tibble: 2 × 5
+##   Survived Male_Child Male_Adult Female_Child Female_Adult
+##   &lt;fct&gt;         &lt;int&gt;      &lt;int&gt;        &lt;int&gt;        &lt;int&gt;
+## 1 No               35       1329           17          109
+## 2 Yes              29        338           28          316</code></pre>
+</div>
+<div id="desired-usage-piped" class="section level2">
+<h2>Desired usage: Piped</h2>
 <pre class="r"><code>ggtable(mtcars) |&gt; # a count of observations
   set_rows(cyl) |&gt; # a count by cyl (cly name each row)
   set_cols(c(gear, am)) |&gt; # count by cyl and gear (gears head cols)
   set_value(mpg) |&gt; # sum of mpgs by cyl and gear
   set_fun(mean) |&gt; # average mpg by cyl and gear</code></pre>
+</div>
 </div>
 <div id="part.-1.-implementation" class="section level1">
 <h1>Part. 1. <strong>Implementation</strong></h1>
@@ -448,34 +500,9 @@ new_tidypivot &lt;- function(data = data.frame(),
 <h2>Step 2. <strong>Print</strong>: Once specification is defined,
 actually do manipulation to produce the table - we use a routine from
 the {tidypivot} package.</h2>
-<div id="pivot_count-create-table-based-on-direct-user-inputs" class="section level3">
-<h3><code>pivot_count()</code> create table based on direct user
-inputs</h3>
-<pre class="r"><code>pivot_count &lt;- function (data, rows = NULL, cols = NULL) {
-    
-  cols_quo &lt;- rlang::enquo(cols)
-  
-  grouped &lt;- data %&gt;% dplyr::group_by(
-    dplyr::across(c({{cols}}, {{rows}
-    })), .drop = FALSE)
-  
-  summarized &lt;- grouped %&gt;% 
-    dplyr::mutate(value = 1) %&gt;% 
-    dplyr::summarise(value = sum(value), .groups = &quot;drop&quot;)
-
-  tidy &lt;- summarized
-  
-    if (rlang::quo_is_null(cols_quo)) {
-        tidy
-    }
-    else {
-        tidy %&gt;% tidyr::pivot_wider(names_from = {{cols}})
-    }
-}</code></pre>
-</div>
 <div id="return_specified_table-create-table-based-on-table-specification-tp" class="section level3">
 <h3><code>return_specified_table()</code> create table based on table
-specification (<code>tp</code>)</h3>
+<em>specification</em> (<code>tp</code>)</h3>
 <pre class="r"><code>return_specified_table = function(tp){
 
       out &lt;- &#39;pivot_count(thedata, rows, cols)&#39;
@@ -527,8 +554,8 @@ specification (<code>tp</code>)</h3>
 
 ggtable(cars)</code></pre>
 <pre><code>## # A tibble: 1 × 1
-##   value
-##   &lt;dbl&gt;
+##       n
+##   &lt;int&gt;
 ## 1    50</code></pre>
 </div>
 <div id="set_rows-the-other-set-functions-are-hidden---set-up-the-same-way" class="section level3">
@@ -582,24 +609,32 @@ tidy_titanic |&gt; tibble()</code></pre>
 <pre class="r"><code>tidy_titanic |&gt;
   ggtable() </code></pre>
 <pre><code>## # A tibble: 1 × 1
-##   value
-##   &lt;dbl&gt;
+##       n
+##   &lt;int&gt;
 ## 1  2201</code></pre>
 <pre class="r"><code>last_table() |&gt; 
   set_rows(Survived)</code></pre>
 <pre><code>## # A tibble: 2 × 2
-##   Survived value
-##   &lt;fct&gt;    &lt;dbl&gt;
+##   Survived     n
+##   &lt;fct&gt;    &lt;int&gt;
 ## 1 No        1490
 ## 2 Yes        711</code></pre>
 <pre class="r"><code>last_table() |&gt; 
-  set_cols(c(Sex, Class))</code></pre>
-<pre><code>## # A tibble: 2 × 9
-##   Survived Male_1st Male_2nd Male_3rd Male_Crew Female_1st Female_2nd Female_3rd
-##   &lt;fct&gt;       &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
-## 1 No            118      154      422       670          4         13        106
-## 2 Yes            62       25       88       192        141         93         90
-## # ℹ 1 more variable: Female_Crew &lt;dbl&gt;</code></pre>
+  set_cols(c(Sex))</code></pre>
+<pre><code>## # A tibble: 2 × 3
+##   Survived  Male Female
+##   &lt;fct&gt;    &lt;int&gt;  &lt;int&gt;
+## 1 No        1364    126
+## 2 Yes        367    344</code></pre>
+<pre class="r"><code>last_table() |&gt;
+  set_rows(Class)</code></pre>
+<pre><code>## # A tibble: 4 × 3
+##   Class  Male Female
+##   &lt;fct&gt; &lt;int&gt;  &lt;int&gt;
+## 1 1st     180    145
+## 2 2nd     179    106
+## 3 3rd     510    196
+## 4 Crew    862     23</code></pre>
 </div>
 <div id="fast-piped-build-uh-oh-we-get-to-see-the-in-between-tables-even-when-we-dont-use-last-table-ah" class="section level2">
 <h2>fast, piped <code>|&gt;</code> build <em>uh-oh, we get to see the
@@ -609,24 +644,24 @@ in-between tables even when we don’t use last table! Ah!!!!</em></h2>
   set_cols(am) |&gt;
   set_cols(c(gear, am)) </code></pre>
 <pre><code>## # A tibble: 1 × 1
-##   value
-##   &lt;dbl&gt;
+##       n
+##   &lt;int&gt;
 ## 1    32
 ## # A tibble: 3 × 2
-##     cyl value
-##   &lt;dbl&gt; &lt;dbl&gt;
+##     cyl     n
+##   &lt;dbl&gt; &lt;int&gt;
 ## 1     4    11
 ## 2     6     7
 ## 3     8    14
 ## # A tibble: 3 × 3
 ##     cyl   `0`   `1`
-##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##   &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
 ## 1     4     3     8
 ## 2     6     4     3
 ## 3     8    12     2
 ## # A tibble: 3 × 5
 ##     cyl `3_0` `4_0` `4_1` `5_1`
-##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##   &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
 ## 1     4     1     2     6     2
 ## 2     6     2     2     2     1
 ## 3     8    12    NA    NA     2</code></pre>

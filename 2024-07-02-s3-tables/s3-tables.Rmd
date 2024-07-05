@@ -12,7 +12,47 @@ knitr::opts_chunk$set(echo = TRUE)
 options(tidyverse.quiet = TRUE)
 ```
 
-# Part 0.  **Objective... **
+# Part 0.  **Objective** take many argument function, where arguments are orthogonal, and make a pipable interface
+
+## `pivot_count()` create count table based on direct user inputs
+
+```{r, echo = T}
+library(tidyverse)
+pivot_count <- function (data, rows = NULL, cols = NULL) {
+    
+  cols_quo <- rlang::enquo(cols)
+  
+  grouped <- data %>% dplyr::group_by(
+    dplyr::across(c({{cols}}, {{rows}})))
+  
+  summarized <- grouped |> 
+    dplyr::count() |> 
+    dplyr::ungroup()
+
+    if (rlang::quo_is_null(cols_quo)) {
+        summarized
+    }
+    else {
+        summarized %>% tidyr::pivot_wider(names_from = {{cols}}, 
+                                    values_from = n)
+    }
+}
+```
+
+## status quo usage: enter arguments at once
+
+```{r}
+Titanic |> 
+  data.frame() |>
+  uncount(Freq) ->
+tidy_titanic
+
+pivot_count(data = tidy_titanic,
+            rows = Survived,
+            cols = c(Sex, Age))
+```
+
+## Desired usage: Piped
 
 ```{r eval = F}
 ggtable(mtcars) |> # a count of observations
@@ -56,33 +96,9 @@ new_tidypivot <- function(data = data.frame(),
 
 ## Step 2. **Print**: Once specification is defined, actually do  manipulation to produce the table - we use a routine from the {tidypivot} package.
 
-### `pivot_count()` create table based on direct user inputs
 
-```{r, echo = T}
-pivot_count <- function (data, rows = NULL, cols = NULL) {
-    
-  cols_quo <- rlang::enquo(cols)
-  
-  grouped <- data %>% dplyr::group_by(
-    dplyr::across(c({{cols}}, {{rows}
-    })), .drop = FALSE)
-  
-  summarized <- grouped %>% 
-    dplyr::mutate(value = 1) %>% 
-    dplyr::summarise(value = sum(value), .groups = "drop")
 
-  tidy <- summarized
-  
-    if (rlang::quo_is_null(cols_quo)) {
-        tidy
-    }
-    else {
-        tidy %>% tidyr::pivot_wider(names_from = {{cols}})
-    }
-}
-```
-
-### `return_specified_table()` create table based on table specification (`tp`)
+### `return_specified_table()` create table based on table *specification* (`tp`)
 
 ```{r}
 return_specified_table = function(tp){
@@ -238,7 +254,10 @@ last_table() |>
   set_rows(Survived)
 
 last_table() |> 
-  set_cols(c(Sex, Class))
+  set_cols(c(Sex))
+
+last_table() |>
+  set_rows(Class)
 ```
 
 
