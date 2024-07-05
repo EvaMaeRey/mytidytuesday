@@ -11,9 +11,9 @@
 
 <meta name="author" content="Evangeline Reynolds" />
 
-<meta name="date" content="2024-07-03" />
+<meta name="date" content="2024-07-05" />
 
-<title>another experiment</title>
+<title>Towards incremental table specification</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -350,51 +350,136 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">another experiment</h1>
+<h1 class="title toc-ignore">Towards incremental table
+specification</h1>
 <h4 class="author">Evangeline Reynolds</h4>
-<h4 class="date">2024-07-03</h4>
+<h4 class="date">2024-07-05</h4>
 
 </div>
 
 <div id="TOC">
 <ul>
-<li><a href="#intro-thoughts" id="toc-intro-thoughts">Intro
-Thoughts</a></li>
-<li><a href="#status-quo" id="toc-status-quo">Status Quo</a></li>
+<li><a href="#part-0.-objective" id="toc-part-0.-objective">Part 0.
+<strong>Objective… </strong></a></li>
+<li><a href="#part.-1.-implementation" id="toc-part.-1.-implementation">Part. 1.
+<strong>Implementation</strong></a>
+<ul>
+<li><a href="#step-1.-new-3s-object-create-new_tidypivot-which-defines-components-in-tp-a-3s-object." id="toc-step-1.-new-3s-object-create-new_tidypivot-which-defines-components-in-tp-a-3s-object.">Step
+1. <strong>New 3S object</strong> Create <code>new_tidypivot()</code>
+which defines components in ‘<code>tp</code>’ a 3S object.</a></li>
+<li><a href="#step-2.-print-once-specification-is-defined-actually-do-manipulation-to-produce-the-table---we-use-a-routine-from-the-tidypivot-package." id="toc-step-2.-print-once-specification-is-defined-actually-do-manipulation-to-produce-the-table---we-use-a-routine-from-the-tidypivot-package.">Step
+2. <strong>Print</strong>: Once specification is defined, actually do
+manipulation to produce the table - we use a routine from the
+{tidypivot} package.</a>
+<ul>
+<li><a href="#pivot_count-create-table-based-on-direct-user-inputs" id="toc-pivot_count-create-table-based-on-direct-user-inputs"><code>pivot_count()</code>
+create table based on direct user inputs</a></li>
+<li><a href="#return_specified_table-create-table-based-on-table-specification-tp" id="toc-return_specified_table-create-table-based-on-table-specification-tp"><code>return_specified_table()</code>
+create table based on table specification (<code>tp</code>)</a></li>
+<li><a href="#print.tidypivot-declare-print-method-for-tp-the-3s-objects" id="toc-print.tidypivot-declare-print-method-for-tp-the-3s-objects"><code>print.tidypivot</code>
+declare print method for <code>tp</code>, the 3S objects</a></li>
+</ul></li>
+<li><a href="#step-3.-user-facing-functions" id="toc-step-3.-user-facing-functions">Step 3. <strong>user-facing
+functions!</strong></a>
+<ul>
+<li><a href="#ggtable-initiate-table" id="toc-ggtable-initiate-table"><code>ggtable()</code> <em>initiate
+table</em></a></li>
+<li><a href="#set_rows-the-other-set-functions-are-hidden---set-up-the-same-way" id="toc-set_rows-the-other-set-functions-are-hidden---set-up-the-same-way"><code>set_rows()</code>,
+(the other ‘set’ functions are hidden - set up the same way…)</a></li>
+<li><a href="#last_table" id="toc-last_table"><code>last_table()</code></a></li>
+</ul></li>
+</ul></li>
+<li><a href="#part-2.-test-functionality" id="toc-part-2.-test-functionality">Part 2. <strong>Test
+functionality!</strong></a>
+<ul>
+<li><a href="#slow-build-with-last_table" id="toc-slow-build-with-last_table">Slow build with
+<code>last_table()</code></a></li>
+<li><a href="#fast-piped-build-uh-oh-we-get-to-see-the-in-between-tables-even-when-we-dont-use-last-table-ah" id="toc-fast-piped-build-uh-oh-we-get-to-see-the-in-between-tables-even-when-we-dont-use-last-table-ah">fast,
+piped <code>|&gt;</code> build <em>uh-oh, we get to see the in-between
+tables even when we don’t use last table! Ah!!!!</em></a></li>
+</ul></li>
+<li><a href="#part-3.-dispatch-define-behavior-when-tps-are-piped-to-other-environmenst" id="toc-part-3.-dispatch-define-behavior-when-tps-are-piped-to-other-environmenst">Part
+3. <strong>Dispatch</strong> Define behavior when tps are piped to other
+environmenst</a></li>
 </ul>
 </div>
 
-<div id="intro-thoughts" class="section level2">
-<h2>Intro Thoughts</h2>
+<div id="part-0.-objective" class="section level1">
+<h1>Part 0. <strong>Objective… </strong></h1>
+<pre class="r"><code>ggtable(mtcars) |&gt; # a count of observations
+  set_rows(cyl) |&gt; # a count by cyl (cly name each row)
+  set_cols(c(gear, am)) |&gt; # count by cyl and gear (gears head cols)
+  set_value(mpg) |&gt; # sum of mpgs by cyl and gear
+  set_fun(mean) |&gt; # average mpg by cyl and gear</code></pre>
 </div>
-<div id="status-quo" class="section level2">
-<h2>Status Quo</h2>
+<div id="part.-1.-implementation" class="section level1">
+<h1>Part. 1. <strong>Implementation</strong></h1>
+<div id="step-1.-new-3s-object-create-new_tidypivot-which-defines-components-in-tp-a-3s-object." class="section level2">
+<h2>Step 1. <strong>New 3S object</strong> Create
+<code>new_tidypivot()</code> which defines components in
+‘<code>tp</code>’ a 3S object.</h2>
 <pre class="r"><code>library(tidyverse)
-create_tidypivot &lt;- function(data = data.frame(), rows = NULL, columns = NULL, value = NULL, weight = NULL) {
+
+new_tidypivot &lt;- function(data = data.frame(), 
+                          rows = NULL, 
+                          columns = NULL, 
+                          value = NULL, 
+                          weight = NULL) {
   
-  # Create a list with specified components
-  obj &lt;- list(
+  # table specification components !
+  tp &lt;- list(
     data = data,
     rows = rows,
     columns = columns,
     value = value,
-    weight = weight
+    weight = weight  
+    # more &#39;slots&#39; to be added
   )
   
-  # Set the class attribute to indicate this is of class &#39;tidypivot&#39;
-  class(obj) &lt;- &quot;tidypivot&quot;
+  # declare class &#39;tidypivot&#39;
+  class(tp) &lt;- &quot;tidypivot&quot;
   
   # Return the created object
-  invisible(obj)
+  invisible(tp)
   
-}
-
-
-print_specified_table = function(tp){
-
-      out &lt;- &#39;tidypivot::pivot_helper(thedata, rows, cols, value, wt, fun)&#39;
-
+}</code></pre>
+</div>
+<div id="step-2.-print-once-specification-is-defined-actually-do-manipulation-to-produce-the-table---we-use-a-routine-from-the-tidypivot-package." class="section level2">
+<h2>Step 2. <strong>Print</strong>: Once specification is defined,
+actually do manipulation to produce the table - we use a routine from
+the {tidypivot} package.</h2>
+<div id="pivot_count-create-table-based-on-direct-user-inputs" class="section level3">
+<h3><code>pivot_count()</code> create table based on direct user
+inputs</h3>
+<pre class="r"><code>pivot_count &lt;- function (data, rows = NULL, cols = NULL) {
+    
+  cols_quo &lt;- rlang::enquo(cols)
   
+  grouped &lt;- data %&gt;% dplyr::group_by(
+    dplyr::across(c({{cols}}, {{rows}
+    })), .drop = FALSE)
+  
+  summarized &lt;- grouped %&gt;% 
+    dplyr::mutate(value = 1) %&gt;% 
+    dplyr::summarise(value = sum(value), .groups = &quot;drop&quot;)
+
+  tidy &lt;- summarized
+  
+    if (rlang::quo_is_null(cols_quo)) {
+        tidy
+    }
+    else {
+        tidy %&gt;% tidyr::pivot_wider(names_from = {{cols}})
+    }
+}</code></pre>
+</div>
+<div id="return_specified_table-create-table-based-on-table-specification-tp" class="section level3">
+<h3><code>return_specified_table()</code> create table based on table
+specification (<code>tp</code>)</h3>
+<pre class="r"><code>return_specified_table = function(tp){
+
+      out &lt;- &#39;pivot_count(thedata, rows, cols)&#39;
+
       str_replace_or_null &lt;- function(x, pattern, replacement){
         
         if(is.null(replacement)){x |&gt; str_replace(pattern, &#39;NULL&#39;)}
@@ -405,195 +490,152 @@ print_specified_table = function(tp){
       # out &lt;- str_replace_or_null(out, &quot;data&quot;,  tp$data)
       out &lt;- str_replace_or_null(out, &quot;rows&quot;,  tp$rows)
       out &lt;- str_replace_or_null(out, &quot;cols&quot;,  tp$cols)
-      out &lt;- str_replace_or_null(out, &quot;fun&quot;,   tp$fun)
-      out &lt;- str_replace_or_null(out, &quot;value&quot;, tp$value)
-      out &lt;- str_replace_or_null(out, &quot;wt&quot;,    tp$wt)
-      out &lt;- str_replace_or_null(out, &quot;fun&quot;,    tp$fun)
 
       eval(parse(text = out))         
       
-            
-}
-
-
-
-# Define a print method for &#39;tidypivot&#39;
-  print.tidypivot &lt;- function(tp, print_flag = TRUE) {
-    if (print_flag) {
-      # print(print_specified_table(tp))
-      print(&quot;An new table or update to specification just happened&quot;)
-    # cat(&quot;----------------------\nTable specification:\n&quot;)
-    # cat(&quot;Data:&quot;, x$data, &quot;\n&quot;)
-    # # print(x$data)
-    # cat(&quot;Rows:&quot;, x$rows, &quot;\n&quot;)
-    # cat(&quot;Columns:&quot;, x$cols, &quot;\n&quot;)
-    # cat(&quot;Function:&quot;, x$fun, &quot;\n&quot;)
-    # cat(&quot;Value:&quot;, x$value, &quot;\n&quot;)
-    # cat(&quot;Weight:&quot;, x$weight, &quot;\n&quot;)
-    }
-  }
+}</code></pre>
+</div>
+<div id="print.tidypivot-declare-print-method-for-tp-the-3s-objects" class="section level3">
+<h3><code>print.tidypivot</code> declare print method for
+<code>tp</code>, the 3S objects</h3>
+<pre class="r"><code>print.tidypivot &lt;- function(tp){
   
-ggtable &lt;- function(data){
+  return_specified_table(tp)
   
-  thedata &lt;&lt;- data
+}</code></pre>
+</div>
+</div>
+<div id="step-3.-user-facing-functions" class="section level2">
+<h2>Step 3. <strong>user-facing functions!</strong></h2>
+<div id="ggtable-initiate-table" class="section level3">
+<h3><code>ggtable()</code> <em>initiate table</em></h3>
+<pre class="r"><code>ggtable &lt;- function(data){
+  
+  thedata &lt;&lt;- data # don&#39;t love this
 
-tp &lt;- create_tidypivot(deparse(substitute(thedata)))
-    
-  tp |&gt;
-  print.tidypivot()
-  
+  tp &lt;- new_tidypivot(deparse(substitute(thedata)))
+
+  print(return_specified_table(tp))
+
   invisible(tp)
   
-    last_tp &lt;&lt;- tp
+  # tp
+  
+  last_tp &lt;&lt;- tp
 
 }
 
-set_rows &lt;- function(tp, rows = NULL){
+ggtable(cars)</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   value
+##   &lt;dbl&gt;
+## 1    50</code></pre>
+</div>
+<div id="set_rows-the-other-set-functions-are-hidden---set-up-the-same-way" class="section level3">
+<h3><code>set_rows()</code>, (the other ‘set’ functions are hidden - set
+up the same way…)</h3>
+<pre class="r"><code>set_rows &lt;- function(tp, rows = NULL){
   
 tp$rows &lt;- deparse(substitute(rows))
-
-  tp |&gt;
-  print.tidypivot()
+ 
+  print(return_specified_table(tp))
   
   invisible(tp)
   
     last_tp &lt;&lt;- tp
-
-}
-
-set_cols &lt;- function(tp, cols = NULL){
-  
-tp$cols &lt;- deparse(substitute(cols))
-
-  tp |&gt;
-  print.tidypivot()
-  
-  invisible(tp)
-  
-    last_tp &lt;&lt;- tp
-}
-
-
-set_fun &lt;- function(tp, fun = sum){
-
-tp$fun &lt;- deparse(substitute(fun))
-
-
-  tp |&gt;
-  print.tidypivot()
-
-  invisible(tp)
-
-    last_tp &lt;&lt;- tp
-
-  
-}
-
-set_value &lt;- function(tp, value = NULL){
-  
-tp$value &lt;- deparse(substitute(value))
-
-  tp |&gt;
-  print.tidypivot()
-  
-  invisible(tp)
-  
-  last_tp &lt;&lt;- tp
-  
-}
-
-set_weight &lt;- function(tp, weight = NULL){
-  
-tp$weight &lt;- deparse(substitute(weight))
-
-  tp |&gt;
-  print.tidypivot()
-  
-  invisible(tp)
-  
-  last_tp &lt;&lt;- tp
-  
-}
-
-
-
-
-ggtable(cars) |&gt; str()</code></pre>
-<pre><code>## [1] &quot;An new table or update to specification just happened&quot;
-## List of 5
-##  $ data   : chr &quot;thedata&quot;
-##  $ rows   : NULL
-##  $ columns: NULL
-##  $ value  : NULL
-##  $ weight : NULL
-##  - attr(*, &quot;class&quot;)= chr &quot;tidypivot&quot;</code></pre>
+}</code></pre>
+</div>
+<div id="last_table" class="section level3">
+<h3><code>last_table()</code></h3>
 <pre class="r"><code>last_table &lt;- function(){
   
   last_tp
   
-}
-
-
-Titanic |&gt; 
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="part-2.-test-functionality" class="section level1">
+<h1>Part 2. <strong>Test functionality!</strong></h1>
+<div id="slow-build-with-last_table" class="section level2">
+<h2>Slow build with <code>last_table()</code></h2>
+<pre class="r"><code>Titanic |&gt; 
   data.frame() |&gt;
-  uncount(Freq) |&gt; 
-  ggtable() |&gt; 
-  set_rows(Survived) |&gt; 
-  print_specified_table()</code></pre>
-<pre><code>## [1] &quot;An new table or update to specification just happened&quot;
-## [1] &quot;An new table or update to specification just happened&quot;</code></pre>
+  uncount(Freq) -&gt;
+tidy_titanic
+
+tidy_titanic |&gt; tibble()</code></pre>
+<pre><code>## # A tibble: 2,201 × 4
+##    Class Sex   Age   Survived
+##    &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt;   
+##  1 3rd   Male  Child No      
+##  2 3rd   Male  Child No      
+##  3 3rd   Male  Child No      
+##  4 3rd   Male  Child No      
+##  5 3rd   Male  Child No      
+##  6 3rd   Male  Child No      
+##  7 3rd   Male  Child No      
+##  8 3rd   Male  Child No      
+##  9 3rd   Male  Child No      
+## 10 3rd   Male  Child No      
+## # ℹ 2,191 more rows</code></pre>
+<pre class="r"><code>tidy_titanic |&gt;
+  ggtable() </code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   value
+##   &lt;dbl&gt;
+## 1  2201</code></pre>
+<pre class="r"><code>last_table() |&gt; 
+  set_rows(Survived)</code></pre>
 <pre><code>## # A tibble: 2 × 2
 ##   Survived value
 ##   &lt;fct&gt;    &lt;dbl&gt;
 ## 1 No        1490
 ## 2 Yes        711</code></pre>
 <pre class="r"><code>last_table() |&gt; 
-  set_cols(c(Sex, Class)) |&gt;
-  print_specified_table() </code></pre>
-<pre><code>## [1] &quot;An new table or update to specification just happened&quot;</code></pre>
+  set_cols(c(Sex, Class))</code></pre>
 <pre><code>## # A tibble: 2 × 9
 ##   Survived Male_1st Male_2nd Male_3rd Male_Crew Female_1st Female_2nd Female_3rd
 ##   &lt;fct&gt;       &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
 ## 1 No            118      154      422       670          4         13        106
 ## 2 Yes            62       25       88       192        141         93         90
 ## # ℹ 1 more variable: Female_Crew &lt;dbl&gt;</code></pre>
+</div>
+<div id="fast-piped-build-uh-oh-we-get-to-see-the-in-between-tables-even-when-we-dont-use-last-table-ah" class="section level2">
+<h2>fast, piped <code>|&gt;</code> build <em>uh-oh, we get to see the
+in-between tables even when we don’t use last table! Ah!!!!</em></h2>
 <pre class="r"><code>ggtable(mtcars) |&gt; 
   set_rows(cyl) |&gt; 
   set_cols(am) |&gt;
-  set_cols(c(gear, am)) |&gt; 
-  set_fun(sum) |&gt;
-  set_value(mpg) |&gt;
-  set_weight(cyl) |&gt;
-  print_specified_table() </code></pre>
-<pre><code>## [1] &quot;An new table or update to specification just happened&quot;
-## [1] &quot;An new table or update to specification just happened&quot;
-## [1] &quot;An new table or update to specification just happened&quot;
-## [1] &quot;An new table or update to specification just happened&quot;
-## [1] &quot;An new table or update to specification just happened&quot;
-## [1] &quot;An new table or update to specification just happened&quot;
-## [1] &quot;An new table or update to specification just happened&quot;</code></pre>
-<pre><code>## # A tibble: 3 × 5
+  set_cols(c(gear, am)) </code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   value
+##   &lt;dbl&gt;
+## 1    32
+## # A tibble: 3 × 2
+##     cyl value
+##   &lt;dbl&gt; &lt;dbl&gt;
+## 1     4    11
+## 2     6     7
+## 3     8    14
+## # A tibble: 3 × 3
+##     cyl   `0`   `1`
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     4     3     8
+## 2     6     4     3
+## 3     8    12     2
+## # A tibble: 3 × 5
 ##     cyl `3_0` `4_0` `4_1` `5_1`
 ##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1     4  21.5  47.2  168.  56.4
-## 2     6  39.5  37     42   19.7
-## 3     8 181.   NA     NA   30.8</code></pre>
-<pre class="r"><code>ggtable(mpg) |&gt; 
-  set_rows(class) |&gt;
-  print_specified_table()</code></pre>
-<pre><code>## [1] &quot;An new table or update to specification just happened&quot;
-## [1] &quot;An new table or update to specification just happened&quot;</code></pre>
-<pre><code>## # A tibble: 7 × 2
-##   class      value
-##   &lt;chr&gt;      &lt;dbl&gt;
-## 1 2seater        5
-## 2 compact       47
-## 3 midsize       41
-## 4 minivan       11
-## 5 pickup        33
-## 6 subcompact    35
-## 7 suv           62</code></pre>
-<pre class="r"><code>knitr::knit_exit()</code></pre>
+## 1     4     1     2     6     2
+## 2     6     2     2     2     1
+## 3     8    12    NA    NA     2</code></pre>
+</div>
+</div>
+<div id="part-3.-dispatch-define-behavior-when-tps-are-piped-to-other-environmenst" class="section level1">
+<h1>Part 3. <strong>Dispatch</strong> Define behavior when tps are piped
+to other environmenst</h1>
+<p>Future work</p>
 </div>
 
 

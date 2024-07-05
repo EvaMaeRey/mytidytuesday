@@ -114,7 +114,17 @@ data.frame(time = hms::as_hms(c("08:30:00",
 ## Experiment
 
 ```{r}
-
+library(tidyverse)
+tribble(~ time, ~event,
+        "2024-07-05 17:30:00 MDT", "Swim",
+        "2024-07-06 09:30:00 MDT", "Story Time",
+        "2024-07-06 10:00:00 MDT", "Bus Arrives") %>% 
+  mutate(time = as.Date.POSIXlt(time)) %>% 
+  ggplot() + 
+  aes(x = time, 
+      label = paste(time, event, sep = "\n")) + 
+  geom_timeline_basic() + 
+  labs(title = "Thurs 27")
 ```
 
 

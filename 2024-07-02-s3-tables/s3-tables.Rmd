@@ -1,5 +1,5 @@
 ---
-title: "another experiment"
+title: "Towards incremental table specification"
 author: "Evangeline Reynolds"
 date: "`r Sys.Date()`"
 output: 
@@ -12,41 +12,83 @@ knitr::opts_chunk$set(echo = TRUE)
 options(tidyverse.quiet = TRUE)
 ```
 
+# Part 0.  **Objective... **
 
+```{r eval = F}
+ggtable(mtcars) |> # a count of observations
+  set_rows(cyl) |> # a count by cyl (cly name each row)
+  set_cols(c(gear, am)) |> # count by cyl and gear (gears head cols)
+  set_value(mpg) |> # sum of mpgs by cyl and gear
+  set_fun(mean) |> # average mpg by cyl and gear
+```
 
+# Part. 1. **Implementation**
 
-## Intro Thoughts
-
-
-## Status Quo
+## Step 1. **New 3S object** Create `new_tidypivot()` which defines components in '`tp`' a 3S object.
 
 ```{r}
 library(tidyverse)
-create_tidypivot <- function(data = data.frame(), rows = NULL, columns = NULL, value = NULL, weight = NULL) {
+
+new_tidypivot <- function(data = data.frame(), 
+                          rows = NULL, 
+                          columns = NULL, 
+                          value = NULL, 
+                          weight = NULL) {
   
-  # Create a list with specified components
-  obj <- list(
+  # table specification components !
+  tp <- list(
     data = data,
     rows = rows,
     columns = columns,
     value = value,
-    weight = weight
+    weight = weight  
+    # more 'slots' to be added
   )
   
-  # Set the class attribute to indicate this is of class 'tidypivot'
-  class(obj) <- "tidypivot"
+  # declare class 'tidypivot'
+  class(tp) <- "tidypivot"
   
   # Return the created object
-  invisible(obj)
+  invisible(tp)
   
 }
+```
 
+## Step 2. **Print**: Once specification is defined, actually do  manipulation to produce the table - we use a routine from the {tidypivot} package.
 
-print_specified_table = function(tp){
+### `pivot_count()` create table based on direct user inputs
 
-      out <- 'tidypivot::pivot_helper(thedata, rows, cols, value, wt, fun)'
-
+```{r, echo = T}
+pivot_count <- function (data, rows = NULL, cols = NULL) {
+    
+  cols_quo <- rlang::enquo(cols)
   
+  grouped <- data %>% dplyr::group_by(
+    dplyr::across(c({{cols}}, {{rows}
+    })), .drop = FALSE)
+  
+  summarized <- grouped %>% 
+    dplyr::mutate(value = 1) %>% 
+    dplyr::summarise(value = sum(value), .groups = "drop")
+
+  tidy <- summarized
+  
+    if (rlang::quo_is_null(cols_quo)) {
+        tidy
+    }
+    else {
+        tidy %>% tidyr::pivot_wider(names_from = {{cols}})
+    }
+}
+```
+
+### `return_specified_table()` create table based on table specification (`tp`)
+
+```{r}
+return_specified_table = function(tp){
+
+      out <- 'pivot_count(thedata, rows, cols)'
+
       str_replace_or_null <- function(x, pattern, replacement){
         
         if(is.null(replacement)){x |> str_replace(pattern, 'NULL')}
@@ -57,68 +99,69 @@ print_specified_table = function(tp){
       # out <- str_replace_or_null(out, "data",  tp$data)
       out <- str_replace_or_null(out, "rows",  tp$rows)
       out <- str_replace_or_null(out, "cols",  tp$cols)
-      out <- str_replace_or_null(out, "fun",   tp$fun)
-      out <- str_replace_or_null(out, "value", tp$value)
-      out <- str_replace_or_null(out, "wt",    tp$wt)
-      out <- str_replace_or_null(out, "fun",    tp$fun)
 
       eval(parse(text = out))         
       
-            
 }
+```
 
+###  `print.tidypivot` declare print method for `tp`, the 3S objects
 
-
-# Define a print method for 'tidypivot'
-  print.tidypivot <- function(tp, print_flag = TRUE) {
-    if (print_flag) {
-      # print(print_specified_table(tp))
-      print("An new table or update to specification just happened")
-    # cat("----------------------\nTable specification:\n")
-    # cat("Data:", x$data, "\n")
-    # # print(x$data)
-    # cat("Rows:", x$rows, "\n")
-    # cat("Columns:", x$cols, "\n")
-    # cat("Function:", x$fun, "\n")
-    # cat("Value:", x$value, "\n")
-    # cat("Weight:", x$weight, "\n")
-    }
-  }
+```{r}
+print.tidypivot <- function(tp){
   
+  return_specified_table(tp)
+  
+}
+```
+  
+  
+## Step 3. **user-facing functions!**
+
+### `ggtable()` *initiate table*
+  
+```{r}  
 ggtable <- function(data){
   
-  thedata <<- data
+  thedata <<- data # don't love this
 
-tp <- create_tidypivot(deparse(substitute(thedata)))
-    
-  tp |>
-  print.tidypivot()
-  
+  tp <- new_tidypivot(deparse(substitute(thedata)))
+
+  print(return_specified_table(tp))
+
   invisible(tp)
   
-    last_tp <<- tp
+  # tp
+  
+  last_tp <<- tp
 
 }
 
+ggtable(cars)
+
+```
+
+### `set_rows()`, (the other 'set' functions are hidden - set up the same way...)
+
+```{r}
 set_rows <- function(tp, rows = NULL){
   
 tp$rows <- deparse(substitute(rows))
-
-  tp |>
-  print.tidypivot()
+ 
+  print(return_specified_table(tp))
   
   invisible(tp)
   
     last_tp <<- tp
-
 }
+```
 
+```{r, echo = F}
 set_cols <- function(tp, cols = NULL){
   
 tp$cols <- deparse(substitute(cols))
 
-  tp |>
-  print.tidypivot()
+  print(return_specified_table(tp))
   
   invisible(tp)
   
@@ -131,8 +174,7 @@ set_fun <- function(tp, fun = sum){
 tp$fun <- deparse(substitute(fun))
 
 
-  tp |>
-  print.tidypivot()
+  print(return_specified_table(tp))
 
   invisible(tp)
 
@@ -145,8 +187,7 @@ set_value <- function(tp, value = NULL){
   
 tp$value <- deparse(substitute(value))
 
-  tp |>
-  print.tidypivot()
+  print(return_specified_table(tp))
   
   invisible(tp)
   
@@ -158,8 +199,7 @@ set_weight <- function(tp, weight = NULL){
   
 tp$weight <- deparse(substitute(weight))
 
-  tp |>
-  print.tidypivot()
+  print(return_specified_table(tp))
   
   invisible(tp)
   
@@ -167,51 +207,51 @@ tp$weight <- deparse(substitute(weight))
   
 }
 
+```
 
+### `last_table()`
 
-
-ggtable(cars) |> str()
-  
-
-
-
+```{r}
 last_table <- function(){
   
   last_tp
   
 }
+```
 
+# Part 2. **Test functionality!**
 
+## Slow build with `last_table()`
+
+```{r}
 Titanic |> 
   data.frame() |>
-  uncount(Freq) |> 
-  ggtable() |> 
-  set_rows(Survived) |> 
-  print_specified_table()
+  uncount(Freq) ->
+tidy_titanic
+
+tidy_titanic |> tibble()
+
+tidy_titanic |>
+  ggtable() 
 
 last_table() |> 
-  set_cols(c(Sex, Class)) |>
-  print_specified_table() 
+  set_rows(Survived)
 
+last_table() |> 
+  set_cols(c(Sex, Class))
+```
+
+
+## fast, piped `|>` build *uh-oh, we get to see the in-between tables even when we don't use last table!  Ah!!!!*
+
+```{r}
 ggtable(mtcars) |> 
   set_rows(cyl) |> 
   set_cols(am) |>
-  set_cols(c(gear, am)) |> 
-  set_fun(sum) |>
-  set_value(mpg) |>
-  set_weight(cyl) |>
-  print_specified_table() 
-
-ggtable(mpg) |> 
-  set_rows(class) |>
-  print_specified_table()
-
-
-
+  set_cols(c(gear, am)) 
 ```
 
 
-```{r}
-knitr::knit_exit()
+# Part 3. **Dispatch** Define behavior when tps are piped to other environmenst 
 
-```
+Future work
