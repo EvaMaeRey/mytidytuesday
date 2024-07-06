@@ -220,7 +220,26 @@ df_year(YEAR) |>
 ## Experiment
 
 ```{r}
+library(ggplot2)
+library(ggcalendar)
+df_month(7) |> 
+  ggcalendar(size = 6, alpha = .5) + 
+  theme(text = element_text(size = 18))
 
+last_plot() %+% 
+  df_month(8)
+
+last_plot() %+% 
+  df_month(9)
+
+last_plot() %+% 
+  df_month(10)
+
+last_plot() %+% 
+  df_month(11)
+
+last_plot() %+% 
+  df_month(12)
 ```
 
 
