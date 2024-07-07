@@ -33,8 +33,9 @@ pivot_count <- function (data, rows = NULL, cols = NULL) {
         summarized
     }
     else {
-        summarized %>% tidyr::pivot_wider(names_from = {{cols}}, 
-                                    values_from = n)
+        summarized %>% 
+        tidyr::pivot_wider(names_from = {{cols}}, 
+                           values_from = n)
     }
 }
 ```
@@ -52,14 +53,12 @@ pivot_count(data = tidy_titanic,
             cols = c(Sex, Age))
 ```
 
-## Desired usage: Piped
+## Desired usage: Piped pivot `ppivot`
 
 ```{r eval = F}
-ggtable(mtcars) |> # a count of observations
-  set_rows(cyl) |> # a count by cyl (cly name each row)
-  set_cols(c(gear, am)) |> # count by cyl and gear (gears head cols)
-  set_value(mpg) |> # sum of mpgs by cyl and gear
-  set_fun(mean) |> # average mpg by cyl and gear
+ppivot(tidy_titanic) |> # a count of observations
+  set_rows(Survived) |> # a count by Survived
+  set_cols(c(Sex, Age)) # count by Sex, Age and Survived 
 ```
 
 # Part. 1. **Implementation**
@@ -112,7 +111,6 @@ return_specified_table = function(tp){
         
       }
       
-      # out <- str_replace_or_null(out, "data",  tp$data)
       out <- str_replace_or_null(out, "rows",  tp$rows)
       out <- str_replace_or_null(out, "cols",  tp$cols)
 
@@ -134,10 +132,10 @@ print.tidypivot <- function(tp){
   
 ## Step 3. **user-facing functions!**
 
-### `ggtable()` *initiate table*
+### `ppivot()` *initiate table*
   
 ```{r}  
-ggtable <- function(data){
+ppivot <- function(data){
   
   thedata <<- data # don't love this
 
@@ -153,7 +151,7 @@ ggtable <- function(data){
 
 }
 
-ggtable(cars)
+ppivot(cars)
 
 ```
 
@@ -248,7 +246,7 @@ tidy_titanic
 tidy_titanic |> tibble()
 
 tidy_titanic |>
-  ggtable() 
+  ppivot() 
 
 last_table() |> 
   set_rows(Survived)
@@ -264,13 +262,13 @@ last_table() |>
 ## fast, piped `|>` build *uh-oh, we get to see the in-between tables even when we don't use last table!  Ah!!!!*
 
 ```{r}
-ggtable(mtcars) |> 
+ppivot(mtcars) |> 
   set_rows(cyl) |> 
   set_cols(am) |>
   set_cols(c(gear, am)) 
 ```
 
 
-# Part 3. **Dispatch** Define behavior when tps are piped to other environmenst 
+# Part 3. **Dispatch** Define behavior when tps are piped to other environment 
 
 Future work

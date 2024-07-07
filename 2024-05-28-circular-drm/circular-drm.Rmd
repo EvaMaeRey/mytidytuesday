@@ -1,5 +1,5 @@
 ---
-title: "another experiment"
+title: "ggdandalion case study: Melodically placed song lyrics in a round"
 author: "Evangeline Reynolds"
 date: "`r Sys.Date()`"
 output: 
@@ -14,16 +14,23 @@ options(tidyverse.quiet = TRUE)
 
 
 
+## Intro, a lyrics-melody data frame
 
-## Intro Thoughts
-
-
-## Status Quo
-
-```{r, fig.height=12, fig.width=12 }
+```{r}
 library(tidyverse)
 
-compute_panel_circle_drm <- function(data, scales){
+
+beluga_song <- ggdoremi:::join_phrases_drm_lyrics()
+
+beluga_song %>% head()
+```
+
+
+## Dandalion song w/o extension
+
+```{r, fig.height=12, fig.width=12 }
+
+compute_panel_dandalion <- function(data, scales){
   
   spacer_df <- tibble(spacer = 1)
   
@@ -34,8 +41,10 @@ compute_panel_circle_drm <- function(data, scales){
   data$around <- 1:(nrow(data))/nrow(data)
   data$circ_angle <- -data$around*2*pi - 
     pi/2 + 2*pi/nrow(data)/2 
-  data$x <- data$dist * cos(data$circ_angle)
-  data$y <- data$dist * sin(data$circ_angle)
+  data$x <- data$radius * cos(data$circ_angle)
+  data$xend <- 0
+  data$yend <- 0
+  data$y <- data$radius * sin(data$circ_angle)
   data$angle <- -data$around*360 + 180
   
   data %>% 
@@ -46,21 +55,102 @@ compute_panel_circle_drm <- function(data, scales){
 
 ggdoremi:::join_phrases_drm_lyrics() %>% 
   # head(30) %>% 
-  mutate(dist = as.numeric(drm) + 10) %>% 
-  compute_panel_circle_drm() %>% 
+  mutate(radius = as.numeric(drm) + 10) %>% 
+  compute_panel_dandalion() %>% 
   ggplot() + 
   ggstamp::stamp_circle(radius = 8+10, alpha = 0, size = .25, linetype = "dotted") +
   ggstamp::stamp_circle(radius = 8+12, alpha = 0, size = .25, linetype = "dotted") +
   ggstamp::stamp_circle(radius = 8+14, alpha = 0, size = .25, linetype = "dotted") +
-  aes(x = x, dist = dist, y = y, label = lyric, angle = angle) + 
+  aes(x = x, radius = radius, y = y, label = lyric, angle = angle) + 
   geom_segment(xend = 0, yend = 0, color = "black", linewidth = .5) +
   geom_point(shape = 21, size = 16, fill = "white") +
   # aes(color = doremi) +
   geom_text() +
   coord_equal()  + 
   theme_void()
+```
+
+# statexpress enabled extension
+
+## write extension
+
+```{r}
+
+stat_dandalion <- function(geom = "segment", ...){
+  statexpress::stat_panel(compute_panel_dandalion, geom, ...)
+}
+
+geom_dandalion_segment <- stat_dandalion
+geom_dandalion_text <- function(...){stat_dandalion(geom =  "text", ...)}
+geom_dandalion_point <- function(...){stat_dandalion(geom =  "point", ...)}
+
+
+```
+
+```{r}
+stamp_staff_dms <- function(radius_addition = 10 ){
+  
+  list(
+  ggstamp::stamp_circle(radius = 8+0+radius_addition, alpha = 0, size = .25, linetype = "dotted"),
+  ggstamp::stamp_circle(radius = 8+2+radius_addition, alpha = 0, size = .25, linetype = "dotted"),
+  ggstamp::stamp_circle(radius = 8+4+radius_addition, alpha = 0, size = .25, linetype = "dotted")
+  )
+  
+  
+}
+
+
+stamp_staff_dmst <- function(radius_addition = 10 ){
+  
+  list(stamp_staff_dms(radius_addition = radius_addition), 
+      ggstamp::stamp_circle(radius = 8+6+radius_addition, 
+                            alpha = 0, size = .25, 
+                            linetype = "dotted")
+  )
+  
+  
+}
+
+stamp_staff_dmstr <- function(radius_addition = 10 ){
+  
+  list(stamp_staff_dmst(radius_addition = radius_addition), 
+      ggstamp::stamp_circle(radius = 8+8+radius_addition, 
+                            alpha = 0, size = .25, 
+                            linetype = "dotted")
+  )
+  
+  
+}
+
+```
+
+
+## Use extension
+
+```{r , fig.height=12, fig.width=12 }
+ggdoremi:::join_phrases_drm_lyrics() ->
+beluga_song
+
+head(beluga_song) 
+
+beluga_song %>% 
+  ggplot() + 
+  aes(radius = as.numeric(drm)) +
+  geom_dandalion_segment() + 
+  geom_dandalion_point(size = 16, 
+                       shape = 21,
+                       fill = "white") +
+  aes(label = lyric) +
+  geom_dandalion_text() + 
+  coord_equal()
   
 
+
+```
+
+## Another example
+
+```{r}
 lyrics_abc <- "a b c d e f g
 h i j k l m n o p
 q r s t u v
@@ -77,25 +167,33 @@ ddsslls
 ffmmrrd"
 
 
-ggdoremi:::join_phrases_drm_lyrics(drm_abc, lyrics_phrases = lyrics_abc %>% str_to_title()) %>% 
-  # head(30) %>% 
-  mutate(dist = as.numeric(drm) + 10) %>% 
-  compute_panel_circle_drm() %>% 
+ggdoremi:::join_phrases_drm_lyrics(drm_abc, 
+                                   lyrics_phrases = 
+                                     lyrics_abc %>% str_to_title()) %>% 
   ggplot() + 
-  ggstamp::stamp_circle(radius = 8+10, alpha = 0, size = .25, linetype = "dotted") +
-  ggstamp::stamp_circle(radius = 8+12, alpha = 0, size = .25, linetype = "dotted") +
-  ggstamp::stamp_circle(radius = 8+14, alpha = 0, size = .25, linetype = "dotted") +
-  aes(x = x, dist = dist, y = y, label = lyric, angle = angle) + 
-  geom_segment(xend = 0, yend = 0, color = "black") +
-  geom_point(size = 16, color = "white") +
-  # aes(color = doremi) +
-  geom_text(size = 8) +
-  coord_equal()  + 
-  theme_void()
+  aes(radius = as.numeric(drm) + 3) +
+  stamp_staff_dms(3) +
+  geom_dandalion_segment(color = "black", 
+                         size = .5) +
+  geom_dandalion_point(size = 10, 
+                       fill = "white",
+                       shape = 21) +
+  aes(label = lyric) +
+  geom_dandalion_text() +
+  coord_equal() + 
+  theme_void() + 
+  aes(size = 5)
+
+last_plot() %+%
+  (ggdoremi:::join_phrases_drm_lyrics(drm_abc, 
+                                   lyrics_abc)[1:26,]) + 
+  aes(size = 7) + 
+  guides("none")
 ```
 
-```{r}
 
+
+```{r, fig.height=12, fig.width=12 }
 lyrics_doe_a_deer <-
 'Doe a deer a fe-male deer
 ray a drop of gol-den sun
@@ -119,21 +217,19 @@ tmfslt1
 
 ggdoremi:::join_phrases_drm_lyrics(drm_doe_a_deer, lyrics_phrases = lyrics_doe_a_deer) %>%
   # head(30) %>%
-  mutate(dist = as.numeric(drm) + 10) %>%
-  compute_panel_circle_drm() %>%
   ggplot() +
-  ggstamp::stamp_circle(radius = 8+10, alpha = 0, size = .25, linetype = "dotted") +
-  ggstamp::stamp_circle(radius = 8+12, alpha = 0, size = .25, linetype = "dotted") +
-  ggstamp::stamp_circle(radius = 8+14, alpha = 0, size = .25, linetype = "dotted") +
-  ggstamp::stamp_circle(radius = 8+16, alpha = 0, size = .25, linetype = "dotted") +
-  aes(x = x, dist = dist, y = y, label = lyric, angle = angle) +
-  geom_segment(xend = 0, yend = 0, color = "black") +
-  geom_point(shape = 21, size = 16, fill = "white") +
-  # aes(color = doremi) +
-  geom_text() +
+  stamp_staff_dmst(0) +
+  aes(radius = as.numeric(drm) ) +
+  geom_dandalion_segment(xend = 0, yend = 0) +
+  geom_dandalion_point(shape = 21, size = 19, fill = "white") +
+  aes(color = doremi, label = lyric) +
+  geom_dandalion_text(size = 7) +
   coord_equal() + 
-  theme_void()
+  theme_void() + 
+  guides(color = "none", label = "none")
 
+last_plot() + 
+  aes(label = doremi)
 
 ```
 

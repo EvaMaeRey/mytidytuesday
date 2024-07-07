@@ -11,7 +11,7 @@
 
 <meta name="author" content="Evangeline Reynolds" />
 
-<meta name="date" content="2024-07-05" />
+<meta name="date" content="2024-07-06" />
 
 <title>Towards incremental table specification</title>
 
@@ -353,7 +353,7 @@ display: none;
 <h1 class="title toc-ignore">Towards incremental table
 specification</h1>
 <h4 class="author">Evangeline Reynolds</h4>
-<h4 class="date">2024-07-05</h4>
+<h4 class="date">2024-07-06</h4>
 
 </div>
 
@@ -367,8 +367,8 @@ arguments are orthogonal, and make a pipable interface</a>
 create count table based on direct user inputs</a></li>
 <li><a href="#status-quo-usage-enter-arguments-at-once" id="toc-status-quo-usage-enter-arguments-at-once">status quo usage:
 enter arguments at once</a></li>
-<li><a href="#desired-usage-piped" id="toc-desired-usage-piped">Desired
-usage: Piped</a></li>
+<li><a href="#desired-usage-piped-pivot-ppivot" id="toc-desired-usage-piped-pivot-ppivot">Desired usage: Piped pivot
+<code>ppivot</code></a></li>
 </ul></li>
 <li><a href="#part.-1.-implementation" id="toc-part.-1.-implementation">Part. 1.
 <strong>Implementation</strong></a>
@@ -390,7 +390,7 @@ declare print method for <code>tp</code>, the 3S objects</a></li>
 <li><a href="#step-3.-user-facing-functions" id="toc-step-3.-user-facing-functions">Step 3. <strong>user-facing
 functions!</strong></a>
 <ul>
-<li><a href="#ggtable-initiate-table" id="toc-ggtable-initiate-table"><code>ggtable()</code> <em>initiate
+<li><a href="#ppivot-initiate-table" id="toc-ppivot-initiate-table"><code>ppivot()</code> <em>initiate
 table</em></a></li>
 <li><a href="#set_rows-the-other-set-functions-are-hidden---set-up-the-same-way" id="toc-set_rows-the-other-set-functions-are-hidden---set-up-the-same-way"><code>set_rows()</code>,
 (the other ‘set’ functions are hidden - set up the same way…)</a></li>
@@ -406,9 +406,9 @@ functionality!</strong></a>
 piped <code>|&gt;</code> build <em>uh-oh, we get to see the in-between
 tables even when we don’t use last table! Ah!!!!</em></a></li>
 </ul></li>
-<li><a href="#part-3.-dispatch-define-behavior-when-tps-are-piped-to-other-environmenst" id="toc-part-3.-dispatch-define-behavior-when-tps-are-piped-to-other-environmenst">Part
+<li><a href="#part-3.-dispatch-define-behavior-when-tps-are-piped-to-other-environment" id="toc-part-3.-dispatch-define-behavior-when-tps-are-piped-to-other-environment">Part
 3. <strong>Dispatch</strong> Define behavior when tps are piped to other
-environmenst</a></li>
+environment</a></li>
 </ul>
 </div>
 
@@ -434,8 +434,9 @@ pivot_count &lt;- function (data, rows = NULL, cols = NULL) {
         summarized
     }
     else {
-        summarized %&gt;% tidyr::pivot_wider(names_from = {{cols}}, 
-                                    values_from = n)
+        summarized %&gt;% 
+        tidyr::pivot_wider(names_from = {{cols}}, 
+                           values_from = n)
     }
 }</code></pre>
 </div>
@@ -455,13 +456,11 @@ pivot_count(data = tidy_titanic,
 ## 1 No               35       1329           17          109
 ## 2 Yes              29        338           28          316</code></pre>
 </div>
-<div id="desired-usage-piped" class="section level2">
-<h2>Desired usage: Piped</h2>
-<pre class="r"><code>ggtable(mtcars) |&gt; # a count of observations
-  set_rows(cyl) |&gt; # a count by cyl (cly name each row)
-  set_cols(c(gear, am)) |&gt; # count by cyl and gear (gears head cols)
-  set_value(mpg) |&gt; # sum of mpgs by cyl and gear
-  set_fun(mean) |&gt; # average mpg by cyl and gear</code></pre>
+<div id="desired-usage-piped-pivot-ppivot" class="section level2">
+<h2>Desired usage: Piped pivot <code>ppivot</code></h2>
+<pre class="r"><code>ppivot(tidy_titanic) |&gt; # a count of observations
+  set_rows(Survived) |&gt; # a count by Survived
+  set_cols(c(Sex, Age)) # count by Sex, Age and Survived </code></pre>
 </div>
 </div>
 <div id="part.-1.-implementation" class="section level1">
@@ -514,7 +513,6 @@ the {tidypivot} package.</h2>
         
       }
       
-      # out &lt;- str_replace_or_null(out, &quot;data&quot;,  tp$data)
       out &lt;- str_replace_or_null(out, &quot;rows&quot;,  tp$rows)
       out &lt;- str_replace_or_null(out, &quot;cols&quot;,  tp$cols)
 
@@ -534,9 +532,9 @@ the {tidypivot} package.</h2>
 </div>
 <div id="step-3.-user-facing-functions" class="section level2">
 <h2>Step 3. <strong>user-facing functions!</strong></h2>
-<div id="ggtable-initiate-table" class="section level3">
-<h3><code>ggtable()</code> <em>initiate table</em></h3>
-<pre class="r"><code>ggtable &lt;- function(data){
+<div id="ppivot-initiate-table" class="section level3">
+<h3><code>ppivot()</code> <em>initiate table</em></h3>
+<pre class="r"><code>ppivot &lt;- function(data){
   
   thedata &lt;&lt;- data # don&#39;t love this
 
@@ -552,7 +550,7 @@ the {tidypivot} package.</h2>
 
 }
 
-ggtable(cars)</code></pre>
+ppivot(cars)</code></pre>
 <pre><code>## # A tibble: 1 × 1
 ##       n
 ##   &lt;int&gt;
@@ -607,7 +605,7 @@ tidy_titanic |&gt; tibble()</code></pre>
 ## 10 3rd   Male  Child No      
 ## # ℹ 2,191 more rows</code></pre>
 <pre class="r"><code>tidy_titanic |&gt;
-  ggtable() </code></pre>
+  ppivot() </code></pre>
 <pre><code>## # A tibble: 1 × 1
 ##       n
 ##   &lt;int&gt;
@@ -639,7 +637,7 @@ tidy_titanic |&gt; tibble()</code></pre>
 <div id="fast-piped-build-uh-oh-we-get-to-see-the-in-between-tables-even-when-we-dont-use-last-table-ah" class="section level2">
 <h2>fast, piped <code>|&gt;</code> build <em>uh-oh, we get to see the
 in-between tables even when we don’t use last table! Ah!!!!</em></h2>
-<pre class="r"><code>ggtable(mtcars) |&gt; 
+<pre class="r"><code>ppivot(mtcars) |&gt; 
   set_rows(cyl) |&gt; 
   set_cols(am) |&gt;
   set_cols(c(gear, am)) </code></pre>
@@ -667,9 +665,9 @@ in-between tables even when we don’t use last table! Ah!!!!</em></h2>
 ## 3     8    12    NA    NA     2</code></pre>
 </div>
 </div>
-<div id="part-3.-dispatch-define-behavior-when-tps-are-piped-to-other-environmenst" class="section level1">
+<div id="part-3.-dispatch-define-behavior-when-tps-are-piped-to-other-environment" class="section level1">
 <h1>Part 3. <strong>Dispatch</strong> Define behavior when tps are piped
-to other environmenst</h1>
+to other environment</h1>
 <p>Future work</p>
 </div>
 
