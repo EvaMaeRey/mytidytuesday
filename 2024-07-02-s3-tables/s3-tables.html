@@ -403,10 +403,7 @@ functionality!</strong></a>
 <ul>
 <li><a href="#slow-build-with-last_table" id="toc-slow-build-with-last_table">Slow build with
 <code>last_table()</code></a></li>
-<li><a href="#fast-piped-build-uh-oh-we-get-to-see-the-in-between-tables-even-when-we-dont-use-last-table-but-this-is-not-the-behavior-were-going-after." id="toc-fast-piped-build-uh-oh-we-get-to-see-the-in-between-tables-even-when-we-dont-use-last-table-but-this-is-not-the-behavior-were-going-after.">fast,
-piped <code>|&gt;</code> build *uh-oh, we get to see the in-between
-tables even when we don’t use last table! But this is not the behavior
-we’re going after.</a></li>
+<li><a href="#piped" id="toc-piped">Piped <code>|&gt;</code></a></li>
 </ul></li>
 <li><a href="#part-3.-dispatch-define-behavior-when-tps-are-piped-to-other-environment" id="toc-part-3.-dispatch-define-behavior-when-tps-are-piped-to-other-environment">Part
 3. <strong>Dispatch</strong> Define behavior when tps are piped to other
@@ -473,42 +470,42 @@ pivot_count(data = tidy_titanic,
 ‘<code>tp</code>’ a 3S object.</h2>
 <pre class="r"><code>library(tidyverse)
 
-new_tidypivot &lt;- function(data = data.frame(), 
-                          rows = NULL, 
-                          columns = NULL, 
-                          value = NULL, 
+new_tidypivot &lt;- function(data = data.frame(),
+                          rows = NULL,
+                          columns = NULL,
+                          value = NULL,
                           weight = NULL) {
-  
+
   # table specification components !
   tp &lt;- list(
     data = data,
     rows = rows,
     columns = columns,
     value = value,
-    weight = weight  
+    weight = weight
     # more &#39;slots&#39; to be added
   )
-  
+
   # declare class &#39;tidypivot&#39;
   class(tp) &lt;- &quot;tidypivot&quot;
-  
+
   # Return the created object
   invisible(tp)
-  
+
 }
 
 
-# 
+
 # # table specification components !
 # tp &lt;- list(
-#     data = data,
-#     rows = rows,
-#     columns = columns,
-#     value = value,
-#     weight = weight  
+#     data,
+#     rows,
+#     columns,
+#     value,
+#     weight
 #     # more &#39;slots&#39; to be added
 #   )
-#   
+# 
 # # declare class &#39;tidypivot&#39;
 # class(tp) &lt;- &quot;tp&quot;</code></pre>
 </div>
@@ -557,12 +554,10 @@ the {tidypivot} package.</h2>
   thedata &lt;&lt;- data # don&#39;t love this
 
   tp &lt;- new_tidypivot(deparse(substitute(thedata)))
-
-  print(tp)
-  
-  # tp
   
   last_tp &lt;&lt;- tp
+  
+  tp
 
 }
 
@@ -577,11 +572,12 @@ ppivot(cars)</code></pre>
 up the same way…)</h3>
 <pre class="r"><code>set_rows &lt;- function(tp, rows = NULL){
   
-tp$rows &lt;- deparse(substitute(rows))
- 
-  print(tp)
+  tp$rows &lt;- deparse(substitute(rows))
   
   last_tp &lt;&lt;- tp
+  
+  tp
+
   
 }</code></pre>
 </div>
@@ -649,36 +645,27 @@ tidy_titanic |&gt; tibble()</code></pre>
 ## 3 3rd     510    196
 ## 4 Crew    862     23</code></pre>
 </div>
-<div id="fast-piped-build-uh-oh-we-get-to-see-the-in-between-tables-even-when-we-dont-use-last-table-but-this-is-not-the-behavior-were-going-after." class="section level2">
-<h2>fast, piped <code>|&gt;</code> build *uh-oh, we get to see the
-in-between tables even when we don’t use last table! But this is not the
-behavior we’re going after.</h2>
+<div id="piped" class="section level2">
+<h2>Piped <code>|&gt;</code></h2>
 <pre class="r"><code>ppivot(mtcars) |&gt; 
   set_rows(cyl) |&gt; 
   set_cols(am) |&gt;
   set_cols(c(gear, am)) </code></pre>
-<pre><code>## # A tibble: 1 × 1
-##       n
-##   &lt;int&gt;
-## 1    32
-## # A tibble: 3 × 2
-##     cyl     n
-##   &lt;dbl&gt; &lt;int&gt;
-## 1     4    11
-## 2     6     7
-## 3     8    14
-## # A tibble: 3 × 3
-##     cyl   `0`   `1`
-##   &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
-## 1     4     3     8
-## 2     6     4     3
-## 3     8    12     2
-## # A tibble: 3 × 5
+<pre><code>## # A tibble: 3 × 5
 ##     cyl `3_0` `4_0` `4_1` `5_1`
 ##   &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
 ## 1     4     1     2     6     2
 ## 2     6     2     2     2     1
 ## 3     8    12    NA    NA     2</code></pre>
+<pre class="r"><code>last_table() |&gt; str()</code></pre>
+<pre><code>## List of 6
+##  $ data   : chr &quot;thedata&quot;
+##  $ rows   : chr &quot;cyl&quot;
+##  $ columns: NULL
+##  $ value  : NULL
+##  $ weight : NULL
+##  $ cols   : chr &quot;c(gear, am)&quot;
+##  - attr(*, &quot;class&quot;)= chr &quot;tidypivot&quot;</code></pre>
 </div>
 </div>
 <div id="part-3.-dispatch-define-behavior-when-tps-are-piped-to-other-environment" class="section level1">

@@ -68,42 +68,42 @@ ppivot(tidy_titanic) |> # a count of observations
 ```{r}
 library(tidyverse)
 
-new_tidypivot <- function(data = data.frame(), 
-                          rows = NULL, 
-                          columns = NULL, 
-                          value = NULL, 
+new_tidypivot <- function(data = data.frame(),
+                          rows = NULL,
+                          columns = NULL,
+                          value = NULL,
                           weight = NULL) {
-  
+
   # table specification components !
   tp <- list(
     data = data,
     rows = rows,
     columns = columns,
     value = value,
-    weight = weight  
+    weight = weight
     # more 'slots' to be added
   )
-  
+
   # declare class 'tidypivot'
   class(tp) <- "tidypivot"
-  
+
   # Return the created object
   invisible(tp)
-  
+
 }
 
 
-# 
+
 # # table specification components !
 # tp <- list(
-#     data = data,
-#     rows = rows,
-#     columns = columns,
-#     value = value,
-#     weight = weight  
+#     data,
+#     rows,
+#     columns,
+#     value,
+#     weight
 #     # more 'slots' to be added
 #   )
-#   
+# 
 # # declare class 'tidypivot'
 # class(tp) <- "tp"
 
@@ -157,12 +157,10 @@ ppivot <- function(data){
   thedata <<- data # don't love this
 
   tp <- new_tidypivot(deparse(substitute(thedata)))
-
-  print(tp)
-  
-  # tp
   
   last_tp <<- tp
+  
+  tp
 
 }
 
@@ -175,11 +173,12 @@ ppivot(cars)
 ```{r}
 set_rows <- function(tp, rows = NULL){
   
-tp$rows <- deparse(substitute(rows))
- 
-  print(tp)
+  tp$rows <- deparse(substitute(rows))
   
   last_tp <<- tp
+  
+  tp
+
   
 }
 ```
@@ -189,9 +188,11 @@ set_cols <- function(tp, cols = NULL){
   
 tp$cols <- deparse(substitute(cols))
 
-  print(tp)
+  tp
   
   last_tp <<- tp
+  
+  tp
   
 }
 
@@ -200,11 +201,9 @@ set_fun <- function(tp, fun = sum){
 
 tp$fun <- deparse(substitute(fun))
 
-
-  print(tp)
-
   last_tp <<- tp
 
+  tp
   
 }
 
@@ -212,9 +211,11 @@ set_value <- function(tp, value = NULL){
   
 tp$value <- deparse(substitute(value))
 
-  print(tp)
+
   
   last_tp <<- tp
+  
+  tp
   
 }
 
@@ -266,13 +267,15 @@ last_table() |>
 ```
 
 
-## fast, piped `|>` build *uh-oh, we get to see the in-between tables even when we don't use last table!  But this is not the behavior we're going after.
+## Piped `|>`
 
 ```{r}
 ppivot(mtcars) |> 
   set_rows(cyl) |> 
   set_cols(am) |>
   set_cols(c(gear, am)) 
+
+last_table() |> str()
 ```
 
 
