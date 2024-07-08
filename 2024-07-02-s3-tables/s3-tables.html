@@ -9,9 +9,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Evangeline Reynolds" />
+<meta name="author" content="Gina Reynolds, you?! - link to source" />
 
-<meta name="date" content="2024-07-06" />
+<meta name="date" content="2024-07-08" />
 
 <title>Towards incremental table specification</title>
 
@@ -352,8 +352,9 @@ display: none;
 
 <h1 class="title toc-ignore">Towards incremental table
 specification</h1>
-<h4 class="author">Evangeline Reynolds</h4>
-<h4 class="date">2024-07-06</h4>
+<h4 class="author">Gina Reynolds, <a href="https://github.com/evamaerey/mytidytuesday/blob/master/2024-07-02-s3-tables/s3-tables.Rmd">you?!
+- link to source</a></h4>
+<h4 class="date">2024-07-08</h4>
 
 </div>
 
@@ -402,9 +403,10 @@ functionality!</strong></a>
 <ul>
 <li><a href="#slow-build-with-last_table" id="toc-slow-build-with-last_table">Slow build with
 <code>last_table()</code></a></li>
-<li><a href="#fast-piped-build-uh-oh-we-get-to-see-the-in-between-tables-even-when-we-dont-use-last-table-ah" id="toc-fast-piped-build-uh-oh-we-get-to-see-the-in-between-tables-even-when-we-dont-use-last-table-ah">fast,
-piped <code>|&gt;</code> build <em>uh-oh, we get to see the in-between
-tables even when we don’t use last table! Ah!!!!</em></a></li>
+<li><a href="#fast-piped-build-uh-oh-we-get-to-see-the-in-between-tables-even-when-we-dont-use-last-table-but-this-is-not-the-behavior-were-going-after." id="toc-fast-piped-build-uh-oh-we-get-to-see-the-in-between-tables-even-when-we-dont-use-last-table-but-this-is-not-the-behavior-were-going-after.">fast,
+piped <code>|&gt;</code> build *uh-oh, we get to see the in-between
+tables even when we don’t use last table! But this is not the behavior
+we’re going after.</a></li>
 </ul></li>
 <li><a href="#part-3.-dispatch-define-behavior-when-tps-are-piped-to-other-environment" id="toc-part-3.-dispatch-define-behavior-when-tps-are-piped-to-other-environment">Part
 3. <strong>Dispatch</strong> Define behavior when tps are piped to other
@@ -493,7 +495,22 @@ new_tidypivot &lt;- function(data = data.frame(),
   # Return the created object
   invisible(tp)
   
-}</code></pre>
+}
+
+
+# 
+# # table specification components !
+# tp &lt;- list(
+#     data = data,
+#     rows = rows,
+#     columns = columns,
+#     value = value,
+#     weight = weight  
+#     # more &#39;slots&#39; to be added
+#   )
+#   
+# # declare class &#39;tidypivot&#39;
+# class(tp) &lt;- &quot;tp&quot;</code></pre>
 </div>
 <div id="step-2.-print-once-specification-is-defined-actually-do-manipulation-to-produce-the-table---we-use-a-routine-from-the-tidypivot-package." class="section level2">
 <h2>Step 2. <strong>Print</strong>: Once specification is defined,
@@ -525,7 +542,8 @@ the {tidypivot} package.</h2>
 <code>tp</code>, the 3S objects</h3>
 <pre class="r"><code>print.tidypivot &lt;- function(tp){
   
-  return_specified_table(tp)
+  print(return_specified_table(tp))
+  invisible(tp)
   
 }</code></pre>
 </div>
@@ -540,9 +558,7 @@ the {tidypivot} package.</h2>
 
   tp &lt;- new_tidypivot(deparse(substitute(thedata)))
 
-  print(return_specified_table(tp))
-
-  invisible(tp)
+  print(tp)
   
   # tp
   
@@ -563,11 +579,10 @@ up the same way…)</h3>
   
 tp$rows &lt;- deparse(substitute(rows))
  
-  print(return_specified_table(tp))
+  print(tp)
   
-  invisible(tp)
+  last_tp &lt;&lt;- tp
   
-    last_tp &lt;&lt;- tp
 }</code></pre>
 </div>
 <div id="last_table" class="section level3">
@@ -634,9 +649,10 @@ tidy_titanic |&gt; tibble()</code></pre>
 ## 3 3rd     510    196
 ## 4 Crew    862     23</code></pre>
 </div>
-<div id="fast-piped-build-uh-oh-we-get-to-see-the-in-between-tables-even-when-we-dont-use-last-table-ah" class="section level2">
-<h2>fast, piped <code>|&gt;</code> build <em>uh-oh, we get to see the
-in-between tables even when we don’t use last table! Ah!!!!</em></h2>
+<div id="fast-piped-build-uh-oh-we-get-to-see-the-in-between-tables-even-when-we-dont-use-last-table-but-this-is-not-the-behavior-were-going-after." class="section level2">
+<h2>fast, piped <code>|&gt;</code> build *uh-oh, we get to see the
+in-between tables even when we don’t use last table! But this is not the
+behavior we’re going after.</h2>
 <pre class="r"><code>ppivot(mtcars) |&gt; 
   set_rows(cyl) |&gt; 
   set_cols(am) |&gt;

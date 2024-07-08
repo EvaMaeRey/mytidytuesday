@@ -1,6 +1,6 @@
 ---
-title: "Towards incremental table specification"
-author: "Evangeline Reynolds"
+title: "Towards incremental table specification "
+author: "Gina Reynolds, [you?! - link to source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-07-02-s3-tables/s3-tables.Rmd)"
 date: "`r Sys.Date()`"
 output: 
   html_document:
@@ -91,6 +91,22 @@ new_tidypivot <- function(data = data.frame(),
   invisible(tp)
   
 }
+
+
+# 
+# # table specification components !
+# tp <- list(
+#     data = data,
+#     rows = rows,
+#     columns = columns,
+#     value = value,
+#     weight = weight  
+#     # more 'slots' to be added
+#   )
+#   
+# # declare class 'tidypivot'
+# class(tp) <- "tp"
+
 ```
 
 ## Step 2. **Print**: Once specification is defined, actually do  manipulation to produce the table - we use a routine from the {tidypivot} package.
@@ -124,7 +140,8 @@ return_specified_table = function(tp){
 ```{r}
 print.tidypivot <- function(tp){
   
-  return_specified_table(tp)
+  print(return_specified_table(tp))
+  invisible(tp)
   
 }
 ```
@@ -141,9 +158,7 @@ ppivot <- function(data){
 
   tp <- new_tidypivot(deparse(substitute(thedata)))
 
-  print(return_specified_table(tp))
-
-  invisible(tp)
+  print(tp)
   
   # tp
   
@@ -162,11 +177,10 @@ set_rows <- function(tp, rows = NULL){
   
 tp$rows <- deparse(substitute(rows))
  
-  print(return_specified_table(tp))
+  print(tp)
   
-  invisible(tp)
+  last_tp <<- tp
   
-    last_tp <<- tp
 }
 ```
 
@@ -175,11 +189,10 @@ set_cols <- function(tp, cols = NULL){
   
 tp$cols <- deparse(substitute(cols))
 
-  print(return_specified_table(tp))
+  print(tp)
   
-  invisible(tp)
+  last_tp <<- tp
   
-    last_tp <<- tp
 }
 
 
@@ -188,11 +201,9 @@ set_fun <- function(tp, fun = sum){
 tp$fun <- deparse(substitute(fun))
 
 
-  print(return_specified_table(tp))
+  print(tp)
 
-  invisible(tp)
-
-    last_tp <<- tp
+  last_tp <<- tp
 
   
 }
@@ -201,9 +212,7 @@ set_value <- function(tp, value = NULL){
   
 tp$value <- deparse(substitute(value))
 
-  print(return_specified_table(tp))
-  
-  invisible(tp)
+  print(tp)
   
   last_tp <<- tp
   
@@ -213,9 +222,7 @@ set_weight <- function(tp, weight = NULL){
   
 tp$weight <- deparse(substitute(weight))
 
-  print(return_specified_table(tp))
-  
-  invisible(tp)
+  print(tp)
   
   last_tp <<- tp
   
@@ -259,7 +266,7 @@ last_table() |>
 ```
 
 
-## fast, piped `|>` build *uh-oh, we get to see the in-between tables even when we don't use last table!  Ah!!!!*
+## fast, piped `|>` build *uh-oh, we get to see the in-between tables even when we don't use last table!  But this is not the behavior we're going after.
 
 ```{r}
 ppivot(mtcars) |> 

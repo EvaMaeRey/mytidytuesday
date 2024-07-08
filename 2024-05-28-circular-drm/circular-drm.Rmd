@@ -30,7 +30,7 @@ beluga_song %>% head()
 
 ```{r, fig.height=12, fig.width=12 }
 
-compute_panel_dandalion <- function(data, scales){
+compute_panel_dandalion <- function(data, scales, start_angle =  -90){
   
   spacer_df <- tibble(spacer = 1)
   
@@ -38,14 +38,20 @@ compute_panel_dandalion <- function(data, scales){
   
   data$id <- 1:nrow(data)
   # nrow(data)
-  data$around <- 1:(nrow(data))/nrow(data)
-  data$circ_angle <- -data$around*2*pi - 
-    pi/2 + 2*pi/nrow(data)/2 
+  
+  single_wedge_angle <- 1/nrow(data)*360
+  half_wedged_angle <- single_wedge_angle/2
+  
+  data$around <- (nrow(data)):1/nrow(data) 
+
+  data$circ_angle <- data$around*2*pi + 
+    (start_angle -half_wedged_angle)*2*pi/360 
   data$x <- data$radius * cos(data$circ_angle)
   data$xend <- 0
   data$yend <- 0
   data$y <- data$radius * sin(data$circ_angle)
-  data$angle <- -data$around*360 + 180
+  data$angle <- data$around*360 + 180 + 90 + 
+    start_angle - half_wedged_angle
   
   data %>% 
     slice(-1) %>% 
@@ -53,7 +59,7 @@ compute_panel_dandalion <- function(data, scales){
   
 }
 
-ggdoremi:::join_phrases_drm_lyrics() %>% 
+beluga_song %>% head(4) %>% 
   # head(30) %>% 
   mutate(radius = as.numeric(drm) + 10) %>% 
   compute_panel_dandalion() %>% 
@@ -74,7 +80,7 @@ ggdoremi:::join_phrases_drm_lyrics() %>%
 
 ## write extension
 
-```{r}
+```{r statexpress}
 
 stat_dandalion <- function(geom = "segment", ...){
   statexpress::stat_panel(compute_panel_dandalion, geom, ...)
@@ -87,7 +93,7 @@ geom_dandalion_point <- function(...){stat_dandalion(geom =  "point", ...)}
 
 ```
 
-```{r}
+```{r stamp}
 stamp_staff_dms <- function(radius_addition = 10 ){
   
   list(
@@ -127,7 +133,9 @@ stamp_staff_dmstr <- function(radius_addition = 10 ){
 
 ## Use extension
 
-```{r , fig.height=12, fig.width=12 }
+### Beluga
+
+```{r beluga, fig.height=12, fig.width=12 }
 ggdoremi:::join_phrases_drm_lyrics() ->
 beluga_song
 
@@ -135,26 +143,28 @@ head(beluga_song)
 
 beluga_song %>% 
   ggplot() + 
-  aes(radius = as.numeric(drm)) +
-  geom_dandalion_segment() + 
-  geom_dandalion_point(size = 16, 
+  stamp_staff_dms(3) +
+  aes(radius = as.numeric(drm)+3) +
+  geom_dandalion_segment() +
+  geom_dandalion_point(size = 21,
                        shape = 21,
                        fill = "white") +
   aes(label = lyric) +
-  geom_dandalion_text() + 
-  coord_equal()
+  geom_dandalion_text(size = 5) +
+  coord_equal() + 
+  theme_void()
   
 
 
 ```
 
-## Another example
+## ABCs
 
-```{r}
-lyrics_abc <- "a b c d e f g
-h i j k l m n o p
-q r s t u v
-w x y z
+```{r abc}
+lyrics_abc <- "A B C D E F G
+H I J K L M N O P
+Q R S T U V
+W X Y Z
 Now I know my A B Cs
 Next time won't you sing with me"
 
@@ -167,31 +177,91 @@ ddsslls
 ffmmrrd"
 
 
-ggdoremi:::join_phrases_drm_lyrics(drm_abc, 
-                                   lyrics_phrases = 
-                                     lyrics_abc %>% str_to_title()) %>% 
+abc_df <- ggdoremi:::join_phrases_drm_lyrics(drm_phrases = drm_abc, 
+                                   lyrics_phrases = lyrics_abc)  
+
+abc_df
+
+abc_df %>% 
   ggplot() + 
-  aes(radius = as.numeric(drm) + 3) +
-  stamp_staff_dms(3) +
+  aes(radius = as.numeric(drm) - 2) +
+  stamp_staff_dms(-2) +
   geom_dandalion_segment(color = "black", 
                          size = .5) +
-  geom_dandalion_point(size = 10, 
+  geom_dandalion_point(size = 13, 
                        fill = "white",
                        shape = 21) +
   aes(label = lyric) +
   geom_dandalion_text() +
   coord_equal() + 
   theme_void() + 
-  aes(size = 5)
+  aes(size = 5) + 
+  scale_size(range = c(3,5))
 
 last_plot() %+%
   (ggdoremi:::join_phrases_drm_lyrics(drm_abc, 
                                    lyrics_abc)[1:26,]) + 
-  aes(size = 7) + 
-  guides("none")
+  aes(size = 8) + 
+  theme(legend.position = "none")
 ```
 
+### twinkle twinkle
 
+```{r}
+lyrics_abcd <- '一 闪 一 闪 亮 晶 晶'
+
+drm_abcd <- 'ddsslls'
+
+
+ggdoremi:::join_phrases_drm_lyrics(drm_abcd, 
+                                   lyrics_abcd) %>% 
+  ggplot() + 
+  aes(radius = as.numeric(drm) - 2) +
+  stamp_staff_dms(-2) +
+  geom_dandalion_segment(color = "black", 
+                         size = .5) +
+  geom_dandalion_point(size = 13, 
+                       fill = "white",
+                       shape = 21) +
+  aes(label = lyric) +
+  geom_dandalion_text(angle = 0) +
+  coord_equal() + 
+  theme_void() + 
+  aes(size = 5)
+  theme(legend.position = "none")
+```
+
+```{r, fig.height=10, fig.width=10 }
+lyrics_hb <- 
+'Hap-py birth-day to you
+Hap-py birth-day to you
+Hap-py birth-day dear X-X
+Hap-py birth-day to you'
+
+
+drm_hb <- 
+'SSLSdT
+SSLSrd
+SSsmdTL
+ffmdrd'
+
+
+ggdoremi:::join_phrases_drm_lyrics(drm_hb, lyrics_hb) %>%
+  # head(30) %>%
+  ggplot() +
+  stamp_staff_dms(10) +
+  aes(radius = as.numeric(drm) +10 ) +
+  geom_dandalion_segment(xend = 0, yend = 0) +
+  geom_dandalion_point(shape = 21, size = 20, fill = "white") +
+  # aes(color = doremi) +
+  aes(label = lyric) +
+  geom_dandalion_text(size = 5) +
+  coord_equal() + 
+  theme_void() + 
+  guides(color = "none", 
+         label = "none")
+
+```
 
 ```{r, fig.height=12, fig.width=12 }
 lyrics_doe_a_deer <-
