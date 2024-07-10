@@ -1,0 +1,90 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r gtflipbook}
+library(gtsummary)
+
+trial |>
+  tbl_wide_summary(
+    include = c(response, grade),
+    statistic = c("{n}", "{p}")
+  ) |>
+  str()
+
+
+trial |>
+  tbl_wide_summary(
+    include = c(age, marker),
+    statistic = c("{median}", "{p25}, {p75}")
+  ) ->
+out
+```
+
+
+```{r gtsummary2}
+trial |>
+  tbl_summary(
+    include = age,
+    type = all_continuous() ~ "continuous2",
+    statistic = all_continuous() ~ c("{mean} ({sd})",
+                                     "{median} ({p25}, {p75})",
+                                     "{min}, {max}"),
+    digits = age ~ list(sd = 2), # show the SD to 2 decimal places
+    missing = "no"
+  ) ->
+out
+
+trial |>
+ tbl_summary(
+    include = c(age, grade, response),
+    by = trt, # split table by group
+    missing = "no" # dont list missing data separately
+  ) |>
+  add_n() %>% # add column with total number of non-missing observations
+  modify_header(label = "**Variable**") %>% # update the column header
+  bold_labels() ->
+gtstable
+```
+
+
+```{r gtsum3}
+names(gtstable)
+
+str(gtstable$table_body)
+str(gtstable$table_styling)
+str(gtstable$call_list)
+str(gtstable$cards)
+str(gtstable$inputs)
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

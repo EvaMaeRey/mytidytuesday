@@ -129,7 +129,10 @@ return_specified_table = function(tp){
       
       out <- str_replace_or_null(out, "rows",  tp$rows)
       out <- str_replace_or_null(out, "cols",  tp$cols)
+      out <- str_replace_or_null(out, "fun",  tp$fun)
 
+      
+      
       eval(parse(text = out))         
       
 }

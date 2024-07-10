@@ -1,4 +1,5 @@
 library(ggplot2)
-ggplot(cars) +
-  aes(speed, dist) + 
-  geom_point()
+cars |>
+  ggplot() + 
+  aes(x = speed, y = dist) +
+  geom_point(size = 6)

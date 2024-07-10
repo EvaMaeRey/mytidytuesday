@@ -1,0 +1,99 @@
+---
+title: "abc2"
+subtitle: ""
+author: ""
+output:
+  xaringan::moon_reader:
+    seal: FALSE
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r, include = F}
+options(knitr.duplicate.label = "allow")
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F)
+library(flipbookr)
+library(tidyverse)
+load("current_image.Rdata")
+```
+
+
+```{r, echo = F, eval = FALSE , message = F, warning = F}
+xaringanExtra::use_share_again()
+```
+
+
+```{r the_chunk, include = F}
+abc_df <- ggdoremi:::join_phrases_drm_lyrics(
+  drm_phrases = drm_abc, 
+  lyrics_phrases = lyrics_abc)  
+
+abc_df %>% 
+  ggplot() + 
+  aes(radius = as.numeric(drm) - 2) +
+  stamp_staff_dms(-2) +
+  geom_dandalion_segment() +
+  geom_dandalion_point(size = 13, 
+                       fill = "white",
+                       shape = 21) +
+  aes(label = lyric) +
+  geom_dandalion_text(size = 6.5) +
+  coord_equal() + 
+  theme_void() ->
+abc_plot_full
+
+abc_plot_full %+%
+  (ggdoremi:::join_phrases_drm_lyrics(
+    drm_abc, lyrics_abc)[1:26,]) + 
+  aes(color = doremi) ->
+abc26
+
+abc26 + 
+  aes(label = doremi) + 
+  guides(color = "none")
+```
+
+`r chunk_reveal(chunk_name = "the_chunk", break_type = "auto")`
+
+
+```{r helloworld}
+library(ggplot2)
+cars |>
+  ggplot() + 
+  aes(x = speed, y = dist) +
+  geom_point() + 
+  aes(size = I(8)) + 
+  aes(alpha = I(.4))
+
+```
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 80%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+

@@ -1,0 +1,5398 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>gtsummary2</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="" />
+    <script src="libs/header-attrs-2.26/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+
+
+
+
+
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+*trial
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+# A tibble: 200 × 8
+   trt      age marker stage grade response death ttdeath
+   &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;fct&gt; &lt;fct&gt;    &lt;int&gt; &lt;int&gt;   &lt;dbl&gt;
+ 1 Drug A    23  0.16  T1    II           0     0    24  
+ 2 Drug B     9  1.11  T2    I            1     0    24  
+ 3 Drug A    31  0.277 T1    II           0     0    24  
+ 4 Drug A    NA  2.07  T3    III          1     1    17.6
+ 5 Drug A    51  2.77  T4    III          1     1    16.4
+ 6 Drug B    39  0.613 T4    I            0     1    15.6
+ 7 Drug A    37  0.354 T1    II           0     0    24  
+ 8 Drug A    32  1.74  T1    I            0     1    18.4
+ 9 Drug A    31  0.144 T1    II           0     0    24  
+10 Drug B    34  0.205 T3    I            0     1    10.5
+# ℹ 190 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+trial |&gt;
+* tbl_summary(
+*   include = age,
+*   type = all_continuous() ~ "continuous2",
+*   statistic = all_continuous() ~ c("{mean} ({sd})",
+*                                    "{median} ({p25}, {p75})",
+*                                    "{min}, {max}"),
+*   digits = age ~ list(sd = 2),  # show the SD to 2 decimal places
+*   missing = "no"
+* )
+```
+]
+ 
+.panel2-the_chunk-auto[
+<div id="vurzlpmgwb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#vurzlpmgwb table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#vurzlpmgwb thead, #vurzlpmgwb tbody, #vurzlpmgwb tfoot, #vurzlpmgwb tr, #vurzlpmgwb td, #vurzlpmgwb th {
+  border-style: none;
+}
+
+#vurzlpmgwb p {
+  margin: 0;
+  padding: 0;
+}
+
+#vurzlpmgwb .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#vurzlpmgwb .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#vurzlpmgwb .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#vurzlpmgwb .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#vurzlpmgwb .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vurzlpmgwb .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vurzlpmgwb .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vurzlpmgwb .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#vurzlpmgwb .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#vurzlpmgwb .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#vurzlpmgwb .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#vurzlpmgwb .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#vurzlpmgwb .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#vurzlpmgwb .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#vurzlpmgwb .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#vurzlpmgwb .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#vurzlpmgwb .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#vurzlpmgwb .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#vurzlpmgwb .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vurzlpmgwb .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#vurzlpmgwb .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#vurzlpmgwb .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#vurzlpmgwb .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vurzlpmgwb .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#vurzlpmgwb .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#vurzlpmgwb .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vurzlpmgwb .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vurzlpmgwb .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#vurzlpmgwb .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vurzlpmgwb .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#vurzlpmgwb .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vurzlpmgwb .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vurzlpmgwb .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vurzlpmgwb .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vurzlpmgwb .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vurzlpmgwb .gt_left {
+  text-align: left;
+}
+
+#vurzlpmgwb .gt_center {
+  text-align: center;
+}
+
+#vurzlpmgwb .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#vurzlpmgwb .gt_font_normal {
+  font-weight: normal;
+}
+
+#vurzlpmgwb .gt_font_bold {
+  font-weight: bold;
+}
+
+#vurzlpmgwb .gt_font_italic {
+  font-style: italic;
+}
+
+#vurzlpmgwb .gt_super {
+  font-size: 65%;
+}
+
+#vurzlpmgwb .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#vurzlpmgwb .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#vurzlpmgwb .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#vurzlpmgwb .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#vurzlpmgwb .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#vurzlpmgwb .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#vurzlpmgwb .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;Characteristic&lt;/strong&gt;"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;N = 200&lt;/strong&gt;"><strong>N = 200</strong></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="label" class="gt_row gt_left">Age</td>
+<td headers="stat_0" class="gt_row gt_center"><br /></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Mean (SD)</td>
+<td headers="stat_0" class="gt_row gt_center">47 (14.31)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Median (Q1, Q3)</td>
+<td headers="stat_0" class="gt_row gt_center">47 (38, 57)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Min, Max</td>
+<td headers="stat_0" class="gt_row gt_center">6, 83</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+trial |&gt;
+  tbl_summary(
+    include = age,
+    type = all_continuous() ~ "continuous2",
+    statistic = all_continuous() ~ c("{mean} ({sd})",
+                                     "{median} ({p25}, {p75})",
+                                     "{min}, {max}"),
+    digits = age ~ list(sd = 2),  # show the SD to 2 decimal places
+    missing = "no"
+  ) -&gt;
+*out
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+trial |&gt;
+  tbl_summary(
+    include = age,
+    type = all_continuous() ~ "continuous2",
+    statistic = all_continuous() ~ c("{mean} ({sd})",
+                                     "{median} ({p25}, {p75})",
+                                     "{min}, {max}"),
+    digits = age ~ list(sd = 2),  # show the SD to 2 decimal places
+    missing = "no"
+  ) -&gt;
+out
+
+*trial
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+# A tibble: 200 × 8
+   trt      age marker stage grade response death ttdeath
+   &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;fct&gt; &lt;fct&gt;    &lt;int&gt; &lt;int&gt;   &lt;dbl&gt;
+ 1 Drug A    23  0.16  T1    II           0     0    24  
+ 2 Drug B     9  1.11  T2    I            1     0    24  
+ 3 Drug A    31  0.277 T1    II           0     0    24  
+ 4 Drug A    NA  2.07  T3    III          1     1    17.6
+ 5 Drug A    51  2.77  T4    III          1     1    16.4
+ 6 Drug B    39  0.613 T4    I            0     1    15.6
+ 7 Drug A    37  0.354 T1    II           0     0    24  
+ 8 Drug A    32  1.74  T1    I            0     1    18.4
+ 9 Drug A    31  0.144 T1    II           0     0    24  
+10 Drug B    34  0.205 T3    I            0     1    10.5
+# ℹ 190 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+trial |&gt;
+  tbl_summary(
+    include = age,
+    type = all_continuous() ~ "continuous2",
+    statistic = all_continuous() ~ c("{mean} ({sd})",
+                                     "{median} ({p25}, {p75})",
+                                     "{min}, {max}"),
+    digits = age ~ list(sd = 2),  # show the SD to 2 decimal places
+    missing = "no"
+  ) -&gt;
+out
+
+trial |&gt;
+*tbl_summary(
+*   include = c(age, grade, response),
+*   by = trt,  # split table by group
+*   missing = "no"  # dont list missing data separately
+* )
+```
+]
+ 
+.panel2-the_chunk-auto[
+<div id="wagdmklpsz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#wagdmklpsz table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#wagdmklpsz thead, #wagdmklpsz tbody, #wagdmklpsz tfoot, #wagdmklpsz tr, #wagdmklpsz td, #wagdmklpsz th {
+  border-style: none;
+}
+
+#wagdmklpsz p {
+  margin: 0;
+  padding: 0;
+}
+
+#wagdmklpsz .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#wagdmklpsz .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#wagdmklpsz .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#wagdmklpsz .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#wagdmklpsz .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#wagdmklpsz .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#wagdmklpsz .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#wagdmklpsz .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#wagdmklpsz .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#wagdmklpsz .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#wagdmklpsz .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#wagdmklpsz .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#wagdmklpsz .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#wagdmklpsz .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#wagdmklpsz .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#wagdmklpsz .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#wagdmklpsz .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#wagdmklpsz .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#wagdmklpsz .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wagdmklpsz .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#wagdmklpsz .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#wagdmklpsz .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#wagdmklpsz .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wagdmklpsz .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#wagdmklpsz .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#wagdmklpsz .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#wagdmklpsz .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wagdmklpsz .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#wagdmklpsz .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#wagdmklpsz .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#wagdmklpsz .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#wagdmklpsz .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#wagdmklpsz .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wagdmklpsz .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#wagdmklpsz .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wagdmklpsz .gt_left {
+  text-align: left;
+}
+
+#wagdmklpsz .gt_center {
+  text-align: center;
+}
+
+#wagdmklpsz .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#wagdmklpsz .gt_font_normal {
+  font-weight: normal;
+}
+
+#wagdmklpsz .gt_font_bold {
+  font-weight: bold;
+}
+
+#wagdmklpsz .gt_font_italic {
+  font-style: italic;
+}
+
+#wagdmklpsz .gt_super {
+  font-size: 65%;
+}
+
+#wagdmklpsz .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#wagdmklpsz .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#wagdmklpsz .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#wagdmklpsz .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#wagdmklpsz .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#wagdmklpsz .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#wagdmklpsz .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;Characteristic&lt;/strong&gt;"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;Drug A&lt;/strong&gt;&lt;br /&gt;&#10;N = 98&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;"><strong>Drug A</strong><br />
+N = 98<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;Drug B&lt;/strong&gt;&lt;br /&gt;&#10;N = 102&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;"><strong>Drug B</strong><br />
+N = 102<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="label" class="gt_row gt_left">Age</td>
+<td headers="stat_1" class="gt_row gt_center">46 (37, 60)</td>
+<td headers="stat_2" class="gt_row gt_center">48 (39, 56)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">Grade</td>
+<td headers="stat_1" class="gt_row gt_center"><br /></td>
+<td headers="stat_2" class="gt_row gt_center"><br /></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    I</td>
+<td headers="stat_1" class="gt_row gt_center">35 (36%)</td>
+<td headers="stat_2" class="gt_row gt_center">33 (32%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    II</td>
+<td headers="stat_1" class="gt_row gt_center">32 (33%)</td>
+<td headers="stat_2" class="gt_row gt_center">36 (35%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    III</td>
+<td headers="stat_1" class="gt_row gt_center">31 (32%)</td>
+<td headers="stat_2" class="gt_row gt_center">33 (32%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">Tumor Response</td>
+<td headers="stat_1" class="gt_row gt_center">28 (29%)</td>
+<td headers="stat_2" class="gt_row gt_center">33 (34%)</td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="3"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> Median (Q1, Q3); n (%)</td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+trial |&gt;
+  tbl_summary(
+    include = age,
+    type = all_continuous() ~ "continuous2",
+    statistic = all_continuous() ~ c("{mean} ({sd})",
+                                     "{median} ({p25}, {p75})",
+                                     "{min}, {max}"),
+    digits = age ~ list(sd = 2),  # show the SD to 2 decimal places
+    missing = "no"
+  ) -&gt;
+out
+
+trial |&gt;
+ tbl_summary(
+    include = c(age, grade, response),
+    by = trt,  # split table by group
+    missing = "no"  # dont list missing data separately
+  ) |&gt;
+* add_n()   # add column with total number of non-missing observations
+```
+]
+ 
+.panel2-the_chunk-auto[
+<div id="svnejvgfey" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#svnejvgfey table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#svnejvgfey thead, #svnejvgfey tbody, #svnejvgfey tfoot, #svnejvgfey tr, #svnejvgfey td, #svnejvgfey th {
+  border-style: none;
+}
+
+#svnejvgfey p {
+  margin: 0;
+  padding: 0;
+}
+
+#svnejvgfey .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#svnejvgfey .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#svnejvgfey .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#svnejvgfey .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#svnejvgfey .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#svnejvgfey .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#svnejvgfey .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#svnejvgfey .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#svnejvgfey .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#svnejvgfey .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#svnejvgfey .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#svnejvgfey .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#svnejvgfey .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#svnejvgfey .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#svnejvgfey .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#svnejvgfey .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#svnejvgfey .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#svnejvgfey .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#svnejvgfey .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#svnejvgfey .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#svnejvgfey .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#svnejvgfey .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#svnejvgfey .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#svnejvgfey .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#svnejvgfey .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#svnejvgfey .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#svnejvgfey .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#svnejvgfey .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#svnejvgfey .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#svnejvgfey .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#svnejvgfey .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#svnejvgfey .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#svnejvgfey .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#svnejvgfey .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#svnejvgfey .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#svnejvgfey .gt_left {
+  text-align: left;
+}
+
+#svnejvgfey .gt_center {
+  text-align: center;
+}
+
+#svnejvgfey .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#svnejvgfey .gt_font_normal {
+  font-weight: normal;
+}
+
+#svnejvgfey .gt_font_bold {
+  font-weight: bold;
+}
+
+#svnejvgfey .gt_font_italic {
+  font-style: italic;
+}
+
+#svnejvgfey .gt_super {
+  font-size: 65%;
+}
+
+#svnejvgfey .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#svnejvgfey .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#svnejvgfey .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#svnejvgfey .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#svnejvgfey .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#svnejvgfey .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#svnejvgfey .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;Characteristic&lt;/strong&gt;"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;N&lt;/strong&gt;"><strong>N</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;Drug A&lt;/strong&gt;&lt;br /&gt;&#10;N = 98&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;"><strong>Drug A</strong><br />
+N = 98<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;Drug B&lt;/strong&gt;&lt;br /&gt;&#10;N = 102&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;"><strong>Drug B</strong><br />
+N = 102<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="label" class="gt_row gt_left">Age</td>
+<td headers="n" class="gt_row gt_center">189</td>
+<td headers="stat_1" class="gt_row gt_center">46 (37, 60)</td>
+<td headers="stat_2" class="gt_row gt_center">48 (39, 56)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">Grade</td>
+<td headers="n" class="gt_row gt_center">200</td>
+<td headers="stat_1" class="gt_row gt_center"><br /></td>
+<td headers="stat_2" class="gt_row gt_center"><br /></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    I</td>
+<td headers="n" class="gt_row gt_center"><br /></td>
+<td headers="stat_1" class="gt_row gt_center">35 (36%)</td>
+<td headers="stat_2" class="gt_row gt_center">33 (32%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    II</td>
+<td headers="n" class="gt_row gt_center"><br /></td>
+<td headers="stat_1" class="gt_row gt_center">32 (33%)</td>
+<td headers="stat_2" class="gt_row gt_center">36 (35%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    III</td>
+<td headers="n" class="gt_row gt_center"><br /></td>
+<td headers="stat_1" class="gt_row gt_center">31 (32%)</td>
+<td headers="stat_2" class="gt_row gt_center">33 (32%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">Tumor Response</td>
+<td headers="n" class="gt_row gt_center">193</td>
+<td headers="stat_1" class="gt_row gt_center">28 (29%)</td>
+<td headers="stat_2" class="gt_row gt_center">33 (34%)</td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="4"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> Median (Q1, Q3); n (%)</td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+trial |&gt;
+  tbl_summary(
+    include = age,
+    type = all_continuous() ~ "continuous2",
+    statistic = all_continuous() ~ c("{mean} ({sd})",
+                                     "{median} ({p25}, {p75})",
+                                     "{min}, {max}"),
+    digits = age ~ list(sd = 2),  # show the SD to 2 decimal places
+    missing = "no"
+  ) -&gt;
+out
+
+trial |&gt;
+ tbl_summary(
+    include = c(age, grade, response),
+    by = trt,  # split table by group
+    missing = "no"  # dont list missing data separately
+  ) |&gt;
+  add_n() %&gt;%  # add column with total number of non-missing observations
+* modify_header(label = "**Variable**")   # update the column header
+```
+]
+ 
+.panel2-the_chunk-auto[
+<div id="kmdirysetk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#kmdirysetk table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#kmdirysetk thead, #kmdirysetk tbody, #kmdirysetk tfoot, #kmdirysetk tr, #kmdirysetk td, #kmdirysetk th {
+  border-style: none;
+}
+
+#kmdirysetk p {
+  margin: 0;
+  padding: 0;
+}
+
+#kmdirysetk .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#kmdirysetk .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#kmdirysetk .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#kmdirysetk .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#kmdirysetk .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#kmdirysetk .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kmdirysetk .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#kmdirysetk .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#kmdirysetk .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#kmdirysetk .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#kmdirysetk .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#kmdirysetk .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#kmdirysetk .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#kmdirysetk .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#kmdirysetk .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#kmdirysetk .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#kmdirysetk .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#kmdirysetk .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#kmdirysetk .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kmdirysetk .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#kmdirysetk .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#kmdirysetk .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#kmdirysetk .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kmdirysetk .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#kmdirysetk .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#kmdirysetk .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kmdirysetk .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kmdirysetk .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#kmdirysetk .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kmdirysetk .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#kmdirysetk .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kmdirysetk .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#kmdirysetk .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kmdirysetk .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#kmdirysetk .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kmdirysetk .gt_left {
+  text-align: left;
+}
+
+#kmdirysetk .gt_center {
+  text-align: center;
+}
+
+#kmdirysetk .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#kmdirysetk .gt_font_normal {
+  font-weight: normal;
+}
+
+#kmdirysetk .gt_font_bold {
+  font-weight: bold;
+}
+
+#kmdirysetk .gt_font_italic {
+  font-style: italic;
+}
+
+#kmdirysetk .gt_super {
+  font-size: 65%;
+}
+
+#kmdirysetk .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#kmdirysetk .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#kmdirysetk .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#kmdirysetk .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#kmdirysetk .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#kmdirysetk .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#kmdirysetk .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;Variable&lt;/strong&gt;"><strong>Variable</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;N&lt;/strong&gt;"><strong>N</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;Drug A&lt;/strong&gt;&lt;br /&gt;&#10;N = 98&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;"><strong>Drug A</strong><br />
+N = 98<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;Drug B&lt;/strong&gt;&lt;br /&gt;&#10;N = 102&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;"><strong>Drug B</strong><br />
+N = 102<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="label" class="gt_row gt_left">Age</td>
+<td headers="n" class="gt_row gt_center">189</td>
+<td headers="stat_1" class="gt_row gt_center">46 (37, 60)</td>
+<td headers="stat_2" class="gt_row gt_center">48 (39, 56)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">Grade</td>
+<td headers="n" class="gt_row gt_center">200</td>
+<td headers="stat_1" class="gt_row gt_center"><br /></td>
+<td headers="stat_2" class="gt_row gt_center"><br /></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    I</td>
+<td headers="n" class="gt_row gt_center"><br /></td>
+<td headers="stat_1" class="gt_row gt_center">35 (36%)</td>
+<td headers="stat_2" class="gt_row gt_center">33 (32%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    II</td>
+<td headers="n" class="gt_row gt_center"><br /></td>
+<td headers="stat_1" class="gt_row gt_center">32 (33%)</td>
+<td headers="stat_2" class="gt_row gt_center">36 (35%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    III</td>
+<td headers="n" class="gt_row gt_center"><br /></td>
+<td headers="stat_1" class="gt_row gt_center">31 (32%)</td>
+<td headers="stat_2" class="gt_row gt_center">33 (32%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">Tumor Response</td>
+<td headers="n" class="gt_row gt_center">193</td>
+<td headers="stat_1" class="gt_row gt_center">28 (29%)</td>
+<td headers="stat_2" class="gt_row gt_center">33 (34%)</td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="4"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> Median (Q1, Q3); n (%)</td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+trial |&gt;
+  tbl_summary(
+    include = age,
+    type = all_continuous() ~ "continuous2",
+    statistic = all_continuous() ~ c("{mean} ({sd})",
+                                     "{median} ({p25}, {p75})",
+                                     "{min}, {max}"),
+    digits = age ~ list(sd = 2),  # show the SD to 2 decimal places
+    missing = "no"
+  ) -&gt;
+out
+
+trial |&gt;
+ tbl_summary(
+    include = c(age, grade, response),
+    by = trt,  # split table by group
+    missing = "no"  # dont list missing data separately
+  ) |&gt;
+  add_n() %&gt;%  # add column with total number of non-missing observations
+  modify_header(label = "**Variable**") %&gt;%  # update the column header
+* bold_labels()
+```
+]
+ 
+.panel2-the_chunk-auto[
+<div id="mpdiumaity" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#mpdiumaity table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#mpdiumaity thead, #mpdiumaity tbody, #mpdiumaity tfoot, #mpdiumaity tr, #mpdiumaity td, #mpdiumaity th {
+  border-style: none;
+}
+
+#mpdiumaity p {
+  margin: 0;
+  padding: 0;
+}
+
+#mpdiumaity .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#mpdiumaity .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#mpdiumaity .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#mpdiumaity .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#mpdiumaity .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mpdiumaity .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mpdiumaity .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mpdiumaity .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#mpdiumaity .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#mpdiumaity .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#mpdiumaity .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#mpdiumaity .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#mpdiumaity .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#mpdiumaity .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#mpdiumaity .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#mpdiumaity .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#mpdiumaity .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#mpdiumaity .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#mpdiumaity .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mpdiumaity .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#mpdiumaity .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#mpdiumaity .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#mpdiumaity .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mpdiumaity .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#mpdiumaity .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#mpdiumaity .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mpdiumaity .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mpdiumaity .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#mpdiumaity .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mpdiumaity .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#mpdiumaity .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mpdiumaity .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mpdiumaity .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mpdiumaity .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mpdiumaity .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mpdiumaity .gt_left {
+  text-align: left;
+}
+
+#mpdiumaity .gt_center {
+  text-align: center;
+}
+
+#mpdiumaity .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#mpdiumaity .gt_font_normal {
+  font-weight: normal;
+}
+
+#mpdiumaity .gt_font_bold {
+  font-weight: bold;
+}
+
+#mpdiumaity .gt_font_italic {
+  font-style: italic;
+}
+
+#mpdiumaity .gt_super {
+  font-size: 65%;
+}
+
+#mpdiumaity .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#mpdiumaity .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#mpdiumaity .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#mpdiumaity .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#mpdiumaity .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#mpdiumaity .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#mpdiumaity .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;Variable&lt;/strong&gt;"><strong>Variable</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;N&lt;/strong&gt;"><strong>N</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;Drug A&lt;/strong&gt;&lt;br /&gt;&#10;N = 98&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;"><strong>Drug A</strong><br />
+N = 98<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;Drug B&lt;/strong&gt;&lt;br /&gt;&#10;N = 102&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;"><strong>Drug B</strong><br />
+N = 102<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">Age</td>
+<td headers="n" class="gt_row gt_center">189</td>
+<td headers="stat_1" class="gt_row gt_center">46 (37, 60)</td>
+<td headers="stat_2" class="gt_row gt_center">48 (39, 56)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">Grade</td>
+<td headers="n" class="gt_row gt_center">200</td>
+<td headers="stat_1" class="gt_row gt_center"><br /></td>
+<td headers="stat_2" class="gt_row gt_center"><br /></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    I</td>
+<td headers="n" class="gt_row gt_center"><br /></td>
+<td headers="stat_1" class="gt_row gt_center">35 (36%)</td>
+<td headers="stat_2" class="gt_row gt_center">33 (32%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    II</td>
+<td headers="n" class="gt_row gt_center"><br /></td>
+<td headers="stat_1" class="gt_row gt_center">32 (33%)</td>
+<td headers="stat_2" class="gt_row gt_center">36 (35%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    III</td>
+<td headers="n" class="gt_row gt_center"><br /></td>
+<td headers="stat_1" class="gt_row gt_center">31 (32%)</td>
+<td headers="stat_2" class="gt_row gt_center">33 (32%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">Tumor Response</td>
+<td headers="n" class="gt_row gt_center">193</td>
+<td headers="stat_1" class="gt_row gt_center">28 (29%)</td>
+<td headers="stat_2" class="gt_row gt_center">33 (34%)</td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="4"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> Median (Q1, Q3); n (%)</td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+trial |&gt;
+  tbl_summary(
+    include = age,
+    type = all_continuous() ~ "continuous2",
+    statistic = all_continuous() ~ c("{mean} ({sd})",
+                                     "{median} ({p25}, {p75})",
+                                     "{min}, {max}"),
+    digits = age ~ list(sd = 2),  # show the SD to 2 decimal places
+    missing = "no"
+  ) -&gt;
+out
+
+trial |&gt;
+ tbl_summary(
+    include = c(age, grade, response),
+    by = trt,  # split table by group
+    missing = "no"  # dont list missing data separately
+  ) |&gt;
+  add_n() %&gt;%  # add column with total number of non-missing observations
+  modify_header(label = "**Variable**") %&gt;%  # update the column header
+  bold_labels() -&gt;
+*gtstable
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+trial |&gt;
+  tbl_summary(
+    include = age,
+    type = all_continuous() ~ "continuous2",
+    statistic = all_continuous() ~ c("{mean} ({sd})",
+                                     "{median} ({p25}, {p75})",
+                                     "{min}, {max}"),
+    digits = age ~ list(sd = 2),  # show the SD to 2 decimal places
+    missing = "no"
+  ) -&gt;
+out
+
+trial |&gt;
+ tbl_summary(
+    include = c(age, grade, response),
+    by = trt,  # split table by group
+    missing = "no"  # dont list missing data separately
+  ) |&gt;
+  add_n() %&gt;%  # add column with total number of non-missing observations
+  modify_header(label = "**Variable**") %&gt;%  # update the column header
+  bold_labels() -&gt;
+gtstable
+
+*names(gtstable)
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+[1] "table_body"    "table_styling" "call_list"     "cards"        
+[5] "inputs"       
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+trial |&gt;
+  tbl_summary(
+    include = age,
+    type = all_continuous() ~ "continuous2",
+    statistic = all_continuous() ~ c("{mean} ({sd})",
+                                     "{median} ({p25}, {p75})",
+                                     "{min}, {max}"),
+    digits = age ~ list(sd = 2),  # show the SD to 2 decimal places
+    missing = "no"
+  ) -&gt;
+out
+
+trial |&gt;
+ tbl_summary(
+    include = c(age, grade, response),
+    by = trt,  # split table by group
+    missing = "no"  # dont list missing data separately
+  ) |&gt;
+  add_n() %&gt;%  # add column with total number of non-missing observations
+  modify_header(label = "**Variable**") %&gt;%  # update the column header
+  bold_labels() -&gt;
+gtstable
+
+names(gtstable)
+
+*str(gtstable$table_body)
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+[1] "table_body"    "table_styling" "call_list"     "cards"        
+[5] "inputs"       
+```
+
+```
+tibble [6 × 8] (S3: tbl_df/tbl/data.frame)
+ $ variable : chr [1:6] "age" "grade" "grade" "grade" ...
+ $ var_type : chr [1:6] "continuous" "categorical" "categorical" "categorical" ...
+ $ row_type : chr [1:6] "label" "label" "level" "level" ...
+ $ var_label: chr [1:6] "Age" "Grade" "Grade" "Grade" ...
+ $ label    : chr [1:6] "Age" "Grade" "I" "II" ...
+ $ n        : chr [1:6] "189" "200" NA NA ...
+ $ stat_1   : chr [1:6] "46 (37, 60)" NA "35 (36%)" "32 (33%)" ...
+ $ stat_2   : chr [1:6] "48 (39, 56)" NA "33 (32%)" "36 (35%)" ...
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+trial |&gt;
+  tbl_summary(
+    include = age,
+    type = all_continuous() ~ "continuous2",
+    statistic = all_continuous() ~ c("{mean} ({sd})",
+                                     "{median} ({p25}, {p75})",
+                                     "{min}, {max}"),
+    digits = age ~ list(sd = 2),  # show the SD to 2 decimal places
+    missing = "no"
+  ) -&gt;
+out
+
+trial |&gt;
+ tbl_summary(
+    include = c(age, grade, response),
+    by = trt,  # split table by group
+    missing = "no"  # dont list missing data separately
+  ) |&gt;
+  add_n() %&gt;%  # add column with total number of non-missing observations
+  modify_header(label = "**Variable**") %&gt;%  # update the column header
+  bold_labels() -&gt;
+gtstable
+
+names(gtstable)
+
+str(gtstable$table_body) -&gt;
+* shhh; str(gtstable$table_styling)
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+[1] "table_body"    "table_styling" "call_list"     "cards"        
+[5] "inputs"       
+```
+
+```
+tibble [6 × 8] (S3: tbl_df/tbl/data.frame)
+ $ variable : chr [1:6] "age" "grade" "grade" "grade" ...
+ $ var_type : chr [1:6] "continuous" "categorical" "categorical" "categorical" ...
+ $ row_type : chr [1:6] "label" "label" "level" "level" ...
+ $ var_label: chr [1:6] "Age" "Grade" "Grade" "Grade" ...
+ $ label    : chr [1:6] "Age" "Grade" "I" "II" ...
+ $ n        : chr [1:6] "189" "200" NA NA ...
+ $ stat_1   : chr [1:6] "46 (37, 60)" NA "35 (36%)" "32 (33%)" ...
+ $ stat_2   : chr [1:6] "48 (39, 56)" NA "33 (32%)" "36 (35%)" ...
+```
+
+```
+List of 8
+ $ header         : tibble [8 × 11] (S3: tbl_df/tbl/data.frame)
+  ..$ column                   : chr [1:8] "variable" "var_type" "row_type" "var_label" ...
+  ..$ hide                     : logi [1:8] TRUE TRUE TRUE TRUE FALSE FALSE ...
+  ..$ align                    : chr [1:8] "center" "center" "center" "center" ...
+  ..$ interpret_label          : chr [1:8] "gt::md" "gt::md" "gt::md" "gt::md" ...
+  ..$ label                    : chr [1:8] "variable" "var_type" "row_type" "var_label" ...
+  ..$ interpret_spanning_header: chr [1:8] "gt::md" "gt::md" "gt::md" "gt::md" ...
+  ..$ spanning_header          : chr [1:8] NA NA NA NA ...
+  ..$ modify_stat_N            : int [1:8] 200 200 200 200 200 NA 200 200
+  ..$ modify_stat_n            : int [1:8] NA NA NA NA NA NA 98 102
+  ..$ modify_stat_p            : num [1:8] NA NA NA NA NA NA 0.49 0.51
+  ..$ modify_stat_level        : chr [1:8] NA NA NA NA ...
+ $ footnote       : tibble [2 × 4] (S3: tbl_df/tbl/data.frame)
+  ..$ column        : chr [1:2] "stat_1" "stat_2"
+  ..$ rows          :List of 2
+  .. ..$ : language ~NULL
+  .. .. ..- attr(*, ".Environment")=&lt;environment: R_EmptyEnv&gt; 
+  .. ..$ : language ~NULL
+  .. .. ..- attr(*, ".Environment")=&lt;environment: R_EmptyEnv&gt; 
+  ..$ text_interpret: chr [1:2] "gt::md" "gt::md"
+  ..$ footnote      : chr [1:2] "Median (Q1, Q3); n (%)" "Median (Q1, Q3); n (%)"
+ $ footnote_abbrev: tibble [0 × 4] (S3: tbl_df/tbl/data.frame)
+  ..$ column        : chr(0) 
+  ..$ rows          : list()
+  ..$ text_interpret: chr(0) 
+  ..$ footnote      : chr(0) 
+ $ text_format    : tibble [1 × 4] (S3: tbl_df/tbl/data.frame)
+  ..$ column          : chr "label"
+  ..$ rows            :List of 1
+  .. ..$ : language ~.data$row_type == "label"
+  .. .. ..- attr(*, ".Environment")=&lt;environment: 0x7fcbdcbc6dc8&gt; 
+  ..$ format_type     : chr "bold"
+  ..$ undo_text_format: logi FALSE
+ $ indent         : tibble [2 × 3] (S3: tbl_df/tbl/data.frame)
+  ..$ column  : chr [1:2] "label" "label"
+  ..$ rows    :List of 2
+  .. ..$ : logi TRUE
+  .. ..$ : language ~.data$row_type %in% c("level", "missing")
+  .. .. ..- attr(*, ".Environment")=&lt;environment: 0x7fcbddd43a60&gt; 
+  ..$ n_spaces: int [1:2] 0 4
+ $ fmt_missing    : tibble [0 × 3] (S3: tbl_df/tbl/data.frame)
+  ..$ column: chr(0) 
+  ..$ rows  : list()
+  ..$ symbol: chr(0) 
+ $ fmt_fun        : tibble [0 × 3] (S3: tbl_df/tbl/data.frame)
+  ..$ column : chr(0) 
+  ..$ rows   : list()
+  ..$ fmt_fun: list()
+ $ cols_merge     : tibble [0 × 3] (S3: tbl_df/tbl/data.frame)
+  ..$ column : chr(0) 
+  ..$ rows   : list()
+  ..$ pattern: chr(0) 
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+trial |&gt;
+  tbl_summary(
+    include = age,
+    type = all_continuous() ~ "continuous2",
+    statistic = all_continuous() ~ c("{mean} ({sd})",
+                                     "{median} ({p25}, {p75})",
+                                     "{min}, {max}"),
+    digits = age ~ list(sd = 2),  # show the SD to 2 decimal places
+    missing = "no"
+  ) -&gt;
+out
+
+trial |&gt;
+ tbl_summary(
+    include = c(age, grade, response),
+    by = trt,  # split table by group
+    missing = "no"  # dont list missing data separately
+  ) |&gt;
+  add_n() %&gt;%  # add column with total number of non-missing observations
+  modify_header(label = "**Variable**") %&gt;%  # update the column header
+  bold_labels() -&gt;
+gtstable
+
+names(gtstable)
+
+str(gtstable$table_body) -&gt;
+  shhh; str(gtstable$table_styling) -&gt;
+* shhh; str(gtstable$call_list)
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+[1] "table_body"    "table_styling" "call_list"     "cards"        
+[5] "inputs"       
+```
+
+```
+tibble [6 × 8] (S3: tbl_df/tbl/data.frame)
+ $ variable : chr [1:6] "age" "grade" "grade" "grade" ...
+ $ var_type : chr [1:6] "continuous" "categorical" "categorical" "categorical" ...
+ $ row_type : chr [1:6] "label" "label" "level" "level" ...
+ $ var_label: chr [1:6] "Age" "Grade" "Grade" "Grade" ...
+ $ label    : chr [1:6] "Age" "Grade" "I" "II" ...
+ $ n        : chr [1:6] "189" "200" NA NA ...
+ $ stat_1   : chr [1:6] "46 (37, 60)" NA "35 (36%)" "32 (33%)" ...
+ $ stat_2   : chr [1:6] "48 (39, 56)" NA "33 (32%)" "36 (35%)" ...
+```
+
+```
+List of 8
+ $ header         : tibble [8 × 11] (S3: tbl_df/tbl/data.frame)
+  ..$ column                   : chr [1:8] "variable" "var_type" "row_type" "var_label" ...
+  ..$ hide                     : logi [1:8] TRUE TRUE TRUE TRUE FALSE FALSE ...
+  ..$ align                    : chr [1:8] "center" "center" "center" "center" ...
+  ..$ interpret_label          : chr [1:8] "gt::md" "gt::md" "gt::md" "gt::md" ...
+  ..$ label                    : chr [1:8] "variable" "var_type" "row_type" "var_label" ...
+  ..$ interpret_spanning_header: chr [1:8] "gt::md" "gt::md" "gt::md" "gt::md" ...
+  ..$ spanning_header          : chr [1:8] NA NA NA NA ...
+  ..$ modify_stat_N            : int [1:8] 200 200 200 200 200 NA 200 200
+  ..$ modify_stat_n            : int [1:8] NA NA NA NA NA NA 98 102
+  ..$ modify_stat_p            : num [1:8] NA NA NA NA NA NA 0.49 0.51
+  ..$ modify_stat_level        : chr [1:8] NA NA NA NA ...
+ $ footnote       : tibble [2 × 4] (S3: tbl_df/tbl/data.frame)
+  ..$ column        : chr [1:2] "stat_1" "stat_2"
+  ..$ rows          :List of 2
+  .. ..$ : language ~NULL
+  .. .. ..- attr(*, ".Environment")=&lt;environment: R_EmptyEnv&gt; 
+  .. ..$ : language ~NULL
+  .. .. ..- attr(*, ".Environment")=&lt;environment: R_EmptyEnv&gt; 
+  ..$ text_interpret: chr [1:2] "gt::md" "gt::md"
+  ..$ footnote      : chr [1:2] "Median (Q1, Q3); n (%)" "Median (Q1, Q3); n (%)"
+ $ footnote_abbrev: tibble [0 × 4] (S3: tbl_df/tbl/data.frame)
+  ..$ column        : chr(0) 
+  ..$ rows          : list()
+  ..$ text_interpret: chr(0) 
+  ..$ footnote      : chr(0) 
+ $ text_format    : tibble [1 × 4] (S3: tbl_df/tbl/data.frame)
+  ..$ column          : chr "label"
+  ..$ rows            :List of 1
+  .. ..$ : language ~.data$row_type == "label"
+  .. .. ..- attr(*, ".Environment")=&lt;environment: 0x7fcbe983a390&gt; 
+  ..$ format_type     : chr "bold"
+  ..$ undo_text_format: logi FALSE
+ $ indent         : tibble [2 × 3] (S3: tbl_df/tbl/data.frame)
+  ..$ column  : chr [1:2] "label" "label"
+  ..$ rows    :List of 2
+  .. ..$ : logi TRUE
+  .. ..$ : language ~.data$row_type %in% c("level", "missing")
+  .. .. ..- attr(*, ".Environment")=&lt;environment: 0x7fcbdcacb288&gt; 
+  ..$ n_spaces: int [1:2] 0 4
+ $ fmt_missing    : tibble [0 × 3] (S3: tbl_df/tbl/data.frame)
+  ..$ column: chr(0) 
+  ..$ rows  : list()
+  ..$ symbol: chr(0) 
+ $ fmt_fun        : tibble [0 × 3] (S3: tbl_df/tbl/data.frame)
+  ..$ column : chr(0) 
+  ..$ rows   : list()
+  ..$ fmt_fun: list()
+ $ cols_merge     : tibble [0 × 3] (S3: tbl_df/tbl/data.frame)
+  ..$ column : chr(0) 
+  ..$ rows   : list()
+  ..$ pattern: chr(0) 
+```
+
+```
+List of 4
+ $ tbl_summary    : language tbl_summary(data = trial, by = trt, missing = "no", include = c(age, grade,      response))
+ $ add_n          : language add_n.tbl_summary(x = tbl_summary(trial, include = c(age, grade, response),      by = trt, missing = "no"))
+ $ modify_footnote: language modify_header(x = ., label = "**Variable**")
+ $ bold_labels    : language bold_labels.gtsummary(x = .)
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+trial |&gt;
+  tbl_summary(
+    include = age,
+    type = all_continuous() ~ "continuous2",
+    statistic = all_continuous() ~ c("{mean} ({sd})",
+                                     "{median} ({p25}, {p75})",
+                                     "{min}, {max}"),
+    digits = age ~ list(sd = 2),  # show the SD to 2 decimal places
+    missing = "no"
+  ) -&gt;
+out
+
+trial |&gt;
+ tbl_summary(
+    include = c(age, grade, response),
+    by = trt,  # split table by group
+    missing = "no"  # dont list missing data separately
+  ) |&gt;
+  add_n() %&gt;%  # add column with total number of non-missing observations
+  modify_header(label = "**Variable**") %&gt;%  # update the column header
+  bold_labels() -&gt;
+gtstable
+
+names(gtstable)
+
+str(gtstable$table_body) -&gt;
+  shhh; str(gtstable$table_styling) -&gt;
+  shhh; str(gtstable$call_list) -&gt;
+* shhh; str(gtstable$cards)
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+[1] "table_body"    "table_styling" "call_list"     "cards"        
+[5] "inputs"       
+```
+
+```
+tibble [6 × 8] (S3: tbl_df/tbl/data.frame)
+ $ variable : chr [1:6] "age" "grade" "grade" "grade" ...
+ $ var_type : chr [1:6] "continuous" "categorical" "categorical" "categorical" ...
+ $ row_type : chr [1:6] "label" "label" "level" "level" ...
+ $ var_label: chr [1:6] "Age" "Grade" "Grade" "Grade" ...
+ $ label    : chr [1:6] "Age" "Grade" "I" "II" ...
+ $ n        : chr [1:6] "189" "200" NA NA ...
+ $ stat_1   : chr [1:6] "46 (37, 60)" NA "35 (36%)" "32 (33%)" ...
+ $ stat_2   : chr [1:6] "48 (39, 56)" NA "33 (32%)" "36 (35%)" ...
+```
+
+```
+List of 8
+ $ header         : tibble [8 × 11] (S3: tbl_df/tbl/data.frame)
+  ..$ column                   : chr [1:8] "variable" "var_type" "row_type" "var_label" ...
+  ..$ hide                     : logi [1:8] TRUE TRUE TRUE TRUE FALSE FALSE ...
+  ..$ align                    : chr [1:8] "center" "center" "center" "center" ...
+  ..$ interpret_label          : chr [1:8] "gt::md" "gt::md" "gt::md" "gt::md" ...
+  ..$ label                    : chr [1:8] "variable" "var_type" "row_type" "var_label" ...
+  ..$ interpret_spanning_header: chr [1:8] "gt::md" "gt::md" "gt::md" "gt::md" ...
+  ..$ spanning_header          : chr [1:8] NA NA NA NA ...
+  ..$ modify_stat_N            : int [1:8] 200 200 200 200 200 NA 200 200
+  ..$ modify_stat_n            : int [1:8] NA NA NA NA NA NA 98 102
+  ..$ modify_stat_p            : num [1:8] NA NA NA NA NA NA 0.49 0.51
+  ..$ modify_stat_level        : chr [1:8] NA NA NA NA ...
+ $ footnote       : tibble [2 × 4] (S3: tbl_df/tbl/data.frame)
+  ..$ column        : chr [1:2] "stat_1" "stat_2"
+  ..$ rows          :List of 2
+  .. ..$ : language ~NULL
+  .. .. ..- attr(*, ".Environment")=&lt;environment: R_EmptyEnv&gt; 
+  .. ..$ : language ~NULL
+  .. .. ..- attr(*, ".Environment")=&lt;environment: R_EmptyEnv&gt; 
+  ..$ text_interpret: chr [1:2] "gt::md" "gt::md"
+  ..$ footnote      : chr [1:2] "Median (Q1, Q3); n (%)" "Median (Q1, Q3); n (%)"
+ $ footnote_abbrev: tibble [0 × 4] (S3: tbl_df/tbl/data.frame)
+  ..$ column        : chr(0) 
+  ..$ rows          : list()
+  ..$ text_interpret: chr(0) 
+  ..$ footnote      : chr(0) 
+ $ text_format    : tibble [1 × 4] (S3: tbl_df/tbl/data.frame)
+  ..$ column          : chr "label"
+  ..$ rows            :List of 1
+  .. ..$ : language ~.data$row_type == "label"
+  .. .. ..- attr(*, ".Environment")=&lt;environment: 0x7fcc02b2f518&gt; 
+  ..$ format_type     : chr "bold"
+  ..$ undo_text_format: logi FALSE
+ $ indent         : tibble [2 × 3] (S3: tbl_df/tbl/data.frame)
+  ..$ column  : chr [1:2] "label" "label"
+  ..$ rows    :List of 2
+  .. ..$ : logi TRUE
+  .. ..$ : language ~.data$row_type %in% c("level", "missing")
+  .. .. ..- attr(*, ".Environment")=&lt;environment: 0x7fcbea12cef0&gt; 
+  ..$ n_spaces: int [1:2] 0 4
+ $ fmt_missing    : tibble [0 × 3] (S3: tbl_df/tbl/data.frame)
+  ..$ column: chr(0) 
+  ..$ rows  : list()
+  ..$ symbol: chr(0) 
+ $ fmt_fun        : tibble [0 × 3] (S3: tbl_df/tbl/data.frame)
+  ..$ column : chr(0) 
+  ..$ rows   : list()
+  ..$ fmt_fun: list()
+ $ cols_merge     : tibble [0 × 3] (S3: tbl_df/tbl/data.frame)
+  ..$ column : chr(0) 
+  ..$ rows   : list()
+  ..$ pattern: chr(0) 
+```
+
+```
+List of 4
+ $ tbl_summary    : language tbl_summary(data = trial, by = trt, missing = "no", include = c(age, grade,      response))
+ $ add_n          : language add_n.tbl_summary(x = tbl_summary(trial, include = c(age, grade, response),      by = trt, missing = "no"))
+ $ modify_footnote: language modify_header(x = ., label = "**Variable**")
+ $ bold_labels    : language bold_labels.gtsummary(x = .)
+```
+
+```
+List of 2
+ $ tbl_summary: card [75 × 12] (S3: card/tbl_df/tbl/data.frame)
+  ..$ group1        : chr [1:75] NA NA NA NA ...
+  ..$ group1_level  :List of 75
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  ..$ variable      : chr [1:75] "age" "age" "grade" "grade" ...
+  ..$ variable_level:List of 75
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : Factor w/ 3 levels "I","II","III": 1
+  .. ..$ : Factor w/ 3 levels "I","II","III": 1
+  .. ..$ : Factor w/ 3 levels "I","II","III": 1
+  .. ..$ : Factor w/ 3 levels "I","II","III": 1
+  .. ..$ : Factor w/ 3 levels "I","II","III": 1
+  .. ..$ : Factor w/ 3 levels "I","II","III": 1
+  .. ..$ : Factor w/ 3 levels "I","II","III": 2
+  .. ..$ : Factor w/ 3 levels "I","II","III": 2
+  .. ..$ : Factor w/ 3 levels "I","II","III": 2
+  .. ..$ : Factor w/ 3 levels "I","II","III": 2
+  .. ..$ : Factor w/ 3 levels "I","II","III": 2
+  .. ..$ : Factor w/ 3 levels "I","II","III": 2
+  .. ..$ : Factor w/ 3 levels "I","II","III": 3
+  .. ..$ : Factor w/ 3 levels "I","II","III": 3
+  .. ..$ : Factor w/ 3 levels "I","II","III": 3
+  .. ..$ : Factor w/ 3 levels "I","II","III": 3
+  .. ..$ : Factor w/ 3 levels "I","II","III": 3
+  .. ..$ : Factor w/ 3 levels "I","II","III": 3
+  .. ..$ : int 1
+  .. ..$ : int 1
+  .. ..$ : int 1
+  .. ..$ : int 1
+  .. ..$ : int 1
+  .. ..$ : int 1
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  ..$ context       : chr [1:75] "attributes" "attributes" "attributes" "attributes" ...
+  ..$ stat_name     : chr [1:75] "label" "class" "levels" "class" ...
+  ..$ stat_label    : chr [1:75] "Variable Label" "Variable Class" "levels" "Variable Class" ...
+  ..$ stat          :List of 75
+  .. ..$ : chr "Age"
+  .. ..$ : chr "numeric"
+  .. ..$ : chr [1:3] "I" "II" "III"
+  .. ..$ : chr "factor"
+  .. ..$ : chr "Grade"
+  .. ..$ : chr "Tumor Response"
+  .. ..$ : chr "integer"
+  .. ..$ : chr "Chemotherapy Treatment"
+  .. ..$ : chr "character"
+  .. ..$ : int 98
+  .. ..$ : int 7
+  .. ..$ : int 91
+  .. ..$ : num 0.0714
+  .. ..$ : num 0.929
+  .. ..$ : int 98
+  .. ..$ : int 0
+  .. ..$ : int 98
+  .. ..$ : num 0
+  .. ..$ : num 1
+  .. ..$ : int 98
+  .. ..$ : int 3
+  .. ..$ : int 95
+  .. ..$ : num 0.0306
+  .. ..$ : num 0.969
+  .. ..$ : int 102
+  .. ..$ : int 4
+  .. ..$ : int 98
+  .. ..$ : num 0.0392
+  .. ..$ : num 0.961
+  .. ..$ : int 102
+  .. ..$ : int 0
+  .. ..$ : int 102
+  .. ..$ : num 0
+  .. ..$ : num 1
+  .. ..$ : int 102
+  .. ..$ : int 4
+  .. ..$ : int 98
+  .. ..$ : num 0.0392
+  .. ..$ : num 0.961
+  .. ..$ : int 98
+  .. ..$ : int 200
+  .. ..$ : num 0.49
+  .. ..$ : int 102
+  .. ..$ : int 200
+  .. ..$ : num 0.51
+  .. ..$ : int 35
+  .. ..$ : int 98
+  .. ..$ : num 0.357
+  .. ..$ : int 33
+  .. ..$ : int 102
+  .. ..$ : num 0.324
+  .. ..$ : int 32
+  .. ..$ : int 98
+  .. ..$ : num 0.327
+  .. ..$ : int 36
+  .. ..$ : int 102
+  .. ..$ : num 0.353
+  .. ..$ : int 31
+  .. ..$ : int 98
+  .. ..$ : num 0.316
+  .. ..$ : int 33
+  .. ..$ : int 102
+  .. ..$ : num 0.324
+  .. ..$ : int 28
+  .. ..$ : int 95
+  .. ..$ : num 0.295
+  .. ..$ : int 33
+  .. ..$ : int 98
+  .. ..$ : num 0.337
+  .. ..$ : num 46
+  .. ..$ : num 37
+  .. ..$ : num 60
+  .. ..$ : num 48
+  .. ..$ : num 39
+  .. ..$ : num 56
+  ..$ fmt_fn        :List of 75
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  ..$ warning       :List of 75
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  ..$ error         :List of 75
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  ..$ gts_column    : chr [1:75] NA NA NA NA ...
+ $ add_n      : card [15 × 9] (S3: card/tbl_df/tbl/data.frame)
+  ..$ variable  : chr [1:15] "age" "age" "age" "age" ...
+  ..$ context   : chr [1:15] "missing" "missing" "missing" "missing" ...
+  ..$ stat_name : chr [1:15] "N_obs" "N_miss" "N_nonmiss" "p_miss" ...
+  ..$ stat_label: chr [1:15] "Vector Length" "N Missing" "N Non-missing" "% Missing" ...
+  ..$ stat      :List of 15
+  .. ..$ : int 200
+  .. ..$ : int 11
+  .. ..$ : int 189
+  .. ..$ : num 0.055
+  .. ..$ : num 0.945
+  .. ..$ : int 200
+  .. ..$ : int 0
+  .. ..$ : int 200
+  .. ..$ : num 0
+  .. ..$ : num 1
+  .. ..$ : int 200
+  .. ..$ : int 7
+  .. ..$ : int 193
+  .. ..$ : num 0.035
+  .. ..$ : num 0.965
+  ..$ stat_fmt  :List of 15
+  .. ..$ : chr "200"
+  .. ..$ : chr "11"
+  .. ..$ : chr "189"
+  .. ..$ : chr "5.5"
+  .. ..$ : chr "95"
+  .. ..$ : chr "200"
+  .. ..$ : chr "0"
+  .. ..$ : chr "200"
+  .. ..$ : chr "0"
+  .. ..$ : chr "100"
+  .. ..$ : chr "200"
+  .. ..$ : chr "7"
+  .. ..$ : chr "193"
+  .. ..$ : chr "3.5"
+  .. ..$ : chr "97"
+  ..$ fmt_fn    :List of 15
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  ..$ warning   :List of 15
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  ..$ error     :List of 15
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+trial |&gt;
+  tbl_summary(
+    include = age,
+    type = all_continuous() ~ "continuous2",
+    statistic = all_continuous() ~ c("{mean} ({sd})",
+                                     "{median} ({p25}, {p75})",
+                                     "{min}, {max}"),
+    digits = age ~ list(sd = 2),  # show the SD to 2 decimal places
+    missing = "no"
+  ) -&gt;
+out
+
+trial |&gt;
+ tbl_summary(
+    include = c(age, grade, response),
+    by = trt,  # split table by group
+    missing = "no"  # dont list missing data separately
+  ) |&gt;
+  add_n() %&gt;%  # add column with total number of non-missing observations
+  modify_header(label = "**Variable**") %&gt;%  # update the column header
+  bold_labels() -&gt;
+gtstable
+
+names(gtstable)
+
+str(gtstable$table_body) -&gt;
+  shhh; str(gtstable$table_styling) -&gt;
+  shhh; str(gtstable$call_list) -&gt;
+  shhh; str(gtstable$cards) -&gt;
+* shhh; str(gtstable$inputs)
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+[1] "table_body"    "table_styling" "call_list"     "cards"        
+[5] "inputs"       
+```
+
+```
+tibble [6 × 8] (S3: tbl_df/tbl/data.frame)
+ $ variable : chr [1:6] "age" "grade" "grade" "grade" ...
+ $ var_type : chr [1:6] "continuous" "categorical" "categorical" "categorical" ...
+ $ row_type : chr [1:6] "label" "label" "level" "level" ...
+ $ var_label: chr [1:6] "Age" "Grade" "Grade" "Grade" ...
+ $ label    : chr [1:6] "Age" "Grade" "I" "II" ...
+ $ n        : chr [1:6] "189" "200" NA NA ...
+ $ stat_1   : chr [1:6] "46 (37, 60)" NA "35 (36%)" "32 (33%)" ...
+ $ stat_2   : chr [1:6] "48 (39, 56)" NA "33 (32%)" "36 (35%)" ...
+```
+
+```
+List of 8
+ $ header         : tibble [8 × 11] (S3: tbl_df/tbl/data.frame)
+  ..$ column                   : chr [1:8] "variable" "var_type" "row_type" "var_label" ...
+  ..$ hide                     : logi [1:8] TRUE TRUE TRUE TRUE FALSE FALSE ...
+  ..$ align                    : chr [1:8] "center" "center" "center" "center" ...
+  ..$ interpret_label          : chr [1:8] "gt::md" "gt::md" "gt::md" "gt::md" ...
+  ..$ label                    : chr [1:8] "variable" "var_type" "row_type" "var_label" ...
+  ..$ interpret_spanning_header: chr [1:8] "gt::md" "gt::md" "gt::md" "gt::md" ...
+  ..$ spanning_header          : chr [1:8] NA NA NA NA ...
+  ..$ modify_stat_N            : int [1:8] 200 200 200 200 200 NA 200 200
+  ..$ modify_stat_n            : int [1:8] NA NA NA NA NA NA 98 102
+  ..$ modify_stat_p            : num [1:8] NA NA NA NA NA NA 0.49 0.51
+  ..$ modify_stat_level        : chr [1:8] NA NA NA NA ...
+ $ footnote       : tibble [2 × 4] (S3: tbl_df/tbl/data.frame)
+  ..$ column        : chr [1:2] "stat_1" "stat_2"
+  ..$ rows          :List of 2
+  .. ..$ : language ~NULL
+  .. .. ..- attr(*, ".Environment")=&lt;environment: R_EmptyEnv&gt; 
+  .. ..$ : language ~NULL
+  .. .. ..- attr(*, ".Environment")=&lt;environment: R_EmptyEnv&gt; 
+  ..$ text_interpret: chr [1:2] "gt::md" "gt::md"
+  ..$ footnote      : chr [1:2] "Median (Q1, Q3); n (%)" "Median (Q1, Q3); n (%)"
+ $ footnote_abbrev: tibble [0 × 4] (S3: tbl_df/tbl/data.frame)
+  ..$ column        : chr(0) 
+  ..$ rows          : list()
+  ..$ text_interpret: chr(0) 
+  ..$ footnote      : chr(0) 
+ $ text_format    : tibble [1 × 4] (S3: tbl_df/tbl/data.frame)
+  ..$ column          : chr "label"
+  ..$ rows            :List of 1
+  .. ..$ : language ~.data$row_type == "label"
+  .. .. ..- attr(*, ".Environment")=&lt;environment: 0x7fcc03c93698&gt; 
+  ..$ format_type     : chr "bold"
+  ..$ undo_text_format: logi FALSE
+ $ indent         : tibble [2 × 3] (S3: tbl_df/tbl/data.frame)
+  ..$ column  : chr [1:2] "label" "label"
+  ..$ rows    :List of 2
+  .. ..$ : logi TRUE
+  .. ..$ : language ~.data$row_type %in% c("level", "missing")
+  .. .. ..- attr(*, ".Environment")=&lt;environment: 0x7fcbf2acd068&gt; 
+  ..$ n_spaces: int [1:2] 0 4
+ $ fmt_missing    : tibble [0 × 3] (S3: tbl_df/tbl/data.frame)
+  ..$ column: chr(0) 
+  ..$ rows  : list()
+  ..$ symbol: chr(0) 
+ $ fmt_fun        : tibble [0 × 3] (S3: tbl_df/tbl/data.frame)
+  ..$ column : chr(0) 
+  ..$ rows   : list()
+  ..$ fmt_fun: list()
+ $ cols_merge     : tibble [0 × 3] (S3: tbl_df/tbl/data.frame)
+  ..$ column : chr(0) 
+  ..$ rows   : list()
+  ..$ pattern: chr(0) 
+```
+
+```
+List of 4
+ $ tbl_summary    : language tbl_summary(data = trial, by = trt, missing = "no", include = c(age, grade,      response))
+ $ add_n          : language add_n.tbl_summary(x = tbl_summary(trial, include = c(age, grade, response),      by = trt, missing = "no"))
+ $ modify_footnote: language modify_header(x = ., label = "**Variable**")
+ $ bold_labels    : language bold_labels.gtsummary(x = .)
+```
+
+```
+List of 2
+ $ tbl_summary: card [75 × 12] (S3: card/tbl_df/tbl/data.frame)
+  ..$ group1        : chr [1:75] NA NA NA NA ...
+  ..$ group1_level  :List of 75
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  ..$ variable      : chr [1:75] "age" "age" "grade" "grade" ...
+  ..$ variable_level:List of 75
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : Factor w/ 3 levels "I","II","III": 1
+  .. ..$ : Factor w/ 3 levels "I","II","III": 1
+  .. ..$ : Factor w/ 3 levels "I","II","III": 1
+  .. ..$ : Factor w/ 3 levels "I","II","III": 1
+  .. ..$ : Factor w/ 3 levels "I","II","III": 1
+  .. ..$ : Factor w/ 3 levels "I","II","III": 1
+  .. ..$ : Factor w/ 3 levels "I","II","III": 2
+  .. ..$ : Factor w/ 3 levels "I","II","III": 2
+  .. ..$ : Factor w/ 3 levels "I","II","III": 2
+  .. ..$ : Factor w/ 3 levels "I","II","III": 2
+  .. ..$ : Factor w/ 3 levels "I","II","III": 2
+  .. ..$ : Factor w/ 3 levels "I","II","III": 2
+  .. ..$ : Factor w/ 3 levels "I","II","III": 3
+  .. ..$ : Factor w/ 3 levels "I","II","III": 3
+  .. ..$ : Factor w/ 3 levels "I","II","III": 3
+  .. ..$ : Factor w/ 3 levels "I","II","III": 3
+  .. ..$ : Factor w/ 3 levels "I","II","III": 3
+  .. ..$ : Factor w/ 3 levels "I","II","III": 3
+  .. ..$ : int 1
+  .. ..$ : int 1
+  .. ..$ : int 1
+  .. ..$ : int 1
+  .. ..$ : int 1
+  .. ..$ : int 1
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  ..$ context       : chr [1:75] "attributes" "attributes" "attributes" "attributes" ...
+  ..$ stat_name     : chr [1:75] "label" "class" "levels" "class" ...
+  ..$ stat_label    : chr [1:75] "Variable Label" "Variable Class" "levels" "Variable Class" ...
+  ..$ stat          :List of 75
+  .. ..$ : chr "Age"
+  .. ..$ : chr "numeric"
+  .. ..$ : chr [1:3] "I" "II" "III"
+  .. ..$ : chr "factor"
+  .. ..$ : chr "Grade"
+  .. ..$ : chr "Tumor Response"
+  .. ..$ : chr "integer"
+  .. ..$ : chr "Chemotherapy Treatment"
+  .. ..$ : chr "character"
+  .. ..$ : int 98
+  .. ..$ : int 7
+  .. ..$ : int 91
+  .. ..$ : num 0.0714
+  .. ..$ : num 0.929
+  .. ..$ : int 98
+  .. ..$ : int 0
+  .. ..$ : int 98
+  .. ..$ : num 0
+  .. ..$ : num 1
+  .. ..$ : int 98
+  .. ..$ : int 3
+  .. ..$ : int 95
+  .. ..$ : num 0.0306
+  .. ..$ : num 0.969
+  .. ..$ : int 102
+  .. ..$ : int 4
+  .. ..$ : int 98
+  .. ..$ : num 0.0392
+  .. ..$ : num 0.961
+  .. ..$ : int 102
+  .. ..$ : int 0
+  .. ..$ : int 102
+  .. ..$ : num 0
+  .. ..$ : num 1
+  .. ..$ : int 102
+  .. ..$ : int 4
+  .. ..$ : int 98
+  .. ..$ : num 0.0392
+  .. ..$ : num 0.961
+  .. ..$ : int 98
+  .. ..$ : int 200
+  .. ..$ : num 0.49
+  .. ..$ : int 102
+  .. ..$ : int 200
+  .. ..$ : num 0.51
+  .. ..$ : int 35
+  .. ..$ : int 98
+  .. ..$ : num 0.357
+  .. ..$ : int 33
+  .. ..$ : int 102
+  .. ..$ : num 0.324
+  .. ..$ : int 32
+  .. ..$ : int 98
+  .. ..$ : num 0.327
+  .. ..$ : int 36
+  .. ..$ : int 102
+  .. ..$ : num 0.353
+  .. ..$ : int 31
+  .. ..$ : int 98
+  .. ..$ : num 0.316
+  .. ..$ : int 33
+  .. ..$ : int 102
+  .. ..$ : num 0.324
+  .. ..$ : int 28
+  .. ..$ : int 95
+  .. ..$ : num 0.295
+  .. ..$ : int 33
+  .. ..$ : int 98
+  .. ..$ : num 0.337
+  .. ..$ : num 46
+  .. ..$ : num 37
+  .. ..$ : num 60
+  .. ..$ : num 48
+  .. ..$ : num 39
+  .. ..$ : num 56
+  ..$ fmt_fn        :List of 75
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  ..$ warning       :List of 75
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  ..$ error         :List of 75
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  ..$ gts_column    : chr [1:75] NA NA NA NA ...
+ $ add_n      : card [15 × 9] (S3: card/tbl_df/tbl/data.frame)
+  ..$ variable  : chr [1:15] "age" "age" "age" "age" ...
+  ..$ context   : chr [1:15] "missing" "missing" "missing" "missing" ...
+  ..$ stat_name : chr [1:15] "N_obs" "N_miss" "N_nonmiss" "p_miss" ...
+  ..$ stat_label: chr [1:15] "Vector Length" "N Missing" "N Non-missing" "% Missing" ...
+  ..$ stat      :List of 15
+  .. ..$ : int 200
+  .. ..$ : int 11
+  .. ..$ : int 189
+  .. ..$ : num 0.055
+  .. ..$ : num 0.945
+  .. ..$ : int 200
+  .. ..$ : int 0
+  .. ..$ : int 200
+  .. ..$ : num 0
+  .. ..$ : num 1
+  .. ..$ : int 200
+  .. ..$ : int 7
+  .. ..$ : int 193
+  .. ..$ : num 0.035
+  .. ..$ : num 0.965
+  ..$ stat_fmt  :List of 15
+  .. ..$ : chr "200"
+  .. ..$ : chr "11"
+  .. ..$ : chr "189"
+  .. ..$ : chr "5.5"
+  .. ..$ : chr "95"
+  .. ..$ : chr "200"
+  .. ..$ : chr "0"
+  .. ..$ : chr "200"
+  .. ..$ : chr "0"
+  .. ..$ : chr "100"
+  .. ..$ : chr "200"
+  .. ..$ : chr "7"
+  .. ..$ : chr "193"
+  .. ..$ : chr "3.5"
+  .. ..$ : chr "97"
+  ..$ fmt_fn    :List of 15
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  ..$ warning   :List of 15
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  ..$ error     :List of 15
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+```
+
+```
+List of 13
+ $ data        : tibble [200 × 8] (S3: tbl_df/tbl/data.frame)
+  ..$ trt     : chr [1:200] "Drug A" "Drug B" "Drug A" "Drug A" ...
+  .. ..- attr(*, "label")= chr "Chemotherapy Treatment"
+  ..$ age     : num [1:200] 23 9 31 NA 51 39 37 32 31 34 ...
+  .. ..- attr(*, "label")= chr "Age"
+  ..$ marker  : num [1:200] 0.16 1.107 0.277 2.067 2.767 ...
+  .. ..- attr(*, "label")= chr "Marker Level (ng/mL)"
+  ..$ stage   : Factor w/ 4 levels "T1","T2","T3",..: 1 2 1 3 4 4 1 1 1 3 ...
+  .. ..- attr(*, "label")= chr "T Stage"
+  ..$ grade   : Factor w/ 3 levels "I","II","III": 2 1 2 3 3 1 2 1 2 1 ...
+  .. ..- attr(*, "label")= chr "Grade"
+  ..$ response: int [1:200] 0 1 0 1 1 0 0 0 0 0 ...
+  .. ..- attr(*, "label")= chr "Tumor Response"
+  ..$ death   : int [1:200] 0 0 0 1 1 1 0 1 0 1 ...
+  .. ..- attr(*, "label")= chr "Patient Died"
+  ..$ ttdeath : num [1:200] 24 24 24 17.6 16.4 ...
+  .. ..- attr(*, "label")= chr "Months to Death/Censor"
+ $ by          : chr "trt"
+ $ label       : list()
+ $ statistic   :List of 3
+  ..$ age     : chr "{median} ({p25}, {p75})"
+  .. ..- attr(*, ".Environment")=&lt;environment: 0x7fcc027844b0&gt; 
+  ..$ grade   : chr "{n} ({p}%)"
+  .. ..- attr(*, ".Environment")=&lt;environment: 0x7fcc027844b0&gt; 
+  ..$ response: chr "{n} ({p}%)"
+  .. ..- attr(*, ".Environment")=&lt;environment: 0x7fcc027844b0&gt; 
+ $ digits      :List of 3
+  ..$ age     :List of 8
+  .. ..$ median   :function (x)  
+  .. ..$ p25      :function (x)  
+  .. ..$ p75      :function (x)  
+  .. ..$ N_obs    :function (x)  
+  .. ..$ N_miss   :function (x)  
+  .. ..$ N_nonmiss:function (x)  
+  .. ..$ p_miss   :function (x)  
+  .. ..$ p_nonmiss:function (x)  
+  ..$ grade   :List of 7
+  .. ..$ n        :function (x)  
+  .. ..$ p        :function (x)  
+  .. ..$ N_obs    :function (x)  
+  .. ..$ N_miss   :function (x)  
+  .. ..$ N_nonmiss:function (x)  
+  .. ..$ p_miss   :function (x)  
+  .. ..$ p_nonmiss:function (x)  
+  ..$ response:List of 7
+  .. ..$ n        :function (x)  
+  .. ..$ p        :function (x)  
+  .. ..$ N_obs    :function (x)  
+  .. ..$ N_miss   :function (x)  
+  .. ..$ N_nonmiss:function (x)  
+  .. ..$ p_miss   :function (x)  
+  .. ..$ p_nonmiss:function (x)  
+ $ type        :List of 3
+  ..$ age     : chr "continuous"
+  ..$ grade   : chr "categorical"
+  ..$ response: chr "dichotomous"
+ $ value       :List of 3
+  ..$ age     : NULL
+  ..$ grade   : NULL
+  ..$ response: int 1
+ $ missing     : chr "no"
+ $ missing_text: chr "Unknown"
+ $ missing_stat: chr "{N_miss}"
+ $ sort        :List of 1
+  ..$ grade: chr "alphanumeric"
+ $ percent     : chr "column"
+ $ include     : chr [1:3] "age" "grade" "response"
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+trial |&gt;
+  tbl_summary(
+    include = age,
+    type = all_continuous() ~ "continuous2",
+    statistic = all_continuous() ~ c("{mean} ({sd})",
+                                     "{median} ({p25}, {p75})",
+                                     "{min}, {max}"),
+    digits = age ~ list(sd = 2),  # show the SD to 2 decimal places
+    missing = "no"
+  ) -&gt;
+out
+
+trial |&gt;
+ tbl_summary(
+    include = c(age, grade, response),
+    by = trt,  # split table by group
+    missing = "no"  # dont list missing data separately
+  ) |&gt;
+  add_n() %&gt;%  # add column with total number of non-missing observations
+  modify_header(label = "**Variable**") %&gt;%  # update the column header
+  bold_labels() -&gt;
+gtstable
+
+names(gtstable)
+
+str(gtstable$table_body) -&gt;
+  shhh; str(gtstable$table_styling) -&gt;
+  shhh; str(gtstable$call_list) -&gt;
+  shhh; str(gtstable$cards) -&gt;
+  shhh; str(gtstable$inputs)
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+[1] "table_body"    "table_styling" "call_list"     "cards"        
+[5] "inputs"       
+```
+
+```
+tibble [6 × 8] (S3: tbl_df/tbl/data.frame)
+ $ variable : chr [1:6] "age" "grade" "grade" "grade" ...
+ $ var_type : chr [1:6] "continuous" "categorical" "categorical" "categorical" ...
+ $ row_type : chr [1:6] "label" "label" "level" "level" ...
+ $ var_label: chr [1:6] "Age" "Grade" "Grade" "Grade" ...
+ $ label    : chr [1:6] "Age" "Grade" "I" "II" ...
+ $ n        : chr [1:6] "189" "200" NA NA ...
+ $ stat_1   : chr [1:6] "46 (37, 60)" NA "35 (36%)" "32 (33%)" ...
+ $ stat_2   : chr [1:6] "48 (39, 56)" NA "33 (32%)" "36 (35%)" ...
+```
+
+```
+List of 8
+ $ header         : tibble [8 × 11] (S3: tbl_df/tbl/data.frame)
+  ..$ column                   : chr [1:8] "variable" "var_type" "row_type" "var_label" ...
+  ..$ hide                     : logi [1:8] TRUE TRUE TRUE TRUE FALSE FALSE ...
+  ..$ align                    : chr [1:8] "center" "center" "center" "center" ...
+  ..$ interpret_label          : chr [1:8] "gt::md" "gt::md" "gt::md" "gt::md" ...
+  ..$ label                    : chr [1:8] "variable" "var_type" "row_type" "var_label" ...
+  ..$ interpret_spanning_header: chr [1:8] "gt::md" "gt::md" "gt::md" "gt::md" ...
+  ..$ spanning_header          : chr [1:8] NA NA NA NA ...
+  ..$ modify_stat_N            : int [1:8] 200 200 200 200 200 NA 200 200
+  ..$ modify_stat_n            : int [1:8] NA NA NA NA NA NA 98 102
+  ..$ modify_stat_p            : num [1:8] NA NA NA NA NA NA 0.49 0.51
+  ..$ modify_stat_level        : chr [1:8] NA NA NA NA ...
+ $ footnote       : tibble [2 × 4] (S3: tbl_df/tbl/data.frame)
+  ..$ column        : chr [1:2] "stat_1" "stat_2"
+  ..$ rows          :List of 2
+  .. ..$ : language ~NULL
+  .. .. ..- attr(*, ".Environment")=&lt;environment: R_EmptyEnv&gt; 
+  .. ..$ : language ~NULL
+  .. .. ..- attr(*, ".Environment")=&lt;environment: R_EmptyEnv&gt; 
+  ..$ text_interpret: chr [1:2] "gt::md" "gt::md"
+  ..$ footnote      : chr [1:2] "Median (Q1, Q3); n (%)" "Median (Q1, Q3); n (%)"
+ $ footnote_abbrev: tibble [0 × 4] (S3: tbl_df/tbl/data.frame)
+  ..$ column        : chr(0) 
+  ..$ rows          : list()
+  ..$ text_interpret: chr(0) 
+  ..$ footnote      : chr(0) 
+ $ text_format    : tibble [1 × 4] (S3: tbl_df/tbl/data.frame)
+  ..$ column          : chr "label"
+  ..$ rows            :List of 1
+  .. ..$ : language ~.data$row_type == "label"
+  .. .. ..- attr(*, ".Environment")=&lt;environment: 0x7fcc03c19168&gt; 
+  ..$ format_type     : chr "bold"
+  ..$ undo_text_format: logi FALSE
+ $ indent         : tibble [2 × 3] (S3: tbl_df/tbl/data.frame)
+  ..$ column  : chr [1:2] "label" "label"
+  ..$ rows    :List of 2
+  .. ..$ : logi TRUE
+  .. ..$ : language ~.data$row_type %in% c("level", "missing")
+  .. .. ..- attr(*, ".Environment")=&lt;environment: 0x7fcbd9126be0&gt; 
+  ..$ n_spaces: int [1:2] 0 4
+ $ fmt_missing    : tibble [0 × 3] (S3: tbl_df/tbl/data.frame)
+  ..$ column: chr(0) 
+  ..$ rows  : list()
+  ..$ symbol: chr(0) 
+ $ fmt_fun        : tibble [0 × 3] (S3: tbl_df/tbl/data.frame)
+  ..$ column : chr(0) 
+  ..$ rows   : list()
+  ..$ fmt_fun: list()
+ $ cols_merge     : tibble [0 × 3] (S3: tbl_df/tbl/data.frame)
+  ..$ column : chr(0) 
+  ..$ rows   : list()
+  ..$ pattern: chr(0) 
+```
+
+```
+List of 4
+ $ tbl_summary    : language tbl_summary(data = trial, by = trt, missing = "no", include = c(age, grade,      response))
+ $ add_n          : language add_n.tbl_summary(x = tbl_summary(trial, include = c(age, grade, response),      by = trt, missing = "no"))
+ $ modify_footnote: language modify_header(x = ., label = "**Variable**")
+ $ bold_labels    : language bold_labels.gtsummary(x = .)
+```
+
+```
+List of 2
+ $ tbl_summary: card [75 × 12] (S3: card/tbl_df/tbl/data.frame)
+  ..$ group1        : chr [1:75] NA NA NA NA ...
+  ..$ group1_level  :List of 75
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  ..$ variable      : chr [1:75] "age" "age" "grade" "grade" ...
+  ..$ variable_level:List of 75
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug A"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : chr "Drug B"
+  .. ..$ : Factor w/ 3 levels "I","II","III": 1
+  .. ..$ : Factor w/ 3 levels "I","II","III": 1
+  .. ..$ : Factor w/ 3 levels "I","II","III": 1
+  .. ..$ : Factor w/ 3 levels "I","II","III": 1
+  .. ..$ : Factor w/ 3 levels "I","II","III": 1
+  .. ..$ : Factor w/ 3 levels "I","II","III": 1
+  .. ..$ : Factor w/ 3 levels "I","II","III": 2
+  .. ..$ : Factor w/ 3 levels "I","II","III": 2
+  .. ..$ : Factor w/ 3 levels "I","II","III": 2
+  .. ..$ : Factor w/ 3 levels "I","II","III": 2
+  .. ..$ : Factor w/ 3 levels "I","II","III": 2
+  .. ..$ : Factor w/ 3 levels "I","II","III": 2
+  .. ..$ : Factor w/ 3 levels "I","II","III": 3
+  .. ..$ : Factor w/ 3 levels "I","II","III": 3
+  .. ..$ : Factor w/ 3 levels "I","II","III": 3
+  .. ..$ : Factor w/ 3 levels "I","II","III": 3
+  .. ..$ : Factor w/ 3 levels "I","II","III": 3
+  .. ..$ : Factor w/ 3 levels "I","II","III": 3
+  .. ..$ : int 1
+  .. ..$ : int 1
+  .. ..$ : int 1
+  .. ..$ : int 1
+  .. ..$ : int 1
+  .. ..$ : int 1
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  ..$ context       : chr [1:75] "attributes" "attributes" "attributes" "attributes" ...
+  ..$ stat_name     : chr [1:75] "label" "class" "levels" "class" ...
+  ..$ stat_label    : chr [1:75] "Variable Label" "Variable Class" "levels" "Variable Class" ...
+  ..$ stat          :List of 75
+  .. ..$ : chr "Age"
+  .. ..$ : chr "numeric"
+  .. ..$ : chr [1:3] "I" "II" "III"
+  .. ..$ : chr "factor"
+  .. ..$ : chr "Grade"
+  .. ..$ : chr "Tumor Response"
+  .. ..$ : chr "integer"
+  .. ..$ : chr "Chemotherapy Treatment"
+  .. ..$ : chr "character"
+  .. ..$ : int 98
+  .. ..$ : int 7
+  .. ..$ : int 91
+  .. ..$ : num 0.0714
+  .. ..$ : num 0.929
+  .. ..$ : int 98
+  .. ..$ : int 0
+  .. ..$ : int 98
+  .. ..$ : num 0
+  .. ..$ : num 1
+  .. ..$ : int 98
+  .. ..$ : int 3
+  .. ..$ : int 95
+  .. ..$ : num 0.0306
+  .. ..$ : num 0.969
+  .. ..$ : int 102
+  .. ..$ : int 4
+  .. ..$ : int 98
+  .. ..$ : num 0.0392
+  .. ..$ : num 0.961
+  .. ..$ : int 102
+  .. ..$ : int 0
+  .. ..$ : int 102
+  .. ..$ : num 0
+  .. ..$ : num 1
+  .. ..$ : int 102
+  .. ..$ : int 4
+  .. ..$ : int 98
+  .. ..$ : num 0.0392
+  .. ..$ : num 0.961
+  .. ..$ : int 98
+  .. ..$ : int 200
+  .. ..$ : num 0.49
+  .. ..$ : int 102
+  .. ..$ : int 200
+  .. ..$ : num 0.51
+  .. ..$ : int 35
+  .. ..$ : int 98
+  .. ..$ : num 0.357
+  .. ..$ : int 33
+  .. ..$ : int 102
+  .. ..$ : num 0.324
+  .. ..$ : int 32
+  .. ..$ : int 98
+  .. ..$ : num 0.327
+  .. ..$ : int 36
+  .. ..$ : int 102
+  .. ..$ : num 0.353
+  .. ..$ : int 31
+  .. ..$ : int 98
+  .. ..$ : num 0.316
+  .. ..$ : int 33
+  .. ..$ : int 102
+  .. ..$ : num 0.324
+  .. ..$ : int 28
+  .. ..$ : int 95
+  .. ..$ : num 0.295
+  .. ..$ : int 33
+  .. ..$ : int 98
+  .. ..$ : num 0.337
+  .. ..$ : num 46
+  .. ..$ : num 37
+  .. ..$ : num 60
+  .. ..$ : num 48
+  .. ..$ : num 39
+  .. ..$ : num 56
+  ..$ fmt_fn        :List of 75
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ : int 0
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  ..$ warning       :List of 75
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  ..$ error         :List of 75
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  ..$ gts_column    : chr [1:75] NA NA NA NA ...
+ $ add_n      : card [15 × 9] (S3: card/tbl_df/tbl/data.frame)
+  ..$ variable  : chr [1:15] "age" "age" "age" "age" ...
+  ..$ context   : chr [1:15] "missing" "missing" "missing" "missing" ...
+  ..$ stat_name : chr [1:15] "N_obs" "N_miss" "N_nonmiss" "p_miss" ...
+  ..$ stat_label: chr [1:15] "Vector Length" "N Missing" "N Non-missing" "% Missing" ...
+  ..$ stat      :List of 15
+  .. ..$ : int 200
+  .. ..$ : int 11
+  .. ..$ : int 189
+  .. ..$ : num 0.055
+  .. ..$ : num 0.945
+  .. ..$ : int 200
+  .. ..$ : int 0
+  .. ..$ : int 200
+  .. ..$ : num 0
+  .. ..$ : num 1
+  .. ..$ : int 200
+  .. ..$ : int 7
+  .. ..$ : int 193
+  .. ..$ : num 0.035
+  .. ..$ : num 0.965
+  ..$ stat_fmt  :List of 15
+  .. ..$ : chr "200"
+  .. ..$ : chr "11"
+  .. ..$ : chr "189"
+  .. ..$ : chr "5.5"
+  .. ..$ : chr "95"
+  .. ..$ : chr "200"
+  .. ..$ : chr "0"
+  .. ..$ : chr "200"
+  .. ..$ : chr "0"
+  .. ..$ : chr "100"
+  .. ..$ : chr "200"
+  .. ..$ : chr "7"
+  .. ..$ : chr "193"
+  .. ..$ : chr "3.5"
+  .. ..$ : chr "97"
+  ..$ fmt_fn    :List of 15
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  .. ..$ :function (x)  
+  ..$ warning   :List of 15
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  ..$ error     :List of 15
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+```
+
+```
+List of 13
+ $ data        : tibble [200 × 8] (S3: tbl_df/tbl/data.frame)
+  ..$ trt     : chr [1:200] "Drug A" "Drug B" "Drug A" "Drug A" ...
+  .. ..- attr(*, "label")= chr "Chemotherapy Treatment"
+  ..$ age     : num [1:200] 23 9 31 NA 51 39 37 32 31 34 ...
+  .. ..- attr(*, "label")= chr "Age"
+  ..$ marker  : num [1:200] 0.16 1.107 0.277 2.067 2.767 ...
+  .. ..- attr(*, "label")= chr "Marker Level (ng/mL)"
+  ..$ stage   : Factor w/ 4 levels "T1","T2","T3",..: 1 2 1 3 4 4 1 1 1 3 ...
+  .. ..- attr(*, "label")= chr "T Stage"
+  ..$ grade   : Factor w/ 3 levels "I","II","III": 2 1 2 3 3 1 2 1 2 1 ...
+  .. ..- attr(*, "label")= chr "Grade"
+  ..$ response: int [1:200] 0 1 0 1 1 0 0 0 0 0 ...
+  .. ..- attr(*, "label")= chr "Tumor Response"
+  ..$ death   : int [1:200] 0 0 0 1 1 1 0 1 0 1 ...
+  .. ..- attr(*, "label")= chr "Patient Died"
+  ..$ ttdeath : num [1:200] 24 24 24 17.6 16.4 ...
+  .. ..- attr(*, "label")= chr "Months to Death/Censor"
+ $ by          : chr "trt"
+ $ label       : list()
+ $ statistic   :List of 3
+  ..$ age     : chr "{median} ({p25}, {p75})"
+  .. ..- attr(*, ".Environment")=&lt;environment: 0x7fcc01ab8548&gt; 
+  ..$ grade   : chr "{n} ({p}%)"
+  .. ..- attr(*, ".Environment")=&lt;environment: 0x7fcc01ab8548&gt; 
+  ..$ response: chr "{n} ({p}%)"
+  .. ..- attr(*, ".Environment")=&lt;environment: 0x7fcc01ab8548&gt; 
+ $ digits      :List of 3
+  ..$ age     :List of 8
+  .. ..$ median   :function (x)  
+  .. ..$ p25      :function (x)  
+  .. ..$ p75      :function (x)  
+  .. ..$ N_obs    :function (x)  
+  .. ..$ N_miss   :function (x)  
+  .. ..$ N_nonmiss:function (x)  
+  .. ..$ p_miss   :function (x)  
+  .. ..$ p_nonmiss:function (x)  
+  ..$ grade   :List of 7
+  .. ..$ n        :function (x)  
+  .. ..$ p        :function (x)  
+  .. ..$ N_obs    :function (x)  
+  .. ..$ N_miss   :function (x)  
+  .. ..$ N_nonmiss:function (x)  
+  .. ..$ p_miss   :function (x)  
+  .. ..$ p_nonmiss:function (x)  
+  ..$ response:List of 7
+  .. ..$ n        :function (x)  
+  .. ..$ p        :function (x)  
+  .. ..$ N_obs    :function (x)  
+  .. ..$ N_miss   :function (x)  
+  .. ..$ N_nonmiss:function (x)  
+  .. ..$ p_miss   :function (x)  
+  .. ..$ p_nonmiss:function (x)  
+ $ type        :List of 3
+  ..$ age     : chr "continuous"
+  ..$ grade   : chr "categorical"
+  ..$ response: chr "dichotomous"
+ $ value       :List of 3
+  ..$ age     : NULL
+  ..$ grade   : NULL
+  ..$ response: int 1
+ $ missing     : chr "no"
+ $ missing_text: chr "Unknown"
+ $ missing_stat: chr "{N_miss}"
+ $ sort        :List of 1
+  ..$ grade: chr "alphanumeric"
+ $ percent     : chr "column"
+ $ include     : chr [1:3] "age" "grade" "response"
+```
+]
+
+&lt;style&gt;
+.panel1-the_chunk-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-the_chunk-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-the_chunk-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 120%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+&lt;/style&gt;
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

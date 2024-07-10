@@ -1,0 +1,351 @@
+---
+title: "Towards incremental table specification "
+author: "Gina Reynolds, [you?! - link to source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-07-02-s3-tables/s3-tables.Rmd)"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+# Part 0.  **Objective** take many argument function, where arguments are orthogonal, and make a pipable interface
+
+## `pivot_count()` create count table based on direct user inputs
+
+```{r, echo = T}
+library(tidyverse)
+pivot_count <- function (data, rows = NULL, cols = NULL) {
+    
+  cols_quo <- rlang::enquo(cols)
+  
+  grouped <- data %>% dplyr::group_by(
+    dplyr::across(c({{cols}}, {{rows}})))
+  
+  summarized <- grouped |> 
+    dplyr::count() |> 
+    dplyr::ungroup()
+
+    if (rlang::quo_is_null(cols_quo)) {
+        summarized
+    }
+    else {
+        summarized %>% 
+        tidyr::pivot_wider(names_from = {{cols}}, 
+                           values_from = n)
+    }
+}
+```
+
+## status quo usage: enter arguments at once
+
+```{r}
+Titanic |> 
+  data.frame() |>
+  uncount(Freq) ->
+tidy_titanic
+
+pivot_count(data = tidy_titanic,
+            rows = Survived,
+            cols = c(Sex, Age))
+```
+
+## Desired usage: Piped pivot `ggtable`
+
+```{r eval = F}
+ggtable(tidy_titanic) |> # a count of observations
+  set_rows(Survived) |> # a count by Survived
+  set_cols(c(Sex, Age)) # count by Sex, Age and Survived 
+```
+
+# Part. 1. **Implementation**
+
+## Step 1. **New 3S object** Create `new_tidypivot()` which defines components in '`tp`' a 3S object.
+
+```{r}
+library(tidyverse)
+
+new_tidypivot <- function(data = data.frame(),
+                          rows = NULL,
+                          columns = NULL,
+                          value = NULL,
+                          wt = NULL) {
+
+  # table specification components !
+  tp <- list(
+    data = data,
+    rows = rows,
+    columns = columns,
+    value = value,
+    wt = wt
+    # more 'slots' to be added
+  )
+
+  # declare class 'tidypivot'
+  class(tp) <- "tidypivot"
+
+  # Return the created object
+  invisible(tp)
+
+}
+
+
+
+# # table specification components !
+# tp <- list(
+#     data,
+#     rows,
+#     columns,
+#     value,
+#     weight
+#     # more 'slots' to be added
+#   )
+# 
+# # declare class 'tidypivot'
+# class(tp) <- "tp"
+
+```
+
+## Step 2. **Print**: Once specification is defined, actually do  manipulation to produce the table - we use a routine from the {tidypivot} package.
+
+
+
+### `return_specified_table()` create table based on table *specification* (`tp`)
+
+```{r}
+return_specified_table = function(tp){
+
+      out <- 'tidypivot::pivot_helper(thedata, rows, cols, value, wt, fun)'
+
+      str_replace_or_null <- function(x, pattern, replacement){
+        
+        if(is.null(replacement)){x |> str_replace(pattern, 'NULL')}
+        else{x |> str_replace(pattern, replacement)}
+        
+      }
+      
+      out <- str_replace_or_null(out, "rows",  tp$rows)
+      out <- str_replace_or_null(out, "cols",  tp$cols)
+      out <- str_replace_or_null(out, "value",  tp$value)
+      out <- str_replace_or_null(out, "wt",  tp$wt)
+      out <- str_replace_or_null(out, "fun",  tp$fun)
+
+      
+      eval(parse(text = out))         
+      
+}
+```
+
+###  `print.tidypivot` declare print method for `tp`, the 3S objects
+
+```{r}
+print.tidypivot <- function(tp){
+  
+  print(return_specified_table(tp))
+  invisible(tp)
+  
+}
+```
+  
+  
+## Step 3. **user-facing functions!**
+
+### `ggtable()` *initiate table*
+  
+```{r}  
+ggtable <- function(data){
+  
+  thedata <<- data # don't love this
+
+  tp <- new_tidypivot(deparse(substitute(thedata)))
+  
+  last_tp <<- tp
+  
+  tp
+
+}
+
+ggtable(cars)
+
+```
+
+### `set_rows()`, (the other 'set' functions are hidden - set up the same way...)
+
+```{r}
+set_rows <- function(tp, rows = NULL){
+  
+  tp$rows <- deparse(substitute(rows))
+  
+  last_tp <<- tp
+  
+  tp
+
+  
+}
+```
+
+```{r, echo = F}
+set_cols <- function(tp, cols = NULL){
+  
+tp$cols <- deparse(substitute(cols))
+
+  tp
+  
+  last_tp <<- tp
+  
+  tp
+  
+}
+
+
+set_fun <- function(tp, fun = sum){
+
+tp$fun <- deparse(substitute(fun))
+
+  last_tp <<- tp
+
+  tp
+  
+}
+
+set_value <- function(tp, value = NULL){
+  
+tp$value <- deparse(substitute(value))
+
+  last_tp <<- tp
+  
+  tp
+  
+}
+
+set_wt <- function(tp, wt = NULL){
+  
+tp$wt <- deparse(substitute(wt))
+
+  last_tp <<- tp
+  
+  tp
+  
+}
+
+set_weight <- function(tp, weight = NULL){
+  
+tp$weight <- deparse(substitute(weight))
+
+  print(tp)
+  
+  last_tp <<- tp
+  
+}
+
+
+unpivot <- function(tp){
+  
+  tp$pivot <- FALSE
+
+  print(tp)
+  
+  last_tp <<- tp
+  
+  
+}
+
+```
+
+### `last_table()`
+
+```{r}
+last_table <- function(){
+  
+  last_tp
+  
+}
+```
+
+# Part 2. **Test functionality!**
+
+## Slow build with `last_table()`
+
+```{r}
+Titanic |> 
+  data.frame() |>
+  uncount(Freq) ->
+tidy_titanic
+
+tidy_titanic |> tibble()
+
+tidy_titanic |>
+  ggtable() 
+
+last_table() |> 
+  set_rows(Survived)
+
+last_table() |> 
+  set_cols(c(Sex))
+
+last_table() |>
+  set_rows(Class)
+
+last_table() |>
+  set_fun(sum)
+
+```
+
+
+## Piped `|>`
+
+```{r}
+ggtable(mtcars) |> 
+  set_rows(cyl) |> 
+  set_cols(am) |>
+  set_cols(c(gear, am)) 
+
+last_table() |> str()
+
+ggtable(mtcars) |> 
+  set_rows(cyl) |> 
+  set_cols(am) 
+
+last_table() |>
+  set_fun(mean) |> # sum by default
+  set_value(mpg)   # 1 by default
+
+tidytitanic::flat_titanic |>
+  ggtable() |>
+  set_cols(sex) |>
+  set_value(freq)
+
+
+tidytitanic::flat_titanic |>
+  ggtable() |>
+  set_cols(sex) |>
+  set_wt(freq) # hmm.. should it be the same?
+
+palmerpenguins::penguins %>% 
+  remove_missing() ->
+penguins
+```
+
+
+
+```{r penguins}
+# count table 
+ggtable(penguins) 
+  
+# count by species, sex
+last_table() |>
+  set_rows(species)|>
+  set_cols(sex) 
+
+# average bill depth table
+last_table() |>
+  set_fun(mean) |>
+  set_value(bill_depth_mm)
+```
+
+# Part 3. **Dispatch** Define behavior when tps are piped to other environment 
+
+Future work

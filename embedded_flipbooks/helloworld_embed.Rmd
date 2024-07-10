@@ -32,9 +32,10 @@ xaringanExtra::use_share_again()
 
 ```{r the_chunk, include = F}
 library(ggplot2)
-ggplot(cars) +
-  aes(speed, dist) + 
-  geom_point()
+cars |>
+  ggplot() + 
+  aes(x = speed, y = dist) +
+  geom_point(size = 6)
 ```
 
 `r chunk_reveal(chunk_name = "the_chunk", break_type = "auto")`
