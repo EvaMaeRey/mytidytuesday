@@ -185,6 +185,8 @@ last_plot() +
   scale_size(range = c(-2,1)) + 
   aes(size = stage(after_stat = area, after_scale = ifelse(size < .5, 0, size)))
 
+pride_index <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-06-11/pride_index.csv')
+
 
 ggplot(pride_it) +
   aes(id = campus_name) + 
@@ -195,7 +197,7 @@ ggplot(pride_it) +
   geom_circlepack_text() +
   scale_size(range = c(0,3)) +
   aes(size = rating) +
-  facet_wrap(facets = vars(community_type)) + 
+  facet_wrap(facets = vars(community_type)) 
 
 circlepa
     

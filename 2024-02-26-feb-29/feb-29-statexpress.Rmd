@@ -146,7 +146,7 @@ time_series_base
 library(statexpress)
 geom_ymean_line <- function(...){
 
-    stat_group(function(df) df |> summarize(yintercept = mean(y)), 
+    statexpress::stat_group(function(df) df |> summarize(yintercept = mean(y)), 
              "hline", 
              dropped_aes = c("x", "y"), ...)
 
@@ -154,7 +154,7 @@ geom_ymean_line <- function(...){
 
 geom_ymean_label <- function(round = 0, ...){
   
-  stat_group(function(df) df |> summarise(y = mean(y), x = I(.5)), 
+  statexpress::stat_group(function(df) df |> summarise(y = mean(y), x = I(.5)), 
              geom = "label", 
              default_aes = aes(label = after_stat(round(y, round))), 
              ...)
@@ -177,7 +177,7 @@ Looking at the time series above or the univariate distribution of daily births 
 ```{r}
 geom_xmean_line <- function(...){
 
-    stat_group(function(df) df |> summarize(xintercept = mean(x)), 
+    statexpress::stat_group(function(df) df |> summarize(xintercept = mean(x)), 
              "vline", 
              dropped_aes = c("x", "y"), ...)
 
@@ -185,7 +185,7 @@ geom_xmean_line <- function(...){
 
 geom_xmean_label <- function(round = 0, ...){
   
-  stat_group(function(df) df |> summarise(x = mean(x), y = I(.5)), 
+  statexpress::stat_group(function(df) df |> summarise(x = mean(x), y = I(.5)), 
              geom = "label", 
              default_aes = aes(label = after_stat(round(x, round))), 
              ...)
@@ -230,9 +230,27 @@ Following on the observation that their's bimodality within the weekend observat
 For each day we plot the 95% confidence interval around the mean based on [t-tests](https://github.com/EvaMaeRey/ggxmean/blob/master/R/ttest.R); these confidence intervals are visualized as a red horizontal segment at the base of the histogram.  The intervals are calculated independently by day of the week. 
 
 ```{r, fig.height=6, fig.width=6}
+compute_t_conf_interval_one_sample <- function(data, scales, conf.level = .95){
+  
+  ttest <- t.test(data$x, conf.level = conf.level)
+    
+  data.frame(x = ttest$conf.int[1],
+             xend = ttest$conf.int[2],
+             y = 0,
+             yend = 0)
+               
+}
+
+geom_ttest_conf <- function(...){
+  
+  statexpress::stat_group(compute_t_conf_interval_one_sample, "segment",...)
+  
+}
+
+
 univariate_base +
   facet_wrap(~wday(date, label = T, week_start = "Monday"), ncol = 1)  + 
-  ggxmean:::geom_tdist(color = "red", linewidth = 2)
+  geom_ttest_conf(color = "red", linewidth = 2, conf.level = .95)
 ```
 
 *Post-interview addition:*
@@ -332,14 +350,30 @@ ggplot(births_df) +
 In the plot above, we also see differences in the rate of births by year.  Exploring that more directly, we look at the distributions of number of daily birth by year. Diamonds mark the mean for each year.
 
 ```{r}
+geom_group_mean_point <- function(...){
+  
+  compute_mean_group <- function(data, scales){
+     
+    if(is.null(data$x)){data$x <- 0}
+    if(is.null(data$y)){data$y <- 0}
+
+    
+    data %>% 
+      summarise(x = mean(x),
+                y = mean(y))
+    
+  }
+  
+  statexpress::stat_group(compute_mean_group, "point",...)
+  
+}
+
+
 ggplot(births_df) + 
   aes(x = num_births, y = factor(year)) + 
+  geom_density() +
   ggridges::geom_density_ridges() + 
-  stat_summary(fun = mean, 
-               geom = "point", 
-               col = "goldenrod3", 
-               size = 10, 
-               shape = "diamond") + 
+  geom_group_mean_point(color = "goldenrod3") +
   labs(x = "Daily births", y = NULL) +
   labs(title = "Number of daily Births distributions and means (diamond) by year in the US" %>% str_wrap(65))
 ```
@@ -360,7 +394,9 @@ ggplot(births_df) +
              color = "darkseagreen4") + 
   labs(y = NULL, x = NULL) + 
   labs(title = "Number of births in the U.S. (millions)") + 
-  scale_x_continuous(breaks = 2000:2014, labels = c("2000", "", "", "","'04", "", "", "","'08", "", "", "","'12", "", "'14"))
+  scale_x_continuous(breaks = 2000:2014, 
+                     labels = c("2000", "", "", "","'04", "", "", "",
+                                "'08", "", "", "","'12", "", "'14"))
 ```
 
 
@@ -423,7 +459,7 @@ Then we visualize the distribution of the model residuals and mark the threshold
 ```{r}
 geom_x_sd <- function(sd = 1, ...){
 
-    stat_group(function(df) df |> summarize(
+    statexpress::stat_group(function(df) df |> summarize(
       xintercept = c(mean(x)-sd*sd(x), mean(x)+sd*sd(x))), 
              "vline", 
              dropped_aes = c("x", "y"), ...)
@@ -820,6 +856,15 @@ t.test(num_births_detrend_2x ~ ind_Feb_29th,
 ```{r}
 sd(births_df_pruned_detrend_1$num_births_detrend_2x)
 
+# stamp_normal_dist <-  function(mean, sd, num_sds){
+#   
+#   x <- seq(mean - sd*num_sds, )
+#   
+#   annotate("ribbon", )
+#   
+# }
+
+
 ggplot(births_df_pruned_detrend_1) +
   aes(num_births_detrend_2x) + 
   geom_histogram(aes(y = after_stat(density), 
@@ -830,7 +875,10 @@ ggplot(births_df_pruned_detrend_1) +
                    color = "Observed - density plot"), 
                alpha =.4) +
   geom_x_sd(linetype = "dashed") + # made with statexpress
-  ggxmean:::stamp_normal_dist(sd = 361.3038, height = .0038, aes(fill = "Normal overlay", color = "Normal overlay"), alpha = .3)
+  ggxmean:::stamp_normal_dist(sd = 361.3038, height = .0038, 
+                              aes(fill = "Normal overlay", 
+                                  color = "Normal overlay"), 
+                              alpha = .3)
 
 expected <- qnorm(p = 0:1000/1000, mean = 0, sd = 361.3038)
 
