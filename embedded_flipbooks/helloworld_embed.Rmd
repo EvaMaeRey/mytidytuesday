@@ -30,24 +30,27 @@ xaringanExtra::use_share_again()
 ```
 
 
-```{r the_chunk, include = F}
-library(ggplot2)
-cars |>
-  ggplot() + 
-  aes(x = speed, y = dist) +
-  geom_point() + 
-  aes(size = I(8)) + 
-  aes(alpha = I(.7)) + 
-  aes(color = I("darkolivegreen")) + 
-  aes(shape = I(21)) + 
-  aes(fill = I("whitesmoke")) + 
-  aes(stroke = I(1.5)) + 
-  geom_density2d() + 
-  aes(linewidth = I(1)) + 
-  aes(shape = I(22))
+
+
+
+```{r chunk2, include = F}
+unmapped_aes <- aes(size = I(8),  
+        alpha = I(.7),      
+        color = I("goldenrod3"), 
+        linewidth = I(1))
+
+ggplot(cars, 
+    aes(x = speed, 
+        y = dist,
+        !!!unmapped_aes)
+    ) + 
+  geom_point() + # unmapped aes here
+  geom_density2d() # and here!
 ```
 
-`r chunk_reveal(chunk_name = "the_chunk", break_type = "auto")`
+---
+
+`r chunk_reveal(chunk_name = "chunk2", break_type = "auto", widths = c(1,1))`
 
 
 

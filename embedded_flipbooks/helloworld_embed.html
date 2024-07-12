@@ -23,17 +23,25 @@
 
 
 
+
+
+
+---
+
 count: false
  
 
-.panel1-the_chunk-auto[
+.panel1-chunk2-auto[
 
 ``` r
-*library(ggplot2)
+*unmapped_aes &lt;- aes(size = I(8),
+*       alpha = I(.7),
+*       color = I("goldenrod3"),
+*       linewidth = I(1))
 ```
 ]
  
-.panel2-the_chunk-auto[
+.panel2-chunk2-auto[
 
 ]
 
@@ -41,359 +49,95 @@ count: false
 count: false
  
 
-.panel1-the_chunk-auto[
+.panel1-chunk2-auto[
 
 ``` r
-library(ggplot2)
-*cars
+unmapped_aes &lt;- aes(size = I(8),
+        alpha = I(.7),
+        color = I("goldenrod3"),
+        linewidth = I(1))
+
+*ggplot(cars,
+*   aes(x = speed,
+*       y = dist,
+*       !!!unmapped_aes)
+*   )
 ```
 ]
  
-.panel2-the_chunk-auto[
-
-```
-   speed dist
-1      4    2
-2      4   10
-3      7    4
-4      7   22
-5      8   16
-6      9   10
-7     10   18
-8     10   26
-9     10   34
-10    11   17
-11    11   28
-12    12   14
-13    12   20
-14    12   24
-15    12   28
-16    13   26
-17    13   34
-18    13   34
-19    13   46
-20    14   26
-21    14   36
-22    14   60
-23    14   80
-24    15   20
-25    15   26
-26    15   54
-27    16   32
-28    16   40
-29    17   32
-30    17   40
-31    17   50
-32    18   42
-33    18   56
-34    18   76
-35    18   84
-36    19   36
-37    19   46
-38    19   68
-39    20   32
-40    20   48
-41    20   52
-42    20   56
-43    20   64
-44    22   66
-45    23   54
-46    24   70
-47    24   92
-48    24   93
-49    24  120
-50    25   85
-```
+.panel2-chunk2-auto[
+![](helloworld_embed_files/figure-html/chunk2_auto_02_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-the_chunk-auto[
+.panel1-chunk2-auto[
 
 ``` r
-library(ggplot2)
-cars |&gt;
-* ggplot()
+unmapped_aes &lt;- aes(size = I(8),
+        alpha = I(.7),
+        color = I("goldenrod3"),
+        linewidth = I(1))
+
+ggplot(cars,
+    aes(x = speed,
+        y = dist,
+        !!!unmapped_aes)
+    ) +
+* geom_point()   # unmapped aes here
 ```
 ]
  
-.panel2-the_chunk-auto[
-![](helloworld_embed_files/figure-html/the_chunk_auto_03_output-1.png)&lt;!-- --&gt;
+.panel2-chunk2-auto[
+![](helloworld_embed_files/figure-html/chunk2_auto_03_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-the_chunk-auto[
+.panel1-chunk2-auto[
 
 ``` r
-library(ggplot2)
-cars |&gt;
-  ggplot() +
-* aes(x = speed, y = dist)
+unmapped_aes &lt;- aes(size = I(8),
+        alpha = I(.7),
+        color = I("goldenrod3"),
+        linewidth = I(1))
+
+ggplot(cars,
+    aes(x = speed,
+        y = dist,
+        !!!unmapped_aes)
+    ) +
+  geom_point() +  # unmapped aes here
+* geom_density2d()  # and here!
 ```
 ]
  
-.panel2-the_chunk-auto[
-![](helloworld_embed_files/figure-html/the_chunk_auto_04_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-the_chunk-auto[
-
-``` r
-library(ggplot2)
-cars |&gt;
-  ggplot() +
-  aes(x = speed, y = dist) +
-* geom_point()
-```
-]
- 
-.panel2-the_chunk-auto[
-![](helloworld_embed_files/figure-html/the_chunk_auto_05_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-the_chunk-auto[
-
-``` r
-library(ggplot2)
-cars |&gt;
-  ggplot() +
-  aes(x = speed, y = dist) +
-  geom_point() +
-* aes(size = I(8))
-```
-]
- 
-.panel2-the_chunk-auto[
-![](helloworld_embed_files/figure-html/the_chunk_auto_06_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-the_chunk-auto[
-
-``` r
-library(ggplot2)
-cars |&gt;
-  ggplot() +
-  aes(x = speed, y = dist) +
-  geom_point() +
-  aes(size = I(8)) +
-* aes(alpha = I(.7))
-```
-]
- 
-.panel2-the_chunk-auto[
-![](helloworld_embed_files/figure-html/the_chunk_auto_07_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-the_chunk-auto[
-
-``` r
-library(ggplot2)
-cars |&gt;
-  ggplot() +
-  aes(x = speed, y = dist) +
-  geom_point() +
-  aes(size = I(8)) +
-  aes(alpha = I(.7)) +
-* aes(color = I("darkolivegreen"))
-```
-]
- 
-.panel2-the_chunk-auto[
-![](helloworld_embed_files/figure-html/the_chunk_auto_08_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-the_chunk-auto[
-
-``` r
-library(ggplot2)
-cars |&gt;
-  ggplot() +
-  aes(x = speed, y = dist) +
-  geom_point() +
-  aes(size = I(8)) +
-  aes(alpha = I(.7)) +
-  aes(color = I("darkolivegreen")) +
-* aes(shape = I(21))
-```
-]
- 
-.panel2-the_chunk-auto[
-![](helloworld_embed_files/figure-html/the_chunk_auto_09_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-the_chunk-auto[
-
-``` r
-library(ggplot2)
-cars |&gt;
-  ggplot() +
-  aes(x = speed, y = dist) +
-  geom_point() +
-  aes(size = I(8)) +
-  aes(alpha = I(.7)) +
-  aes(color = I("darkolivegreen")) +
-  aes(shape = I(21)) +
-* aes(fill = I("whitesmoke"))
-```
-]
- 
-.panel2-the_chunk-auto[
-![](helloworld_embed_files/figure-html/the_chunk_auto_10_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-the_chunk-auto[
-
-``` r
-library(ggplot2)
-cars |&gt;
-  ggplot() +
-  aes(x = speed, y = dist) +
-  geom_point() +
-  aes(size = I(8)) +
-  aes(alpha = I(.7)) +
-  aes(color = I("darkolivegreen")) +
-  aes(shape = I(21)) +
-  aes(fill = I("whitesmoke")) +
-* aes(stroke = I(1.5))
-```
-]
- 
-.panel2-the_chunk-auto[
-![](helloworld_embed_files/figure-html/the_chunk_auto_11_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-the_chunk-auto[
-
-``` r
-library(ggplot2)
-cars |&gt;
-  ggplot() +
-  aes(x = speed, y = dist) +
-  geom_point() +
-  aes(size = I(8)) +
-  aes(alpha = I(.7)) +
-  aes(color = I("darkolivegreen")) +
-  aes(shape = I(21)) +
-  aes(fill = I("whitesmoke")) +
-  aes(stroke = I(1.5)) +
-* geom_density2d()
-```
-]
- 
-.panel2-the_chunk-auto[
-![](helloworld_embed_files/figure-html/the_chunk_auto_12_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-the_chunk-auto[
-
-``` r
-library(ggplot2)
-cars |&gt;
-  ggplot() +
-  aes(x = speed, y = dist) +
-  geom_point() +
-  aes(size = I(8)) +
-  aes(alpha = I(.7)) +
-  aes(color = I("darkolivegreen")) +
-  aes(shape = I(21)) +
-  aes(fill = I("whitesmoke")) +
-  aes(stroke = I(1.5)) +
-  geom_density2d() +
-* aes(linewidth = I(1))
-```
-]
- 
-.panel2-the_chunk-auto[
-![](helloworld_embed_files/figure-html/the_chunk_auto_13_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-the_chunk-auto[
-
-``` r
-library(ggplot2)
-cars |&gt;
-  ggplot() +
-  aes(x = speed, y = dist) +
-  geom_point() +
-  aes(size = I(8)) +
-  aes(alpha = I(.7)) +
-  aes(color = I("darkolivegreen")) +
-  aes(shape = I(21)) +
-  aes(fill = I("whitesmoke")) +
-  aes(stroke = I(1.5)) +
-  geom_density2d() +
-  aes(linewidth = I(1)) +
-* aes(shape = I(22))
-```
-]
- 
-.panel2-the_chunk-auto[
-![](helloworld_embed_files/figure-html/the_chunk_auto_14_output-1.png)&lt;!-- --&gt;
+.panel2-chunk2-auto[
+![](helloworld_embed_files/figure-html/chunk2_auto_04_output-1.png)&lt;!-- --&gt;
 ]
 
 &lt;style&gt;
-.panel1-the_chunk-auto {
+.panel1-chunk2-auto {
   color: black;
-  width: 38.6060606060606%;
+  width: 49%;
   hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel2-the_chunk-auto {
+.panel2-chunk2-auto {
   color: black;
-  width: 59.3939393939394%;
+  width: 49%;
   hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel3-the_chunk-auto {
+.panel3-chunk2-auto {
   color: black;
   width: NA%;
   hight: 33%;

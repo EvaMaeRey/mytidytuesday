@@ -1,0 +1,98 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+
+library(tmap)
+data(NLD_prov)
+data(NLD_muni)
+
+```
+
+
+
+```{r}
+NLD_prov |>
+  dplyr::select(name_prov = name, code_prov = code, geometry) |>
+  sf2stat:::sf_df_prep_for_stat(id_col_name = "name_prov") ->
+nld_prov_geo_reference
+
+nld_prov_geo_reference
+```
+
+
+```{r}
+compute_panel_nl_prov <- function(data, scales, keep_id = NULL, drop_id = NULL, stamp = FALSE){
+  
+  if(!stamp){data <- dplyr::inner_join(data, nld_prov_geo_reference)}
+  if( stamp){data <- nld_prov_geo_reference }
+  
+  if(!is.null(keep_id)){ data <- filter(data, id_col %in% keep_id) }
+  if(!is.null(drop_id)){ data <- filter(data, !(id_col %in% drop_id)) }
+  
+  data
+  
+}
+
+StatNlprov <- ggplot2::ggproto(`_class` = "StatNlprov",
+                                `_inherit` = ggplot2::Stat,
+                               required_aes = "name_prov|code_prov",
+                                compute_panel = compute_panel_nl_prov,
+                               default_aes = ggplot2::aes(label = after_stat(id_col)))
+
+geom_prov <- function(...){
+  
+  geom_sf(stat = StatNlprov, ...)
+  
+}
+
+
+geom_prov_label <- function(...){
+  
+  geom_text(stat = StatNlprov, ...)
+  
+}
+```
+
+# ho! new reality in 30 lines of code...
+
+```{r}
+NLD_prov |>
+  sf::st_drop_geometry() |>
+  ggplot() + 
+  aes(name_prov = name) +
+  geom_prov() + 
+  geom_prov_label(check_overlap = T)
+
+last_plot() + 
+  aes(fill = pop_65plus)
+```
+
+
+## Closing remarks, Other Relevant Work, Caveats
