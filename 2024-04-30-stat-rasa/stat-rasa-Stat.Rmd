@@ -18,13 +18,10 @@ options(tidyverse.quiet = TRUE)
 ## Intro Thoughts
 
 
-## Campitelli:  stat_rasa (now stat_group() and extending to stat_panel()) 
-
 https://eliocamp.github.io/codigo-r/en/2018/05/how-to-make-a-generic-stat-in-ggplot2/
 
 # but now, let's just make a Stat and pop it in geom_line()?
 
-### Original example and variant
 
 ```{r}
 library(tidyverse)
@@ -43,6 +40,8 @@ StatDetrend <- ggproto("StatDetrend",
                        compute_group = Detrend)
 
    
+# don't do it. Don't create stat_detrend.  Just use the Stat with geom_line
+
 library(ggplot2)
 set.seed(42)
 x <- seq(-1, 3, length.out = 30)

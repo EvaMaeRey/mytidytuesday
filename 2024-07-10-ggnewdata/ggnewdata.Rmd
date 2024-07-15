@@ -8,10 +8,225 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
 options(tidyverse.quiet = TRUE)
 ```
 
+
+
+
+
+
+
+```{r}
+library(tidyverse)
+ggplot(cars) + 
+  aes(dist, speed) + 
+  geom_point(size = 7) + 
+  aes(color = speed) + 
+  scale_color_viridis_c(limits = c(0,26)) + 
+  scale_x_continuous(limits = c(0,125)) +
+  scale_y_continuous(limits = c(0,25))
+
+
+data_filter <- function(keep) {
+  structure(list(keep_specification = rlang::enquo(keep)), 
+            class = "wipeobs")
+}
+
+ggplot_add.wipeobs <- function(object, plot, object_name) {
+  
+  new_data <- dplyr::filter(plot$data, 
+                            !! object$keep_specification)
+  plot$data <- new_data
+  plot
+
+  }
+
+last_plot() + 
+  data_filter(keep = dist > 60)
+```
+
+
+```{r}
+ggplot(cars) + 
+  aes(dist, speed) + 
+  geom_point(size = 7) + 
+  aes(color = speed)
+
+data_replace <- function(data) {
+  structure(list(new_data_specification = data), 
+            class = "wipedata")
+}
+
+ggplot_add.wipedata <- function(object, plot, object_name) {
+  
+  plot$data <- object$new_data_specification
+  plot
+
+  }
+
+
+last_plot() + 
+  data_replace(data = cars %>% filter(dist > 50))
+
+
+drob_funs <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-07-09/drob_funs.csv')
+
+drob_funs %>% 
+  ggplot() + 
+  aes(y = funs) + 
+  aes(y = fct_infreq(funs)) +
+  aes(y = fct_infreq(funs) %>% fct_rev()) +
+  geom_bar() ->
+p; p
+
+p + 
+  data_replace(drob_funs %>% 
+             group_by(funs) %>% 
+             filter(n() > 500))
+
+p + 
+  data_filter(pkgs == "ggplot")
+
+p + 
+  data_filter(pkgs == "dplyr")
+
+p + 
+  data_filter(pkgs == "tidyr")
+
+p + 
+  data_filter(pkgs == "base")
+
+```
+
+
+```{r}
+# might not work
+data_group <- function(group) {
+  structure(list(group_specification = rlang::enquo(group)),
+            class = "data_grouping")
+}
+
+ggplot_add.data_grouping <- function(object, plot, object_name) {
+
+  new_data <- dplyr::group_by(plot$data,
+                            !! object$group_specification)
+  plot$data <- new_data
+  plot
+
+}
+
+p +
+  data_group() +
+  data_filter(n() > 500)
+
+```
+
+
+```{r}
+data_mutate <- function(.value, .by) {
+  structure(list(sum_specification = rlang::enquo(.value),
+                 by_specification = rlang::enquo(.by)),
+            class = "data_summary")
+  
+}
+
+ggplot_add.data_summary <- function(object, plot, object_name) {
+
+  
+  new_data <- dplyr::mutate(plot$data, .value =
+                            !! object$sum_specification, 
+                            .by = !! object$by_specification)
+    message("New variable named '.value' created")
+
+  plot$data <- new_data
+  plot
+
+  
+  }
+
+
+p + 
+  data_mutate(.value = n(), 
+              .by = funs) +
+  data_filter(.value > 500)
+
+
+drob_funs %>% 
+  ggplot() + 
+  aes(id = funs) + 
+  ggcirclepack::geom_circlepack() + 
+  ggcirclepack::geom_circlepack_text() + 
+  coord_equal() +
+  aes(fill = I("grey")) ->
+plot_all
+
+plot_all + 
+  data_filter(pkgs == "ggplot")
+
+plot_all + 
+  data_filter(pkgs == "base")
+
+plot_all + 
+  data_filter(pkgs == "tidyr")
+
+plot_all + 
+  data_filter(pkgs == "dplyr")
+
+plot_all + 
+  data_filter(pkgs == "stringr")
+
+```
+
+
+```{r}
+data_mutate_filter <- function(.value, .by, keep) {
+  structure(list(sum_specification = rlang::enquo(.value),
+                 by_specification = rlang::enquo(.by),
+                 keep_specifiction = rlang::enquo(keep)),
+            class = "data_mutatefilter")
+  
+}
+
+ggplot_add.data_mutatefilter <- function(object, plot, object_name) {
+
+  
+  new_data <- dplyr::mutate(plot$data, .value =
+                            !! object$sum_specification, 
+                            .by = !! object$by_specification) %>% 
+    dplyr::filter(!! object$keep_specifiction)
+    message("New variable named '.value' created")
+
+  plot$data <- new_data
+  plot
+
+  
+  }
+
+
+drob_funs %>% 
+  ggplot() + 
+  aes(id = funs) + 
+  ggcirclepack::geom_circlepack() + 
+  ggcirclepack::geom_circlepack_text() + 
+  coord_equal() +
+  aes(fill = I("grey")) + 
+  data_mutate_filter(n(), funs, .value >= 100) + 
+  aes(fill = pkgs)
+
+
+```
+
+```{r}
+knitr::knit_exit()
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
 
 
 
@@ -38,7 +253,7 @@ ggplot(cars) +
 # last_plot() |>
 #   update_data(cars %>% filter(dist > 20))
 
-plot_update_data <- function(p = last_plot(), data){
+last_plot_update_data <- function(p = last_plot(), data){
   
   p$data <- data
 
@@ -47,10 +262,10 @@ plot_update_data <- function(p = last_plot(), data){
 }
 
 
-plot_update_data(data = cars %>% filter(speed > 10))
+last_plot_update_data(data = cars %>% filter(speed > 10))
 
 
-plot_filter_data <- function(p = last_plot(), keep){
+last_plot_filter_data <- function(p = last_plot(), keep){
   
   p$data <- p$data %>% filter({{keep}})
   
@@ -59,16 +274,6 @@ plot_filter_data <- function(p = last_plot(), keep){
 }
 
 
-plot_filter_data(keep = dist > 40)
+last_plot_filter_data(keep = dist > 40)
 
 ```
-
-## Experiment
-
-```{r}
-
-```
-
-
-
-## Closing remarks, Other Relevant Work, Caveats
