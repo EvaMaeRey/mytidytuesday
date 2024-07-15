@@ -1,0 +1,70 @@
+---
+title: "layer one liners"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = T)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Campitelli:  stat_rasa (now stat_group() and extending to stat_panel()) 
+
+https://eliocamp.github.io/codigo-r/en/2018/05/how-to-make-a-generic-stat-in-ggplot2/
+
+# but now, let's just make a Stat and pop it in geom_line()?
+
+### Original example and variant
+
+```{r}
+library(tidyverse)
+# using .75 span to match ggplot2 geom_smooth
+Detrend <- function(data, scales, method = "lm", span = 0.75) {
+   if (method == "lm") {
+      data$y <- resid(lm(y ~ x, data = data))
+   } else {
+      data$y <- resid(loess(y ~ x, span = span, data = data))
+   }
+   as.data.frame(data)
+   }
+   
+StatDetrend <- ggproto("StatDetrend",
+                       Stat,
+                       compute_group = Detrend)
+
+   
+library(ggplot2)
+set.seed(42)
+x <- seq(-1, 3, length.out = 30)
+y <- x^2 + rnorm(30)*0.5
+df <- data.frame(x = x, y = y)
+
+ggplot(df, aes(x, y)) +
+  scale_color_discrete(breaks = 
+                         fct_inorder(c("raw data",
+                                       "loess smoothing",
+                                       "detrended"))) +
+  geom_line(aes(color = "raw data")) +
+  geom_smooth(aes(color = "loess smoothing")) + 
+  stat_smooth(geom = "point", 
+              aes(color = "loess smoothing"),
+              xseq = df$x) +
+  geom_line(stat = StatDetrend, 
+             method = "smooth",
+             aes(color = "detrended")) +
+  geom_hline(yintercept = 0, 
+             linetype = "dashed") + 
+
+  labs(title = "detrending with loess smoothing")
+```  
+  

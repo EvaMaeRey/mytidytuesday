@@ -61,10 +61,20 @@ compute_panel_nl_prov <- function(data, scales, keep_id = NULL, drop_id = NULL, 
 }
 
 StatNlprov <- ggplot2::ggproto(`_class` = "StatNlprov",
-                                `_inherit` = ggplot2::Stat,
+                                `_inherit` = ggplot2::StatSf,
                                required_aes = "name_prov|code_prov",
                                 compute_panel = compute_panel_nl_prov,
-                               default_aes = ggplot2::aes(label = after_stat(id_col)))
+                               default_aes = ggplot2::aes(label = after_stat(id_col),
+                                                          geometry = after_stat(geometry)
+                                                          )
+                               )
+
+
+NLD_prov |>
+  sf::st_drop_geometry() |>
+  ggplot() + 
+  aes(name_prov = name) + 
+  geom_sf(stat = StatNlprov)
 
 geom_prov <- function(...){
   
@@ -92,7 +102,53 @@ NLD_prov |>
 
 last_plot() + 
   aes(fill = pop_65plus)
+
+
+NLD_prov |>
+  ggplot() + 
+  geom_sf()
 ```
 
 
 ## Closing remarks, Other Relevant Work, Caveats
+
+
+
+```{r, eval = F}
+library(geobr)
+library(tidyverse)
+
+state <- geobr::read_state(simplified = T) %>% 
+  rename(geometry = geom)
+
+
+compute_panel_state <- function(data, scales){
+  
+  data <- inner_join(data, state)
+  
+  data
+  
+}
+
+
+StatBrasilstate <- ggproto("StatBrasilstate", 
+                           Stat,
+                           compute_panel = compute_panel_state,
+                           default_aes = ggplot2::aes(
+                             geometry = after_stat(geometry)))
+
+
+state %>% 
+  ggplot() +
+  geom_sf() + 
+  geom_sf_text(aes(label = name_state))
+
+
+state %>% 
+  sf::st_drop_geometry() %>% 
+  ggplot() + 
+  aes(code_state = code_state) +
+  geom_sf(stat = StatBrasilstate)
+
+```
+

@@ -31,12 +31,12 @@ ggplot(cars) +
   scale_x_continuous(limits = c(0,125)) +
   scale_y_continuous(limits = c(0,25))
 
-last_plot() %>% `%+%`(cars)
+# last_plot() %>% `%+%`(cars)
+# 
+# update_data <- `%+%`
 
-update_data <- `%+%`
-
-last_plot() |>
-  update_data(cars %>% filter(dist > 20))
+# last_plot() |>
+#   update_data(cars %>% filter(dist > 20))
 
 plot_update_data <- function(p = last_plot(), data){
   
