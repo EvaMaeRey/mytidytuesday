@@ -212,8 +212,10 @@ drob_funs %>%
   ggcirclepack::geom_circlepack_text() + 
   coord_equal() +
   aes(fill = I("grey")) + 
-  data_mutate_filter(n(), funs, .value >= 100) + 
-  aes(fill = pkgs)
+  data_mutate_filter(.value = n(), 
+                     .by = c(funs, pkgs), 
+                     keep = .value >= 100) + 
+  aes(group = pkgs)
 
 
 ```

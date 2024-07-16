@@ -1,0 +1,225 @@
+---
+title: "Population Pyramids using 'express' ggplot2 Extension"
+author: "Gina Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+## Intro Thoughts
+
+New Stat functionality can help ggplot2 become more expressive and more of a joy to use.  However, guidance for creating new layers has typically involved a fair amount of 'scaffolding' code, which is hard to remember.  
+
+This exercise explores some *new strategies* for using new Stat definitions.
+
+We show two 'express' extension strategies, one that requires no dependencies and another that uses the `statexpress` package to define user-facing functions.  Both aim at allowing authors to skip the 'scaffolding/boiler plate' code, and focus their attention on the compute they wish to use to get from input data to render-ready. 
+
+We start with 'base' ggplot2 build, and turn to on-the-fly extension.
+
+
+## Step 0. Status Quo, no-extension build. 
+
+Inspiration, and data, for this exercise comes from...
+https://rfortherestofus.com/2024/07/population-pyramid-part-1
+
+We build the plot in single panel (no patchwork) as used in the blog post.  We'll use the computation lessons in the compute in the extensions in the next section.
+
+
+
+```{r}
+library(tidyverse)
+
+
+oregon_population_pyramid_data <-
+  read_csv("https://raw.githubusercontent.com/rfortherestofus/blog/main/population-pyramid-part-1/oregon_population_pyramid_data.csv")
+
+
+sep = 0
+sep = .01
+
+oregon_population_pyramid_data %>% 
+  filter(county == "Baker") %>%
+  mutate(split = ifelse(gender == "Men", sep, -sep)) %>% 
+  mutate(xmin = 0 + split) %>% 
+  mutate(xmax = percent * ifelse(gender == "Men", 1, -1) + split) %>% 
+  mutate(y = as.numeric(fct_inorder(age))) %>% 
+  mutate(ymax = y + .45 * 1) %>% 
+  mutate(ymin = y - .45 * 1) %>% 
+  ggplot() + 
+  aes(y = fct_inorder(age), x = percent) + 
+  geom_point() +
+  geom_point(aes(x = -percent)) +
+  geom_rect(aes(xmin = xmin, xmax = xmax, 
+                ymin = ymin, ymax = ymax)) + 
+  aes(fill = gender) + 
+  aes(label = age) +
+  geom_text(aes(x = 0, fill = NULL), data = . %>% distinct(age))
+
+
+```
+
+# Option 1. dependency-free, light-weight layer definition
+
+Use ggproto to define new Stat, then use that directly with a user-facing geom_*() function, replacing the Stat argument.
+
+## Create new Stat (upper-case)
+
+```{r}
+
+compute_panel_pyramid <- function(data, scales, sep = 0, neg_cat = NULL){
+  
+  if(is.null(neg_cat)){neg_cat <- sort(data$pyramid_cat)[1] }
+  
+  data %>% 
+  mutate(split = ifelse(pyramid_cat == neg_cat, -sep, sep)) %>% 
+  mutate(xmin = 0 + split) %>% 
+  mutate(xmax = x * ifelse(pyramid_cat == neg_cat, -1, 1) + split) %>% 
+  mutate(y = as.numeric(as.factor(y))) %>% 
+  mutate(ymax = y + .45*1) %>% 
+  mutate(ymin = y - .45*1)
+  
+}
+
+StatPyramid <- ggproto("StatPyramid", 
+                       Stat,
+                       compute_panel = compute_panel_pyramid,
+                       default_aes = aes(fill = after_stat(pyramid_cat)))
+
+
+compute_pyramid_label <- function(data, scales){
+  
+  data %>% 
+    distinct(y, label) %>% 
+    mutate(x = 0)
+  
+}
+
+StatPyramidlabel <- ggproto("StatPyramidlabel",
+                            Stat,
+                            compute_panel = compute_pyramid_label)
+```
+
+## use new Stats with existing geom_*() functions
+
+```{r or_pyramid}
+oregon_population_pyramid_data %>%
+  filter(county == "Baker") %>%
+  ggplot() + 
+  aes(x = percent*100, 
+      y = fct_inorder(age), 
+      pyramid_cat = gender) +
+  geom_rect(stat = StatPyramid,
+            sep = 1) + 
+  aes(label = age)  + 
+  geom_text(stat = StatPyramidlabel) + 
+  scale_x_continuous(breaks = c(-10:0 - 1, 0:10 + 1),
+                     labels = paste0(c(10:0, 0:10), "%"),
+                     limits = c(-10,10)) + 
+  labs(y = NULL, x = NULL, fill = NULL) + 
+  theme(axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        legend.position = "top",
+        legend.justification = "left", 
+        panel.grid = element_blank(),
+        panel.background = element_rect(fill = "whitesmoke")
+        )
+```
+
+# Option 2. Use statexpress::stat_panel() to define user-facing functions
+
+The statexpress package creates StatTemp in the background and wraps up the 'scaffolding' that is more typically used in defining user-facing functions.  You won't be able to use StatTemp itself.
+
+## use statexpress to build functions
+
+
+```{r}
+compute_panel_pyramid <- function(data, scales, sep = 0, neg_cat = NULL){
+  
+  if(is.null(neg_cat)){neg_cat <- sort(data$pyramid_cat)[1] }
+  
+  data %>% 
+  mutate(split = ifelse(pyramid_cat == neg_cat, -sep, sep)) %>% 
+  mutate(xmin = 0 + split) %>% 
+  mutate(xmax = x * ifelse(pyramid_cat == neg_cat, -1, 1) + split) %>% 
+  mutate(y = as.numeric(as.factor(y))) %>% 
+  mutate(ymax = y + .45*1) %>% 
+  mutate(ymin = y - .45*1)
+  
+}
+
+geom_split_pyramid <- function(...){
+  statexpress::stat_panel(fun = compute_panel_pyramid, 
+                          geom = "rect",
+                          default_aes = aes(fill = after_stat(pyramid_cat)),
+                          ...
+                          )}
+
+
+compute_pyramid_label <- function(data, scales){
+  
+  data %>% 
+    distinct(y, label) %>% 
+    mutate(x = 0)
+  
+}
+
+geom_split_pyramid_label <- function(...){
+  statexpress::stat_panel(fun = compute_pyramid_label, 
+                          geom = "text",
+                          ...)
+}
+
+```
+
+
+## test them in plot
+
+```{r or_pyramid2}
+oregon_population_pyramid_data %>%
+  filter(county == "Baker") %>%
+  ggplot() + 
+  aes(x = percent*100, 
+      y = fct_inorder(age), 
+      pyramid_cat = gender) +
+  geom_split_pyramid(sep = 1) + 
+  aes(label = age)  + 
+  geom_split_pyramid_label() ->
+base; base
+
+# styling
+base + 
+  scale_x_continuous(breaks = c(-10:0 - 1, 0:10 + 1),
+                     labels = paste0(c(10:0, 0:10), "%"),
+                     limits = c(-10,10)) + 
+  labs(y = NULL, x = NULL, fill = NULL) + 
+  theme(axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        legend.position = "top",
+        legend.justification = "left", 
+        panel.grid = element_blank(),
+        panel.background = element_rect(fill = "whitesmoke")
+        )
+```
+
+
+```{r, eval = F}
+layer_data(i = 2)
+
+```
+
+
+
+# To do, notes
+
+- theme that complements pyramid
+- scale shortcut (that complemnets outward shift)
+
+
+- of course you can write something user-facing from geom_rect + StatPyramid.  So a third step to get to what statexpress gets you in 2 steps.
