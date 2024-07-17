@@ -181,6 +181,10 @@ plot_all +
 
 
 ```{r}
+library(tidyverse)
+
+drob_funs <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-07-09/drob_funs.csv')
+
 data_mutate_filter <- function(.value, .by, keep) {
   structure(list(sum_specification = rlang::enquo(.value),
                  by_specification = rlang::enquo(.by),
@@ -207,16 +211,53 @@ ggplot_add.data_mutatefilter <- function(object, plot, object_name) {
 
 drob_funs %>% 
   ggplot() + 
-  aes(id = funs) + 
+  aes(id = paste(funs, pkgs)) + 
   ggcirclepack::geom_circlepack() + 
-  ggcirclepack::geom_circlepack_text() + 
+  ggcirclepack::geom_circlepack_text(aes(label = funs)) + 
   coord_equal() +
-  aes(fill = I("grey")) + 
-  data_mutate_filter(.value = n(), 
-                     .by = c(funs, pkgs), 
-                     keep = .value >= 100) + 
-  aes(group = pkgs)
+  aes(fill = pkgs) + 
+  guides(fill = "none")
 
+last_plot() +
+  data_mutate_filter(.value = n(),       
+                     .by = c(funs, pkgs), 
+                     keep = .value >= 200) 
+
+last_plot() +
+  aes(group = pkgs) 
+
+
+# ggcirclepack:::StatCirclepack$compute_panel
+# 
+# StatCirclepack <- ggcirclepack:::StatCirclepack
+# StatCirclepack$compute_panel <- function (data, scales, npoints = 50, fun = sum) 
+# {
+#     if (is.null(data$slice)) {
+#         data$slice <- TRUE
+#     }
+#     data <- data %>% dplyr::filter(.data$slice)
+#     grp_cols <- c("id", "fill", "alpha", "colour", "linewidth", 
+#         "label", "size", "linetype", "render")
+#     data <- data %>% group_by(group_by(pick(any_of(grp_cols))))
+#     if (is.null(data$area)) {
+#         data$area <- 1
+#     }
+#     if (is.null(data$wt)) {
+#         data$wt <- 1
+#     }
+#     data <- data %>% summarize(area = fun(.data$area * .data$wt), 
+#         .groups = "drop")
+#     data <- data %>% arrange(id)
+#     if (is.null(data$within)) {
+#         data$within <- 1
+#     }
+#     data <- data %>% group_by(.data$within) %>% mutate(prop = .data$area/sum(.data$area)) %>% 
+#         mutate(percent = round(.data$prop * 100))
+#     data$id = 1:nrow(data)
+#     data %>% pull(area) %>% packcircles::circleProgressiveLayout(sizetype = "area") %>% 
+#         packcircles::circleLayoutVertices(npoints = npoints) %>% 
+#         left_join(data, by = join_by(id))
+# }
 
 ```
 

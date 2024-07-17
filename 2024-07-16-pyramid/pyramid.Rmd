@@ -24,7 +24,7 @@ We show two 'express' extension strategies, one that requires no dependencies an
 We start with 'base' ggplot2 build, and turn to on-the-fly extension.
 
 
-## Step 0. Status Quo, no-extension build. 
+## Step 0. Status Quo, no use of extension mechanisms (ggproto)
 
 Inspiration, and data, for this exercise comes from...
 https://rfortherestofus.com/2024/07/population-pyramid-part-1
@@ -44,18 +44,21 @@ oregon_population_pyramid_data <-
 sep = 0
 sep = .01
 
+# we will use GeomRect for it's flexibility instead of Col or Bar
 oregon_population_pyramid_data %>% 
   filter(county == "Baker") %>%
-  mutate(split = ifelse(gender == "Men", sep, -sep)) %>% 
-  mutate(xmin = 0 + split) %>% 
-  mutate(xmax = percent * ifelse(gender == "Men", 1, -1) + split) %>% 
+  # move 'zero' out from center
+  mutate(zero_shift = ifelse(gender == "Men", sep, -sep)) %>% 
+  mutate(xmin = 0 + zero_shift) %>% 
+  # max needs to be flipped, and shifted 
+  mutate(xmax = percent * ifelse(gender == "Men", 1, -1) + zero_shift) %>% 
   mutate(y = as.numeric(fct_inorder(age))) %>% 
+  # we need to compute ymax and min because we are using GeomRect
   mutate(ymax = y + .45 * 1) %>% 
   mutate(ymin = y - .45 * 1) %>% 
   ggplot() + 
   aes(y = fct_inorder(age), x = percent) + 
   geom_point() +
-  geom_point(aes(x = -percent)) +
   geom_rect(aes(xmin = xmin, xmax = xmax, 
                 ymin = ymin, ymax = ymax)) + 
   aes(fill = gender) + 
@@ -223,3 +226,48 @@ layer_data(i = 2)
 
 
 - of course you can write something user-facing from geom_rect + StatPyramid.  So a third step to get to what statexpress gets you in 2 steps.
+
+---
+
+#  Much simpler examples of 'express stats'
+
+
+## Option 1. No dependency
+
+```{r}
+library(ggplot2)
+StatMeans <- ggproto("StatMeans",
+                     Stat,
+                     compute_group = function(data,scales){
+                       x <- mean(data$x)
+                       y <- mean(data$y)
+                       data.frame(x,y)
+                     })
+
+ggplot(cars, aes(dist, speed)) + 
+  geom_point() + 
+  geom_point(stat = StatMeans, size = 8)
+```
+
+
+## Option 2. {statexpress}
+
+```{r}
+library(tidyverse)
+
+library(statexpress)
+geom_xmean_line <- function(...){
+  stat_group(function(df) df |> 
+               summarize(xintercept = mean(x)), 
+             "vline", dropped_aes = c("x", "y"), ...)}
+
+
+ggplot(cars) +
+  aes(speed, dist) + 
+  geom_point() + 
+  geom_xmean_line(linetype = 'dashed')
+
+last_plot() + 
+  aes(color = dist > 50)
+
+```
