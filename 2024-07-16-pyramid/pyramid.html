@@ -376,8 +376,6 @@ existing geom_*() functions</a></li>
 <ul>
 <li><a href="#use-statexpress-to-build-functions" id="toc-use-statexpress-to-build-functions">use statexpress to build
 functions</a></li>
-<li><a href="#test-them-in-plot" id="toc-test-them-in-plot">test them in
-plot</a></li>
 </ul></li>
 <li><a href="#to-do-notes" id="toc-to-do-notes">To do, notes</a></li>
 <li><a href="#much-simpler-examples-of-express-stats" id="toc-much-simpler-examples-of-express-stats">Much simpler examples of
@@ -393,8 +391,8 @@ plot</a></li>
 <h2>Intro Thoughts</h2>
 <p>New Stat functionality can help ggplot2 become more expressive and
 more of a joy to use. However, guidance for creating new layers has
-typically involved a fair amount of ‘scaffolding’ code, which is hard to
-remember.</p>
+typically involved a fair amount of ‘scaffolding’ code, which can be
+hard to manage and can make scripts less readable.</p>
 <p>This exercise explores some <em>new strategies</em> for using new
 Stat definitions.</p>
 <p>We show two ‘express’ extension strategies, one that requires no
@@ -555,11 +553,15 @@ geom_split_pyramid_label &lt;- function(...){
   statexpress::stat_panel(fun = compute_pyramid_label, 
                           geom = &quot;text&quot;,
                           ...)
-}</code></pre>
-</div>
-<div id="test-them-in-plot" class="section level2">
-<h2>test them in plot</h2>
-<pre class="r"><code>oregon_population_pyramid_data %&gt;%
+}
+
+# ```
+# 
+# 
+# ## test them in plot
+# 
+# ```{r or_pyramid2}
+oregon_population_pyramid_data %&gt;%
   filter(county == &quot;Baker&quot;) %&gt;%
   ggplot() + 
   aes(x = percent*100, 

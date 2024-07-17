@@ -15,7 +15,7 @@ options(tidyverse.quiet = TRUE)
 
 ## Intro Thoughts
 
-New Stat functionality can help ggplot2 become more expressive and more of a joy to use.  However, guidance for creating new layers has typically involved a fair amount of 'scaffolding' code, which is hard to remember.  
+New Stat functionality can help ggplot2 become more expressive and more of a joy to use.  However, guidance for creating new layers has typically involved a fair amount of 'scaffolding' code, which can be hard to manage and can make scripts less readable.   
 
 This exercise explores some *new strategies* for using new Stat definitions.
 
@@ -75,6 +75,7 @@ Use ggproto to define new Stat, then use that directly with a user-facing geom_*
 ## Create new Stat (upper-case)
 
 ```{r}
+
 
 compute_panel_pyramid <- function(data, scales, sep = 0, neg_cat = NULL){
   
@@ -179,12 +180,12 @@ geom_split_pyramid_label <- function(...){
                           ...)
 }
 
-```
-
-
-## test them in plot
-
-```{r or_pyramid2}
+# ```
+# 
+# 
+# ## test them in plot
+# 
+# ```{r or_pyramid2}
 oregon_population_pyramid_data %>%
   filter(county == "Baker") %>%
   ggplot() + 
