@@ -1,0 +1,198 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+
+geom_segment_straight <- function(...) {
+  layer <- geom_segment(...)
+  new_layer <- ggproto(NULL, layer)
+  old_geom <- new_layer$geom
+  geom <- ggproto(
+    NULL, old_geom,
+    draw_panel = function(data, panel_params, coord, 
+                          arrow = NULL, arrow.fill = NULL,
+                          lineend = "butt", linejoin = "round",
+                          na.rm = FALSE) {
+      data <- ggplot2:::remove_missing(
+        data, na.rm = na.rm, c("x", "y", "xend", "yend", 
+                               "linetype", "size", "shape")
+      )
+      if (ggplot2:::empty(data)) {
+        return(zeroGrob())
+      }
+      coords <- coord$transform(data, panel_params)
+      # xend and yend need to be transformed separately, as coord doesn't understand
+      ends <- transform(data, x = xend, y = yend)
+      ends <- coord$transform(ends, panel_params)
+      
+      arrow.fill <- if (!is.null(arrow.fill)) arrow.fill else coords$colour
+      return(grid::segmentsGrob(
+        coords$x, coords$y, ends$x, ends$y,
+        default.units = "native", gp = grid::gpar(
+          col = alpha(coords$colour, coords$alpha),
+          fill = alpha(arrow.fill, coords$alpha),
+          lwd = #coords$size
+            1 * .pt,
+          lty = coords$linetype,
+          lineend = lineend,
+          linejoin = linejoin
+        ),
+        arrow = arrow
+      ))
+      
+    }
+  )
+  new_layer$geom <- geom
+  return(new_layer)
+}
+
+```
+
+## Experiment
+
+```{r}
+df <- tibble(x = rep(letters,  each = 5),
+             y = rep(1:5, 26),
+             d =  rnorm(26 * 5))
+
+
+p1 <- ggplot() +
+  geom_tile(data = df,
+            aes(x = x,
+                y = y,
+                fill = d)) +
+  ylim(c(-2, 5)) +
+  geom_segment(
+    aes(
+      x = "o",
+      y = -1,
+      xend = "z",
+      yend = 3
+    ),
+    arrow = arrow(length = unit(0.2, "cm")),
+    col = "red",
+    size = 2
+  ) 
+p1
+
+ggplot() +
+  geom_tile(data = df,
+            aes(x = x,
+                y = y,
+                fill = d)) +
+  ylim(c(-2, 5)) +
+  geom_segment_straight(
+    aes(
+      x = "o",
+      y = -1,
+      xend = "z",
+      yend = 3
+    ),
+    arrow = arrow(length = unit(0.2, "cm")),
+    col = "red",
+    size = 2
+  ) + 
+  coord_polar()
+
+```
+
+
+# GeomSegmentstraight 2-step
+
+1. new geom
+2. test with stat_identity
+3. write user-facer (but totally defined, i.e. both stat and geom)
+
+```{r}
+GeomSegmentstraight <- ggproto(
+    "GeomSegmentstraight", GeomSegment,
+    draw_panel = function(data, panel_params, coord, 
+                          arrow = NULL, arrow.fill = NULL,
+                          lineend = "butt", linejoin = "round",
+                          na.rm = FALSE) {
+      data <- ggplot2:::remove_missing(
+        data, na.rm = na.rm, c("x", "y", "xend", "yend", 
+                               "linetype", "size", "shape")
+      )
+      if (ggplot2:::empty(data)) {
+        return(zeroGrob())
+      }
+      coords <- coord$transform(data, panel_params)
+      # xend and yend need to be transformed separately, as coord doesn't understand
+      ends <- transform(data, x = xend, y = yend)
+      ends <- coord$transform(ends, panel_params)
+      
+      arrow.fill <- if (!is.null(arrow.fill)) arrow.fill else coords$colour
+      return(grid::segmentsGrob(
+        coords$x, coords$y, ends$x, ends$y,
+        default.units = "native", gp = grid::gpar(
+          col = alpha(coords$colour, coords$alpha),
+          fill = alpha(arrow.fill, coords$alpha),
+          lwd = #coords$size
+            .5 * .pt,
+          lty = coords$linetype,
+          lineend = lineend,
+          linejoin = linejoin
+        ),
+        arrow = arrow
+      ))
+      
+    }
+  )
+
+ggplot() +
+  geom_tile(data = df,
+            aes(x = x,
+                y = y,
+                fill = d)) +
+  ylim(c(-2, 5)) +
+  coord_polar() +
+  stat_identity(geom = GeomSegmentstraight, 
+                aes( x = "o", y = -1, xend = "z", yend = 3),
+                color = "red")
+
+
+geom_segment_straight <- function(...){
+  
+  stat_identity(geom = GeomSegmentstraight, ...)
+  
+}
+
+ggplot() +
+  geom_tile(data = df,
+            aes(x = x,
+                y = y,
+                fill = d)) +
+  ylim(c(-2, 5)) +
+  coord_polar() +
+  geom_segment_straight(data = NULL, 
+                        y = -1, yend = 3,
+    aes( x = "o",   xend = "z"),
+    color = "red")
+
+
+```
+
+
+## Closing remarks, Other Relevant Work, Caveats
