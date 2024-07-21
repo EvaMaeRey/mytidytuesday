@@ -285,7 +285,7 @@ tea a drink with jam and bread
 that will bring us back to do o o o'
 
 drm_doe_a_deer <-
-'drmrmrm
+'drmdmdm
 rmffmrf
 mfsmsms
 fsllsfl
@@ -310,6 +310,17 @@ ggdoremi:::join_phrases_drm_lyrics(drm_doe_a_deer, lyrics_phrases = lyrics_doe_a
 
 last_plot() + 
   aes(label = doremi)
+
+
+ggdoremi:::join_phrases_drm_lyrics(drm_doe_a_deer, lyrics_phrases = lyrics_doe_a_deer) %>%
+  head(30) %>%
+  ggplot() + 
+  aes(label = lyric, y = id_in_phrase, x = drm) +
+  geom_label(size = 8) + 
+  # geom_path(aes(x = as.numeric(drm))) +
+  # geom_label(size = 8)
+  facet_grid(-id_phrase ~ . ) +
+  theme_void()
 
 ```
 

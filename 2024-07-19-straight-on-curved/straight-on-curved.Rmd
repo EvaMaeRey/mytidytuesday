@@ -125,6 +125,14 @@ ggplot() +
 3. write user-facer (but totally defined, i.e. both stat and geom)
 
 ```{r}
+rm(list = ls())
+
+library(tidyverse)
+
+df <- tibble(x = rep(letters,  each = 5),
+             y = rep(1:5, 26),
+             d =  rnorm(26 * 5))
+
 GeomSegmentstraight <- ggproto(
     "GeomSegmentstraight", GeomSegment,
     draw_panel = function(data, panel_params, coord, 
@@ -139,6 +147,7 @@ GeomSegmentstraight <- ggproto(
         return(zeroGrob())
       }
       coords <- coord$transform(data, panel_params)
+
       # xend and yend need to be transformed separately, as coord doesn't understand
       ends <- transform(data, x = xend, y = yend)
       ends <- coord$transform(ends, panel_params)
