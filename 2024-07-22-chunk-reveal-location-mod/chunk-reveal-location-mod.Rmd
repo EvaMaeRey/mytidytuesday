@@ -1,0 +1,69 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+library(flipbookr)
+chunk_reveal_live <- function (chunk_name, 
+          break_type = "auto", 
+          dir = setwd(dirname(rstudioapi::getSourceEditorContext()$path)),
+          code_file_name = paste0(dir, "/", 
+    chunk_name, ".R"), 
+    rmd_path = paste0(dir, "/",
+    chunk_name, "_chunk_flipbook.Rmd"), title = stringr::str_replace_all(chunk_name, 
+    "_|\\.", " "), subtitle = "", author = "", url = paste0(dir, "/",
+    chunk_name, "_chunk_flipbook.html"), height = 325, font_size = 120, 
+    title_page = F, ...) {
+    # if (!dir.exists("embedded_flipbooks")) {
+    #     dir.create("embedded_flipbooks")
+    # }
+    save.image(paste0(dir, "/current_image.Rdata"))
+    flipbookr:::return_chunk_code(chunk_name = chunk_name) %>% paste(collapse = "\n") %>%
+        writeLines(code_file_name)
+    flipbookr:::write_instant_flipbook_source(chunk_name = chunk_name,
+                                  break_type = break_type,
+        code_file_name = code_file_name, rmd_path = rmd_path,
+        title = title, subtitle = subtitle, author = author,
+        font_size = font_size, title_page = title_page, ...)
+    rmarkdown::render(rmd_path, quiet = T)
+    print(rstudioapi::isAvailable())
+    rstudioapi::viewer(file.path(url), height = height)
+}
+```
+
+
+```{r hi}
+library(ggplot2)
+ggplot(cars) + 
+  aes(x = speed) + 
+  aes(y = dist) + 
+  geom_point()
+```
+
+
+## Closing remarks, Other Relevant Work, Caveats

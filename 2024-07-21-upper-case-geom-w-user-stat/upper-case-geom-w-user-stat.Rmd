@@ -53,9 +53,13 @@ GeomBarbell <- ggproto("GeomBarbell", Geom,
   }
 ) 
 
-geom_barbell <- function(mapping = NULL, data = NULL, 
-                         stat = "identity", position = "identity", 
-                         ..., na.rm = FALSE, show.legend = NA, 
+geom_barbell <- function(mapping = NULL, 
+                         data = NULL, 
+                         stat = "identity", 
+                         position = "identity", 
+                         ..., 
+                         na.rm = FALSE, 
+                         show.legend = NA, 
                          inherit.aes = TRUE) {
   layer(
     data = data, 
@@ -77,26 +81,76 @@ base + geom_barbell()
 base + geom_barbell(shape = 4, linetype = "dashed")  
 ```
 
-## Experimental in-script 'express' variant
+## Experimental in-script 'express' variant (using lollipop instead of barbell for variety)
 
 ```{r, eval = T}
 GeomSegment$default_aes
 GeomPoint$default_aes
+
+# Duplicated aesthetics after name standardisation: colour and alpha
+
+library(ggplot2)
+list(GeomPoint$default_aes, !!!GeomSegment$default_aes)
+
+modifyList(GeomPoint$default_aes, GeomSegment$default_aes) # warns even with removal
 ```
 
 
 ```{r}
-draw_panel_barbell <- function(data, panel_params, coord, ...) {
+library(tidyverse)
+
+GeomBarbell <- ggproto(`_class` = "GeomBarbell", 
+                       `_inherit` = ggplot2::Geom,
+                       
+  # required_aes = c("x", "y", "xend", "yend"),
+  
+  default_aes = modifyList(GeomPoint$default_aes, GeomSegment$default_aes),
+  
+  draw_panel = function(data, panel_params, coord, ...) {
     
     # Transformed data for the points
-    point1 <- transform(data) 
-    point2 <- transform(data, x = xend, y = yend)    
+    point1data <- transform(data) 
+    point2data <- transform(data, x = xend, y = yend)    
     
     # Return all three components
     grid::gList(
       GeomSegment$draw_panel(data, panel_params, coord, ...),
-      GeomPoint$draw_panel(point1, panel_params, coord, ...),
-      GeomPoint$draw_panel(point2, panel_params, coord, ...)
+      GeomPoint$draw_panel(point1data, panel_params, coord, ...),
+      GeomPoint$draw_panel(point2data, panel_params, coord, ...)
+    )
+  }
+) 
+
+df <- data.frame(x = 1:10, xend = 0:9, y = 0, yend = 1:10)
+
+ggplot(df, aes(x, y, xend = xend, yend = yend)) + 
+  stat_identity(geom = GeomBarbell, linetype = "dotted")
+```
+
+
+
+
+
+---
+
+
+
+
+```{r}
+library(tidyverse)
+
+draw_panel_lollipop <- function(data, panel_params, coord, ...) {
+    
+    # Transformed data for the points
+    segmentdata <- transform(data, xend = x, yend = 0)
+    point1data <- transform(data) 
+    point2data <- transform(data, y = 0)    
+    
+    # Return all three components
+    grid::gList(
+      GeomSegment$draw_panel(segmentdata, panel_params, coord, ...),
+      GeomPoint$draw_panel(point1data, panel_params, coord, ...),
+      GeomPoint$draw_panel(point2data, panel_params, coord, ...)
     )
     
   }
@@ -108,28 +162,27 @@ draw_panel_barbell <- function(data, panel_params, coord, ...) {
 #   mutate(xend = x, yend = 0) %>% 
 #   draw_panel_barbell(coord = CoordCartesian)
 
-GeomBarbell <- ggproto(`_class` = "GeomBarbell", 
+GeomLollipop <- ggproto(`_class` = "GeomLollipop", 
                        `_inherit` = Geom,
                        
-                       
-                       ## Warning: Duplicated aesthetics after name standardisation: 
-                       ##  colour and alpha
-                       default_aes = aes(!!!GeomPoint$default_aes, 
-                                         !!!GeomSegment$default_aes),
-                       draw_panel = draw_panel_barbell
+                       default_aes = # modifyList from @yjunechoe
+                         aes(!!!modifyList(GeomPoint$default_aes,
+                                           GeomSegment$default_aes)),
+                             
+                       draw_panel = draw_panel_lollipop
       )
 
 
-df <- data.frame(x = 1:10, xend = 0:9, y = 0, yend = 1:10)
-base <- ggplot(df, aes(x, y, xend = xend, yend = yend))
+df <- data.frame(x = 1:10, y = 1:10)
+base <- ggplot(df, aes(x, y))
 
-base + stat_identity(geom = GeomBarbell)
-# base + geom_barbell(shape = 4, linetype = "dashed")  
-
+base + 
+  stat_identity(geom = GeomLollipop, 
+                linetype = "dashed")
 
 geom_barbell <- function(...){
   
-  stat_identity(geom = GeomBarbell,...)
+  stat_identity(geom = GeomLollipop,...)
   
 }
 
