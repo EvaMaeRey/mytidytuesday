@@ -31,7 +31,7 @@ library(tidyverse)
 library(flipbookr)
 chunk_reveal_live <- function (chunk_name, 
           break_type = "auto", 
-          dir = setwd(dirname(rstudioapi::getSourceEditorContext()$path)),
+          dir = dirname(rstudioapi::getSourceEditorContext()$path),
           code_file_name = paste0(dir, "/", chunk_name, ".R"),
           rmd_path = paste0(dir, "/", chunk_name, "_chunk_flipbook.Rmd"), 
           title = stringr::str_replace_all(chunk_name, "_|\\.", " "), 
@@ -46,37 +46,39 @@ chunk_reveal_live <- function (chunk_name,
     save.image(paste0(dir, "/current_image.Rdata"))
   
     flipbookr:::return_chunk_code(chunk_name = chunk_name) %>% 
-      paste(collapse = "\n") %>%
+        paste(collapse = "\n") %>%
         writeLines(code_file_name)
 
-    flipbookr:::write_instant_flipbook_source(chunk_name = chunk_name,
-                                  break_type = break_type,
+    flipbookr:::write_instant_flipbook_source(
+      chunk_name = chunk_name,
+      break_type = break_type,
         code_file_name = code_file_name, rmd_path = rmd_path,
         title = title, subtitle = subtitle, author = author,
         font_size = font_size, title_page = title_page)
     
-    
     # print(rstudioapi::isAvailable())
   
     tempdir <- tempfile()
-    
     dir.create(tempdir)
+    dir.create(file.path(tempdir, "libs"))
     
-    
-    
+    rmarkdown::render(rmd_path,  quiet = F) # local copy
+
     temphtmlFile <- file.path(tempdir, paste0(chunk_name, "_chunk_flipbook.html"))
     
-    # tempstuff <- c
+    file.copy(url, temphtmlFile, overwrite = T)
     
+    file.copy(from = file.path(dir, "libs"),
+              to = file.path(tempdir, "libs"),
+              overwrite = TRUE,
+              recursive = TRUE,
+              copy.mode = TRUE)
     
-    rmarkdown::render(rmd_path, output_file = temphtmlFile, quiet = F) # local copy
+    try(rmarkdown::render(rmd_path, output_file = temphtmlFile, quiet = T),silent = T) # local copy
+    message("rendering...")
 
-    # file.copy(url, temphtmlFile, overwrite = T)
-    
     rstudioapi::viewer(file.path(temphtmlFile), height = height)
-    
-    # rmarkdown::render(rmd_path,  quiet = F) # local copy
-
+  
 }
 ```
 
