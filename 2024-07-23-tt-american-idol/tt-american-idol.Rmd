@@ -1,0 +1,179 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+
+library(tidyverse)
+songs <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-07-23/songs.csv')
+```
+
+
+
+
+## Intro Thoughts
+
+
+```{r}
+data_mutate_filter <- function(.value, .by, keep) {
+  structure(list(sum_specification = rlang::enquo(.value),
+                 by_specification = rlang::enquo(.by),
+                 keep_specifiction = rlang::enquo(keep)),
+            class = "data_mutatefilter")
+  
+}
+
+ggplot_add.data_mutatefilter <- function(object, plot, object_name) {
+
+  
+  new_data <- dplyr::mutate(plot$data, .value =
+                            !! object$sum_specification, 
+                            .by = !! object$by_specification) %>% 
+    dplyr::filter(!! object$keep_specifiction)
+    message("New variable named '.value' created")
+
+  plot$data <- new_data
+  plot
+
+  
+}
+
+
+data_drop_small <- function(.by, n) {
+  structure(list(by_specification = rlang::enquo(.by)),
+            class = "data_dropsmall")
+  
+}
+
+ggplot_add.data_dropsmall <- function(object, plot, object_name) {
+
+  
+  new_data <- dplyr::mutate(plot$data, 
+                            .value = n(), 
+                            .by = !!object$by_specification) %>% 
+    dplyr::filter(.value >= n)
+
+  plot$data <- new_data
+  plot
+
+  
+}
+
+
+data_filter <- function(keep) {
+  structure(
+    list(keep_specification = rlang::enquo(keep)), 
+            class = "wipeobs")
+}
+
+ggplot_add.wipeobs <- function(object, plot, object_name) {
+  
+  new_data <- dplyr::filter(plot$data, 
+                            !! object$keep_specification)
+  plot$data <- new_data
+  plot
+
+  }
+
+
+data_replace <- function(data) {
+  structure(list(new_data_specification = data), 
+            class = "wipedata")
+}
+
+ggplot_add.wipedata <- function(object, plot, object_name) {
+  
+  plot$data <- object$new_data_specification
+  plot
+
+  }
+
+
+data_mutate <- function(mutate) {
+  
+  structure(list(mutate_specification = rlang::enquo(mutate)),
+                
+            class = "data_summary")
+  
+}
+
+ggplot_add.data_summary <- function(object, plot, object_name) {
+
+  
+  new_data <- dplyr::mutate(plot$data, 
+                            !!object$mutate_specification)
+
+  plot$data <- new_data
+  plot
+
+  
+  }
+
+
+```
+
+
+## Status Quo
+
+```{r american-idol}
+library(ggcirclepack)
+songs %>%
+  ggplot() + 
+  aes(id = "All") +
+  geom_circlepack() + 
+  geom_circlepack_text(aes(lineheight = I(.7))) +
+  aes(fill = I("aliceblue")) +
+  coord_equal() +
+  aes(id = artist) +
+  aes(label = after_stat(area)) + 
+  data_mutate_filter(n(), c(artist), .value >= 15) +
+  aes(label = str_wrap(after_stat(id), 12)) + 
+  data_filter(artist == "Stevie Wonder") + 
+  aes(fill = I("plum1")) +
+  aes(id = song) +
+  aes(label = str_wrap(after_stat(paste0(id, " ", 
+                                         area, "X")), 12)) +
+  scale_size(range = c(2,3)) +
+  data_replace(data = songs |> 
+                 filter(artist == "Stevie Wonder") |>
+                 mutate(song = str_remove(song, "\\(Stevie Wonder\\)")) |>
+                 mutate(song = str_replace(song, "bout", "Bout"))) ->
+  p
+                
+
+p$data ->
+songs_stevie_cleaned
+
+```
+
+## Experiment
+
+```{r}
+songs %>% 
+  group_by(song) %>% 
+  mutate(n = n()) %>% 
+  ggplot() + 
+  aes(x = as.factor(n)) + 
+  aes(y = result) + 
+  geom_count() + 
+  data_replace(data = songs %>% 
+                      group_by(song) %>% 
+                      mutate(n = n()) %>% 
+                      mutate(result = str_remove(result, "\\(.+\\)")) %>% 
+                 mutate(result = str_trim(result)) %>% 
+                 mutate(result = str_replace(result, "-Up", "-up")) %>% 
+                 mutate(result = str_to_title(result))
+
+                )
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

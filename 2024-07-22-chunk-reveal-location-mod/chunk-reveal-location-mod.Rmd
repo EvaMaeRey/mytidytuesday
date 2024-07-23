@@ -62,10 +62,13 @@ chunk_reveal_live <- function (chunk_name,
     dir.create(tempdir)
     dir.create(file.path(tempdir, "libs"))
     
-    rmarkdown::render(rmd_path,  quiet = F) # local copy
+    rmarkdown::render(rmd_path,  quiet = F) # real copy
 
-    temphtmlFile <- file.path(tempdir, paste0(chunk_name, "_chunk_flipbook.html"))
+    temphtmlFile <- file.path(tempdir, 
+                              paste0(chunk_name,
+                                     "_chunk_flipbook.html"))
     
+    # temp copy
     file.copy(url, temphtmlFile, overwrite = T)
     
     file.copy(from = file.path(dir, "libs"),
@@ -74,8 +77,15 @@ chunk_reveal_live <- function (chunk_name,
               recursive = TRUE,
               copy.mode = TRUE)
     
-    try(rmarkdown::render(rmd_path, output_file = temphtmlFile, quiet = T),silent = T) # local copy
+    
     message("rendering...")
+
+
+    # make flipbook assets, does not fully render for some reason
+    try(rmarkdown::render(rmd_path, 
+                          output_file = temphtmlFile, 
+                          quiet = T), 
+        silent = T) # temp copy of copy
 
     rstudioapi::viewer(file.path(temphtmlFile), height = height)
   
