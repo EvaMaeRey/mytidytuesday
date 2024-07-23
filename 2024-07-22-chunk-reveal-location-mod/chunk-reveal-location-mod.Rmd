@@ -32,30 +32,78 @@ library(flipbookr)
 chunk_reveal_live <- function (chunk_name, 
           break_type = "auto", 
           dir = setwd(dirname(rstudioapi::getSourceEditorContext()$path)),
-          code_file_name = paste0(dir, "/", 
-    chunk_name, ".R"), 
-    rmd_path = paste0(dir, "/",
-    chunk_name, "_chunk_flipbook.Rmd"), title = stringr::str_replace_all(chunk_name, 
-    "_|\\.", " "), subtitle = "", author = "", url = paste0(dir, "/",
-    chunk_name, "_chunk_flipbook.html"), height = 325, font_size = 120, 
-    title_page = F, ...) {
-    # if (!dir.exists("embedded_flipbooks")) {
-    #     dir.create("embedded_flipbooks")
-    # }
+          code_file_name = paste0(dir, "/", chunk_name, ".R"),
+          rmd_path = paste0(dir, "/", chunk_name, "_chunk_flipbook.Rmd"), 
+          title = stringr::str_replace_all(chunk_name, "_|\\.", " "), 
+          subtitle = "", 
+          author = "", 
+          url = paste0(dir, "/",
+                       chunk_name, "_chunk_flipbook.html"), 
+          height = 325, 
+          font_size = 120, 
+          title_page = F, ...) {
+
     save.image(paste0(dir, "/current_image.Rdata"))
-    flipbookr:::return_chunk_code(chunk_name = chunk_name) %>% paste(collapse = "\n") %>%
+  
+    flipbookr:::return_chunk_code(chunk_name = chunk_name) %>% 
+      paste(collapse = "\n") %>%
         writeLines(code_file_name)
+
     flipbookr:::write_instant_flipbook_source(chunk_name = chunk_name,
                                   break_type = break_type,
         code_file_name = code_file_name, rmd_path = rmd_path,
         title = title, subtitle = subtitle, author = author,
-        font_size = font_size, title_page = title_page, ...)
-    rmarkdown::render(rmd_path, quiet = T)
-    print(rstudioapi::isAvailable())
-    rstudioapi::viewer(file.path(url), height = height)
+        font_size = font_size, title_page = title_page)
+    
+    
+    # print(rstudioapi::isAvailable())
+  
+    tempdir <- tempfile()
+    
+    dir.create(tempdir)
+    
+    
+    
+    temphtmlFile <- file.path(tempdir, paste0(chunk_name, "_chunk_flipbook.html"))
+    
+    # tempstuff <- c
+    
+    
+    rmarkdown::render(rmd_path, output_file = temphtmlFile, quiet = F) # local copy
+
+    # file.copy(url, temphtmlFile, overwrite = T)
+    
+    rstudioapi::viewer(file.path(temphtmlFile), height = height)
+    
+    # rmarkdown::render(rmd_path,  quiet = F) # local copy
+
 }
 ```
 
+
+```{r}
+if (FALSE) {
+
+# run an application inside the IDE
+rstudioapi::viewer("http://localhost:8100")
+
+# run an application and request a height of 500 pixels
+rstudioapi::viewer("http://localhost:8100", height = 500)
+
+# use 'viewer' option if set, or `utils::browseURL()` if unset
+viewer <- getOption("viewer", default = utils::browseURL)
+viewer("http://localhost:8100")
+
+# generate a temporary html file and display it
+dir <- tempfile()
+dir.create(dir)
+htmlFile <- file.path(dir, "index.html")
+# (code to write some content to the file)
+rstudioapi::viewer(htmlFile)
+
+}
+
+```
 
 ```{r hi}
 library(ggplot2)
@@ -67,3 +115,4 @@ ggplot(cars) +
 
 
 ## Closing remarks, Other Relevant Work, Caveats
+
