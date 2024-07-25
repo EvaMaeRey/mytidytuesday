@@ -52,9 +52,9 @@ songs %>%
   data_replace(data = songs |> 
                  filter(artist == "Stevie Wonder") |>
                  mutate(song = str_remove(song, "\\(Stevie Wonder\\)")) |>
-                 mutate(song = str_replace(song, "bout", "Bout")) |>
-                 mutate(song = str_replace(song, "Do I Do", "All I Do"))
-               ) 
+                 mutate(song = str_replace(song, "bout", "Bout"))) ->
+  p
+                
 
 p$data ->
 songs_stevie_cleaned
@@ -66,7 +66,7 @@ songs_stevie_cleaned
 
 
 ```{css, eval = TRUE, echo = FALSE}
-.remark-code{line-height: 1.5; font-size: 80%}
+.remark-code{line-height: 1.5; font-size: 90%}
 
 @media print {
   .has-continuation {

@@ -22,30 +22,67 @@ options(tidyverse.quiet = TRUE)
 
 ```{r}
 library(tidyverse)
-
 ```
 
 ## Experiment
 
 ```{r}
-
 library(tmap)
 data(NLD_prov)
 data(NLD_muni)
-
 ```
 
 
+## Create reference data. 
+
+Now we're looking at a dependency free method (w/o sf2stat), it's a bit of code. 
+
+I believe this is a work around and it's just a matter of time before figuring out how to get this more automated using what's alread in ggplot2.
 
 ```{r}
-NLD_prov |>
-  dplyr::select(name_prov = name, code_prov = code, geometry) |>
-  sf2stat:::sf_df_prep_for_stat(id_col_name = "name_prov") ->
+# lots of work to build sf2stat
+# NLD_prov |>
+#   dplyr::select(name_prov = name, code_prov = code, geometry) |>
+#   sf2stat:::sf_df_prep_for_stat(id_col_name = "name_prov") ->
+# nld_prov_geo_reference0
+
+# a fun moment
+# # build a plot with sf type data
+# NLD_prov %>% 
+#   ggplot() + 
+#   geom_sf() + 
+#   geom_sf_text(aes(label = name))
+# 
+# # extract xmin ymin, x y, 
+# NLD_prov %>% 
+#   select(name_prov = name, code_prov = code, geometry) %>%
+#   bind_cols(layer_data() %>% select(xmin, xmax, ymin, ymax)) %>% 
+#   bind_cols(layer_data(i = 2) %>% select(x, y)) %>% 
+#   as.data.frame() %>% 
+#   mutate(id_col = name_prov) ->
+# nld_prov_geo_reference
+
+# # the way - but now I put it below
+# NLD_prov %>% 
+#   StatSf$compute_panel(coord = CoordSf) ->
+# 
+# 
+# NLD_prov %>% 
+#   StatSfCoordinates$compute_group(coord = CoordSf)
+
+
+NLD_prov %>% 
+   select(name_prov = name, code_prov = code, geometry) %>% 
+   mutate(id_col = name_prov)  %>% 
+    StatSf$compute_panel(coord = CoordSf) %>%  # adds individual bounding boxes, xmin, ymin etc
+    StatSfCoordinates$compute_group(coord = CoordSf) %>% # adds xy coordinates
+  tibble() -> # remove sf info
 nld_prov_geo_reference
 
-nld_prov_geo_reference
+
 ```
 
+# write compute routine
 
 ```{r}
 compute_panel_nl_prov <- function(data, scales, keep_id = NULL, drop_id = NULL, stamp = FALSE){
@@ -57,37 +94,93 @@ compute_panel_nl_prov <- function(data, scales, keep_id = NULL, drop_id = NULL, 
   if(!is.null(drop_id)){ data <- filter(data, !(id_col %in% drop_id)) }
   
   data
-  
 }
+```
 
+# write stat
+
+```{r}
 StatNlprov <- ggplot2::ggproto(`_class` = "StatNlprov",
                                 `_inherit` = ggplot2::StatSf,
                                required_aes = "name_prov|code_prov",
-                                compute_panel = compute_panel_nl_prov,
-                               default_aes = ggplot2::aes(label = after_stat(id_col),
-                                                          geometry = after_stat(geometry)
-                                                          )
-                               )
+                               compute_panel = compute_panel_nl_prov,
+                               default_aes = 
+                                 ggplot2::aes(label = after_stat(id_col)))
+```
+
+# try out the stat with geom_sf
+
+```{r}
+NLD_prov |>
+  sf::st_drop_geometry() |>
+  slice(1:3) |>
+  ggplot() + 
+  aes(name_prov = name) + 
+  geom_sf(stat = StatNlprov, stamp = T) + 
+  geom_sf(stat = StatNlprov, fill = "darkred") +
+  coord_sf(crs = "EPSG:28992") + 
+  geom_sf_label(stat = StatNlprov, keep_id = "Groningen")
+```
+
+
+# write user-facing wrappers
+
+```{r}
+geom_prov <- function(...){
+  
+  list(
+  geom_sf(stat = StatNlprov, ...),
+  coord_sf(crs = "EPSG:28992")
+  )
+  
+}
+
+
+geom_prov_text <- function(...){
+  
+  list(
+  geom_sf_text(stat = StatNlprov, ...),
+  coord_sf(crs = "EPSG:28992")
+  )
+  
+}
+```
+
+
+# use user-facers.
+
+```{r}
+NLD_prov |>
+  sf::st_drop_geometry() |> # so we can test on flat file (no geometry )
+  ggplot() + 
+  aes(name_prov = name) + 
+  geom_prov() + 
+  geom_prov_text(size = 2) 
+
+last_plot() + 
+  aes(fill = population) + 
+  scale_fill_viridis_c()
+  
+```
+
+
+
+```{r}
+NLD_prov |>
+  sf::st_drop_geometry() |>
+  ggplot() + 
+  aes(name_prov = name) + 
+  geom_prov(stamp = T) + 
+  geom_prov_text(size = 2) 
 
 
 NLD_prov |>
   sf::st_drop_geometry() |>
   ggplot() + 
   aes(name_prov = name) + 
-  geom_sf(stat = StatNlprov)
+  geom_prov(stamp = T) + 
+  geom_prov_text(size = 5, keep_id = "Groningen") 
 
-geom_prov <- function(...){
-  
-  geom_sf(stat = StatNlprov, ...)
-  
-}
-
-
-geom_prov_label <- function(...){
-  
-  geom_text(stat = StatNlprov, ...)
-  
-}
 ```
 
 # ho! new reality in 30 lines of code...
@@ -98,17 +191,23 @@ NLD_prov |>
   ggplot() + 
   aes(name_prov = name) +
   geom_prov() + 
-  geom_prov_label(check_overlap = T)
+  geom_prov_text(check_overlap = T)
 
 last_plot() + 
   aes(fill = pop_65plus)
 
 
-NLD_prov |>
-  ggplot() + 
-  geom_sf()
+
+
 ```
 
+
+
+```{r}
+knitr::knit_exit()
+
+
+```
 
 ## Closing remarks, Other Relevant Work, Caveats
 
@@ -118,8 +217,13 @@ NLD_prov |>
 library(geobr)
 library(tidyverse)
 
+
+br_state_raw <- geobr::read_state(simplified = T)
+str(br_state_raw)
+
 state <- geobr::read_state(simplified = T) %>% 
-  rename(geometry = geom)
+  rename(geometry = geom) %>% 
+  sf2stat:::sf_df_prep_for_stat(id_col_name = "name_state")
 
 
 compute_panel_state <- function(data, scales){
@@ -131,15 +235,21 @@ compute_panel_state <- function(data, scales){
 }
 
 
+sf::st_crs( geobr::read_state(simplified = T))
+
+
+state %>% 
+  sf::st_drop_geometry() %>% 
+  compute_panel_state()
+
 StatBrasilstate <- ggproto("StatBrasilstate", 
                            Stat,
-                           compute_panel = compute_panel_state,
-                           default_aes = ggplot2::aes(
-                             geometry = after_stat(geometry)))
+                           compute_panel = compute_panel_state)
 
 
 state %>% 
   ggplot() +
+  aes(geometry = geometry) +  # why is it needed here
   geom_sf() + 
   geom_sf_text(aes(label = name_state))
 
@@ -148,7 +258,41 @@ state %>%
   sf::st_drop_geometry() %>% 
   ggplot() + 
   aes(code_state = code_state) +
-  geom_sf(stat = StatBrasilstate)
+  geom_sf(stat = StatBrasilstate) + 
+  coord_sf(crs = "SIRGAS2000")
 
 ```
 
+```{r}
+nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE) %>% 
+  sf2stat:::sf_df_prep_for_stat(id_col_name = "NAME")
+
+
+compute_panel_nc <- function(data, scales){
+  
+  nc %>% inner_join(data)
+
+}
+
+
+StatNc <- ggproto("StatNc", 
+                  Stat,
+                  compute_panel = compute_panel_nc,
+                  default_aes = aes(geometry = after_stat(geometry)))
+
+nc %>% 
+  sf::st_drop_geometry() %>% 
+  ggplot() + 
+  aes(FIPS = FIPS) + 
+  geom_sf(stat = StatNc) + 
+  coord_sf(crs = "NAD27") 
+  
+                  
+nc %>% 
+  sf::st_drop_geometry() %>% 
+  slice(1:3) %>% 
+  ggplot() + 
+  aes(FIPS = FIPS) + 
+  geom_sf(stat = StatNc)
+
+```

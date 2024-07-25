@@ -96,9 +96,11 @@ ggplot_add.wipedata <- function(object, plot, object_name) {
   }
 
 
-data_mutate <- function(mutate) {
+data_mutate <- function(var, mutate) {
   
-  structure(list(mutate_specification = rlang::enquo(mutate)),
+  structure(list(
+    var_specification = rlang::enquo(var),
+    mutate_specification = rlang::enquo(mutate)),
                 
             class = "data_summary")
   
@@ -107,7 +109,7 @@ data_mutate <- function(mutate) {
 ggplot_add.data_summary <- function(object, plot, object_name) {
 
   
-  new_data <- dplyr::mutate(plot$data, 
+  new_data <- dplyr::mutate(plot$data, !!object$var_specification = 
                             !!object$mutate_specification)
 
   plot$data <- new_data
@@ -116,6 +118,11 @@ ggplot_add.data_summary <- function(object, plot, object_name) {
   
   }
 
+
+ggplot(cars) + 
+  aes(x = speed, y = dist) + 
+  geom_point() + 
+  data_mutate(mutate = speed2 = rev(speed)`)
 
 ```
 
