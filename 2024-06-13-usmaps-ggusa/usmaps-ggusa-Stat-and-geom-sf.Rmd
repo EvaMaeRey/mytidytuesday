@@ -1,0 +1,99 @@
+---
+title: "When place names are positional aesthetics"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+
+# Step 00 - mapping data US map
+
+```{r}
+library(tidyverse)
+
+usmapdata::us_map("states") %>% 
+  ggplot() +
+  aes(geometry = geom) +
+  geom_sf() -> p; p
+
+p$coordinates$crs
+
+usmapdata::us_map("states")
+```
+
+
+## Step 0 - a dream
+
+```{r, eval = F}
+flat_data %>% 
+  ggplot() + 
+  aes(state_name = state) + 
+  geom_state() + 
+  geom_state_label()
+```
+
+
+
+
+### prep reference data
+
+```{r}
+usmapdata::us_map("states") %>% 
+  select(state_name = full, state_abbr = abbr, geometry = geom) %>% 
+  StatSf$compute_panel(coord = CoordSf) %>% 
+  StatSfCoordinates$compute_group(coord = CoordSf) ->
+usmaprefdata
+
+
+usmapcrsinfo <- sf::st_crs(usmapdata::us_map("states"))
+```
+
+
+# compute (join flat w/ reference)
+
+```{r}
+compute_panel_us_states <- function(data, scales){
+  
+  inner_join(data, usmaprefdata)
+  
+}
+```
+
+
+# ggplot2 extension magic - define stat
+
+```{r}
+StatStates <- ggproto("StatStates",
+                      Stat,
+                      required_aes = "state_name|state_abbr",
+                      compute_panel = compute_panel_us_states)
+```
+
+
+# Use stat
+
+```{r}
+state.name %>% 
+  data.frame(state = .) %>% 
+  mutate(is_aeiou = state %>% 
+           str_detect("^[AEIOU]")) %>% 
+  ggplot() + 
+  aes(state_name = state) + 
+  geom_sf(stat = StatStates) + 
+  coord_sf(crs = usmapcrsinfo)
+
+
+geom_sf
+```
+
+
