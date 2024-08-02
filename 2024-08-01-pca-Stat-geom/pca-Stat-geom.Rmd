@@ -1,0 +1,99 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+library(tidyverse)
+
+compute_panel_pca_rows <- function(data, scales){
+  
+  data %>%  remove_missing() ->
+    data
+
+  data %>% 
+    select(outcome, a, b, c) %>% # as proof of concept 3 predictors a b c
+    ordr::ordinate(cols = 2:4, model = ~ prcomp(., scale. = TRUE)) %>% 
+  .$x %>% 
+    as.data.frame() %>% 
+    bind_cols(data["outcome"])
+    
+}
+
+palmerpenguins::penguins %>% 
+  rename(outcome = species, a = bill_length_mm, b = bill_depth_mm, c = flipper_length_mm) %>%
+  compute_panel_pca_rows() %>% 
+  head()
+
+StatPcarows <- ggproto(`_class` = "StatPcarows",
+                       `_inherit` = Stat,
+                       compute_panel = compute_panel_pca_rows,
+                       default_aes = aes(x = after_stat(PC1), 
+                                         y = after_stat(PC2), 
+                                         color = after_stat(outcome)))
+
+compute_panel_pca_col <- function(data, scales){
+  
+  data %>%  remove_missing() ->
+    data
+
+  data %>% 
+    select(outcome, a, b, c) %>% # as proof of concept 3 predictors a b c
+    ordr::ordinate(cols = 2:4, model = ~ prcomp(., scale. = TRUE)) %>% 
+    .$rotation %>% 
+    as.data.frame() %>% 
+    rownames_to_column()
+    
+}
+
+palmerpenguins::penguins %>% 
+  rename(outcome = species, a = bill_length_mm, b = bill_depth_mm, c = flipper_length_mm) %>%
+  compute_panel_pca_col()
+
+StatPcacols <- ggproto(`_class` = "StatPcacols", Stat,
+                      compute_panel = compute_panel_pca_col, 
+                      default_aes = aes(x = after_stat(PC1), 
+                                        y = after_stat(PC2), 
+                                        xend = after_stat(0),
+                                        yend = after_stat(0), 
+                                        label = paste("Variable",
+                                                      after_stat(rowname))))
+
+
+palmerpenguins::penguins %>% 
+  ggplot() + 
+  aes(outcome = species, a = bill_length_mm, 
+      b = bill_depth_mm, c = flipper_length_mm) +
+  geom_point(stat = StatPcarows) + 
+  geom_text(stat = StatPcacols, hjust = "outward") + 
+  geom_segment(stat = StatPcacols, 
+                arrow = arrow(ends = "first"))
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

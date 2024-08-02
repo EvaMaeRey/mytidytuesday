@@ -349,3 +349,30 @@ last_table() |>
 # Part 3. **Dispatch** Define behavior when tps are piped to other environment 
 
 Future work
+
+
+
+
+
+
+---
+
+
+```{r}
+summer_movies <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-07-30/summer_movies.csv')
+
+summer_movies %>%
+  mutate(genre = str_split(genres, ",")) %>% 
+  unnest(genre) %>% 
+  mutate(decade = floor(year/10) * 10) %>%
+  mutate(n = n(), .by = genre) %>% 
+  filter(n >=30 ) %>% 
+  filter(!is.na(runtime_minutes)) %>% 
+  mutate(genre = fct_infreq(genre)) %>%  
+  ggtable() %>% 
+  set_rows(genre) %>% 
+  set_cols(decade) %>% 
+  set_value(runtime_minutes) %>% 
+  set_fun(mean) 
+
+```

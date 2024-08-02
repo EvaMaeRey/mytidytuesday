@@ -1,8 +1,13 @@
 ---
-title: "easy geom recipes"
-author: "Evangeline Reynolds, Morgan Brown"
-date: "2022/03/01, revised 2024/05/06"
-output: html_document
+title: "easy geom recipes: compute_group"
+author: "Gina Reynolds, Morgan Brown"
+date: "1/3/2022 revised 07/26/2024"
+format: html
+engine: knitr
+webr: 
+  packages:
+    - tidyverse
+    - palmerpenguins
 ---
 
 
@@ -200,10 +205,10 @@ penguins |>
 Using recipe #1 as a reference, try to create the function `geom_point_xy_means()`
 
 
-```{r}
+```{webr-r}
 # step 0: use base ggplot2
 
-# step 1: write your compute_group function (and test)
+# step 1: write your compute_group function - don't forget scales argument!
 
 # step 2: write ggproto with compute_group as an input
 
@@ -359,7 +364,7 @@ paste0("(", 1, ", ", 3.5, ")")
 
 
 
-```{r}
+```{webr-r}
 # step 0: use base ggplot2
 
 # step 1: write your compute_group function (and test)
@@ -499,7 +504,7 @@ Create the function `geom_segment_lm_residuals()`.
 
 ## Step 0: use base ggplot2 to get the job done
 
-```{r}
+```{webr-r}
 # step 0: use base ggplot2
 model <- lm(formula = bill_length_mm ~ bill_depth_mm, 
             data = penguins) 

@@ -1,9 +1,16 @@
 ---
-title: "easy geom recipes"
-author: "Evangeline Reynolds, Morgan Brown"
-date: "2022/03/01, revised 2024/05/06"
-output: html_document
+title: "easy geom recipes: compute_group"
+author: "Gina Reynolds, Morgan Brown"
+date: "1/3/2022 revised 07/26/2024"
+format: html
+engine: knitr
+webr: 
+  packages:
+    - tidyverse
+    - palmerpenguins
 ---
+
+
 
 
 Using ggplot2 has been described as writing 'graphical poems'.  But we may feel at a loss for 'words' when functions we'd like to have don't exist.  The ggplot2 extension system allows us to build new 'vocabulary' for fluent expression.  
@@ -37,9 +44,13 @@ Below, you'll see a completely worked example (example recipes A, B and C) and t
 
 ---
 
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
 ```
+
+
 
 # Example recipe #A: `geom_point_xy_medians()`
 
@@ -48,6 +59,8 @@ knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
 - This will be a point at the median of x and y
 
 ## Step 0: use base ggplot2 to get the job done
+
+
 
 ```{r penguins}
 library(tidyverse)
@@ -71,11 +84,15 @@ penguins %>%
 ```
 
 
+
+
 ## Step 1a: write compute function
 
 - define computation that ggplot2 should do for you, before plotting
   - here it's computing a variable with labels for each observation
 - test that functionality Step 1.b
+
+
 
 ```{r compute_group_xy_medians}
 # Step 1.a
@@ -87,7 +104,11 @@ compute_group_xy_medians <- function(data, scales){ #  scales is used internally
 ```
 
 
+
+
 ## Step 1b. Test compute
+
+
 
 ```{r}
 penguins |>
@@ -95,6 +116,8 @@ penguins |>
          y = bill_length_mm) |>  # therefore select is required to used the compute function
   compute_group_xy_medians()
 ```
+
+
 
 
 ## Step 2: define new Stat
@@ -105,6 +128,8 @@ Things to notice
 - which aesthetics are required as inputs?
 - where does the function from above go?
 
+
+
 ```{r StatXYMedians}
 StatXymedians <- ggplot2::ggproto(`_class` = "StatXymedians",
                                   `_inherit` = ggplot2::Stat,
@@ -114,7 +139,11 @@ StatXymedians <- ggplot2::ggproto(`_class` = "StatXymedians",
 
 
 
+
+
 ## Step 2b. Test. Use the stat with long-form, layer() function. 
+
+
 
 
 
@@ -139,12 +168,16 @@ penguins %>%
 ```
 
 
+
+
 ## Step 3a: define geom_* function
 
 Things to notice
 
 - Where does our work up to this point enter in?
 - What more primitive geom will we inherit behavior from?
+
+
 
 ```{r geom_point_xy_medians} 
 geom_point_xy_medians <- function(
@@ -173,7 +206,11 @@ geom_point_xy_medians <- function(
 ```
 
 
+
+
 ## Step 3b: Test.  Enjoy! Use your function
+
+
 
 ```{r enjoy_penguins}
 penguins |>
@@ -183,7 +220,11 @@ penguins |>
   geom_point_xy_medians(color = "red", size = 7)
 ```
 
+
+
 ### And check out conditionality!
+
+
 
 ```{r conditional_penguins}
 penguins |>
@@ -195,15 +236,17 @@ penguins |>
   geom_point_xy_medians(size = 7)
 ```
 
+
+
 # Task #A: create the function `geom_point_xy_means()`
 
 Using recipe #1 as a reference, try to create the function `geom_point_xy_means()`
 
 
-```{r}
+```{webr-r}
 # step 0: use base ggplot2
 
-# step 1: write your compute_group function (and test)
+# step 1: write your compute_group function - don't forget scales argument!
 
 # step 2: write ggproto with compute_group as an input
 
@@ -222,6 +265,8 @@ Using recipe #1 as a reference, try to create the function `geom_point_xy_means(
 ## Step 0: use base ggplot2 to get the job done
 
 
+
+
 ```{r cars}
 cars |> 
   mutate(id_number = 1:n()) |> 
@@ -232,9 +277,13 @@ cars |>
              hjust = 1.2)
 ```
 
+
+
 ---
 
 ## Step 1a: write compute function
+
+
 
 
 
@@ -250,7 +299,11 @@ compute_group_row_number <- function(data, scales){
 }
 ```
 
+
+
 ## Step 1b test the computation function 
+
+
 
 
 ```{r}
@@ -261,9 +314,13 @@ cars |>
   head()
 ```
 
+
+
 ---
 
 ## Step 2a: define new Stat
+
+
 
 
 
@@ -275,7 +332,11 @@ StatRownumber <- ggplot2::ggproto(`_class` = "StatRownumber",
 ```
 
 
+
+
 ## Step 2b. Test Stat
+
+
 
 ```{r}
 cars |> 
@@ -288,6 +349,8 @@ cars |>
         position = "identity")
 ```
 
+
+
 ---
 
 ## Step 3a: define geom_* function
@@ -295,6 +358,8 @@ cars |>
 
 
 - define the stat and geom for your layer
+
+
 
 
 ```{r geom_label_row_number}
@@ -319,9 +384,13 @@ geom_label_row_number <- function(mapping = NULL, data = NULL,
 
 
 
+
+
 ---
 
 ## Step 3b: Enjoy! Use your function
+
+
 
 ```{r enjoy_again}
 cars |> 
@@ -332,12 +401,18 @@ cars |>
                         vjust = 0) # function in action
 ```
 
+
+
 ### And check out conditionality!
+
+
 
 ```{r conditional_compute}
 last_plot() + 
   aes(color = dist > 60) # Computation is within group
 ```
+
+
 
 ---
 
@@ -352,6 +427,8 @@ Using recipe #2 as a reference, can you create the function `geom_text_coordinat
 
 Hint:
 
+
+
 ```{r}
 paste0("(", 1, ", ", 3.5, ")")
 ```
@@ -359,7 +436,9 @@ paste0("(", 1, ", ", 3.5, ")")
 
 
 
-```{r}
+
+
+```{webr-r}
 # step 0: use base ggplot2
 
 # step 1: write your compute_group function (and test)
@@ -382,6 +461,8 @@ paste0("(", 1, ", ", 3.5, ")")
 
 ## Step 0: use base ggplot2 to get the job done
 
+
+
 ```{r fitted_1}
 model <- lm(formula = bill_length_mm ~ bill_depth_mm, 
             data = penguins) 
@@ -401,7 +482,11 @@ penguins |>
 ```
 
 
+
+
 ## Step 1a: write compute function
+
+
 
 ```{r fitted_2}
 compute_group_lm_fitted <- function(data, scales){
@@ -411,7 +496,11 @@ compute_group_lm_fitted <- function(data, scales){
 }
 ```
 
+
+
 ## Step 1b. test out the function
+
+
 
 
 ```{r}
@@ -422,7 +511,11 @@ penguins |>
 ```
 
 
+
+
 ## Step 2a: define new Stat
+
+
 
 ```{r fitted_3}
 StatLmFitted <-ggplot2::ggproto(`_class` = "StatLmFitted",
@@ -430,7 +523,6 @@ StatLmFitted <-ggplot2::ggproto(`_class` = "StatLmFitted",
                                required_aes = c("x", "y"),
                                compute_group = compute_group_lm_fitted)
 ```
-
 
 ```{r}
 penguins |> 
@@ -445,7 +537,11 @@ penguins |>
 ```
 
 
+
+
 ## Step 3a: define geom_* function
+
+
 
 
 ```{r fitted_4}
@@ -466,7 +562,11 @@ geom_point_lm_fitted <- function(mapping = NULL, data = NULL,
 }
 ```
 
+
+
 ## Step 3b: Enjoy! Use your function
+
+
 
 ```{r fitted_5}
 penguins |> 
@@ -477,7 +577,11 @@ penguins |>
   geom_point_lm_fitted(color="blue")
 ```
 
+
+
 ### And check out conditionality
+
+
 
 ```{r fitted_6}
 penguins |> 
@@ -489,6 +593,8 @@ penguins |>
   facet_wrap(facets = vars(species))
 ```
 
+
+
 ---
 
 # Task #C create `geom_segment_lm_residuals()`
@@ -499,7 +605,7 @@ Create the function `geom_segment_lm_residuals()`.
 
 ## Step 0: use base ggplot2 to get the job done
 
-```{r}
+```{webr-r}
 # step 0: use base ggplot2
 model <- lm(formula = bill_length_mm ~ bill_depth_mm, 
             data = penguins) 
@@ -536,4 +642,5 @@ Check out some ready-to-go geoms that might be of interest in the ggxmean packag
 Interested in working a bit more with geoms and making them available to more folks, but not interested in writing your own package?
 
 Join in on the development and validation of the ggxmean package for statistical educators and everyday analysis!
+
 
