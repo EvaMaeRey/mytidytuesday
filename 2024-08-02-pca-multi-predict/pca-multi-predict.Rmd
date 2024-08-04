@@ -1,0 +1,175 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+library(tidyverse)
+
+compute_panel_pca_col <- function(data, scales){
+  
+  data %>%  remove_missing() ->
+    data
+  
+  varnames <- attr(data$predictors, "varnames")
+  
+  data %>% 
+    select(outcome, predictors) %>%
+    mutate(tidy_vars_pca(predictors)) %>% 
+    ordr::ordinate(cols = all_of(varnames), model = ~ prcomp(., scale. = TRUE)) %>% 
+    .$rotation %>% 
+    as.data.frame() %>% 
+    rownames_to_column()
+  
+}
+
+vars_pca <- function(...) {
+  varnames <- as.character(ensyms(...))
+  vars <- list(...)
+  listvec <- asplit(do.call(cbind, vars), 1)
+  structure(listvec, varnames = varnames)
+}
+
+tidy_vars_pca <- function(x) {
+  pca_vars <- x
+  df <- do.call(rbind, pca_vars)
+  colnames(df) <- attr(pca_vars, "varnames")
+  as.data.frame(df)
+}
+
+palmerpenguins::penguins %>% 
+  mutate(outcome = species, predictors = vars_pca(bill_length_mm, bill_depth_mm, flipper_length_mm)) %>% 
+  compute_panel_pca_col() 
+#> Warning: Removed 11 rows containing missing values or values outside the scale
+#> range.
+#>             rowname        PC1         PC2        PC3
+#> 1    bill_length_mm  0.5513631 -0.65493615  0.5167759
+#> 2     bill_depth_mm -0.5107043 -0.75478128 -0.4116872
+#> 3 flipper_length_mm  0.6596816 -0.03693055 -0.7506373
+
+
+StatPcacols <- ggproto(`_class` = "StatPcacols", Stat,
+                       compute_panel = compute_panel_pca_col, 
+                       default_aes = aes(x = after_stat(PC1), 
+                                         y = after_stat(PC2), 
+                                         xend = after_stat(0),
+                                         yend = after_stat(0), 
+                                         label = paste("Variable",
+                                                       after_stat(rowname))))
+palmerpenguins::penguins %>% 
+  ggplot() + 
+  aes(outcome = species, 
+      predictors = vars_pca(bill_length_mm, bill_depth_mm, flipper_length_mm)) +
+  geom_text(stat = StatPcacols, hjust = "outward") + 
+  geom_segment(stat = StatPcacols, 
+               arrow = arrow(ends = "first"))
+#> Warning: Removed 2 rows containing missing values or values outside the scale range.
+#> Removed 2 rows containing missing values or values outside the scale range.
+
+
+#Complete with StatPcarows:
+
+compute_panel_pca_rows <- function(data, scales){
+  
+  varnames <- attr(data$predictors, "varnames")
+  
+  data <- data %>% 
+    select(outcome, predictors) %>%
+    mutate(tidy_vars_pca(predictors)) %>% 
+    remove_missing()
+  
+  data %>% 
+    ordr::ordinate(cols = all_of(varnames), model = ~ prcomp(., scale. = TRUE)) %>% 
+    .$x %>% 
+    as.data.frame() %>% 
+    bind_cols(data["outcome"])
+  
+}
+
+StatPcarows <- ggproto(`_class` = "StatPcarows",
+                       `_inherit` = Stat,
+                       compute_panel = compute_panel_pca_rows,
+                       default_aes = aes(x = after_stat(PC1), 
+                                         y = after_stat(PC2), 
+                                         color = after_stat(outcome)))
+palmerpenguins::penguins %>% 
+  ggplot() + 
+  aes(outcome = species, 
+      predictors = vars_pca(bill_length_mm, bill_depth_mm, flipper_length_mm)) +
+  geom_point(stat = StatPcarows) + 
+  geom_text(stat = StatPcacols, hjust = "outward") + 
+  geom_segment(stat = StatPcacols, 
+               arrow = arrow(ends = "first"))
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
+
+
+```{r}
+
+
+library(ggplot2)
+library(ggcircumscribe)
+
+example_data <- data.frame(
+  time = c(3, 5, 7),
+  space = c(3, 5, 7),
+  observation = c("Early morning joggers", "A baby kookaburra wearing a gown", "And then I went to the grocery store to get some cake before the crowds came, for they would often come you know,a skasdjf asak asaj akekfsa asdfa")
+)
+
+ggplot(example_data, aes(x = time, y = space, label = observation)) +
+  geom_abs_circle(radius = grid::unit(20, "mm")) +
+  geom_circumscribe(radius = grid::unit(20, "mm"), grow = TRUE) +
+  scale_x_continuous(limits = c(0, 10)) +
+  scale_y_continuous(limits = c(0, 10))
+```
+
+```{r}
+library(tidyverse)
+
+harvest_2021 <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-05-28/harvest_2021.csv')
+
+harvest_2021 %>% 
+  ggplot() + 
+  aes(id = vegetable) + 
+  ggcirclepack::geom_circlepack() + 
+  ggcirclepack::geom_circlepack_text() 
+  
+  
+
+layer_data(i = 2) ->
+circle_data
+
+circle_data %>% 
+  ggplot() + 
+  aes(x = x, y = y, label = label, radius = radius) +
+  # geom_abs_circle(radius = grid::unit(20, "mm")) +
+  geom_circumscribe(radius = grid::unit(20, "mm"), grow = TRUE) 
+
+```

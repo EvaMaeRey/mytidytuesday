@@ -1,0 +1,106 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+
+# create default datetimes
+ggcalendar::df_week() %>% 
+  crossing(data.frame(time = hours(8:16))) %>% 
+  mutate(datetime = date + time) ->
+df_week_datetimes
+
+df_week_datetimes %>% 
+  head()
+
+
+df_week_datetimes %>% 
+  ggplot() + 
+  # Stat x and y from datetimes
+  aes(x = paste0(wday(date, label = T, abbr = T), "\n",
+        month(date, label = T, abbr = T)," " ,day(date)) %>% 
+        fct_inorder()) +  
+  aes(y = hms::as_hms(datetime)) + 
+  # hour blocks - do with geom_rect instead, save xmin xmax etc in Stat
+  geom_tile(aes(y = hms::as_hms(datetime + minutes(30)))) + 
+  aes(fill = I("white"),
+      color = I("grey"))
+
+# probably better to just do date and adjust labels w scale_x... sec.axis = dup_axis(name = "Time of Day",labels = scales::label_time("%I %p")
+
+
+# some theming default choices
+last_plot() + 
+  aes(fill = wday(date) %in% 2:6) + 
+  scale_fill_manual(values = 
+                      c("grey98", "white")) + 
+  guides(fill = "none") + 
+  labs(x = NULL, y = NULL) +
+  theme_void() + 
+  # coord page flips y (above)
+  coord_trans(y = "reverse") +
+  theme(axis.text.y = element_text(hjust = 1),
+        axis.text.x = element_text()) + 
+  scale_y_time(breaks = hms::as_hms(c("08:00:00",
+    "9:00:00", 
+                                    "10:00:00",
+                                    "11:00:00",
+                                    "12:00:00",
+                                    "13:00:00", 
+                                    "14:00:00",
+                                    "15:00:00",
+                                    "16:00:00",
+                                    "17:00:00",
+                                    "18:00:00")
+                                    ),
+               label = c("8am", "9am","10am","11am","12pm",
+                         "1pm", "2pm", "3pm", "4pm", "", ""),
+    expand = expansion(mult = c(0,.1)))  
+
+
+
+# create helper for individual entries, day of week and time, event label
+last_plot() +
+  annotate(geom = "label", 
+           x = 6 - .5, 
+           y = hms::as_hms("10:00:00"),
+           label = str_wrap("very important date", 10),
+           fill = NA,
+           vjust = 1, 
+           hjust = 0,
+           label.size = NA,
+           lineheight = .8
+           ) 
+  
+
+```
+
+## Experiment
+
+```{r}
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
