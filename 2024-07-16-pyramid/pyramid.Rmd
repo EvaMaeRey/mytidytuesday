@@ -272,3 +272,77 @@ last_plot() +
   aes(color = dist > 50)
 
 ```
+
+
+## For reprex
+
+```{r}
+library(tidyverse)
+
+oregon_population_pyramid_data <-
+  read_csv("https://raw.githubusercontent.com/rfortherestofus/blog/main/population-pyramid-part-1/oregon_population_pyramid_data.csv")
+
+compute_panel_pyramid <- function(data, scales, sep = 0, neg_cat = NULL){
+  
+  if(is.null(neg_cat)){neg_cat <- sort(data$pyramid_cat)[1] }
+  
+  data %>% 
+  mutate(split = ifelse(pyramid_cat == neg_cat, -sep, sep)) %>% 
+  mutate(xmin = 0 + split) %>% 
+  mutate(xmax = x * ifelse(pyramid_cat == neg_cat, -1, 1) + split) %>% 
+  mutate(y = as.numeric(as.factor(y))) %>% 
+  mutate(ymax = y + .45*1) %>% 
+  mutate(ymin = y - .45*1)
+  
+}
+
+StatPyramid <- ggproto("StatPyramid", 
+                       Stat,
+                       compute_panel = compute_panel_pyramid,
+                       default_aes = aes(fill = after_stat(pyramid_cat)))
+
+
+compute_pyramid_label <- function(data, scales){
+  
+  data %>% 
+    distinct(y, label) %>% 
+    mutate(x = 0)
+  
+}
+
+StatPyramidlabel <- ggproto("StatPyramidlabel",
+                            Stat,
+                            compute_panel = compute_pyramid_label)
+
+
+scale_x_pyramid <- function(sep = 1, breaks = 0:10, ...){
+  
+    scale_x_continuous(breaks = c(-rev(breaks) - sep, breaks + 1),
+                     labels = paste0(c(rev(breaks), breaks), "%"),
+                     limits = c(-max(breaks),max(breaks)), ...)
+  
+}
+  
+  
+
+oregon_population_pyramid_data %>%
+  filter(county == "Baker") %>%
+  ggplot() + 
+  aes(x = percent*100, 
+      y = fct_inorder(age), 
+      pyramid_cat = gender) +
+  geom_rect(stat = StatPyramid,
+            sep = 1) + 
+  aes(label = age)  + 
+  geom_text(stat = StatPyramidlabel) + 
+  scale_x_pyramid() +
+  labs(y = NULL, x = NULL, fill = NULL) + 
+  theme(axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        legend.position = "top",
+        legend.justification = "left", 
+        panel.grid = element_blank(),
+        panel.background = element_rect(fill = "whitesmoke")
+        )
+
+```

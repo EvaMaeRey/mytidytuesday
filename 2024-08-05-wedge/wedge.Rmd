@@ -1,0 +1,96 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+compute_panel_wedge <- function(data, scales){
+  
+  data |>
+    group_by(id) |>
+    count() |>
+    ungroup() |>
+    mutate(prop = n/sum(n)) |>
+    mutate(cumprop = cumsum(prop)) %>% 
+    mutate(x = cos(prop*2*pi)) %>% 
+    mutate(y = sin(prop*2*pi)) ->
+  props_vertices; props_vertices
+  
+  data.frame(around = 0:50/50) %>%
+    crossing(props_vertices) %>%
+    filter(cumprop > around & lag(cumprop) <= around) %>%
+    mutate(x = cos(around*2*pi)) %>%
+    mutate(y = sin(around*2*pi)) ->
+  arcs; arcs
+
+  data |>
+    distinct(id) |>
+    mutate(x = 0) |>
+    mutate(y = 0) ->
+  middle; middle
+
+  bind_rows(middle,
+            full_join(props_vertices %>% mutate(around = prop), arcs) %>%
+              arrange(around)) %>%
+  bind_rows(middle) %>% 
+    group_by(id) %>% 
+    mutate(label = id) %>% 
+    ungroup()
+
+  }
+
+
+diamonds %>% 
+  select(id = cut) %>% 
+  compute_panel_wedge()
+
+StatWedge <- ggproto("StatWedge",
+                     Stat,
+                     compute_panel = compute_panel_wedge)
+
+
+diamonds |>
+  ggplot() + 
+  aes(id = cut, alpha = .3) + 
+  geom_point(stat = StatWedge) + 
+  geom_label(stat = StatWedge) + 
+  aes(color = after_stat(id)) +
+  # layer(geom = "path", stat  = StatWedge, position = "identity") +
+  coord_equal()
+
+diamonds |> 
+  ggplot() + 
+  aes(fill = cut, x = "all") + 
+  geom_bar()
+
+
+```
+
+## Experiment
+
+```{r}
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
