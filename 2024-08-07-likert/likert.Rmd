@@ -1,0 +1,144 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+
+
+## Status Quo... From https://www.youtube.com/watch?v=nTbzO-RjABo&t=4s
+
+```{r}
+library(tidyverse)
+
+
+library(tidyverse)
+original_dat <- tribble(
+  ~label, ~group, ~strongly_oppose, ~somewhat_oppose, ~somewhat_favor, ~strongly_favor, ~neither, ~no_experience,
+  'Total', 'total', 22, 18, 15, 9, 32, 4,
+  'Men', 'gender', 25, 19, 13, 8, 32, 3,
+  'Women', 'gender', 20, 17, 18, 9, 32, 3,
+  'Ages 18-29', 'age', 16, 17, 19, 12, 32, 4,
+  '30-49', 'age', 20, 16, 17, 10, 33, 3,
+  '50-64', 'age', 25, 18, 13, 8, 32, 4,
+  '65+', 'age', 27, 20, 13, 5, 31, 4,
+  'High school or less', 'education', 23, 16, 13, 9, 32, 7,
+  'Some college', 'education', 21, 18, 15, 9, 35, 2,
+  'Bachelor\'s degree', 'education', 20, 20, 20, 8, 31, 1,
+  'Postgraduate', 'education', 23, 19, 20, 8, 30, 1,
+  'Lower Income', 'income', 21, 16, 15, 9, 32, 7,
+  'Middle income', 'income', 22, 18, 16, 9, 33, 2,
+  'Upper income', 'income', 22, 21, 18, 9, 30, 0
+  
+)
+
+original_dat
+## # A tibble: 14 × 
+
+dat_longer <- original_dat |> 
+  pivot_longer(
+    cols = strongly_oppose:no_experience,
+    values_to = 'percentage',
+    names_to = 'preference'
+  )
+
+dat_diverging <- dat_longer |> 
+  filter(!(preference %in% c('neither', 'no_experience'))) 
+
+
+computed_values <- dat_diverging |> 
+  mutate(
+    middle_shift = sum(percentage[1:2]),
+    lagged_percentage = lag(percentage, default = 0),
+    left = cumsum(lagged_percentage) - middle_shift,
+    right = cumsum(percentage) - middle_shift,
+    middle_point = (left + right) / 2,
+    width = right - left,
+    .by = label
+  )
+
+computed_values
+
+
+bar_width <- 0.75
+computed_values |> 
+  ggplot() +
+  geom_tile(
+    aes(
+      x = middle_point, 
+      y = label,
+      width = width,
+      fill = preference
+    ),
+    height = bar_width
+  )
+
+```
+
+## Experiment: Stat Experiment... geom_tile(StatDivergent)
+
+
+
+
+```{r}
+compute_panel_values <- function(data, scales){
+  
+  data |> 
+  mutate(
+    middle_shift = sum(x[1:2]),
+    lagged_percentage = lag(x, default = 0),
+    left = cumsum(lagged_percentage) - middle_shift,
+    right = cumsum(x) - middle_shift,
+    x = (left + right) / 2,
+    width = right - left,
+    .by = y
+  )
+  
+}
+
+dat_diverging %>% 
+  select(x = percentage, 
+         y = label,
+         color = preference) %>% 
+  compute_panel_values()
+
+
+StatDivergent <- ggproto("StatDivergent", 
+                         Stat,
+                         compute_panel = compute_panel_values)
+
+
+dat_diverging |> 
+  ggplot() +
+  aes(x = percentage, 
+      y = label,
+      fill = preference) + 
+  geom_tile(stat = StatDivergent, height = .75)
+
+
+last_plot() + 
+  aes(fill = NULL)
+
+
+last_plot() + 
+  aes(alpha = preference)
+
+last_plot() + 
+  aes(color = preference) + 
+  aes(linewidth = I(.5))
+
+```
+
+
+

@@ -25,7 +25,7 @@ library(tidyverse)
 
 
 # create default datetimes
-ggcalendar::df_week() %>% 
+ggcalendar::df_week(date = as_date("2024-08-12")) %>% 
   crossing(data.frame(time = hours(8:16))) %>% 
   mutate(datetime = date + time) ->
 df_week_datetimes

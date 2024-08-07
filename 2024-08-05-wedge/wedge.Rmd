@@ -23,64 +23,103 @@ options(tidyverse.quiet = TRUE)
 ```{r}
 library(tidyverse)
 
-compute_panel_wedge <- function(data, scales){
+compute_panel_wedge <- function(data, scales, vertices = 5){
   
   data |>
-    group_by(id) |>
-    count() |>
-    ungroup() |>
-    mutate(prop = n/sum(n)) |>
-    mutate(cumprop = cumsum(prop)) %>% 
-    mutate(x = cos(prop*2*pi)) %>% 
-    mutate(y = sin(prop*2*pi)) ->
+    mutate(prop = area/sum(area)) |>
+    mutate(cumprop = cumsum(prop))->
   props_vertices; props_vertices
   
-  data.frame(around = 0:50/50) %>%
+  props_vertices %>% 
+    mutate(lagcumprop = lag(cumprop, default = 0)) %>% 
+    mutate(x = cos(cumprop*2*pi)) %>% 
+    mutate(y = sin(cumprop*2*pi)) ->
+  props_vertices; props_vertices
+  
+  data.frame(around = 0:vertices/vertices) %>%
     crossing(props_vertices) %>%
-    filter(cumprop > around & lag(cumprop) <= around) %>%
+    group_by(id) %>%
+    filter(lagcumprop <= around &
+           cumprop >= around) %>%
     mutate(x = cos(around*2*pi)) %>%
-    mutate(y = sin(around*2*pi)) ->
+    mutate(y = sin(around*2*pi)) %>% 
+    ungroup() ->
   arcs; arcs
 
+  props_vertices %>% 
+    mutate(around = cumprop) %>% 
+    full_join(arcs) %>% 
+    arrange(id, around) %>% 
+    distinct() ->
+  circle_points; circle_points
+  
   data |>
-    distinct(id) |>
+    distinct(id, area) |>
     mutate(x = 0) |>
-    mutate(y = 0) ->
+    mutate(y = 0) %>%
+    mutate(around = 0) %>%
+    mutate(cumprop = 0) %>%
+    mutate(prop = 0) ->
   middle; middle
 
-  bind_rows(middle,
-            full_join(props_vertices %>% mutate(around = prop), arcs) %>%
-              arrange(around)) %>%
-  bind_rows(middle) %>% 
-    group_by(id) %>% 
-    mutate(label = id) %>% 
-    ungroup()
+  data |>
+    distinct(id, area) |>
+    mutate(x = 0) |>
+    mutate(y = 0) %>%
+    mutate(around = 1) %>%
+    mutate(cumprop = 1) %>%
+    mutate(prop = 1) ->
+  middle2; middle2
+
+  full_join(middle, circle_points) %>% 
+    full_join(middle2)
 
   }
 
 
 diamonds %>% 
-  select(id = cut) %>% 
-  compute_panel_wedge()
+  count(cut) %>% 
+  select(id = cut, area = n) %>% 
+  compute_panel_wedge() %>% 
+  data.frame()
+
+
+diamonds %>% 
+  count(cut) %>% 
+  select(id = cut, area = n) %>% 
+  compute_panel_wedge() %>% 
+  ggplot() + 
+  aes(x = x, y = y, color = id) + 
+  geom_point() + 
+  geom_path() + 
+  coord_equal()
+
 
 StatWedge <- ggproto("StatWedge",
                      Stat,
-                     compute_panel = compute_panel_wedge)
+                     compute_panel = 
+                       compute_panel_wedge)
 
 
+
+```
+
+
+```{r, eval = T, error=T}
 diamonds |>
+  count(cut) |>
   ggplot() + 
-  aes(id = cut, alpha = .3) + 
+  aes(id = cut, area = n) + 
   geom_point(stat = StatWedge) + 
-  geom_label(stat = StatWedge) + 
   aes(color = after_stat(id)) +
-  # layer(geom = "path", stat  = StatWedge, position = "identity") +
+  aes(fill = after_stat(id)) +
+  geom_polygon(stat = StatWedge) +
   coord_equal()
 
-diamonds |> 
-  ggplot() + 
-  aes(fill = cut, x = "all") + 
-  geom_bar()
+# diamonds |> 
+#   ggplot() + 
+#   aes(fill = cut, x = "all") + 
+#   geom_bar()
 
 
 ```
