@@ -20,66 +20,69 @@ options(tidyverse.quiet = TRUE)
 
 ## Status Quo
 
-```{r}
+```{r, error = T}
 library(tidyverse)
 
 compute_panel_wedge <- function(data, scales, vertices = 5){
   
   data |>
     mutate(prop = area/sum(area)) |>
-    mutate(cumprop = cumsum(prop))->
-  props_vertices; props_vertices
-  
-  props_vertices %>% 
-    mutate(lagcumprop = lag(cumprop, default = 0)) %>% 
-    mutate(x = cos(cumprop*2*pi)) %>% 
-    mutate(y = sin(cumprop*2*pi)) ->
+    mutate(cumprop = cumsum(prop)) |>
+    mutate(lagcumprop = lag(cumprop, default = 0)) ->
   props_vertices; props_vertices
   
   data.frame(around = 0:vertices/vertices) %>%
     crossing(props_vertices) %>%
     group_by(id) %>%
     filter(lagcumprop <= around &
-           cumprop >= around) %>%
-    mutate(x = cos(around*2*pi)) %>%
-    mutate(y = sin(around*2*pi)) %>% 
-    ungroup() ->
+           cumprop >= around) ->
   arcs; arcs
 
-  props_vertices %>% 
-    mutate(around = cumprop) %>% 
-    full_join(arcs) %>% 
+  props_vertices %>%
+    mutate(around = cumprop) %>%
+    bind_rows(arcs) %>%
+    bind_rows(props_vertices %>%
+                 mutate(around = lagcumprop)) |>
     arrange(id, around) %>% 
-    distinct() ->
+    mutate(x = cos(2*pi*around)) %>% 
+    mutate(y = sin(2*pi*around)) ->
   circle_points; circle_points
-  
+
   data |>
     distinct(id, area) |>
     mutate(x = 0) |>
     mutate(y = 0) %>%
-    mutate(around = 0) %>%
-    mutate(cumprop = 0) %>%
-    mutate(prop = 0) ->
+    mutate(around = -1) %>% 
+    mutate(prop = -1, 
+           cumprop = -1,
+           lagcumprop = -1) ->
   middle; middle
 
   data |>
     distinct(id, area) |>
     mutate(x = 0) |>
     mutate(y = 0) %>%
-    mutate(around = 1) %>%
-    mutate(cumprop = 1) %>%
-    mutate(prop = 1) ->
+    mutate(around = 2) %>% 
+    mutate(prop = 2, 
+           cumprop = 2,
+           lagcumprop = 2) ->
   middle2; middle2
 
-  full_join(middle, circle_points) %>% 
-    full_join(middle2)
+  bind_rows(middle, 
+            circle_points) %>% 
+    bind_rows(middle2) %>% 
+    arrange(around) %>% 
+    ungroup()
 
   }
 
 
 diamonds %>% 
   count(cut) %>% 
-  select(id = cut, area = n) %>% 
+  select(id = cut, area = n) ->
+data
+
+data %>% 
   compute_panel_wedge() %>% 
   data.frame()
 
@@ -102,10 +105,7 @@ StatWedge <- ggproto("StatWedge",
 
 
 
-```
 
-
-```{r, eval = T, error=T}
 diamonds |>
   count(cut) |>
   ggplot() + 
@@ -116,17 +116,77 @@ diamonds |>
   geom_polygon(stat = StatWedge) +
   coord_equal()
 
-# diamonds |> 
-#   ggplot() + 
-#   aes(fill = cut, x = "all") + 
-#   geom_bar()
 
 
-```
 
-## Experiment
+compute_panel_wedge <- function(data, scales, vertices = 5){
+  
+  data |>
+    mutate(prop = area/sum(area)) |>
+    mutate(cumprop = cumsum(prop)) |>
+    mutate(lagcumprop = lag(cumprop, default = 0)) ->
+  props_vertices; props_vertices
+  
+  data.frame(around = 0:vertices/vertices) %>%
+    crossing(props_vertices) %>%
+    group_by(id) %>%
+    filter(lagcumprop <= around &
+           cumprop >= around) ->
+  arcs; arcs
 
-```{r}
+  props_vertices %>%
+    mutate(around = cumprop) %>%
+    bind_rows(arcs) %>%
+    bind_rows(props_vertices %>%
+                 mutate(around = lagcumprop)) |>
+    arrange(id, around) %>% 
+    mutate(x = cos(2*pi*around)) %>% 
+    mutate(y = sin(2*pi*around)) ->
+  circle_points; circle_points
+
+  data |>
+    distinct() |>
+    mutate(x = 0) |>
+    mutate(y = 0) %>%
+    mutate(around = -1) %>%
+    mutate(prop = -1,
+           cumprop = -1,
+           lagcumprop = -1) ->
+  middle; middle
+
+  data |>
+    distinct() |>
+    mutate(x = 0) |>
+    mutate(y = 0) %>%
+    mutate(around = 2) %>%
+    mutate(prop = 2,
+           cumprop = 2,
+           lagcumprop = 2) ->
+  middle2; middle2
+
+  bind_rows(middle,
+            circle_points) %>%
+    bind_rows(middle2) %>%
+    arrange(around) %>%
+    ungroup()
+
+}
+
+
+StatWedge$compute_panel <- compute_panel_wedge
+
+diamonds |>
+  count(cut) |>
+  ggplot() + 
+  aes(id = cut, area = n) + 
+  geom_point(stat = StatWedge) + 
+  aes(color = after_stat(id)) +
+  aes(fill = after_stat(id)) +
+  geom_polygon(stat = StatWedge, vertices = 10) +
+  coord_equal()
+
+
+layer_data(i = 2)
 
 ```
 
