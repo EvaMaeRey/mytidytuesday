@@ -261,12 +261,6 @@ last_plot() +
 
 ```
 
-```{r}
-knitr::knit_exit()
-
-
-```
-
 
 
 ## Closing remarks, Other Relevant Work, Caveats
@@ -278,7 +272,7 @@ knitr::knit_exit()
 
 ## Status Quo
 
-```{r}
+```{r, error = T}
 library(tidyverse)
 
 ggplot(cars) + 
@@ -320,3 +314,62 @@ last_plot_filter_data <- function(p = last_plot(), keep){
 last_plot_filter_data(keep = dist > 40)
 
 ```
+
+
+
+
+```{r, error = T}
+#The {magrittr} piping with . returns a function (of the 'functional sequence' subclass), so that kicks off the 'function as data' clause of the data documention.
+
+#You could probably do something like the following to allow that in data_replace() too:
+library(tidyverse)
+
+ggplot_add.wipedata <- function(object, plot, object_name) {
+  new <- object$new_data_specifiction
+  if (is.function(new)) {
+    new <- new(plot$data)
+  }
+  plot$data <- new
+  plot
+}
+
+data_replace <- function(data) {
+  structure(list(new_data_specification = data), 
+            class = "wipedata")
+}
+
+circle_packing_data <- data.frame(x = abs(rnorm(100)), id = 1:100) 
+
+circle_packing_data %>% 
+ggplot(data = .) +
+  aes(area = x, id = id) + 
+  ggcirclepack::geom_circlepack() 
+
+last_plot() +
+  data_replace(data = circle_packing_data %>% mutate(x = sort(x)))
+
+last_plot() +
+  data_replace(data = . %>% mutate(x = sort(x)))
+
+ggplot_add.wipedata <- function(object, plot, object_name) {
+
+  plot$data <- object$new_data_specification
+  plot
+
+  }
+
+last_plot() + 
+  data_replace(data = circle_packing_data %>% mutate(x = sort(x)))
+
+
+last_plot() + 
+  data_replace(data = circle_packing_data %>% mutate(x = rev(sort(x))))
+
+
+last_plot() %+% 
+  (. %>% mutate(x = sort(x)))
+
+
+```
+
+

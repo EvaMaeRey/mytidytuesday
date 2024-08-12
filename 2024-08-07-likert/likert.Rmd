@@ -21,28 +21,156 @@ options(tidyverse.quiet = TRUE)
 
 ```{r}
 library(tidyverse)
-
-
-library(tidyverse)
 original_dat <- tribble(
-  ~label, ~group, ~strongly_oppose, ~somewhat_oppose, ~somewhat_favor, ~strongly_favor, ~neither, ~no_experience,
-  'Total', 'total', 22, 18, 15, 9, 32, 4,
-  'Men', 'gender', 25, 19, 13, 8, 32, 3,
-  'Women', 'gender', 20, 17, 18, 9, 32, 3,
-  'Ages 18-29', 'age', 16, 17, 19, 12, 32, 4,
-  '30-49', 'age', 20, 16, 17, 10, 33, 3,
-  '50-64', 'age', 25, 18, 13, 8, 32, 4,
-  '65+', 'age', 27, 20, 13, 5, 31, 4,
+  ~cat, ~group, ~strongly_oppose, ~somewhat_oppose, ~somewhat_favor, ~strongly_favor, ~neither, ~no_experience,
+
   'High school or less', 'education', 23, 16, 13, 9, 32, 7,
   'Some college', 'education', 21, 18, 15, 9, 35, 2,
   'Bachelor\'s degree', 'education', 20, 20, 20, 8, 31, 1,
   'Postgraduate', 'education', 23, 19, 20, 8, 30, 1,
-  'Lower Income', 'income', 21, 16, 15, 9, 32, 7,
-  'Middle income', 'income', 22, 18, 16, 9, 33, 2,
-  'Upper income', 'income', 22, 21, 18, 9, 30, 0
-  
+
 )
 
+
+
+
+## # A tibble: 14 ×
+dat_longer <- original_dat |> 
+  pivot_longer(
+    cols = strongly_oppose:no_experience,
+    values_to = 'percentage',
+    names_to = 'response'
+  )
+
+dat_diverging <- dat_longer |> 
+  filter(!(response %in% c('neither', 'no_experience'))) 
+
+
+computed_values <- dat_diverging |> 
+  mutate(
+    middle_shift = sum(percentage[1:2]),
+    lagged_percentage = lag(percentage, default = 0),
+    left = cumsum(lagged_percentage) - middle_shift,
+    right = cumsum(percentage) - middle_shift,
+    middle_point = (left + right) / 2,
+    width = right - left,
+    .by = cat
+  )
+
+computed_values
+
+
+bar_width <- 0.75
+computed_values |> 
+  ggplot() +
+  geom_tile(
+    aes(
+      x = middle_point, 
+      y = cat,
+      width = width,
+      fill = response
+    ),
+    height = bar_width
+  )
+
+```
+
+## Experiment: Stat Experiment... geom_tile(StatDivergent)
+
+
+
+
+```{r}
+compute_panel_likert <- function(data, scales){
+  
+  data |> 
+  mutate(
+    middle_shift = sum(x[1:2]),
+    lagged_percentage = lag(x, default = 0),
+    left = cumsum(lagged_percentage) - middle_shift,
+    right = cumsum(x) - middle_shift,
+    x = (left + right) / 2,
+    width = right - left,
+    .by = y
+  )
+  
+}
+
+dat_diverging %>% 
+  select(x = percentage, 
+         y = cat,
+         color = response) %>% 
+  compute_panel_likert()
+
+
+StatDivergent <- ggproto("StatDivergent", 
+                         Stat,
+                         compute_panel = compute_panel_likert)
+
+
+dat_diverging |> 
+  ggplot() +
+  aes(x = percentage, 
+      y = cat,
+      fill = response) + 
+  geom_tile(stat = StatDivergent, height = .75)
+
+
+last_plot() + 
+  aes(fill = NULL)
+
+
+last_plot() + 
+  aes(alpha = response)
+
+last_plot() + 
+  aes(color = response) + 
+  aes(linewidth = I(.5))
+
+```
+
+
+# w/ ggstats::position_likert()
+
+```{r ggstats-likert}
+dat_diverging |>
+  ggplot() + 
+  aes(y = cat) + 
+  aes(weight = percentage) + 
+  aes(fill = response) +
+  geom_bar() +
+  labs(tag = 1)
+
+last_plot() + 
+  aes(fill = response %>% 
+        fct_inorder()) + 
+  labs(tag = 2)
+  
+ggwipe::last_plot_wipe() + 
+  geom_bar(position = 
+             ggstats::position_likert()) +
+  labs(tag = 3)
+
+custom_label <- function(x) {
+  p <- scales::percent(x, accuracy = 1)
+  p[x < .075] <- ""
+  p
+}
+
+last_plot() + 
+  geom_text(
+    aes(by = as.factor(cat), 
+        label = custom_label(after_stat(prop))),
+    stat = ggstats::StatProp,
+    position = ggstats::position_likert(vjust = .5)
+  ) +
+  scale_x_continuous(label = ggstats::label_percent_abs()) +
+  labs(tag = 4)
+```
+
+
+
+```{r}
 age_cats <- c("18-29", "30-49"," 50-64", "65+")
 sex_cats <- c("Male", "Female")
 edu_cats <- c('High school or less',  "Some college", "Bachelor's Degree",
@@ -67,144 +195,7 @@ survey <- data.frame(c1 = sample40replaceT(age_cats),
                      q4 = sample40replaceT(likertforce_cats))
 
 original_dat
-## # A tibble: 14 × 
 
-dat_longer <- original_dat |> 
-  pivot_longer(
-    cols = strongly_oppose:no_experience,
-    values_to = 'percentage',
-    names_to = 'preference'
-  )
-
-dat_diverging <- dat_longer |> 
-  filter(!(preference %in% c('neither', 'no_experience'))) 
-
-
-computed_values <- dat_diverging |> 
-  mutate(
-    middle_shift = sum(percentage[1:2]),
-    lagged_percentage = lag(percentage, default = 0),
-    left = cumsum(lagged_percentage) - middle_shift,
-    right = cumsum(percentage) - middle_shift,
-    middle_point = (left + right) / 2,
-    width = right - left,
-    .by = label
-  )
-
-computed_values
-
-
-bar_width <- 0.75
-computed_values |> 
-  ggplot() +
-  geom_tile(
-    aes(
-      x = middle_point, 
-      y = label,
-      width = width,
-      fill = preference
-    ),
-    height = bar_width
-  )
-
-```
-
-## Experiment: Stat Experiment... geom_tile(StatDivergent)
-
-
-
-
-```{r}
-compute_panel_values <- function(data, scales){
-  
-  data |> 
-  mutate(
-    middle_shift = sum(x[1:2]),
-    lagged_percentage = lag(x, default = 0),
-    left = cumsum(lagged_percentage) - middle_shift,
-    right = cumsum(x) - middle_shift,
-    x = (left + right) / 2,
-    width = right - left,
-    .by = y
-  )
-  
-}
-
-dat_diverging %>% 
-  select(x = percentage, 
-         y = label,
-         color = preference) %>% 
-  compute_panel_values()
-
-
-StatDivergent <- ggproto("StatDivergent", 
-                         Stat,
-                         compute_panel = compute_panel_values)
-
-
-dat_diverging |> 
-  ggplot() +
-  aes(x = percentage, 
-      y = label,
-      fill = preference) + 
-  geom_tile(stat = StatDivergent, height = .75)
-
-
-last_plot() + 
-  aes(fill = NULL)
-
-
-last_plot() + 
-  aes(alpha = preference)
-
-last_plot() + 
-  aes(color = preference) + 
-  aes(linewidth = I(.5))
-
-```
-
-
-# w/ ggstats::position_likert()
-
-```{r ggstats-likert}
-dat_diverging |>
-  ggplot() + 
-  aes(y = label) + 
-  aes(weight = percentage) + 
-  aes(fill = preference) +
-  geom_bar() +
-  labs(tag = 1)
-
-last_plot() + 
-  aes(fill = preference %>% 
-        fct_inorder()) + 
-  labs(tag = 2)
-  
-ggwipe::last_plot_wipe() + 
-  geom_bar(position = 
-             ggstats::position_likert()) +
-  labs(tag = 3)
-
-custom_label <- function(x) {
-  p <- scales::percent(x, accuracy = 1)
-  p[x < .075] <- ""
-  p
-}
-
-last_plot() + 
-  geom_text(
-    aes(by = as.factor(label), 
-        label = custom_label(after_stat(prop))),
-    stat = ggstats::StatProp,
-    position = ggstats::position_likert(vjust = .5)
-  ) +
-  scale_x_continuous(label = ggstats::label_percent_abs()) +
-  labs(tag = 4)
-```
-
-
-
-```{r}
 survey %>% 
   ggplot() + 
   aes(y = c1, fill = q1) + 
@@ -309,6 +300,45 @@ last_plot() +
 
 
 
+
+
+ggplot(data = data.frame(x = runif(100)^.5, y = 1:100) ) +
+  aes(area = x, id = y) + 
+  ggcirclepack::geom_circlepack() 
+
+last_plot() %+%
+  (data.frame(x = runif(100)^3 %>% sort(), y = 1:100))
+
+
+```
+
+
+
+```{r}
+library(tidyverse)
+age_cats <- c("18-29", "30-49"," 50-64", "65+")
+sex_cats <- c("Male", "Female")
+
+sample40replaceT <- function(x){
+  sample(x, size = 40, replace = T) %>% factor(levels = x)
+}
+
+survey <- data.frame(c1 = sample40replaceT(age_cats),
+                     c2 = sample40replaceT(sex_cats))
+
+survey %>% 
+  ggplot() + 
+  aes(y = c1, fill = c2) + 
+  geom_bar(position = ggstats::position_likert_count())
+
+
+# drop shadow layer (if MF counts were equal) attempt
+last_plot() + 
+  aes(fill = NULL)
+
+# drop shadow layer attempt 2
+last_plot() + 
+  aes(fill = "All")
 
 
 ```
