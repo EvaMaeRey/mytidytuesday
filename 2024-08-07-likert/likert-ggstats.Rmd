@@ -1,0 +1,104 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+
+
+
+
+```{r, error = T}
+library(ggstats)
+library(tidyverse)
+age_cats <- c("18-29", "30-49"," 50-64", "65+")
+sex_cats <- c("Male", "Female")
+edu_cats <- c('High school or less',  "Some college", "Bachelor's Degree",
+              "Postgraduate")
+income_cats <- c("Lower Income", "Middle Income", "Upper Income")
+likert_cats <- c("strongly oppose", "somewhat_oppose", "neither",
+                 "somewhat_favor", "strongly_favor")
+likertforce_cats <- c("strongly oppose", "somewhat_oppose", 
+                 "somewhat_favor", "strongly_favor")
+
+yes_no <- c("no", "yes")
+
+sample40replaceT <- function(x){
+  sample(x, size = 40, replace = T) %>% factor(levels = x)
+}
+
+set.seed(12345)
+survey <- data.frame(c1 = sample40replaceT(age_cats),
+                     c2 = sample40replaceT(sex_cats),
+                     c3 = sample40replaceT(edu_cats),
+                     c4 = sample40replaceT(income_cats),
+                     q1 = sample40replaceT(likert_cats),
+                     q2 = sample40replaceT(likert_cats),
+                     q3 = sample40replaceT(likert_cats),
+                     q4 = sample40replaceT(likertforce_cats),
+                     q6 = sample40replaceT(yes_no))
+
+survey |> head()
+
+
+
+
+
+geom_likert <- function(mapping = NULL, position = ggstats::position_likert(vjust = .5), 
+                        stat = ggstats::StatProp, complete = "fill", ...){
+  
+  geom_bar(mapping = mapping, position = position,
+           stat = ggstats::StatProp,
+           complete = complete, ...)
+  
+}
+
+custom_label <- function(x, small = .075) {
+  p <- scales::percent(x, accuracy = 1)
+  p[x < small] <- ""
+  p
+}
+
+geom_likert_text <- function(mapping = NULL, stat = ggstats::StatProp,
+    position = ggstats::position_likert(vjust = .5),
+    complete = "fill", small = .075, ...){ 
+
+  geom_text(mapping = aes(label = custom_label(after_stat(prop), small = small), !!!mapping),
+    stat = stat,
+    position = position,
+    complete = complete, ...
+  ) 
+  
+}
+
+survey %>% 
+  ggplot() + 
+  aes(y = c1, fill = q1) +
+  geom_likert() + 
+  geom_likert_text(small = .01) + 
+  aes(by = c1)
+
+survey %>% 
+  pivot_longer(cols = q1:q4) %>% 
+  ggplot() + 
+  aes(y = name, fill = value, by = factor(name)) +
+  geom_likert() + 
+  geom_likert_text(size = 3) 
+
+last_plot() +
+  facet_wrap(~c2)
+
+```
+
+

@@ -81,6 +81,31 @@ computed_values |>
 
 
 ```{r}
+library(tidyverse)
+original_dat <- tribble(
+  ~cat, ~group, ~strongly_oppose, ~somewhat_oppose, ~somewhat_favor, ~strongly_favor, ~neither, ~no_experience,
+
+  'High school or less', 'education', 23, 16, 13, 9, 32, 7,
+  'Some college', 'education', 21, 18, 15, 9, 35, 2,
+  'Bachelor\'s degree', 'education', 20, 20, 20, 8, 31, 1,
+  'Postgraduate', 'education', 23, 19, 20, 8, 30, 1,
+
+)
+
+
+
+
+## # A tibble: 14 ×
+dat_longer <- original_dat |> 
+  pivot_longer(
+    cols = strongly_oppose:no_experience,
+    values_to = 'percentage',
+    names_to = 'response'
+  )
+
+dat_diverging <- dat_longer |> 
+  filter(!(response %in% c('neither', 'no_experience'))) 
+
 compute_panel_likert <- function(data, scales){
   
   data |> 
@@ -170,7 +195,9 @@ last_plot() +
 
 
 
-```{r}
+```{r, error = T}
+library(ggstats)
+library(tidyverse)
 age_cats <- c("18-29", "30-49"," 50-64", "65+")
 sex_cats <- c("Male", "Female")
 edu_cats <- c('High school or less',  "Some college", "Bachelor's Degree",
@@ -194,17 +221,10 @@ survey <- data.frame(c1 = sample40replaceT(age_cats),
                      q3 = sample40replaceT(likert_cats),
                      q4 = sample40replaceT(likertforce_cats))
 
-original_dat
-
-survey %>% 
-  ggplot() + 
-  aes(y = c1, fill = q1) + 
-  geom_bar() +
-  scale_fill_brewer(palette = "PiYG")
+survey |> head()
 
 
-
-
+# using ggstats guidance on position_likert()
 library(ggstats)
 survey %>% 
   ggplot() + 
@@ -212,10 +232,6 @@ survey %>%
   geom_bar(position = ggstats::position_likert(vjust = .5),
            stat = ggstats::StatProp,
            complete = "fill")
-  
-
-last_plot() + 
-  aes(fill = q4)
 
 
 custom_label <- function(x) {
@@ -234,15 +250,6 @@ last_plot() +
   scale_x_continuous(label = label_percent_abs()) 
 
 
-layer_data(i = 2)
-
-```
-
-
-```{r}
-
-
-
 
 geom_likert <- function (mapping = NULL, data = NULL,  stat = StatProp, position = ggstats::position_likert(vjust = .5), 
     ..., just = 0.5, width = NULL, na.rm = FALSE, orientation = NA, 
@@ -253,14 +260,6 @@ geom_likert <- function (mapping = NULL, data = NULL,  stat = StatProp, position
         params = rlang::list2(just = just, width = width, na.rm = na.rm, 
             orientation = orientation, complete = "fill", ...))
 }
-
-
-StatProp <- ggstats::StatProp
-# 
-# StatProp$default_aes <- aes(by = after_stat(y), 
-#                             label = custom_label(after_stat(prop)))
-
-
 
 geom_likert_text <- function (mapping = NULL, data = NULL,  
                               stat = StatProp, 
@@ -283,32 +282,85 @@ geom_likert_text <- function (mapping = NULL, data = NULL,
 }
 
 
-survey %>% 
-  ggplot() + 
-  aes(y = c1, fill = q1) + 
-  geom_bar() 
+
 
 survey %>% 
   ggplot() + 
   aes(y = c1, fill = q1) +
-  geom_likert() 
-
-
-last_plot() + 
-  geom_likert_text(aes(by = c1)) + 
-  aes(label = custom_label(after_stat(prop)))
+  geom_likert() + 
+  aes(label = custom_label(after_stat(prop))) +
+  geom_likert_text(aes(by = c1)) 
 
 
 
+StatProptext <- ggproto("StatProptext", 
+                        ggstats::StatProp)
+
+StatProptext$default_aes <- aes(#by = after_stat(y), 
+                           label = custom_label(after_stat(prop)))
+
+geom_likert_text <- function (mapping = NULL, data = NULL,  
+                              stat = StatProptext, 
+                              position = ggstats::position_likert(vjust = .5),
+                            
+    ..., parse = FALSE, nudge_x = 0, nudge_y = 0, check_overlap = FALSE, 
+    size.unit = "mm", na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) 
+{
+    if (!missing(nudge_x) || !missing(nudge_y)) {
+        if (!missing(position)) {
+            cli::cli_abort(c("Both {.arg position} and {.arg nudge_x}/{.arg nudge_y} are supplied.", 
+                i = "Only use one approach to alter the position."))
+        }
+        position <- position_nudge(nudge_x, nudge_y)
+    }
+    layer(data = data, mapping = mapping, stat = stat, geom = GeomText, 
+        position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
+        params = rlang::list2(parse = parse, check_overlap = check_overlap, 
+            size.unit = size.unit, na.rm = na.rm, complete = "fill", ...))
+}
+
+survey %>% 
+  ggplot() + 
+  aes(y = c1, fill = q1) +
+  geom_likert() + 
+  aes(label = custom_label(after_stat(prop))) +
+  geom_likert_text(aes(by = c1)) 
 
 
-ggplot(data = data.frame(x = runif(100)^.5, y = 1:100) ) +
-  aes(area = x, id = y) + 
-  ggcirclepack::geom_circlepack() 
+geom_likert <- function(mapping = NULL, position = ggstats::position_likert(vjust = .5), 
+                        stat = ggstats::StatProp, complete = "fill", ...){
+  
+  geom_bar(mapping = mapping, position = position,
+           stat = ggstats::StatProp,
+           complete = complete, ...)
+  
+}
 
-last_plot() %+%
-  (data.frame(x = runif(100)^3 %>% sort(), y = 1:100))
+geom_likert_text <- function(mapping = NULL, stat = ggstats::StatProp,
+    position = ggstats::position_likert(vjust = .5),
+    complete = "fill", ...){ 
 
+  geom_text(mapping = aes(label = custom_label(after_stat(prop)), !!!mapping),
+    stat = stat,
+    position = position,
+    complete = complete, ...
+  ) 
+  
+}
+
+
+survey %>% 
+  ggplot() + 
+  aes(y = c1, fill = q1, by = c1) +
+  geom_likert() + 
+  geom_likert_text() 
+
+survey %>% 
+  pivot_longer(cols = q1:q3) %>% 
+  ggplot() + 
+  aes(y = name, fill = value, by = factor(name)) +
+  geom_likert() + 
+  geom_likert_text() 
 
 ```
 
