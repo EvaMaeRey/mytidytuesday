@@ -12,12 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 options(tidyverse.quiet = TRUE)
 ```
 
-
-
-
-
-
-
+# simulate some survey data
 
 ```{r, error = T}
 library(ggstats)
@@ -38,6 +33,9 @@ sample40replaceT <- function(x){
   sample(x, size = 40, replace = T) %>% factor(levels = x)
 }
 
+
+
+
 set.seed(12345)
 survey <- data.frame(c1 = sample40replaceT(age_cats),
                      c2 = sample40replaceT(sex_cats),
@@ -51,9 +49,11 @@ survey <- data.frame(c1 = sample40replaceT(age_cats),
 
 survey |> head()
 
+```
 
+# convenience layer ideas
 
-
+```{r}
 
 geom_likert <- function(mapping = NULL, position = ggstats::position_likert(vjust = .5), 
                         stat = ggstats::StatProp, complete = "fill", ...){
@@ -64,41 +64,119 @@ geom_likert <- function(mapping = NULL, position = ggstats::position_likert(vjus
   
 }
 
-custom_label <- function(x, small = .075) {
+custom_label <- function(x, min_prop = .075) {
   p <- scales::percent(x, accuracy = 1)
-  p[x < small] <- ""
+  p[x < min_prop] <- ""
   p
 }
 
 geom_likert_text <- function(mapping = NULL, stat = ggstats::StatProp,
     position = ggstats::position_likert(vjust = .5),
-    complete = "fill", small = .075, ...){ 
+    complete = "fill", min_prop = .075, ...){ 
 
-  geom_text(mapping = aes(label = custom_label(after_stat(prop), small = small), !!!mapping),
+  geom_text(mapping = aes(label = custom_label(after_stat(prop), min_prop = min_prop), !!!mapping),
     stat = stat,
     position = position,
     complete = complete, ...
   ) 
   
 }
+```
 
+# Try them out...
+
+```{r}
 survey %>% 
   ggplot() + 
   aes(y = c1, fill = q1) +
   geom_likert() + 
-  geom_likert_text(small = .01) + 
-  aes(by = c1)
+  geom_likert_text(min_prop = .01) + 
+  aes(by = c1) + 
+  labs(title = "Difference in responses, single question by single demographic") +
+  scale_fill_brewer(palette = "RdYlBu") 
+```
 
+```{r}
 survey %>% 
   pivot_longer(cols = q1:q4) %>% 
+  rename(question = name,
+         response = value) %>% 
   ggplot() + 
-  aes(y = name, fill = value, by = factor(name)) +
+  aes(y = question,   # question
+      fill = response) +  # response
   geom_likert() + 
-  geom_likert_text(size = 3) 
+  geom_likert_text(size = 3) + aes(by = factor(question)) +
+  scale_fill_brewer(palette = "RdYlBu") + 
+  labs(title = "Overview plot of likert responses") #+
+  # aes(y = fct_rev(fct_inorder(name)))  #consider reversing order
+  
 
 last_plot() +
-  facet_wrap(~c2)
+  facet_wrap(~c2) + 
+  labs(title = "Likert responses v. key characteristic")
+
+
+survey %>% 
+  pivot_longer(cols = c1:c4) %>% 
+  rename(demographic_cat = value,
+         demographic = name) %>% 
+  ggplot() + 
+  aes(y = demographic_cat, 
+      fill = q1) + # response to q1
+  geom_likert() + 
+  geom_likert_text(size = 3) + aes(by = demographic_cat) + 
+  scale_fill_brewer(palette = "RdYlBu") + 
+  labs(title = "Likert") + 
+  labs(title = "Single question Likert response\nv. several characterisitcs")
+
+last_plot() + 
+  ggforce::facet_col(demographic ~ ., 
+                     scales = "free_y",
+                     space = "free", 
+                     strip.position = "left") + 
+  labs(subtitle = "Same but more spatial grouping")
+
 
 ```
 
+# what if you have aggregated data? - use weight aes
 
+```{r, error = T}
+
+survey %>% 
+  count(c1, q1) %>% # maybe your data is already aggregated
+  ggplot() + 
+  aes(y = c1, fill = q1) + 
+  aes(weight = n) +  #<< use weight aes
+  geom_likert() + 
+  geom_likert_text(min_prop = .01)  +
+  scale_fill_brewer(palette = "RdYlBu") + 
+  aes(by = c1)
+
+last_plot() + 
+  aes(x = c1, y = NULL)
+
+```
+
+```{r}
+knitr::knit_exit()
+```
+
+```{r}
+
+color_multi_cats <- fct_inorder(c("orange", "pink", "green", "blue"))
+
+gen_selection <- function(multi_cats){
+  
+  paste(sort(sample(multi_cats, sample(1:length(multi_cats), 1))), 
+        collapse = ";")
+
+}
+
+sample_collapse40 <- function(multi_cats){ 
+  
+  # do.call(gen_selection, list(multi_cats = color_multi_cats))
+
+}
+
+```
