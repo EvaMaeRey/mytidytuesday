@@ -151,25 +151,6 @@ ggplot(example_data, aes(x = time, y = space, label = observation)) +
 ```
 
 ```{r}
-library(tidyverse)
 
-harvest_2021 <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-05-28/harvest_2021.csv')
-
-harvest_2021 %>% 
-  ggplot() + 
-  aes(id = vegetable) + 
-  ggcirclepack::geom_circlepack() + 
-  ggcirclepack::geom_circlepack_text() 
-  
-  
-
-layer_data(i = 2) ->
-circle_data
-
-circle_data %>% 
-  ggplot() + 
-  aes(x = x, y = y, label = label, radius = radius) +
-  # geom_abs_circle(radius = grid::unit(20, "mm")) +
-  geom_circumscribe(radius = grid::unit(20, "mm"), grow = TRUE) 
 
 ```
