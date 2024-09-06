@@ -981,12 +981,11 @@ infusion_events %&gt;% head(2)
 
 p2 +
   new_scale_color() +
-* geom_swim_point(
-*   data = infusion_events,
-*   aes(x = time_from_initial_infusion,
-*       color = infusion_type),
-*   size = 5
-* )
+* geom_point(data = infusion_events,
+*            aes(x = time_from_initial_infusion,
+*                y = pt_id,
+*                color = infusion_type),
+*            size = 5)
 ```
 ]
  
@@ -1014,9 +1013,54 @@ infusion_events %&gt;% head(2)
 
 p2 +
   new_scale_color() +
+  geom_point(data = infusion_events,
+             aes(x = time_from_initial_infusion,
+                 y = pt_id,
+                 color = infusion_type),
+             size = 5) +
+* geom_swim_point(
+*   data = infusion_events,
+*   aes(x = time_from_initial_infusion,
+*       y = pt_id,
+*       color = infusion_type),
+*   size = 5
+* )
+```
+]
+ 
+.panel2-the_chunk3-auto[
+
+```
+# A tibble: 2 × 3
+  pt_id time_from_initial_infusion infusion_type   
+  &lt;chr&gt;                      &lt;dbl&gt; &lt;chr&gt;           
+1 01                             0 Initial Infusion
+2 02                             0 Initial Infusion
+```
+
+![](swim_chunk_flipbook_files/figure-html/the_chunk3_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk3-auto[
+
+``` r
+infusion_events %&gt;% head(2)
+
+p2 +
+  new_scale_color() +
+  geom_point(data = infusion_events,
+             aes(x = time_from_initial_infusion,
+                 y = pt_id,
+                 color = infusion_type),
+             size = 5) +
   geom_swim_point(
     data = infusion_events,
     aes(x = time_from_initial_infusion,
+        y = pt_id,
         color = infusion_type),
     size = 5
   ) -&gt;
@@ -1061,6 +1105,9 @@ p2 +
   font-size: 80%
 }
 &lt;/style&gt;
+
+
+
 
 
 
@@ -1130,6 +1177,7 @@ p3 +
 * geom_swim_label(
 *   data = end_study_events,
 *   aes(x = time_from_initial_infusion,
+*       y = pt_id,
 *       label_vals = end_study_label,
 *       label_names = end_study_name),
 *   label.size = NA, fill = NA, size = 5
@@ -1164,6 +1212,7 @@ p3 +
   geom_swim_label(
     data = end_study_events,
     aes(x = time_from_initial_infusion,
+        y = pt_id,
         label_vals = end_study_label,
         label_names = end_study_name),
     label.size = NA, fill = NA, size = 5

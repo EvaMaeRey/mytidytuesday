@@ -103,14 +103,23 @@ infusion_events %>% head(2)
 
 p2 +
   new_scale_color() +
+  geom_point(data = infusion_events,
+             aes(x = time_from_initial_infusion,
+                 y = pt_id,
+                 color = infusion_type),
+             size = 5) +
   geom_swim_point(
     data = infusion_events,
     aes(x = time_from_initial_infusion,
+        y = pt_id,
         color = infusion_type),
     size = 5
   ) ->
 p3
 ```
+
+
+
 
 ---
 
@@ -124,6 +133,7 @@ p3 +
   geom_swim_label(
     data = end_study_events,
     aes(x = time_from_initial_infusion, 
+        y = pt_id,
         label_vals = end_study_label, 
         label_names = end_study_name),
     label.size = NA, fill = NA, size = 5
