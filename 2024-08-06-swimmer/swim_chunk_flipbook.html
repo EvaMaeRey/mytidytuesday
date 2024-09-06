@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>swim</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="" />
+    <script src="libs/header-attrs-2.26/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+
+
+
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+*library(ggswim)
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggswim)
+*library(ggplot2)
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggswim)
+library(ggplot2)
+*patient_data %&gt;% head(3)
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+# A tibble: 3 × 4
+  pt_id disease_assessment       start_time end_time
+  &lt;chr&gt; &lt;chr&gt;                         &lt;dbl&gt;    &lt;dbl&gt;
+1 01    CR/CRi + B Cell Recovery       -2.8      0  
+2 01    RD                              0        0.9
+3 01    CR/CRi + B Cell Aplasia         0.9      1.8
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggswim)
+library(ggplot2)
+patient_data %&gt;% head(3)
+
+*ggplot(data = patient_data)
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+# A tibble: 3 × 4
+  pt_id disease_assessment       start_time end_time
+  &lt;chr&gt; &lt;chr&gt;                         &lt;dbl&gt;    &lt;dbl&gt;
+1 01    CR/CRi + B Cell Recovery       -2.8      0  
+2 01    RD                              0        0.9
+3 01    CR/CRi + B Cell Aplasia         0.9      1.8
+```
+
+![](swim_chunk_flipbook_files/figure-html/the_chunk_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggswim)
+library(ggplot2)
+patient_data %&gt;% head(3)
+
+ggplot(data = patient_data) +
+* aes(x = start_time,
+*     y = pt_id)
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+# A tibble: 3 × 4
+  pt_id disease_assessment       start_time end_time
+  &lt;chr&gt; &lt;chr&gt;                         &lt;dbl&gt;    &lt;dbl&gt;
+1 01    CR/CRi + B Cell Recovery       -2.8      0  
+2 01    RD                              0        0.9
+3 01    CR/CRi + B Cell Aplasia         0.9      1.8
+```
+
+![](swim_chunk_flipbook_files/figure-html/the_chunk_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggswim)
+library(ggplot2)
+patient_data %&gt;% head(3)
+
+ggplot(data = patient_data) +
+  aes(x = start_time,
+      y = pt_id) +
+* labs(title = "My Swimmer Plot")
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+# A tibble: 3 × 4
+  pt_id disease_assessment       start_time end_time
+  &lt;chr&gt; &lt;chr&gt;                         &lt;dbl&gt;    &lt;dbl&gt;
+1 01    CR/CRi + B Cell Recovery       -2.8      0  
+2 01    RD                              0        0.9
+3 01    CR/CRi + B Cell Aplasia         0.9      1.8
+```
+
+![](swim_chunk_flipbook_files/figure-html/the_chunk_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggswim)
+library(ggplot2)
+patient_data %&gt;% head(3)
+
+ggplot(data = patient_data) +
+  aes(x = start_time,
+      y = pt_id) +
+  labs(title = "My Swimmer Plot") +
+* labs(x = "Time Since Infusion (Months)")
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+# A tibble: 3 × 4
+  pt_id disease_assessment       start_time end_time
+  &lt;chr&gt; &lt;chr&gt;                         &lt;dbl&gt;    &lt;dbl&gt;
+1 01    CR/CRi + B Cell Recovery       -2.8      0  
+2 01    RD                              0        0.9
+3 01    CR/CRi + B Cell Aplasia         0.9      1.8
+```
+
+![](swim_chunk_flipbook_files/figure-html/the_chunk_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggswim)
+library(ggplot2)
+patient_data %&gt;% head(3)
+
+ggplot(data = patient_data) +
+  aes(x = start_time,
+      y = pt_id) +
+  labs(title = "My Swimmer Plot") +
+  labs(x = "Time Since Infusion (Months)") +
+* labs(y = "Patient ID")
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+# A tibble: 3 × 4
+  pt_id disease_assessment       start_time end_time
+  &lt;chr&gt; &lt;chr&gt;                         &lt;dbl&gt;    &lt;dbl&gt;
+1 01    CR/CRi + B Cell Recovery       -2.8      0  
+2 01    RD                              0        0.9
+3 01    CR/CRi + B Cell Aplasia         0.9      1.8
+```
+
+![](swim_chunk_flipbook_files/figure-html/the_chunk_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggswim)
+library(ggplot2)
+patient_data %&gt;% head(3)
+
+ggplot(data = patient_data) +
+  aes(x = start_time,
+      y = pt_id) +
+  labs(title = "My Swimmer Plot") +
+  labs(x = "Time Since Infusion (Months)") +
+  labs(y = "Patient ID") +
+* theme_ggswim()
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+# A tibble: 3 × 4
+  pt_id disease_assessment       start_time end_time
+  &lt;chr&gt; &lt;chr&gt;                         &lt;dbl&gt;    &lt;dbl&gt;
+1 01    CR/CRi + B Cell Recovery       -2.8      0  
+2 01    RD                              0        0.9
+3 01    CR/CRi + B Cell Aplasia         0.9      1.8
+```
+
+![](swim_chunk_flipbook_files/figure-html/the_chunk_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggswim)
+library(ggplot2)
+patient_data %&gt;% head(3)
+
+ggplot(data = patient_data) +
+  aes(x = start_time,
+      y = pt_id) +
+  labs(title = "My Swimmer Plot") +
+  labs(x = "Time Since Infusion (Months)") +
+  labs(y = "Patient ID") +
+  theme_ggswim() +
+* geom_swim_lane(aes(
+*   x = start_time,
+*   y = pt_id,
+*   xend = end_time,
+*   color = disease_assessment))
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+# A tibble: 3 × 4
+  pt_id disease_assessment       start_time end_time
+  &lt;chr&gt; &lt;chr&gt;                         &lt;dbl&gt;    &lt;dbl&gt;
+1 01    CR/CRi + B Cell Recovery       -2.8      0  
+2 01    RD                              0        0.9
+3 01    CR/CRi + B Cell Aplasia         0.9      1.8
+```
+
+![](swim_chunk_flipbook_files/figure-html/the_chunk_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggswim)
+library(ggplot2)
+patient_data %&gt;% head(3)
+
+ggplot(data = patient_data) +
+  aes(x = start_time,
+      y = pt_id) +
+  labs(title = "My Swimmer Plot") +
+  labs(x = "Time Since Infusion (Months)") +
+  labs(y = "Patient ID") +
+  theme_ggswim() +
+  geom_swim_lane(aes(
+    x = start_time,
+    y = pt_id,
+    xend = end_time,
+    color = disease_assessment)) +
+* scale_color_brewer(
+*   name = "Overall Disease Assessment",
+*   palette = "Set1"
+* )
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+# A tibble: 3 × 4
+  pt_id disease_assessment       start_time end_time
+  &lt;chr&gt; &lt;chr&gt;                         &lt;dbl&gt;    &lt;dbl&gt;
+1 01    CR/CRi + B Cell Recovery       -2.8      0  
+2 01    RD                              0        0.9
+3 01    CR/CRi + B Cell Aplasia         0.9      1.8
+```
+
+![](swim_chunk_flipbook_files/figure-html/the_chunk_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggswim)
+library(ggplot2)
+patient_data %&gt;% head(3)
+
+ggplot(data = patient_data) +
+  aes(x = start_time,
+      y = pt_id) +
+  labs(title = "My Swimmer Plot") +
+  labs(x = "Time Since Infusion (Months)") +
+  labs(y = "Patient ID") +
+  theme_ggswim() +
+  geom_swim_lane(aes(
+    x = start_time,
+    y = pt_id,
+    xend = end_time,
+    color = disease_assessment)) +
+  scale_color_brewer(
+    name = "Overall Disease Assessment",
+    palette = "Set1"
+  ) -&gt;
+*p1
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+# A tibble: 3 × 4
+  pt_id disease_assessment       start_time end_time
+  &lt;chr&gt; &lt;chr&gt;                         &lt;dbl&gt;    &lt;dbl&gt;
+1 01    CR/CRi + B Cell Recovery       -2.8      0  
+2 01    RD                              0        0.9
+3 01    CR/CRi + B Cell Aplasia         0.9      1.8
+```
+]
+
+&lt;style&gt;
+.panel1-the_chunk-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-the_chunk-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-the_chunk-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+*patient_data
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+# A tibble: 53 × 4
+   pt_id disease_assessment       start_time end_time
+   &lt;chr&gt; &lt;chr&gt;                         &lt;dbl&gt;    &lt;dbl&gt;
+ 1 01    CR/CRi + B Cell Recovery       -2.8      0  
+ 2 01    RD                              0        0.9
+ 3 01    CR/CRi + B Cell Aplasia         0.9      1.8
+ 4 01    CR/CRi + B Cell Recovery        1.8      2  
+ 5 02    RD                             -2.8      0  
+ 6 02    CRi                             0        0.2
+ 7 03    CR/CRi + B Cell Recovery       -2.4      0  
+ 8 03    CR/CRi + B Cell Recovery        0        0.9
+ 9 03    CR/CRi + B Cell Aplasia         0.9      2.8
+10 03    CR/CRi + B Cell Aplasia         2.8      6.2
+# ℹ 43 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+patient_data |&gt;
+* dplyr::left_join(
+*   end_study_events |&gt;
+*     dplyr::select(pt_id, end_study_name),
+*   by = "pt_id"
+* )
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+# A tibble: 53 × 5
+   pt_id disease_assessment       start_time end_time end_study_name           
+   &lt;chr&gt; &lt;chr&gt;                         &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;                    
+ 1 01    CR/CRi + B Cell Recovery       -2.8      0   Other End Study Reason   
+ 2 01    RD                              0        0.9 Other End Study Reason   
+ 3 01    CR/CRi + B Cell Aplasia         0.9      1.8 Other End Study Reason   
+ 4 01    CR/CRi + B Cell Recovery        1.8      2   Other End Study Reason   
+ 5 02    RD                             -2.8      0   Deceased                 
+ 6 02    CRi                             0        0.2 Deceased                 
+ 7 03    CR/CRi + B Cell Recovery       -2.4      0   Completed Study Follow-Up
+ 8 03    CR/CRi + B Cell Recovery        0        0.9 Completed Study Follow-Up
+ 9 03    CR/CRi + B Cell Aplasia         0.9      2.8 Completed Study Follow-Up
+10 03    CR/CRi + B Cell Aplasia         2.8      6.2 Completed Study Follow-Up
+# ℹ 43 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+patient_data |&gt;
+  dplyr::left_join(
+    end_study_events |&gt;
+      dplyr::select(pt_id, end_study_name),
+    by = "pt_id"
+  ) |&gt;
+* dplyr::select(pt_id, end_time, end_study_name)
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+# A tibble: 53 × 3
+   pt_id end_time end_study_name           
+   &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                    
+ 1 01         0   Other End Study Reason   
+ 2 01         0.9 Other End Study Reason   
+ 3 01         1.8 Other End Study Reason   
+ 4 01         2   Other End Study Reason   
+ 5 02         0   Deceased                 
+ 6 02         0.2 Deceased                 
+ 7 03         0   Completed Study Follow-Up
+ 8 03         0.9 Completed Study Follow-Up
+ 9 03         2.8 Completed Study Follow-Up
+10 03         6.2 Completed Study Follow-Up
+# ℹ 43 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+patient_data |&gt;
+  dplyr::left_join(
+    end_study_events |&gt;
+      dplyr::select(pt_id, end_study_name),
+    by = "pt_id"
+  ) |&gt;
+  dplyr::select(pt_id, end_time, end_study_name) |&gt;
+* dplyr::filter(.by = pt_id,
+*               end_time == max(end_time))
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+# A tibble: 14 × 3
+   pt_id end_time end_study_name           
+   &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                    
+ 1 01         2   Other End Study Reason   
+ 2 02         0.2 Deceased                 
+ 3 03        11.9 Completed Study Follow-Up
+ 4 03        11.9 Completed Study Follow-Up
+ 5 04         9   &lt;NA&gt;                     
+ 6 05         8.9 &lt;NA&gt;                     
+ 7 06         4.8 Other End Study Reason   
+ 8 08        11.7 Other End Study Reason   
+ 9 09         8.3 &lt;NA&gt;                     
+10 12         9.7 Other End Study Reason   
+11 13        -0.2 &lt;NA&gt;                     
+12 17         0.9 &lt;NA&gt;                     
+13 18         0.9 &lt;NA&gt;                     
+14 19         3   &lt;NA&gt;                     
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+patient_data |&gt;
+  dplyr::left_join(
+    end_study_events |&gt;
+      dplyr::select(pt_id, end_study_name),
+    by = "pt_id"
+  ) |&gt;
+  dplyr::select(pt_id, end_time, end_study_name) |&gt;
+  dplyr::filter(.by = pt_id,
+                end_time == max(end_time)) |&gt;
+* unique()
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+# A tibble: 13 × 3
+   pt_id end_time end_study_name           
+   &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                    
+ 1 01         2   Other End Study Reason   
+ 2 02         0.2 Deceased                 
+ 3 03        11.9 Completed Study Follow-Up
+ 4 04         9   &lt;NA&gt;                     
+ 5 05         8.9 &lt;NA&gt;                     
+ 6 06         4.8 Other End Study Reason   
+ 7 08        11.7 Other End Study Reason   
+ 8 09         8.3 &lt;NA&gt;                     
+ 9 12         9.7 Other End Study Reason   
+10 13        -0.2 &lt;NA&gt;                     
+11 17         0.9 &lt;NA&gt;                     
+12 18         0.9 &lt;NA&gt;                     
+13 19         3   &lt;NA&gt;                     
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+patient_data |&gt;
+  dplyr::left_join(
+    end_study_events |&gt;
+      dplyr::select(pt_id, end_study_name),
+    by = "pt_id"
+  ) |&gt;
+  dplyr::select(pt_id, end_time, end_study_name) |&gt;
+  dplyr::filter(.by = pt_id,
+                end_time == max(end_time)) |&gt;
+  unique() -&gt;
+*arrow_data
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+patient_data |&gt;
+  dplyr::left_join(
+    end_study_events |&gt;
+      dplyr::select(pt_id, end_study_name),
+    by = "pt_id"
+  ) |&gt;
+  dplyr::select(pt_id, end_time, end_study_name) |&gt;
+  dplyr::filter(.by = pt_id,
+                end_time == max(end_time)) |&gt;
+  unique() -&gt;
+arrow_data
+
+
+*arrow_data %&gt;% head(3)
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+# A tibble: 3 × 3
+  pt_id end_time end_study_name           
+  &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                    
+1 01         2   Other End Study Reason   
+2 02         0.2 Deceased                 
+3 03        11.9 Completed Study Follow-Up
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+patient_data |&gt;
+  dplyr::left_join(
+    end_study_events |&gt;
+      dplyr::select(pt_id, end_study_name),
+    by = "pt_id"
+  ) |&gt;
+  dplyr::select(pt_id, end_time, end_study_name) |&gt;
+  dplyr::filter(.by = pt_id,
+                end_time == max(end_time)) |&gt;
+  unique() -&gt;
+arrow_data
+
+
+arrow_data %&gt;% head(3)
+
+*p1
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+# A tibble: 3 × 3
+  pt_id end_time end_study_name           
+  &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                    
+1 01         2   Other End Study Reason   
+2 02         0.2 Deceased                 
+3 03        11.9 Completed Study Follow-Up
+```
+
+![](swim_chunk_flipbook_files/figure-html/the_chunk2_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+patient_data |&gt;
+  dplyr::left_join(
+    end_study_events |&gt;
+      dplyr::select(pt_id, end_study_name),
+    by = "pt_id"
+  ) |&gt;
+  dplyr::select(pt_id, end_time, end_study_name) |&gt;
+  dplyr::filter(.by = pt_id,
+                end_time == max(end_time)) |&gt;
+  unique() -&gt;
+arrow_data
+
+
+arrow_data %&gt;% head(3)
+
+p1 +
+* geom_point(data = arrow_data,
+*            aes(x = end_time,
+*                y = pt_id))
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+# A tibble: 3 × 3
+  pt_id end_time end_study_name           
+  &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                    
+1 01         2   Other End Study Reason   
+2 02         0.2 Deceased                 
+3 03        11.9 Completed Study Follow-Up
+```
+
+![](swim_chunk_flipbook_files/figure-html/the_chunk2_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+patient_data |&gt;
+  dplyr::left_join(
+    end_study_events |&gt;
+      dplyr::select(pt_id, end_study_name),
+    by = "pt_id"
+  ) |&gt;
+  dplyr::select(pt_id, end_time, end_study_name) |&gt;
+  dplyr::filter(.by = pt_id,
+                end_time == max(end_time)) |&gt;
+  unique() -&gt;
+arrow_data
+
+
+arrow_data %&gt;% head(3)
+
+p1 +
+  geom_point(data = arrow_data,
+             aes(x = end_time,
+                 y = pt_id)) +
+* geom_swim_arrow(
+*    data = arrow_data,
+*    mapping = aes(x = NULL,
+*                  y = pt_id,
+*                  xend = end_time),
+*    size = .3)
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+# A tibble: 3 × 3
+  pt_id end_time end_study_name           
+  &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                    
+1 01         2   Other End Study Reason   
+2 02         0.2 Deceased                 
+3 03        11.9 Completed Study Follow-Up
+```
+
+![](swim_chunk_flipbook_files/figure-html/the_chunk2_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+patient_data |&gt;
+  dplyr::left_join(
+    end_study_events |&gt;
+      dplyr::select(pt_id, end_study_name),
+    by = "pt_id"
+  ) |&gt;
+  dplyr::select(pt_id, end_time, end_study_name) |&gt;
+  dplyr::filter(.by = pt_id,
+                end_time == max(end_time)) |&gt;
+  unique() -&gt;
+arrow_data
+
+
+arrow_data %&gt;% head(3)
+
+p1 +
+  geom_point(data = arrow_data,
+             aes(x = end_time,
+                 y = pt_id)) +
+  geom_swim_arrow(
+     data = arrow_data,
+     mapping = aes(x = NULL,
+                   y = pt_id,
+                   xend = end_time),
+     size = .3) -&gt;
+*p2
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+# A tibble: 3 × 3
+  pt_id end_time end_study_name           
+  &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                    
+1 01         2   Other End Study Reason   
+2 02         0.2 Deceased                 
+3 03        11.9 Completed Study Follow-Up
+```
+]
+
+&lt;style&gt;
+.panel1-the_chunk2-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-the_chunk2-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-the_chunk2-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-the_chunk3-auto[
+
+``` r
+*infusion_events %&gt;% head(2)
+```
+]
+ 
+.panel2-the_chunk3-auto[
+
+```
+# A tibble: 2 × 3
+  pt_id time_from_initial_infusion infusion_type   
+  &lt;chr&gt;                      &lt;dbl&gt; &lt;chr&gt;           
+1 01                             0 Initial Infusion
+2 02                             0 Initial Infusion
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk3-auto[
+
+``` r
+infusion_events %&gt;% head(2)
+
+*p2
+```
+]
+ 
+.panel2-the_chunk3-auto[
+
+```
+# A tibble: 2 × 3
+  pt_id time_from_initial_infusion infusion_type   
+  &lt;chr&gt;                      &lt;dbl&gt; &lt;chr&gt;           
+1 01                             0 Initial Infusion
+2 02                             0 Initial Infusion
+```
+
+![](swim_chunk_flipbook_files/figure-html/the_chunk3_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk3-auto[
+
+``` r
+infusion_events %&gt;% head(2)
+
+p2 +
+* new_scale_color()
+```
+]
+ 
+.panel2-the_chunk3-auto[
+
+```
+# A tibble: 2 × 3
+  pt_id time_from_initial_infusion infusion_type   
+  &lt;chr&gt;                      &lt;dbl&gt; &lt;chr&gt;           
+1 01                             0 Initial Infusion
+2 02                             0 Initial Infusion
+```
+
+![](swim_chunk_flipbook_files/figure-html/the_chunk3_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk3-auto[
+
+``` r
+infusion_events %&gt;% head(2)
+
+p2 +
+  new_scale_color() +
+* geom_swim_point(
+*   data = infusion_events,
+*   aes(x = time_from_initial_infusion,
+*       color = infusion_type),
+*   size = 5
+* )
+```
+]
+ 
+.panel2-the_chunk3-auto[
+
+```
+# A tibble: 2 × 3
+  pt_id time_from_initial_infusion infusion_type   
+  &lt;chr&gt;                      &lt;dbl&gt; &lt;chr&gt;           
+1 01                             0 Initial Infusion
+2 02                             0 Initial Infusion
+```
+
+![](swim_chunk_flipbook_files/figure-html/the_chunk3_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk3-auto[
+
+``` r
+infusion_events %&gt;% head(2)
+
+p2 +
+  new_scale_color() +
+  geom_swim_point(
+    data = infusion_events,
+    aes(x = time_from_initial_infusion,
+        color = infusion_type),
+    size = 5
+  ) -&gt;
+*p3
+```
+]
+ 
+.panel2-the_chunk3-auto[
+
+```
+# A tibble: 2 × 3
+  pt_id time_from_initial_infusion infusion_type   
+  &lt;chr&gt;                      &lt;dbl&gt; &lt;chr&gt;           
+1 01                             0 Initial Infusion
+2 02                             0 Initial Infusion
+```
+]
+
+&lt;style&gt;
+.panel1-the_chunk3-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-the_chunk3-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-the_chunk3-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-the_chunk4-auto[
+
+``` r
+*end_study_events %&gt;% head(2)
+```
+]
+ 
+.panel2-the_chunk4-auto[
+
+```
+# A tibble: 2 × 4
+  pt_id time_from_initial_infusion end_study_label end_study_name        
+  &lt;chr&gt;                      &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;                 
+1 01                           2   ⚠️               Other End Study Reason
+2 02                           0.2 ❌              Deceased              
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk4-auto[
+
+``` r
+end_study_events %&gt;% head(2)
+
+
+*p3
+```
+]
+ 
+.panel2-the_chunk4-auto[
+
+```
+# A tibble: 2 × 4
+  pt_id time_from_initial_infusion end_study_label end_study_name        
+  &lt;chr&gt;                      &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;                 
+1 01                           2   ⚠️               Other End Study Reason
+2 02                           0.2 ❌              Deceased              
+```
+
+![](swim_chunk_flipbook_files/figure-html/the_chunk4_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk4-auto[
+
+``` r
+end_study_events %&gt;% head(2)
+
+
+p3 +
+* geom_swim_label(
+*   data = end_study_events,
+*   aes(x = time_from_initial_infusion,
+*       label_vals = end_study_label,
+*       label_names = end_study_name),
+*   label.size = NA, fill = NA, size = 5
+* )
+```
+]
+ 
+.panel2-the_chunk4-auto[
+
+```
+# A tibble: 2 × 4
+  pt_id time_from_initial_infusion end_study_label end_study_name        
+  &lt;chr&gt;                      &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;                 
+1 01                           2   ⚠️               Other End Study Reason
+2 02                           0.2 ❌              Deceased              
+```
+
+![](swim_chunk_flipbook_files/figure-html/the_chunk4_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk4-auto[
+
+``` r
+end_study_events %&gt;% head(2)
+
+
+p3 +
+  geom_swim_label(
+    data = end_study_events,
+    aes(x = time_from_initial_infusion,
+        label_vals = end_study_label,
+        label_names = end_study_name),
+    label.size = NA, fill = NA, size = 5
+  ) +
+* scale_color_brewer(name = "Markers", palette = "Set2")
+```
+]
+ 
+.panel2-the_chunk4-auto[
+
+```
+# A tibble: 2 × 4
+  pt_id time_from_initial_infusion end_study_label end_study_name        
+  &lt;chr&gt;                      &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;                 
+1 01                           2   ⚠️               Other End Study Reason
+2 02                           0.2 ❌              Deceased              
+```
+
+![](swim_chunk_flipbook_files/figure-html/the_chunk4_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-the_chunk4-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-the_chunk4-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-the_chunk4-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 80%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+&lt;/style&gt;
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

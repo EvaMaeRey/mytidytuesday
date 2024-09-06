@@ -26,7 +26,7 @@ library(tidyverse)
 
 # create default datetimes
 ggcalendar::df_week(date = as_date("2024-08-12")) %>% 
-  crossing(data.frame(time = hours(8:16))) %>% 
+  crossing(data.frame(time = hours(8:17))) %>% 
   mutate(datetime = date + time) ->
 df_week_datetimes
 
@@ -75,6 +75,8 @@ last_plot() +
                                     ),
                label = c("8am", "9am","10am","11am","12pm",
                          "1pm", "2pm", "3pm", "4pm", "", ""),
+  
+  ,
     expand = expansion(mult = c(0,.1)))  
 
 
@@ -95,9 +97,102 @@ last_plot() +
 
 ```
 
-## Experiment
+## Pull out peices
+
 
 ```{r}
+
+compute_group_weekly <- function(data, ...){
+  
+  data |>
+  mutate(day = wday(datetime)) |>
+  mutate(day_name = paste0(wday(datetime, label = T, abbr = T), "\n",
+        month(datetime, label = T, abbr = T)," " , day(datetime)) %>% 
+        fct_inorder()) |>
+  mutate(hour = hms::as_hms(datetime)) %>% 
+  mutate(hour_mid = hms::as_hms(datetime + minutes(30)))
+  
+}
+
+df_week_datetimes |>
+  compute_group_weekly()
+
+StatWeekly <- ggproto("StatWeekly", Stat,
+                      compute_group = compute_group_weekly,
+                      required_aes = "datetime",
+                      default_aes = aes(y = after_stat(hour), 
+                                        x = after_stat(day)))
+
+df_week_datetimes %>% 
+  ggplot() + 
+  # Stat x and y from datetimes
+  aes(datetime = datetime) + 
+  geom_point(stat = StatWeekly, alpha = .2)
+
+
+```
+
+
+
+```{r}
+theme_weekly <- function(){
+  
+  list(
+    theme_void(),
+    theme(axis.text.x = element_text(),
+      axis.text.y = element_text(hjust = 1, vjust = 1),
+          panel.grid.major.x = element_blank(),
+          panel.grid.minor.x = element_line(color = "grey"),
+          panel.grid.major.y = element_line(color = "grey"),
+          panel.grid.minor.y = element_blank())
+    )# use replace complete
+  
+}
+
+last_plot() + 
+  theme_weekly()
+
+scale_y_weekly <- function(){
+  
+    scale_y_time(breaks = hms::as_hms(c("08:00:00",
+                                        "9:00:00", 
+                                    "10:00:00",
+                                    "11:00:00",
+                                    "12:00:00",
+                                    "13:00:00", 
+                                    "14:00:00",
+                                    "15:00:00",
+                                    "16:00:00",
+                                    "17:00:00",
+                                    "18:00:00")
+                                    ),
+               label = c("8am", "9am","10am","11am","12pm",
+                         "1pm", "2pm", "3pm", "4pm", "", ""),
+    expand = expansion(mult = c(0,0)))  
+  
+}
+
+scale_x_weekly <- function(){
+  
+  scale_x_continuous(expand = expansion(mult = c(0,0)),
+                     limits = c(.5, 7.5),
+                     breaks = 1:7)
+  
+}
+
+last_plot() + 
+  scale_y_weekly() + 
+  scale_x_weekly()
+
+
+coord_page <- function(){
+  
+    coord_trans(y = "reverse")
+
+}
+
+last_plot() + 
+  coord_page()
 
 ```
 

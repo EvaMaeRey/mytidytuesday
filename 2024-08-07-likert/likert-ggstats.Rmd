@@ -92,8 +92,15 @@ survey %>%
   geom_likert() + 
   geom_likert_text(min_prop = .01) + 
   aes(by = c1) + 
-  labs(title = "Difference in responses, single question by single demographic") +
+  labs(title = "Difference in responses, single question by single demographic")
+  
+last_plot() + 
+  aes(fill = factor(q1, ordered = T))
+  
+last_plot() + 
   scale_fill_brewer(palette = "RdYlBu") 
+
+ggstats:::
 ```
 
 ```{r}
@@ -105,7 +112,8 @@ survey %>%
   aes(y = question,   # question
       fill = response) +  # response
   geom_likert() + 
-  geom_likert_text(size = 3) + aes(by = factor(question)) +
+  geom_likert_text(size = 3) + 
+  aes(by = factor(question)) +
   scale_fill_brewer(palette = "RdYlBu") + 
   labs(title = "Overview plot of likert responses") #+
   # aes(y = fct_rev(fct_inorder(name)))  #consider reversing order

@@ -1,0 +1,104 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r error = T}
+library(tidyverse)
+compute_panel_pairs <- function(data, scales){
+  
+  data %>% 
+    mutate(group_label = group) %>% 
+    group_by(group) %>% 
+    arrange(x) %>% 
+    mutate(change = y - lag(y)  ) %>% 
+    fill(change, .direction = "up")  
+  
+}
+
+StatPairs <- ggproto("StatPairs", Stat,
+                     compute_panel = compute_panel_pairs,
+                     default_aes = aes(color = after_stat(change)))
+
+gapminder::gapminder %>% 
+  filter(year %in% c(1992, 2002)) %>% 
+  ggplot() + 
+  aes(x = year, 
+      y = gdpPercap, 
+      group = country) + 
+  geom_point(stat = StatPairs) +
+  geom_path(stat = StatPairs)
+
+
+last_plot()  +
+  geom_text(
+            stat = StatPairs,
+            aes(label = country), 
+            hjust = "outward", 
+            check_overlap = T
+            )
+
+last_plot() + 
+  aes(x = as.factor(year))
+
+last_plot() + 
+  stat_summary(geom = "point", 
+               fun = "mean",
+               aes(group = NULL, 
+                   color = I("goldenrod")  # why do I have to do this? When I have color *set* above?
+                   ), 
+               size = 4)
+
+
+last_plot() + 
+  aes(color = sign(after_stat(change))) 
+
+ggwipe::last_plot_wipe_last() + 
+  stat_summary(geom = "point", 
+               color = "goldenrod", 
+               fun = "mean",
+               aes(group = NULL, 
+                   color = I("goldenrod") 
+                   ), 
+               size = 4)
+
+
+last_plot() + 
+  aes(y = lifeExp)
+
+last_plot() + 
+  aes(color = I("grey"))
+
+
+
+StatSummary$compute_layer
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

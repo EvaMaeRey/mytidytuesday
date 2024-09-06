@@ -1,0 +1,157 @@
+---
+title: "swim"
+subtitle: ""
+author: ""
+output:
+  xaringan::moon_reader:
+    seal: FALSE
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r, include = F}
+options(knitr.duplicate.label = "allow")
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F)
+library(flipbookr)
+library(tidyverse)
+load("current_image.Rdata")
+```
+
+
+```{r, echo = F, eval = FALSE , message = F, warning = F}
+xaringanExtra::use_share_again()
+```
+
+
+`r chunk_reveal(chunk_name = "the_chunk", break_type = "auto")`
+
+
+
+```{r the_chunk, include = F}
+library(ggswim)
+library(ggplot2)
+patient_data %>% head(3)
+
+ggplot(data = patient_data) +
+  aes(x = start_time, 
+      y = pt_id) + 
+  labs(title = "My Swimmer Plot") +
+  labs(x = "Time Since Infusion (Months)") + 
+  labs(y = "Patient ID") +
+  theme_ggswim() +
+  geom_swim_lane(aes(
+    x = start_time,
+    y = pt_id,
+    xend = end_time,
+    color = disease_assessment)) +
+  scale_color_brewer(
+    name = "Overall Disease Assessment",
+    palette = "Set1"
+  ) ->
+p1
+```
+
+
+---
+
+`r chunk_reveal(chunk_name = "the_chunk2", break_type = "auto")`
+
+
+```{r the_chunk2, include = F}
+patient_data |>
+  dplyr::left_join(
+    end_study_events |>
+      dplyr::select(pt_id, end_study_name),
+    by = "pt_id"
+  ) |>
+  dplyr::select(pt_id, end_time, end_study_name) |>
+  dplyr::filter(.by = pt_id, 
+                end_time == max(end_time)) |>
+  unique() ->
+arrow_data
+
+
+arrow_data %>% head(3)
+
+p1 +
+  geom_point(data = arrow_data,
+             aes(x = end_time, 
+                 y = pt_id)) +
+  geom_swim_arrow(
+     data = arrow_data,
+     mapping = aes(x = NULL, 
+                   y = pt_id,
+                   xend = end_time),
+     size = .3) ->
+p2
+```
+
+
+---
+
+`r chunk_reveal(chunk_name = "the_chunk3", break_type = "auto")`
+
+```{r the_chunk3, include = F}
+infusion_events %>% head(2)
+
+p2 +
+  new_scale_color() +
+  geom_swim_point(
+    data = infusion_events,
+    aes(x = time_from_initial_infusion,
+        color = infusion_type),
+    size = 5
+  ) ->
+p3
+```
+
+---
+
+`r chunk_reveal(chunk_name = "the_chunk4", break_type = "auto")`
+
+```{r the_chunk4, include = F}
+end_study_events %>% head(2)
+
+
+p3 +
+  geom_swim_label(
+    data = end_study_events,
+    aes(x = time_from_initial_infusion, 
+        label_vals = end_study_label, 
+        label_names = end_study_name),
+    label.size = NA, fill = NA, size = 5
+  ) +
+  scale_color_brewer(name = "Markers", palette = "Set2")
+```
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 80%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+

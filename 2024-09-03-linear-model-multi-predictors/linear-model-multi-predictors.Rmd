@@ -1,0 +1,350 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+```{r}
+
+library(tidyverse)
+
+vars_pack <- function(...) {
+  
+  varnames <- as.character(ensyms(...))
+  vars <- list(...)
+  listvec <- asplit(do.call(cbind, vars), 1)
+  structure(listvec, varnames = varnames)
+
+  }
+
+vars_unpack <- function(x) {
+  pca_vars <- x
+  df <- do.call(rbind, pca_vars)
+  colnames(df) <- attr(pca_vars, "varnames")
+  as.data.frame(df)
+  
+}
+
+
+palmerpenguins::penguins %>% 
+  mutate(outcome = species, 
+         predictors = vars_pack(bill_length_mm, species, sex)) %>% 
+    select(outcome, predictors) ->
+data
+
+data
+
+head(data$predictors)
+
+
+data %>%
+    mutate(vars_unpack(predictors)) %>% 
+  select(-predictors) ->
+data
+
+data
+```
+
+
+
+```{r}
+compute_lm_multi <- function(data, drop_x = T, ...){
+  
+  
+    data %>% 
+    remove_missing() ->
+    data
+  
+  no_x <- is.null(data$x)
+  
+  if(is.null(data$x)){data$x <- runif(nrow(data))}
+  
+  if(!is.null(data$predictors)){
+
+  data %>% 
+    select(x, y, predictors) %>% 
+    mutate(vars_unpack(predictors)) %>% 
+    select(-predictors) ->
+  lmdata
+    
+  } else{
+    
+    data %>% 
+      select(x,y) ->
+    lmdata
+    
+  }
+  
+  if(drop_x|no_x){
+    
+  lmdata %>%
+      dplyr::select(-x) ->
+  lmdata
+    
+  } 
+  
+  lm <- lm(data = lmdata, y ~ .)
+  
+  data$yend = data$y
+  data$y = lm$fitted.values
+  data$xend = data$x
+
+  data$residuals <- lm$residuals
+  
+  data
+}
+
+
+
+palmerpenguins::penguins %>% 
+  remove_missing() %>% 
+  mutate(y = flipper_length_mm, 
+         x = bill_depth_mm, 
+         predictors = vars_pack(sex, species)) %>% 
+  select(x, y, predictors) %>% 
+  select(-x, -predictors) %>% 
+  compute_lm_multi(drop_x = T)
+
+
+StatLmMulti <- ggproto("StatLmMulti",
+                       Stat,
+                       compute_panel = compute_lm_multi)
+
+ 
+palmerpenguins::penguins %>% 
+  remove_missing() %>% 
+  mutate(x = sample(row_number())) %>% 
+  ggplot() + 
+  aes(y = flipper_length_mm, x = x) + 
+  geom_point() + 
+  geom_point(stat = StatLmMulti, alpha = .25, color = "blue") + 
+  geom_segment(stat = StatLmMulti, alpha = .25, color = "blue")
+
+
+layer_data() %>% head()
+
+last_plot() + 
+  aes(predictors = vars_pack(species)) + 
+  aes(color = species)
+
+
+last_plot() +
+  aes(predictors = vars_pack(species, sex)) + 
+  aes(shape = sex)
+
+
+last_plot() +
+  aes(predictors = vars_pack(species, sex, body_mass_g))
+
+last_plot() + 
+  aes(predictors = vars_pack(species, sex, body_mass_g, bill_depth_mm))
+
+
+```
+
+
+```{r}
+knitr::knit_exit()
+
+
+```
+
+
+```{r}
+library(tidyverse)
+
+compute_panel_pca_col <- function(data, scales){
+  
+  data %>%  remove_missing() ->
+    data
+  
+  varnames <- attr(data$predictors, "varnames")
+  
+  data %>% 
+    select(outcome, predictors) %>%
+    mutate(tidy_vars_pca(predictors)) %>% 
+    ordr::ordinate(cols = all_of(varnames), model = ~ prcomp(., scale. = TRUE)) %>% 
+    .$rotation %>% 
+    as.data.frame() %>% 
+    rownames_to_column()
+  
+}
+
+%>% 
+  compute_panel_pca_col() 
+
+StatPcacols <- ggproto(`_class` = "StatPcacols", Stat,
+                       compute_panel = compute_panel_pca_col, 
+                       default_aes = aes(x = after_stat(PC1), 
+                                         y = after_stat(PC2), 
+                                         xend = after_stat(0),
+                                         yend = after_stat(0), 
+                                         label = paste("Variable",
+                                                       after_stat(rowname))))
+palmerpenguins::penguins %>% 
+  ggplot() + 
+  aes(outcome = species, 
+      predictors = vars_pca(bill_length_mm, bill_depth_mm, flipper_length_mm)) +
+  geom_text(stat = StatPcacols, hjust = "outward") + 
+  geom_segment(stat = StatPcacols, 
+               arrow = arrow(ends = "first"))
+
+```
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+```
+
+## Experiment
+
+```{r, eval = T, error = T}
+lm <- lm(data = mtcars, mpg ~ .) # subset to y and prediction vars
+
+mtcars %>% 
+  select(wt, c(mpg, drat))
+
+compute_panel_pca_col <- function(data, ...){
+  
+  data %>% ggplot2::remove_missing() ->
+    data
+  
+  # if(is.null(data$predictors)){
+  # 
+  # data %>% 
+  #   select(y, x, predictors) ->
+  # data
+  #   
+  # }
+  
+  lm <- lm(data = data, y ~ .)
+  
+  data$y = lm$fitted.values
+  
+  data
+  
+}
+
+# mtcars %>% 
+#   select(y = mpg, x = wt, 
+#          predictors = c(drat, qsec)) %>% 
+#   compute_panel_pca_col()
+
+  
+  
+StatLmMulti <- ggproto("StatLmMulti", 
+                       Stat,
+                       compute_panel = compute_panel_pca_col)
+
+ggplot(mtcars) + 
+  aes(y = mpg, x = wt) + 
+  geom_point() +
+  stat_smooth(geom = "point", method = "lm", alpha = .2) 
+
+last_plot() +
+  aes(predictors = c(qsec)) + 
+  layer(stat = StatLmMulti, 
+        geom = GeomPoint, 
+        position = "identity",
+        params = list(
+        color = "blue"))
+
+
+last_plot() + 
+  aes(predictors = c(drat))
+
+last_plot() + 
+  aes(predictors = c(qsec, drat))
+
+ggplot2:::check_aesthetics()
+
+GeomPoint
+
+# check_aesthetics <- function (x, n){
+#     # ns <- lengths(x)
+#     # good <- ns == 1L | ns == n
+#     # if (all(good)) {
+#     #     return()
+#     # }
+#     # cli::cli_abort(c("Aesthetics must be either length 1 or the same as the data ({n}).", 
+#     #     x = "Fix the following mappings: {.col {names(which(!good))}}."))
+# }
+
+```
+
+```{r}
+library(tidyverse)
+
+compute_panel_pca_col <- function(data, scales){
+  
+  data %>%  remove_missing() ->
+    data
+  
+  varnames <- attr(data$predictors, "varnames")
+  
+  data %>% 
+    select(outcome, predictors) %>%
+    mutate(tidy_vars_pca(predictors)) %>% 
+    ordr::ordinate(cols = all_of(varnames), model = ~ prcomp(., scale. = TRUE)) %>% 
+    .$rotation %>% 
+    as.data.frame() %>% 
+    rownames_to_column()
+  
+}
+
+vars_pca <- function(...) {
+  varnames <- as.character(ensyms(...))
+  vars <- list(...)
+  listvec <- asplit(do.call(cbind, vars), 1)
+  structure(listvec, varnames = varnames)
+}
+
+tidy_vars_pca <- function(x) {
+  pca_vars <- x
+  df <- do.call(rbind, pca_vars)
+  colnames(df) <- attr(pca_vars, "varnames")
+  as.data.frame(df)
+}
+
+palmerpenguins::penguins %>% 
+  mutate(outcome = species, predictors = vars_pca(bill_length_mm, bill_depth_mm, flipper_length_mm)) %>% 
+  compute_panel_pca_col() 
+
+
+StatPcacols <- ggproto(`_class` = "StatPcacols", Stat,
+                       compute_panel = compute_panel_pca_col, 
+                       default_aes = aes(x = after_stat(PC1), 
+                                         y = after_stat(PC2), 
+                                         xend = after_stat(0),
+                                         yend = after_stat(0), 
+                                         label = paste("Variable",
+                                                       after_stat(rowname))))
+
+palmerpenguins::penguins %>% 
+  ggplot() + 
+  aes(outcome = species, 
+      predictors = vars_pca(bill_length_mm, bill_depth_mm, flipper_length_mm)) +
+  geom_text(stat = StatPcacols, hjust = "outward") + 
+  geom_segment(stat = StatPcacols, 
+               arrow = arrow(ends = "first"))
+
+
+```
+
+
+## Closing remarks, Other Relevant Work, Caveats
