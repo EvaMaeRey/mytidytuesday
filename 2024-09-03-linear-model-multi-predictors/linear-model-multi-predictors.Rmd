@@ -153,6 +153,144 @@ last_plot() +
 ```
 
 
+
+```{r}
+
+compute_lm_whatever <- function(data, scales, drop_x = FALSE){
+  
+  data %>% 
+    select(-PANEL) ->
+  lmdata
+  
+  if(drop_x){
+    
+    lmdata %>% 
+      select(-x) ->
+    lmdata
+    
+  }
+  
+  lm <- lm(data = lmdata, y ~ .)
+  
+  data$yend = data$y
+  data$y = lm$fitted.values
+  data$xend = data$x
+
+  data$residuals <- lm$residuals
+  
+  data
+  
+}
+
+palmerpenguins::penguins %>% 
+  remove_missing() %>% 
+  select(y = flipper_length_mm, 
+         x = bill_depth_mm,
+         pred1 = sex) %>% 
+  mutate(PANEL = 1) %>% 
+  compute_lm_whatever()
+
+
+StatLmWhatever <- ggproto("StatLmWhatever",
+                       Stat,
+                       compute_panel = compute_lm_whatever)
+ 
+palmerpenguins::penguins %>% 
+  remove_missing() %>% 
+  mutate(x = sample(row_number())) %>% 
+  ggplot() + 
+  aes(y = flipper_length_mm, x = bill_depth_mm) + 
+  geom_point() + 
+  geom_point(stat = StatLmWhatever, alpha = .25) + 
+  geom_segment(stat = StatLmWhatever, alpha = .25)
+
+
+layer_data() %>% head()
+
+last_plot() + 
+  aes(color = species)
+
+
+last_plot() +
+  aes(shape = sex)
+
+
+last_plot() +
+  aes(p3 = body_mass_g)
+
+last_plot() + 
+  aes(p4 = bill_length_mm)
+
+last_plot() + 
+  aes(p5 = island)
+
+last_plot() + 
+  aes(p6 = year)
+
+
+compute_square = function(data, scales){
+  
+  data %>% mutate(y = x, xmax = x, ymax = y, xmin = 0, ymin = 0)
+  
+}
+
+
+StatSquare <- ggproto("StatSquare", Stat, compute_group = compute_square)
+
+# residuals
+layer_data(i = 2) %>% 
+  ggplot() + 
+  aes(x = residuals) + 
+  geom_rug() +
+  scale_x_continuous(limits = c(-40, 40)) + 
+  geom_rect(stat = StatSquare, alpha = .2) + 
+  coord_equal()
+
+layer_data(i = 2) %>% 
+  ggplot() + 
+  aes(id = "All", area = x^2) +
+  ggcirclepack::geom_circlepack(alpha = .25) + 
+  ggcirclepack::geom_circlepack_text() + 
+  aes(label = round(after_stat(area))) + 
+  labs(title = "Residual Sum of Squares")
+
+# Diff from mean
+palmerpenguins::penguins %>% 
+  remove_missing() %>% 
+  mutate(index = row_number()) %>% 
+  ggplot() + 
+  aes(y = flipper_length_mm, x = index) + 
+  geom_point() + 
+  geom_point(stat = StatLmWhatever, alpha = .25, drop_x = T) + 
+  geom_segment(stat = StatLmWhatever, alpha = .25, drop_x = T) 
+  
+
+layer_data(i = 2) %>% 
+  ggplot() + 
+  aes(x = residuals) + 
+  geom_rug() + 
+  geom_rect(stat = StatSquare, alpha = .2) +
+  scale_x_continuous(limits = c(-40, 40)) + 
+  coord_equal()
+
+layer_data(i = 2) %>% 
+  ggplot() + 
+  aes(id = "All", area = x^2) +
+  ggcirclepack::geom_circlepack(alpha = .25) + 
+  ggcirclepack::geom_circlepack_text() + 
+  aes(label = round(after_stat(area))) + 
+  labs(title = "Total Sum of Squares")
+
+
+
+(65219-7567)/66219  # R-squared 0.884
+
+lm(flipper_length_mm ~ ., data = palmerpenguins::penguins) %>% 
+  summary()
+
+```
+
+
 ```{r}
 knitr::knit_exit()
 
