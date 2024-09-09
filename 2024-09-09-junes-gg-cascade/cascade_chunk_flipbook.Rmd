@@ -1,0 +1,136 @@
+---
+title: "cascade"
+subtitle: ""
+author: ""
+output:
+  xaringan::moon_reader:
+    seal: FALSE
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r, include = F}
+options(knitr.duplicate.label = "allow")
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F)
+library(flipbookr)
+library(tidyverse)
+load("current_image.Rdata")
+```
+
+
+```{r, echo = F, eval = FALSE , message = F, warning = F}
+xaringanExtra::use_share_again()
+```
+
+
+`r chunk_reveal(chunk_name = "the_chunk", break_type = "auto")`
+
+
+```{r the_chunk, include = F}
+library(ggtrace)
+library(ggplot2)
+
+mtcars|>
+  ggplot() +
+  aes(x = cyl) +
+  stat_count() ->
+p
+
+
+mtcars |> # from here
+  head()
+layer_data(p, 1) -> # to here
+layer_data_p
+
+ggplot2:::ggplot_build.ggplot |>
+  body() |>
+  as.list() |> # 37 steps
+  sapply(deparse1) |>
+  grep(x = _, "l\\$\\w+", value = TRUE) |> 
+  gsub(x = _, ".*l(\\$\\w+).*", "ggplot2:::Layer\\1") ->
+layer_methods
+
+gsub(x = layer_methods, ".*\\$", "") ->
+  names(layer_methods)
+
+
+```
+
+---
+
+```{r}
+stat_count_Layer <- lapply(
+  layer_methods,
+  \(x) {
+    rlang::inject(
+      capture_fn(p, !!rlang::parse_expr(x), cond = 1)
+    )
+  }
+)
+
+
+```
+
+
+---
+
+`r chunk_reveal(chunk_name = "the_chunk2", break_type = "auto")`
+
+
+```{r the_chunk2, include = F}
+layer_data_p
+
+p %>% 
+  ggtrace::capture_fn(Layout$setup) %>% 
+  list(setup = .) ->
+p_Layout
+
+mtcars |>
+  stat_count_Layer$layer_data(plot_data = _) |>
+  stat_count_Layer$setup_layer(data = _) |>
+  # Detour around Layout setup
+    list() |>
+    p_Layout$setup(data = _) |>
+    el(1) |>
+  stat_count_Layer$compute_aesthetics(data = _) |>
+  stat_count_Layer$compute_statistic(data = _) |>
+  stat_count_Layer$map_statistic(data = _) |>
+  stat_count_Layer$compute_geom_1(data = _) |>
+  stat_count_Layer$compute_geom_2(data = _) |>
+  stat_count_Layer$finish_statistics(data = _)
+
+
+```
+
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 76%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+

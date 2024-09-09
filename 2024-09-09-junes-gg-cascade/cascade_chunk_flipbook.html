@@ -1,0 +1,2469 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>cascade</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="" />
+    <script src="libs/header-attrs-2.26/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+
+
+
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+*library(ggtrace)
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggtrace)
+*library(ggplot2)
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggtrace)
+library(ggplot2)
+
+*mtcars
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+                     mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710          22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive      21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout   18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+Valiant             18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+Duster 360          14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
+Merc 240D           24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+Merc 230            22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+Merc 280            19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+Merc 280C           17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
+Merc 450SE          16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3
+Merc 450SL          17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3
+Merc 450SLC         15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
+Cadillac Fleetwood  10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
+Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
+Chrysler Imperial   14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
+Fiat 128            32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+Honda Civic         30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+Toyota Corolla      33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
+Toyota Corona       21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
+Dodge Challenger    15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2
+AMC Javelin         15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2
+Camaro Z28          13.3   8 350.0 245 3.73 3.840 15.41  0  0    3    4
+Pontiac Firebird    19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2
+Fiat X1-9           27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
+Porsche 914-2       26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+Lotus Europa        30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+Ford Pantera L      15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4
+Ferrari Dino        19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
+Maserati Bora       15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
+Volvo 142E          21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggtrace)
+library(ggplot2)
+
+mtcars|&gt;
+* ggplot()
+```
+]
+ 
+.panel2-the_chunk-auto[
+![](cascade_chunk_flipbook_files/figure-html/the_chunk_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggtrace)
+library(ggplot2)
+
+mtcars|&gt;
+  ggplot() +
+* aes(x = cyl)
+```
+]
+ 
+.panel2-the_chunk-auto[
+![](cascade_chunk_flipbook_files/figure-html/the_chunk_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggtrace)
+library(ggplot2)
+
+mtcars|&gt;
+  ggplot() +
+  aes(x = cyl) +
+* stat_count()
+```
+]
+ 
+.panel2-the_chunk-auto[
+![](cascade_chunk_flipbook_files/figure-html/the_chunk_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggtrace)
+library(ggplot2)
+
+mtcars|&gt;
+  ggplot() +
+  aes(x = cyl) +
+  stat_count() -&gt;
+*p 
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggtrace)
+library(ggplot2)
+
+mtcars|&gt;
+  ggplot() +
+  aes(x = cyl) +
+  stat_count() -&gt;
+p
+
+
+*mtcars   # from here
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+                     mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710          22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive      21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout   18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+Valiant             18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+Duster 360          14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
+Merc 240D           24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+Merc 230            22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+Merc 280            19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+Merc 280C           17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
+Merc 450SE          16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3
+Merc 450SL          17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3
+Merc 450SLC         15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
+Cadillac Fleetwood  10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
+Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
+Chrysler Imperial   14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
+Fiat 128            32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+Honda Civic         30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+Toyota Corolla      33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
+Toyota Corona       21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
+Dodge Challenger    15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2
+AMC Javelin         15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2
+Camaro Z28          13.3   8 350.0 245 3.73 3.840 15.41  0  0    3    4
+Pontiac Firebird    19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2
+Fiat X1-9           27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
+Porsche 914-2       26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+Lotus Europa        30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+Ford Pantera L      15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4
+Ferrari Dino        19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
+Maserati Bora       15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
+Volvo 142E          21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggtrace)
+library(ggplot2)
+
+mtcars|&gt;
+  ggplot() +
+  aes(x = cyl) +
+  stat_count() -&gt;
+p
+
+
+mtcars |&gt;  # from here
+* head()
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggtrace)
+library(ggplot2)
+
+mtcars|&gt;
+  ggplot() +
+  aes(x = cyl) +
+  stat_count() -&gt;
+p
+
+
+mtcars |&gt;  # from here
+  head()
+*layer_data(p, 1)   # to here
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+```
+
+```
+   y count    prop x flipped_aes PANEL group ymin ymax xmin xmax colour   fill
+1 11    11 0.34375 4       FALSE     1    -1    0   11  3.1  4.9     NA grey35
+2  7     7 0.21875 6       FALSE     1    -1    0    7  5.1  6.9     NA grey35
+3 14    14 0.43750 8       FALSE     1    -1    0   14  7.1  8.9     NA grey35
+  linewidth linetype alpha
+1       0.5        1    NA
+2       0.5        1    NA
+3       0.5        1    NA
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggtrace)
+library(ggplot2)
+
+mtcars|&gt;
+  ggplot() +
+  aes(x = cyl) +
+  stat_count() -&gt;
+p
+
+
+mtcars |&gt;  # from here
+  head()
+layer_data(p, 1) -&gt;  # to here
+*layer_data_p
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggtrace)
+library(ggplot2)
+
+mtcars|&gt;
+  ggplot() +
+  aes(x = cyl) +
+  stat_count() -&gt;
+p
+
+
+mtcars |&gt;  # from here
+  head()
+layer_data(p, 1) -&gt;  # to here
+layer_data_p
+
+*ggplot2:::ggplot_build.ggplot
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+```
+
+```
+function (plot) 
+{
+    plot &lt;- plot_clone(plot)
+    if (length(plot$layers) == 0) {
+        plot &lt;- plot + geom_blank()
+    }
+    layers &lt;- plot$layers
+    data &lt;- rep(list(NULL), length(layers))
+    scales &lt;- plot$scales
+    data &lt;- by_layer(function(l, d) l$layer_data(plot$data), 
+        layers, data, "computing layer data")
+    data &lt;- by_layer(function(l, d) l$setup_layer(d, plot), layers, 
+        data, "setting up layer")
+    layout &lt;- create_layout(plot$facet, plot$coordinates, plot$layout)
+    data &lt;- layout$setup(data, plot$data, plot$plot_env)
+    data &lt;- by_layer(function(l, d) l$compute_aesthetics(d, plot), 
+        layers, data, "computing aesthetics")
+    data &lt;- .ignore_data(data)
+    data &lt;- lapply(data, scales$transform_df)
+    scale_x &lt;- function() scales$get_scales("x")
+    scale_y &lt;- function() scales$get_scales("y")
+    layout$train_position(data, scale_x(), scale_y())
+    data &lt;- layout$map_position(data)
+    data &lt;- .expose_data(data)
+    data &lt;- by_layer(function(l, d) l$compute_statistic(d, layout), 
+        layers, data, "computing stat")
+    data &lt;- by_layer(function(l, d) l$map_statistic(d, plot), 
+        layers, data, "mapping stat to aesthetics")
+    plot$scales$add_missing(c("x", "y"), plot$plot_env)
+    data &lt;- by_layer(function(l, d) l$compute_geom_1(d), layers, 
+        data, "setting up geom")
+    data &lt;- by_layer(function(l, d) l$compute_position(d, layout), 
+        layers, data, "computing position")
+    data &lt;- .ignore_data(data)
+    layout$reset_scales()
+    layout$train_position(data, scale_x(), scale_y())
+    layout$setup_panel_params()
+    data &lt;- layout$map_position(data)
+    layout$setup_panel_guides(plot$guides, plot$layers)
+    npscales &lt;- scales$non_position_scales()
+    if (npscales$n() &gt; 0) {
+        lapply(data, npscales$train_df)
+        plot$guides &lt;- plot$guides$build(npscales, plot$layers, 
+            plot$labels, data)
+        data &lt;- lapply(data, npscales$map_df)
+    }
+    else {
+        plot$guides &lt;- plot$guides$get_custom()
+    }
+    data &lt;- .expose_data(data)
+    data &lt;- by_layer(function(l, d) l$compute_geom_2(d), layers, 
+        data, "setting up geom aesthetics")
+    data &lt;- by_layer(function(l, d) l$finish_statistics(d), layers, 
+        data, "finishing layer stat")
+    data &lt;- layout$finish_data(data)
+    plot$labels$alt &lt;- get_alt_text(plot)
+    structure(list(data = data, layout = layout, plot = plot), 
+        class = "ggplot_built")
+}
+&lt;bytecode: 0x7f9af8062b38&gt;
+&lt;environment: namespace:ggplot2&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggtrace)
+library(ggplot2)
+
+mtcars|&gt;
+  ggplot() +
+  aes(x = cyl) +
+  stat_count() -&gt;
+p
+
+
+mtcars |&gt;  # from here
+  head()
+layer_data(p, 1) -&gt;  # to here
+layer_data_p
+
+ggplot2:::ggplot_build.ggplot |&gt;
+* body()
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+```
+
+```
+{
+    plot &lt;- plot_clone(plot)
+    if (length(plot$layers) == 0) {
+        plot &lt;- plot + geom_blank()
+    }
+    layers &lt;- plot$layers
+    data &lt;- rep(list(NULL), length(layers))
+    scales &lt;- plot$scales
+    data &lt;- by_layer(function(l, d) l$layer_data(plot$data), 
+        layers, data, "computing layer data")
+    data &lt;- by_layer(function(l, d) l$setup_layer(d, plot), layers, 
+        data, "setting up layer")
+    layout &lt;- create_layout(plot$facet, plot$coordinates, plot$layout)
+    data &lt;- layout$setup(data, plot$data, plot$plot_env)
+    data &lt;- by_layer(function(l, d) l$compute_aesthetics(d, plot), 
+        layers, data, "computing aesthetics")
+    data &lt;- .ignore_data(data)
+    data &lt;- lapply(data, scales$transform_df)
+    scale_x &lt;- function() scales$get_scales("x")
+    scale_y &lt;- function() scales$get_scales("y")
+    layout$train_position(data, scale_x(), scale_y())
+    data &lt;- layout$map_position(data)
+    data &lt;- .expose_data(data)
+    data &lt;- by_layer(function(l, d) l$compute_statistic(d, layout), 
+        layers, data, "computing stat")
+    data &lt;- by_layer(function(l, d) l$map_statistic(d, plot), 
+        layers, data, "mapping stat to aesthetics")
+    plot$scales$add_missing(c("x", "y"), plot$plot_env)
+    data &lt;- by_layer(function(l, d) l$compute_geom_1(d), layers, 
+        data, "setting up geom")
+    data &lt;- by_layer(function(l, d) l$compute_position(d, layout), 
+        layers, data, "computing position")
+    data &lt;- .ignore_data(data)
+    layout$reset_scales()
+    layout$train_position(data, scale_x(), scale_y())
+    layout$setup_panel_params()
+    data &lt;- layout$map_position(data)
+    layout$setup_panel_guides(plot$guides, plot$layers)
+    npscales &lt;- scales$non_position_scales()
+    if (npscales$n() &gt; 0) {
+        lapply(data, npscales$train_df)
+        plot$guides &lt;- plot$guides$build(npscales, plot$layers, 
+            plot$labels, data)
+        data &lt;- lapply(data, npscales$map_df)
+    }
+    else {
+        plot$guides &lt;- plot$guides$get_custom()
+    }
+    data &lt;- .expose_data(data)
+    data &lt;- by_layer(function(l, d) l$compute_geom_2(d), layers, 
+        data, "setting up geom aesthetics")
+    data &lt;- by_layer(function(l, d) l$finish_statistics(d), layers, 
+        data, "finishing layer stat")
+    data &lt;- layout$finish_data(data)
+    plot$labels$alt &lt;- get_alt_text(plot)
+    structure(list(data = data, layout = layout, plot = plot), 
+        class = "ggplot_built")
+}
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggtrace)
+library(ggplot2)
+
+mtcars|&gt;
+  ggplot() +
+  aes(x = cyl) +
+  stat_count() -&gt;
+p
+
+
+mtcars |&gt;  # from here
+  head()
+layer_data(p, 1) -&gt;  # to here
+layer_data_p
+
+ggplot2:::ggplot_build.ggplot |&gt;
+  body() |&gt;
+* as.list()   # 37 steps
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+```
+
+```
+[[1]]
+`{`
+
+[[2]]
+plot &lt;- plot_clone(plot)
+
+[[3]]
+if (length(plot$layers) == 0) {
+    plot &lt;- plot + geom_blank()
+}
+
+[[4]]
+layers &lt;- plot$layers
+
+[[5]]
+data &lt;- rep(list(NULL), length(layers))
+
+[[6]]
+scales &lt;- plot$scales
+
+[[7]]
+data &lt;- by_layer(function(l, d) l$layer_data(plot$data), layers, 
+    data, "computing layer data")
+
+[[8]]
+data &lt;- by_layer(function(l, d) l$setup_layer(d, plot), layers, 
+    data, "setting up layer")
+
+[[9]]
+layout &lt;- create_layout(plot$facet, plot$coordinates, plot$layout)
+
+[[10]]
+data &lt;- layout$setup(data, plot$data, plot$plot_env)
+
+[[11]]
+data &lt;- by_layer(function(l, d) l$compute_aesthetics(d, plot), 
+    layers, data, "computing aesthetics")
+
+[[12]]
+data &lt;- .ignore_data(data)
+
+[[13]]
+data &lt;- lapply(data, scales$transform_df)
+
+[[14]]
+scale_x &lt;- function() scales$get_scales("x")
+
+[[15]]
+scale_y &lt;- function() scales$get_scales("y")
+
+[[16]]
+layout$train_position(data, scale_x(), scale_y())
+
+[[17]]
+data &lt;- layout$map_position(data)
+
+[[18]]
+data &lt;- .expose_data(data)
+
+[[19]]
+data &lt;- by_layer(function(l, d) l$compute_statistic(d, layout), 
+    layers, data, "computing stat")
+
+[[20]]
+data &lt;- by_layer(function(l, d) l$map_statistic(d, plot), layers, 
+    data, "mapping stat to aesthetics")
+
+[[21]]
+plot$scales$add_missing(c("x", "y"), plot$plot_env)
+
+[[22]]
+data &lt;- by_layer(function(l, d) l$compute_geom_1(d), layers, 
+    data, "setting up geom")
+
+[[23]]
+data &lt;- by_layer(function(l, d) l$compute_position(d, layout), 
+    layers, data, "computing position")
+
+[[24]]
+data &lt;- .ignore_data(data)
+
+[[25]]
+layout$reset_scales()
+
+[[26]]
+layout$train_position(data, scale_x(), scale_y())
+
+[[27]]
+layout$setup_panel_params()
+
+[[28]]
+data &lt;- layout$map_position(data)
+
+[[29]]
+layout$setup_panel_guides(plot$guides, plot$layers)
+
+[[30]]
+npscales &lt;- scales$non_position_scales()
+
+[[31]]
+if (npscales$n() &gt; 0) {
+    lapply(data, npscales$train_df)
+    plot$guides &lt;- plot$guides$build(npscales, plot$layers, plot$labels, 
+        data)
+    data &lt;- lapply(data, npscales$map_df)
+} else {
+    plot$guides &lt;- plot$guides$get_custom()
+}
+
+[[32]]
+data &lt;- .expose_data(data)
+
+[[33]]
+data &lt;- by_layer(function(l, d) l$compute_geom_2(d), layers, 
+    data, "setting up geom aesthetics")
+
+[[34]]
+data &lt;- by_layer(function(l, d) l$finish_statistics(d), layers, 
+    data, "finishing layer stat")
+
+[[35]]
+data &lt;- layout$finish_data(data)
+
+[[36]]
+plot$labels$alt &lt;- get_alt_text(plot)
+
+[[37]]
+structure(list(data = data, layout = layout, plot = plot), class = "ggplot_built")
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggtrace)
+library(ggplot2)
+
+mtcars|&gt;
+  ggplot() +
+  aes(x = cyl) +
+  stat_count() -&gt;
+p
+
+
+mtcars |&gt;  # from here
+  head()
+layer_data(p, 1) -&gt;  # to here
+layer_data_p
+
+ggplot2:::ggplot_build.ggplot |&gt;
+  body() |&gt;
+  as.list() |&gt;  # 37 steps
+* sapply(deparse1)
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+```
+
+```
+ [1] "{"                                                                                                                                                                                                                                          
+ [2] "plot &lt;- plot_clone(plot)"                                                                                                                                                                                                                   
+ [3] "if (length(plot$layers) == 0) {     plot &lt;- plot + geom_blank() }"                                                                                                                                                                          
+ [4] "layers &lt;- plot$layers"                                                                                                                                                                                                                      
+ [5] "data &lt;- rep(list(NULL), length(layers))"                                                                                                                                                                                                    
+ [6] "scales &lt;- plot$scales"                                                                                                                                                                                                                      
+ [7] "data &lt;- by_layer(function(l, d) l$layer_data(plot$data), layers, data, \"computing layer data\")"                                                                                                                                           
+ [8] "data &lt;- by_layer(function(l, d) l$setup_layer(d, plot), layers, data, \"setting up layer\")"                                                                                                                                                
+ [9] "layout &lt;- create_layout(plot$facet, plot$coordinates, plot$layout)"                                                                                                                                                                         
+[10] "data &lt;- layout$setup(data, plot$data, plot$plot_env)"                                                                                                                                                                                       
+[11] "data &lt;- by_layer(function(l, d) l$compute_aesthetics(d, plot), layers, data, \"computing aesthetics\")"                                                                                                                                     
+[12] "data &lt;- .ignore_data(data)"                                                                                                                                                                                                                 
+[13] "data &lt;- lapply(data, scales$transform_df)"                                                                                                                                                                                                  
+[14] "scale_x &lt;- function() scales$get_scales(\"x\")"                                                                                                                                                                                             
+[15] "scale_y &lt;- function() scales$get_scales(\"y\")"                                                                                                                                                                                             
+[16] "layout$train_position(data, scale_x(), scale_y())"                                                                                                                                                                                          
+[17] "data &lt;- layout$map_position(data)"                                                                                                                                                                                                          
+[18] "data &lt;- .expose_data(data)"                                                                                                                                                                                                                 
+[19] "data &lt;- by_layer(function(l, d) l$compute_statistic(d, layout), layers, data, \"computing stat\")"                                                                                                                                          
+[20] "data &lt;- by_layer(function(l, d) l$map_statistic(d, plot), layers, data, \"mapping stat to aesthetics\")"                                                                                                                                    
+[21] "plot$scales$add_missing(c(\"x\", \"y\"), plot$plot_env)"                                                                                                                                                                                    
+[22] "data &lt;- by_layer(function(l, d) l$compute_geom_1(d), layers, data, \"setting up geom\")"                                                                                                                                                    
+[23] "data &lt;- by_layer(function(l, d) l$compute_position(d, layout), layers, data, \"computing position\")"                                                                                                                                       
+[24] "data &lt;- .ignore_data(data)"                                                                                                                                                                                                                 
+[25] "layout$reset_scales()"                                                                                                                                                                                                                      
+[26] "layout$train_position(data, scale_x(), scale_y())"                                                                                                                                                                                          
+[27] "layout$setup_panel_params()"                                                                                                                                                                                                                
+[28] "data &lt;- layout$map_position(data)"                                                                                                                                                                                                          
+[29] "layout$setup_panel_guides(plot$guides, plot$layers)"                                                                                                                                                                                        
+[30] "npscales &lt;- scales$non_position_scales()"                                                                                                                                                                                                   
+[31] "if (npscales$n() &gt; 0) {     lapply(data, npscales$train_df)     plot$guides &lt;- plot$guides$build(npscales, plot$layers, plot$labels, data)     data &lt;- lapply(data, npscales$map_df) } else {     plot$guides &lt;- plot$guides$get_custom() }"
+[32] "data &lt;- .expose_data(data)"                                                                                                                                                                                                                 
+[33] "data &lt;- by_layer(function(l, d) l$compute_geom_2(d), layers, data, \"setting up geom aesthetics\")"                                                                                                                                         
+[34] "data &lt;- by_layer(function(l, d) l$finish_statistics(d), layers, data, \"finishing layer stat\")"                                                                                                                                            
+[35] "data &lt;- layout$finish_data(data)"                                                                                                                                                                                                           
+[36] "plot$labels$alt &lt;- get_alt_text(plot)"                                                                                                                                                                                                      
+[37] "structure(list(data = data, layout = layout, plot = plot), class = \"ggplot_built\")"                                                                                                                                                       
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggtrace)
+library(ggplot2)
+
+mtcars|&gt;
+  ggplot() +
+  aes(x = cyl) +
+  stat_count() -&gt;
+p
+
+
+mtcars |&gt;  # from here
+  head()
+layer_data(p, 1) -&gt;  # to here
+layer_data_p
+
+ggplot2:::ggplot_build.ggplot |&gt;
+  body() |&gt;
+  as.list() |&gt;  # 37 steps
+  sapply(deparse1) |&gt;
+* grep(x = _, "l\\$\\w+", value = TRUE)
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+```
+
+```
+[1] "data &lt;- by_layer(function(l, d) l$layer_data(plot$data), layers, data, \"computing layer data\")"       
+[2] "data &lt;- by_layer(function(l, d) l$setup_layer(d, plot), layers, data, \"setting up layer\")"            
+[3] "data &lt;- by_layer(function(l, d) l$compute_aesthetics(d, plot), layers, data, \"computing aesthetics\")" 
+[4] "data &lt;- by_layer(function(l, d) l$compute_statistic(d, layout), layers, data, \"computing stat\")"      
+[5] "data &lt;- by_layer(function(l, d) l$map_statistic(d, plot), layers, data, \"mapping stat to aesthetics\")"
+[6] "data &lt;- by_layer(function(l, d) l$compute_geom_1(d), layers, data, \"setting up geom\")"                
+[7] "data &lt;- by_layer(function(l, d) l$compute_position(d, layout), layers, data, \"computing position\")"   
+[8] "data &lt;- by_layer(function(l, d) l$compute_geom_2(d), layers, data, \"setting up geom aesthetics\")"     
+[9] "data &lt;- by_layer(function(l, d) l$finish_statistics(d), layers, data, \"finishing layer stat\")"        
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggtrace)
+library(ggplot2)
+
+mtcars|&gt;
+  ggplot() +
+  aes(x = cyl) +
+  stat_count() -&gt;
+p
+
+
+mtcars |&gt;  # from here
+  head()
+layer_data(p, 1) -&gt;  # to here
+layer_data_p
+
+ggplot2:::ggplot_build.ggplot |&gt;
+  body() |&gt;
+  as.list() |&gt;  # 37 steps
+  sapply(deparse1) |&gt;
+  grep(x = _, "l\\$\\w+", value = TRUE) |&gt;
+* gsub(x = _, ".*l(\\$\\w+).*", "ggplot2:::Layer\\1")
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+```
+
+```
+[1] "ggplot2:::Layer$layer_data"         "ggplot2:::Layer$setup_layer"       
+[3] "ggplot2:::Layer$compute_aesthetics" "ggplot2:::Layer$compute_statistic" 
+[5] "ggplot2:::Layer$map_statistic"      "ggplot2:::Layer$compute_geom_1"    
+[7] "ggplot2:::Layer$compute_position"   "ggplot2:::Layer$compute_geom_2"    
+[9] "ggplot2:::Layer$finish_statistics" 
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggtrace)
+library(ggplot2)
+
+mtcars|&gt;
+  ggplot() +
+  aes(x = cyl) +
+  stat_count() -&gt;
+p
+
+
+mtcars |&gt;  # from here
+  head()
+layer_data(p, 1) -&gt;  # to here
+layer_data_p
+
+ggplot2:::ggplot_build.ggplot |&gt;
+  body() |&gt;
+  as.list() |&gt;  # 37 steps
+  sapply(deparse1) |&gt;
+  grep(x = _, "l\\$\\w+", value = TRUE) |&gt;
+  gsub(x = _, ".*l(\\$\\w+).*", "ggplot2:::Layer\\1") -&gt;
+*layer_methods
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggtrace)
+library(ggplot2)
+
+mtcars|&gt;
+  ggplot() +
+  aes(x = cyl) +
+  stat_count() -&gt;
+p
+
+
+mtcars |&gt;  # from here
+  head()
+layer_data(p, 1) -&gt;  # to here
+layer_data_p
+
+ggplot2:::ggplot_build.ggplot |&gt;
+  body() |&gt;
+  as.list() |&gt;  # 37 steps
+  sapply(deparse1) |&gt;
+  grep(x = _, "l\\$\\w+", value = TRUE) |&gt;
+  gsub(x = _, ".*l(\\$\\w+).*", "ggplot2:::Layer\\1") -&gt;
+layer_methods
+
+*gsub(x = layer_methods, ".*\\$", "")
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+```
+
+```
+[1] "layer_data"         "setup_layer"        "compute_aesthetics"
+[4] "compute_statistic"  "map_statistic"      "compute_geom_1"    
+[7] "compute_position"   "compute_geom_2"     "finish_statistics" 
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggtrace)
+library(ggplot2)
+
+mtcars|&gt;
+  ggplot() +
+  aes(x = cyl) +
+  stat_count() -&gt;
+p
+
+
+mtcars |&gt;  # from here
+  head()
+layer_data(p, 1) -&gt;  # to here
+layer_data_p
+
+ggplot2:::ggplot_build.ggplot |&gt;
+  body() |&gt;
+  as.list() |&gt;  # 37 steps
+  sapply(deparse1) |&gt;
+  grep(x = _, "l\\$\\w+", value = TRUE) |&gt;
+  gsub(x = _, ".*l(\\$\\w+).*", "ggplot2:::Layer\\1") -&gt;
+layer_methods
+
+gsub(x = layer_methods, ".*\\$", "") -&gt;
+* names(layer_methods)
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(ggtrace)
+library(ggplot2)
+
+mtcars|&gt;
+  ggplot() +
+  aes(x = cyl) +
+  stat_count() -&gt;
+p
+
+
+mtcars |&gt;  # from here
+  head()
+layer_data(p, 1) -&gt;  # to here
+layer_data_p
+
+ggplot2:::ggplot_build.ggplot |&gt;
+  body() |&gt;
+  as.list() |&gt;  # 37 steps
+  sapply(deparse1) |&gt;
+  grep(x = _, "l\\$\\w+", value = TRUE) |&gt;
+  gsub(x = _, ".*l(\\$\\w+).*", "ggplot2:::Layer\\1") -&gt;
+layer_methods
+
+gsub(x = layer_methods, ".*\\$", "") -&gt;
+  names(layer_methods)
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+```
+]
+
+&lt;style&gt;
+.panel1-the_chunk-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-the_chunk-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-the_chunk-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+
+``` r
+stat_count_Layer &lt;- lapply(
+  layer_methods,
+  \(x) {
+    rlang::inject(
+      capture_fn(p, !!rlang::parse_expr(x), cond = 1)
+    )
+  }
+)
+```
+
+
+---
+
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+*layer_data_p
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+   y count    prop x flipped_aes PANEL group ymin ymax xmin xmax colour   fill
+1 11    11 0.34375 4       FALSE     1    -1    0   11  3.1  4.9     NA grey35
+2  7     7 0.21875 6       FALSE     1    -1    0    7  5.1  6.9     NA grey35
+3 14    14 0.43750 8       FALSE     1    -1    0   14  7.1  8.9     NA grey35
+  linewidth linetype alpha
+1       0.5        1    NA
+2       0.5        1    NA
+3       0.5        1    NA
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+layer_data_p
+
+*p 
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+   y count    prop x flipped_aes PANEL group ymin ymax xmin xmax colour   fill
+1 11    11 0.34375 4       FALSE     1    -1    0   11  3.1  4.9     NA grey35
+2  7     7 0.21875 6       FALSE     1    -1    0    7  5.1  6.9     NA grey35
+3 14    14 0.43750 8       FALSE     1    -1    0   14  7.1  8.9     NA grey35
+  linewidth linetype alpha
+1       0.5        1    NA
+2       0.5        1    NA
+3       0.5        1    NA
+```
+
+![](cascade_chunk_flipbook_files/figure-html/the_chunk2_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+layer_data_p
+
+p %&gt;%
+* ggtrace::capture_fn(Layout$setup)
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+   y count    prop x flipped_aes PANEL group ymin ymax xmin xmax colour   fill
+1 11    11 0.34375 4       FALSE     1    -1    0   11  3.1  4.9     NA grey35
+2  7     7 0.21875 6       FALSE     1    -1    0    7  5.1  6.9     NA grey35
+3 14    14 0.43750 8       FALSE     1    -1    0   14  7.1  8.9     NA grey35
+  linewidth linetype alpha
+1       0.5        1    NA
+2       0.5        1    NA
+3       0.5        1    NA
+```
+
+```
+function (self = &lt;environment&gt;, data = list(list(mpg = c(21, 
+21, 22.8, 21.4, 18.7, 18.1, 14.3, 24.4, 22.8, 19.2, 17.8, 16.4, 
+17.3, 15.2, 10.4, 10.4, 14.7, 32.4, 30.4, 33.9, 21.5, 15.5, 15.2, 
+13.3, 19.2, 27.3, 26, 30.4, 15.8, 19.7, 15, 21.4), cyl = c(6, 
+6, 4, 6, 8, 6, 8, 4, 4, 6, 6, 8, 8, 8, 8, 8, 8, 4, 4, 4, 4, 8, 
+8, 8, 8, 4, 4, 4, 8, 6, 8, 4), disp = c(160, 160, 108, 258, 360, 
+225, 360, 146.7, 140.8, 167.6, 167.6, 275.8, 275.8, 275.8, 472, 
+460, 440, 78.7, 75.7, 71.1, 120.1, 318, 304, 350, 400, 79, 120.3, 
+95.1, 351, 145, 301, 121), hp = c(110, 110, 93, 110, 175, 105, 
+245, 62, 95, 123, 123, 180, 180, 180, 205, 215, 230, 66, 52, 
+65, 97, 150, 150, 245, 175, 66, 91, 113, 264, 175, 335, 109), 
+    drat = c(3.9, 3.9, 3.85, 3.08, 3.15, 2.76, 3.21, 3.69, 3.92, 
+    3.92, 3.92, 3.07, 3.07, 3.07, 2.93, 3, 3.23, 4.08, 4.93, 
+    4.22, 3.7, 2.76, 3.15, 3.73, 3.08, 4.08, 4.43, 3.77, 4.22, 
+    3.62, 3.54, 4.11), wt = c(2.62, 2.875, 2.32, 3.215, 3.44, 
+    3.46, 3.57, 3.19, 3.15, 3.44, 3.44, 4.07, 3.73, 3.78, 5.25, 
+    5.424, 5.345, 2.2, 1.615, 1.835, 2.465, 3.52, 3.435, 3.84, 
+    3.845, 1.935, 2.14, 1.513, 3.17, 2.77, 3.57, 2.78), qsec = c(16.46, 
+    17.02, 18.61, 19.44, 17.02, 20.22, 15.84, 20, 22.9, 18.3, 
+    18.9, 17.4, 17.6, 18, 17.98, 17.82, 17.42, 19.47, 18.52, 
+    19.9, 20.01, 16.87, 17.3, 15.41, 17.05, 18.9, 16.7, 16.9, 
+    14.5, 15.5, 14.6, 18.6), vs = c(0, 0, 1, 1, 0, 1, 0, 1, 1, 
+    1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 
+    0, 0, 0, 1), am = c(1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1), 
+    gear = c(4, 4, 4, 3, 3, 3, 3, 4, 4, 4, 4, 3, 3, 3, 3, 3, 
+    3, 4, 4, 4, 3, 3, 3, 3, 3, 4, 5, 5, 5, 5, 5, 4), carb = c(4, 
+    4, 1, 1, 2, 1, 4, 2, 2, 4, 4, 3, 3, 3, 4, 4, 4, 1, 2, 1, 
+    1, 2, 2, 4, 2, 1, 2, 2, 4, 6, 8, 2))), plot_data = list(mpg = c(21, 
+21, 22.8, 21.4, 18.7, 18.1, 14.3, 24.4, 22.8, 19.2, 17.8, 16.4, 
+17.3, 15.2, 10.4, 10.4, 14.7, 32.4, 30.4, 33.9, 21.5, 15.5, 15.2, 
+13.3, 19.2, 27.3, 26, 30.4, 15.8, 19.7, 15, 21.4), cyl = c(6, 
+6, 4, 6, 8, 6, 8, 4, 4, 6, 6, 8, 8, 8, 8, 8, 8, 4, 4, 4, 4, 8, 
+8, 8, 8, 4, 4, 4, 8, 6, 8, 4), disp = c(160, 160, 108, 258, 360, 
+225, 360, 146.7, 140.8, 167.6, 167.6, 275.8, 275.8, 275.8, 472, 
+460, 440, 78.7, 75.7, 71.1, 120.1, 318, 304, 350, 400, 79, 120.3, 
+95.1, 351, 145, 301, 121), hp = c(110, 110, 93, 110, 175, 105, 
+245, 62, 95, 123, 123, 180, 180, 180, 205, 215, 230, 66, 52, 
+65, 97, 150, 150, 245, 175, 66, 91, 113, 264, 175, 335, 109), 
+    drat = c(3.9, 3.9, 3.85, 3.08, 3.15, 2.76, 3.21, 3.69, 3.92, 
+    3.92, 3.92, 3.07, 3.07, 3.07, 2.93, 3, 3.23, 4.08, 4.93, 
+    4.22, 3.7, 2.76, 3.15, 3.73, 3.08, 4.08, 4.43, 3.77, 4.22, 
+    3.62, 3.54, 4.11), wt = c(2.62, 2.875, 2.32, 3.215, 3.44, 
+    3.46, 3.57, 3.19, 3.15, 3.44, 3.44, 4.07, 3.73, 3.78, 5.25, 
+    5.424, 5.345, 2.2, 1.615, 1.835, 2.465, 3.52, 3.435, 3.84, 
+    3.845, 1.935, 2.14, 1.513, 3.17, 2.77, 3.57, 2.78), qsec = c(16.46, 
+    17.02, 18.61, 19.44, 17.02, 20.22, 15.84, 20, 22.9, 18.3, 
+    18.9, 17.4, 17.6, 18, 17.98, 17.82, 17.42, 19.47, 18.52, 
+    19.9, 20.01, 16.87, 17.3, 15.41, 17.05, 18.9, 16.7, 16.9, 
+    14.5, 15.5, 14.6, 18.6), vs = c(0, 0, 1, 1, 0, 1, 0, 1, 1, 
+    1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 
+    0, 0, 0, 1), am = c(1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1), 
+    gear = c(4, 4, 4, 3, 3, 3, 3, 4, 4, 4, 4, 3, 3, 3, 3, 3, 
+    3, 4, 4, 4, 3, 3, 3, 3, 3, 4, 5, 5, 5, 5, 5, 4), carb = c(4, 
+    4, 1, 1, 2, 1, 4, 2, 2, 4, 4, 3, 3, 3, 4, 4, 4, 1, 2, 1, 
+    1, 2, 2, 4, 2, 1, 2, 2, 4, 6, 8, 2)), plot_env = &lt;environment&gt;) 
+{
+    data &lt;- c(list(plot_data), data)
+    self$facet_params &lt;- self$facet$setup_params(data, self$facet$params)
+    self$facet_params$plot_env &lt;- plot_env
+    data &lt;- self$facet$setup_data(data, self$facet_params)
+    self$coord_params &lt;- self$coord$setup_params(data)
+    data &lt;- self$coord$setup_data(data, self$coord_params)
+    self$layout &lt;- self$facet$compute_layout(data, self$facet_params)
+    self$layout &lt;- self$coord$setup_layout(self$layout, self$coord_params)
+    check_layout(self$layout)
+    lapply(data[-1], self$facet$map_data, layout = self$layout, 
+        params = self$facet_params)
+}
+&lt;environment: 0x7f9af6db6898&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+layer_data_p
+
+p %&gt;%
+  ggtrace::capture_fn(Layout$setup) %&gt;%
+* list(setup = .)
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+   y count    prop x flipped_aes PANEL group ymin ymax xmin xmax colour   fill
+1 11    11 0.34375 4       FALSE     1    -1    0   11  3.1  4.9     NA grey35
+2  7     7 0.21875 6       FALSE     1    -1    0    7  5.1  6.9     NA grey35
+3 14    14 0.43750 8       FALSE     1    -1    0   14  7.1  8.9     NA grey35
+  linewidth linetype alpha
+1       0.5        1    NA
+2       0.5        1    NA
+3       0.5        1    NA
+```
+
+```
+$setup
+function (self = &lt;environment&gt;, data = list(list(mpg = c(21, 
+21, 22.8, 21.4, 18.7, 18.1, 14.3, 24.4, 22.8, 19.2, 17.8, 16.4, 
+17.3, 15.2, 10.4, 10.4, 14.7, 32.4, 30.4, 33.9, 21.5, 15.5, 15.2, 
+13.3, 19.2, 27.3, 26, 30.4, 15.8, 19.7, 15, 21.4), cyl = c(6, 
+6, 4, 6, 8, 6, 8, 4, 4, 6, 6, 8, 8, 8, 8, 8, 8, 4, 4, 4, 4, 8, 
+8, 8, 8, 4, 4, 4, 8, 6, 8, 4), disp = c(160, 160, 108, 258, 360, 
+225, 360, 146.7, 140.8, 167.6, 167.6, 275.8, 275.8, 275.8, 472, 
+460, 440, 78.7, 75.7, 71.1, 120.1, 318, 304, 350, 400, 79, 120.3, 
+95.1, 351, 145, 301, 121), hp = c(110, 110, 93, 110, 175, 105, 
+245, 62, 95, 123, 123, 180, 180, 180, 205, 215, 230, 66, 52, 
+65, 97, 150, 150, 245, 175, 66, 91, 113, 264, 175, 335, 109), 
+    drat = c(3.9, 3.9, 3.85, 3.08, 3.15, 2.76, 3.21, 3.69, 3.92, 
+    3.92, 3.92, 3.07, 3.07, 3.07, 2.93, 3, 3.23, 4.08, 4.93, 
+    4.22, 3.7, 2.76, 3.15, 3.73, 3.08, 4.08, 4.43, 3.77, 4.22, 
+    3.62, 3.54, 4.11), wt = c(2.62, 2.875, 2.32, 3.215, 3.44, 
+    3.46, 3.57, 3.19, 3.15, 3.44, 3.44, 4.07, 3.73, 3.78, 5.25, 
+    5.424, 5.345, 2.2, 1.615, 1.835, 2.465, 3.52, 3.435, 3.84, 
+    3.845, 1.935, 2.14, 1.513, 3.17, 2.77, 3.57, 2.78), qsec = c(16.46, 
+    17.02, 18.61, 19.44, 17.02, 20.22, 15.84, 20, 22.9, 18.3, 
+    18.9, 17.4, 17.6, 18, 17.98, 17.82, 17.42, 19.47, 18.52, 
+    19.9, 20.01, 16.87, 17.3, 15.41, 17.05, 18.9, 16.7, 16.9, 
+    14.5, 15.5, 14.6, 18.6), vs = c(0, 0, 1, 1, 0, 1, 0, 1, 1, 
+    1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 
+    0, 0, 0, 1), am = c(1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1), 
+    gear = c(4, 4, 4, 3, 3, 3, 3, 4, 4, 4, 4, 3, 3, 3, 3, 3, 
+    3, 4, 4, 4, 3, 3, 3, 3, 3, 4, 5, 5, 5, 5, 5, 4), carb = c(4, 
+    4, 1, 1, 2, 1, 4, 2, 2, 4, 4, 3, 3, 3, 4, 4, 4, 1, 2, 1, 
+    1, 2, 2, 4, 2, 1, 2, 2, 4, 6, 8, 2))), plot_data = list(mpg = c(21, 
+21, 22.8, 21.4, 18.7, 18.1, 14.3, 24.4, 22.8, 19.2, 17.8, 16.4, 
+17.3, 15.2, 10.4, 10.4, 14.7, 32.4, 30.4, 33.9, 21.5, 15.5, 15.2, 
+13.3, 19.2, 27.3, 26, 30.4, 15.8, 19.7, 15, 21.4), cyl = c(6, 
+6, 4, 6, 8, 6, 8, 4, 4, 6, 6, 8, 8, 8, 8, 8, 8, 4, 4, 4, 4, 8, 
+8, 8, 8, 4, 4, 4, 8, 6, 8, 4), disp = c(160, 160, 108, 258, 360, 
+225, 360, 146.7, 140.8, 167.6, 167.6, 275.8, 275.8, 275.8, 472, 
+460, 440, 78.7, 75.7, 71.1, 120.1, 318, 304, 350, 400, 79, 120.3, 
+95.1, 351, 145, 301, 121), hp = c(110, 110, 93, 110, 175, 105, 
+245, 62, 95, 123, 123, 180, 180, 180, 205, 215, 230, 66, 52, 
+65, 97, 150, 150, 245, 175, 66, 91, 113, 264, 175, 335, 109), 
+    drat = c(3.9, 3.9, 3.85, 3.08, 3.15, 2.76, 3.21, 3.69, 3.92, 
+    3.92, 3.92, 3.07, 3.07, 3.07, 2.93, 3, 3.23, 4.08, 4.93, 
+    4.22, 3.7, 2.76, 3.15, 3.73, 3.08, 4.08, 4.43, 3.77, 4.22, 
+    3.62, 3.54, 4.11), wt = c(2.62, 2.875, 2.32, 3.215, 3.44, 
+    3.46, 3.57, 3.19, 3.15, 3.44, 3.44, 4.07, 3.73, 3.78, 5.25, 
+    5.424, 5.345, 2.2, 1.615, 1.835, 2.465, 3.52, 3.435, 3.84, 
+    3.845, 1.935, 2.14, 1.513, 3.17, 2.77, 3.57, 2.78), qsec = c(16.46, 
+    17.02, 18.61, 19.44, 17.02, 20.22, 15.84, 20, 22.9, 18.3, 
+    18.9, 17.4, 17.6, 18, 17.98, 17.82, 17.42, 19.47, 18.52, 
+    19.9, 20.01, 16.87, 17.3, 15.41, 17.05, 18.9, 16.7, 16.9, 
+    14.5, 15.5, 14.6, 18.6), vs = c(0, 0, 1, 1, 0, 1, 0, 1, 1, 
+    1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 
+    0, 0, 0, 1), am = c(1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1), 
+    gear = c(4, 4, 4, 3, 3, 3, 3, 4, 4, 4, 4, 3, 3, 3, 3, 3, 
+    3, 4, 4, 4, 3, 3, 3, 3, 3, 4, 5, 5, 5, 5, 5, 4), carb = c(4, 
+    4, 1, 1, 2, 1, 4, 2, 2, 4, 4, 3, 3, 3, 4, 4, 4, 1, 2, 1, 
+    1, 2, 2, 4, 2, 1, 2, 2, 4, 6, 8, 2)), plot_env = &lt;environment&gt;) 
+{
+    data &lt;- c(list(plot_data), data)
+    self$facet_params &lt;- self$facet$setup_params(data, self$facet$params)
+    self$facet_params$plot_env &lt;- plot_env
+    data &lt;- self$facet$setup_data(data, self$facet_params)
+    self$coord_params &lt;- self$coord$setup_params(data)
+    data &lt;- self$coord$setup_data(data, self$coord_params)
+    self$layout &lt;- self$facet$compute_layout(data, self$facet_params)
+    self$layout &lt;- self$coord$setup_layout(self$layout, self$coord_params)
+    check_layout(self$layout)
+    lapply(data[-1], self$facet$map_data, layout = self$layout, 
+        params = self$facet_params)
+}
+&lt;environment: 0x7f9af069cba0&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+layer_data_p
+
+p %&gt;%
+  ggtrace::capture_fn(Layout$setup) %&gt;%
+  list(setup = .) -&gt;
+*p_Layout
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+   y count    prop x flipped_aes PANEL group ymin ymax xmin xmax colour   fill
+1 11    11 0.34375 4       FALSE     1    -1    0   11  3.1  4.9     NA grey35
+2  7     7 0.21875 6       FALSE     1    -1    0    7  5.1  6.9     NA grey35
+3 14    14 0.43750 8       FALSE     1    -1    0   14  7.1  8.9     NA grey35
+  linewidth linetype alpha
+1       0.5        1    NA
+2       0.5        1    NA
+3       0.5        1    NA
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+layer_data_p
+
+p %&gt;%
+  ggtrace::capture_fn(Layout$setup) %&gt;%
+  list(setup = .) -&gt;
+p_Layout
+
+*mtcars
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+   y count    prop x flipped_aes PANEL group ymin ymax xmin xmax colour   fill
+1 11    11 0.34375 4       FALSE     1    -1    0   11  3.1  4.9     NA grey35
+2  7     7 0.21875 6       FALSE     1    -1    0    7  5.1  6.9     NA grey35
+3 14    14 0.43750 8       FALSE     1    -1    0   14  7.1  8.9     NA grey35
+  linewidth linetype alpha
+1       0.5        1    NA
+2       0.5        1    NA
+3       0.5        1    NA
+```
+
+```
+                     mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710          22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive      21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout   18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+Valiant             18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+Duster 360          14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
+Merc 240D           24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+Merc 230            22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+Merc 280            19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+Merc 280C           17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
+Merc 450SE          16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3
+Merc 450SL          17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3
+Merc 450SLC         15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
+Cadillac Fleetwood  10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
+Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
+Chrysler Imperial   14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
+Fiat 128            32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+Honda Civic         30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+Toyota Corolla      33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
+Toyota Corona       21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
+Dodge Challenger    15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2
+AMC Javelin         15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2
+Camaro Z28          13.3   8 350.0 245 3.73 3.840 15.41  0  0    3    4
+Pontiac Firebird    19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2
+Fiat X1-9           27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
+Porsche 914-2       26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+Lotus Europa        30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+Ford Pantera L      15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4
+Ferrari Dino        19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
+Maserati Bora       15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
+Volvo 142E          21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+layer_data_p
+
+p %&gt;%
+  ggtrace::capture_fn(Layout$setup) %&gt;%
+  list(setup = .) -&gt;
+p_Layout
+
+mtcars |&gt;
+* stat_count_Layer$layer_data(plot_data = _)
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+   y count    prop x flipped_aes PANEL group ymin ymax xmin xmax colour   fill
+1 11    11 0.34375 4       FALSE     1    -1    0   11  3.1  4.9     NA grey35
+2  7     7 0.21875 6       FALSE     1    -1    0    7  5.1  6.9     NA grey35
+3 14    14 0.43750 8       FALSE     1    -1    0   14  7.1  8.9     NA grey35
+  linewidth linetype alpha
+1       0.5        1    NA
+2       0.5        1    NA
+3       0.5        1    NA
+```
+
+```
+    mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+1  21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+2  21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+3  22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+4  21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+5  18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+6  18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+7  14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
+8  24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+9  22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+10 19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+11 17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
+12 16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3
+13 17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3
+14 15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
+15 10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
+16 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
+17 14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
+18 32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+19 30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+20 33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
+21 21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
+22 15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2
+23 15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2
+24 13.3   8 350.0 245 3.73 3.840 15.41  0  0    3    4
+25 19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2
+26 27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
+27 26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+28 30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+29 15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4
+30 19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
+31 15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
+32 21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+layer_data_p
+
+p %&gt;%
+  ggtrace::capture_fn(Layout$setup) %&gt;%
+  list(setup = .) -&gt;
+p_Layout
+
+mtcars |&gt;
+  stat_count_Layer$layer_data(plot_data = _) |&gt;
+* stat_count_Layer$setup_layer(data = _)
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+   y count    prop x flipped_aes PANEL group ymin ymax xmin xmax colour   fill
+1 11    11 0.34375 4       FALSE     1    -1    0   11  3.1  4.9     NA grey35
+2  7     7 0.21875 6       FALSE     1    -1    0    7  5.1  6.9     NA grey35
+3 14    14 0.43750 8       FALSE     1    -1    0   14  7.1  8.9     NA grey35
+  linewidth linetype alpha
+1       0.5        1    NA
+2       0.5        1    NA
+3       0.5        1    NA
+```
+
+```
+    mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+1  21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+2  21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+3  22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+4  21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+5  18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+6  18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+7  14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
+8  24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+9  22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+10 19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+11 17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
+12 16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3
+13 17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3
+14 15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
+15 10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
+16 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
+17 14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
+18 32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+19 30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+20 33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
+21 21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
+22 15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2
+23 15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2
+24 13.3   8 350.0 245 3.73 3.840 15.41  0  0    3    4
+25 19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2
+26 27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
+27 26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+28 30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+29 15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4
+30 19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
+31 15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
+32 21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+layer_data_p
+
+p %&gt;%
+  ggtrace::capture_fn(Layout$setup) %&gt;%
+  list(setup = .) -&gt;
+p_Layout
+
+mtcars |&gt;
+  stat_count_Layer$layer_data(plot_data = _) |&gt;
+  stat_count_Layer$setup_layer(data = _) |&gt;
+# Detour around Layout setup
+*   list()
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+   y count    prop x flipped_aes PANEL group ymin ymax xmin xmax colour   fill
+1 11    11 0.34375 4       FALSE     1    -1    0   11  3.1  4.9     NA grey35
+2  7     7 0.21875 6       FALSE     1    -1    0    7  5.1  6.9     NA grey35
+3 14    14 0.43750 8       FALSE     1    -1    0   14  7.1  8.9     NA grey35
+  linewidth linetype alpha
+1       0.5        1    NA
+2       0.5        1    NA
+3       0.5        1    NA
+```
+
+```
+[[1]]
+    mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+1  21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+2  21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+3  22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+4  21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+5  18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+6  18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+7  14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
+8  24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+9  22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+10 19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+11 17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
+12 16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3
+13 17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3
+14 15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
+15 10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
+16 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
+17 14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
+18 32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+19 30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+20 33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
+21 21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
+22 15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2
+23 15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2
+24 13.3   8 350.0 245 3.73 3.840 15.41  0  0    3    4
+25 19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2
+26 27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
+27 26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+28 30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+29 15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4
+30 19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
+31 15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
+32 21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+layer_data_p
+
+p %&gt;%
+  ggtrace::capture_fn(Layout$setup) %&gt;%
+  list(setup = .) -&gt;
+p_Layout
+
+mtcars |&gt;
+  stat_count_Layer$layer_data(plot_data = _) |&gt;
+  stat_count_Layer$setup_layer(data = _) |&gt;
+# Detour around Layout setup
+    list() |&gt;
+*   p_Layout$setup(data = _)
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+   y count    prop x flipped_aes PANEL group ymin ymax xmin xmax colour   fill
+1 11    11 0.34375 4       FALSE     1    -1    0   11  3.1  4.9     NA grey35
+2  7     7 0.21875 6       FALSE     1    -1    0    7  5.1  6.9     NA grey35
+3 14    14 0.43750 8       FALSE     1    -1    0   14  7.1  8.9     NA grey35
+  linewidth linetype alpha
+1       0.5        1    NA
+2       0.5        1    NA
+3       0.5        1    NA
+```
+
+```
+[[1]]
+    mpg cyl  disp  hp drat    wt  qsec vs am gear carb PANEL
+1  21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4     1
+2  21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4     1
+3  22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1     1
+4  21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1     1
+5  18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2     1
+6  18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1     1
+7  14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4     1
+8  24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2     1
+9  22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2     1
+10 19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4     1
+11 17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4     1
+12 16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3     1
+13 17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3     1
+14 15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3     1
+15 10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4     1
+16 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4     1
+17 14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4     1
+18 32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1     1
+19 30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2     1
+20 33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1     1
+21 21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1     1
+22 15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2     1
+23 15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2     1
+24 13.3   8 350.0 245 3.73 3.840 15.41  0  0    3    4     1
+25 19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2     1
+26 27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1     1
+27 26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2     1
+28 30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2     1
+29 15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4     1
+30 19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6     1
+31 15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8     1
+32 21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2     1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+layer_data_p
+
+p %&gt;%
+  ggtrace::capture_fn(Layout$setup) %&gt;%
+  list(setup = .) -&gt;
+p_Layout
+
+mtcars |&gt;
+  stat_count_Layer$layer_data(plot_data = _) |&gt;
+  stat_count_Layer$setup_layer(data = _) |&gt;
+# Detour around Layout setup
+    list() |&gt;
+    p_Layout$setup(data = _) |&gt;
+*   el(1)
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+   y count    prop x flipped_aes PANEL group ymin ymax xmin xmax colour   fill
+1 11    11 0.34375 4       FALSE     1    -1    0   11  3.1  4.9     NA grey35
+2  7     7 0.21875 6       FALSE     1    -1    0    7  5.1  6.9     NA grey35
+3 14    14 0.43750 8       FALSE     1    -1    0   14  7.1  8.9     NA grey35
+  linewidth linetype alpha
+1       0.5        1    NA
+2       0.5        1    NA
+3       0.5        1    NA
+```
+
+```
+    mpg cyl  disp  hp drat    wt  qsec vs am gear carb PANEL
+1  21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4     1
+2  21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4     1
+3  22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1     1
+4  21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1     1
+5  18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2     1
+6  18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1     1
+7  14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4     1
+8  24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2     1
+9  22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2     1
+10 19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4     1
+11 17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4     1
+12 16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3     1
+13 17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3     1
+14 15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3     1
+15 10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4     1
+16 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4     1
+17 14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4     1
+18 32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1     1
+19 30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2     1
+20 33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1     1
+21 21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1     1
+22 15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2     1
+23 15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2     1
+24 13.3   8 350.0 245 3.73 3.840 15.41  0  0    3    4     1
+25 19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2     1
+26 27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1     1
+27 26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2     1
+28 30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2     1
+29 15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4     1
+30 19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6     1
+31 15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8     1
+32 21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2     1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+layer_data_p
+
+p %&gt;%
+  ggtrace::capture_fn(Layout$setup) %&gt;%
+  list(setup = .) -&gt;
+p_Layout
+
+mtcars |&gt;
+  stat_count_Layer$layer_data(plot_data = _) |&gt;
+  stat_count_Layer$setup_layer(data = _) |&gt;
+# Detour around Layout setup
+    list() |&gt;
+    p_Layout$setup(data = _) |&gt;
+    el(1) |&gt;
+* stat_count_Layer$compute_aesthetics(data = _)
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+   y count    prop x flipped_aes PANEL group ymin ymax xmin xmax colour   fill
+1 11    11 0.34375 4       FALSE     1    -1    0   11  3.1  4.9     NA grey35
+2  7     7 0.21875 6       FALSE     1    -1    0    7  5.1  6.9     NA grey35
+3 14    14 0.43750 8       FALSE     1    -1    0   14  7.1  8.9     NA grey35
+  linewidth linetype alpha
+1       0.5        1    NA
+2       0.5        1    NA
+3       0.5        1    NA
+```
+
+```
+   x PANEL group
+1  6     1    -1
+2  6     1    -1
+3  4     1    -1
+4  6     1    -1
+5  8     1    -1
+6  6     1    -1
+7  8     1    -1
+8  4     1    -1
+9  4     1    -1
+10 6     1    -1
+11 6     1    -1
+12 8     1    -1
+13 8     1    -1
+14 8     1    -1
+15 8     1    -1
+16 8     1    -1
+17 8     1    -1
+18 4     1    -1
+19 4     1    -1
+20 4     1    -1
+21 4     1    -1
+22 8     1    -1
+23 8     1    -1
+24 8     1    -1
+25 8     1    -1
+26 4     1    -1
+27 4     1    -1
+28 4     1    -1
+29 8     1    -1
+30 6     1    -1
+31 8     1    -1
+32 4     1    -1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+layer_data_p
+
+p %&gt;%
+  ggtrace::capture_fn(Layout$setup) %&gt;%
+  list(setup = .) -&gt;
+p_Layout
+
+mtcars |&gt;
+  stat_count_Layer$layer_data(plot_data = _) |&gt;
+  stat_count_Layer$setup_layer(data = _) |&gt;
+# Detour around Layout setup
+    list() |&gt;
+    p_Layout$setup(data = _) |&gt;
+    el(1) |&gt;
+  stat_count_Layer$compute_aesthetics(data = _) |&gt;
+* stat_count_Layer$compute_statistic(data = _)
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+   y count    prop x flipped_aes PANEL group ymin ymax xmin xmax colour   fill
+1 11    11 0.34375 4       FALSE     1    -1    0   11  3.1  4.9     NA grey35
+2  7     7 0.21875 6       FALSE     1    -1    0    7  5.1  6.9     NA grey35
+3 14    14 0.43750 8       FALSE     1    -1    0   14  7.1  8.9     NA grey35
+  linewidth linetype alpha
+1       0.5        1    NA
+2       0.5        1    NA
+3       0.5        1    NA
+```
+
+```
+  count    prop x width flipped_aes PANEL group
+1    11 0.34375 4   1.8       FALSE     1    -1
+2     7 0.21875 6   1.8       FALSE     1    -1
+3    14 0.43750 8   1.8       FALSE     1    -1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+layer_data_p
+
+p %&gt;%
+  ggtrace::capture_fn(Layout$setup) %&gt;%
+  list(setup = .) -&gt;
+p_Layout
+
+mtcars |&gt;
+  stat_count_Layer$layer_data(plot_data = _) |&gt;
+  stat_count_Layer$setup_layer(data = _) |&gt;
+# Detour around Layout setup
+    list() |&gt;
+    p_Layout$setup(data = _) |&gt;
+    el(1) |&gt;
+  stat_count_Layer$compute_aesthetics(data = _) |&gt;
+  stat_count_Layer$compute_statistic(data = _) |&gt;
+* stat_count_Layer$map_statistic(data = _)
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+   y count    prop x flipped_aes PANEL group ymin ymax xmin xmax colour   fill
+1 11    11 0.34375 4       FALSE     1    -1    0   11  3.1  4.9     NA grey35
+2  7     7 0.21875 6       FALSE     1    -1    0    7  5.1  6.9     NA grey35
+3 14    14 0.43750 8       FALSE     1    -1    0   14  7.1  8.9     NA grey35
+  linewidth linetype alpha
+1       0.5        1    NA
+2       0.5        1    NA
+3       0.5        1    NA
+```
+
+```
+   y count    prop x width flipped_aes PANEL group
+1 11    11 0.34375 4   1.8       FALSE     1    -1
+2  7     7 0.21875 6   1.8       FALSE     1    -1
+3 14    14 0.43750 8   1.8       FALSE     1    -1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+layer_data_p
+
+p %&gt;%
+  ggtrace::capture_fn(Layout$setup) %&gt;%
+  list(setup = .) -&gt;
+p_Layout
+
+mtcars |&gt;
+  stat_count_Layer$layer_data(plot_data = _) |&gt;
+  stat_count_Layer$setup_layer(data = _) |&gt;
+# Detour around Layout setup
+    list() |&gt;
+    p_Layout$setup(data = _) |&gt;
+    el(1) |&gt;
+  stat_count_Layer$compute_aesthetics(data = _) |&gt;
+  stat_count_Layer$compute_statistic(data = _) |&gt;
+  stat_count_Layer$map_statistic(data = _) |&gt;
+* stat_count_Layer$compute_geom_1(data = _)
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+   y count    prop x flipped_aes PANEL group ymin ymax xmin xmax colour   fill
+1 11    11 0.34375 4       FALSE     1    -1    0   11  3.1  4.9     NA grey35
+2  7     7 0.21875 6       FALSE     1    -1    0    7  5.1  6.9     NA grey35
+3 14    14 0.43750 8       FALSE     1    -1    0   14  7.1  8.9     NA grey35
+  linewidth linetype alpha
+1       0.5        1    NA
+2       0.5        1    NA
+3       0.5        1    NA
+```
+
+```
+   y count    prop x flipped_aes PANEL group ymin ymax xmin xmax
+1 11    11 0.34375 4       FALSE     1    -1    0   11  3.1  4.9
+2  7     7 0.21875 6       FALSE     1    -1    0    7  5.1  6.9
+3 14    14 0.43750 8       FALSE     1    -1    0   14  7.1  8.9
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+layer_data_p
+
+p %&gt;%
+  ggtrace::capture_fn(Layout$setup) %&gt;%
+  list(setup = .) -&gt;
+p_Layout
+
+mtcars |&gt;
+  stat_count_Layer$layer_data(plot_data = _) |&gt;
+  stat_count_Layer$setup_layer(data = _) |&gt;
+# Detour around Layout setup
+    list() |&gt;
+    p_Layout$setup(data = _) |&gt;
+    el(1) |&gt;
+  stat_count_Layer$compute_aesthetics(data = _) |&gt;
+  stat_count_Layer$compute_statistic(data = _) |&gt;
+  stat_count_Layer$map_statistic(data = _) |&gt;
+  stat_count_Layer$compute_geom_1(data = _) |&gt;
+* stat_count_Layer$compute_geom_2(data = _)
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+   y count    prop x flipped_aes PANEL group ymin ymax xmin xmax colour   fill
+1 11    11 0.34375 4       FALSE     1    -1    0   11  3.1  4.9     NA grey35
+2  7     7 0.21875 6       FALSE     1    -1    0    7  5.1  6.9     NA grey35
+3 14    14 0.43750 8       FALSE     1    -1    0   14  7.1  8.9     NA grey35
+  linewidth linetype alpha
+1       0.5        1    NA
+2       0.5        1    NA
+3       0.5        1    NA
+```
+
+```
+   y count    prop x flipped_aes PANEL group ymin ymax xmin xmax colour   fill
+1 11    11 0.34375 4       FALSE     1    -1    0   11  3.1  4.9     NA grey35
+2  7     7 0.21875 6       FALSE     1    -1    0    7  5.1  6.9     NA grey35
+3 14    14 0.43750 8       FALSE     1    -1    0   14  7.1  8.9     NA grey35
+  linewidth linetype alpha
+1       0.5        1    NA
+2       0.5        1    NA
+3       0.5        1    NA
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+layer_data_p
+
+p %&gt;%
+  ggtrace::capture_fn(Layout$setup) %&gt;%
+  list(setup = .) -&gt;
+p_Layout
+
+mtcars |&gt;
+  stat_count_Layer$layer_data(plot_data = _) |&gt;
+  stat_count_Layer$setup_layer(data = _) |&gt;
+# Detour around Layout setup
+    list() |&gt;
+    p_Layout$setup(data = _) |&gt;
+    el(1) |&gt;
+  stat_count_Layer$compute_aesthetics(data = _) |&gt;
+  stat_count_Layer$compute_statistic(data = _) |&gt;
+  stat_count_Layer$map_statistic(data = _) |&gt;
+  stat_count_Layer$compute_geom_1(data = _) |&gt;
+  stat_count_Layer$compute_geom_2(data = _) |&gt;
+* stat_count_Layer$finish_statistics(data = _)
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+   y count    prop x flipped_aes PANEL group ymin ymax xmin xmax colour   fill
+1 11    11 0.34375 4       FALSE     1    -1    0   11  3.1  4.9     NA grey35
+2  7     7 0.21875 6       FALSE     1    -1    0    7  5.1  6.9     NA grey35
+3 14    14 0.43750 8       FALSE     1    -1    0   14  7.1  8.9     NA grey35
+  linewidth linetype alpha
+1       0.5        1    NA
+2       0.5        1    NA
+3       0.5        1    NA
+```
+
+```
+   y count    prop x flipped_aes PANEL group ymin ymax xmin xmax colour   fill
+1 11    11 0.34375 4       FALSE     1    -1    0   11  3.1  4.9     NA grey35
+2  7     7 0.21875 6       FALSE     1    -1    0    7  5.1  6.9     NA grey35
+3 14    14 0.43750 8       FALSE     1    -1    0   14  7.1  8.9     NA grey35
+  linewidth linetype alpha
+1       0.5        1    NA
+2       0.5        1    NA
+3       0.5        1    NA
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk2-auto[
+
+``` r
+layer_data_p
+
+p %&gt;%
+  ggtrace::capture_fn(Layout$setup) %&gt;%
+  list(setup = .) -&gt;
+p_Layout
+
+mtcars |&gt;
+  stat_count_Layer$layer_data(plot_data = _) |&gt;
+  stat_count_Layer$setup_layer(data = _) |&gt;
+# Detour around Layout setup
+    list() |&gt;
+    p_Layout$setup(data = _) |&gt;
+    el(1) |&gt;
+  stat_count_Layer$compute_aesthetics(data = _) |&gt;
+  stat_count_Layer$compute_statistic(data = _) |&gt;
+  stat_count_Layer$map_statistic(data = _) |&gt;
+  stat_count_Layer$compute_geom_1(data = _) |&gt;
+  stat_count_Layer$compute_geom_2(data = _) |&gt;
+  stat_count_Layer$finish_statistics(data = _)
+```
+]
+ 
+.panel2-the_chunk2-auto[
+
+```
+   y count    prop x flipped_aes PANEL group ymin ymax xmin xmax colour   fill
+1 11    11 0.34375 4       FALSE     1    -1    0   11  3.1  4.9     NA grey35
+2  7     7 0.21875 6       FALSE     1    -1    0    7  5.1  6.9     NA grey35
+3 14    14 0.43750 8       FALSE     1    -1    0   14  7.1  8.9     NA grey35
+  linewidth linetype alpha
+1       0.5        1    NA
+2       0.5        1    NA
+3       0.5        1    NA
+```
+
+```
+   y count    prop x flipped_aes PANEL group ymin ymax xmin xmax colour   fill
+1 11    11 0.34375 4       FALSE     1    -1    0   11  3.1  4.9     NA grey35
+2  7     7 0.21875 6       FALSE     1    -1    0    7  5.1  6.9     NA grey35
+3 14    14 0.43750 8       FALSE     1    -1    0   14  7.1  8.9     NA grey35
+  linewidth linetype alpha
+1       0.5        1    NA
+2       0.5        1    NA
+3       0.5        1    NA
+```
+]
+
+&lt;style&gt;
+.panel1-the_chunk2-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-the_chunk2-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-the_chunk2-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 76%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+&lt;/style&gt;
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
