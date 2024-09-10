@@ -1,0 +1,100 @@
+---
+title: "gglm"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r, eval = F}
+library(devtools)
+create(".")
+
+```
+
+```{r}
+knitrExtra:::chunk_to_r("StatLm")
+```
+
+```{r StatLm}
+compute_panel_lm <- function(data, 
+                             scales, 
+                             drop_x = FALSE, 
+                             formula = y ~ . , ...){
+  
+  data |>
+    ggplot2::remove_missing() ->
+  data
+  
+  data %>% 
+    select(-PANEL) ->
+  lmdata
+  
+  if(drop_x){
+    
+    lmdata %>% 
+      select(-x) ->
+    lmdata
+    
+  }
+  
+  lm <- lm(data = lmdata, formula = formula, ...)
+  
+  data$yend = data$y
+  data$y = lm$fitted.values
+  data$xend = data$x
+
+  data$residuals <- lm$residuals
+  
+  data
+  
+}
+
+StatLm <- ggplot2::ggproto("StatLm",
+                           ggplot2::Stat,
+                           compute_panel = compute_panel_lm)
+```
+
+## Experiment
+
+```{r}
+library(tidyverse)
+palmerpenguins::penguins %>%
+  remove_missing() %>%
+  select(y = flipper_length_mm,
+         x = bill_depth_mm,
+         pred1 = sex) %>%
+  mutate(PANEL = 1) %>%
+  compute_panel_lm()
+
+palmerpenguins::penguins %>% 
+  ggplot() + 
+  aes(y = flipper_length_mm, x = bill_depth_mm) + 
+  geom_point() + 
+  geom_point(stat = StatLm, alpha = .25, formula = y ~ species) + 
+  geom_segment(stat = StatLm, alpha = .25) +
+  aes(color = species) + aes(species = species) + 
+  aes(shape = sex) + 
+  aes(body_mass_g = body_mass_g) + 
+  aes(bill_length_mm = bill_length_mm) + 
+  aes(island = island) + 
+  aes(year = year)
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

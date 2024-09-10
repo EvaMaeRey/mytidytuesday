@@ -155,8 +155,12 @@ last_plot() +
 
 
 ```{r}
-
-compute_lm_whatever <- function(data, scales, drop_x = FALSE){
+library(tidyverse)
+compute_panel_lm <- function(data, scales, drop_x = FALSE){
+  
+  data %>% 
+    remove_missing() ->
+  data
   
   data %>% 
     select(-PANEL) ->
@@ -188,35 +192,36 @@ palmerpenguins::penguins %>%
          x = bill_depth_mm,
          pred1 = sex) %>% 
   mutate(PANEL = 1) %>% 
-  compute_lm_whatever()
+  compute_panel_lm()
 
 
-StatLmWhatever <- ggproto("StatLmWhatever",
+StatLm <- ggproto("StatLm",
                        Stat,
-                       compute_panel = compute_lm_whatever)
+                       compute_panel = compute_panel_lm)
  
 palmerpenguins::penguins %>% 
-  remove_missing() %>% 
-  mutate(x = sample(row_number())) %>% 
   ggplot() + 
   aes(y = flipper_length_mm, x = bill_depth_mm) + 
   geom_point() + 
-  geom_point(stat = StatLmWhatever, alpha = .25) + 
-  geom_segment(stat = StatLmWhatever, alpha = .25)
+  geom_point(stat = StatLm, alpha = .25) + 
+  geom_segment(stat = StatLm, alpha = .25)
 
-
-layer_data() %>% head()
+last_plot() +
+  aes(p2 = body_mass_g)
 
 last_plot() + 
   aes(color = species)
-
 
 last_plot() +
   aes(shape = sex)
 
 
-last_plot() +
-  aes(p3 = body_mass_g)
+palmerpenguins::penguins %>% 
+  ggplot() + 
+  aes(y = flipper_length_mm, x = bill_depth_mm, sex = sex) + 
+  geom_point() + 
+  geom_point(stat = StatLm, alpha = .25) + 
+  geom_segment(stat = StatLm, alpha = .25)
 
 last_plot() + 
   aes(p4 = bill_length_mm)
@@ -480,6 +485,19 @@ palmerpenguins::penguins %>%
   geom_text(stat = StatPcacols, hjust = "outward") + 
   geom_segment(stat = StatPcacols, 
                arrow = arrow(ends = "first"))
+
+
+```
+
+
+
+```{r}
+compute_group_centroid <- function(data, fun, ){
+  
+  
+  
+}
+
 
 
 ```

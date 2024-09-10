@@ -36,7 +36,7 @@ return_heart_df <- function(n_vertices){
 
 
 ### Design code to be featured in app ####
-return_heart_df(n_vertices = 16) %>%
+return_heart_df(n_vertices = 16) %>% # computes x, y for heart
   ggplot() +
   aes(x = x, y = y, group = group) +
   geom_polygon(
