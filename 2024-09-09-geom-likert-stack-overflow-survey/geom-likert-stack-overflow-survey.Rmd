@@ -55,7 +55,7 @@ ai_sent_levels <- c("Very unfavorable",
                     "Very favorable")
 
 
-so <- stackoverflow_survey_single_response %>% 
+stack_overflow_ai <- stackoverflow_survey_single_response %>% 
   left_join(qfilter("age")) %>% 
   left_join(qfilter("main_branch")) %>% 
   left_join(qfilter("ai_sent")) %>% 
@@ -71,7 +71,7 @@ so <- stackoverflow_survey_single_response %>%
   )
 
 
-so_count <- so %>% 
+so_count <- stack_overflow_ai %>% 
   count(age_label, main_branch_label, ai_sent_label)
 
 
@@ -111,41 +111,55 @@ ggstats::gglikert(so_count,
     plot.margin = margin(10, 10, 10, 10)
   )
 
+```
 
-
-
+```{r, fig.show='hold', out.width="33%"}
 library(ggstats)
-so %>% 
-  ggplot() + 
-  aes(fill = ai_sent_label, 
-      y = age_label) + 
-  geom_likert() +
-  geom_likert_text(cutoff = .1) 
 
+# data + aesthetics + labs plot object
+p0 <- ggplot(stack_overflow_ai) + 
+  aes(y = age_label) + labs(y = NULL) +
+  aes(fill = ai_sent_label) + labs(fill = NULL)
 
-last_plot() + 
-  labs(fill = NULL) +
-  scale_fill_likert() + 
-  geom_vline(xintercept = 0, color = "grey", linetype = "dashed") +
-  scale_y_discrete(labels = scales::wrap_format(20))
+# plot 1: position filled geom_bar
+p0 + 
+  geom_bar(position = position_fill())  
   
-
-
-last_plot() + 
-  aes(y = main_branch_label)
-
-
-ggwipe::last_plot_wipe() + # returns last plot without layers.
-  geom_diverging() + 
-  geom_diverging_text(cutoff = .25)
-
-
+# plot 2: geom_likert() plot
+p0 +                  
+  geom_likert() + # geom_bar + with likert positioning
+  geom_vline(xintercept = 0,         # add center reference
+             color = "gray90") +
+  geom_likert_text(size = 2.5) +     # add text percentages
+  scale_fill_likert()                # change to likert fill colors
+  
+# plot 3: geom_diverging() plot
+p0 +                  
+  geom_diverging() + # geom_bar with diverging positioning
+  geom_vline(xintercept = 0,         # add center reference
+             color = "gray90") +
+  geom_diverging_text(size = 2.5) +     # add text counts
+  scale_fill_likert()                # change to likert fill colors
 ```
 
 ## Experiment
 
-```{r}
+```{r, fig.show='hold', out.width="49%"}
+library(ggstats)
 
+# data/aesthetics/labs ggplot object
+p0 <- ggplot(stack_overflow_ai) + 
+  aes(y = age_label) + labs(y = NULL) +
+  aes(fill = ifelse(!is.na(ai_sent_label), "respond", "don't respond")) + labs(fill = NULL)
+
+# plot 1: position filled geom_bar
+p0 + 
+  geom_bar()  
+  
+# plot 2: geom_pyramid() plot
+p0 +                  
+  geom_pyramid() +                    # geom_bar with pyramid positioning
+  geom_pyramid_text(size = 2.5)    # add text percentages
 ```
 
 

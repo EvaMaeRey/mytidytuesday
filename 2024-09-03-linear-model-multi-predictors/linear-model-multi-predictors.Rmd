@@ -137,11 +137,18 @@ last_plot() +
   aes(predictors = vars_pack(species)) + 
   aes(color = species)
 
+layer_data() %>% head()
+
+
+layer_data() %>% head() %>%
+    mutate(vars_unpack(predictors))
 
 last_plot() +
   aes(predictors = vars_pack(species, sex)) + 
   aes(shape = sex)
 
+layer_data() %>% head() %>%
+    mutate(vars_unpack(predictors))
 
 last_plot() +
   aes(predictors = vars_pack(species, sex, body_mass_g))

@@ -1,0 +1,154 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+```{r, warning=F}
+library(tidyverse)
+
+compute_panel_lm <- function(data, scales, formula = y ~ . ){
+  
+  # data prep
+  data <- data %>% remove_missing()
+  lmdata <- data %>% select(-PANEL, -group)
+  
+  # modeling
+  lm <- lm(data = lmdata, formula = formula)
+  data$model <- NA
+  data$model[1] <- list(lm)
+  
+  # save attributes
+  data$yend = data$y
+  data$y = lm$fitted.values
+  data$xend = data$x
+  data$residuals <- lm$residuals
+  
+  data
+  
+}
+
+compute_panel_lm_glance <- function(data, scales, formula = y ~ . ){
+  
+  # data prep
+  data <- data %>% remove_missing()
+  lmdata <- data %>% select(-PANEL, -group)
+  
+  # modeling
+  lm <- lm(data = lmdata, formula = formula) %>% summary()
+
+  data.frame(label = paste0("R-squared: \n", round(lm$r.squared, 3)),
+             x = I(.15),
+             y = I(.95))
+  
+  }
+
+StatLmGlance <- ggproto("StatLmGlance", Stat, 
+                  compute_panel = compute_panel_lm_glance)
+
+
+StatLm <- ggproto("StatLm", Stat, 
+                  compute_panel = compute_panel_lm)
+
+
+stat_lm <- function (mapping = NULL, data = NULL, geom = "point", position = "identity", 
+    ..., show.legend = NA, inherit.aes = TRUE) 
+{
+    layer(data = data, mapping = mapping, stat = StatLm, 
+        geom = geom, position = position, show.legend = show.legend, 
+        inherit.aes = inherit.aes, params = rlang::list2(na.rm = FALSE, 
+            ...))
+}
+
+geom_lm <- stat_lm
+
+return_model <- function(){layer_data(i = length(last_plot()$layers))$model[[1]] %>% summary}
+
+stat_lm_empty <- function(...){stat_lm(formula = y ~ 1, ...)}
+
+geom_lm_empty <- stat_lm_empty
+
+```
+
+
+```{r, warning=F}
+# scatterplot
+p0 <- palmerpenguins::penguins %>% 
+  ggplot() + 
+  aes(y = flipper_length_mm, x = bill_depth_mm) + 
+  geom_point(color = "Black") ; p0
+  
+# adding bill_depth_mm
+p0 + 
+  aes(bill_depth_mm = bill_depth_mm) +
+  geom_lm(alpha = .2) +
+  geom_text(stat = StatLmGlance, size = 4) +
+  stat_lm(geom = 'segment', alpha = .2)
+
+return_model()
+
+# adding species
+last_plot() + 
+  aes(color = species) 
+
+return_model()
+
+# adding sex
+last_plot() + 
+  aes(shape = sex)
+
+# adding island
+last_plot() + 
+  aes(island = island)
+
+# adding wt
+last_plot() + 
+  aes(body_mass_g = body_mass_g)
+
+return_model()
+
+
+# empty model
+p0 +
+  geom_lm_empty(alpha = .2) +
+  stat_lm_empty(geom = 'segment', alpha = .2)  
+return_model()
+```
+
+
+```{r flipper_estimation}
+palmerpenguins::penguins %>% 
+  head(2)
+
+ggplot(palmerpenguins::penguins) + 
+  aes(y = flipper_length_mm, x = bill_depth_mm) + 
+  geom_point(color = "Black") +
+  aes(bill_depth_mm = bill_depth_mm) +
+  geom_lm(alpha = .2) +
+  geom_text(stat = StatLmGlance, size = 5) +
+  stat_lm(geom = 'segment', alpha = .2) +
+  aes(color = species) + 
+  aes(shape = sex) + 
+  aes(island = island) + 
+  aes(body_mass_g = body_mass_g)
+```
+
+
+
+
+```{r}
+knitr::knit_exit()
+
+
+```
+

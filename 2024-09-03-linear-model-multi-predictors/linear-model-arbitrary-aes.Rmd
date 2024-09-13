@@ -16,6 +16,7 @@ options(tidyverse.quiet = TRUE)
 
 ```{r}
 library(tidyverse)
+
 compute_panel_lm <- function(data, scales, drop_x = FALSE, formula = y ~ . ){
   
   data %>% 
@@ -34,13 +35,16 @@ compute_panel_lm <- function(data, scales, drop_x = FALSE, formula = y ~ . ){
     
   }
   
-  lm <- lm(data = lmdata, y ~ .)
+  lm <- lm(data = lmdata, formula = formula)
   
   data$yend = data$y
   data$y = lm$fitted.values
   data$xend = data$x
 
   data$residuals <- lm$residuals
+  
+  data$model <- NA
+  data$model[1] <- list(lm)
   
   data
   
@@ -50,31 +54,39 @@ palmerpenguins::penguins %>%
   remove_missing() %>% 
   select(y = flipper_length_mm, 
          x = bill_depth_mm,
-         pred1 = sex) %>% 
+         p1 = sex) %>% 
   mutate(PANEL = 1) %>% 
-  compute_panel_lm()
+  compute_panel_lm() %>% 
+  .$model %>%
+  .[[1]] %>% 
+  summary()
 
+palmerpenguins::penguins %>% 
+  remove_missing() %>% 
+  select(y = flipper_length_mm, 
+         x = bill_depth_mm,
+         p1 = sex) %>% 
+  lm(data = ., formula = y ~ x + p1) %>% 
+  summary()
 
 StatLm <- ggproto("StatLm",
                   Stat,
                   compute_panel = compute_panel_lm)
-``` 
 
-
-
-```{r penguinseval}
 palmerpenguins::penguins %>% 
   ggplot() + 
   aes(y = flipper_length_mm, x = bill_depth_mm) + 
   geom_point() + 
-  geom_point(stat = StatLm, alpha = .25) + 
-  geom_segment(stat = StatLm, alpha = .25) +
-  aes(color = species) + aes(species = species) + 
-  aes(shape = sex) + 
-  aes(body_mass_g = body_mass_g) + 
-  aes(bill_length_mm = bill_length_mm) + 
-  aes(island = island)  + 
-  aes(year = year)
+  geom_point(stat = StatLm, alpha = .25) +
+  geom_segment(stat = StatLm, alpha = .25) + NULL 
+last_plot() + aes(color = species) + aes(species = species) + NULL
+last_plot() + aes(shape = sex) + NULL
+last_plot() + aes(body_mass_g = body_mass_g) + NULL
+last_plot() + aes(bill_length_mm = bill_length_mm) + NULL
+last_plot() + aes(island = island)  + NULL
+last_plot() + aes(year = year)
+
+layer_data()
 ```
 
 ```{r}
@@ -82,9 +94,20 @@ palmerpenguins::penguins %>%
   ggplot() + 
   aes(y = flipper_length_mm, x = bill_depth_mm, sex = sex) + 
   geom_point() + 
-  geom_point(stat = StatLm, alpha = .25) + 
-  geom_segment(stat = StatLm, alpha = .25)
+  geom_point(stat = StatLm, alpha = .05, formula = y ~ x) + 
+  geom_point(stat = StatLm, alpha = .25, formula = y ~ x + sex) 
 
+palmerpenguins::penguins %>% lm(data = ., formula = flipper_length_mm ~ .)
+
+palmerpenguins::penguins %>% 
+  ggplot() + 
+  aes(y = flipper_length_mm, x = bill_depth_mm, sex = sex) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x + x^2)
+```
+
+
+```{r}
 last_plot() + 
   aes(p4 = bill_length_mm)
 
