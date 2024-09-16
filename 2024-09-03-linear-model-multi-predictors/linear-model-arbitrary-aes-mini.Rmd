@@ -77,7 +77,8 @@ compute_panel_lm_tidy <- function(data, scales, formula = y ~ . ){
 
 StatLmTidy <- ggproto("StatLmTidy", Stat,
                       compute_panel = compute_panel_lm_tidy,
-                      default_aes = aes(label = after_stat(variable)))
+                      default_aes = aes(label = after_stat(variable),
+                                        xend = after_stat(Estimate + Std..Error*1.96)))
 
 
 StatLm <- ggproto("StatLm", Stat, 
@@ -168,10 +169,8 @@ ggplot(palmerpenguins::penguins) +
 ggwipe::last_plot_wipe() +
   geom_point(stat = StatLmTidy) + 
   geom_text(stat = StatLmTidy, vjust = 1) + 
-  geom_segment(stat = StatLmTidy, 
-               aes(xend = after_stat(Estimate + Std..Error*1.96))) + 
-  geom_segment(stat = StatLmTidy, 
-               aes(xend = after_stat(Estimate - Std..Error*1.96)))
+  geom_segment(stat = StatLmTidy,
+               aes(x = after_stat(Estimate - Std..Error*1.96)))
 
 layer_data()
 ```
