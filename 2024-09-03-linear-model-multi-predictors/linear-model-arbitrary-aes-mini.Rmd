@@ -57,6 +57,29 @@ StatLmGlance <- ggproto("StatLmGlance", Stat,
                   compute_panel = compute_panel_lm_glance)
 
 
+compute_panel_lm_tidy <- function(data, scales, formula = y ~ . ){
+  
+  # data prep
+  data <- data %>% remove_missing()
+  lmdata <- data %>% select(-PANEL, -group)
+  
+  # modeling
+  model <- lm(data = lmdata, formula = formula) %>% summary()
+
+  model$coefficients %>% 
+    data.frame() %>% 
+    rownames_to_column(var = "variable") %>% 
+    mutate(y = as.numeric(as.factor(variable)),
+           x = Estimate) %>% 
+    slice(-1)
+  
+}
+
+StatLmTidy <- ggproto("StatLmTidy", Stat,
+                      compute_panel = compute_panel_lm_tidy,
+                      default_aes = aes(label = after_stat(variable)))
+
+
 StatLm <- ggproto("StatLm", Stat, 
                   compute_panel = compute_panel_lm)
 
@@ -86,7 +109,7 @@ geom_lm_empty <- stat_lm_empty
 p0 <- palmerpenguins::penguins %>% 
   ggplot() + 
   aes(y = flipper_length_mm, x = bill_depth_mm) + 
-  geom_point(color = "Black") ; p0
+  geom_point() ; p0
   
 # adding bill_depth_mm
 p0 + 
@@ -132,7 +155,7 @@ palmerpenguins::penguins %>%
 
 ggplot(palmerpenguins::penguins) + 
   aes(y = flipper_length_mm, x = bill_depth_mm) + 
-  geom_point(color = "Black") +
+  geom_point() +
   aes(bill_depth_mm = bill_depth_mm) +
   geom_lm(alpha = .2) +
   geom_text(stat = StatLmGlance, size = 5) +
@@ -141,6 +164,16 @@ ggplot(palmerpenguins::penguins) +
   aes(shape = sex) + 
   aes(island = island) + 
   aes(body_mass_g = body_mass_g)
+
+ggwipe::last_plot_wipe() +
+  geom_point(stat = StatLmTidy) + 
+  geom_text(stat = StatLmTidy, vjust = 1) + 
+  geom_segment(stat = StatLmTidy, 
+               aes(xend = after_stat(Estimate + Std..Error*1.96))) + 
+  geom_segment(stat = StatLmTidy, 
+               aes(xend = after_stat(Estimate - Std..Error*1.96)))
+
+layer_data()
 ```
 
 
