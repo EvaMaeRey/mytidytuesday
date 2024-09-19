@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>bikes-box</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="" />
+    <script src="libs/header-attrs-2.26/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+
+
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+*library(dsbox)
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(dsbox)
+*dcbikeshare
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+# A tibble: 731 × 16
+   instant dteday     season    yr  mnth holiday weekday workingday weathersit
+     &lt;dbl&gt; &lt;date&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+ 1       1 2011-01-01      1     0     1       0       6          0          2
+ 2       2 2011-01-02      1     0     1       0       0          0          2
+ 3       3 2011-01-03      1     0     1       0       1          1          1
+ 4       4 2011-01-04      1     0     1       0       2          1          1
+ 5       5 2011-01-05      1     0     1       0       3          1          1
+ 6       6 2011-01-06      1     0     1       0       4          1          1
+ 7       7 2011-01-07      1     0     1       0       5          1          2
+ 8       8 2011-01-08      1     0     1       0       6          0          2
+ 9       9 2011-01-09      1     0     1       0       0          0          1
+10      10 2011-01-10      1     0     1       0       1          1          1
+# ℹ 721 more rows
+# ℹ 7 more variables: temp &lt;dbl&gt;, atemp &lt;dbl&gt;, hum &lt;dbl&gt;, windspeed &lt;dbl&gt;,
+#   casual &lt;dbl&gt;, registered &lt;dbl&gt;, cnt &lt;dbl&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(dsbox)
+dcbikeshare %&gt;%
+* mutate(atemp_raw = atemp * 50)
+```
+]
+ 
+.panel2-the_chunk-auto[
+
+```
+# A tibble: 731 × 17
+   instant dteday     season    yr  mnth holiday weekday workingday weathersit
+     &lt;dbl&gt; &lt;date&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+ 1       1 2011-01-01      1     0     1       0       6          0          2
+ 2       2 2011-01-02      1     0     1       0       0          0          2
+ 3       3 2011-01-03      1     0     1       0       1          1          1
+ 4       4 2011-01-04      1     0     1       0       2          1          1
+ 5       5 2011-01-05      1     0     1       0       3          1          1
+ 6       6 2011-01-06      1     0     1       0       4          1          1
+ 7       7 2011-01-07      1     0     1       0       5          1          2
+ 8       8 2011-01-08      1     0     1       0       6          0          2
+ 9       9 2011-01-09      1     0     1       0       0          0          1
+10      10 2011-01-10      1     0     1       0       1          1          1
+# ℹ 721 more rows
+# ℹ 8 more variables: temp &lt;dbl&gt;, atemp &lt;dbl&gt;, hum &lt;dbl&gt;, windspeed &lt;dbl&gt;,
+#   casual &lt;dbl&gt;, registered &lt;dbl&gt;, cnt &lt;dbl&gt;, atemp_raw &lt;dbl&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(dsbox)
+dcbikeshare %&gt;%
+  mutate(atemp_raw = atemp * 50) %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-the_chunk-auto[
+![](bikes-box_chunk_flipbook_files/figure-html/the_chunk_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(dsbox)
+dcbikeshare %&gt;%
+  mutate(atemp_raw = atemp * 50) %&gt;%
+  ggplot() +
+* aes(x = dteday, y = cnt)
+```
+]
+ 
+.panel2-the_chunk-auto[
+![](bikes-box_chunk_flipbook_files/figure-html/the_chunk_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(dsbox)
+dcbikeshare %&gt;%
+  mutate(atemp_raw = atemp * 50) %&gt;%
+  ggplot() +
+  aes(x = dteday, y = cnt) +
+*   geom_point()
+```
+]
+ 
+.panel2-the_chunk-auto[
+![](bikes-box_chunk_flipbook_files/figure-html/the_chunk_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(dsbox)
+dcbikeshare %&gt;%
+  mutate(atemp_raw = atemp * 50) %&gt;%
+  ggplot() +
+  aes(x = dteday, y = cnt) +
+    geom_point() +
+*   labs(title = "Bike rentals in DC, 2011 and 2012",
+*        subtitle = "Warmer temperatures associated with more bike rentals",
+*        x = "Date",
+*        y = "Bike renrals",
+*        color = "Temperature (C)")
+```
+]
+ 
+.panel2-the_chunk-auto[
+![](bikes-box_chunk_flipbook_files/figure-html/the_chunk_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(dsbox)
+dcbikeshare %&gt;%
+  mutate(atemp_raw = atemp * 50) %&gt;%
+  ggplot() +
+  aes(x = dteday, y = cnt) +
+    geom_point() +
+    labs(title = "Bike rentals in DC, 2011 and 2012",
+         subtitle = "Warmer temperatures associated with more bike rentals",
+         x = "Date",
+         y = "Bike renrals",
+         color = "Temperature (C)") +
+* theme_minimal()
+```
+]
+ 
+.panel2-the_chunk-auto[
+![](bikes-box_chunk_flipbook_files/figure-html/the_chunk_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(dsbox)
+dcbikeshare %&gt;%
+  mutate(atemp_raw = atemp * 50) %&gt;%
+  ggplot() +
+  aes(x = dteday, y = cnt) +
+    geom_point() +
+    labs(title = "Bike rentals in DC, 2011 and 2012",
+         subtitle = "Warmer temperatures associated with more bike rentals",
+         x = "Date",
+         y = "Bike renrals",
+         color = "Temperature (C)") +
+  theme_minimal() +
+* geom_lm(alpha = .2)
+```
+]
+ 
+.panel2-the_chunk-auto[
+![](bikes-box_chunk_flipbook_files/figure-html/the_chunk_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(dsbox)
+dcbikeshare %&gt;%
+  mutate(atemp_raw = atemp * 50) %&gt;%
+  ggplot() +
+  aes(x = dteday, y = cnt) +
+    geom_point() +
+    labs(title = "Bike rentals in DC, 2011 and 2012",
+         subtitle = "Warmer temperatures associated with more bike rentals",
+         x = "Date",
+         y = "Bike renrals",
+         color = "Temperature (C)") +
+  theme_minimal() +
+  geom_lm(alpha = .2) +
+* geom_text(stat = StatLmGlance, size = 5)
+```
+]
+ 
+.panel2-the_chunk-auto[
+![](bikes-box_chunk_flipbook_files/figure-html/the_chunk_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(dsbox)
+dcbikeshare %&gt;%
+  mutate(atemp_raw = atemp * 50) %&gt;%
+  ggplot() +
+  aes(x = dteday, y = cnt) +
+    geom_point() +
+    labs(title = "Bike rentals in DC, 2011 and 2012",
+         subtitle = "Warmer temperatures associated with more bike rentals",
+         x = "Date",
+         y = "Bike renrals",
+         color = "Temperature (C)") +
+  theme_minimal() +
+  geom_lm(alpha = .2) +
+  geom_text(stat = StatLmGlance, size = 5) +
+* stat_lm(geom = 'segment', alpha = .2)
+```
+]
+ 
+.panel2-the_chunk-auto[
+![](bikes-box_chunk_flipbook_files/figure-html/the_chunk_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(dsbox)
+dcbikeshare %&gt;%
+  mutate(atemp_raw = atemp * 50) %&gt;%
+  ggplot() +
+  aes(x = dteday, y = cnt) +
+    geom_point() +
+    labs(title = "Bike rentals in DC, 2011 and 2012",
+         subtitle = "Warmer temperatures associated with more bike rentals",
+         x = "Date",
+         y = "Bike renrals",
+         color = "Temperature (C)") +
+  theme_minimal() +
+  geom_lm(alpha = .2) +
+  geom_text(stat = StatLmGlance, size = 5) +
+  stat_lm(geom = 'segment', alpha = .2) +
+* aes(season = as.factor(season))
+```
+]
+ 
+.panel2-the_chunk-auto[
+![](bikes-box_chunk_flipbook_files/figure-html/the_chunk_auto_12_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(dsbox)
+dcbikeshare %&gt;%
+  mutate(atemp_raw = atemp * 50) %&gt;%
+  ggplot() +
+  aes(x = dteday, y = cnt) +
+    geom_point() +
+    labs(title = "Bike rentals in DC, 2011 and 2012",
+         subtitle = "Warmer temperatures associated with more bike rentals",
+         x = "Date",
+         y = "Bike renrals",
+         color = "Temperature (C)") +
+  theme_minimal() +
+  geom_lm(alpha = .2) +
+  geom_text(stat = StatLmGlance, size = 5) +
+  stat_lm(geom = 'segment', alpha = .2) +
+  aes(season = as.factor(season)) +
+* aes(holiday = holiday)
+```
+]
+ 
+.panel2-the_chunk-auto[
+![](bikes-box_chunk_flipbook_files/figure-html/the_chunk_auto_13_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(dsbox)
+dcbikeshare %&gt;%
+  mutate(atemp_raw = atemp * 50) %&gt;%
+  ggplot() +
+  aes(x = dteday, y = cnt) +
+    geom_point() +
+    labs(title = "Bike rentals in DC, 2011 and 2012",
+         subtitle = "Warmer temperatures associated with more bike rentals",
+         x = "Date",
+         y = "Bike renrals",
+         color = "Temperature (C)") +
+  theme_minimal() +
+  geom_lm(alpha = .2) +
+  geom_text(stat = StatLmGlance, size = 5) +
+  stat_lm(geom = 'segment', alpha = .2) +
+  aes(season = as.factor(season)) +
+  aes(holiday = holiday) +
+* aes(shape = ind2cat::ind_recode(workingday)) + labs(shape = NULL)
+```
+]
+ 
+.panel2-the_chunk-auto[
+![](bikes-box_chunk_flipbook_files/figure-html/the_chunk_auto_14_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(dsbox)
+dcbikeshare %&gt;%
+  mutate(atemp_raw = atemp * 50) %&gt;%
+  ggplot() +
+  aes(x = dteday, y = cnt) +
+    geom_point() +
+    labs(title = "Bike rentals in DC, 2011 and 2012",
+         subtitle = "Warmer temperatures associated with more bike rentals",
+         x = "Date",
+         y = "Bike renrals",
+         color = "Temperature (C)") +
+  theme_minimal() +
+  geom_lm(alpha = .2) +
+  geom_text(stat = StatLmGlance, size = 5) +
+  stat_lm(geom = 'segment', alpha = .2) +
+  aes(season = as.factor(season)) +
+  aes(holiday = holiday) +
+  aes(shape = ind2cat::ind_recode(workingday)) + labs(shape = NULL) +
+* aes(workingday = workingday)
+```
+]
+ 
+.panel2-the_chunk-auto[
+![](bikes-box_chunk_flipbook_files/figure-html/the_chunk_auto_15_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(dsbox)
+dcbikeshare %&gt;%
+  mutate(atemp_raw = atemp * 50) %&gt;%
+  ggplot() +
+  aes(x = dteday, y = cnt) +
+    geom_point() +
+    labs(title = "Bike rentals in DC, 2011 and 2012",
+         subtitle = "Warmer temperatures associated with more bike rentals",
+         x = "Date",
+         y = "Bike renrals",
+         color = "Temperature (C)") +
+  theme_minimal() +
+  geom_lm(alpha = .2) +
+  geom_text(stat = StatLmGlance, size = 5) +
+  stat_lm(geom = 'segment', alpha = .2) +
+  aes(season = as.factor(season)) +
+  aes(holiday = holiday) +
+  aes(shape = ind2cat::ind_recode(workingday)) + labs(shape = NULL) +
+  aes(workingday = workingday) +
+* aes(color = atemp_raw) + aes(atemp_raw = atemp_raw)
+```
+]
+ 
+.panel2-the_chunk-auto[
+![](bikes-box_chunk_flipbook_files/figure-html/the_chunk_auto_16_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(dsbox)
+dcbikeshare %&gt;%
+  mutate(atemp_raw = atemp * 50) %&gt;%
+  ggplot() +
+  aes(x = dteday, y = cnt) +
+    geom_point() +
+    labs(title = "Bike rentals in DC, 2011 and 2012",
+         subtitle = "Warmer temperatures associated with more bike rentals",
+         x = "Date",
+         y = "Bike renrals",
+         color = "Temperature (C)") +
+  theme_minimal() +
+  geom_lm(alpha = .2) +
+  geom_text(stat = StatLmGlance, size = 5) +
+  stat_lm(geom = 'segment', alpha = .2) +
+  aes(season = as.factor(season)) +
+  aes(holiday = holiday) +
+  aes(shape = ind2cat::ind_recode(workingday)) + labs(shape = NULL) +
+  aes(workingday = workingday) +
+  aes(color = atemp_raw) + aes(atemp_raw = atemp_raw) +
+* aes(dteday = dteday)
+```
+]
+ 
+.panel2-the_chunk-auto[
+![](bikes-box_chunk_flipbook_files/figure-html/the_chunk_auto_17_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(dsbox)
+dcbikeshare %&gt;%
+  mutate(atemp_raw = atemp * 50) %&gt;%
+  ggplot() +
+  aes(x = dteday, y = cnt) +
+    geom_point() +
+    labs(title = "Bike rentals in DC, 2011 and 2012",
+         subtitle = "Warmer temperatures associated with more bike rentals",
+         x = "Date",
+         y = "Bike renrals",
+         color = "Temperature (C)") +
+  theme_minimal() +
+  geom_lm(alpha = .2) +
+  geom_text(stat = StatLmGlance, size = 5) +
+  stat_lm(geom = 'segment', alpha = .2) +
+  aes(season = as.factor(season)) +
+  aes(holiday = holiday) +
+  aes(shape = ind2cat::ind_recode(workingday)) + labs(shape = NULL) +
+  aes(workingday = workingday) +
+  aes(color = atemp_raw) + aes(atemp_raw = atemp_raw) +
+  aes(dteday = dteday) +
+* aes(x = atemp_raw)
+```
+]
+ 
+.panel2-the_chunk-auto[
+![](bikes-box_chunk_flipbook_files/figure-html/the_chunk_auto_18_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-auto[
+
+``` r
+library(dsbox)
+dcbikeshare %&gt;%
+  mutate(atemp_raw = atemp * 50) %&gt;%
+  ggplot() +
+  aes(x = dteday, y = cnt) +
+    geom_point() +
+    labs(title = "Bike rentals in DC, 2011 and 2012",
+         subtitle = "Warmer temperatures associated with more bike rentals",
+         x = "Date",
+         y = "Bike renrals",
+         color = "Temperature (C)") +
+  theme_minimal() +
+  geom_lm(alpha = .2) +
+  geom_text(stat = StatLmGlance, size = 5) +
+  stat_lm(geom = 'segment', alpha = .2) +
+  aes(season = as.factor(season)) +
+  aes(holiday = holiday) +
+  aes(shape = ind2cat::ind_recode(workingday)) + labs(shape = NULL) +
+  aes(workingday = workingday) +
+  aes(color = atemp_raw) + aes(atemp_raw = atemp_raw) +
+  aes(dteday = dteday) +
+  aes(x = atemp_raw) +
+* aes(weathersit = as.factor(weathersit))
+```
+]
+ 
+.panel2-the_chunk-auto[
+![](bikes-box_chunk_flipbook_files/figure-html/the_chunk_auto_19_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-the_chunk-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-the_chunk-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-the_chunk-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+
+``` r
+return_model()
+```
+
+```
+
+Call:
+lm(formula = formula, data = lmdata)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3753.2  -390.5    60.6   540.0  3648.6 
+
+Coefficients: (3 not defined because of singularities)
+                  Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)     -7.558e+04  2.710e+03 -27.890  &lt; 2e-16 ***
+weathersit2     -6.523e+02  7.311e+01  -8.921  &lt; 2e-16 ***
+weathersit3     -2.518e+03  2.073e+02 -12.145  &lt; 2e-16 ***
+x                1.068e+02  7.287e+00  14.658  &lt; 2e-16 ***
+dteday           5.042e+00  1.782e-01  28.298  &lt; 2e-16 ***
+atemp_raw               NA         NA      NA       NA    
+colour                  NA         NA      NA       NA    
+workingday       1.499e+02  7.585e+01   1.977 0.048463 *  
+shapeworkingday         NA         NA      NA       NA    
+holiday         -6.655e+02  2.107e+02  -3.159 0.001649 ** 
+season2          9.366e+02  1.258e+02   7.443 2.81e-13 ***
+season3          3.330e+02  1.621e+02   2.054 0.040342 *  
+season4          4.096e+02  1.132e+02   3.619 0.000316 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 919.2 on 721 degrees of freedom
+Multiple R-squared:  0.7776,	Adjusted R-squared:  0.7749 
+F-statistic: 280.2 on 9 and 721 DF,  p-value: &lt; 2.2e-16
+```
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 80%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+&lt;/style&gt;
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

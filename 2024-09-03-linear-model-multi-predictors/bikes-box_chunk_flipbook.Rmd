@@ -1,0 +1,114 @@
+---
+title: "bikes-box"
+subtitle: ""
+author: ""
+output:
+  xaringan::moon_reader:
+    seal: FALSE
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r, include = F}
+options(knitr.duplicate.label = "allow")
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F)
+library(flipbookr)
+library(tidyverse)
+load("current_image.Rdata")
+```
+
+
+```{r, echo = F, eval = FALSE , message = F, warning = F}
+xaringanExtra::use_share_again()
+```
+
+`r chunk_reveal(chunk_name = "the_chunk", break_type = "auto")`
+
+```{r the_chunk, include = F}
+library(dsbox)
+dcbikeshare %>%
+  mutate(atemp_raw = atemp * 50) %>%
+  ggplot() +
+  aes(x = dteday, y = cnt) +
+    geom_point() +
+    labs(title = "Bike rentals in DC, 2011 and 2012",
+         subtitle = "Warmer temperatures associated with more bike rentals",
+         x = "Date",
+         y = "Bike renrals",
+         color = "Temperature (C)") +
+  theme_minimal() + 
+  geom_lm(alpha = .2) +
+  geom_text(stat = StatLmGlance, size = 5) +
+  stat_lm(geom = 'segment', alpha = .2) + 
+  aes(season = as.factor(season)) +
+  aes(holiday = holiday) +
+  aes(shape = ind2cat::ind_recode(workingday)) + labs(shape = NULL) +
+  aes(workingday = workingday) +
+  aes(color = atemp_raw) + aes(atemp_raw = atemp_raw) +
+  aes(dteday = dteday) +
+  aes(x = atemp_raw) +
+  aes(weathersit = as.factor(weathersit))
+```
+
+---
+
+```{r}
+return_model()
+```
+
+
+
+
+
+```{r}
+p <- ggplot(mtcars, aes(disp, mpg, colour = factor(cyl))) +
+  geom_point()
+
+# Using a custom function
+make_hull <- function(data, scales) {
+  hull <- chull(x = data$x, y = data$y)
+  data.frame(x = data$x[hull], y = data$y[hull])
+}
+
+# p + stat_manual(
+#   geom = "polygon",
+#   fun  = make_hull,
+#   fill = NA
+# )
+
+
+
+
+```
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 80%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+

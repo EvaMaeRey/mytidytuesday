@@ -1,0 +1,174 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+# Using a custom function
+make_hull <- function(data, scales) {
+  
+  hull_ids <- chull(data %>% select(x,y))
+
+  data |>
+    dplyr::slice(hull_ids)
+    
+}
+
+mtcars %>% 
+  select(x = disp, y = mpg) %>% 
+  make_hull()
+
+
+stat_manual <- statexpress::stat_group # 
+
+
+library(ggplot2)
+ggplot(mtcars, aes(disp, mpg, colour = factor(cyl))) +
+  geom_point() + 
+  stat_manual(fun = make_hull, geom = "polygon", alpha = .2) + 
+  stat_manual(fun = make_hull, size = 3)
+
+
+library(ggplot2)
+StatHull <- ggproto("StatHull", Stat, compute_group = make_hull)
+ggplot(mtcars, aes(disp, mpg, colour = factor(cyl))) +
+  geom_point() + 
+  geom_polygon(stat = StatHull, alpha = .2) + 
+  geom_point(stat = StatHull, size = 3)
+
+
+
+# statexpress/stat_manual alternative... qstat
+qstat <- function(fun, ...){ggproto("StatTemp", Stat, compute_group = fun, ...)}
+qstat_p <- function(fun, ...){ggproto("StatTemp", Stat, compute_panel = fun, ...)}
+
+
+library(ggplot2) # or library(statexpress)
+ggplot(mtcars, aes(disp, mpg, colour = factor(cyl))) +
+  geom_point() + 
+  geom_polygon(stat = qstat(make_hull), alpha = .2) + 
+  geom_point(stat = qstat(make_hull), size = 3)
+
+# or 
+library(ggplot2)
+QStatHull <- qstat(make_hull)
+ggplot(mtcars, aes(disp, mpg, colour = factor(cyl))) +
+  geom_point() + 
+  geom_polygon(stat = QStatHull, alpha = .2) + 
+  geom_point(stat = QStatHull, size = 3)
+
+
+
+# Free to pack your computation w/ bonus columns
+make_hull_w_means <- function(data, scales){
+ 
+  data %>% make_hull() %>% 
+    mutate(hull_mean_x = mean(x)) %>% 
+    mutate(hull_mean_y = mean(y)) %>% 
+    mutate(hull_median_x = median(x)) %>% 
+    mutate(hull_median_y = median(y))
+  
+}
+
+QStatHull <- qstat(fun = make_hull_w_means, 
+                   default_aes = aes(xend = after_stat(hull_mean_x),
+                                     yend = after_stat(hull_mean_y)))
+
+last_plot() + 
+  geom_segment(stat = QStatHull)
+
+last_plot() + 
+  geom_segment(stat = QStatHull, xend = 0, yend = 0, alpha = .2)
+
+
+# using group means
+group_center <- function(data, scales, fun = mean){
+  
+ data |> 
+    summarise(x = fun(x),
+              y = fun(y))
+  
+}
+
+last_plot() + 
+  geom_point(stat = qstat(group_center), 
+             size = 7,
+             shape = "diamond")
+
+
+
+last_plot() + 
+  geom_label(stat = qstat(group_center), 
+             label = "global\nmeans",
+             color = "black",
+             shape = "diamond")
+
+last_plot() + 
+  geom_text(stat = qstat(group_center), 
+            label = "global\nmedians",
+            color = "black",
+            fun = median)
+
+
+# when you don't have a stat argument for geom_*() as with geom_vline()
+# cross between geom_point and stat_identity
+layer_express <- function (mapping = NULL, data = NULL, stat = "identity", geom = "point", position = "identity", 
+    ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) {
+    layer(data = data, mapping = mapping, stat = stat, geom = geom, 
+        position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
+        params = rlang::list2(na.rm = na.rm, ...))
+} 
+
+xmean <- function(data, scales){
+  
+ data |> 
+    summarise(xintercept = mean(x))
+  
+}
+
+
+last_plot() +
+  layer_express(stat = qstat(xmean, dropped_aes = c("x", "y")), 
+                geom = GeomVline)
+
+# And back again!  should be same behavior as stat_manual()
+stat_manual_group <- function(geom = "point", fun, ...){
+  
+  layer_express(geom = geom, stat = qstat(fun = fun), ...)
+  
+}
+
+
+
+
+ggplot(mtcars, aes(disp, mpg, colour = factor(cyl))) +
+  geom_point() + 
+  stat_manual_group(fun = make_hull, geom = "polygon", alpha = .2) + 
+  stat_manual_group(fun = make_hull, size = 3)
+
+#########
+
+
+
+
+```
+
