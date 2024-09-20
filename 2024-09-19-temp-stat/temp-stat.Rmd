@@ -23,7 +23,7 @@ options(tidyverse.quiet = TRUE)
 ```{r}
 library(tidyverse)
 
-# Using a custom function
+# Given a cool function ...
 make_hull <- function(data, scales) {
   
   hull_ids <- chull(data %>% select(x,y))
@@ -40,14 +40,14 @@ mtcars %>%
 
 stat_manual <- statexpress::stat_group # 
 
-
+# 1. stat_manual promise
 library(ggplot2)
 ggplot(mtcars, aes(disp, mpg, colour = factor(cyl))) +
   geom_point() + 
   stat_manual(fun = make_hull, geom = "polygon", alpha = .2) + 
   stat_manual(fun = make_hull, size = 3)
 
-
+# 2. Express in-script dependency free approach
 library(ggplot2)
 StatHull <- ggproto("StatHull", Stat, compute_group = make_hull)
 ggplot(mtcars, aes(disp, mpg, colour = factor(cyl))) +
@@ -61,24 +61,24 @@ ggplot(mtcars, aes(disp, mpg, colour = factor(cyl))) +
 qstat <- function(fun, ...){ggproto("StatTemp", Stat, compute_group = fun, ...)}
 qstat_p <- function(fun, ...){ggproto("StatTemp", Stat, compute_panel = fun, ...)}
 
-
+# 3. third way: qstat
 library(ggplot2) # or library(statexpress)
 ggplot(mtcars, aes(disp, mpg, colour = factor(cyl))) +
   geom_point() + 
   geom_polygon(stat = qstat(make_hull), alpha = .2) + 
   geom_point(stat = qstat(make_hull), size = 3)
 
-# or 
+# 3.b can still define a stat, but subclass is 'StatTemp' internally
 library(ggplot2)
-QStatHull <- qstat(make_hull)
+QSH <- qstat(make_hull)
 ggplot(mtcars, aes(disp, mpg, colour = factor(cyl))) +
   geom_point() + 
-  geom_polygon(stat = QStatHull, alpha = .2) + 
-  geom_point(stat = QStatHull, size = 3)
+  geom_polygon(stat = QSH, alpha = .2) + 
+  geom_point(stat = QSH, size = 3)
 
 
-
-# Free to pack your computation w/ bonus columns
+# Niceties of new approach
+# Free to pack your computation w/ bonus columns ...
 make_hull_w_means <- function(data, scales){
  
   data %>% make_hull() %>% 
@@ -89,15 +89,19 @@ make_hull_w_means <- function(data, scales){
   
 }
 
+
+# ... for use in your stat... 
 QStatHull <- qstat(fun = make_hull_w_means, 
                    default_aes = aes(xend = after_stat(hull_mean_x),
                                      yend = after_stat(hull_mean_y)))
 
 last_plot() + 
-  geom_segment(stat = QStatHull)
+  geom_segment(stat = QStatHull) + 
+  labs(title = "the means based my c-hull...")
 
 last_plot() + 
-  geom_segment(stat = QStatHull, xend = 0, yend = 0, alpha = .2)
+  geom_segment(stat = QStatHull, xend = 0, yend = 0, alpha = .2) + 
+  labs(caption = "let's anchor these to the origin!")
 
 
 # using group means
@@ -112,9 +116,9 @@ group_center <- function(data, scales, fun = mean){
 last_plot() + 
   geom_point(stat = qstat(group_center), 
              size = 7,
-             shape = "diamond")
-
-
+             shape = "diamond") + 
+  labs(subtitle = "... is not the group means")
+  
 
 last_plot() + 
   geom_label(stat = qstat(group_center), 
@@ -151,9 +155,9 @@ last_plot() +
                 geom = GeomVline)
 
 # And back again!  should be same behavior as stat_manual()
-stat_manual_group <- function(geom = "point", fun, ...){
+stat_manual_group <- function(geom = "point", group_fun, ...){
   
-  layer_express(geom = geom, stat = qstat(fun = fun), ...)
+  layer_express(geom = geom, stat = qstat(fun = group_fun), ...)
   
 }
 
@@ -162,8 +166,8 @@ stat_manual_group <- function(geom = "point", fun, ...){
 
 ggplot(mtcars, aes(disp, mpg, colour = factor(cyl))) +
   geom_point() + 
-  stat_manual_group(fun = make_hull, geom = "polygon", alpha = .2) + 
-  stat_manual_group(fun = make_hull, size = 3)
+  stat_manual_group(group_fun = make_hull, geom = "polygon", alpha = .2) + 
+  stat_manual_group(group_fun = make_hull, size = 3)
 
 #########
 
