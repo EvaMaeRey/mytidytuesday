@@ -1,0 +1,301 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+
+https://evamaerey.github.io/statistics/covariance_correlation.html#56
+
+ggxmean non-express...
+
+
+
+## Experiment
+
+```{r}
+library(tidyverse)
+
+# express Stat setup.
+
+qstat <- function(compute_group, ...){ggproto("StatTemp", Stat, compute_group = compute_group, ...)}
+
+qlayer <- function (mapping = NULL, data = NULL, geom = "point", stat = "identity", position = "identity", 
+    ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) 
+{
+    layer(data = data, mapping = mapping, stat = stat, geom = geom, 
+        position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
+        params = rlang::list2(na.rm = na.rm, ...))
+}
+```
+
+
+```{r}
+
+# 
+
+# mysetseed(199402)
+# create_x_y(relationship = .5) %>%
+# data_create_scatterplot() %>%
+# plot_draw_mean_x() %>%
+# plot_draw_mean_y() %>%
+# plot_draw_differences_x() %>%
+# plot_draw_differences_y() %>%
+# plot_multiply_differences() %>%
+# plot_take_average_rectangle()
+
+# Assume qlayer() and qstat() exists:
+
+# Layer 0 (actually don't use in var/sd/cov/corr/R^2 but demos qstat simplest usage)
+compute_group_xymean <- function(data, scales){data |> mutate(x = mean(x), y = mean(y))}
+
+geom_xy_means <- function(...){geom_point(stat = qstat(compute_group_xymean), ...)}
+
+
+# Layer 1
+compute_group_xmean <- function(data, scales){data |> summarize(xintercept = mean(x))}
+
+geom_xmean <- function(...){
+  
+  QStat <- qstat(compute_group_xmean, dropped_aes = c("x", "y"))
+  
+  qlayer(geom = GeomVline, stat = QStat, ...)
+  
+  
+  }
+
+# Layer 2
+compute_group_ymean <- function(data, scales){data |> summarize(yintercept = mean(y))}
+
+geom_ymean <- function(...){
+  
+  QStat <- qstat(compute_group_ymean, dropped_aes = c("x", "y"))
+  
+  qlayer(geom = GeomHline, stat = QStat, ...)
+  
+  }
+
+# Layer 3
+compute_group_xmeandiff <- function(data, scales){
+  
+  data |> mutate(xend = mean(x), 
+                 yend = y, 
+                 xdiff = x - mean(x), 
+                 sign = factor(sign(xdiff)))
+  
+  }
+
+geom_xmeandiff <- function(...){
+  
+  QStat <- qstat(compute_group_xmeandiff, 
+              default_aes = aes(color = after_stat(sign)))
+  
+  geom_segment(stat = QStat, ...)
+  
+  }
+
+# Layer 4
+compute_group_ymeandiff <- function(data, scales){
+  
+  data |> mutate(yend = mean(y), 
+                 xend = x, 
+                 ydiff = y - mean(y), 
+                 sign = factor(sign(ydiff)))
+  }
+
+geom_ymeandiff <- function(...){
+  
+  QStat <- qstat(compute_group_ymeandiff, 
+              default_aes = aes(color = after_stat(sign)))
+  
+  geom_segment(stat = QStat, ...)
+  
+  }
+
+
+# Layer 5
+compute_group_xymeandiffs <- function(data, scales){data |> mutate(xmin = mean(x), ymin = mean(y), xmax = x, ymax = y, area = (xmax-xmin)*(ymax-ymin), sign = factor(sign(area)))}
+
+geom_xydiffs <- function(alpha = .2, ...){geom_rect(
+  stat = qstat(compute_group_xymeandiffs, 
+               default_aes = aes(fill = after_stat(sign))), alpha = alpha, ...)}
+
+# Layer 6 & 7
+compute_covariance <- function(data, scales){
+   
+  xmean = mean(data$x)
+  ymean = mean(data$y)
+  xsd = sd(data$x)
+  
+  data |> 
+    mutate(xdiff = x - mean(x),                                      ydiff = y - mean(y),   
+           area = xdiff * ydiff) %>% 
+    summarize(mean_area = sum(area)/(n()-1)) %>% 
+    pull(mean_area) ->
+    mean_area
+  
+  data.frame(
+             xmin = xmean, ymin = ymean,
+             xmax = xmean + xsd, ymax = ymean + mean_area/xsd,
+             covariance = mean_area,
+             sign = factor(sign(mean_area))) |>
+    mutate(x = (xmin + xmax)/2,
+          y = (ymin + ymax)/2)
+  
+}
+  
+  
+geom_covariance <- function(...){
+  
+  QStat <- qstat(compute_covariance,
+              default_aes = aes(fill = after_stat(sign)))
+  
+  geom_rect(stat = QStat, ...)
+  
+}  
+
+
+
+geom_mean_xdiffXydiff <- geom_covariance
+
+
+geom_covariance_label <- function(...){
+  
+  QStat <- qstat(compute_covariance,
+                 default_aes = 
+                   aes(label = round(after_stat(covariance), 2))
+                 )
+                                   
+  
+  geom_label(stat = QStat,
+             show.legend = F,
+                         ...)
+  
+}
+  
+
+# SDs
+compute_sdx <- function(data, scales){
+  
+  ymean <- mean(data$y)
+  xmean <- mean(data$x)
+  xsd <- sd(data$x)
+  
+  data.frame(xintercept = xmean + xsd*c(-2,-1,1,2)) %>% 
+    mutate(xstart = xmean,
+            ystart = ymean,
+            xend = xstart + xsd,
+            yend = ystart)
+
+    }
+
+
+geom_x_sd <- function(...){
+  
+  QS <- qstat(compute_sdx, 
+              default_aes = aes(linetype = after_stat(I("dotted"))),
+              dropped_aes = c("x", "y")
+              )
+  
+  qlayer(geom = GeomVline, stat = QS, ...)
+  
+}
+
+# SDs
+compute_sdy <- function(data, scales){
+  
+  ymean <- mean(data$y)
+  ysd <- sd(data$y)
+  
+  data.frame(yintercept = ymean + ysd*c(-2,-1,1,2))
+
+    }
+
+
+geom_y_sd <- function(...){
+  
+  QS <- qstat(compute_sdy, 
+              default_aes = aes(linetype = after_stat(I("dotted"))),
+              dropped_aes = c("x", "y"))
+  
+  qlayer(geom = GeomHline, stat = QS, ...)
+  
+}
+
+
+
+
+cars %>% 
+  ggplot() + 
+  aes(x = speed, y = dist) +
+  geom_point() + # x, y  0
+  geom_xmean() + # x-bar 1
+  geom_ymean() + # y-bar 2
+  geom_xmeandiff() + # 3
+  geom_ymeandiff() + # 4
+  geom_xydiffs() + # 5
+  geom_covariance(color = "black") + #6
+  geom_covariance_label() #7
+
+cov(cars$speed, cars$dist)
+
+# variance speed
+last_plot() + 
+  aes(x = speed, y = speed) + 
+  coord_equal() + 
+  geom_x_sd(linetype = "dotted") + 
+  geom_y_sd()
+
+var(cars$speed)
+sd(cars$speed)
+
+# variance dist 
+last_plot() + 
+  aes(x = dist, y = dist)
+
+# returning to dist/speed
+last_plot() +
+  coord_cartesian() +
+  aes(y = dist, x = speed)
+
+
+
+last_plot() + 
+  aes(y = dist/sd(dist), x = speed/sd(speed)) + 
+  coord_equal()
+
+
+
+cor(cars$speed, cars$dist)
+
+last_plot() + 
+  geom_smooth(method = lm)
+
+
+lm(cars$dist ~ cars$speed) %>% 
+  summary()
+
+cor(cars$speed, cars$dist)^2 # variance explained
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
