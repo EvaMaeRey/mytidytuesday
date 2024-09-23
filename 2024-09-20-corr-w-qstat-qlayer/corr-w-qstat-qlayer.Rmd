@@ -164,9 +164,16 @@ compute_covariance <- function(data, scales){
 geom_covariance <- function(...){
   
   QStat <- qstat(compute_covariance,
-              default_aes = aes(fill = after_stat(sign)))
+                 default_aes = aes(fill = after_stat(sign)))
   
-  geom_rect(stat = QStat, ...)
+  GeomRect2 <- ggproto("GeomRect2", GeomRect, 
+                       default_aes = aes(color = "black", 
+                              fill = "grey35",
+                              linewidth = .5,
+                              linetype = 1, 
+                              alpha = NA))
+  
+  qlayer(stat = QStat, geom = GeomRect2, ...)
   
 }  
 
@@ -206,14 +213,20 @@ compute_sdx <- function(data, scales){
     }
 
 
+
+
 geom_x_sd <- function(...){
   
-  QS <- qstat(compute_sdx, 
-              default_aes = aes(linetype = after_stat(I("dotted"))),
-              dropped_aes = c("x", "y")
-              )
+  QS <- qstat(compute_sdx, dropped_aes = c("x", "y"))
   
-  qlayer(geom = GeomVline, stat = QS, ...)
+    # GeomVline$default_aes
+  GeomVline2 <- ggproto("GeomVline2", GeomVline, 
+                        default_aes = aes(colour = "black",
+                                          linewidth = .5,
+                                          linetype = "dotted",
+                                          alpha = NA))
+  
+  qlayer(geom = GeomVline2, stat = QS, ...)
   
 }
 
@@ -231,10 +244,16 @@ compute_sdy <- function(data, scales){
 geom_y_sd <- function(...){
   
   QS <- qstat(compute_sdy, 
-              default_aes = aes(linetype = after_stat(I("dotted"))),
               dropped_aes = c("x", "y"))
   
-  qlayer(geom = GeomHline, stat = QS, ...)
+  # GeomHline$default_aes
+  GeomHline2 <- ggproto("GeomHline2", GeomHline, 
+                        default_aes = aes(colour = "black",
+                                          linewidth = .5,
+                                          linetype = "dotted",
+                                          alpha = NA))
+  
+  qlayer(geom = GeomHline2, stat = QS, ...)
   
 }
 
@@ -250,7 +269,7 @@ cars %>%
   geom_xmeandiff() + # 3
   geom_ymeandiff() + # 4
   geom_xydiffs() + # 5
-  geom_covariance(color = "black") + #6
+  geom_covariance() + #6
   geom_covariance_label() #7
 
 cov(cars$speed, cars$dist)
@@ -284,15 +303,15 @@ last_plot() +
 
 cor(cars$speed, cars$dist)
 
-last_plot() + 
-  geom_smooth(method = lm)
-
-
-lm(cars$dist ~ cars$speed) %>% 
-  summary()
-
-cor(cars$speed, cars$dist)^2 # variance explained
-
+# last_plot() + 
+#   geom_smooth(method = lm)
+# 
+# 
+# lm(cars$dist ~ cars$speed) %>% 
+#   summary()
+# 
+# cor(cars$speed, cars$dist)^2 # variance explained
+# 
 
 ```
 
