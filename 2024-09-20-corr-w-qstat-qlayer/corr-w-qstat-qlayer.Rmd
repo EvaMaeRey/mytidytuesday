@@ -34,7 +34,16 @@ library(tidyverse)
 
 # express Stat setup.
 
-qstat <- function(compute_group, ...){ggproto("StatTemp", Stat, compute_group = compute_group, ...)}
+qstat <- function(compute_group, ...){
+  ggproto("StatTemp", Stat, compute_group = compute_group, ...)
+  }
+
+qgeom_mod_default_aes <- function(`_inherit` = GeomPoint, default_aes = GeomPoint$default_aes, ...){
+  
+  ggproto("GeomTemp", `_inherit` = `_inherit`, default_aes = default_aes, ...)
+
+}
+
 
 qlayer <- function (mapping = NULL, data = NULL, geom = "point", stat = "identity", position = "identity", 
     ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) 
@@ -166,8 +175,7 @@ geom_covariance <- function(...){
   QStat <- qstat(compute_covariance,
                  default_aes = aes(fill = after_stat(sign)))
   
-  GeomRect2 <- ggproto("GeomRect2", GeomRect, 
-                       default_aes = aes(color = "black", 
+  GeomRect2 <- qgeom_mod_default_aes(GeomRect, aes(color = "black", 
                               fill = "grey35",
                               linewidth = .5,
                               linetype = 1, 
@@ -212,14 +220,11 @@ compute_sdx <- function(data, scales){
 
     }
 
-
-
-
 geom_x_sd <- function(...){
   
   QS <- qstat(compute_sdx, dropped_aes = c("x", "y"))
   
-    # GeomVline$default_aes
+  # GeomVline$default_aes
   GeomVline2 <- ggproto("GeomVline2", GeomVline, 
                         default_aes = aes(colour = "black",
                                           linewidth = .5,
@@ -293,13 +298,10 @@ last_plot() +
   coord_cartesian() +
   aes(y = dist, x = speed)
 
-
-
 last_plot() + 
-  aes(y = dist/sd(dist), x = speed/sd(speed)) + 
+  aes(y = (dist-mean(dist))/sd(dist), 
+      x = (speed-mean(speed))/sd(speed)) + 
   coord_equal()
-
-
 
 cor(cars$speed, cars$dist)
 
@@ -312,6 +314,17 @@ cor(cars$speed, cars$dist)
 # 
 # cor(cars$speed, cars$dist)^2 # variance explained
 # 
+
+
+post <- function(data, scales){
+  
+  data |> 
+    mutate(xend = x) |>
+    mutate(yend = 0)
+}
+
+
+
 
 ```
 

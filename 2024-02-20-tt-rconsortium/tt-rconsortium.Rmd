@@ -137,7 +137,10 @@ ggplot(cars) +
 ```{r cars, fig.height=12, fig.width=12}
 library(tidyverse)
 library(ggcirclepack)
-read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-02-20/isc_grants.csv") |>
+read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-02-20/isc_grants.csv") ->
+isc_grants
+
+isc_grants |>
   ggplot() + 
   aes(area = funded, 
       id = proposed_by %>% str_replace(" ", "\n"), 

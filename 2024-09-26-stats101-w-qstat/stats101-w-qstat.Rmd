@@ -1,0 +1,70 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r, error = T}
+tribble(~selection, ~n,
+     "Candy", 148,
+       "Toy", 135) %>% 
+  uncount(weights = n) %>% 
+  mutate(group = row_number()) %>% 
+  ggplot() + 
+  aes(x = selection == "Toy", group = group) + 
+  geom_bar(width = .1, color = "black", linewidth = .2)
+
+
+
+compute_group_bricks <- function(data, scales){
+  
+  data %>% 
+    StatCount$compute_group(scales = scales) %>% 
+    mutate(grouping = row_number())
+  
+}
+
+
+
+StatCount2 <- ggproto("StatCount2", StatCount,
+                      default_aes = aes(group = after_stat(grouping)))
+
+tribble(~selection, ~n,
+     "Candy", 148,
+       "Toy", 135) %>% 
+  uncount(weights = n) %>% 
+  ggplot() + 
+  aes(x = selection == "Toy") + 
+  geom_bar(stat = StatCount2, width = .1, color = "black", linewidth = .2)
+
+
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

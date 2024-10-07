@@ -1,0 +1,132 @@
+---
+title: "Two columns layout Quarto"
+format: html
+engine: knitr
+---
+
+
+```{r}
+library(tidyverse)
+theme_set(theme_grey(base_size = 25))
+
+library(tidyverse)
+
+
+qname_levels_single_response_crosswalk <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-09-03/qname_levels_single_response_crosswalk.csv')
+stackoverflow_survey_questions <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-09-03/stackoverflow_survey_questions.csv')
+stackoverflow_survey_single_response <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-09-03/stackoverflow_survey_single_response.csv')
+
+
+qfilter <- function(q) {
+  qname_levels_single_response_crosswalk %>% 
+    filter(qname == q) %>% 
+    select(level, label) %>% 
+    rename_with(~q, level) %>% 
+    rename_with(~paste0(q, "_label"), label)
+}
+
+age_levels <- c("Under 18 years old",
+                "18-24 years old",
+                "25-34 years old",
+                "35-44 years old",
+                "45-54 years old",
+                "55-64 years old",
+                "65 years or older",
+                "Prefer not to say"
+                ) %>% 
+  str_remove(., " years( old)*")
+
+ai_sent_levels <- c("Very unfavorable",
+                    "Unfavorable",
+                    "Indifferent/Unsure",
+                    "Favorable",
+                    "Very favorable")
+
+
+stack_overflow_ai <- stackoverflow_survey_single_response %>% 
+  left_join(qfilter("age")) %>% 
+  left_join(qfilter("main_branch")) %>% 
+  left_join(qfilter("ai_sent")) %>% 
+  mutate(age_label = str_remove(age_label, " years( old)*")) %>% 
+  # filter(ai_sent_label != "Unsure") %>%
+  mutate(ai_sent_label = case_when(
+    ai_sent_label == "Indifferent" | ai_sent_label == "Unsure" ~ "Indifferent/Unsure",
+    TRUE ~ ai_sent_label
+  )) %>% 
+  mutate(
+    age_label = fct_relevel(age_label, age_levels),
+    ai_sent_label = fct_relevel(ai_sent_label, ai_sent_levels)
+  )
+
+```
+
+:::: {.columns}
+
+::: {.column width="48%"}
+
+### P1 
+
+#### *A vanilla scatterplot*
+
+```{r}
+library(ggplot2)
+
+
+stack_overflow_ai |>
+  ggplot() + 
+  aes(y = age_label) + 
+  aes(fill = ai_sent_label) + 
+  geom_bar(position = "fill") + 
+  NULL +
+  theme(legend.position = "none") + 
+  labs(y = NULL, fill = NULL) +
+  NULL 
+```
+
+
+:::
+
+::: {.column width="4%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="48%"}
+
+### P2 
+
+#### *A bubble chart*
+
+```{r, warning=F}
+library(ggplot2)
+library(ggstats)
+
+stack_overflow_ai |>
+  ggplot() + 
+  aes(y = age_label) +
+  aes(fill = ai_sent_label) + 
+  geom_likert() + 
+  geom_likert_text(hide_below = 0.10) +
+  theme(legend.position = "none") + 
+  labs(y = NULL, fill = NULL) +
+  scale_fill_likert() 
+  
+```
+1. Overwrite y mapping
+
+
+
+
+:::
+
+::::
+::: {.g-col-6}
+
+## Second column 
+
+and here
+
+More text
+
+:::
+  
+:::  

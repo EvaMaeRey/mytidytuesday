@@ -1,0 +1,83 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+with_defaults <- function(new, default) {
+  new <- c(new, default[setdiff(names(default), names(new))])
+  default[names(new)] <- new
+  default
+  }
+
+GeomPoint2 <- ggproto("GeomPoint2", 
+                       GeomPoint, 
+                       default_aes = with_defaults(aes(color = "blue"), GeomPoint$default_aes))
+
+
+ggplot(cars) + 
+  aes(speed, dist) + 
+  layer(stat = StatIdentity, 
+        geom = GeomPoint2,
+        position = "identity")
+
+
+qgeom <- function(geom = GeomPoint, new_aes){
+  
+  ggproto("GeomTemp", geom, default_aes = with_defaults(new_aes, geom$defaul_aes))
+  
+}
+
+geom_specialpoint <- function(...){
+  
+  QG <- qgeom_mod(new_aes = aes(color = "blue"))
+  
+  stat_identity(geom = QG, ...)
+  
+}
+
+geom_specialpoint <- function(...){
+  
+  GeomPoint2 <- ggproto("GeomPoint2", GeomPoint)
+  
+  stat_identity(geom = GeomPoint2, ...)
+  
+  }
+
+
+ggplot(cars) + 
+  aes(speed, dist) + 
+  geom_specialpoint() 
+
+
+
+```
+
+## Experiment
+
+```{r}
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

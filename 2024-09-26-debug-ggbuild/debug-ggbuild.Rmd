@@ -1,0 +1,87 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+mtcars|>
+  ggplot() +
+  aes(x = cyl) +
+  stat_count() 
+
+ggplot() ->
+p
+
+# function (plot) 
+# {
+  plot <- ggplot2:::plot_clone(plot); plot
+  if (length(plot$layers) == 0) {  plot <- plot + geom_blank()}; plot
+  layers <- plot$layers; layers
+  data <- rep(list(NULL), length(layers)); data
+  scales <- plot$scales; scales
+  data <- ggplot2:::by_layer(function(l, d) l$layer_data(plot$data), layers, data, "computing layer data"); data
+  data <- ggplot2:::by_layer(function(l, d) l$setup_layer(d, plot), layers, data, "setting up layer"); data
+  layout <- ggplot2:::create_layout(plot$facet, plot$coordinates, plot$layout); layout
+  data <- layout$setup(data, plot$data, plot$plot_env); data
+  data <- ggplot2:::by_layer(function(l, d) l$compute_aesthetics(d, plot), layers, data, "computing aesthetics"); data
+  data <- .ignore_data(data); data
+  data <- lapply(data, scales$transform_df)
+  scale_x <- function() scales$get_scales("x"); scale_x
+  scale_y <- function() scales$get_scales("y"); scale_y
+  layout$train_position(data, scale_x(), scale_y()); layout
+  data <- layout$map_position(data); data
+  data <- .expose_data(data); data
+  data <- ggplot2:::by_layer(function(l, d) l$compute_statistic(d, layout), layers, data, "computing stat"); data
+  data <- ggplot2:::by_layer(function(l, d) l$map_statistic(d, plot), layers, data, "mapping stat to aesthetics"); data
+  plot$scales$add_missing(c("x", "y"), plot$plot_env)
+  data <- ggplot2:::by_layer(function(l, d) l$compute_geom_1(d), layers,  data, "setting up geom"); data
+  data <- ggplot2:::by_layer(function(l, d) l$compute_position(d, layout),  layers, data, "computing position")
+  data <- .ignore_data(data)
+  layout$reset_scales()
+  layout$train_position(data, scale_x(), scale_y())
+  layout$setup_panel_params()
+  data <- layout$map_position(data); data
+  layout$setup_panel_guides(plot$guides, plot$layers)
+  npscales <- scales$non_position_scales()
+  if (npscales$n() > 0) {
+    lapply(data, npscales$train_df)
+    plot$guides <- plot$guides$build(npscales, plot$layers, 
+      plot$labels, data)
+    data <- lapply(data, npscales$map_df)
+  }else {
+    plot$guides <- plot$guides$get_custom()
+  }
+  data <- .expose_data(data)
+  data <- ggplot2:::by_layer(function(l, d) l$compute_geom_2(d), layers, 
+    data, "setting up geom aesthetics")
+  data <- ggplot2:::by_layer(function(l, d) l$finish_statistics(d), 
+    layers, data, "finishing layer stat")
+  data <- layout$finish_data(data)
+  plot$labels$alt <- get_alt_text(plot)
+  structure(list(data = data, layout = layout, plot = plot), 
+    class = "ggplot_built")
+# }
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

@@ -1,0 +1,157 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+palmerpenguins::penguins |>
+  filter(sex == "female") |>
+  mutate(id = row_number()) |>
+  ggplot() + 
+  aes(x = species) + 
+  geom_bar(width = .25, 
+           fill = "white",
+           color = "grey35",
+           linewidth = .05) + 
+  aes(group = id)
+```
+
+## Experiment
+
+```{r}
+palmerpenguins::penguins |>
+  filter(sex == "female") |>
+  mutate(id = row_number()) |>
+  ggplot() + 
+  aes(x = species) + 
+  layer(geom = "bar", 
+        stat = "count", 
+        position = "stack",
+        params = list(
+          width = .25, 
+          fill = "white",
+          color = "grey35",
+          linewidth = .05
+        )) + 
+  aes(group = id)
+```
+
+
+
+
+```{r}
+palmerpenguins::penguins |>
+  filter(sex == "female") |>
+  mutate(id = row_number()) |>
+  ggplot() + 
+  aes(x = species) + 
+  layer(geom = ggproto("GeomBrick", 
+                       GeomBar, 
+                       default_aes = aes(fill = "white",
+                                         color = "grey35",
+                                         linewidth = .05)),
+        stat = "count", 
+        position = "stack",
+        params = list(
+          width = .25
+        )) + 
+  aes(group = id)
+
+
+palmerpenguins::penguins |>
+  filter(sex == "female") |>
+  mutate(id = row_number()) |>
+  ggplot() + 
+  aes(x = species) + 
+  layer(geom = ggproto("GeomBrick", 
+                       GeomBar, 
+                       default_aes = aes(fill = "white",
+                                         color = "grey35",
+                                         linewidth = .05)),
+        stat = ggproto("StatCountId", StatCount,
+                       compute_group = function(data, scales){
+                         StatCount$compute_group(data, scales) %>% 
+                         mutate(id = row_number())
+                         }),
+        position = "stack",
+        params = list(
+          width = .25
+        )) + 
+  aes(group = id)
+
+
+# layer_data()
+
+
+
+compute_group_bricks <- function(data, scales){
+  
+  data %>% 
+    mutate(id = row_number()) %>% 
+    mutate(y = id - .5)  
+  
+}
+
+palmerpenguins::penguins |>
+  filter(sex == "female") |>
+  ggplot() + 
+  aes(x = species) + 
+  geom_tile(stat = 
+              ggproto("StatBricks", 
+                      Stat,
+                      compute_group = compute_group_bricks), 
+            width = .2, 
+            color = "grey35", 
+            fill = "white")
+
+
+StatBricks <- ggproto("StatBricks", 
+                      Stat,
+                      compute_group = compute_group_bricks)
+
+palmerpenguins::penguins |>
+  filter(sex == "female") |>
+  ggplot() + 
+  aes(x = species) + 
+  layer(stat = StatBricks,
+        geom = ggproto("GeomBricks", 
+                       GeomTile,
+                       default_aes = 
+                         aes(!!!modifyList(
+                           GeomTile$default_aes,
+                           aes(color = "grey35", 
+                               fill = "white", linewidth = .1)
+                                           ))
+                         ),
+        position = "identity",
+        params = list(width = .2))
+
+
+
+GeomTile$default_aes
+
+
+
+
+```
+
+## Closing remarks, Other Relevant Work, Caveats
