@@ -38,6 +38,7 @@ palmerpenguins::penguins |>
 ## Experiment
 
 ```{r}
+library(tidyverse)
 palmerpenguins::penguins |>
   filter(sex == "female") |>
   mutate(id = row_number()) |>
@@ -102,7 +103,7 @@ palmerpenguins::penguins |>
 # layer_data()
 
 
-
+library(tidyverse)
 compute_group_bricks <- function(data, scales){
   
   data %>% 
@@ -111,20 +112,25 @@ compute_group_bricks <- function(data, scales){
   
 }
 
+StatBricks <- ggproto("StatBricks", Stat,
+                      compute_group = compute_group_bricks)
+
 palmerpenguins::penguins |>
   filter(sex == "female") |>
   ggplot() + 
   aes(x = species) + 
-  geom_tile(stat = 
-              ggproto("StatBricks", 
-                      Stat,
-                      compute_group = compute_group_bricks), 
-            width = .2, 
-            color = "grey35", 
-            fill = "white")
+  geom_tile(stat = StatBricks, 
+            width = .2)
 
+palmerpenguins::penguins |>
+  filter(sex == "female") |>
+  ggplot() + 
+  aes(x = species) + 
+  geom_dotplot()
 
-StatBricks <- ggproto("StatBricks", 
+library()
+
+StatBrickStack <- ggproto("StatBrickStack", 
                       Stat,
                       compute_group = compute_group_bricks)
 
@@ -132,14 +138,15 @@ palmerpenguins::penguins |>
   filter(sex == "female") |>
   ggplot() + 
   aes(x = species) + 
-  layer(stat = StatBricks,
+  layer(stat = StatBrickStack,
         geom = ggproto("GeomBricks", 
                        GeomTile,
                        default_aes = 
                          aes(!!!modifyList(
                            GeomTile$default_aes,
                            aes(color = "grey35", 
-                               fill = "white", linewidth = .1)
+                               fill = "white", 
+                               linewidth = .1)
                                            ))
                          ),
         position = "identity",

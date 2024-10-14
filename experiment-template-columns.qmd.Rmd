@@ -66,7 +66,7 @@ stack_overflow_ai <- stackoverflow_survey_single_response %>%
 
 ### P1 
 
-#### *A vanilla scatterplot*
+#### *A fill-position bar ggplot*
 
 ```{r}
 library(ggplot2)
@@ -78,9 +78,9 @@ stack_overflow_ai |>
   aes(fill = ai_sent_label) + 
   geom_bar(position = "fill") + 
   NULL +
+  NULL +
   theme(legend.position = "none") + 
-  labs(y = NULL, fill = NULL) +
-  NULL 
+  labs(y = NULL, fill = NULL, x = NULL)
 ```
 
 
@@ -94,7 +94,7 @@ stack_overflow_ai |>
 
 ### P2 
 
-#### *A bubble chart*
+#### *A likert plot with ggstats*
 
 ```{r, warning=F}
 library(ggplot2)
@@ -105,10 +105,10 @@ stack_overflow_ai |>
   aes(y = age_label) +
   aes(fill = ai_sent_label) + 
   geom_likert() + 
-  geom_likert_text(hide_below = 0.10) +
+  geom_likert_text(hide_below = 0.03) +
+  scale_fill_likert() +
   theme(legend.position = "none") + 
-  labs(y = NULL, fill = NULL) +
-  scale_fill_likert() 
+  labs(y = NULL, fill = NULL, x = NULL)
   
 ```
 1. Overwrite y mapping

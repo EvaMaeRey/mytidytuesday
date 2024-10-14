@@ -31,7 +31,8 @@ with_defaults <- function(new, default) {
 
 GeomPoint2 <- ggproto("GeomPoint2", 
                        GeomPoint, 
-                       default_aes = with_defaults(aes(color = "blue"), GeomPoint$default_aes))
+                       default_aes = 
+                        with_defaults(aes(color = "blue"), GeomPoint$default_aes))
 
 
 ggplot(cars) + 
@@ -43,7 +44,7 @@ ggplot(cars) +
 
 qgeom <- function(geom = GeomPoint, new_aes){
   
-  ggproto("GeomTemp", geom, default_aes = with_defaults(new_aes, geom$defaul_aes))
+  ggproto("GeomTemp", geom, default_aes = with_defaults(new_aes, geom$default_aes))
   
 }
 

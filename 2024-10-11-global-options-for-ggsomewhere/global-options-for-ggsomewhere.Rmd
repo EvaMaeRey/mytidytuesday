@@ -1,0 +1,44 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+nc <- sf::st_read(system.file("shape/nc.shp", package="sf"))
+nc_ref <- nc |>
+  select(county_name = NAME, fips = FIPS)
+
+options(sf2stat.ref_data = nc_ref)
+
+ref_data
+
+```
+
+## Experiment
+
+```{r}
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
