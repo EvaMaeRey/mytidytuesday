@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>penguinseval</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="" />
+    <script src="libs/header-attrs-2.26/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+## ggplot_build() steps revealed
+
+---
+
+
+``` r
+library(ggplot2)
+set.seed(1234)
+ggplot(palmerpenguins::penguins |&gt; 
+         dplyr::sample_n(10), aes(sex)) +
+  stat_count(position = "stack") +
+  facet_wrap(~species) + 
+  aes(fill = island) -&gt;
+p;p
+```
+
+![](debug-ggbuild-slideshow_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
+
+---
+
+
+```` r
+# ggplot2::ggplot_build()
+# function (plot) 
+# {
+  plot &lt;- ggplot2:::plot_clone(p); 
+plot |&gt; str() # step 1.```
+````
+
+```
+## List of 11
+##  $ data       : tibble [10 × 8] (S3: tbl_df/tbl/data.frame)
+##   ..$ species          : Factor w/ 3 levels "Adelie","Chinstrap",..: 2 2 1 1 1 1 1 3 1 2
+##   ..$ island           : Factor w/ 3 levels "Biscoe","Dream",..: 2 2 1 1 2 2 1 1 2 2
+##   ..$ bill_length_mm   : num [1:10] 51.3 45.6 35 38.1 36.8 40.3 37.7 46.2 38.9 49.8
+##   ..$ bill_depth_mm    : num [1:10] 18.2 19.4 17.9 16.5 18.5 18.5 16 14.9 18.8 17.3
+##   ..$ flipper_length_mm: int [1:10] 197 194 192 198 193 196 183 221 190 198
+##   ..$ body_mass_g      : int [1:10] 3750 3525 3725 3825 3500 4350 3075 5300 3600 3675
+##   ..$ sex              : Factor w/ 2 levels "female","male": 2 1 1 1 1 2 1 2 1 1
+##   ..$ year             : int [1:10] 2007 2009 2009 2009 2009 2008 2009 2008 2008 2009
+##  $ layers     :List of 1
+##   ..$ :Classes 'LayerInstance', 'Layer', 'ggproto', 'gg' &lt;ggproto object: Class LayerInstance, Layer, gg&gt;
+##     aes_params: list
+##     compute_aesthetics: function
+##     compute_geom_1: function
+##     compute_geom_2: function
+##     compute_position: function
+##     compute_statistic: function
+##     computed_geom_params: list
+##     computed_mapping: uneval
+##     computed_stat_params: list
+##     constructor: call
+##     data: waiver
+##     draw_geom: function
+##     finish_statistics: function
+##     geom: &lt;ggproto object: Class GeomBar, GeomRect, Geom, gg&gt;
+##         aesthetics: function
+##         default_aes: uneval
+##         draw_group: function
+##         draw_key: function
+##         draw_layer: function
+##         draw_panel: function
+##         extra_params: just na.rm orientation
+##         handle_na: function
+##         non_missing_aes: xmin xmax ymin ymax
+##         optional_aes: 
+##         parameters: function
+##         rename_size: TRUE
+##         required_aes: x y
+##         setup_data: function
+##         setup_params: function
+##         use_defaults: function
+##         super:  &lt;ggproto object: Class GeomRect, Geom, gg&gt;
+##     geom_params: list
+##     inherit.aes: TRUE
+##     layer_data: function
+##     map_statistic: function
+##     mapping: NULL
+##     position: &lt;ggproto object: Class PositionStack, Position, gg&gt;
+##         compute_layer: function
+##         compute_panel: function
+##         fill: FALSE
+##         required_aes: 
+##         reverse: FALSE
+##         setup_data: function
+##         setup_params: function
+##         type: NULL
+##         vjust: 1
+##         super:  &lt;ggproto object: Class Position, gg&gt;
+##     print: function
+##     setup_layer: function
+##     show.legend: NA
+##     stat: &lt;ggproto object: Class StatCount, Stat, gg&gt;
+##         aesthetics: function
+##         compute_group: function
+##         compute_layer: function
+##         compute_panel: function
+##         default_aes: uneval
+##         dropped_aes: weight
+##         extra_params: na.rm orientation
+##         finish_layer: function
+##         non_missing_aes: 
+##         optional_aes: 
+##         parameters: function
+##         required_aes: x|y
+##         retransform: TRUE
+##         setup_data: function
+##         setup_params: function
+##         super:  &lt;ggproto object: Class Stat, gg&gt;
+##     stat_params: list
+##     super:  &lt;ggproto object: Class Layer, gg&gt; 
+##  $ scales     :Classes 'ScalesList', 'ggproto', 'gg' &lt;ggproto object: Class ScalesList, gg&gt;
+##     add: function
+##     add_defaults: function
+##     add_missing: function
+##     backtransform_df: function
+##     clone: function
+##     find: function
+##     get_scales: function
+##     has_scale: function
+##     input: function
+##     map_df: function
+##     n: function
+##     non_position_scales: function
+##     scales: list
+##     train_df: function
+##     transform_df: function
+##     super:  &lt;ggproto object: Class ScalesList, gg&gt; 
+##  $ guides     :Classes 'Guides', 'ggproto', 'gg' &lt;ggproto object: Class Guides, gg&gt;
+##     add: function
+##     assemble: function
+##     build: function
+##     draw: function
+##     get_custom: function
+##     get_guide: function
+##     get_params: function
+##     get_position: function
+##     guides: NULL
+##     merge: function
+##     missing: &lt;ggproto object: Class GuideNone, Guide, gg&gt;
+##         add_title: function
+##         arrange_layout: function
+##         assemble_drawing: function
+##         available_aes: any
+##         build_decor: function
+##         build_labels: function
+##         build_ticks: function
+##         build_title: function
+##         draw: function
+##         draw_early_exit: function
+##         elements: list
+##         extract_decor: function
+##         extract_key: function
+##         extract_params: function
+##         get_layer_key: function
+##         hashables: list
+##         measure_grobs: function
+##         merge: function
+##         override_elements: function
+##         params: list
+##         process_layers: function
+##         setup_elements: function
+##         setup_params: function
+##         train: function
+##         transform: function
+##         super:  &lt;ggproto object: Class GuideNone, Guide, gg&gt;
+##     package_box: function
+##     print: function
+##     process_layers: function
+##     setup: function
+##     subset_guides: function
+##     train: function
+##     update_params: function
+##     super:  &lt;ggproto object: Class Guides, gg&gt; 
+##  $ mapping    :List of 2
+##   ..$ fill: language ~island
+##   .. ..- attr(*, ".Environment")=&lt;environment: R_GlobalEnv&gt; 
+##   ..$ x   : language ~sex
+##   .. ..- attr(*, ".Environment")=&lt;environment: R_GlobalEnv&gt; 
+##   ..- attr(*, "class")= chr "uneval"
+##  $ theme      : list()
+##  $ coordinates:Classes 'CoordCartesian', 'Coord', 'ggproto', 'gg' &lt;ggproto object: Class CoordCartesian, Coord, gg&gt;
+##     aspect: function
+##     backtransform_range: function
+##     clip: on
+##     default: TRUE
+##     distance: function
+##     expand: TRUE
+##     is_free: function
+##     is_linear: function
+##     labels: function
+##     limits: list
+##     modify_scales: function
+##     range: function
+##     render_axis_h: function
+##     render_axis_v: function
+##     render_bg: function
+##     render_fg: function
+##     setup_data: function
+##     setup_layout: function
+##     setup_panel_guides: function
+##     setup_panel_params: function
+##     setup_params: function
+##     train_panel_guides: function
+##     transform: function
+##     super:  &lt;ggproto object: Class CoordCartesian, Coord, gg&gt; 
+##  $ facet      :Classes 'FacetWrap', 'Facet', 'ggproto', 'gg' &lt;ggproto object: Class FacetWrap, Facet, gg&gt;
+##     compute_layout: function
+##     draw_back: function
+##     draw_front: function
+##     draw_labels: function
+##     draw_panels: function
+##     finish_data: function
+##     init_scales: function
+##     map_data: function
+##     params: list
+##     setup_data: function
+##     setup_params: function
+##     shrink: TRUE
+##     train_scales: function
+##     vars: function
+##     super:  &lt;ggproto object: Class FacetWrap, Facet, gg&gt; 
+##  $ plot_env   :&lt;environment: R_GlobalEnv&gt; 
+##  $ layout     :Classes 'Layout', 'ggproto', 'gg' &lt;ggproto object: Class Layout, gg&gt;
+##     coord: NULL
+##     coord_params: list
+##     facet: NULL
+##     facet_params: list
+##     finish_data: function
+##     get_scales: function
+##     layout: NULL
+##     map_position: function
+##     panel_params: NULL
+##     panel_scales_x: NULL
+##     panel_scales_y: NULL
+##     render: function
+##     render_labels: function
+##     reset_scales: function
+##     resolve_label: function
+##     setup: function
+##     setup_panel_guides: function
+##     setup_panel_params: function
+##     train_position: function
+##     super:  &lt;ggproto object: Class Layout, gg&gt; 
+##  $ labels     :List of 4
+##   ..$ fill  : chr "island"
+##   ..$ x     : chr "sex"
+##   ..$ y     : chr "count"
+##   .. ..- attr(*, "fallback")= logi TRUE
+##   ..$ weight: chr "weight"
+##   .. ..- attr(*, "fallback")= logi TRUE
+##  - attr(*, "class")= chr [1:2] "gg" "ggplot"
+```
+    
+---
+    
+
+``` r
+  if (length(plot$layers) == 0) {  plot &lt;- plot + geom_blank()}; 
+plot |&gt; str() # step 2.
+```
+
+```
+## List of 11
+##  $ data       : tibble [10 × 8] (S3: tbl_df/tbl/data.frame)
+##   ..$ species          : Factor w/ 3 levels "Adelie","Chinstrap",..: 2 2 1 1 1 1 1 3 1 2
+##   ..$ island           : Factor w/ 3 levels "Biscoe","Dream",..: 2 2 1 1 2 2 1 1 2 2
+##   ..$ bill_length_mm   : num [1:10] 51.3 45.6 35 38.1 36.8 40.3 37.7 46.2 38.9 49.8
+##   ..$ bill_depth_mm    : num [1:10] 18.2 19.4 17.9 16.5 18.5 18.5 16 14.9 18.8 17.3
+##   ..$ flipper_length_mm: int [1:10] 197 194 192 198 193 196 183 221 190 198
+##   ..$ body_mass_g      : int [1:10] 3750 3525 3725 3825 3500 4350 3075 5300 3600 3675
+##   ..$ sex              : Factor w/ 2 levels "female","male": 2 1 1 1 1 2 1 2 1 1
+##   ..$ year             : int [1:10] 2007 2009 2009 2009 2009 2008 2009 2008 2008 2009
+##  $ layers     :List of 1
+##   ..$ :Classes 'LayerInstance', 'Layer', 'ggproto', 'gg' &lt;ggproto object: Class LayerInstance, Layer, gg&gt;
+##     aes_params: list
+##     compute_aesthetics: function
+##     compute_geom_1: function
+##     compute_geom_2: function
+##     compute_position: function
+##     compute_statistic: function
+##     computed_geom_params: list
+##     computed_mapping: uneval
+##     computed_stat_params: list
+##     constructor: call
+##     data: waiver
+##     draw_geom: function
+##     finish_statistics: function
+##     geom: &lt;ggproto object: Class GeomBar, GeomRect, Geom, gg&gt;
+##         aesthetics: function
+##         default_aes: uneval
+##         draw_group: function
+##         draw_key: function
+##         draw_layer: function
+##         draw_panel: function
+##         extra_params: just na.rm orientation
+##         handle_na: function
+##         non_missing_aes: xmin xmax ymin ymax
+##         optional_aes: 
+##         parameters: function
+##         rename_size: TRUE
+##         required_aes: x y
+##         setup_data: function
+##         setup_params: function
+##         use_defaults: function
+##         super:  &lt;ggproto object: Class GeomRect, Geom, gg&gt;
+##     geom_params: list
+##     inherit.aes: TRUE
+##     layer_data: function
+##     map_statistic: function
+##     mapping: NULL
+##     position: &lt;ggproto object: Class PositionStack, Position, gg&gt;
+##         compute_layer: function
+##         compute_panel: function
+##         fill: FALSE
+##         required_aes: 
+##         reverse: FALSE
+##         setup_data: function
+##         setup_params: function
+##         type: NULL
+##         vjust: 1
+##         super:  &lt;ggproto object: Class Position, gg&gt;
+##     print: function
+##     setup_layer: function
+##     show.legend: NA
+##     stat: &lt;ggproto object: Class StatCount, Stat, gg&gt;
+##         aesthetics: function
+##         compute_group: function
+##         compute_layer: function
+##         compute_panel: function
+##         default_aes: uneval
+##         dropped_aes: weight
+##         extra_params: na.rm orientation
+##         finish_layer: function
+##         non_missing_aes: 
+##         optional_aes: 
+##         parameters: function
+##         required_aes: x|y
+##         retransform: TRUE
+##         setup_data: function
+##         setup_params: function
+##         super:  &lt;ggproto object: Class Stat, gg&gt;
+##     stat_params: list
+##     super:  &lt;ggproto object: Class Layer, gg&gt; 
+##  $ scales     :Classes 'ScalesList', 'ggproto', 'gg' &lt;ggproto object: Class ScalesList, gg&gt;
+##     add: function
+##     add_defaults: function
+##     add_missing: function
+##     backtransform_df: function
+##     clone: function
+##     find: function
+##     get_scales: function
+##     has_scale: function
+##     input: function
+##     map_df: function
+##     n: function
+##     non_position_scales: function
+##     scales: list
+##     train_df: function
+##     transform_df: function
+##     super:  &lt;ggproto object: Class ScalesList, gg&gt; 
+##  $ guides     :Classes 'Guides', 'ggproto', 'gg' &lt;ggproto object: Class Guides, gg&gt;
+##     add: function
+##     assemble: function
+##     build: function
+##     draw: function
+##     get_custom: function
+##     get_guide: function
+##     get_params: function
+##     get_position: function
+##     guides: NULL
+##     merge: function
+##     missing: &lt;ggproto object: Class GuideNone, Guide, gg&gt;
+##         add_title: function
+##         arrange_layout: function
+##         assemble_drawing: function
+##         available_aes: any
+##         build_decor: function
+##         build_labels: function
+##         build_ticks: function
+##         build_title: function
+##         draw: function
+##         draw_early_exit: function
+##         elements: list
+##         extract_decor: function
+##         extract_key: function
+##         extract_params: function
+##         get_layer_key: function
+##         hashables: list
+##         measure_grobs: function
+##         merge: function
+##         override_elements: function
+##         params: list
+##         process_layers: function
+##         setup_elements: function
+##         setup_params: function
+##         train: function
+##         transform: function
+##         super:  &lt;ggproto object: Class GuideNone, Guide, gg&gt;
+##     package_box: function
+##     print: function
+##     process_layers: function
+##     setup: function
+##     subset_guides: function
+##     train: function
+##     update_params: function
+##     super:  &lt;ggproto object: Class Guides, gg&gt; 
+##  $ mapping    :List of 2
+##   ..$ fill: language ~island
+##   .. ..- attr(*, ".Environment")=&lt;environment: R_GlobalEnv&gt; 
+##   ..$ x   : language ~sex
+##   .. ..- attr(*, ".Environment")=&lt;environment: R_GlobalEnv&gt; 
+##   ..- attr(*, "class")= chr "uneval"
+##  $ theme      : list()
+##  $ coordinates:Classes 'CoordCartesian', 'Coord', 'ggproto', 'gg' &lt;ggproto object: Class CoordCartesian, Coord, gg&gt;
+##     aspect: function
+##     backtransform_range: function
+##     clip: on
+##     default: TRUE
+##     distance: function
+##     expand: TRUE
+##     is_free: function
+##     is_linear: function
+##     labels: function
+##     limits: list
+##     modify_scales: function
+##     range: function
+##     render_axis_h: function
+##     render_axis_v: function
+##     render_bg: function
+##     render_fg: function
+##     setup_data: function
+##     setup_layout: function
+##     setup_panel_guides: function
+##     setup_panel_params: function
+##     setup_params: function
+##     train_panel_guides: function
+##     transform: function
+##     super:  &lt;ggproto object: Class CoordCartesian, Coord, gg&gt; 
+##  $ facet      :Classes 'FacetWrap', 'Facet', 'ggproto', 'gg' &lt;ggproto object: Class FacetWrap, Facet, gg&gt;
+##     compute_layout: function
+##     draw_back: function
+##     draw_front: function
+##     draw_labels: function
+##     draw_panels: function
+##     finish_data: function
+##     init_scales: function
+##     map_data: function
+##     params: list
+##     setup_data: function
+##     setup_params: function
+##     shrink: TRUE
+##     train_scales: function
+##     vars: function
+##     super:  &lt;ggproto object: Class FacetWrap, Facet, gg&gt; 
+##  $ plot_env   :&lt;environment: R_GlobalEnv&gt; 
+##  $ layout     :Classes 'Layout', 'ggproto', 'gg' &lt;ggproto object: Class Layout, gg&gt;
+##     coord: NULL
+##     coord_params: list
+##     facet: NULL
+##     facet_params: list
+##     finish_data: function
+##     get_scales: function
+##     layout: NULL
+##     map_position: function
+##     panel_params: NULL
+##     panel_scales_x: NULL
+##     panel_scales_y: NULL
+##     render: function
+##     render_labels: function
+##     reset_scales: function
+##     resolve_label: function
+##     setup: function
+##     setup_panel_guides: function
+##     setup_panel_params: function
+##     train_position: function
+##     super:  &lt;ggproto object: Class Layout, gg&gt; 
+##  $ labels     :List of 4
+##   ..$ fill  : chr "island"
+##   ..$ x     : chr "sex"
+##   ..$ y     : chr "count"
+##   .. ..- attr(*, "fallback")= logi TRUE
+##   ..$ weight: chr "weight"
+##   .. ..- attr(*, "fallback")= logi TRUE
+##  - attr(*, "class")= chr [1:2] "gg" "ggplot"
+```
+
+---
+    
+
+``` r
+  layers &lt;- plot$layers; 
+layers # step 3.
+```
+
+```
+## [[1]]
+## geom_bar: na.rm = FALSE, orientation = NA, width = NULL
+## stat_count: na.rm = FALSE, orientation = NA, width = NULL
+## position_stack
+```
+
+---
+    
+
+``` r
+  data &lt;- rep(list(NULL), length(layers)); 
+data # step 4.
+```
+
+```
+## [[1]]
+## NULL
+```
+
+---
+    
+
+``` r
+  scales &lt;- plot$scales; 
+data # step 1.
+```
+
+```
+## [[1]]
+## NULL
+```
+
+---
+    
+
+``` r
+  data &lt;- ggplot2:::by_layer(function(l, d) l$layer_data(plot$data), 
+                             layers, data, "computing layer data"); data # step 5.
+```
+
+```
+## [[1]]
+## # A tibble: 10 × 8
+##    species   island bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+##    &lt;fct&gt;     &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+##  1 Chinstrap Dream            51.3          18.2               197        3750
+##  2 Chinstrap Dream            45.6          19.4               194        3525
+##  3 Adelie    Biscoe           35            17.9               192        3725
+##  4 Adelie    Biscoe           38.1          16.5               198        3825
+##  5 Adelie    Dream            36.8          18.5               193        3500
+##  6 Adelie    Dream            40.3          18.5               196        4350
+##  7 Adelie    Biscoe           37.7          16                 183        3075
+##  8 Gentoo    Biscoe           46.2          14.9               221        5300
+##  9 Adelie    Dream            38.9          18.8               190        3600
+## 10 Chinstrap Dream            49.8          17.3               198        3675
+## # ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;
+```
+
+---
+    
+
+``` r
+  data &lt;- ggplot2:::by_layer(function(l, d) l$setup_layer(d, plot), 
+                             layers, data, "setting up layer"); data # step 6.
+```
+
+```
+## [[1]]
+## # A tibble: 10 × 8
+##    species   island bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+##    &lt;fct&gt;     &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+##  1 Chinstrap Dream            51.3          18.2               197        3750
+##  2 Chinstrap Dream            45.6          19.4               194        3525
+##  3 Adelie    Biscoe           35            17.9               192        3725
+##  4 Adelie    Biscoe           38.1          16.5               198        3825
+##  5 Adelie    Dream            36.8          18.5               193        3500
+##  6 Adelie    Dream            40.3          18.5               196        4350
+##  7 Adelie    Biscoe           37.7          16                 183        3075
+##  8 Gentoo    Biscoe           46.2          14.9               221        5300
+##  9 Adelie    Dream            38.9          18.8               190        3600
+## 10 Chinstrap Dream            49.8          17.3               198        3675
+## # ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;
+```
+
+---
+    
+
+``` r
+  layout &lt;- ggplot2:::create_layout(plot$facet, 
+                                    plot$coordinates, plot$layout); data # step 7.
+```
+
+```
+## [[1]]
+## # A tibble: 10 × 8
+##    species   island bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+##    &lt;fct&gt;     &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+##  1 Chinstrap Dream            51.3          18.2               197        3750
+##  2 Chinstrap Dream            45.6          19.4               194        3525
+##  3 Adelie    Biscoe           35            17.9               192        3725
+##  4 Adelie    Biscoe           38.1          16.5               198        3825
+##  5 Adelie    Dream            36.8          18.5               193        3500
+##  6 Adelie    Dream            40.3          18.5               196        4350
+##  7 Adelie    Biscoe           37.7          16                 183        3075
+##  8 Gentoo    Biscoe           46.2          14.9               221        5300
+##  9 Adelie    Dream            38.9          18.8               190        3600
+## 10 Chinstrap Dream            49.8          17.3               198        3675
+## # ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;
+```
+
+---
+    
+
+``` r
+  data &lt;- layout$setup(data, plot$data, plot$plot_env); 
+data # step 8.
+```
+
+```
+## [[1]]
+## # A tibble: 10 × 9
+##    species   island bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+##    &lt;fct&gt;     &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+##  1 Chinstrap Dream            51.3          18.2               197        3750
+##  2 Chinstrap Dream            45.6          19.4               194        3525
+##  3 Adelie    Biscoe           35            17.9               192        3725
+##  4 Adelie    Biscoe           38.1          16.5               198        3825
+##  5 Adelie    Dream            36.8          18.5               193        3500
+##  6 Adelie    Dream            40.3          18.5               196        4350
+##  7 Adelie    Biscoe           37.7          16                 183        3075
+##  8 Gentoo    Biscoe           46.2          14.9               221        5300
+##  9 Adelie    Dream            38.9          18.8               190        3600
+## 10 Chinstrap Dream            49.8          17.3               198        3675
+## # ℹ 3 more variables: sex &lt;fct&gt;, year &lt;int&gt;, PANEL &lt;fct&gt;
+```
+
+---
+    
+
+``` r
+  data &lt;- ggplot2:::by_layer(function(l, d) l$compute_aesthetics(d, plot), 
+                             layers, data, "computing aesthetics"); data # step 9.
+```
+
+```
+## [[1]]
+##      fill      x PANEL group
+## 1   Dream   male     2     4
+## 2   Dream female     2     3
+## 3  Biscoe female     1     1
+## 4  Biscoe female     1     1
+## 5   Dream female     1     3
+## 6   Dream   male     1     4
+## 7  Biscoe female     1     1
+## 8  Biscoe   male     3     2
+## 9   Dream female     1     3
+## 10  Dream female     2     3
+```
+
+---
+    
+
+``` r
+  data &lt;- .ignore_data(data); 
+data # step 10.
+```
+
+```
+## [[1]]
+##      fill      x PANEL group
+## 1   Dream   male     2     4
+## 2   Dream female     2     3
+## 3  Biscoe female     1     1
+## 4  Biscoe female     1     1
+## 5   Dream female     1     3
+## 6   Dream   male     1     4
+## 7  Biscoe female     1     1
+## 8  Biscoe   male     3     2
+## 9   Dream female     1     3
+## 10  Dream female     2     3
+```
+
+---
+    
+
+``` r
+  data &lt;- lapply(data, scales$transform_df); 
+data  # step 11
+```
+
+```
+## [[1]]
+##      fill      x PANEL group
+## 1   Dream   male     2     4
+## 2   Dream female     2     3
+## 3  Biscoe female     1     1
+## 4  Biscoe female     1     1
+## 5   Dream female     1     3
+## 6   Dream   male     1     4
+## 7  Biscoe female     1     1
+## 8  Biscoe   male     3     2
+## 9   Dream female     1     3
+## 10  Dream female     2     3
+```
+
+---
+    
+
+``` r
+  scale_x &lt;- function() scales$get_scales("x"); 
+data # step 12
+```
+
+```
+## [[1]]
+##      fill      x PANEL group
+## 1   Dream   male     2     4
+## 2   Dream female     2     3
+## 3  Biscoe female     1     1
+## 4  Biscoe female     1     1
+## 5   Dream female     1     3
+## 6   Dream   male     1     4
+## 7  Biscoe female     1     1
+## 8  Biscoe   male     3     2
+## 9   Dream female     1     3
+## 10  Dream female     2     3
+```
+
+---
+    
+
+``` r
+  scale_y &lt;- function() scales$get_scales("y"); 
+data # step 13
+```
+
+```
+## [[1]]
+##      fill      x PANEL group
+## 1   Dream   male     2     4
+## 2   Dream female     2     3
+## 3  Biscoe female     1     1
+## 4  Biscoe female     1     1
+## 5   Dream female     1     3
+## 6   Dream   male     1     4
+## 7  Biscoe female     1     1
+## 8  Biscoe   male     3     2
+## 9   Dream female     1     3
+## 10  Dream female     2     3
+```
+
+---
+    
+
+``` r
+  layout$train_position(data, scale_x(), scale_y()); 
+data # step 14
+```
+
+```
+## [[1]]
+##      fill      x PANEL group
+## 1   Dream   male     2     4
+## 2   Dream female     2     3
+## 3  Biscoe female     1     1
+## 4  Biscoe female     1     1
+## 5   Dream female     1     3
+## 6   Dream   male     1     4
+## 7  Biscoe female     1     1
+## 8  Biscoe   male     3     2
+## 9   Dream female     1     3
+## 10  Dream female     2     3
+```
+
+---
+    
+
+``` r
+  data &lt;- layout$map_position(data); 
+data # step 15
+```
+
+```
+## [[1]]
+##      fill x PANEL group
+## 1   Dream 2     2     4
+## 2   Dream 1     2     3
+## 3  Biscoe 1     1     1
+## 4  Biscoe 1     1     1
+## 5   Dream 1     1     3
+## 6   Dream 2     1     4
+## 7  Biscoe 1     1     1
+## 8  Biscoe 2     3     2
+## 9   Dream 1     1     3
+## 10  Dream 1     2     3
+```
+
+---
+    
+
+``` r
+  data &lt;- .expose_data(data); 
+data # step 16
+```
+
+```
+## [[1]]
+##      fill x PANEL group
+## 1   Dream 2     2     4
+## 2   Dream 1     2     3
+## 3  Biscoe 1     1     1
+## 4  Biscoe 1     1     1
+## 5   Dream 1     1     3
+## 6   Dream 2     1     4
+## 7  Biscoe 1     1     1
+## 8  Biscoe 2     3     2
+## 9   Dream 1     1     3
+## 10  Dream 1     2     3
+```
+
+---
+    
+
+``` r
+  data &lt;- ggplot2:::by_layer(function(l, d) l$compute_statistic(d, layout), 
+                             layers, data, "computing stat"); data # step 17
+```
+
+```
+## [[1]]
+##   count prop x width flipped_aes   fill PANEL group
+## 1     3    1 1   0.9       FALSE Biscoe     1     1
+## 2     2    1 1   0.9       FALSE  Dream     1     3
+## 3     1    1 2   0.9       FALSE  Dream     1     4
+## 4     2    1 1   0.9       FALSE  Dream     2     3
+## 5     1    1 2   0.9       FALSE  Dream     2     4
+## 6     1    1 2   0.9       FALSE Biscoe     3     2
+```
+
+---
+    
+
+``` r
+  data &lt;- ggplot2:::by_layer(function(l, d) l$map_statistic(d, plot), 
+                             layers, data, "mapping stat to aesthetics"); data # step 18
+```
+
+```
+## [[1]]
+##   y count prop x width flipped_aes   fill PANEL group
+## 1 3     3    1 1   0.9       FALSE Biscoe     1     1
+## 2 2     2    1 1   0.9       FALSE  Dream     1     3
+## 3 1     1    1 2   0.9       FALSE  Dream     1     4
+## 4 2     2    1 1   0.9       FALSE  Dream     2     3
+## 5 1     1    1 2   0.9       FALSE  Dream     2     4
+## 6 1     1    1 2   0.9       FALSE Biscoe     3     2
+```
+
+---
+    
+
+``` r
+  plot$scales$add_missing(c("x", "y"), plot$plot_env); 
+data # step 19
+```
+
+```
+## [[1]]
+##   y count prop x width flipped_aes   fill PANEL group
+## 1 3     3    1 1   0.9       FALSE Biscoe     1     1
+## 2 2     2    1 1   0.9       FALSE  Dream     1     3
+## 3 1     1    1 2   0.9       FALSE  Dream     1     4
+## 4 2     2    1 1   0.9       FALSE  Dream     2     3
+## 5 1     1    1 2   0.9       FALSE  Dream     2     4
+## 6 1     1    1 2   0.9       FALSE Biscoe     3     2
+```
+
+---
+    
+
+``` r
+  data &lt;- ggplot2:::by_layer(function(l, d) l$compute_geom_1(d), 
+                             layers,  data, "setting up geom"); data # step 20
+```
+
+```
+## [[1]]
+##   y count prop x flipped_aes   fill PANEL group ymin ymax xmin xmax
+## 1 3     3    1 1       FALSE Biscoe     1     1    0    3 0.55 1.45
+## 2 2     2    1 1       FALSE  Dream     1     3    0    2 0.55 1.45
+## 3 1     1    1 2       FALSE  Dream     1     4    0    1 1.55 2.45
+## 4 2     2    1 1       FALSE  Dream     2     3    0    2 0.55 1.45
+## 5 1     1    1 2       FALSE  Dream     2     4    0    1 1.55 2.45
+## 6 1     1    1 2       FALSE Biscoe     3     2    0    1 1.55 2.45
+```
+
+---
+    
+
+``` r
+  data &lt;- ggplot2:::by_layer(function(l, d) l$compute_position(d, layout),  
+                             layers, data, "computing position"); data # step 21
+```
+
+```
+## [[1]]
+##   y count prop x flipped_aes   fill PANEL group ymin ymax xmin xmax
+## 1 5     3    1 1       FALSE Biscoe     1     1    2    5 0.55 1.45
+## 2 2     2    1 1       FALSE  Dream     1     3    0    2 0.55 1.45
+## 3 1     1    1 2       FALSE  Dream     1     4    0    1 1.55 2.45
+## 4 2     2    1 1       FALSE  Dream     2     3    0    2 0.55 1.45
+## 5 1     1    1 2       FALSE  Dream     2     4    0    1 1.55 2.45
+## 6 1     1    1 2       FALSE Biscoe     3     2    0    1 1.55 2.45
+```
+
+---
+    
+
+``` r
+  data &lt;- .ignore_data(data); 
+data # step 22 
+```
+
+```
+## [[1]]
+##   y count prop x flipped_aes   fill PANEL group ymin ymax xmin xmax
+## 1 5     3    1 1       FALSE Biscoe     1     1    2    5 0.55 1.45
+## 2 2     2    1 1       FALSE  Dream     1     3    0    2 0.55 1.45
+## 3 1     1    1 2       FALSE  Dream     1     4    0    1 1.55 2.45
+## 4 2     2    1 1       FALSE  Dream     2     3    0    2 0.55 1.45
+## 5 1     1    1 2       FALSE  Dream     2     4    0    1 1.55 2.45
+## 6 1     1    1 2       FALSE Biscoe     3     2    0    1 1.55 2.45
+```
+
+---
+    
+
+``` r
+  layout$reset_scales(); 
+data # step 23
+```
+
+```
+## [[1]]
+##   y count prop x flipped_aes   fill PANEL group ymin ymax xmin xmax
+## 1 5     3    1 1       FALSE Biscoe     1     1    2    5 0.55 1.45
+## 2 2     2    1 1       FALSE  Dream     1     3    0    2 0.55 1.45
+## 3 1     1    1 2       FALSE  Dream     1     4    0    1 1.55 2.45
+## 4 2     2    1 1       FALSE  Dream     2     3    0    2 0.55 1.45
+## 5 1     1    1 2       FALSE  Dream     2     4    0    1 1.55 2.45
+## 6 1     1    1 2       FALSE Biscoe     3     2    0    1 1.55 2.45
+```
+
+---
+    
+
+``` r
+  layout$train_position(data, scale_x(), scale_y()); 
+data #layout # step 24
+```
+
+```
+## [[1]]
+##   y count prop x flipped_aes   fill PANEL group ymin ymax xmin xmax
+## 1 5     3    1 1       FALSE Biscoe     1     1    2    5 0.55 1.45
+## 2 2     2    1 1       FALSE  Dream     1     3    0    2 0.55 1.45
+## 3 1     1    1 2       FALSE  Dream     1     4    0    1 1.55 2.45
+## 4 2     2    1 1       FALSE  Dream     2     3    0    2 0.55 1.45
+## 5 1     1    1 2       FALSE  Dream     2     4    0    1 1.55 2.45
+## 6 1     1    1 2       FALSE Biscoe     3     2    0    1 1.55 2.45
+```
+
+---
+    
+
+``` r
+  layout$setup_panel_params(); 
+data #layout # step 25
+```
+
+```
+## [[1]]
+##   y count prop x flipped_aes   fill PANEL group ymin ymax xmin xmax
+## 1 5     3    1 1       FALSE Biscoe     1     1    2    5 0.55 1.45
+## 2 2     2    1 1       FALSE  Dream     1     3    0    2 0.55 1.45
+## 3 1     1    1 2       FALSE  Dream     1     4    0    1 1.55 2.45
+## 4 2     2    1 1       FALSE  Dream     2     3    0    2 0.55 1.45
+## 5 1     1    1 2       FALSE  Dream     2     4    0    1 1.55 2.45
+## 6 1     1    1 2       FALSE Biscoe     3     2    0    1 1.55 2.45
+```
+
+---
+    
+
+``` r
+  data &lt;- layout$map_position(data); 
+data # step 26
+```
+
+```
+## [[1]]
+##   y count prop x flipped_aes   fill PANEL group ymin ymax xmin xmax
+## 1 5     3    1 1       FALSE Biscoe     1     1    2    5 0.55 1.45
+## 2 2     2    1 1       FALSE  Dream     1     3    0    2 0.55 1.45
+## 3 1     1    1 2       FALSE  Dream     1     4    0    1 1.55 2.45
+## 4 2     2    1 1       FALSE  Dream     2     3    0    2 0.55 1.45
+## 5 1     1    1 2       FALSE  Dream     2     4    0    1 1.55 2.45
+## 6 1     1    1 2       FALSE Biscoe     3     2    0    1 1.55 2.45
+```
+
+---
+    
+
+``` r
+  layout$setup_panel_guides(plot$guides, plot$layers); 
+data #layout # step 27
+```
+
+```
+## [[1]]
+##   y count prop x flipped_aes   fill PANEL group ymin ymax xmin xmax
+## 1 5     3    1 1       FALSE Biscoe     1     1    2    5 0.55 1.45
+## 2 2     2    1 1       FALSE  Dream     1     3    0    2 0.55 1.45
+## 3 1     1    1 2       FALSE  Dream     1     4    0    1 1.55 2.45
+## 4 2     2    1 1       FALSE  Dream     2     3    0    2 0.55 1.45
+## 5 1     1    1 2       FALSE  Dream     2     4    0    1 1.55 2.45
+## 6 1     1    1 2       FALSE Biscoe     3     2    0    1 1.55 2.45
+```
+
+---
+    
+
+``` r
+  npscales &lt;- scales$non_position_scales(); 
+data #npscales # step 28
+```
+
+```
+## [[1]]
+##   y count prop x flipped_aes   fill PANEL group ymin ymax xmin xmax
+## 1 5     3    1 1       FALSE Biscoe     1     1    2    5 0.55 1.45
+## 2 2     2    1 1       FALSE  Dream     1     3    0    2 0.55 1.45
+## 3 1     1    1 2       FALSE  Dream     1     4    0    1 1.55 2.45
+## 4 2     2    1 1       FALSE  Dream     2     3    0    2 0.55 1.45
+## 5 1     1    1 2       FALSE  Dream     2     4    0    1 1.55 2.45
+## 6 1     1    1 2       FALSE Biscoe     3     2    0    1 1.55 2.45
+```
+
+---
+
+    
+
+``` r
+  if (npscales$n() &gt; 0) {lapply(data, npscales$train_df); plot$guides &lt;- plot$guides$build(npscales, plot$layers,  plot$labels, data);     data &lt;- lapply(data, npscales$map_df)}else { plot$guides &lt;- plot$guides$get_custom() };
+data# plot$guides  step 29
+```
+
+```
+## [[1]]
+##      fill y count prop x flipped_aes PANEL group ymin ymax xmin xmax
+## 1 #F8766D 5     3    1 1       FALSE     1     1    2    5 0.55 1.45
+## 2 #00BFC4 2     2    1 1       FALSE     1     3    0    2 0.55 1.45
+## 3 #00BFC4 1     1    1 2       FALSE     1     4    0    1 1.55 2.45
+## 4 #00BFC4 2     2    1 1       FALSE     2     3    0    2 0.55 1.45
+## 5 #00BFC4 1     1    1 2       FALSE     2     4    0    1 1.55 2.45
+## 6 #F8766D 1     1    1 2       FALSE     3     2    0    1 1.55 2.45
+```
+
+---
+    
+
+``` r
+  data &lt;- .expose_data(data); 
+data # step 30
+```
+
+```
+## [[1]]
+##      fill y count prop x flipped_aes PANEL group ymin ymax xmin xmax
+## 1 #F8766D 5     3    1 1       FALSE     1     1    2    5 0.55 1.45
+## 2 #00BFC4 2     2    1 1       FALSE     1     3    0    2 0.55 1.45
+## 3 #00BFC4 1     1    1 2       FALSE     1     4    0    1 1.55 2.45
+## 4 #00BFC4 2     2    1 1       FALSE     2     3    0    2 0.55 1.45
+## 5 #00BFC4 1     1    1 2       FALSE     2     4    0    1 1.55 2.45
+## 6 #F8766D 1     1    1 2       FALSE     3     2    0    1 1.55 2.45
+```
+
+---
+    
+
+``` r
+  data &lt;- ggplot2:::by_layer(function(l, d) l$compute_geom_2(d), layers,  
+                             data, "setting up geom aesthetics"); data # step 31
+```
+
+```
+## [[1]]
+##      fill y count prop x flipped_aes PANEL group ymin ymax xmin xmax colour
+## 1 #F8766D 5     3    1 1       FALSE     1     1    2    5 0.55 1.45     NA
+## 2 #00BFC4 2     2    1 1       FALSE     1     3    0    2 0.55 1.45     NA
+## 3 #00BFC4 1     1    1 2       FALSE     1     4    0    1 1.55 2.45     NA
+## 4 #00BFC4 2     2    1 1       FALSE     2     3    0    2 0.55 1.45     NA
+## 5 #00BFC4 1     1    1 2       FALSE     2     4    0    1 1.55 2.45     NA
+## 6 #F8766D 1     1    1 2       FALSE     3     2    0    1 1.55 2.45     NA
+##   linewidth linetype alpha
+## 1       0.5        1    NA
+## 2       0.5        1    NA
+## 3       0.5        1    NA
+## 4       0.5        1    NA
+## 5       0.5        1    NA
+## 6       0.5        1    NA
+```
+
+---
+    
+
+``` r
+  data &lt;- ggplot2:::by_layer(function(l, d) l$finish_statistics(d),  layers, 
+                             data, "finishing layer stat"); data # step 32
+```
+
+```
+## [[1]]
+##      fill y count prop x flipped_aes PANEL group ymin ymax xmin xmax colour
+## 1 #F8766D 5     3    1 1       FALSE     1     1    2    5 0.55 1.45     NA
+## 2 #00BFC4 2     2    1 1       FALSE     1     3    0    2 0.55 1.45     NA
+## 3 #00BFC4 1     1    1 2       FALSE     1     4    0    1 1.55 2.45     NA
+## 4 #00BFC4 2     2    1 1       FALSE     2     3    0    2 0.55 1.45     NA
+## 5 #00BFC4 1     1    1 2       FALSE     2     4    0    1 1.55 2.45     NA
+## 6 #F8766D 1     1    1 2       FALSE     3     2    0    1 1.55 2.45     NA
+##   linewidth linetype alpha
+## 1       0.5        1    NA
+## 2       0.5        1    NA
+## 3       0.5        1    NA
+## 4       0.5        1    NA
+## 5       0.5        1    NA
+## 6       0.5        1    NA
+```
+
+---
+    
+
+``` r
+  data &lt;- layout$finish_data(data); 
+data # step 33
+```
+
+```
+## [[1]]
+##      fill y count prop x flipped_aes PANEL group ymin ymax xmin xmax colour
+## 1 #F8766D 5     3    1 1       FALSE     1     1    2    5 0.55 1.45     NA
+## 2 #00BFC4 2     2    1 1       FALSE     1     3    0    2 0.55 1.45     NA
+## 3 #00BFC4 1     1    1 2       FALSE     1     4    0    1 1.55 2.45     NA
+## 4 #00BFC4 2     2    1 1       FALSE     2     3    0    2 0.55 1.45     NA
+## 5 #00BFC4 1     1    1 2       FALSE     2     4    0    1 1.55 2.45     NA
+## 6 #F8766D 1     1    1 2       FALSE     3     2    0    1 1.55 2.45     NA
+##   linewidth linetype alpha
+## 1       0.5        1    NA
+## 2       0.5        1    NA
+## 3       0.5        1    NA
+## 4       0.5        1    NA
+## 5       0.5        1    NA
+## 6       0.5        1    NA
+```
+
+---
+    
+
+``` r
+  plot$labels$alt &lt;- get_alt_text(plot); 
+data # step 34
+```
+
+```
+## [[1]]
+##      fill y count prop x flipped_aes PANEL group ymin ymax xmin xmax colour
+## 1 #F8766D 5     3    1 1       FALSE     1     1    2    5 0.55 1.45     NA
+## 2 #00BFC4 2     2    1 1       FALSE     1     3    0    2 0.55 1.45     NA
+## 3 #00BFC4 1     1    1 2       FALSE     1     4    0    1 1.55 2.45     NA
+## 4 #00BFC4 2     2    1 1       FALSE     2     3    0    2 0.55 1.45     NA
+## 5 #00BFC4 1     1    1 2       FALSE     2     4    0    1 1.55 2.45     NA
+## 6 #F8766D 1     1    1 2       FALSE     3     2    0    1 1.55 2.45     NA
+##   linewidth linetype alpha
+## 1       0.5        1    NA
+## 2       0.5        1    NA
+## 3       0.5        1    NA
+## 4       0.5        1    NA
+## 5       0.5        1    NA
+## 6       0.5        1    NA
+```
+
+---
+    
+
+``` r
+  structure(list(data = data, layout = layout, plot = plot),   class = "ggplot_built"); 
+```
+
+```
+## $data
+## $data[[1]]
+##      fill y count prop x flipped_aes PANEL group ymin ymax xmin xmax colour
+## 1 #F8766D 5     3    1 1       FALSE     1     1    2    5 0.55 1.45     NA
+## 2 #00BFC4 2     2    1 1       FALSE     1     3    0    2 0.55 1.45     NA
+## 3 #00BFC4 1     1    1 2       FALSE     1     4    0    1 1.55 2.45     NA
+## 4 #00BFC4 2     2    1 1       FALSE     2     3    0    2 0.55 1.45     NA
+## 5 #00BFC4 1     1    1 2       FALSE     2     4    0    1 1.55 2.45     NA
+## 6 #F8766D 1     1    1 2       FALSE     3     2    0    1 1.55 2.45     NA
+##   linewidth linetype alpha
+## 1       0.5        1    NA
+## 2       0.5        1    NA
+## 3       0.5        1    NA
+## 4       0.5        1    NA
+## 5       0.5        1    NA
+## 6       0.5        1    NA
+## 
+## 
+## $layout
+## &lt;ggproto object: Class Layout, gg&gt;
+##     coord: &lt;ggproto object: Class CoordCartesian, Coord, gg&gt;
+##         aspect: function
+##         backtransform_range: function
+##         clip: on
+##         default: TRUE
+##         distance: function
+##         expand: TRUE
+##         is_free: function
+##         is_linear: function
+##         labels: function
+##         limits: list
+##         modify_scales: function
+##         range: function
+##         render_axis_h: function
+##         render_axis_v: function
+##         render_bg: function
+##         render_fg: function
+##         setup_data: function
+##         setup_layout: function
+##         setup_panel_guides: function
+##         setup_panel_params: function
+##         setup_params: function
+##         train_panel_guides: function
+##         transform: function
+##         super:  &lt;ggproto object: Class CoordCartesian, Coord, gg&gt;
+##     coord_params: list
+##     facet: &lt;ggproto object: Class FacetWrap, Facet, gg&gt;
+##         compute_layout: function
+##         draw_back: function
+##         draw_front: function
+##         draw_labels: function
+##         draw_panels: function
+##         finish_data: function
+##         init_scales: function
+##         map_data: function
+##         params: list
+##         setup_data: function
+##         setup_params: function
+##         shrink: TRUE
+##         train_scales: function
+##         vars: function
+##         super:  &lt;ggproto object: Class FacetWrap, Facet, gg&gt;
+##     facet_params: list
+##     finish_data: function
+##     get_scales: function
+##     layout: data.frame
+##     map_position: function
+##     panel_params: list
+##     panel_scales_x: list
+##     panel_scales_y: list
+##     render: function
+##     render_labels: function
+##     reset_scales: function
+##     resolve_label: function
+##     setup: function
+##     setup_panel_guides: function
+##     setup_panel_params: function
+##     train_position: function
+##     super:  &lt;ggproto object: Class Layout, gg&gt;
+## 
+## $plot
+```
+
+![](debug-ggbuild-slideshow_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
+
+```
+## 
+## attr(,"class")
+## [1] "ggplot_built"
+```
+
+``` r
+data # step 35
+```
+
+```
+## [[1]]
+##      fill y count prop x flipped_aes PANEL group ymin ymax xmin xmax colour
+## 1 #F8766D 5     3    1 1       FALSE     1     1    2    5 0.55 1.45     NA
+## 2 #00BFC4 2     2    1 1       FALSE     1     3    0    2 0.55 1.45     NA
+## 3 #00BFC4 1     1    1 2       FALSE     1     4    0    1 1.55 2.45     NA
+## 4 #00BFC4 2     2    1 1       FALSE     2     3    0    2 0.55 1.45     NA
+## 5 #00BFC4 1     1    1 2       FALSE     2     4    0    1 1.55 2.45     NA
+## 6 #F8766D 1     1    1 2       FALSE     3     2    0    1 1.55 2.45     NA
+##   linewidth linetype alpha
+## 1       0.5        1    NA
+## 2       0.5        1    NA
+## 3       0.5        1    NA
+## 4       0.5        1    NA
+## 5       0.5        1    NA
+## 6       0.5        1    NA
+```
+
+
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
