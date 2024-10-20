@@ -54,6 +54,17 @@ palmerpenguins::penguins |>
           linewidth = .05
         )) + 
   aes(group = id)
+
+library(tidyverse)
+
+palmerpenguins::penguins |>
+  mutate(id = row_number()) |>
+  ggplot() + 
+  aes(x = bill_depth_mm) + 
+  geom_histogram(color = "white",
+                 linewidth = .2) + 
+  aes(group = id) + 
+  aes(fill = sex)
 ```
 
 
@@ -91,8 +102,9 @@ palmerpenguins::penguins |>
         stat = ggproto("StatCountId", StatCount,
                        compute_group = function(data, scales){
                          StatCount$compute_group(data, scales) %>% 
-                         mutate(id = row_number())
-                         }),
+                         mutate(group = row_number())},
+                         # default_aes = aes(group = after_stat(id))
+                         ),
         position = "stack",
         params = list(
           width = .25
