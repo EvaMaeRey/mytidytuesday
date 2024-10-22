@@ -174,7 +174,7 @@ count: false
  
 
 .panel1-cov_steps-auto[
-## `$$\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)$$`
+### `$$\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)$$`
 ]
  
 .panel2-cov_steps-auto[
@@ -198,7 +198,7 @@ count: false
  
 
 .panel1-cov_steps-auto[
-## `$$\frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{n - 1}$$`
+### `$$\frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{n - 1}$$`
 ]
  
 .panel2-cov_steps-auto[
@@ -242,6 +242,61 @@ datasaurus_dozen |&gt; filter(dataset == "dino") |&gt;  ggplot() +  aes(x = x, y
  
 .panel3-cov_steps-auto[
 ![](correlation-covariance-flipbook-rewrite_files/figure-html/cov_steps_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cov_steps-auto[
+NA
+]
+ 
+.panel2-cov_steps-auto[
+
+``` r
+datasaurus_dozen |&gt; filter(dataset == "dino") |&gt;  ggplot() +  aes(x = x, y = y) +   geom_point() +
+  geom_xmean() +
+  geom_ymean() +
+  geom_xmeandiff() +
+  geom_ymeandiff() +
+  geom_xydiffs() +
+  geom_covariance() +
+  geom_covariance_label() +
+* labs(title = "Picture of covariance")
+```
+]
+ 
+.panel3-cov_steps-auto[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/cov_steps_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cov_steps-auto[
+NA
+]
+ 
+.panel2-cov_steps-auto[
+
+``` r
+datasaurus_dozen |&gt; filter(dataset == "dino") |&gt;  ggplot() +  aes(x = x, y = y) +   geom_point() +
+  geom_xmean() +
+  geom_ymean() +
+  geom_xmeandiff() +
+  geom_ymeandiff() +
+  geom_xydiffs() +
+  geom_covariance() +
+  geom_covariance_label() +
+  labs(title = "Picture of covariance") -&gt;
+*xy_covariance
+```
+]
+ 
+.panel3-cov_steps-auto[
+
 ]
 
 &lt;style&gt;
@@ -318,6 +373,13 @@ count: false
  
 .panel2-variance_steps-auto[
 
+``` r
+*xy_covariance
+```
+]
+ 
+.panel3-variance_steps-auto[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/variance_steps_auto_01_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -329,6 +391,14 @@ count: false
 ]
  
 .panel2-variance_steps-auto[
+
+``` r
+xy_covariance +
+* aes(y = x)
+```
+]
+ 
+.panel3-variance_steps-auto[
 ![](correlation-covariance-flipbook-rewrite_files/figure-html/variance_steps_auto_02_output-1.png)&lt;!-- --&gt;
 ]
 
@@ -341,6 +411,15 @@ count: false
 ]
  
 .panel2-variance_steps-auto[
+
+``` r
+xy_covariance +
+  aes(y = x) +
+* labs(title = "Picture of Variance")
+```
+]
+ 
+.panel3-variance_steps-auto[
 ![](correlation-covariance-flipbook-rewrite_files/figure-html/variance_steps_auto_03_output-1.png)&lt;!-- --&gt;
 ]
 
@@ -353,6 +432,16 @@ count: false
 ]
  
 .panel2-variance_steps-auto[
+
+``` r
+xy_covariance +
+  aes(y = x) +
+  labs(title = "Picture of Variance") +
+* geom_x_sd()
+```
+]
+ 
+.panel3-variance_steps-auto[
 ![](correlation-covariance-flipbook-rewrite_files/figure-html/variance_steps_auto_04_output-1.png)&lt;!-- --&gt;
 ]
 
@@ -365,6 +454,17 @@ count: false
 ]
  
 .panel2-variance_steps-auto[
+
+``` r
+xy_covariance +
+  aes(y = x) +
+  labs(title = "Picture of Variance") +
+  geom_x_sd() +
+* labs(title = "Picture of Variance &amp; Standard Deviation")
+```
+]
+ 
+.panel3-variance_steps-auto[
 ![](correlation-covariance-flipbook-rewrite_files/figure-html/variance_steps_auto_05_output-1.png)&lt;!-- --&gt;
 ]
 
@@ -377,61 +477,25 @@ count: false
 ]
  
 .panel2-variance_steps-auto[
-![](correlation-covariance-flipbook-rewrite_files/figure-html/variance_steps_auto_06_output-1.png)&lt;!-- --&gt;
-]
 
----
-count: false
- 
-
-.panel1-variance_steps-auto[
-## `$$\frac{\sum_{i=1}^n (x_i-\mu_x)^2}{n - 1}$$`
-]
- 
-.panel2-variance_steps-auto[
-![](correlation-covariance-flipbook-rewrite_files/figure-html/variance_steps_auto_07_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-variance_steps-auto[
-NA
+``` r
+xy_covariance +
+  aes(y = x) +
+  labs(title = "Picture of Variance") +
+  geom_x_sd() +
+  labs(title = "Picture of Variance &amp; Standard Deviation") -&gt;
+*xx_variance_sd
+```
 ]
  
-.panel2-variance_steps-auto[
-![](correlation-covariance-flipbook-rewrite_files/figure-html/variance_steps_auto_08_output-1.png)&lt;!-- --&gt;
-]
+.panel3-variance_steps-auto[
 
----
-count: false
- 
-
-.panel1-variance_steps-auto[
-NA
-]
- 
-.panel2-variance_steps-auto[
-![](correlation-covariance-flipbook-rewrite_files/figure-html/variance_steps_auto_09_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-variance_steps-auto[
-NA
-]
- 
-.panel2-variance_steps-auto[
-![](correlation-covariance-flipbook-rewrite_files/figure-html/variance_steps_auto_10_output-1.png)&lt;!-- --&gt;
 ]
 
 &lt;style&gt;
 .panel1-variance_steps-auto {
   color: black;
-  width: 38.6060606060606%;
+  width: 28.7040816326531%;
   hight: 32%;
   float: left;
   padding-left: 1%;
@@ -439,7 +503,7 @@ NA
 }
 .panel2-variance_steps-auto {
   color: black;
-  width: 59.3939393939394%;
+  width: 38.6020408163265%;
   hight: 32%;
   float: left;
   padding-left: 1%;
@@ -447,7 +511,7 @@ NA
 }
 .panel3-variance_steps-auto {
   color: black;
-  width: NA%;
+  width: 29.6938775510204%;
   hight: 33%;
   float: left;
   padding-left: 1%;
@@ -457,12 +521,6 @@ NA
 
 
 
-
-
-
-``` r
-knitr::knit_exit()
-```
 
 
 
@@ -494,58 +552,129 @@ $$ \sigma = \sqrt\frac{\sum_{i=1}^n (x_i-\mu_x)^2}{n - 1} $$
 count: false
  
 
-.panel1-sd_steps-user[
+.panel1-sd_steps-auto[
 ## `$$\frac{\sum_{i=1}^n (x_i-\mu_x)^2}{n - 1}$$`
 ]
  
-.panel2-sd_steps-user[
-![](correlation-covariance-flipbook-rewrite_files/figure-html/sd_steps_user_01_output-1.png)&lt;!-- --&gt;
+.panel2-sd_steps-auto[
+
+``` r
+*xx_variance_sd
+```
+]
+ 
+.panel3-sd_steps-auto[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/sd_steps_auto_01_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-sd_steps-user[
+.panel1-sd_steps-auto[
 ## `$$\sqrt\frac{\sum_{i=1}^n (x_i-\mu_x)^2}{n - 1}$$`
 ]
  
-.panel2-sd_steps-user[
-![](correlation-covariance-flipbook-rewrite_files/figure-html/sd_steps_user_02_output-1.png)&lt;!-- --&gt;
+.panel2-sd_steps-auto[
+
+``` r
+xx_variance_sd +
+* aes(y = y)
+```
+]
+ 
+.panel3-sd_steps-auto[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/sd_steps_auto_02_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-sd_steps-user[
+.panel1-sd_steps-auto[
 NA
 ]
  
-.panel2-sd_steps-user[
-![](correlation-covariance-flipbook-rewrite_files/figure-html/sd_steps_user_03_output-1.png)&lt;!-- --&gt;
+.panel2-sd_steps-auto[
+
+``` r
+xx_variance_sd +
+  aes(y = y) +
+* geom_y_sd()
+```
+]
+ 
+.panel3-sd_steps-auto[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/sd_steps_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-sd_steps-auto[
+NA
+]
+ 
+.panel2-sd_steps-auto[
+
+``` r
+xx_variance_sd +
+  aes(y = y) +
+  geom_y_sd() +
+* aes(x = x/sd(x),
+*     y = y/sd(y))
+```
+]
+ 
+.panel3-sd_steps-auto[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/sd_steps_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-sd_steps-auto[
+NA
+]
+ 
+.panel2-sd_steps-auto[
+
+``` r
+xx_variance_sd +
+  aes(y = y) +
+  geom_y_sd() +
+  aes(x = x/sd(x),
+      y = y/sd(y)) +
+* labs(title = "Picture of Pearson correlation")
+```
+]
+ 
+.panel3-sd_steps-auto[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/sd_steps_auto_05_output-1.png)&lt;!-- --&gt;
 ]
 
 &lt;style&gt;
-.panel1-sd_steps-user {
+.panel1-sd_steps-auto {
   color: black;
-  width: 38.6060606060606%;
+  width: 28.7040816326531%;
   hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel2-sd_steps-user {
+.panel2-sd_steps-auto {
   color: black;
-  width: 59.3939393939394%;
+  width: 38.6020408163265%;
   hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel3-sd_steps-user {
+.panel3-sd_steps-auto {
   color: black;
-  width: NA%;
+  width: 29.6938775510204%;
   hight: 33%;
   float: left;
   padding-left: 1%;

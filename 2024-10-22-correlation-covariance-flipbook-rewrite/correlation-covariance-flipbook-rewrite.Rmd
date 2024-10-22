@@ -82,8 +82,8 @@ cov_equation <- c("",
   "## $$\\mu_y$$", 
   "## $$x_i-\\mu_x$$",
   "## $$y_i-\\mu_y$$",
-  "## $$\\sum_{i=1}^n (x_i-\\mu_x)(y_i-\\mu_y)$$",
-  "## $$\\frac{\\sum_{i=1}^n (x_i-\\mu_x)(y_i-\\mu_y)}{n - 1}$$"
+  "### $$\\sum_{i=1}^n (x_i-\\mu_x)(y_i-\\mu_y)$$",
+  "### $$\\frac{\\sum_{i=1}^n (x_i-\\mu_x)(y_i-\\mu_y)}{n - 1}$$"
   )
 
 var_equation <- c("",
@@ -110,7 +110,7 @@ cov_to_cor_equation <- c("## $$\\frac{\\sum_{i=1}^n (x_i-\\mu_x)(y_i-\\mu_y)}{n 
 `r chunk_reveal("cov_steps", display_type = c("md","code","output"), md = cov_equation, widths = c(33,33 ,33))`
 
 
-```{r cov_steps, eval = F, echo=F}
+```{r cov_steps, include =F}
 datasaurus_dozen |> filter(dataset == "dino") |>  ggplot() +  aes(x = x, y = y) +   geom_point() + 
   geom_xmean() + 
   geom_ymean() + 
@@ -118,7 +118,9 @@ datasaurus_dozen |> filter(dataset == "dino") |>  ggplot() +  aes(x = x, y = y) 
   geom_ymeandiff() + 
   geom_xydiffs() + 
   geom_covariance() +
-  geom_covariance_label()
+  geom_covariance_label() +
+  labs(title = "Picture of covariance") ->
+xy_covariance
 ```
 
 
@@ -154,25 +156,16 @@ $$ \sigma^2 = \frac{\sum_{i=1}^n (x_i-\mu_x)^2}{n - 1} $$
 ---
 
 
-`r flipbookr::chunk_reveal("variance_steps", display_type = c("md","output"), md = var_equation)`
+`r flipbookr::chunk_reveal("variance_steps", display_type = c("md","code", "output"), md = var_equation)`
 
-```{r variance_steps, eval = F, echo=F}
-set.seed(199402)
-datasaurus_dozen |> filter(dataset == "dino") |>  ggplot() +  aes(x = x, y = x) +   geom_point() + 
-  geom_xmean() + 
-  geom_ymean() + 
-  geom_xmeandiff() + 
-  geom_ymeandiff() + 
-  geom_xydiffs() + 
-  geom_covariance() + 
-  geom_covariance_label() +
-  labs(title = "Picture of Variance") 
+```{r variance_steps, include =F}
+xy_covariance + 
+  aes(y = x) + 
+  labs(title = "Picture of Variance") + 
+  geom_x_sd() + 
+  labs(title = "Picture of Variance & Standard Deviation") ->
+xx_variance_sd
 ```
-
-```{r}
-knitr::knit_exit()
-```
-
 
 
 
@@ -200,19 +193,15 @@ $$ \sigma = \sqrt\frac{\sum_{i=1}^n (x_i-\mu_x)^2}{n - 1} $$
 ---
 
 
-`r flipbookr::chunk_reveal("sd_steps", break_type = "user", display_type = c("md","output"), md = sd_equation)`
+`r flipbookr::chunk_reveal("sd_steps", display_type = c("md","code", "output"), md = sd_equation)`
 
-```{r sd_steps, eval = F, echo=F}
-set.seed(199402)
-datasaurus_dozen |> filter(dataset == "dino") |>  ggplot() + aes(x = x, y = x) +   geom_point() + 
-  geom_xmean() + 
-  geom_ymean() + 
-  geom_xmeandiff() + 
-  geom_ymeandiff() + 
-  geom_xydiffs() + 
-  geom_covariance() + #BREAK
-  geom_x_sd() + #BREAK
-  labs(title = "Picture of Variance & SD") #BREAK
+```{r sd_steps, include =F}
+xx_variance_sd + 
+  aes(y = y) +
+  geom_y_sd() + 
+  aes(x = x/sd(x), 
+      y = y/sd(y)) +
+  labs(title = "Picture of Pearson correlation") 
 ```
 
 ---
