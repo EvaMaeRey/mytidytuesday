@@ -1,0 +1,452 @@
+---
+title: "cascade"
+subtitle: ""
+author: ""
+output:
+  xaringan::moon_reader:
+    seal: FALSE
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+
+This book looks some basic statistics:
+
+- covariance
+- variance
+- standard deviation
+- correlation coefficient
+
+
+
+
+
+
+
+---
+
+We'll look at the *population* statistics first equation over all:
+
+---
+class: inverse, center, middle
+
+# Covariance
+
+---
+class: center, middle
+
+### Covariance is a measure of the joint variability of two random variables. 
+
+---
+class: inverse, center, middle
+
+.huge[
+
+$$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{n} $$
+]
+
+
+
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.width = 6, message = F, 
+                      warning = F,  comment = "", 
+                      cache = T, fig.height = 7, 
+                      fig.width = 8)
+
+library(flipbookr)
+library(tidyverse)
+library(ggcorrelate)
+library(datasauRus)
+```
+
+
+```{r, include = F}
+set.seed(2020)
+library(tidyverse)
+```
+
+
+```{r, include=F}
+cov_equation <- c("",
+  "## $$\\mu_x$$", 
+  "## $$\\mu_y$$", 
+  "## $$x_i-\\mu_x$$",
+  "## $$y_i-\\mu_y$$",
+  "## $$\\sum_{i=1}^n (x_i-\\mu_x)(y_i-\\mu_y)$$",
+  "## $$\\frac{\\sum_{i=1}^n (x_i-\\mu_x)(y_i-\\mu_y)}{n - 1}$$"
+  )
+
+var_equation <- c("",
+  "## $$\\mu_x$$", 
+  "## $$\\mu_x$$", 
+  "## $$x_i-\\mu_x$$",
+  "## $$x_i-\\mu_x$$",
+  "## $$\\sum_{i=1}^n (x_i-\\mu_x)^2$$",
+  "## $$\\frac{\\sum_{i=1}^n (x_i-\\mu_x)^2}{n - 1}$$"
+  )
+
+
+sd_equation <- c("## $$\\frac{\\sum_{i=1}^n (x_i-\\mu_x)^2}{n - 1}$$",
+                 "## $$\\sqrt\\frac{\\sum_{i=1}^n (x_i-\\mu_x)^2}{n - 1}$$")
+
+cov_to_cor_equation <- c("## $$\\frac{\\sum_{i=1}^n (x_i-\\mu_x)(y_i-\\mu_y)}{n - 1}$$",
+                 "## $$\\frac{\\sum_{i=1}^n (x_i-\\mu_x)(y_i-\\mu_y)}{n*\\sigma_x}$$",
+                 "## $$\\frac{\\sum_{i=1}^n (x_i-\\mu_x)(y_i-\\mu_y)}{n*\\sigma_x\\sigma_y}$$",
+                 "## $$\\frac{\\sum_{i=1}^n (x_i-\\mu_x)(y_i-\\mu_y)}{n*\\sigma_x\\sigma_y}$$")
+
+```
+
+
+`r chunk_reveal("cov_steps", display_type = c("md","code","output"), md = cov_equation, widths = c(33,33 ,33))`
+
+
+```{r cov_steps, eval = F, echo=F}
+datasaurus_dozen |> filter(dataset == "dino") |>  ggplot() +  aes(x = x, y = y) +   geom_point() + 
+  geom_xmean() + 
+  geom_ymean() + 
+  geom_xmeandiff() + 
+  geom_ymeandiff() + 
+  geom_xydiffs() + 
+  geom_covariance() +
+  geom_covariance_label()
+```
+
+
+
+
+
+
+
+---
+class: inverse, middle, center
+
+# Variance and Standard Deviation
+
+
+
+
+---
+class: inverse, center, middle
+
+.huge[
+
+$$ var(x) = \frac{\sum_{i=1}^n (x_i-\mu_x)^2}{n - 1} $$
+]
+
+---
+class: inverse, center, middle
+
+.huge[
+
+$$ \sigma^2 = \frac{\sum_{i=1}^n (x_i-\mu_x)^2}{n - 1} $$
+]
+
+---
+
+
+`r flipbookr::chunk_reveal("variance_steps", display_type = c("md","output"), md = var_equation)`
+
+```{r variance_steps, eval = F, echo=F}
+set.seed(199402)
+datasaurus_dozen |> filter(dataset == "dino") |>  ggplot() +  aes(x = x, y = x) +   geom_point() + 
+  geom_xmean() + 
+  geom_ymean() + 
+  geom_xmeandiff() + 
+  geom_ymeandiff() + 
+  geom_xydiffs() + 
+  geom_covariance() + 
+  geom_covariance_label() +
+  labs(title = "Picture of Variance") 
+```
+
+```{r}
+knitr::knit_exit()
+```
+
+
+
+
+---
+class: inverse, center, middle
+
+.huge[
+
+
+$$ \sigma^2 = \frac{\sum_{i=1}^n (x_i-\mu_x)^2}{n - 1} $$
+]
+
+
+
+---
+class: inverse, center, middle
+
+.huge[
+
+
+$$ \sigma = \sqrt\frac{\sum_{i=1}^n (x_i-\mu_x)^2}{n - 1} $$
+]
+
+
+---
+
+
+`r flipbookr::chunk_reveal("sd_steps", break_type = "user", display_type = c("md","output"), md = sd_equation)`
+
+```{r sd_steps, eval = F, echo=F}
+set.seed(199402)
+datasaurus_dozen |> filter(dataset == "dino") |>  ggplot() + aes(x = x, y = x) +   geom_point() + 
+  geom_xmean() + 
+  geom_ymean() + 
+  geom_xmeandiff() + 
+  geom_ymeandiff() + 
+  geom_xydiffs() + 
+  geom_covariance() + #BREAK
+  geom_x_sd() + #BREAK
+  labs(title = "Picture of Variance & SD") #BREAK
+```
+
+---
+
+
+![Creative commons, Wikipedia, M. W. Toews - Own work, based (in concept) on figure by Jeremy Kemp, on 2005-02-09](https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Standard_deviation_diagram.svg/1920px-Standard_deviation_diagram.svg.png)
+
+Creative commons, Wikipedia, M. W. Toews - Own work, based (in concept) on figure by Jeremy Kemp, on 2005-02-09
+
+---
+class: inverse, middle, center
+
+
+# correlation coefficient
+
+---
+class: inverse, center, middle
+
+.huge[
+
+$$ cor(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{n *\sigma_x \sigma_y} $$
+] 
+
+---
+
+`r chunk_reveal("cor_steps", break_type = "user", display_type = c("md", "output"), md = cov_to_cor_equation, widths = c(44,55))`
+
+
+```{r cor_steps, eval = F, echo=F}
+datasaurus_dozen |> filter(dataset == "dino") |>  ggplot() + aes(x = x/sd(x), y = y/sd(y)) +   geom_point() + 
+  geom_xmean() + 
+  geom_ymean() + 
+  geom_xmeandiff() + 
+  geom_ymeandiff() + 
+  geom_xydiffs() + 
+  geom_covariance() + #BREAK
+  geom_x_sd() + #BREAK
+  geom_y_sd() + 
+  coord_equal() +
+  labs(title = "Picture of correlation") #BREAK
+```
+
+
+---
+
+# Bessel correction: n - 1
+
+*Sample* statistics (Not *population* statistics)
+
+
+---
+class: inverse, center, middle
+
+.huge[
+
+$$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\overline{x})(y_i-\overline{y})}{n - 1} $$
+]
+
+
+
+
+---
+
+
+
+class: inverse, center, middle
+
+.huge[
+
+$$ s^2 = \frac{\sum_{i=1}^n (x_i-\overline{x})^2}{n - 1} $$
+]
+
+
+---
+
+
+
+
+class: inverse, center, middle
+
+.huge[
+
+$$ s = \sqrt\frac{\sum_{i=1}^n (x_i-\overline{x})^2}{n - 1} $$
+]
+
+
+
+---
+
+
+# DRY:  Bonus 
+
+--
+
+## "Don't repeat yourself"
+
+--
+
+## Writing and using functions
+
+---
+
+
+```{r}
+# this is a temporary fix - a 
+mysetseed <- set.seed
+```
+
+---
+
+r chunk_reveal("cov_steps1")`
+
+
+```{r cov_steps1, eval = F, echo=F}
+mysetseed(199402)
+create_x_y(relationship = .5) %>% 
+  data_create_scatterplot() %>% 
+  plot_draw_mean_x() %>% 
+  plot_draw_mean_y() %>% 
+  plot_draw_differences_x() %>% 
+  plot_draw_differences_y() %>% 
+  plot_multiply_differences() %>% 
+  plot_take_average_rectangle() 
+```
+
+---
+
+r chunk_reveal("cov_steps2", display_type = c("code", "func", "output"), widths = c(27, 37, 32))`
+
+
+```{r cov_steps2, eval = F, echo=F}
+mysetseed(199402)
+create_x_y(relationship = .5) %>% 
+  data_create_scatterplot() %>% 
+  plot_draw_mean_x() %>% 
+  plot_draw_mean_y() %>% 
+  plot_draw_differences_x() %>% 
+  plot_draw_differences_y() %>% 
+  plot_multiply_differences() %>% 
+  plot_take_average_rectangle() 
+```
+
+
+---
+
+
+
+
+
+
+---
+
+# DRY next level: writing and using packages
+
+- [A companion guide to Jim Hester’s, 'You can make an R package in 20 minutes'](https://evamaerey.github.io/package_in_20_minutes/package_in_20_minutes)
+
+
+
+---
+
+r chunk_reveal("numeric")`
+
+```{r numeric, include = F}
+cars %>% 
+  ggplot() + 
+  aes(x = speed, y = dist) +
+  geom_point() ->
+visualization
+
+# 'by-hand' calculation
+cars$speed -
+  mean(cars$speed) ->
+x_diff
+
+cars$dist -
+  mean(cars$dist) ->
+y_diff
+
+x_diff %>% 
+  `*`(y_diff) %>% 
+  sum() %>% 
+  `/`(nrow(cars) - 1)
+
+# or use the function
+library(magrittr)
+cars %$%
+  cov(dist, speed)
+
+visualization + 
+  annotate(geom = "text",
+           x = 7,
+           y = 100,
+           label = paste0("cov = ", 
+                          cars %$% 
+                            cov(dist, speed) %>% 
+                            round(1)))
+```
+
+
+
+
+---
+
+```{r cor_steps_lm, eval = F, echo=F}
+set.seed(1934); create_x_y(relationship = .1) -> data; data %>%  data_create_scatterplot() %>% 
+  plot_draw_mean_x() %>% 
+  plot_draw_mean_y() %>% 
+  plot_draw_differences_x() %>% #BREAK
+  plot_draw_differences_y() %>% #BREAK
+  plot_multiply_differences() %>% #BREAK
+  plot_take_average_rectangle() %>% #BREAK
+  plot_normalize_x(data = data) %>% #BREAK 
+  plot_normalize_y(data = data) %>% #BREAK 
+  plot_max_correlation(data = data) + #BREAK
+  geom_smooth(method = lm, aes(fill = FALSE),
+              se = F) #BREAK
+```
+
+```{r, code = flipbookr:::chunk_code_seq_as_vector("cor_steps_lm", break_type = "user"), echo = F, fig.show="hold", out.width="25%", eval = F}
+
+```
+
+
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 70%}
+
+.huge {
+  font-size: 250%;
+}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+```

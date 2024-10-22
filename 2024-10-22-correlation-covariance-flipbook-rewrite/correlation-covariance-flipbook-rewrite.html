@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>cascade</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="" />
+    <script src="libs/header-attrs-2.26/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+This book looks some basic statistics:
+
+- covariance
+- variance
+- standard deviation
+- correlation coefficient
+
+
+
+
+
+
+
+---
+
+We'll look at the *population* statistics first equation over all:
+
+---
+class: inverse, center, middle
+
+# Covariance
+
+---
+class: center, middle
+
+### Covariance is a measure of the joint variability of two random variables. 
+
+---
+class: inverse, center, middle
+
+.huge[
+
+$$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{n} $$
+]
+
+
+
+
+---
+
+
+
+
+
+
+
+
+
+
+count: false
+ 
+
+.panel1-cov_steps-auto[
+
+]
+ 
+.panel2-cov_steps-auto[
+
+``` r
+*datasaurus_dozen |&gt; filter(dataset == "dino") |&gt;  ggplot() +  aes(x = x, y = y) +   geom_point()
+```
+]
+ 
+.panel3-cov_steps-auto[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/cov_steps_auto_01_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cov_steps-auto[
+## `$$\mu_x$$`
+]
+ 
+.panel2-cov_steps-auto[
+
+``` r
+datasaurus_dozen |&gt; filter(dataset == "dino") |&gt;  ggplot() +  aes(x = x, y = y) +   geom_point() +
+* geom_xmean()
+```
+]
+ 
+.panel3-cov_steps-auto[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/cov_steps_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cov_steps-auto[
+## `$$\mu_y$$`
+]
+ 
+.panel2-cov_steps-auto[
+
+``` r
+datasaurus_dozen |&gt; filter(dataset == "dino") |&gt;  ggplot() +  aes(x = x, y = y) +   geom_point() +
+  geom_xmean() +
+* geom_ymean()
+```
+]
+ 
+.panel3-cov_steps-auto[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/cov_steps_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cov_steps-auto[
+## `$$x_i-\mu_x$$`
+]
+ 
+.panel2-cov_steps-auto[
+
+``` r
+datasaurus_dozen |&gt; filter(dataset == "dino") |&gt;  ggplot() +  aes(x = x, y = y) +   geom_point() +
+  geom_xmean() +
+  geom_ymean() +
+* geom_xmeandiff()
+```
+]
+ 
+.panel3-cov_steps-auto[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/cov_steps_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cov_steps-auto[
+## `$$y_i-\mu_y$$`
+]
+ 
+.panel2-cov_steps-auto[
+
+``` r
+datasaurus_dozen |&gt; filter(dataset == "dino") |&gt;  ggplot() +  aes(x = x, y = y) +   geom_point() +
+  geom_xmean() +
+  geom_ymean() +
+  geom_xmeandiff() +
+* geom_ymeandiff()
+```
+]
+ 
+.panel3-cov_steps-auto[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/cov_steps_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cov_steps-auto[
+## `$$\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)$$`
+]
+ 
+.panel2-cov_steps-auto[
+
+``` r
+datasaurus_dozen |&gt; filter(dataset == "dino") |&gt;  ggplot() +  aes(x = x, y = y) +   geom_point() +
+  geom_xmean() +
+  geom_ymean() +
+  geom_xmeandiff() +
+  geom_ymeandiff() +
+* geom_xydiffs()
+```
+]
+ 
+.panel3-cov_steps-auto[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/cov_steps_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cov_steps-auto[
+## `$$\frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{n - 1}$$`
+]
+ 
+.panel2-cov_steps-auto[
+
+``` r
+datasaurus_dozen |&gt; filter(dataset == "dino") |&gt;  ggplot() +  aes(x = x, y = y) +   geom_point() +
+  geom_xmean() +
+  geom_ymean() +
+  geom_xmeandiff() +
+  geom_ymeandiff() +
+  geom_xydiffs() +
+* geom_covariance()
+```
+]
+ 
+.panel3-cov_steps-auto[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/cov_steps_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cov_steps-auto[
+NA
+]
+ 
+.panel2-cov_steps-auto[
+
+``` r
+datasaurus_dozen |&gt; filter(dataset == "dino") |&gt;  ggplot() +  aes(x = x, y = y) +   geom_point() +
+  geom_xmean() +
+  geom_ymean() +
+  geom_xmeandiff() +
+  geom_ymeandiff() +
+  geom_xydiffs() +
+  geom_covariance() +
+* geom_covariance_label()
+```
+]
+ 
+.panel3-cov_steps-auto[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/cov_steps_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-cov_steps-auto {
+  color: black;
+  width: 32.3333333333333%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-cov_steps-auto {
+  color: black;
+  width: 32.3333333333333%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-cov_steps-auto {
+  color: black;
+  width: 32.3333333333333%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+---
+class: inverse, middle, center
+
+# Variance and Standard Deviation
+
+
+
+
+---
+class: inverse, center, middle
+
+.huge[
+
+$$ var(x) = \frac{\sum_{i=1}^n (x_i-\mu_x)^2}{n - 1} $$
+]
+
+---
+class: inverse, center, middle
+
+.huge[
+
+$$ \sigma^2 = \frac{\sum_{i=1}^n (x_i-\mu_x)^2}{n - 1} $$
+]
+
+---
+
+
+count: false
+ 
+
+.panel1-variance_steps-auto[
+
+]
+ 
+.panel2-variance_steps-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-variance_steps-auto[
+## `$$\mu_x$$`
+]
+ 
+.panel2-variance_steps-auto[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/variance_steps_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-variance_steps-auto[
+## `$$\mu_x$$`
+]
+ 
+.panel2-variance_steps-auto[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/variance_steps_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-variance_steps-auto[
+## `$$x_i-\mu_x$$`
+]
+ 
+.panel2-variance_steps-auto[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/variance_steps_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-variance_steps-auto[
+## `$$x_i-\mu_x$$`
+]
+ 
+.panel2-variance_steps-auto[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/variance_steps_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-variance_steps-auto[
+## `$$\sum_{i=1}^n (x_i-\mu_x)^2$$`
+]
+ 
+.panel2-variance_steps-auto[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/variance_steps_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-variance_steps-auto[
+## `$$\frac{\sum_{i=1}^n (x_i-\mu_x)^2}{n - 1}$$`
+]
+ 
+.panel2-variance_steps-auto[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/variance_steps_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-variance_steps-auto[
+NA
+]
+ 
+.panel2-variance_steps-auto[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/variance_steps_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-variance_steps-auto[
+NA
+]
+ 
+.panel2-variance_steps-auto[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/variance_steps_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-variance_steps-auto[
+NA
+]
+ 
+.panel2-variance_steps-auto[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/variance_steps_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-variance_steps-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-variance_steps-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-variance_steps-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+``` r
+knitr::knit_exit()
+```
+
+
+
+
+---
+class: inverse, center, middle
+
+.huge[
+
+
+$$ \sigma^2 = \frac{\sum_{i=1}^n (x_i-\mu_x)^2}{n - 1} $$
+]
+
+
+
+---
+class: inverse, center, middle
+
+.huge[
+
+
+$$ \sigma = \sqrt\frac{\sum_{i=1}^n (x_i-\mu_x)^2}{n - 1} $$
+]
+
+
+---
+
+
+count: false
+ 
+
+.panel1-sd_steps-user[
+## `$$\frac{\sum_{i=1}^n (x_i-\mu_x)^2}{n - 1}$$`
+]
+ 
+.panel2-sd_steps-user[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/sd_steps_user_01_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-sd_steps-user[
+## `$$\sqrt\frac{\sum_{i=1}^n (x_i-\mu_x)^2}{n - 1}$$`
+]
+ 
+.panel2-sd_steps-user[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/sd_steps_user_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-sd_steps-user[
+NA
+]
+ 
+.panel2-sd_steps-user[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/sd_steps_user_03_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-sd_steps-user {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-sd_steps-user {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-sd_steps-user {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+
+![Creative commons, Wikipedia, M. W. Toews - Own work, based (in concept) on figure by Jeremy Kemp, on 2005-02-09](https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Standard_deviation_diagram.svg/1920px-Standard_deviation_diagram.svg.png)
+
+Creative commons, Wikipedia, M. W. Toews - Own work, based (in concept) on figure by Jeremy Kemp, on 2005-02-09
+
+---
+class: inverse, middle, center
+
+
+# correlation coefficient
+
+---
+class: inverse, center, middle
+
+.huge[
+
+$$ cor(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{n *\sigma_x \sigma_y} $$
+] 
+
+---
+
+count: false
+ 
+
+.panel1-cor_steps-user[
+## `$$\frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{n - 1}$$`
+]
+ 
+.panel2-cor_steps-user[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/cor_steps_user_01_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cor_steps-user[
+## `$$\frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{n*\sigma_x}$$`
+]
+ 
+.panel2-cor_steps-user[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/cor_steps_user_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cor_steps-user[
+## `$$\frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{n*\sigma_x\sigma_y}$$`
+]
+ 
+.panel2-cor_steps-user[
+![](correlation-covariance-flipbook-rewrite_files/figure-html/cor_steps_user_03_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-cor_steps-user {
+  color: black;
+  width: 43.5555555555556%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-cor_steps-user {
+  color: black;
+  width: 54.4444444444444%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-cor_steps-user {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+# Bessel correction: n - 1
+
+*Sample* statistics (Not *population* statistics)
+
+
+---
+class: inverse, center, middle
+
+.huge[
+
+$$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\overline{x})(y_i-\overline{y})}{n - 1} $$
+]
+
+
+
+
+---
+
+
+
+class: inverse, center, middle
+
+.huge[
+
+$$ s^2 = \frac{\sum_{i=1}^n (x_i-\overline{x})^2}{n - 1} $$
+]
+
+
+---
+
+
+
+
+class: inverse, center, middle
+
+.huge[
+
+$$ s = \sqrt\frac{\sum_{i=1}^n (x_i-\overline{x})^2}{n - 1} $$
+]
+
+
+
+---
+
+
+# DRY:  Bonus 
+
+--
+
+## "Don't repeat yourself"
+
+--
+
+## Writing and using functions
+
+---
+
+
+
+``` r
+# this is a temporary fix - a 
+mysetseed &lt;- set.seed
+```
+
+---
+
+r chunk_reveal("cov_steps1")`
+
+
+
+
+---
+
+r chunk_reveal("cov_steps2", display_type = c("code", "func", "output"), widths = c(27, 37, 32))`
+
+
+
+
+
+---
+
+
+
+
+
+
+---
+
+# DRY next level: writing and using packages
+
+- [A companion guide to Jim Hester’s, 'You can make an R package in 20 minutes'](https://evamaerey.github.io/package_in_20_minutes/package_in_20_minutes)
+
+
+
+---
+
+r chunk_reveal("numeric")`
+
+
+
+
+
+
+---
+
+
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 70%}
+
+.huge {
+  font-size: 250%;
+}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
