@@ -77,27 +77,22 @@ library(tidyverse)
 
 
 ```{r, include=F}
-cov_equation <- c("",
-  "## $$\\mu_x$$", 
-  "## $$\\mu_y$$", 
-  "## $$x_i-\\mu_x$$",
-  "## $$y_i-\\mu_y$$",
-  "### $$\\sum_{i=1}^n (x_i-\\mu_x)(y_i-\\mu_y)$$",
-  "### $$\\frac{\\sum_{i=1}^n (x_i-\\mu_x)(y_i-\\mu_y)}{n - 1}$$"
-  )
+cov_equation <- c("## $$(x_i, y_i)$$",
+  "## $$\\bar{x}$$", 
+  "## $$\\bar{y}$$", 
+  "## $$x_i-\\bar{x}$$",
+  "## $$y_i-\\bar{y}$$",
+  "### $$\\sum_{i=1}^n (x_i-\\bar{x})(y_i-\\bar{y})$$",
+  rep("### $$\\frac{\\sum_{i=1}^n (x_i-\\bar{x})(y_i-\\bar{y})}{n - 1}$$", 4))
+  
 
-var_equation <- c("",
-  "## $$\\mu_x$$", 
-  "## $$\\mu_x$$", 
-  "## $$x_i-\\mu_x$$",
-  "## $$x_i-\\mu_x$$",
-  "## $$\\sum_{i=1}^n (x_i-\\mu_x)^2$$",
+var_equation <- c("### $$\\frac{\\sum_{i=1}^n (x_i-\\bar{x})(y_i-\\bar{y})}{n - 1}$$",
+  "### $$\\frac{\\sum_{i=1}^n (x_i-\\bar{x})(x_i-\\bar{x})}{n - 1}$$", 
   "## $$\\frac{\\sum_{i=1}^n (x_i-\\mu_x)^2}{n - 1}$$"
   )
 
-
-sd_equation <- c("## $$\\frac{\\sum_{i=1}^n (x_i-\\mu_x)^2}{n - 1}$$",
-                 "## $$\\sqrt\\frac{\\sum_{i=1}^n (x_i-\\mu_x)^2}{n - 1}$$")
+sd_equation <- c("#### $$\\frac{\\sum_{i=1}^n (x_i-\\mu_x)^2}{n - 1}$$",
+                 "#### $$\\sqrt\\frac{\\sum_{i=1}^n (x_i-\\mu_x)^2}{n - 1}$$")
 
 cov_to_cor_equation <- c("## $$\\frac{\\sum_{i=1}^n (x_i-\\mu_x)(y_i-\\mu_y)}{n - 1}$$",
                  "## $$\\frac{\\sum_{i=1}^n (x_i-\\mu_x)(y_i-\\mu_y)}{n*\\sigma_x}$$",
