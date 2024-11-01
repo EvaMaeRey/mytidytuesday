@@ -1,0 +1,75 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+library(tidyverse)
+library(packcircles)
+compute_panel_circlepack <- function(data, scales){
+
+  data_w_id <- data |>
+    mutate(id = row_number())
+
+  data_w_id |>
+    pull(area) |>
+    packcircles::circleProgressiveLayout(
+      sizetype = 'area') |>
+    packcircles::circleLayoutVertices(npoints = 50) |>
+    left_join(data_w_id) |>
+    mutate(group = id)
+
+}
+
+geom_packcircles <- function(...){
+
+  StatTemp <- ggproto("StatTemp", Stat, 
+                      compute_panel = compute_panel_circlepack)
+  
+  geom_polygon(stat = StatTemp, ...)
+
+}
+
+gapminder::gapminder |> 
+  filter(year == 2002) |> 
+  ggplot() + 
+  aes(area = pop/1000000) + 
+  geom_packcircles() + 
+  aes(fill = continent) 
+
+last_plot() +
+  facet_wrap(facet = vars(continent)) + 
+  coord_equal()
+
+ggcalendar::ggcalendar(dates_df = ggcalendar::df_month(month = 11))
+ggcalendar::ggcalendar(dates_df = ggcalendar::df_month(month = 12))
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

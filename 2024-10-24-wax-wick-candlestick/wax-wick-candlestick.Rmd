@@ -25,8 +25,8 @@ library(tidyverse)
 
 compute_group_wax <- function(data, scales){
   
-  data %>% 
-    mutate(xend = x, 
+  data |>
+    mutate(xmin = x,
            y = open, 
            yend = close) %>% 
     mutate(loss_gain =  
@@ -37,7 +37,7 @@ compute_group_wax <- function(data, scales){
 
 compute_group_wick <- function(data, scales){
   
-  data %>% 
+  data |>
     mutate(xend = x, 
            y = high, 
            yend = low) %>% 
@@ -75,11 +75,30 @@ to_plot %>%
                       default_aes = aes(color = after_stat(loss_gain))),
          geom = GeomSegment)
 
-  
-  
 
+to_plot %>% 
+  ggplot() + 
+  aes(x = date,
+      open = open,
+      close = close,
+      high = high,
+      low = low) + 
+  tidyquant::geom_candlestick()
+
+
+tidyquant::geom_candlestick
        
-       
+stock_data %>% 
+  slice(1:200) %>% 
+  ggplot() + 
+  aes(x = date,
+      open = open,
+      close = close,
+      high = high,
+      low = low) + 
+  tidyquant::geom_candlestick()
+
+
 
 ```
 
