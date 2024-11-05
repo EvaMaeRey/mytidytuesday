@@ -12,27 +12,62 @@ knitr::opts_chunk$set(echo = TRUE)
 options(tidyverse.quiet = TRUE)
 ```
 
+## Proposal:
 
-
-Everyday ggplot2 extension: New approaches to light-weight geom extension'
+Everyday ggplot2 extension: New approaches to light-weight 'geom' extension
 
 Creating new layers (geom_* functions) in ggplot2 extension has been described as an 'involved process'.  While new educational material has lowered the conceptual barrier to entry, the amount of scaffolding code required for classical extension can make regularly using extension feel prohibitive.  In this talk, I'll discuss strategies and tools to make experimentation with new functionality more light-weight and fun.  A few practical applications in statistics pedagogy will be presented. 
 
 
+---
+
 ## Intro Thoughts
 
-```{r}
-library(ggbump)
+```{r, echo = F}
 library(tidyverse)
-
 us_and_peers <- c("United States", "Germany", 
                   "United Kingdom", "France", 
                   "Canada")
 
 gapminder::gapminder %>% 
   filter(country %in% us_and_peers) %>% 
-  mutate(life_exp_rank = rank(lifeExp), 
-         .by = year) %>% 
+  mutate(life_exp_rank = rank(-lifeExp), 
+         .by = year) ->
+life_exp_rank_2020
+```
+
+---
+
+
+```{r}
+library(tidyverse)
+library(ggbump)
+
+life_exp_rank_2020 %>% 
+  ggplot() + 
+  aes(x = year, 
+      y = life_exp_rank, 
+      color = country) + 
+  geom_point() + 
+  scale_y_reverse()
+
+last_plot() +
+  geom_bump()
+```
+
+---
+
+# Graphical Poem!!!
+
+--
+
+"The article concludes by discussing some perceptual issues, and thinking about how we can build on the grammar to learn how to create graphical 'poems.'"
+
+
+---
+
+```{r, eval = F}
+life_exp_rank_2020 %>% 
   ggplot() + 
   aes(x = year, 
       y = life_exp_rank, 
@@ -42,27 +77,21 @@ gapminder::gapminder %>%
   geom_bump()
 ```
 
-
-
-
+---
 
 - 'I have two kids, it's so hard to be so deep in ggplot, it takes at least two days just to get all the information in your head again.  So I'm struggling with maintaining [ggbump, ggaluvial, ggsankey]'
 
+---
+
+- 'I have about 200 kids...'
 
 ---
 
-- 'I have about 200 students a year...'
-
-
----
-
-
-- 'I have 1000 students a year...' West Point had 1000 MA206 kids per year)
+- 'I have 1000 kids...' 
 
 ---
 
 - 'I have a thesis to finish'
-
 
 
 ---
@@ -73,16 +102,306 @@ gapminder::gapminder %>%
 
 'How to keep house while drowning'...
 
+![](https://m.media-amazon.com/images/I/61DJiOiZeGL._SY445_SX342_QL70_FMwebp_.jpg)
+
+---
+
+'How to extend ggplot2 while drowning'...
+
+Don't go deep.  
+
+--
+
+Stay in the shallow end.
+
+---
+
+
+Caveat... mostly interested in Stat extension.  Powerful and underutilized for data exploration and statistical education.
+
+--
+
+... creating new Stats is one of the most useful ways to extend the capabilities of ggplot2.’ – ggplot2: Elegant Graphics for Data Analysis
+
+
+---
+
+# Classical Stat creation...
+
+`geom_support()`
+
+What are the logical limits for observed proportions?
+
+```{r, echo = F, message = F, warning=F}
+isi_donor_url <- "https://www.isi-stats.com/isi/data/prelim/OrganDonor.txt"
+
+donor <- read_delim(isi_donor_url) %>%
+  mutate(decision = fct_rev(Choice))
+
+donor |> 
+ggplot() + 
+  aes(x = decision) +
+  geom_bar(width = .2) +
+  geom_segment(aes(x = min(as.numeric(decision)),
+                   xend = max(as.numeric(decision)),
+                   y = 0, 
+                   yend = 0))
+```
+
+
+
+---
+
+# Step 0. use base ggplot2, compute before plotting
+
+```{r}
+isi_donor_url <- "https://www.isi-stats.com/isi/data/prelim/OrganDonor.txt"
+
+donor <- read_delim(isi_donor_url) %>%
+  mutate(decision = fct_rev(Choice))
+
+donor |> 
+  summarise(x = min(as.numeric(decision)),
+            xend = max(as.numeric(decision)),
+            y = 0, 
+            yend = 0) ->
+donor_min_max
+  
+donor |>
+ggplot() + 
+  aes(x = decision) +
+  geom_bar(width = .2) +
+  geom_segment(data = donor_min_max,
+               aes(x = x,
+                   xend = xend,
+                   y = 0, 
+                   yend = 0))
+```
+
+---
+
+# Step 1. 
+
+
+```{r compute_panel_support}
+compute_panel_support <- function(data, scales){
+  
+  data |>
+    summarize(xend = max(x),
+              x = min(x),
+              yend = 0,
+              y = 0)
+  
+}
+```
+
+---
+
+# Step 2. 
+
+
+```{r StatSupport}
+StatSupport <- ggproto(`_class` = "StatSupport",
+                       `_inherit` = ggplot2::Stat,
+                       compute_panel = compute_panel_support,
+                       required_aes = "x")
+```
+
+---
+
+# Step 3. 
+
+
+```{r geom_support}
+geom_support <- function (mapping = NULL, data = NULL, 
+                          geom = "segment", position = "identity", 
+                          ..., show.legend = NA, inherit.aes = TRUE) 
+{
+    layer(data = data, mapping = mapping, stat = StatSupport, 
+        geom = geom, position = position, show.legend = show.legend, 
+        inherit.aes = inherit.aes, params = rlang::list2(na.rm = FALSE, 
+            ...))
+}
+
+```
+
+---
+
+# Yippee!!  Nice poem!!
+
+```{r}
+donor |> 
+  ggplot() + 
+  aes(x = decision) +
+  geom_bar(width = .2) + 
+  geom_support()
+```
+
+
+---
+
+# At what cost?
+
+500 characters!
+
+only 20 percent defines new compute of interest!
+
+```{r}
+knitrExtra::chunk_code_get("compute_panel_support") %>% nchar() %>% sum() -> compute;compute
+
+knitrExtra::chunk_code_get("StatSupport") %>% nchar() %>% sum() +
+knitrExtra::chunk_code_get("geom_support") %>% nchar() %>% sum() ->
+  stat_and_layer; stat_and_layer
+
+data.frame(wt = c(compute, stat_and_layer),
+           type = c("compute code", "scaffolding code")) |>
+  ggplot() + 
+  aes(weight = wt) + 
+  ggwedge:::geom_pie() +
+  ggwedge:::geom_pie_label(r_nudge = 2) +
+  aes(label = after_stat(paste0(percent,"\n(",  count, ")"))) +
+  coord_polar() + 
+  theme_void()
+
+last_plot() +
+  aes(fill = type) + 
+  labs(fill = NULL)
+  
+layer_data()
+
+
+```
 
 
 ---
 
 
-'Everyone has their life going on, so figuring out how to ...
+```{r}
+library(statexpress)
 
---
+donor |> 
+  ggplot() + 
+  aes(x = decision) +
+  geom_bar(width = .2) + 
+  # sketching geom_support
+  qlayer(stat = qstat_panel(compute_panel_support), 
+         geom = GeomSegment)
+```
 
-but I don't care... 
+
+```{r geom_support_express}
+geom_support <- function(...){
+  
+  qlayer(stat = qstat_panel(compute_panel_support), 
+         geom = GeomSegment, ...)
+  
+}
+```
+
+```{r}
+donor |> 
+  ggplot() + 
+  aes(x = decision) +
+  geom_bar(width = .2) + 
+  geom_support()
+```
+
+
+
+
+```{r}
+knitrExtra::chunk_code_get("compute_panel_support") %>% str_remove_all(" ") %>% nchar() %>% sum() ->
+compute;compute
+
+knitrExtra::chunk_code_get("geom_support_express") %>% str_remove_all(" ") %>% nchar() %>% sum() ->
+  geom_support_express
+
+geom_support_express + compute
+
+compute/(geom_support_express + compute)
+
+data.frame(wt = c(compute, stat_and_layer, compute, geom_support_express),
+           code_type = rep(c("compute code", "scaffolding code"), 2),
+           strategy = c("classic", "classic", "statexpress", "statexpress")) |>
+  ggplot() + 
+  aes(weight = wt, fill = code_type) + 
+  ggwedge:::geom_pie(color = "lightgrey") + 
+  ggwedge:::geom_pie_label(r_nudge = 2) +
+  aes(label = after_stat(paste0(percent,"\n(",  count, ")"))) +
+  coord_polar() + 
+  # theme_void() + 
+  facet_wrap(~strategy) +
+  labs(fill = NULL) + 
+  theme_void(base_size = 18) +
+  theme(legend.position = "top",
+        legend.justification = 0) + 
+  theme(
+        strip.background = element_rect(fill = "darkgrey"))
+  labs(title = "Creating geom_support with statexpress")
+```
+
+
+---
+
+
+```{r}
+knitrExtra::chunk_code_get("StatSupport")
+
+
+
+```
+
+
+
+---
+
+'That is a bunch of scaffolding code and I won't bore you with that'.
+
+---
+
+*Actual* graphical-poem-first approach... 
+
+10 or 11 new layers in my statistical poem.
+
+400 scaffolding characters per plot element?
+
+---
+
+
+```{r, eval = F}
+donor |>
+  ggplot() +
+  aes(x = Choice) +
+  geom_stack() +       # custom bar layer
+  geom_stack_label() + # label stack, also see geom_stack_label_percent()
+  geom_x_support() +   # line under range of x
+  geom_x_prop() +      # balancing point
+  geom_x_prop_label()  + # balancing point (proportion) label
+  stamp_x_prop(prop = .5) + 
+  stamp_x_prop_label(prop = .5)  + 
+  geom_prop_null_distribution(prop = .5) + 
+  geom_
+```
+
+
+"get the big ideas across to the students as quickly as possible"
+
+---
+
+- Early exits.
+- guide but don't spin off...
+- 
+
+
+
+---
+
+
+'like everyone has like other life going on so figuring out how you can help those people like save time ... like maintaining
+the R package is like at the top of most people's priority list or writing the best possible R code
+
+---
+
 
 ---
 
@@ -110,7 +429,7 @@ multi-step process, and verbose
 
 ```
 
-```{r}  
+```{r, eval = F}  
 gapminder::gapminder %>% 
   filter(country %in% c("United States", "Germany", "United Kingdom", "France", "Canada")) %>% 
   mutate(life_exp_rank = rank(lifeExp), .by = year) %>% 
@@ -181,8 +500,8 @@ I was so excited when ...
 
 
 
-
-gonna okay Co so hi
+```{r, eval = T}
+text <- "gonna okay Co so hi
 Hadley's thoughts on the ggplot2 ecosystem
 everyone uh I did not really prepare anything today but I can uh and I feel
 like I don't really know about I mean Thomas Thomas and ton are on the call and they both know far more about gigot
@@ -738,7 +1057,37 @@ Insight um and um correct all my mistakes [Music]
 and um yeah we'll we'll see you next time I'll send out a invite for Corey's
 talk and what he's doing with principal component
 analysis all right great to see everybody aw thanks so much for having me it's lovely to chat with you all
-thank you thank you
+thank you thank you"
+
+
+data.frame(text = text) |>
+  tidytext::unnest_tokens(output = word, input = text) |>
+  anti_join(tidytext::stop_words) |>
+  inner_join(tidytext::get_sentiments("bing"), 
+             by = "word", 
+             relationship = "many-to-many") %>% 
+  count(word, sentiment) ->
+hadley_meetup_bing_sentiments 
+hadley_meetup_bing_sentiments
+
+hadley_meetup_bing_sentiments |>
+  ggplot() + 
+  aes(id = word, fill = sentiment, area = n) + 
+  ggcirclepack::geom_circlepack() + 
+  ggcirclepack::geom_circlepack_text() +
+  facet_wrap(~sentiment) + 
+  coord_equal() + 
+  aes(size = after_stat(1/nchar(id)*area)) + 
+  scale_size(range = c(.5, 7.5))
+  
+hadley_meetup_bing_sentiments |>
+  ggplot() + 
+  aes(label = word, color = sentiment, size = n) +    
+  ggwordcloud::geom_text_wordcloud_area()
+
+
+
+```
 
 
 
