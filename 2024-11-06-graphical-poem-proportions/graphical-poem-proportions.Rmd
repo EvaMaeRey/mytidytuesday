@@ -1,0 +1,250 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r eval = F}
+
+# proportions, observed v. asserted lesson...
+
+# proposed API
+library(tidyverse)
+
+isi_donor_url <- "https://www.isi-stats.com/isi/data/prelim/OrganDonor.txt"
+
+donor <- read_delim(isi_donor_url) %>%
+  mutate(Choice = fct_rev(Choice))
+
+donor %>% head()
+
+donor |>
+  ggplot() +
+  aes(x = Choice) +
+  geom_stack() +       # custom bar layer
+  geom_stack_label() + # label stack, also see geom_stack_label_percent()
+  geom_x_support() +   # line under range of x
+  geom_x_prop() +      # balancing point
+  geom_x_prop_label() + # balancing point (proportion) label  
+  stamp_x_prop(prop = .5) + 
+  stamp_x_prop_label(prop = .5) + 
+  geom_prop_null_distribution(prop = .5)
+```
+
+
+
+```{r, class.source = 'fold-hide'}
+# Proposed layer contents
+library(statexpress)
+library(tidyverse)
+
+
+isi_donor_url <- "https://www.isi-stats.com/isi/data/prelim/OrganDonor.txt"
+
+donor <- read_delim(isi_donor_url) %>%
+  mutate(Choice = fct_rev(Choice))
+
+# 1. layer stack of bricks
+compute_group_bricks <- function(data, scales, width = .2){
+  
+  data %>% 
+    mutate(row = row_number()) %>% 
+    mutate(y = row - .5) %>% 
+    mutate(width = width)
+  
+}
+
+# 2. layer label stack with count
+compute_group_count <- function(data, scales){
+  
+  data %>% 
+    count(x) %>% 
+    mutate(y = n,
+           label = n)
+  
+}
+
+
+# 3. layer add x span
+compute_scale <- function(data, scales){
+  
+  data %>% 
+    summarise(min_x = min(x),
+              xend = max(x),
+              y = 0,
+              yend = 0) %>% 
+    rename(x = min_x)
+  
+}
+
+
+# 4. layer add balancing point 
+compute_xmean_at_y0 <- function(data, scales){
+  
+  data %>% 
+    summarise(x = mean(x),
+              y = 0, 
+              label = "^") 
+  
+}
+
+# 5. layer add balancing point value label
+compute_xmean_at_y0_label <- function(data, scales){
+  
+  data %>% 
+    summarise(x = mean(x),
+              y = 0, 
+              label = after_stat(round(x - 1, 2))) 
+  
+}
+
+
+
+# 6. 
+compute_panel_prop_asserted <- function(data, scales, null = .5){
+  
+  # stamp type layer - so ignor input data
+  data.frame(y = 0, 
+             x = null + 1,
+             label = "^"
+             )
+  
+}
+
+compute_panel_prop_asserted_label <- function(data, scales, null = .5){
+  
+  # stamp type layer - so ignor input data
+  data.frame(y = 0, 
+             x = null + 1,
+             label = round(null, 2)
+             )
+  
+}
+
+
+# Proposed layer composition
+compute_dnorm_prop <- function(data, scales, null = .5, dist_sds = seq(-3.5, 3.5, by = .1)
+                               ){
+
+  n <- nrow(data)
+  
+  sd = sqrt(null * (1 - null)/n) # sd of the null distribution
+  
+  q <- dist_sds * sd + null
+  
+  data.frame(x = q + 1) %>%
+    mutate(height = dnorm(q, sd = sd, mean = null)) %>%
+    mutate(height_max = dnorm(0, sd = sd, mean = 0)) %>%
+    mutate(y = .35*n*height/height_max) %>%
+    mutate(xend = x,
+           yend = 0) # This is a bit fragile...
+  
+}  
+
+donor |>
+  ggplot() +
+  aes(x = Choice) +
+  # 1. geom_stack() -- show counts in a count-y way (i.e. bricks!), 
+  # with a good amount of space in-between stacks
+  qlayer(geom = GeomTile, 
+         stat = qstat(compute_group_bricks)) +
+  # 2. geom_stack_label() -- label stacks
+  qlayer(geom = GeomText, 
+         stat = qstat(compute_group_count)) +
+  # 3. geom_xrange, show scale, range at y is zero
+  qlayer(geom = GeomSegment, 
+         stat = qstat_panel(compute_scale)) +
+  # 4. geom_prop, show prop, i.e. balancing point
+  qlayer(geom = GeomText,
+         stat = qstat_panel(compute_xmean_at_y0)) + 
+  # 5. geom_prop_label, labeling prop, balancing point
+  qlayer(geom = GeomLabel,
+         stat = qstat_panel(compute_xmean_at_y0_label))  +   # by 
+  # 6. stamp_prop, assertion, point
+  qlayer(geom = GeomText,
+         stat = qstat_panel(compute_panel_prop_asserted)) +
+  # 7. stamp_prop_label, assertion, label
+  qlayer(geom = GeomLabel,
+         stat = qstat_panel(compute_panel_prop_asserted_label)) +
+  # 8. geom_norm on prop plot
+  qlayer(geom = GeomArea,
+         stat = qstat(compute_dnorm_prop),
+         mapping = aes(x = 1, y = 1)) + 
+   # 9. geom_prop_norm w/ sd marks
+   qlayer(geom = GeomSegment,
+          stat = qstat(compute_dnorm_prop),
+           mapping = aes(x = 1, y = 1),
+           dist_sds = -3:3) +
+   labs(title = "Is there statistical evidence that choice to between being an\nan organ donar or not differs from 50/50") 
+
+
+
+
+
+
+donor |>
+  ggplot() +
+  aes(x = Choice) +
+  # 1. geom_stack() -- show counts in a count-y way (i.e. bricks!), 
+  # with a good amount of space in-between stacks
+  qlayer(geom = qproto_update(GeomTile, aes(color = "white")), 
+         stat = qstat(compute_group_bricks)) +
+  # 2. geom_stack_label() -- label stacks
+  qlayer(geom = qproto_update(GeomText, aes(vjust = 0)), 
+         stat = qstat(compute_group_count)) +
+  # 3. geom_xrange, show scale, range at y is zero
+  qlayer(geom = GeomSegment, 
+         stat = qstat_panel(compute_scale)) +
+  # 4. geom_prop, show prop, i.e. balancing point
+  qlayer(geom = qproto_update(GeomText, aes(size = 6, vjust = 1)),
+         stat = qstat_panel(compute_xmean_at_y0)) + 
+  # 5. geom_prop_label, labeling prop, balancing point
+  qlayer(geom = qproto_update(GeomLabel, aes(fill = NA, label.size = NA, vjust = 0)),
+         stat = qstat_panel(compute_xmean_at_y0_label))  +   # by 
+  # 6. stamp_prop, assertion, point
+  qlayer(geom = qproto_update(GeomText, aes(size = 6, vjust = 1, color = "red")),
+         stat = qstat_panel(compute_panel_prop_asserted)) +
+  # 7. stamp_prop_label, assertion, label
+  qlayer(geom = qproto_update(GeomLabel, aes(fill = NA, label.size = NA, vjust = 0, color = "red")),
+         stat = qstat_panel(compute_panel_prop_asserted_label)) +
+  # 8. geom_norm on prop plot
+  qlayer(geom = qproto_update(GeomArea, aes(alpha = .2)),
+         stat = qstat(compute_dnorm_prop),
+         mapping = aes(x = 1, y = 1)) + 
+   # 9. geom_prop_norm w/ sd marks
+   qlayer(geom = qproto_update(GeomSegment, aes(linetype = "dotted")),
+          stat = qstat(compute_dnorm_prop),
+           mapping = aes(x = 1, y = 1),
+           dist_sds = -3:3) +
+  labs(title = "Is there statistical evidence that choice to between being an\nan organ donar or not differs from 50/50") 
+```
+
+
+
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

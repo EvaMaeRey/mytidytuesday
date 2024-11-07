@@ -242,11 +242,13 @@ donor |>
 
 # At what cost?
 
-500 characters!
+700 characters!?
 
-only 20 percent defines new compute of interest!
+only 20 percent defines new compute of interest!?
 
-```{r}
+
+
+```{r, echo = F, message = F}
 knitrExtra::chunk_code_get("compute_panel_support") %>% nchar() %>% sum() -> compute;compute
 
 knitrExtra::chunk_code_get("StatSupport") %>% nchar() %>% sum() +
@@ -275,6 +277,29 @@ layer_data()
 
 ---
 
+# New approach, w {statexpress}
+
+---
+
+
+# Step 1. Compute
+
+
+```{r}
+compute_panel_support <- function(data, scales){
+  
+  data |>
+    summarize(xend = max(x),
+              x = min(x),
+              yend = 0,
+              y = 0)
+  
+}
+```
+
+---
+
+# Step 1.5 Sketch
 
 ```{r}
 library(statexpress)
@@ -288,6 +313,13 @@ donor |>
          geom = GeomSegment)
 ```
 
+statexpress::qstat_panel - define panel-wise computation for a temp stat.
+statexpress::qlayer - use a more filled-in version of layer
+
+---
+
+# Step 2. User-facing function
+
 
 ```{r geom_support_express}
 geom_support <- function(...){
@@ -298,6 +330,11 @@ geom_support <- function(...){
 }
 ```
 
+---
+
+# Yippee - Graphical Poem!!
+
+
 ```{r}
 donor |> 
   ggplot() + 
@@ -307,7 +344,9 @@ donor |>
 ```
 
 
+---
 
+# Code burden comparison
 
 ```{r}
 knitrExtra::chunk_code_get("compute_panel_support") %>% str_remove_all(" ") %>% nchar() %>% sum() ->
@@ -342,7 +381,6 @@ data.frame(wt = c(compute, stat_and_layer, compute, geom_support_express),
 
 
 ---
-
 
 ```{r}
 knitrExtra::chunk_code_get("StatSupport")
