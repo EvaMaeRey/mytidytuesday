@@ -144,11 +144,10 @@ compute_panel_prop_asserted_label <- function(data, scales, null = .5){
   
 }
 
-
 # Proposed layer composition
-compute_dnorm_prop <- function(data, scales, null = .5, dist_sds = seq(-3.5, 3.5, by = .1)
-                               ){
-
+compute_dnorm_prop <- function(data, scales, null = .5,   dist_sds = seq(-3.5, 3.5, by = .1)
+){
+  
   n <- nrow(data)
   
   sd = sqrt(null * (1 - null)/n) # sd of the null distribution
@@ -158,11 +157,38 @@ compute_dnorm_prop <- function(data, scales, null = .5, dist_sds = seq(-3.5, 3.5
   data.frame(x = q + 1) %>%
     mutate(height = dnorm(q, sd = sd, mean = null)) %>%
     mutate(height_max = dnorm(0, sd = sd, mean = 0)) %>%
-    mutate(y = .35*n*height/height_max) %>%
+    mutate(y = .35*n*height/height_max) %>%  # This is a bit fragile...
     mutate(xend = x,
-           yend = 0) # This is a bit fragile...
+           yend = 0) %>% 
+    # @teunbrand GeomArea$setup_data() requires a group column. Your panel computation does not preserve groups, but it should.
+    mutate(group = 1) 
   
 }  
+
+
+
+library(tidyverse)
+
+
+# Proposed layer composition
+compute_dnorm_prop_sds <- function(data, scales, null = .5,
+  dist_sds = -4:4){
+  
+  n <- nrow(data)
+  
+  sd = sqrt(null * (1 - null)/n) # sd of the null distribution
+  
+  q <- dist_sds * sd + null
+  
+  data.frame(x = q + 1) %>%
+    mutate(height = dnorm(q, sd = sd, mean = null)) %>%
+    mutate(height_max = dnorm(0, sd = sd, mean = 0)) %>%
+    mutate(y = .35*n*height/height_max) %>% # This is a bit fragile...
+    mutate(xend = x,
+           yend = 0)
+
+}  
+
 
 donor |>
   ggplot() +
@@ -191,13 +217,10 @@ donor |>
          stat = qstat_panel(compute_panel_prop_asserted_label)) +
   # 8. geom_norm on prop plot
   qlayer(geom = GeomArea,
-         stat = qstat(compute_dnorm_prop),
-         mapping = aes(x = 1, y = 1)) + 
+         stat = qstat_panel(compute_dnorm_prop)) + 
    # 9. geom_prop_norm w/ sd marks
    qlayer(geom = GeomSegment,
-          stat = qstat(compute_dnorm_prop),
-           mapping = aes(x = 1, y = 1),
-           dist_sds = -3:3) +
+          stat = qstat_panel(compute_dnorm_prop_sds)) +
    labs(title = "Is there statistical evidence that choice to between being an\nan organ donar or not differs from 50/50") 
 
 

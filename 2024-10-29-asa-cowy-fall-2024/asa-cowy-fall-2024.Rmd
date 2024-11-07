@@ -1,30 +1,62 @@
 ---
-title: "another experiment"
-author: "Evangeline Reynolds"
-date: "`r Sys.Date()`"
-output: 
-  html_document:
-    toc: TRUE
+title: "ASA-COWY, Fall 2024"
+subtitle: "Everyday ggplot2 extension: New approaches to light-weight 'geom' (layer) extension"
+author: "Evangeline 'Gina' Reynolds"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, cache = F)
 options(tidyverse.quiet = TRUE)
+library(flipbookr)
 ```
 
 ## Proposal:
 
-Everyday ggplot2 extension: New approaches to light-weight 'geom' extension
+Everyday ggplot2 extension: New approaches to light-weight 'geom' (layer) extensions
 
 Creating new layers (geom_* functions) in ggplot2 extension has been described as an 'involved process'.  While new educational material has lowered the conceptual barrier to entry, the amount of scaffolding code required for classical extension can make regularly using extension feel prohibitive.  In this talk, I'll discuss strategies and tools to make experimentation with new functionality more light-weight and fun.  A few practical applications in statistics pedagogy will be presented. 
 
 
 ---
 
+Tell you about:
+
+[Everyday ggplot2 extension](https://evamaerey.github.io/everyday_ggplot2_extension/) initiatives
+
+--
+
+1. Learning resources
+    a. [easy recipes]
+    b. [cookbook](https://evamaerey.github.io/ggplot2-extension-cookbook/)
+
+--
+
+2. Community - [Extenders club](https://github.com/teunbrand/ggplot-extension-club)
+
+    a. meetup 
+    b. club
+    c. workshop?
+
+--
+
+3. Light-weight approach to ggplot2 extension...
+    
+---
+
 ## Intro Thoughts
 
 ```{r, echo = F}
 library(tidyverse)
+theme_set(theme_gray(base_size = 18))
 us_and_peers <- c("United States", "Germany", 
                   "United Kingdom", "France", 
                   "Canada")
@@ -38,8 +70,9 @@ life_exp_rank_2020
 
 ---
 
+`r chunk_reveal("bump")`
 
-```{r}
+```{r bump, include = F}
 library(tidyverse)
 library(ggbump)
 
@@ -49,10 +82,8 @@ life_exp_rank_2020 %>%
       y = life_exp_rank, 
       color = country) + 
   geom_point() + 
-  scale_y_reverse()
-
-last_plot() +
-  geom_bump()
+  scale_y_reverse() +
+  geom_bump()  #<<
 ```
 
 ---
@@ -63,8 +94,6 @@ last_plot() +
 
 "The article concludes by discussing some perceptual issues, and thinking about how we can build on the grammar to learn how to create graphical 'poems.'"
 
-
----
 
 ```{r, eval = F}
 life_exp_rank_2020 %>% 
@@ -79,40 +108,77 @@ life_exp_rank_2020 %>%
 
 ---
 
-- 'I have two kids, it's so hard to be so deep in ggplot, it takes at least two days just to get all the information in your head again.  So I'm struggling with maintaining [ggbump, ggaluvial, ggsankey]'
+# - 'I have two kids, it's so hard to be so deep in ggplot, it takes at least two days just to get all the information in your head again.  So I'm struggling with maintaining [ggbump, ggaluvial, ggsankey]'
 
 ---
 
-- 'I have about 200 kids...'
+# - 'I have about 200 kids...'  Univeristy Professor
 
 ---
 
-- 'I have 1000 kids...' 
+# - 'I have 1000 kids...'  Academy Curriculum Director
 
 ---
 
-- 'I have a thesis to finish'
+# - 'I have a thesis to finish'  Graduate Student
 
 
 ---
 
-'How to extend ggplot2 while drowning'...
+# 'How to extend ggplot2 while drowning'...?
 
 --
 
-'How to keep house while drowning'...
+## managing 'care tasks' ...
 
 ![](https://m.media-amazon.com/images/I/61DJiOiZeGL._SY445_SX342_QL70_FMwebp_.jpg)
 
+
 ---
 
-'How to extend ggplot2 while drowning'...
+## 1. extension is be an analytic 'care task' - can help you in the long run
+
+--
+
+## 2. but in the short run, barriers present a burden
+
+---
+
+# 'How to extend ggplot2 while drowning'...
+
+--
 
 Don't go deep.  
 
 --
 
-Stay in the shallow end.
+Stay intentionally light-weight, and superficial
+
+--
+
+Swim with friends!  
+
+---
+
+# Specifically...
+
+Check out new educational resources - super accessible recipes and cookbook.
+
+--
+
+'early exits'
+
+--
+
+minimal packaging (no CRAN, minimal messaging testing)
+
+--
+
+no packaginfg - in-script extension
+
+--
+
+new, low code extension. <<
 
 ---
 
@@ -121,45 +187,45 @@ Caveat... mostly interested in Stat extension.  Powerful and underutilized for d
 
 --
 
-... creating new Stats is one of the most useful ways to extend the capabilities of ggplot2.’ – ggplot2: Elegant Graphics for Data Analysis
+"... creating new Stats is one of the most useful ways to extend the capabilities of ggplot2." – ggplot2: Elegant Graphics for Data Analysis
 
 
 ---
 
-# Classical Stat creation...
+### Classical new layer creation w/ new Stat ...
 
-`geom_support()`
+--
 
-What are the logical limits for observed proportions?
+`geom_support()`  -- What are the logical limits for observed proportions?
 
-```{r, echo = F, message = F, warning=F}
+```{r, echo = F, message = F, warning=F, fig.height=4}
 isi_donor_url <- "https://www.isi-stats.com/isi/data/prelim/OrganDonor.txt"
 
 donor <- read_delim(isi_donor_url) %>%
-  mutate(decision = fct_rev(Choice))
+  mutate(decision = fct_rev(Choice)) %>% 
+  select(Default, decision) 
+
+head(donor) 
 
 donor |> 
 ggplot() + 
   aes(x = decision) +
-  geom_bar(width = .2) +
+  geom_bar(width = .2, aes(label = NULL)) +
+  stat_count(geom = "text", vjust = 0, mapping = aes(label = after_stat(count))) +
   geom_segment(aes(x = min(as.numeric(decision)),
                    xend = max(as.numeric(decision)),
                    y = 0, 
-                   yend = 0))
+                   yend = 0)) + 
+  labs(title = "Proportion that sign up to be an organ donor...")
 ```
 
 
 
 ---
 
-# Step 0. use base ggplot2, compute before plotting
+`r chunk_reveal("step0", title = "### Step 0. use base ggplot2, compute before plotting")`
 
-```{r}
-isi_donor_url <- "https://www.isi-stats.com/isi/data/prelim/OrganDonor.txt"
-
-donor <- read_delim(isi_donor_url) %>%
-  mutate(decision = fct_rev(Choice))
-
+```{r step0}
 donor |> 
   summarise(x = min(as.numeric(decision)),
             xend = max(as.numeric(decision)),
@@ -180,7 +246,7 @@ ggplot() +
 
 ---
 
-# Step 1. 
+# Step 1. Define Compute
 
 
 ```{r compute_panel_support}
@@ -197,7 +263,7 @@ compute_panel_support <- function(data, scales){
 
 ---
 
-# Step 2. 
+# Step 2. Define Stat
 
 
 ```{r StatSupport}
@@ -209,7 +275,7 @@ StatSupport <- ggproto(`_class` = "StatSupport",
 
 ---
 
-# Step 3. 
+# Step 3. Define user-facing function
 
 
 ```{r geom_support}
@@ -227,9 +293,9 @@ geom_support <- function (mapping = NULL, data = NULL,
 
 ---
 
-# Yippee!!  Nice poem!!
+# Yippee!!  Such a nice poem!!
 
-```{r}
+```{r, fig.height=3.5}
 donor |> 
   ggplot() + 
   aes(x = decision) +
@@ -237,34 +303,40 @@ donor |>
   geom_support()
 ```
 
+---
+
+
+# Style of Everyday ggplot2 extension Recipes and Cookbook
 
 ---
 
-# At what cost?
-
-700 characters!?
-
-only 20 percent defines new compute of interest!?
-
-
+# At what cost?  How much code? 
 
 ```{r, echo = F, message = F}
-knitrExtra::chunk_code_get("compute_panel_support") %>% nchar() %>% sum() -> compute;compute
+library(knitrExtra)
+count_chars <- function(x){x |> str_remove_all("\\s") |> nchar() |> sum()}
 
-knitrExtra::chunk_code_get("StatSupport") %>% nchar() %>% sum() +
-knitrExtra::chunk_code_get("geom_support") %>% nchar() %>% sum() ->
-  stat_and_layer; stat_and_layer
+compute_chars <- chunk_code_get("compute_panel_support") |> count_chars()
+stat_chars <- chunk_code_get("StatSupport") |> count_chars()
+layer_chars <- chunk_code_get("geom_support") |> count_chars()
 
-data.frame(wt = c(compute, stat_and_layer),
+data.frame(wt = c(compute_chars, stat_chars + layer_chars),
            type = c("compute code", "scaffolding code")) |>
   ggplot() + 
   aes(weight = wt) + 
   ggwedge:::geom_pie() +
-  ggwedge:::geom_pie_label(r_nudge = 2) +
+  ggwedge:::geom_pie_label(r_nudge = 2, size = 4) +
   aes(label = after_stat(paste0(percent,"\n(",  count, ")"))) +
   coord_polar() + 
   theme_void()
+```
 
+---
+
+# At what cost?  How much code? 
+
+
+```{r, echo = F}
 last_plot() +
   aes(fill = type) + 
   labs(fill = NULL)
@@ -274,10 +346,286 @@ layer_data()
 
 ```
 
+--- 
+
+# What if you have a much longer graphical poem in mind?
+
+---
+
+```{r compute_for_prop_story, echo = F, message=F, warning=F}
+
+library(statexpress)
+library(tidyverse)
+
+
+isi_donor_url <- "https://www.isi-stats.com/isi/data/prelim/OrganDonor.txt"
+
+donor <- read_delim(isi_donor_url) %>%
+  mutate(Choice = fct_rev(Choice))
+
+# 1. layer stack of bricks
+compute_group_bricks <- function(data, scales, width = .2){
+  
+  data %>% 
+    mutate(row = row_number()) %>% 
+    mutate(y = row - .5) %>% 
+    mutate(width = width)
+  
+}
+
+# 2. layer label stack with count
+compute_group_count <- function(data, scales){
+  
+  data %>% 
+    count(x) %>% 
+    mutate(y = n,
+           label = n)
+  
+}
+
+
+# 3. layer add x span
+compute_scale <- function(data, scales){
+  
+  data %>% 
+    summarise(min_x = min(x),
+              xend = max(x),
+              y = 0,
+              yend = 0) %>% 
+    rename(x = min_x)
+  
+}
+
+
+# 4. layer add balancing point 
+compute_xmean_at_y0 <- function(data, scales){
+  
+  data %>% 
+    summarise(x = mean(x),
+              y = 0, 
+              label = "^") 
+  
+}
+
+# 5. layer add balancing point value label
+compute_xmean_at_y0_label <- function(data, scales){
+  
+  data %>% 
+    summarise(x = mean(x),
+              y = 0, 
+              label = after_stat(round(x - 1, 2))) 
+  
+}
+
+
+
+# 6. 
+compute_panel_prop_asserted <- function(data, scales, null = .5){
+  
+  # stamp type layer - so ignor input data
+  data.frame(y = 0, 
+             x = null + 1,
+             label = "^"
+             )
+  
+}
+
+compute_panel_prop_asserted_label <- function(data, scales, null = .5){
+  
+  # stamp type layer - so ignor input data
+  data.frame(y = 0, 
+             x = null + 1,
+             label = round(null, 2)
+             )
+  
+}
+
+# Proposed layer composition
+compute_dnorm_prop <- function(data, scales, null = .5,   dist_sds = seq(-3.5, 3.5, by = .1)
+){
+  
+  n <- nrow(data)
+  
+  sd = sqrt(null * (1 - null)/n) # sd of the null distribution
+  
+  q <- dist_sds * sd + null
+  
+  data.frame(x = q + 1) %>%
+    mutate(height = dnorm(q, sd = sd, mean = null)) %>%
+    mutate(height_max = dnorm(0, sd = sd, mean = 0)) %>%
+    mutate(y = .35*n*height/height_max) %>%  # This is a bit fragile...
+    mutate(xend = x,
+           yend = 0) %>% 
+    # @teunbrand GeomArea$setup_data() requires a group column. Your panel computation does not preserve groups, but it should.
+    mutate(group = 1) 
+  
+}  
+
+
+# Proposed layer composition
+compute_dnorm_prop_sds <- function(data, scales, null = .5,
+  dist_sds = -4:4){
+  
+  n <- nrow(data)
+  
+  sd = sqrt(null * (1 - null)/n) # sd of the null distribution
+  
+  q <- dist_sds * sd + null
+  
+  data.frame(x = q + 1) %>%
+    mutate(height = dnorm(q, sd = sd, mean = null)) %>%
+    mutate(height_max = dnorm(0, sd = sd, mean = 0)) %>%
+    mutate(y = .35*n*height/height_max) %>% # This is a bit fragile...
+    mutate(xend = x,
+           yend = 0)
+
+}  
+
+
+
+
+```
+
+
+
+```{r wp_prop_poem, echo = F, message = F, warning=F}
+donor |>
+  ggplot() +
+  aes(x = Choice) +
+  # 1 geom_stack
+  qlayer(geom = qproto_update(GeomTile, aes(color = "white")), 
+         stat = qstat(compute_group_bricks)) +
+  # 2 geom_stack_label() 
+  qlayer(geom = qproto_update(GeomText, aes(vjust = 0)), 
+         stat = qstat(compute_group_count)) +
+  # 3 geom_xrange, show scale, range at y is zero
+  qlayer(geom = GeomSegment, 
+         stat = qstat_panel(compute_scale)) +
+  # 4. geom_prop, show prop, i.e. balancing point
+  qlayer(geom = qproto_update(GeomText, aes(size = 6, vjust = 1)),
+         stat = qstat_panel(compute_xmean_at_y0)) + 
+  # 5. geom_prop_label, labeling prop, balancing point
+  qlayer(geom = qproto_update(GeomLabel, aes(fill = NA, label.size = NA, vjust = 0)),
+         stat = qstat_panel(compute_xmean_at_y0_label))  +   
+  # 6. stamp_prop, assertion, point
+  qlayer(geom = qproto_update(GeomText, aes(size = 6, vjust = 1, color = "red")),
+         stat = qstat_panel(compute_panel_prop_asserted)) +
+  # 7. stamp_prop_label, assertion, label
+  qlayer(geom = qproto_update(GeomLabel, aes(fill = NA, label.size = NA, vjust = 0, color = "red")),
+         stat = qstat_panel(compute_panel_prop_asserted_label)) +
+  # 8. geom_norm on prop plot
+  qlayer(geom = qproto_update(GeomArea, aes(alpha = .2)),
+         stat = qstat_panel(compute_dnorm_prop)) + 
+   # 9. geom_prop_norm w/ sd marks
+   qlayer(geom = qproto_update(GeomSegment, aes(linetype = "dotted")),
+          stat = qstat_panel(compute_dnorm_prop_sds)) +
+  labs(title = "Is there statistical evidence that choice to between being an\nan organ donar or not differs from 50/50") 
+```
+
+
+
+
+```{r wp_prop_poem_functions, echo = F, message = F, warning=F}
+geom_stack <- function(...){qlayer(geom = qproto_update(GeomTile, aes(color = "white")), 
+         stat = qstat(compute_group_bricks), ...)} 
+
+geom_stack_label <- function(...){qlayer(geom = qproto_update(GeomText, aes(vjust = 0)), 
+         stat = qstat(compute_group_count), ...)} 
+
+geom_support <- function(...){qlayer(geom = GeomSegment, 
+         stat = qstat_panel(compute_scale))}
+
+geom_prop <- function(...){qlayer(geom = qproto_update(GeomText, aes(size = 6, vjust = 1)),
+         stat = qstat_panel(compute_xmean_at_y0),...)}
+
+
+geom_prop_label <- function(...){ qlayer(geom = qproto_update(GeomLabel, aes(fill = NA, label.size = NA, vjust = 0)),
+         stat = qstat_panel(compute_xmean_at_y0_label), ...) }
+
+stamp_prop <- function(...){ qlayer(geom = qproto_update(GeomText, aes(size = 6, vjust = 1, color = "red")),
+         stat = qstat_panel(compute_panel_prop_asserted), ...)}
+  
+  
+stamp_prop_label <- function(...){  
+  qlayer(geom = qproto_update(GeomLabel, aes(fill = NA, label.size = NA, vjust = 0, color = "red")),
+         stat = qstat_panel(compute_panel_prop_asserted_label), ...)}
+
+
+geom_normal_prop_null <- function(...){qlayer(geom = qproto_update(GeomArea, aes(alpha = .2)),
+         stat = qstat_panel(compute_dnorm_prop), ...)} 
+
+
+geom_normal_prop_null_sds <- function(...){
+   qlayer(geom = qproto_update(GeomSegment, aes(linetype = "dotted")),
+          stat = qstat_panel(compute_dnorm_prop_sds), ...)}
+```
+
+
+`r chunk_reveal("wp_prop_poem_small", display = "output")`
+
+
+```{r wp_prop_poem_small, include = F}
+donor |>
+  ggplot() + 
+  ggchalkboard::theme_chalkboard() +
+  aes(x = Choice) +
+  geom_stack() +
+  geom_stack_label() + 
+  geom_support() +
+  geom_prop() + 
+  geom_prop_label() + 
+  stamp_prop() + 
+  stamp_prop_label() + 
+  geom_normal_prop_null() +
+  geom_normal_prop_null_sds()
+```
+
+---
+
+## *Epic. Statistical. Graphical Poems.*... are being written on the board all the time by stat's instructors.
+
+## And isn't what's draw is the *Actual Poem*
+![This isn't a pipe](https://upload.wikimedia.org/wikipedia/en/b/b9/MagrittePipe.jpg)
+
+--
+
+### ggplot2 *code* sometimes allows us to write those poems down in concise, consistent ways... The code is an expression of the actual poem.
+
+
+---
+
+```{r}
+9 * # number of layers in ma206 lesson 1 poem
+  (stat_chars + layer_chars) # scaffolding code per layer
+```
+
+---
+
+
+
+
+
 
 ---
 
 # New approach, w {statexpress}
+
+```{r}
+library(statexpress)
+```
+
+--
+
+### Use `statexpress::qstat` and `statexpress::qlayer` to build up poem. 
+
+--
+
+### Combines step 2 and 3 and requires much less code. 
+
+--
+
+### Delivers same user experience: computational work under the hood.
+
 
 ---
 
@@ -301,19 +649,17 @@ compute_panel_support <- function(data, scales){
 
 # Step 1.5 Sketch
 
-```{r}
-library(statexpress)
-
+```{r, fig.height = 3}
 donor |> 
   ggplot() + 
-  aes(x = decision) +
+  aes(x = Choice) +
   geom_bar(width = .2) + 
   # sketching geom_support
-  qlayer(stat = qstat_panel(compute_panel_support), 
-         geom = GeomSegment)
+  qlayer(geom = GeomSegment,
+         stat = qstat_panel(compute_panel_support))
 ```
 
-statexpress::qstat_panel - define panel-wise computation for a temp stat.
+statexpress::qstat_panel - define panel-wise computation for a temp stat
 statexpress::qlayer - use a more filled-in version of layer
 
 ---
@@ -338,7 +684,7 @@ geom_support <- function(...){
 ```{r}
 donor |> 
   ggplot() + 
-  aes(x = decision) +
+  aes(x = Choice) +
   geom_bar(width = .2) + 
   geom_support()
 ```
@@ -349,33 +695,23 @@ donor |>
 # Code burden comparison
 
 ```{r}
-knitrExtra::chunk_code_get("compute_panel_support") %>% str_remove_all(" ") %>% nchar() %>% sum() ->
-compute;compute
-
-knitrExtra::chunk_code_get("geom_support_express") %>% str_remove_all(" ") %>% nchar() %>% sum() ->
-  geom_support_express
-
-geom_support_express + compute
-
-compute/(geom_support_express + compute)
-
-data.frame(wt = c(compute, stat_and_layer, compute, geom_support_express),
+qlayer_qstat_chars <- chunk_code_get("geom_support_express") |> count_chars()
+  
+data.frame(wt = c(compute_chars, stat_chars + layer_chars, compute_chars, qlayer_qstat_chars),
            code_type = rep(c("compute code", "scaffolding code"), 2),
-           strategy = c("classic", "classic", "statexpress", "statexpress")) |>
+           strategy = c("classic", "classic", "w/ statexpress", "w/ statexpress")) |>
   ggplot() + 
   aes(weight = wt, fill = code_type) + 
   ggwedge:::geom_pie(color = "lightgrey") + 
   ggwedge:::geom_pie_label(r_nudge = 2) +
   aes(label = after_stat(paste0(percent,"\n(",  count, ")"))) +
   coord_polar() + 
-  # theme_void() + 
   facet_wrap(~strategy) +
   labs(fill = NULL) + 
   theme_void(base_size = 18) +
   theme(legend.position = "top",
         legend.justification = 0) + 
-  theme(
-        strip.background = element_rect(fill = "darkgrey"))
+  theme(strip.background = element_rect(fill = "darkgrey")) +
   labs(title = "Creating geom_support with statexpress")
 ```
 
@@ -389,11 +725,148 @@ knitrExtra::chunk_code_get("StatSupport")
 
 ```
 
+---
+
+`r chunk_reveal("wp_prop_poem_small", display = c("output", "code"))`
+
+---
+
+# Part 0. Sketch epic poem on chalkboard or paper.
+
+---
+
+# Part 1. Sketch w qlayer and qstat
+
+```{r sketch_prop_story, eval = F}
+donor |>
+  ggplot() +
+  aes(x = Choice) +
+  # 1. geom_stack() 
+  qlayer(geom = GeomTile, stat = qstat(compute_group_bricks)) +
+  # 2. geom_stack_label() 
+  qlayer(geom = GeomText, stat = qstat(compute_group_count)) +
+  # 3. geom_support()
+  qlayer(geom = GeomSegment, stat = qstat_panel(compute_scale)) +
+  # 4. geom_prop()
+  qlayer(geom = GeomText, stat = qstat_panel(compute_xmean_at_y0)) + 
+  # 5. geom_prop_label()
+  qlayer(geom = GeomLabel, stat = qstat_panel(compute_xmean_at_y0_label))  +   
+  # 6. stamp_prop()
+  qlayer(geom = GeomText, stat = qstat_panel(compute_panel_prop_asserted)) +
+  # 7. stamp_prop_label()
+  qlayer(geom = GeomLabel, stat = qstat_panel(compute_panel_prop_asserted_label)) +
+  # 8. geom_norm()
+  qlayer(geom = GeomArea, stat = qstat_panel(compute_dnorm_prop)) + 
+  # 9. geom_prop_norm()
+  qlayer(geom = GeomSegment, stat = qstat_panel(compute_dnorm_prop_sds))
+```
+
+---
+
+### Room for improvement...
+
+```{r code = knitrExtra::chunk_code_get("sketch_prop_story"), echo= F}
+
+```
 
 
 ---
 
-'That is a bunch of scaffolding code and I won't bore you with that'.
+### Part 2. Spruce up *Geoms* w/ statexpress' `qproto_update_defaults()`, e.g. justification, linetype, color, transparency
+
+```{r finess, eval = F}
+donor |>
+  ggplot() +
+  aes(x = Choice) +
+  # 1 geom_stack
+  qlayer(geom = qproto_update(GeomTile, aes(color = "white")), 
+         stat = qstat(compute_group_bricks)) +
+  # 2 geom_stack_label() 
+  qlayer(geom = qproto_update(GeomText, aes(vjust = 0)), 
+         stat = qstat(compute_group_count)) +
+  # 3 geom_xrange, show scale, range at y is zero
+  qlayer(geom = GeomSegment, 
+         stat = qstat_panel(compute_scale)) +
+  ### ---
+  ### ---
+  ### ---
+  # 8. geom_norm on prop plot
+  qlayer(geom = qproto_update(GeomArea, aes(alpha = .2)),
+         stat = qstat_panel(compute_dnorm_prop)) + 
+   # 9. geom_prop_norm w/ sd marks
+   qlayer(geom = qproto_update(GeomSegment, aes(linetype = "dotted")),
+          stat = qstat_panel(compute_dnorm_prop_sds))
+```
+
+
+
+---
+
+
+
+
+```{r, code = knitrExtra::chunk_code_get("finess"), echo= F}
+
+```
+
+
+---
+
+# Part 3. Write user facing functions...
+
+```{r, ev}
+geom_stack <- function(...){
+  
+  qlayer(geom = qproto_update(GeomTile, aes(color = "white")), 
+         stat = qstat(compute_group_bricks), ...)
+  } 
+
+geom_stack_label <- function(...){
+  
+  qlayer(geom = qproto_update(GeomText, aes(vjust = 0)), 
+         stat = qstat(compute_group_count), ...)
+  } 
+
+geom_support <- function(...){
+  
+  qlayer(geom = GeomSegment, 
+         stat = qstat_panel(compute_scale))
+  
+  }
+
+geom_prop <- function(...){
+  
+  qlayer(geom = qproto_update(GeomText, aes(size = 6, vjust = 1)),
+         stat = qstat_panel(compute_xmean_at_y0),...)
+  
+  }
+
+# etc ...
+
+```
+
+# Part 4. Circulate to Collegues; make adjustments
+
+'
+
+
+---
+
+'There is a bunch of scaffolding code and I won't bore you with that'.
+
+--
+
+
+'There is a bunch of compute and I won't bore you with that'. 
+
+--
+
+You are writing the compute anyway... 
+
+--
+
+But, yes, it might be a little trickier in ggplot2 context...
+
 
 ---
 
@@ -402,6 +875,56 @@ knitrExtra::chunk_code_get("StatSupport")
 10 or 11 new layers in my statistical poem.
 
 400 scaffolding characters per plot element?
+
+---
+
+```{r}
+
+
+```
+
+
+---
+
+
+```{r}
+donor |>
+  ggplot() +
+  aes(x = Choice) +
+  # 1. geom_stack() -- show counts in a count-y way (i.e. bricks!), 
+  # with a good amount of space in-between stacks
+  qlayer(geom = GeomTile, stat = qstat(compute_group_bricks)) +
+  # 2. geom_stack_label() -- label stacks
+  qlayer(geom = GeomText, stat = qstat(compute_group_count)) +
+  # 3. geom_xrange, show scale, range at y is zero
+  qlayer(geom = GeomSegment, stat = qstat_panel(compute_scale)) +
+  # 4. geom_prop, show prop, i.e. balancing point
+  qlayer(geom = GeomText,
+         stat = qstat_panel(compute_xmean_at_y0)) + 
+  # 5. geom_prop_label, labeling prop, balancing point
+  qlayer(geom = GeomLabel,
+         stat = qstat_panel(compute_xmean_at_y0_label))  +   # by 
+  # 6. stamp_prop, assertion, point
+  qlayer(geom = GeomText,
+         stat = qstat_panel(compute_panel_prop_asserted)) +
+  # 7. stamp_prop_label, assertion, label
+  qlayer(geom = GeomLabel,
+         stat = qstat_panel(compute_panel_prop_asserted_label)) +
+  # 8. geom_norm on prop plot
+  qlayer(geom = GeomArea,
+         stat = qstat_panel(compute_dnorm_prop)) + 
+   # 9. geom_prop_norm w/ sd marks
+   qlayer(geom = GeomSegment,
+          stat = qstat_panel(compute_dnorm_prop_sds)) +
+   labs(title = "Is there statistical evidence that choice to between being an\nan organ donar or not differs from 50/50") 
+
+
+
+
+```
+
+
+
 
 ---
 
@@ -417,8 +940,7 @@ donor |>
   geom_x_prop_label()  + # balancing point (proportion) label
   stamp_x_prop(prop = .5) + 
   stamp_x_prop_label(prop = .5)  + 
-  geom_prop_null_distribution(prop = .5) + 
-  geom_
+  geom_prop_null_distribution(prop = .5)
 ```
 
 
@@ -440,101 +962,24 @@ the R package is like at the top of most people's priority list or writing the b
 
 ---
 
+Acknowledgements
 
----
-
-So I want to alert you to some headway on this problem, w/ caveats.
-
-- easy recipes online
-- 
-
-
----
-
-
-## Status Quo
-
-```{r}
-library(tidyverse)
-
-```
-
-## Extending the right way... 
-
-multi-step process, and verbose
-
-```{r}
-
-```
-
-```{r, eval = F}  
-gapminder::gapminder %>% 
-  filter(country %in% c("United States", "Germany", "United Kingdom", "France", "Canada")) %>% 
-  mutate(life_exp_rank = rank(lifeExp), .by = year) %>% 
-  ggplot() + 
-  aes(x = year, 
-      y = life_exp_rank, 
-      group = country) + 
-  # geom_line() + 
-  geom_point() +
-  aes(color = country)
-
-compute_panel_rank <- function(data, scales, flip = F){
-  
-  data %>% 
-  group_by(x) %>% 
-  mutate(y = rank(rank_var*!flip))
-  
-}
-  
-gapminder::gapminder %>% 
-  filter(country %in% 
-           c("United States", "Germany", "United Kingdom", 
-             "France", "Canada")) %>% 
-  ggplot() + 
-  aes(x = year, rank_var = lifeExp, group = country) + 
-  # geom_ranktrack
-  geom_line(stat = statexpress::qstat_panel(compute_panel_rank), flip = F) + 
-  geom_point(stat = statexpress::qstat_panel(compute_panel_rank), flip = F) +
-  aes(color = country)
-
-
-
-
-```
-
----
-
-# but what if you have a lot to say ('need' for layers all over the place)
+- ggplot2 extenders club, esp June Choe & Teun van den Brand
 
 --
 
-and you're drowning
-
-
----
-
-- I have a baby, and 18 cadets, and an data analytics gig
-
----
-
-
-
-## But, so excited...
-
-
-I was so excited when ...
-
-
----
-
-
-
+- stat_manual() group-wise computation
+- stat_rasa() 
 
 
 
 
 ---
+
+```{r}
+knitr::knit_exit()
+
+```
 
 
 
