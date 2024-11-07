@@ -300,7 +300,7 @@ donor |>
   ggplot() + 
   aes(x = decision) +
   geom_bar(width = .2) + 
-  geom_support()
+  geom_support() #<<
 ```
 
 ---
@@ -678,15 +678,15 @@ geom_support <- function(...){
 
 ---
 
-# Yippee - Graphical Poem!!
+### Yippee - Graphical Poem!!
 
 
-```{r}
+```{r, fig.height=3}
 donor |> 
   ggplot() + 
   aes(x = Choice) +
   geom_bar(width = .2) + 
-  geom_support()
+  geom_support() #<<
 ```
 
 
@@ -694,12 +694,14 @@ donor |>
 
 # Code burden comparison
 
-```{r}
-qlayer_qstat_chars <- chunk_code_get("geom_support_express") |> count_chars()
+```{r, echo = F, message = F, warning = F}
+qlayer_qstat_chars <- chunk_code_get("geom_support_express") |>
+  count_chars()
   
 data.frame(wt = c(compute_chars, stat_chars + layer_chars, compute_chars, qlayer_qstat_chars),
            code_type = rep(c("compute code", "scaffolding code"), 2),
-           strategy = c("classic", "classic", "w/ statexpress", "w/ statexpress")) |>
+           strategy = c("classic", "classic", 
+                        "w/ statexpress", "w/ statexpress")) |>
   ggplot() + 
   aes(weight = wt, fill = code_type) + 
   ggwedge:::geom_pie(color = "lightgrey") + 
@@ -712,7 +714,7 @@ data.frame(wt = c(compute_chars, stat_chars + layer_chars, compute_chars, qlayer
   theme(legend.position = "top",
         legend.justification = 0) + 
   theme(strip.background = element_rect(fill = "darkgrey")) +
-  labs(title = "Creating geom_support with statexpress")
+  labs(title = "Creating geom_support with classic v. statexpress method")
 ```
 
 
@@ -847,7 +849,10 @@ geom_prop <- function(...){
 
 # Part 4. Circulate to Collegues; make adjustments
 
-'
+'Wow! That is great. What I like about it most is that it provides the visualization or the comparison of the statistics to the null distribution right there. I find that is the most challenging concept for cadets and it is cumbersome to either go to the applet or to draw it on the board to visualize this relationship. It disrupts the flow and their train of thought. Doing it all in one is very slick! Very easy code too!'
+
+'I'm not a statistician, but showing a normal distribution for a binary variable for e.g. the prop test seems sketchy to me. Shouldn't it be some weird beta distribution that is bounded in [0, 1]?'
+
 
 
 ---
@@ -855,7 +860,6 @@ geom_prop <- function(...){
 'There is a bunch of scaffolding code and I won't bore you with that'.
 
 --
-
 
 'There is a bunch of compute and I won't bore you with that'. 
 
