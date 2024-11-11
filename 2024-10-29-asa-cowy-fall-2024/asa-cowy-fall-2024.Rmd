@@ -14,7 +14,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, cache = F)
+knitr::opts_chunk$set(echo = TRUE, cache = F, warning = F, message = F)
 options(tidyverse.quiet = TRUE)
 library(flipbookr)
 ```
@@ -152,7 +152,7 @@ Don't go deep.
 
 --
 
-Stay intentionally light-weight, and superficial
+Stay intentionally light-weight, and superficial.
 
 --
 
@@ -192,7 +192,7 @@ Caveat... mostly interested in Stat extension.  Powerful and underutilized for d
 
 ---
 
-### Classical new layer creation w/ new Stat ...
+### Classical layer creation via a Stat ...
 
 --
 
@@ -202,8 +202,9 @@ Caveat... mostly interested in Stat extension.  Powerful and underutilized for d
 isi_donor_url <- "https://www.isi-stats.com/isi/data/prelim/OrganDonor.txt"
 
 donor <- read_delim(isi_donor_url) %>%
-  mutate(decision = fct_rev(Choice)) %>% 
-  select(Default, decision) 
+  select(Default, Choice) %>% 
+  mutate(decision = ifelse(Choice == "donor", "donor (1)", "not (0)")) %>% 
+  mutate(decision = fct_rev(decision)) 
 
 head(donor) 
 
@@ -353,15 +354,8 @@ layer_data()
 ---
 
 ```{r compute_for_prop_story, echo = F, message=F, warning=F}
-
 library(statexpress)
 library(tidyverse)
-
-
-isi_donor_url <- "https://www.isi-stats.com/isi/data/prelim/OrganDonor.txt"
-
-donor <- read_delim(isi_donor_url) %>%
-  mutate(Choice = fct_rev(Choice))
 
 # 1. layer stack of bricks
 compute_group_bricks <- function(data, scales, width = .2){
@@ -491,7 +485,7 @@ compute_dnorm_prop_sds <- function(data, scales, null = .5,
 ```{r wp_prop_poem, echo = F, message = F, warning=F}
 donor |>
   ggplot() +
-  aes(x = Choice) +
+  aes(x = decision) +
   # 1 geom_stack
   qlayer(geom = qproto_update(GeomTile, aes(color = "white")), 
          stat = qstat(compute_group_bricks)) +
@@ -568,7 +562,7 @@ geom_normal_prop_null_sds <- function(...){
 donor |>
   ggplot() + 
   ggchalkboard::theme_chalkboard() +
-  aes(x = Choice) +
+  aes(x = decision) +
   geom_stack() +
   geom_stack_label() + 
   geom_support() +
@@ -652,7 +646,7 @@ compute_panel_support <- function(data, scales){
 ```{r, fig.height = 3}
 donor |> 
   ggplot() + 
-  aes(x = Choice) +
+  aes(x = decision) +
   geom_bar(width = .2) + 
   # sketching geom_support
   qlayer(geom = GeomSegment,
@@ -684,7 +678,7 @@ geom_support <- function(...){
 ```{r, fig.height=3}
 donor |> 
   ggplot() + 
-  aes(x = Choice) +
+  aes(x = decision) +
   geom_bar(width = .2) + 
   geom_support() #<<
 ```
@@ -700,7 +694,7 @@ qlayer_qstat_chars <- chunk_code_get("geom_support_express") |>
   
 data.frame(wt = c(compute_chars, stat_chars + layer_chars, compute_chars, qlayer_qstat_chars),
            code_type = rep(c("compute code", "scaffolding code"), 2),
-           strategy = c("classic", "classic", 
+           strategy = c("new classic", "new classic", 
                         "w/ statexpress", "w/ statexpress")) |>
   ggplot() + 
   aes(weight = wt, fill = code_type) + 
@@ -714,7 +708,7 @@ data.frame(wt = c(compute_chars, stat_chars + layer_chars, compute_chars, qlayer
   theme(legend.position = "top",
         legend.justification = 0) + 
   theme(strip.background = element_rect(fill = "darkgrey")) +
-  labs(title = "Creating geom_support with classic v. statexpress method")
+  labs(title = "Creating geom_support with new classic v. statexpress method")
 ```
 
 
@@ -742,7 +736,7 @@ knitrExtra::chunk_code_get("StatSupport")
 ```{r sketch_prop_story, eval = F}
 donor |>
   ggplot() +
-  aes(x = Choice) +
+  aes(x = decision) +
   # 1. geom_stack() 
   qlayer(geom = GeomTile, stat = qstat(compute_group_bricks)) +
   # 2. geom_stack_label() 
@@ -779,7 +773,7 @@ donor |>
 ```{r finess, eval = F}
 donor |>
   ggplot() +
-  aes(x = Choice) +
+  aes(x = decision) +
   # 1 geom_stack
   qlayer(geom = qproto_update(GeomTile, aes(color = "white")), 
          stat = qstat(compute_group_bricks)) +
@@ -894,7 +888,7 @@ But, yes, it might be a little trickier in ggplot2 context...
 ```{r}
 donor |>
   ggplot() +
-  aes(x = Choice) +
+  aes(x = decision) +
   # 1. geom_stack() -- show counts in a count-y way (i.e. bricks!), 
   # with a good amount of space in-between stacks
   qlayer(geom = GeomTile, stat = qstat(compute_group_bricks)) +
@@ -936,7 +930,7 @@ donor |>
 ```{r, eval = F}
 donor |>
   ggplot() +
-  aes(x = Choice) +
+  aes(x = decision) +
   geom_stack() +       # custom bar layer
   geom_stack_label() + # label stack, also see geom_stack_label_percent()
   geom_x_support() +   # line under range of x

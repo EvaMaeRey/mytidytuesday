@@ -342,7 +342,7 @@ Don't go deep.
 
 --
 
-Stay intentionally light-weight, and superficial
+Stay intentionally light-weight, and superficial.
 
 --
 
@@ -382,7 +382,7 @@ Caveat... mostly interested in Stat extension.  Powerful and underutilized for d
 
 ---
 
-### Classical new layer creation w/ new Stat ...
+### Classical layer creation via a Stat ...
 
 --
 
@@ -390,15 +390,15 @@ Caveat... mostly interested in Stat extension.  Powerful and underutilized for d
 
 
 ```
-## # A tibble: 6 × 2
-##   Default decision
-##   &lt;chr&gt;   &lt;fct&gt;   
-## 1 opt-in  donor   
-## 2 opt-in  donor   
-## 3 opt-in  donor   
-## 4 opt-in  donor   
-## 5 opt-in  donor   
-## 6 opt-in  donor
+## # A tibble: 6 × 3
+##   Default Choice decision 
+##   &lt;chr&gt;   &lt;chr&gt;  &lt;fct&gt;    
+## 1 opt-in  donor  donor (1)
+## 2 opt-in  donor  donor (1)
+## 3 opt-in  donor  donor (1)
+## 4 opt-in  donor  donor (1)
+## 5 opt-in  donor  donor (1)
+## 6 opt-in  donor  donor (1)
 ```
 
 ![](asa-cowy-fall-2024_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
@@ -420,19 +420,19 @@ count: false
 .panel2-step0-auto[
 
 ```
-## # A tibble: 161 × 2
-##    Default decision
-##    &lt;chr&gt;   &lt;fct&gt;   
-##  1 opt-in  donor   
-##  2 opt-in  donor   
-##  3 opt-in  donor   
-##  4 opt-in  donor   
-##  5 opt-in  donor   
-##  6 opt-in  donor   
-##  7 opt-in  donor   
-##  8 opt-in  donor   
-##  9 opt-in  donor   
-## 10 opt-in  donor   
+## # A tibble: 161 × 3
+##    Default Choice decision 
+##    &lt;chr&gt;   &lt;chr&gt;  &lt;fct&gt;    
+##  1 opt-in  donor  donor (1)
+##  2 opt-in  donor  donor (1)
+##  3 opt-in  donor  donor (1)
+##  4 opt-in  donor  donor (1)
+##  5 opt-in  donor  donor (1)
+##  6 opt-in  donor  donor (1)
+##  7 opt-in  donor  donor (1)
+##  8 opt-in  donor  donor (1)
+##  9 opt-in  donor  donor (1)
+## 10 opt-in  donor  donor (1)
 ## # ℹ 151 more rows
 ```
 ]
@@ -503,19 +503,19 @@ donor_min_max
 .panel2-step0-auto[
 
 ```
-## # A tibble: 161 × 2
-##    Default decision
-##    &lt;chr&gt;   &lt;fct&gt;   
-##  1 opt-in  donor   
-##  2 opt-in  donor   
-##  3 opt-in  donor   
-##  4 opt-in  donor   
-##  5 opt-in  donor   
-##  6 opt-in  donor   
-##  7 opt-in  donor   
-##  8 opt-in  donor   
-##  9 opt-in  donor   
-## 10 opt-in  donor   
+## # A tibble: 161 × 3
+##    Default Choice decision 
+##    &lt;chr&gt;   &lt;chr&gt;  &lt;fct&gt;    
+##  1 opt-in  donor  donor (1)
+##  2 opt-in  donor  donor (1)
+##  3 opt-in  donor  donor (1)
+##  4 opt-in  donor  donor (1)
+##  5 opt-in  donor  donor (1)
+##  6 opt-in  donor  donor (1)
+##  7 opt-in  donor  donor (1)
+##  8 opt-in  donor  donor (1)
+##  9 opt-in  donor  donor (1)
+## 10 opt-in  donor  donor (1)
 ## # ℹ 151 more rows
 ```
 ]
@@ -789,19 +789,19 @@ count: false
 
 
 ```
-## # A tibble: 161 × 2
-##    Default Choice
-##    &lt;chr&gt;   &lt;fct&gt; 
-##  1 opt-in  donor 
-##  2 opt-in  donor 
-##  3 opt-in  donor 
-##  4 opt-in  donor 
-##  5 opt-in  donor 
-##  6 opt-in  donor 
-##  7 opt-in  donor 
-##  8 opt-in  donor 
-##  9 opt-in  donor 
-## 10 opt-in  donor 
+## # A tibble: 161 × 3
+##    Default Choice decision 
+##    &lt;chr&gt;   &lt;chr&gt;  &lt;fct&gt;    
+##  1 opt-in  donor  donor (1)
+##  2 opt-in  donor  donor (1)
+##  3 opt-in  donor  donor (1)
+##  4 opt-in  donor  donor (1)
+##  5 opt-in  donor  donor (1)
+##  6 opt-in  donor  donor (1)
+##  7 opt-in  donor  donor (1)
+##  8 opt-in  donor  donor (1)
+##  9 opt-in  donor  donor (1)
+## 10 opt-in  donor  donor (1)
 ## # ℹ 151 more rows
 ```
 
@@ -977,7 +977,7 @@ compute_panel_support &lt;- function(data, scales){
 ``` r
 donor |&gt; 
   ggplot() + 
-  aes(x = Choice) +
+  aes(x = decision) +
   geom_bar(width = .2) + 
   # sketching geom_support
   qlayer(geom = GeomSegment,
@@ -1013,7 +1013,7 @@ geom_support &lt;- function(...){
 ``` r
 donor |&gt; 
   ggplot() + 
-  aes(x = Choice) +
+  aes(x = decision) +
   geom_bar(width = .2) + 
 * geom_support()
 ```
@@ -1036,10 +1036,6 @@ knitrExtra::chunk_code_get("StatSupport")
 ```
 
 ```
-## It seems you are currently knitting a Rmd/Qmd file. The parsing of the file will be done in a new R session.
-```
-
-```
 ## [1] "StatSupport &lt;- ggproto(`_class` = \"StatSupport\","           
 ## [2] "                       `_inherit` = ggplot2::Stat,"           
 ## [3] "                       compute_panel = compute_panel_support,"
@@ -1054,19 +1050,19 @@ count: false
 .panel1-wp_prop_poem_small-auto[
 
 ```
-## # A tibble: 161 × 2
-##    Default Choice
-##    &lt;chr&gt;   &lt;fct&gt; 
-##  1 opt-in  donor 
-##  2 opt-in  donor 
-##  3 opt-in  donor 
-##  4 opt-in  donor 
-##  5 opt-in  donor 
-##  6 opt-in  donor 
-##  7 opt-in  donor 
-##  8 opt-in  donor 
-##  9 opt-in  donor 
-## 10 opt-in  donor 
+## # A tibble: 161 × 3
+##    Default Choice decision 
+##    &lt;chr&gt;   &lt;chr&gt;  &lt;fct&gt;    
+##  1 opt-in  donor  donor (1)
+##  2 opt-in  donor  donor (1)
+##  3 opt-in  donor  donor (1)
+##  4 opt-in  donor  donor (1)
+##  5 opt-in  donor  donor (1)
+##  6 opt-in  donor  donor (1)
+##  7 opt-in  donor  donor (1)
+##  8 opt-in  donor  donor (1)
+##  9 opt-in  donor  donor (1)
+## 10 opt-in  donor  donor (1)
 ## # ℹ 151 more rows
 ```
 ]
@@ -1125,7 +1121,7 @@ count: false
 donor |&gt;
   ggplot() +
   ggchalkboard::theme_chalkboard() +
-* aes(x = Choice)
+* aes(x = decision)
 ```
 ]
 
@@ -1143,7 +1139,7 @@ count: false
 donor |&gt;
   ggplot() +
   ggchalkboard::theme_chalkboard() +
-  aes(x = Choice) +
+  aes(x = decision) +
 * geom_stack()
 ```
 ]
@@ -1162,7 +1158,7 @@ count: false
 donor |&gt;
   ggplot() +
   ggchalkboard::theme_chalkboard() +
-  aes(x = Choice) +
+  aes(x = decision) +
   geom_stack() +
 * geom_stack_label()
 ```
@@ -1182,7 +1178,7 @@ count: false
 donor |&gt;
   ggplot() +
   ggchalkboard::theme_chalkboard() +
-  aes(x = Choice) +
+  aes(x = decision) +
   geom_stack() +
   geom_stack_label() +
 * geom_support()
@@ -1203,7 +1199,7 @@ count: false
 donor |&gt;
   ggplot() +
   ggchalkboard::theme_chalkboard() +
-  aes(x = Choice) +
+  aes(x = decision) +
   geom_stack() +
   geom_stack_label() +
   geom_support() +
@@ -1225,7 +1221,7 @@ count: false
 donor |&gt;
   ggplot() +
   ggchalkboard::theme_chalkboard() +
-  aes(x = Choice) +
+  aes(x = decision) +
   geom_stack() +
   geom_stack_label() +
   geom_support() +
@@ -1248,7 +1244,7 @@ count: false
 donor |&gt;
   ggplot() +
   ggchalkboard::theme_chalkboard() +
-  aes(x = Choice) +
+  aes(x = decision) +
   geom_stack() +
   geom_stack_label() +
   geom_support() +
@@ -1272,7 +1268,7 @@ count: false
 donor |&gt;
   ggplot() +
   ggchalkboard::theme_chalkboard() +
-  aes(x = Choice) +
+  aes(x = decision) +
   geom_stack() +
   geom_stack_label() +
   geom_support() +
@@ -1297,7 +1293,7 @@ count: false
 donor |&gt;
   ggplot() +
   ggchalkboard::theme_chalkboard() +
-  aes(x = Choice) +
+  aes(x = decision) +
   geom_stack() +
   geom_stack_label() +
   geom_support() +
@@ -1323,7 +1319,7 @@ count: false
 donor |&gt;
   ggplot() +
   ggchalkboard::theme_chalkboard() +
-  aes(x = Choice) +
+  aes(x = decision) +
   geom_stack() +
   geom_stack_label() +
   geom_support() +
@@ -1377,7 +1373,7 @@ donor |&gt;
 ``` r
 donor |&gt;
   ggplot() +
-  aes(x = Choice) +
+  aes(x = decision) +
   # 1. geom_stack() 
   qlayer(geom = GeomTile, stat = qstat(compute_group_bricks)) +
   # 2. geom_stack_label() 
@@ -1413,7 +1409,7 @@ donor |&gt;
 ``` r
 donor |&gt;
   ggplot() +
-  aes(x = Choice) +
+  aes(x = decision) +
   # 1 geom_stack
   qlayer(geom = qproto_update(GeomTile, aes(color = "white")), 
          stat = qstat(compute_group_bricks)) +
@@ -1524,7 +1520,7 @@ But, yes, it might be a little trickier in ggplot2 context...
 ``` r
 donor |&gt;
   ggplot() +
-  aes(x = Choice) +
+  aes(x = decision) +
   # 1. geom_stack() -- show counts in a count-y way (i.e. bricks!), 
   # with a good amount of space in-between stacks
   qlayer(geom = GeomTile, stat = qstat(compute_group_bricks)) +
@@ -1565,7 +1561,7 @@ donor |&gt;
 ``` r
 donor |&gt;
   ggplot() +
-  aes(x = Choice) +
+  aes(x = decision) +
   geom_stack() +       # custom bar layer
   geom_stack_label() + # label stack, also see geom_stack_label_percent()
   geom_x_support() +   # line under range of x
