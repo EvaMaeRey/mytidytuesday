@@ -899,17 +899,20 @@ count: false
 
 ---
 
-## *Epic. Statistical. Graphical Poems.*... are being written on the board all the time by stat's instructors.
+## *Long statistical graphical poems.*... are being written on the board all the time by stat's instructors.
 
-## And isn't what's draw is the *Actual Poem*
+## And isn't what's draw is the *actual poem*
 ![This isn't a pipe](https://upload.wikimedia.org/wikipedia/en/b/b9/MagrittePipe.jpg)
 
---
+---
 
-### ggplot2 *code* sometimes allows us to write those poems down in concise, consistent ways... The code is an expression of the actual poem.
+
+### ggplot2 *code* sometimes allows us to write those poems down in concise, logical, consistent ways... The code is an expression of the actual poem.
 
 
 ---
+
+# Scaffolding code adding up...
 
 
 ``` r
@@ -920,11 +923,6 @@ count: false
 ```
 ## [1] 3627
 ```
-
----
-
-
-
 
 
 
@@ -943,11 +941,15 @@ library(statexpress)
 
 --
 
-### Combines step 2 and 3 and requires much less code. 
+### Combines step 2 and 3.  Requires much less code. 
 
 --
 
 ### Delivers same user experience: computational work under the hood.
+
+
+
+
 
 
 ---
@@ -1396,7 +1398,7 @@ donor |&gt;
 
 ---
 
-### Room for improvement...
+### Aesthetically, room for improvement...
 
 ![](asa-cowy-fall-2024_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
 
@@ -1475,11 +1477,136 @@ geom_prop &lt;- function(...){
 # etc ...
 ```
 
+---
+
+
+# Part 4. Bundle?
+
+
+``` r
+layers_proportion &lt;- function(){
+  
+  list(
+    
+    
+    
+  )
+  
+  
+  
+}
+```
+
+
+
 # Part 4. Circulate to Collegues; make adjustments
 
 'Wow! That is great. What I like about it most is that it provides the visualization or the comparison of the statistics to the null distribution right there. I find that is the most challenging concept for cadets and it is cumbersome to either go to the applet or to draw it on the board to visualize this relationship. It disrupts the flow and their train of thought. Doing it all in one is very slick! Very easy code too!'
 
+--
+
 'I'm not a statistician, but showing a normal distribution for a binary variable for e.g. the prop test seems sketchy to me. Shouldn't it be some weird beta distribution that is bounded in [0, 1]?'
+
+---
+
+# Part 5. Minimally package. Enjoy in classroom as instructor/student.
+
+
+
+
+---
+
+Appendix.
+
+
+# What are these ggexpress functions?
+
+---
+
+# What's qstat_*()?
+
+
+``` r
+statexpress::qstat_panel
+```
+
+```
+## function (compute_panel, ...) 
+## {
+##     ggplot2::ggproto("StatTemp", Stat, compute_panel = compute_panel, 
+##         ...)
+## }
+## &lt;bytecode: 0x7f7ac3f56018&gt;
+## &lt;environment: namespace:statexpress&gt;
+```
+
+Short-hand...
+
+
+
+---
+
+
+# What's qlayer_*()?
+
+
+``` r
+statexpress::qlayer
+```
+
+```
+## function (mapping = NULL, data = NULL, geom = GeomPoint, stat = StatIdentity, 
+##     position = position_identity(), ..., na.rm = FALSE, show.legend = NA, 
+##     inherit.aes = TRUE) 
+## {
+##     ggplot2::layer(data = data, mapping = mapping, geom = geom, 
+##         stat = stat, position = position, show.legend = show.legend, 
+##         inherit.aes = inherit.aes, params = rlang::list2(na.rm = na.rm, 
+##             ...))
+## }
+## &lt;bytecode: 0x7f7abd8cfaf8&gt;
+## &lt;environment: namespace:statexpress&gt;
+```
+
+
+
+---
+
+# 
+
+
+
+``` r
+statexpress::qproto_update
+```
+
+```
+## function (`_inherit`, default_aes_update = NULL, ...) 
+## {
+##     proto_update("protoTemp", `_inherit`, default_aes_update = default_aes_update, 
+##         ...)
+## }
+## &lt;bytecode: 0x7f7abd8e55e8&gt;
+## &lt;environment: namespace:statexpress&gt;
+```
+
+``` r
+statexpress::proto_update
+```
+
+```
+## function (`_class`, `_inherit`, default_aes_update = NULL, ...) 
+## {
+##     if (!is.null(default_aes_update)) {
+##         default_aes &lt;- aes(!!!modifyList(`_inherit`$default_aes, 
+##             default_aes_update))
+##     }
+##     ggplot2::ggproto(`_class` = `_class`, `_inherit` = `_inherit`, 
+##         default_aes = default_aes, ...)
+## }
+## &lt;bytecode: 0x7f7abdbfd0a0&gt;
+## &lt;environment: namespace:statexpress&gt;
+```
 
 
 
@@ -1549,7 +1676,7 @@ donor |&gt;
    labs(title = "Is there statistical evidence that choice to between being an\nan organ donar or not differs from 50/50") 
 ```
 
-![](asa-cowy-fall-2024_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+![](asa-cowy-fall-2024_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
 
 
 
@@ -1598,8 +1725,156 @@ Acknowledgements
 --
 
 - stat_manual() group-wise computation
-- stat_rasa() 
+- stat_rasa() Elio C.
 
+
+'Demasiado complicado'...
+
+---
+
+
+
+
+---
+
+
+
+``` r
+knitrExtra::chunk_code_get("compute_for_prop_story")
+```
+
+```
+##   [1] "library(statexpress)"                                                                                                           
+##   [2] "library(tidyverse)"                                                                                                             
+##   [3] ""                                                                                                                               
+##   [4] "# 1. layer stack of bricks"                                                                                                     
+##   [5] "compute_group_bricks &lt;- function(data, scales, width = .2){"                                                                    
+##   [6] "  "                                                                                                                             
+##   [7] "  data %&gt;% "                                                                                                                    
+##   [8] "    mutate(row = row_number()) %&gt;% "                                                                                            
+##   [9] "    mutate(y = row - .5) %&gt;% "                                                                                                  
+##  [10] "    mutate(width = width)"                                                                                                      
+##  [11] "  "                                                                                                                             
+##  [12] "}"                                                                                                                              
+##  [13] ""                                                                                                                               
+##  [14] "# 2. layer label stack with count"                                                                                              
+##  [15] "compute_group_count &lt;- function(data, scales){"                                                                                 
+##  [16] "  "                                                                                                                             
+##  [17] "  data %&gt;% "                                                                                                                    
+##  [18] "    count(x) %&gt;% "                                                                                                              
+##  [19] "    mutate(y = n,"                                                                                                              
+##  [20] "           label = n)"                                                                                                          
+##  [21] "  "                                                                                                                             
+##  [22] "}"                                                                                                                              
+##  [23] ""                                                                                                                               
+##  [24] ""                                                                                                                               
+##  [25] "# 3. layer add x span"                                                                                                          
+##  [26] "compute_scale &lt;- function(data, scales){"                                                                                       
+##  [27] "  "                                                                                                                             
+##  [28] "  data %&gt;% "                                                                                                                    
+##  [29] "    summarise(min_x = min(x),"                                                                                                  
+##  [30] "              xend = max(x),"                                                                                                   
+##  [31] "              y = 0,"                                                                                                           
+##  [32] "              yend = 0) %&gt;% "                                                                                                   
+##  [33] "    rename(x = min_x)"                                                                                                          
+##  [34] "  "                                                                                                                             
+##  [35] "}"                                                                                                                              
+##  [36] ""                                                                                                                               
+##  [37] ""                                                                                                                               
+##  [38] "# 4. layer add balancing point "                                                                                                
+##  [39] "compute_xmean_at_y0 &lt;- function(data, scales){"                                                                                 
+##  [40] "  "                                                                                                                             
+##  [41] "  data %&gt;% "                                                                                                                    
+##  [42] "    summarise(x = mean(x),"                                                                                                     
+##  [43] "              y = 0, "                                                                                                          
+##  [44] "              label = \"^\") "                                                                                                  
+##  [45] "  "                                                                                                                             
+##  [46] "}"                                                                                                                              
+##  [47] ""                                                                                                                               
+##  [48] "# 5. layer add balancing point value label"                                                                                     
+##  [49] "compute_xmean_at_y0_label &lt;- function(data, scales){"                                                                           
+##  [50] "  "                                                                                                                             
+##  [51] "  data %&gt;% "                                                                                                                    
+##  [52] "    summarise(x = mean(x),"                                                                                                     
+##  [53] "              y = 0, "                                                                                                          
+##  [54] "              label = after_stat(round(x - 1, 2))) "                                                                            
+##  [55] "  "                                                                                                                             
+##  [56] "}"                                                                                                                              
+##  [57] ""                                                                                                                               
+##  [58] ""                                                                                                                               
+##  [59] ""                                                                                                                               
+##  [60] "# 6. "                                                                                                                          
+##  [61] "compute_panel_prop_asserted &lt;- function(data, scales, null = .5){"                                                              
+##  [62] "  "                                                                                                                             
+##  [63] "  # stamp type layer - so ignor input data"                                                                                     
+##  [64] "  data.frame(y = 0, "                                                                                                           
+##  [65] "             x = null + 1,"                                                                                                     
+##  [66] "             label = \"^\""                                                                                                     
+##  [67] "             )"                                                                                                                 
+##  [68] "  "                                                                                                                             
+##  [69] "}"                                                                                                                              
+##  [70] ""                                                                                                                               
+##  [71] "compute_panel_prop_asserted_label &lt;- function(data, scales, null = .5){"                                                        
+##  [72] "  "                                                                                                                             
+##  [73] "  # stamp type layer - so ignor input data"                                                                                     
+##  [74] "  data.frame(y = 0, "                                                                                                           
+##  [75] "             x = null + 1,"                                                                                                     
+##  [76] "             label = round(null, 2)"                                                                                            
+##  [77] "             )"                                                                                                                 
+##  [78] "  "                                                                                                                             
+##  [79] "}"                                                                                                                              
+##  [80] ""                                                                                                                               
+##  [81] "# Proposed layer composition"                                                                                                   
+##  [82] "compute_dnorm_prop &lt;- function(data, scales, null = .5,   dist_sds = seq(-3.5, 3.5, by = .1)"                                   
+##  [83] "){"                                                                                                                             
+##  [84] "  "                                                                                                                             
+##  [85] "  n &lt;- nrow(data)"                                                                                                              
+##  [86] "  "                                                                                                                             
+##  [87] "  sd = sqrt(null * (1 - null)/n) # sd of the null distribution"                                                                 
+##  [88] "  "                                                                                                                             
+##  [89] "  q &lt;- dist_sds * sd + null"                                                                                                    
+##  [90] "  "                                                                                                                             
+##  [91] "  data.frame(x = q + 1) %&gt;%"                                                                                                    
+##  [92] "    mutate(height = dnorm(q, sd = sd, mean = null)) %&gt;%"                                                                        
+##  [93] "    mutate(height_max = dnorm(0, sd = sd, mean = 0)) %&gt;%"                                                                       
+##  [94] "    mutate(y = .35*n*height/height_max) %&gt;%  # This is a bit fragile..."                                                        
+##  [95] "    mutate(xend = x,"                                                                                                           
+##  [96] "           yend = 0) %&gt;% "                                                                                                      
+##  [97] "    # @teunbrand GeomArea$setup_data() requires a group column. Your panel computation does not preserve groups, but it should."
+##  [98] "    mutate(group = 1) "                                                                                                         
+##  [99] "  "                                                                                                                             
+## [100] "}  "                                                                                                                            
+## [101] ""                                                                                                                               
+## [102] ""                                                                                                                               
+## [103] "# Proposed layer composition"                                                                                                   
+## [104] "compute_dnorm_prop_sds &lt;- function(data, scales, null = .5,"                                                                    
+## [105] "  dist_sds = -4:4){"                                                                                                            
+## [106] "  "                                                                                                                             
+## [107] "  n &lt;- nrow(data)"                                                                                                              
+## [108] "  "                                                                                                                             
+## [109] "  sd = sqrt(null * (1 - null)/n) # sd of the null distribution"                                                                 
+## [110] "  "                                                                                                                             
+## [111] "  q &lt;- dist_sds * sd + null"                                                                                                    
+## [112] "  "                                                                                                                             
+## [113] "  data.frame(x = q + 1) %&gt;%"                                                                                                    
+## [114] "    mutate(height = dnorm(q, sd = sd, mean = null)) %&gt;%"                                                                        
+## [115] "    mutate(height_max = dnorm(0, sd = sd, mean = 0)) %&gt;%"                                                                       
+## [116] "    mutate(y = .35*n*height/height_max) %&gt;% # This is a bit fragile..."                                                         
+## [117] "    mutate(xend = x,"                                                                                                           
+## [118] "           yend = 0)"                                                                                                           
+## [119] ""                                                                                                                               
+## [120] "}  "                                                                                                                            
+## [121] ""                                                                                                                               
+## [122] ""                                                                                                                               
+## [123] ""                                                                                                                               
+## [124] ""
+```
+
+``` r
+knitrExtra::chunk_to_dir("compute_for_prop_story", dir = ".")
+```
+
+"compute_for_prop_story"
 
 
 

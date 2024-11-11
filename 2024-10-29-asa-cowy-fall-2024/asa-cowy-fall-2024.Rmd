@@ -576,27 +576,25 @@ donor |>
 
 ---
 
-## *Epic. Statistical. Graphical Poems.*... are being written on the board all the time by stat's instructors.
+## *Long statistical graphical poems.*... are being written on the board all the time by stat's instructors.
 
-## And isn't what's draw is the *Actual Poem*
+## And isn't what's draw is the *actual poem*
 ![This isn't a pipe](https://upload.wikimedia.org/wikipedia/en/b/b9/MagrittePipe.jpg)
 
---
+---
 
-### ggplot2 *code* sometimes allows us to write those poems down in concise, consistent ways... The code is an expression of the actual poem.
+
+### ggplot2 *code* sometimes allows us to write those poems down in concise, logical, consistent ways... The code is an expression of the actual poem.
 
 
 ---
+
+# Scaffolding code adding up...
 
 ```{r}
 9 * # number of layers in ma206 lesson 1 poem
   (stat_chars + layer_chars) # scaffolding code per layer
 ```
-
----
-
-
-
 
 
 
@@ -614,11 +612,15 @@ library(statexpress)
 
 --
 
-### Combines step 2 and 3 and requires much less code. 
+### Combines step 2 and 3.  Requires much less code. 
 
 --
 
 ### Delivers same user experience: computational work under the hood.
+
+
+
+
 
 
 ---
@@ -759,7 +761,7 @@ donor |>
 
 ---
 
-### Room for improvement...
+### Aesthetically, room for improvement...
 
 ```{r code = knitrExtra::chunk_code_get("sketch_prop_story"), echo= F}
 
@@ -841,11 +843,92 @@ geom_prop <- function(...){
 
 ```
 
+---
+
+
+# Part 4. Bundle?
+
+```{r}
+layers_proportion <- function(){
+  
+  list(
+    
+    
+    
+  )
+  
+  
+  
+}
+
+
+```
+
+
+
 # Part 4. Circulate to Collegues; make adjustments
 
 'Wow! That is great. What I like about it most is that it provides the visualization or the comparison of the statistics to the null distribution right there. I find that is the most challenging concept for cadets and it is cumbersome to either go to the applet or to draw it on the board to visualize this relationship. It disrupts the flow and their train of thought. Doing it all in one is very slick! Very easy code too!'
 
+--
+
 'I'm not a statistician, but showing a normal distribution for a binary variable for e.g. the prop test seems sketchy to me. Shouldn't it be some weird beta distribution that is bounded in [0, 1]?'
+
+---
+
+# Part 5. Minimally package. Enjoy in classroom as instructor/student.
+
+```{r}
+
+
+```
+
+
+---
+
+Appendix.
+
+
+# What are these ggexpress functions?
+
+---
+
+# What's qstat_*()?
+
+```{r}
+
+statexpress::qstat_panel
+
+
+```
+
+Short-hand...
+
+
+
+---
+
+
+# What's qlayer_*()?
+
+```{r}
+statexpress::qlayer
+```
+
+
+
+---
+
+# 
+
+
+```{r}
+statexpress::qproto_update
+
+statexpress::proto_update
+
+
+```
 
 
 
@@ -967,8 +1050,31 @@ Acknowledgements
 --
 
 - stat_manual() group-wise computation
-- stat_rasa() 
+- stat_rasa() Elio C.
 
+
+'Demasiado complicado'...
+
+---
+
+```{r}
+
+
+
+```
+
+
+---
+
+
+```{r}
+knitrExtra::chunk_code_get("compute_for_prop_story")
+
+knitrExtra::chunk_to_dir("compute_for_prop_story", dir = ".")
+
+```
+
+"compute_for_prop_story"
 
 
 
