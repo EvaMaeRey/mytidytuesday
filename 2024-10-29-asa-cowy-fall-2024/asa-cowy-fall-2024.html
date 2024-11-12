@@ -1105,7 +1105,7 @@ count: false
 ``` r
 donor |&gt;
   ggplot() +
-* ggchalkboard::theme_chalkboard()
+* theme_chalkboard()
 ```
 ]
 
@@ -1122,7 +1122,7 @@ count: false
 ``` r
 donor |&gt;
   ggplot() +
-  ggchalkboard::theme_chalkboard() +
+  theme_chalkboard() +
 * aes(x = decision)
 ```
 ]
@@ -1140,7 +1140,7 @@ count: false
 ``` r
 donor |&gt;
   ggplot() +
-  ggchalkboard::theme_chalkboard() +
+  theme_chalkboard() +
   aes(x = decision) +
 * geom_stack()
 ```
@@ -1159,7 +1159,7 @@ count: false
 ``` r
 donor |&gt;
   ggplot() +
-  ggchalkboard::theme_chalkboard() +
+  theme_chalkboard() +
   aes(x = decision) +
   geom_stack() +
 * geom_stack_label()
@@ -1179,7 +1179,7 @@ count: false
 ``` r
 donor |&gt;
   ggplot() +
-  ggchalkboard::theme_chalkboard() +
+  theme_chalkboard() +
   aes(x = decision) +
   geom_stack() +
   geom_stack_label() +
@@ -1200,7 +1200,7 @@ count: false
 ``` r
 donor |&gt;
   ggplot() +
-  ggchalkboard::theme_chalkboard() +
+  theme_chalkboard() +
   aes(x = decision) +
   geom_stack() +
   geom_stack_label() +
@@ -1222,7 +1222,7 @@ count: false
 ``` r
 donor |&gt;
   ggplot() +
-  ggchalkboard::theme_chalkboard() +
+  theme_chalkboard() +
   aes(x = decision) +
   geom_stack() +
   geom_stack_label() +
@@ -1245,7 +1245,7 @@ count: false
 ``` r
 donor |&gt;
   ggplot() +
-  ggchalkboard::theme_chalkboard() +
+  theme_chalkboard() +
   aes(x = decision) +
   geom_stack() +
   geom_stack_label() +
@@ -1269,7 +1269,7 @@ count: false
 ``` r
 donor |&gt;
   ggplot() +
-  ggchalkboard::theme_chalkboard() +
+  theme_chalkboard() +
   aes(x = decision) +
   geom_stack() +
   geom_stack_label() +
@@ -1294,7 +1294,7 @@ count: false
 ``` r
 donor |&gt;
   ggplot() +
-  ggchalkboard::theme_chalkboard() +
+  theme_chalkboard() +
   aes(x = decision) +
   geom_stack() +
   geom_stack_label() +
@@ -1320,7 +1320,7 @@ count: false
 ``` r
 donor |&gt;
   ggplot() +
-  ggchalkboard::theme_chalkboard() +
+  theme_chalkboard() +
   aes(x = decision) +
   geom_stack() +
   geom_stack_label() +
@@ -1463,14 +1463,14 @@ geom_stack_label &lt;- function(...){
 geom_support &lt;- function(...){
   
   qlayer(geom = GeomSegment, 
-         stat = qstat_panel(compute_scale))
+         stat = qstat_panel(compute_scale), ...)
   
   }
 
 geom_prop &lt;- function(...){
   
   qlayer(geom = qproto_update(GeomText, aes(size = 6, vjust = 1)),
-         stat = qstat_panel(compute_xmean_at_y0),...)
+         stat = qstat_panel(compute_xmean_at_y0), ...)
   
   }
 
@@ -1484,20 +1484,27 @@ geom_prop &lt;- function(...){
 
 
 ``` r
-layers_proportion &lt;- function(){
+layers_proportion_test &lt;- function(asserted = .5, ...){
   
   list(
-    
-    
-    
-  )
-  
-  
+    geom_stack(),
+    geom_stack_label(),
+    geom_support(), 
+    geom_prop(),
+    geom_prop_label(),
+    stamp_prop(),
+    stamp_prop_label(),
+    geom_normal_prop_null(),
+    geom_normal_prop_null_sds()
+    )
   
 }
 ```
 
 
+
+
+---
 
 # Part 4. Circulate to Collegues; make adjustments
 
@@ -1516,14 +1523,25 @@ layers_proportion &lt;- function(){
 
 ---
 
-Appendix.
+# Appendix.
 
-
-# What are these ggexpress functions?
 
 ---
 
-# What's qstat_*()?
+# What are these ggexpress functions?
+
+qstat() - locally defining stat based on compute
+
+--
+
+qlayer() - pre-populated, generic layer function, already more user-facing
+
+--
+
+qproto_update() - allows aes updating rather than dig, copy and paste
+
+---
+
 
 
 ``` r
@@ -1536,18 +1554,12 @@ statexpress::qstat_panel
 ##     ggplot2::ggproto("StatTemp", Stat, compute_panel = compute_panel, 
 ##         ...)
 ## }
-## &lt;bytecode: 0x7f7ac3f56018&gt;
+## &lt;bytecode: 0x7fb682cd57b0&gt;
 ## &lt;environment: namespace:statexpress&gt;
 ```
 
-Short-hand...
-
-
-
 ---
 
-
-# What's qlayer_*()?
 
 
 ``` r
@@ -1564,16 +1576,11 @@ statexpress::qlayer
 ##         inherit.aes = inherit.aes, params = rlang::list2(na.rm = na.rm, 
 ##             ...))
 ## }
-## &lt;bytecode: 0x7f7abd8cfaf8&gt;
+## &lt;bytecode: 0x7fb679963e70&gt;
 ## &lt;environment: namespace:statexpress&gt;
 ```
 
-
-
 ---
-
-# 
-
 
 
 ``` r
@@ -1586,7 +1593,7 @@ statexpress::qproto_update
 ##     proto_update("protoTemp", `_inherit`, default_aes_update = default_aes_update, 
 ##         ...)
 ## }
-## &lt;bytecode: 0x7f7abd8e55e8&gt;
+## &lt;bytecode: 0x7fb6799e0768&gt;
 ## &lt;environment: namespace:statexpress&gt;
 ```
 
@@ -1604,21 +1611,25 @@ statexpress::proto_update
 ##     ggplot2::ggproto(`_class` = `_class`, `_inherit` = `_inherit`, 
 ##         default_aes = default_aes, ...)
 ## }
-## &lt;bytecode: 0x7f7abdbfd0a0&gt;
+## &lt;bytecode: 0x7fb679b1e7b8&gt;
 ## &lt;environment: namespace:statexpress&gt;
 ```
 
-
-
 ---
 
-'There is a bunch of scaffolding code and I won't bore you with that'.
+# What about the compute?
+
+
 
 --
 
-'There is a bunch of compute and I won't bore you with that'. 
+### 'There is a bunch of scaffolding code and I won't bore you with that'.  Thomas Lin Pederson 2020
 
 --
+
+### 'There is a bunch of compute and I won't bore you with that'. This talk
+
+---
 
 You are writing the compute anyway... 
 
@@ -1626,117 +1637,10 @@ You are writing the compute anyway...
 
 But, yes, it might be a little trickier in ggplot2 context...
 
-
----
-
-*Actual* graphical-poem-first approach... 
-
-10 or 11 new layers in my statistical poem.
-
-400 scaffolding characters per plot element?
-
----
-
-
+https://github.com/teunbrand/ggplot-extension-club/discussions/57#discussioncomment-11170862
 
 
 ---
-
-
-
-``` r
-donor |&gt;
-  ggplot() +
-  aes(x = decision) +
-  # 1. geom_stack() -- show counts in a count-y way (i.e. bricks!), 
-  # with a good amount of space in-between stacks
-  qlayer(geom = GeomTile, stat = qstat(compute_group_bricks)) +
-  # 2. geom_stack_label() -- label stacks
-  qlayer(geom = GeomText, stat = qstat(compute_group_count)) +
-  # 3. geom_xrange, show scale, range at y is zero
-  qlayer(geom = GeomSegment, stat = qstat_panel(compute_scale)) +
-  # 4. geom_prop, show prop, i.e. balancing point
-  qlayer(geom = GeomText,
-         stat = qstat_panel(compute_xmean_at_y0)) + 
-  # 5. geom_prop_label, labeling prop, balancing point
-  qlayer(geom = GeomLabel,
-         stat = qstat_panel(compute_xmean_at_y0_label))  +   # by 
-  # 6. stamp_prop, assertion, point
-  qlayer(geom = GeomText,
-         stat = qstat_panel(compute_panel_prop_asserted)) +
-  # 7. stamp_prop_label, assertion, label
-  qlayer(geom = GeomLabel,
-         stat = qstat_panel(compute_panel_prop_asserted_label)) +
-  # 8. geom_norm on prop plot
-  qlayer(geom = GeomArea,
-         stat = qstat_panel(compute_dnorm_prop)) + 
-   # 9. geom_prop_norm w/ sd marks
-   qlayer(geom = GeomSegment,
-          stat = qstat_panel(compute_dnorm_prop_sds)) +
-   labs(title = "Is there statistical evidence that choice to between being an\nan organ donar or not differs from 50/50") 
-```
-
-![](asa-cowy-fall-2024_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
-
-
-
-
----
-
-
-
-``` r
-donor |&gt;
-  ggplot() +
-  aes(x = decision) +
-  geom_stack() +       # custom bar layer
-  geom_stack_label() + # label stack, also see geom_stack_label_percent()
-  geom_x_support() +   # line under range of x
-  geom_x_prop() +      # balancing point
-  geom_x_prop_label()  + # balancing point (proportion) label
-  stamp_x_prop(prop = .5) + 
-  stamp_x_prop_label(prop = .5)  + 
-  geom_prop_null_distribution(prop = .5)
-```
-
-
-"get the big ideas across to the students as quickly as possible"
-
----
-
-- Early exits.
-- guide but don't spin off...
-- 
-
-
-
----
-
-
-'like everyone has like other life going on so figuring out how you can help those people like save time ... like maintaining
-the R package is like at the top of most people's priority list or writing the best possible R code
-
----
-
-Acknowledgements
-
-- ggplot2 extenders club, esp June Choe &amp; Teun van den Brand
-
---
-
-- stat_manual() group-wise computation
-- stat_rasa() Elio C.
-
-
-'Demasiado complicado'...
-
----
-
-
-
-
----
-
 
 
 ``` r
@@ -1873,6 +1777,51 @@ knitrExtra::chunk_code_get("compute_for_prop_story")
 ``` r
 knitrExtra::chunk_to_dir("compute_for_prop_story", dir = ".")
 ```
+
+---
+
+*Actual* graphical-poem-first approach... 
+
+9 new layers in my statistical poem.
+
+400 scaffolding characters per plot element?
+
+
+
+
+---
+
+
+'like everyone has like other life going on so figuring out how you can help those people like save time ... like maintaining
+the R package is like at the top of most people's priority list or writing the best possible R code
+
+---
+
+Acknowledgements
+
+- ggplot2 extenders club, esp. June Choe &amp; Teun van den Brand
+
+--
+
+- MA206 people
+
+--
+
+- stat_manual() group-wise computation
+
+--
+
+- stat_rasa() Elio C.
+
+'Demasiado complicado'...
+
+
+
+
+---
+
+
+
 
 "compute_for_prop_story"
 

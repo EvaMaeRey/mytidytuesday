@@ -520,38 +520,80 @@ donor |>
 
 
 ```{r wp_prop_poem_functions, echo = F, message = F, warning=F}
-geom_stack <- function(...){qlayer(geom = qproto_update(GeomTile, aes(color = "white")), 
-         stat = qstat(compute_group_bricks), ...)} 
+geom_stack <- function(...){
+  qlayer(geom = qproto_update(GeomTile, aes(color = "white")), 
+         stat = qstat(compute_group_bricks), 
+         ...)
+  } 
 
-geom_stack_label <- function(...){qlayer(geom = qproto_update(GeomText, aes(vjust = 0)), 
-         stat = qstat(compute_group_count), ...)} 
+geom_stack_label <- function(...){
+  qlayer(geom = qproto_update(GeomText, aes(vjust = 0)), 
+         stat = qstat(compute_group_count), 
+         ...)
+  } 
 
-geom_support <- function(...){qlayer(geom = GeomSegment, 
-         stat = qstat_panel(compute_scale))}
+geom_support <- function(...){
+  qlayer(geom = GeomSegment, 
+         stat = qstat_panel(compute_scale), 
+         ...)
+  }
 
-geom_prop <- function(...){qlayer(geom = qproto_update(GeomText, aes(size = 6, vjust = 1)),
-         stat = qstat_panel(compute_xmean_at_y0),...)}
+geom_prop <- function(...){
+  qlayer(geom = qproto_update(GeomText, aes(size = 6, vjust = 1)),
+         stat = qstat_panel(compute_xmean_at_y0),
+         ...)
+  }
 
 
-geom_prop_label <- function(...){ qlayer(geom = qproto_update(GeomLabel, aes(fill = NA, label.size = NA, vjust = 0)),
-         stat = qstat_panel(compute_xmean_at_y0_label), ...) }
+geom_prop_label <- function(...){ 
+  qlayer(geom = qproto_update(GeomLabel, 
+                              aes(fill = NA, label.size = NA, vjust = 0)),
+         stat = qstat_panel(compute_xmean_at_y0_label), 
+         ...) 
+  }
 
-stamp_prop <- function(...){ qlayer(geom = qproto_update(GeomText, aes(size = 6, vjust = 1, color = "red")),
-         stat = qstat_panel(compute_panel_prop_asserted), ...)}
+stamp_prop <- function(...){ 
+  qlayer(geom = qproto_update(GeomText, aes(size = 6, vjust = 1, color = "red")),
+         stat = qstat_panel(compute_panel_prop_asserted), 
+         ...)
+  }
   
   
 stamp_prop_label <- function(...){  
-  qlayer(geom = qproto_update(GeomLabel, aes(fill = NA, label.size = NA, vjust = 0, color = "red")),
-         stat = qstat_panel(compute_panel_prop_asserted_label), ...)}
+  qlayer(geom = qproto_update(GeomLabel, 
+                              aes(fill = NA, label.size = NA, vjust = 0, color = "red")),
+         stat = qstat_panel(compute_panel_prop_asserted_label), 
+         ...)
+  }
 
 
-geom_normal_prop_null <- function(...){qlayer(geom = qproto_update(GeomArea, aes(alpha = .2)),
-         stat = qstat_panel(compute_dnorm_prop), ...)} 
+geom_normal_prop_null <- function(...){
+  qlayer(geom = qproto_update(GeomArea, aes(alpha = .2)),
+         stat = qstat_panel(compute_dnorm_prop), 
+         ...)
+  } 
 
 
 geom_normal_prop_null_sds <- function(...){
    qlayer(geom = qproto_update(GeomSegment, aes(linetype = "dotted")),
-          stat = qstat_panel(compute_dnorm_prop_sds), ...)}
+          stat = qstat_panel(compute_dnorm_prop_sds), 
+          ...)
+  }
+
+
+theme_chalkboard <- function(){
+  
+  list(
+  ggchalkboard::theme_chalkboard(),
+    aes(color = I("lightyellow")), 
+    aes(size = I(7)),
+    aes(linewidth = I(1)),
+    aes(fill = I("lightyellow")),
+     aes(alpha = I(.5))
+  )
+  
+  
+}
 ```
 
 
@@ -561,7 +603,7 @@ geom_normal_prop_null_sds <- function(...){
 ```{r wp_prop_poem_small, include = F}
 donor |>
   ggplot() + 
-  ggchalkboard::theme_chalkboard() +
+  theme_chalkboard() +
   aes(x = decision) +
   geom_stack() +
   geom_stack_label() + 
@@ -828,14 +870,14 @@ geom_stack_label <- function(...){
 geom_support <- function(...){
   
   qlayer(geom = GeomSegment, 
-         stat = qstat_panel(compute_scale))
+         stat = qstat_panel(compute_scale), ...)
   
   }
 
 geom_prop <- function(...){
   
   qlayer(geom = qproto_update(GeomText, aes(size = 6, vjust = 1)),
-         stat = qstat_panel(compute_xmean_at_y0),...)
+         stat = qstat_panel(compute_xmean_at_y0), ...)
   
   }
 
@@ -849,22 +891,32 @@ geom_prop <- function(...){
 # Part 4. Bundle?
 
 ```{r}
-layers_proportion <- function(){
+layers_proportion_test <- function(asserted = .5, ...){
   
   list(
-    
-    
-    
-  )
-  
-  
+    geom_stack(),
+    geom_stack_label(),
+    geom_support(), 
+    geom_prop(),
+    geom_prop_label(),
+    stamp_prop(),
+    stamp_prop_label(),
+    geom_normal_prop_null(),
+    geom_normal_prop_null_sds()
+    )
   
 }
-
 
 ```
 
 
+```{r}
+
+
+
+```
+
+---
 
 # Part 4. Circulate to Collegues; make adjustments
 
@@ -886,14 +938,25 @@ layers_proportion <- function(){
 
 ---
 
-Appendix.
+# Appendix.
 
-
-# What are these ggexpress functions?
 
 ---
 
-# What's qstat_*()?
+# What are these ggexpress functions?
+
+## qstat() - locally defining Stat behavior based on compute, don't need to create and ggproto object
+
+--
+
+## qlayer() - pre-populated, generic layer function, already more user-facing
+
+--
+
+qproto_update() - allows aes updating rather than dig, copy and paste
+
+---
+
 
 ```{r}
 
@@ -902,45 +965,36 @@ statexpress::qstat_panel
 
 ```
 
-Short-hand...
-
-
-
 ---
 
-
-# What's qlayer_*()?
 
 ```{r}
 statexpress::qlayer
 ```
 
-
-
 ---
-
-# 
-
 
 ```{r}
 statexpress::qproto_update
 
 statexpress::proto_update
-
-
 ```
-
-
 
 ---
 
-'There is a bunch of scaffolding code and I won't bore you with that'.
+# What about the compute?
+
+
 
 --
 
-'There is a bunch of compute and I won't bore you with that'. 
+### 'There is a bunch of scaffolding code and I won't bore you with that'.  Thomas Lin Pederson 2020
 
 --
+
+### 'There is a bunch of compute and I won't bore you with that'. This talk
+
+---
 
 You are writing the compute anyway... 
 
@@ -948,90 +1002,26 @@ You are writing the compute anyway...
 
 But, yes, it might be a little trickier in ggplot2 context...
 
+https://github.com/teunbrand/ggplot-extension-club/discussions/57#discussioncomment-11170862
+
+
+---
+
+```{r}
+knitrExtra::chunk_code_get("compute_for_prop_story")
+
+knitrExtra::chunk_to_dir("compute_for_prop_story", dir = ".")
+
+```
 
 ---
 
 *Actual* graphical-poem-first approach... 
 
-10 or 11 new layers in my statistical poem.
+9 new layers in my statistical poem.
 
 400 scaffolding characters per plot element?
 
----
-
-```{r}
-
-
-```
-
-
----
-
-
-```{r}
-donor |>
-  ggplot() +
-  aes(x = decision) +
-  # 1. geom_stack() -- show counts in a count-y way (i.e. bricks!), 
-  # with a good amount of space in-between stacks
-  qlayer(geom = GeomTile, stat = qstat(compute_group_bricks)) +
-  # 2. geom_stack_label() -- label stacks
-  qlayer(geom = GeomText, stat = qstat(compute_group_count)) +
-  # 3. geom_xrange, show scale, range at y is zero
-  qlayer(geom = GeomSegment, stat = qstat_panel(compute_scale)) +
-  # 4. geom_prop, show prop, i.e. balancing point
-  qlayer(geom = GeomText,
-         stat = qstat_panel(compute_xmean_at_y0)) + 
-  # 5. geom_prop_label, labeling prop, balancing point
-  qlayer(geom = GeomLabel,
-         stat = qstat_panel(compute_xmean_at_y0_label))  +   # by 
-  # 6. stamp_prop, assertion, point
-  qlayer(geom = GeomText,
-         stat = qstat_panel(compute_panel_prop_asserted)) +
-  # 7. stamp_prop_label, assertion, label
-  qlayer(geom = GeomLabel,
-         stat = qstat_panel(compute_panel_prop_asserted_label)) +
-  # 8. geom_norm on prop plot
-  qlayer(geom = GeomArea,
-         stat = qstat_panel(compute_dnorm_prop)) + 
-   # 9. geom_prop_norm w/ sd marks
-   qlayer(geom = GeomSegment,
-          stat = qstat_panel(compute_dnorm_prop_sds)) +
-   labs(title = "Is there statistical evidence that choice to between being an\nan organ donar or not differs from 50/50") 
-
-
-
-
-```
-
-
-
-
----
-
-
-```{r, eval = F}
-donor |>
-  ggplot() +
-  aes(x = decision) +
-  geom_stack() +       # custom bar layer
-  geom_stack_label() + # label stack, also see geom_stack_label_percent()
-  geom_x_support() +   # line under range of x
-  geom_x_prop() +      # balancing point
-  geom_x_prop_label()  + # balancing point (proportion) label
-  stamp_x_prop(prop = .5) + 
-  stamp_x_prop_label(prop = .5)  + 
-  geom_prop_null_distribution(prop = .5)
-```
-
-
-"get the big ideas across to the students as quickly as possible"
-
----
-
-- Early exits.
-- guide but don't spin off...
-- 
 
 
 
@@ -1045,34 +1035,29 @@ the R package is like at the top of most people's priority list or writing the b
 
 Acknowledgements
 
-- ggplot2 extenders club, esp June Choe & Teun van den Brand
+- ggplot2 extenders club, esp. June Choe & Teun van den Brand
+
+--
+
+- MA206 people
 
 --
 
 - stat_manual() group-wise computation
-- stat_rasa() Elio C.
 
+--
+
+- stat_rasa() Elio C.
 
 'Demasiado complicado'...
 
----
 
-```{r}
-
-
-
-```
 
 
 ---
 
 
-```{r}
-knitrExtra::chunk_code_get("compute_for_prop_story")
 
-knitrExtra::chunk_to_dir("compute_for_prop_story", dir = ".")
-
-```
 
 "compute_for_prop_story"
 
