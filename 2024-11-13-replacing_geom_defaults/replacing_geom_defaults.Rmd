@@ -1,0 +1,94 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+
+
+compute_group_chull <- function(data, scales){
+  
+  chull_ids <- chull(data$x, data$y)
+  
+  data[chull_ids,]
+  
+}
+
+library(ggplot2)
+
+
+
+
+
+StatChull <- ggproto("StatChull", Stat, compute_group = compute_group_chull)
+
+palmerpenguins::penguins %>% 
+  remove_missing() %>% 
+  select(x = bill_length_mm, y = bill_depth_mm) %>% 
+  compute_group_chull()
+
+palmerpenguins::penguins %>% 
+  remove_missing() %>% 
+  ggplot() + 
+  aes(x = bill_length_mm, y = bill_depth_mm) + 
+  geom_polygon(stat = StatChull)
+
+GeomPolygon$default_aes
+
+GeomPolygonRed <- ggproto("GeomPolygonRed", 
+                      GeomPolygon, default_aes = aes(color = "red"))
+
+
+
+last_plot() +
+  layer(GeomPolygonRed,
+        StatChull,
+        position = "identity")
+  
+  
+GeomPolygonRed2 <- ggproto("GeomPolygonRed2", 
+                           GeomPolygon, 
+                           default_aes = aes(colour    = "red",
+fill     = from_theme(col_mix(ink, paper, 0.2)),
+linewidth = from_theme(borderwidth),
+linetype  = from_theme(bordertype),
+alpha     = NA,
+subgroup  = NULL))
+  
+GeomPolygonRed2$default_aes
+
+last_plot() +
+  layer(GeomPolygonRed2,
+        StatChull,
+        position = "identity")
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

@@ -1,0 +1,88 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+library(ozmaps)
+sf_oz <- ozmap("states")
+
+crs_au_states <- sf::st_crs(sf_oz)
+
+sf_oz |> names()
+
+sf_oz |>
+  select(state_name = NAME) %>% 
+    ggplot2::StatSf$compute_panel(coord = ggplot2::CoordSf) |>
+    ggplot2::StatSfCoordinates$compute_group(coord = ggplot2::CoordSf) ->
+australia_state_ref
+
+
+# layer_county w/ inner join
+compute_panel_australia_states <- function(data, scales){
+
+australia_state_ref  |>
+    inner_join(data)
+
+}
+
+StatAuStates <- ggproto("StatAuStates",
+                        Stat,
+                        compute_panel = compute_panel_australia_states,
+                        default_aes = aes(label = after_stat(state_name)),
+                        required_aes = c("state_name"))
+
+
+tribble(~state, ~pop,
+        "Victoria", 1,
+        "Queensland", 2,
+        "New South Wales", 3,
+        "Western Australia", 4,
+        "Northern Territory", 5,
+        "Tasmania", 6,
+        "South Australia", 7,
+        "Australian Capital Territory", 8,
+        "Other Territories", 9
+        ) |>
+ggplot() +
+  aes(state_name = state) + 
+  geom_sf(stat = StatAuStates) + 
+  aes(fill = pop) + 
+  geom_sf_text(color = "white", 
+               stat = StatAuStates,
+               check_overlap = T) + 
+  scale_fill_viridis_c() + 
+  theme(panel.background = element_rect(fill = "blue")) + 
+  coord_sf(crs = crs_au_states)
+
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

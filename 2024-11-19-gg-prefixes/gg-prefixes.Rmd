@@ -1,0 +1,139 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+extgalleryhtml <- read_lines("https://exts.ggplot2.tidyverse.org/gallery/")
+
+"https://raw.githubusercontent.com/lionel-/ggstance/refs/heads/main/NAMESPACE"
+"https://raw.githubusercontent.com/rcorty/ggQQunif/refs/heads/main/NAMESPACE"
+"https://raw.githubusercontent.com/statsmaths/ggimg/refs/heads/master/NAMESPACE"
+
+extgalleryhtml %>% 
+  str_detect("github.com/.+/gg.+") %>% 
+  extgalleryhtml[.] %>% 
+  str_extract("github.com/([a-zA-Z]|-)+/gg[a-zA-Z]+") %>% 
+  unique() %>% 
+  data.frame(repo_name = .) %>% 
+  mutate(repo_name = str_remove(repo_name, "github.com/")) %>% 
+  remove_missing() %>% 
+  mutate(namespace_url = paste0("https://raw.githubusercontent.com/", 
+                              repo_name, 
+                              "/refs/heads/master/NAMESPACE")) ->
+extensions_df
+```
+
+
+
+```{r, fig.width=20, fig.height=20}
+len <- nrow(extensions_df)
+
+namespace_contents <- vector(mode='list', len)
+
+for (i in 1:len){
+  
+  try(
+  namespace_contents[[i]] <-  read_lines(extensions_df$namespace_url[i])
+   )
+  
+  # if(!exists(namespace_contents[[i]])){}
+  
+  Sys.sleep(.2)
+}
+
+
+extensions_df %>% 
+  mutate(namespace_url = namespace_url,
+         namespace_contents = namespace_contents) %>% 
+  unnest(namespace_contents) %>% 
+  filter(str_detect(namespace_contents,"^export")) %>%
+  mutate(fun = str_remove_all(namespace_contents,"export\\(|\\)")) %>% 
+  mutate(fun_prefix = fun %>% str_extract(".*?_"))->
+extensions_df_exports
+
+extensions_df_exports %>% 
+  remove_missing() %>% 
+  select(repo_name, fun_prefix) %>% 
+  ggedgelist:::ggedgelist_quick(layout = "fr", include_names = T)
+
+
+extensions_df_exports %>% 
+  filter(str_detect(namespace_contents,"^export")) %>%
+  mutate(prefix = namespace_contents %>% str_extract(".*?_") %>% str_remove("export\\(")) %>% 
+  # remove_missing() %>% 
+  group_by(prefix) %>% 
+  mutate(n = n()) %>% 
+  # filter(prefix == "stat_") %>% 
+  select(repo_name, prefix) %>% 
+  ggedgelist:::ggedgelist_quick(layout = "fr", include_names = T)
+
+
+extensions_df_exports %>%   
+  group_by(fun_prefix) %>% 
+  mutate(n = n()) %>% 
+  filter(n > 10) %>% 
+  mutate(repo_fun = paste0(repo_name, "::", fun)) %>% 
+  select(fun_prefix, fun, repo_name) %>% 
+  filter((fun_prefix %in% c("stat_", "facet_", "geom_", "coord_", "theme_", "scale_"))) %>% 
+  pivot_longer(cols= c(repo_name, fun_prefix)) %>% 
+  select(fun, value) %>% 
+  ggedgelist:::ggedgelist_quick(layout = "fr", include_names = T)
+```
+
+
+```{r}
+
+library(tidyverse)
+pkgs <- as_tibble(tools::CRAN_package_db())
+gg_pkgs <- pkgs %>% 
+  select(Package, Depends, Imports, Suggests) %>% 
+  filter(
+    str_detect(Package, "^gg"),
+    if_any(-Package, ~ str_detect(.x, "ggplot2"))
+  ) %>% 
+  mutate(
+    dep_grid = str_detect(Depends, "\\bgrid\\b") | str_detect(Imports, "\\bgrid\\b"),
+    dep_dplyr = str_detect(Depends, "\\bdplyr\\b") | str_detect(Imports, "\\bdplyr\\b")
+  ) %>% 
+  drop_na()
+
+gg_pkgs %>% 
+  pivot_longer(cols = dep_grid:dep_dplyr) %>% 
+  filter(value) %>% 
+  select(Package, name) %>% 
+  ggedgelist:::ggedgelist_quick(include_names = T, 
+                                layout = "fr")
+  
+
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

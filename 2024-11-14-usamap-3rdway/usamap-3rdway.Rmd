@@ -1,0 +1,164 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+
+```
+
+## Experiment
+
+```{r}
+
+library(tidyverse)
+
+
+compute_panel_state <- function(data, scales, keep_id = NULL, drop_id = ""){
+
+usmapdata::us_map() %>% 
+    rename(geometry = geom) %>% # includes geometry column
+    ggplot2::StatSf$compute_panel(coord = ggplot2::CoordSf) |>
+    ggplot2::StatSfCoordinates$compute_group(coord = ggplot2::CoordSf) |>
+    inner_join(data)
+
+}
+
+
+StatUSstates <- ggproto("StatUSstates", 
+                             Stat,
+                             compute_panel = compute_panel_state,
+                             default_aes = aes(label = after_stat(full)),
+                             required_aes = c("full|abb|fips"))
+
+USArrests |>
+  rownames_to_column("state") |># two var data - no geometry column with borders
+  ggplot() +
+  aes(full = state) +
+  geom_sf(stat = StatUSstates) +
+  geom_sf_text(stat = StatUSstates, check_overlap = T) +
+  aes(fill = Murder)
+
+
+
+#And if you will use a bunch,then can do as follows, and set crs create in-script convenience functions...
+usmapcrs <- sf::st_crs(usmapdata::us_map())
+geom_state <- function( ...){c(geom_sf(stat = StatUSstates, ...), 
+                               coord_sf(crs = usmapcrs))}
+geom_state_text <- function( ...){c(geom_sf_text(stat = StatUSstates,...),
+                                    coord_sf(crs = usmapcrs))}
+geom_state_label <- function( ...){c(geom_sf_label(stat = StatUSstates,...),
+                                   coord_sf(crs = usmapcrs))}
+
+USArrests |>
+  rownames_to_column("state") |># two var data - no geometry column with borders
+  ggplot() +
+  aes(full = state) +
+  geom_state() + 
+  geom_state_text() + 
+  aes(fill = Murder) + 
+  aes(label = Murder) + 
+  scale_fill_viridis_c()
+
+
+```
+
+
+
+```{r}
+library(tidyverse)
+
+nc_ref <- sf::st_read(system.file("shape/nc.shp", package="sf")) |>
+  select(county_name = NAME, fips = FIPS) %>% 
+    ggplot2::StatSf$compute_panel(coord = ggplot2::CoordSf) |>
+    ggplot2::StatSfCoordinates$compute_group(coord = ggplot2::CoordSf)# sf object preserves geometry column on save
+
+nc_ref |> head()
+
+
+# layer_county w/ inner join
+compute_panel_nc_county <- function(data, scales){
+
+nc_ref  |>
+    inner_join(data)
+
+}
+
+StatNCcounties <- ggproto("StatNCcounties",
+                        Stat,
+                        compute_panel = compute_panel_nc_county,
+                        default_aes = aes(label = after_stat(county_name)),
+                        required_aes = c("county_name|fips"))
+
+
+tribble(~county, ~pop,
+        "Mecklenburg", 3000) |>
+ggplot() +
+  aes(county_name = county) + 
+  geom_sf(stat = StatNCcounties) + 
+  aes(fill = pop)
+
+
+# layer_county w/ full join fails: Error in `scale_apply()`: `scale_id` must not contain any "NA".
+compute_panel_nc_county_fulljoin <- function(data, scales){
+
+nc_ref  |>
+    full_join(data)
+
+}
+
+tribble(~county, ~pop,
+        "Mecklenburg", 3000) |>
+  rename(county_name = county) |>
+  compute_panel_nc_county_fulljoin()
+
+StatNCcounties$compute_panel <- compute_panel_nc_county_fulljoin
+
+tribble(~county, ~pop,
+        "Mecklenburg", 3000) |>
+ggplot() +
+  aes(county_name = county) + 
+  geom_sf(stat = StatNCcounties) + 
+  aes(fill = pop)
+
+
+# layer_county w/ anti join fails: Error in `scale_apply()`: `scale_id` must not contain any "NA".
+compute_panel_nc_county_antijoin <- function(data, scales){
+
+nc_ref  |>
+    anti_join(data)
+
+}
+
+
+StatNCcounties$compute_panel <- compute_panel_nc_county_antijoin
+
+
+tribble(~county, ~pop,
+        "Mecklenburg", 3000) |>
+ggplot() +
+  aes(county_name = county) + 
+  geom_sf(stat = StatNCcounties) + 
+  aes(fill = pop)
+
+```
+
+
+## Closing remarks, Other Relevant Work, Caveats
