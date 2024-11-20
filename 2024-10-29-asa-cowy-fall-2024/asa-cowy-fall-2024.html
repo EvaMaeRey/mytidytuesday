@@ -32,36 +32,38 @@ class: center, middle, inverse, title-slide
 
 Everyday ggplot2 extension: New approaches to light-weight 'geom' (layer) extensions
 
-Creating new layers (geom_* functions) in ggplot2 extension has been described as an 'involved process'.  While new educational material has lowered the conceptual barrier to entry, the amount of scaffolding code required for classical extension can make regularly using extension feel prohibitive.  In this talk, I'll discuss strategies and tools to make experimentation with new functionality more light-weight and fun.  A few practical applications in statistics pedagogy will be presented. 
+Creating new layers (geom_* functions) in ggplot2 extension has been described as an 'involved process'.  While new educational material has lowered the conceptual barrier to entry, the amount of scaffolding code required for classical extension can make using extension regularly feel prohibitive.  In this talk, I'll discuss strategies and tools to make experimentation with new functionality more light-weight and fun.  A few practical applications in statistics pedagogy will be presented. 
 
 
 ---
 
-Tell you about:
+&lt;!-- Tell you about: --&gt;
 
-[Everyday ggplot2 extension](https://evamaerey.github.io/everyday_ggplot2_extension/) initiatives
+&lt;!-- [Everyday ggplot2 extension](https://evamaerey.github.io/everyday_ggplot2_extension/) initiatives --&gt;
 
---
+&lt;!-- -- --&gt;
 
-1. Learning resources
-    a. [easy recipes]
-    b. [cookbook](https://evamaerey.github.io/ggplot2-extension-cookbook/)
+&lt;!-- 1. Learning resources --&gt;
+&lt;!--     a. [easy recipes] --&gt;
+&lt;!--     b. [cookbook](https://evamaerey.github.io/ggplot2-extension-cookbook/) --&gt;
 
---
+&lt;!-- -- --&gt;
 
-2. Community - [Extenders club](https://github.com/teunbrand/ggplot-extension-club)
+&lt;!-- 2. Community - [Extenders club](https://github.com/teunbrand/ggplot-extension-club) --&gt;
 
-    a. meetup 
-    b. club
-    c. workshop?
+&lt;!--     a. meetup  --&gt;
+&lt;!--     b. club --&gt;
+&lt;!--     c. workshop? --&gt;
 
---
+&lt;!-- -- --&gt;
 
-3. Light-weight approach to ggplot2 extension...
+&lt;!-- 3. Light-weight approach to ggplot2 extension... --&gt;
     
 ---
 
 ## Intro Thoughts
+
+ggbump
 
 
 
@@ -107,7 +109,7 @@ count: false
 library(tidyverse)
 library(ggbump)
 
-*life_exp_rank_2020
+*us_cohort_life_exp_rank_2020
 ```
 ]
  
@@ -141,7 +143,7 @@ count: false
 library(tidyverse)
 library(ggbump)
 
-life_exp_rank_2020 %&gt;%
+us_cohort_life_exp_rank_2020 %&gt;%
 * ggplot()
 ```
 ]
@@ -160,7 +162,7 @@ count: false
 library(tidyverse)
 library(ggbump)
 
-life_exp_rank_2020 %&gt;%
+us_cohort_life_exp_rank_2020 %&gt;%
   ggplot() +
 * aes(x = year,
 *     y = life_exp_rank,
@@ -182,7 +184,7 @@ count: false
 library(tidyverse)
 library(ggbump)
 
-life_exp_rank_2020 %&gt;%
+us_cohort_life_exp_rank_2020 %&gt;%
   ggplot() +
   aes(x = year,
       y = life_exp_rank,
@@ -205,7 +207,7 @@ count: false
 library(tidyverse)
 library(ggbump)
 
-life_exp_rank_2020 %&gt;%
+us_cohort_life_exp_rank_2020 %&gt;%
   ggplot() +
   aes(x = year,
       y = life_exp_rank,
@@ -229,14 +231,14 @@ count: false
 library(tidyverse)
 library(ggbump)
 
-life_exp_rank_2020 %&gt;%
+us_cohort_life_exp_rank_2020 %&gt;%
   ggplot() +
   aes(x = year,
       y = life_exp_rank,
       color = country) +
   geom_point() +
   scale_y_reverse() +
-* geom_bump()  #&lt;&lt;
+* geom_bump()
 ```
 ]
  
@@ -293,16 +295,33 @@ life_exp_rank_2020 %&gt;%
       color = country) + 
   scale_y_reverse() +
   geom_point() + 
-  geom_bump()
+* geom_bump()
 ```
+
+---
+
+Without geom_bumb(), drawing a bumpchart would be a non-starter in most settings (business, government, academic).
+
+--
+
+Layer extension can deliver high value. 
+
+--
+
+"... creating new Stats is one of the most useful ways to extend the capabilities of ggplot2." – ggplot2: Elegant Graphics for Data Analysis
+
 
 ---
 
 # - 'I have two kids, it's so hard to be so deep in ggplot, it takes at least two days just to get all the information in your head again.  So I'm struggling with maintaining [ggbump, ggaluvial, ggsankey]'
 
+--
+
+Delivering layer extension can be costly.
+
 ---
 
-# - 'I have about 200 kids...'  Univeristy Professor
+# - 'I have 200 kids...'  Univeristy Professor
 
 ---
 
@@ -312,6 +331,19 @@ life_exp_rank_2020 %&gt;%
 
 # - 'I have a thesis to finish'  Graduate Student
 
+---
+
+Recognizing demands on peoples time and attention.
+
+Talk central question:  Can we lower the costs to delivering layer extension?
+
+--
+
+Especially in academic setting...
+
+--
+
+(These people may have staggeringly good extension ideas, and academic setting has potential to have ripple effect since educators have a lot of trainees...) :-)
 
 ---
 
@@ -330,7 +362,8 @@ life_exp_rank_2020 %&gt;%
 
 --
 
-## 2. but in the short run, barriers present a burden
+## 2. but in the short run, barriers to entry and maintanance present a burden
+
 
 ---
 
@@ -338,15 +371,15 @@ life_exp_rank_2020 %&gt;%
 
 --
 
-Don't go deep.  
+Don't go deep.  Stay intentionally light-weight, and superficial.
 
 --
 
-Stay intentionally light-weight, and superficial.
+Don't go too far.  Keep things local.
 
 --
 
-Swim with friends!  
+Don't swim alone!  
 
 ---
 
@@ -364,29 +397,17 @@ minimal packaging (no CRAN, minimal messaging testing)
 
 --
 
-no packaginfg - in-script extension
+no packaging - in-script extension
 
 --
 
-new, low code extension. &lt;&lt;
+new, low code extension. (experimental) &lt;&lt;
 
 ---
 
+### `geom_support()` layer creation via a Stat w/ 'new-classic' method
 
-Caveat... mostly interested in Stat extension.  Powerful and underutilized for data exploration and statistical education.
-
---
-
-"... creating new Stats is one of the most useful ways to extend the capabilities of ggplot2." – ggplot2: Elegant Graphics for Data Analysis
-
-
----
-
-### Classical layer creation via a Stat ...
-
---
-
-`geom_support()`  -- What are the logical limits for observed proportions?
+What are the logical limits for observed proportions?
 
 
 ```
@@ -904,10 +925,14 @@ count: false
 ## And isn't what's draw is the *actual poem*
 ![This isn't a pipe](https://upload.wikimedia.org/wikipedia/en/b/b9/MagrittePipe.jpg)
 
----
+--
 
 
-### ggplot2 *code* sometimes allows us to write those poems down in concise, logical, consistent ways... The code is an expression of the actual poem.
+### ggplot2 *code* sometimes allows us to write those poems down in concise, logical, consistent ways... 
+
+--
+
+The code is an expression of the actual poem.
 
 
 ---
@@ -946,10 +971,6 @@ library(statexpress)
 --
 
 ### Delivers same user experience: computational work under the hood.
-
-
-
-
 
 
 ---
@@ -1479,6 +1500,14 @@ geom_prop &lt;- function(...){
 
 ---
 
+Benefit to {statexpress} method 
+
+--
+
+lets you see how these layers are fitting together in a story *as* you craft them.
+
+
+---
 
 # Part 4. Bundle?
 
@@ -1554,7 +1583,7 @@ statexpress::qstat_panel
 ##     ggplot2::ggproto("StatTemp", Stat, compute_panel = compute_panel, 
 ##         ...)
 ## }
-## &lt;bytecode: 0x7ff605594eb0&gt;
+## &lt;bytecode: 0x7fbbb389b660&gt;
 ## &lt;environment: namespace:statexpress&gt;
 ```
 
@@ -1576,7 +1605,7 @@ statexpress::qlayer
 ##         inherit.aes = inherit.aes, params = rlang::list2(na.rm = na.rm, 
 ##             ...))
 ## }
-## &lt;bytecode: 0x7ff6056836d0&gt;
+## &lt;bytecode: 0x7fbbb1769e08&gt;
 ## &lt;environment: namespace:statexpress&gt;
 ```
 
@@ -1593,7 +1622,7 @@ statexpress::qproto_update
 ##     proto_update("protoTemp", `_inherit`, default_aes_update = default_aes_update, 
 ##         ...)
 ## }
-## &lt;bytecode: 0x7ff605681900&gt;
+## &lt;bytecode: 0x7fbbb176bd60&gt;
 ## &lt;environment: namespace:statexpress&gt;
 ```
 
@@ -1611,7 +1640,7 @@ statexpress::proto_update
 ##     ggplot2::ggproto(`_class` = `_class`, `_inherit` = `_inherit`, 
 ##         default_aes = default_aes, ...)
 ## }
-## &lt;bytecode: 0x7ff605682460&gt;
+## &lt;bytecode: 0x7fbbb176b238&gt;
 ## &lt;environment: namespace:statexpress&gt;
 ```
 

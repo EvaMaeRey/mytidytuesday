@@ -131,7 +131,10 @@ gg_pkgs_edgelist
 
 gg_pkgs_edgelist %>% 
   ggedgelist:::ggedgelist_quick(include_names = T, 
-                                layout = "fr")
+                                layout = "fr") +
+  ggforce::geom_mark_hull(
+    aes(x = x, y = y)
+  )
   
 
 gg_pkgs_tbl_graph <- tidygraph::as_tbl_graph(gg_pkgs_edgelist)
@@ -162,7 +165,7 @@ igraph::graph_attr(fed, "layout") <- NULL
 V(fed)$size <- gg_pkgs_tbl_graph_nodes$node_size
 V(fed)$color <- gg_pkgs_tbl_graph_nodes$node_color
 V(fed)$shape <- gg_pkgs_tbl_graph_nodes$name
-E(fed)$size <- .5
+E(fed)$linewidth <- .25
 
 graphjs(g = fed, bg = "gray10",  
         showLabels = T,  
