@@ -125,12 +125,50 @@ gg_pkgs <- pkgs %>%
 gg_pkgs %>% 
   pivot_longer(cols = dep_grid:dep_dplyr) %>% 
   filter(value) %>% 
-  select(Package, name) %>% 
+  select(Package, name, everything()) ->
+gg_pkgs_edgelist
+
+
+gg_pkgs_edgelist %>% 
   ggedgelist:::ggedgelist_quick(include_names = T, 
                                 layout = "fr")
   
 
+gg_pkgs_tbl_graph <- tidygraph::as_tbl_graph(gg_pkgs_edgelist)
+  
+gg_pkgs_tbl_graph %>% 
+  tidygraph::activate(nodes) %>% 
+  as_tibble() %>% 
+  mutate(is_import = name %in% c("dep_grid", "dep_dplyr")) %>% 
+  mutate(node_color = case_when(name == "dep_dplyr" ~ "magenta",
+                                     name == "dep_grid" ~ "khaki4",
+                                     TRUE ~ "darkgrey")) %>% 
+  mutate(name = ifelse(name == "dep_grid", "imports grid", name)) %>% 
+  mutate(name = ifelse(name == "dep_dplyr", "imports dplyr", name)) %>% 
+  mutate(node_size = is_import*2.5 + .8) ->
+gg_pkgs_tbl_graph_nodes
 
+
+```
+
+
+```{r}
+
+library(threejs)  
+fed <-  
+  tidygraph::as.igraph(gg_pkgs_tbl_graph)  
+igraph::graph_attr(fed, "layout") <- NULL  
+
+V(fed)$size <- gg_pkgs_tbl_graph_nodes$node_size
+V(fed)$color <- gg_pkgs_tbl_graph_nodes$node_color
+V(fed)$shape <- gg_pkgs_tbl_graph_nodes$name
+E(fed)$size <- .5
+
+graphjs(g = fed, bg = "gray10",  
+        showLabels = T,  
+        layout = list(  
+          layout_with_fr(fed, dim = 3)),  
+                  main = "")
 
 ```
 
