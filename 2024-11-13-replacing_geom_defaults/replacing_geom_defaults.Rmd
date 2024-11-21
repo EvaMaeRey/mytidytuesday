@@ -27,7 +27,7 @@ library(tidyverse)
 
 ## Experiment
 
-```{r}
+```{r, error = T}
 
 
 compute_group_chull <- function(data, scales){
@@ -39,10 +39,6 @@ compute_group_chull <- function(data, scales){
 }
 
 library(ggplot2)
-
-
-
-
 
 StatChull <- ggproto("StatChull", Stat, compute_group = compute_group_chull)
 
@@ -70,14 +66,20 @@ last_plot() +
         position = "identity")
   
   
-GeomPolygonRed2 <- ggproto("GeomPolygonRed2", 
-                           GeomPolygon, 
+GeomPolygonRed2 <- ggproto("GeomPolygonRed2",
+                           GeomPolygon,
                            default_aes = aes(colour    = "red",
-fill     = from_theme(col_mix(ink, paper, 0.2)),
+fill     = from_theme(ggplot2:::col_mix(ink, paper, 0.2)),
 linewidth = from_theme(borderwidth),
 linetype  = from_theme(bordertype),
 alpha     = NA,
 subgroup  = NULL))
+
+
+
+GeomPolygonRed2 <- ggproto("GeomPolygonRed2", GeomPolygon)
+GeomPolygonRed2$default_aes$colour <- "red"
+
   
 GeomPolygonRed2$default_aes
 
