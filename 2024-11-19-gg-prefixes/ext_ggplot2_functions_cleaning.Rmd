@@ -1,0 +1,154 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+knitr::opts_chunk$set(eval = F)
+
+```
+
+## Experiment
+
+```{r, eval = F}
+extgalleryhtml <- read_lines("https://exts.ggplot2.tidyverse.org/gallery/")
+
+"https://raw.githubusercontent.com/lionel-/ggstance/refs/heads/main/NAMESPACE"
+"https://raw.githubusercontent.com/rcorty/ggQQunif/refs/heads/main/NAMESPACE"
+"https://raw.githubusercontent.com/statsmaths/ggimg/refs/heads/master/NAMESPACE"
+
+extgalleryhtml %>% 
+  str_detect("github.com/.+/gg.+") %>% 
+  extgalleryhtml[.] %>% 
+  str_extract("github.com/([a-zA-Z]|-)+/gg[a-zA-Z]+") %>% 
+  unique() %>% 
+  data.frame(repo_name = .) %>% 
+  mutate(repo_name = str_remove(repo_name, "github.com/")) %>% 
+  remove_missing() %>% 
+  mutate(namespace_url = paste0("https://raw.githubusercontent.com/", 
+                              repo_name, 
+                              "/refs/heads/master/NAMESPACE")) ->
+extensions_df
+```
+
+
+```{r, eval = F}
+ read_lines("https://raw.githubusercontent.com/ggplot2-exts/gallery/refs/heads/gh-pages/_config.yml") %>% 
+  write_lines("ext_config_yml.txt")
+```
+
+```{r}
+read_lines("ext_config_yml.txt") %>% 
+  str_detect("ghuser:|ghrepo:") %>% 
+  read_lines("ext_config_yml.txt")[.] %>% 
+  matrix(ncol = 2, byrow = T) %>% 
+  as_tibble() %>% 
+  rename(user = V1, repo = V2) %>% 
+  mutate(user = str_remove(user, "ghuser: ") %>% str_trim()) %>% 
+  mutate(repo = str_remove(repo, "ghrepo: ") %>% str_trim()) ->
+df_gh
+```
+
+
+```{r, fig.width=20, fig.height=20}
+
+"https://raw.githubusercontent.com/lionel-/ggstance/refs/heads/main/NAMESPACE"
+
+author <- "lionel-"
+package <- "ggstance"
+type <- "main"
+sep = "/"
+
+paste("https://raw.githubusercontent.com/lionel-/ggstance/refs/heads/main/NAMESPACE")
+paste("https://raw.githubusercontent.com", author, package, 
+      "refs/heads", type, "NAMESPACE", sep = sep)
+
+namespace_main <- paste("https://raw.githubusercontent.com", df_gh$user, df_gh$repo, 
+      "refs/heads/main/NAMESPACE", sep = "/")
+namespace_master <- paste("https://raw.githubusercontent.com", df_gh$user, df_gh$repo, 
+      "refs/heads/master/NAMESPACE", sep = "/")
+```
+
+```{r}
+len <- nrow(df_gh)
+
+namespace_main_contents <- vector(mode='list', len)
+namespace_master_contents <- vector(mode='list', len)
+
+for (i in 1:len){
+  
+  try(
+  namespace_main_contents[[i]] <-  read_lines(namespace_main[i])
+   )
+  
+  try(
+  namespace_master_contents[[i]] <-  read_lines(namespace_master[i])
+   )
+  
+  namespace_contents[[1]] <- ifelse(!is.null(namespace_master_contents[[i]]),
+                                    namespace_master_contents[[i]],
+                                ifelse(!is.null(namespace_main_contents[[i]]),
+                                    namespace_main_contents[[i]], NA))
+  
+  Sys.sleep(.2)
+}
+
+length(namespace_main_contents)
+length(namespace_master_contents)
+length(namespace_contents)
+
+df_gh %>% 
+  mutate(namespace_main_contents = namespace_main_contents) %>% 
+  unnest(namespace_contents = namespace_main_contents) %>% 
+  select(user, repo, namespace_contents) %>% 
+  remove_missing() ->
+df_gh_main
+
+
+df_gh %>% 
+  mutate(namespace_master_contents = namespace_master_contents) %>% 
+  unnest(namespace_contents = namespace_master_contents) %>% 
+  select(user, repo, namespace_contents) %>% 
+  remove_missing() ->
+df_gh_master
+
+df_gh_main %>% 
+  bind_rows(df_gh_master) ->
+df_gh
+
+
+```
+
+
+
+```{r}
+df_gh %>% 
+  filter(str_detect(namespace_contents,"^export")) %>%
+  mutate(fun_exported = str_remove_all(namespace_contents,"export\\(|\\)")) %>% 
+  select(-namespace_contents) ->
+extensions_df_exports; dim(extensions_df_exports)
+
+head(extensions_df_exports)
+
+write_csv(extensions_df_exports, "exported_funs_exts_ggplot2_tidyverse_org.csv")
+```
+
+

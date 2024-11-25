@@ -164,9 +164,7 @@ library(ggbump)
 
 us_cohort_life_exp_rank_2020 %&gt;%
   ggplot() +
-* aes(x = year,
-*     y = life_exp_rank,
-*     color = country)
+* scale_y_reverse()
 ```
 ]
  
@@ -186,10 +184,8 @@ library(ggbump)
 
 us_cohort_life_exp_rank_2020 %&gt;%
   ggplot() +
-  aes(x = year,
-      y = life_exp_rank,
-      color = country) +
-* geom_point()
+  scale_y_reverse() +
+* aes(x = year)
 ```
 ]
  
@@ -209,11 +205,9 @@ library(ggbump)
 
 us_cohort_life_exp_rank_2020 %&gt;%
   ggplot() +
-  aes(x = year,
-      y = life_exp_rank,
-      color = country) +
-  geom_point() +
-* scale_y_reverse()
+  scale_y_reverse() +
+  aes(x = year) +
+* aes(y = life_exp_rank)
 ```
 ]
  
@@ -233,17 +227,64 @@ library(ggbump)
 
 us_cohort_life_exp_rank_2020 %&gt;%
   ggplot() +
-  aes(x = year,
-      y = life_exp_rank,
-      color = country) +
-  geom_point() +
   scale_y_reverse() +
-* geom_bump()
+  aes(x = year) +
+  aes(y = life_exp_rank) +
+* geom_point()
 ```
 ]
  
 .panel2-bump-auto[
 ![](asa-cowy-fall-2024_files/figure-html/bump_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-bump-auto[
+
+``` r
+library(tidyverse)
+library(ggbump)
+
+us_cohort_life_exp_rank_2020 %&gt;%
+  ggplot() +
+  scale_y_reverse() +
+  aes(x = year) +
+  aes(y = life_exp_rank) +
+  geom_point() +
+* aes(color = country)
+```
+]
+ 
+.panel2-bump-auto[
+![](asa-cowy-fall-2024_files/figure-html/bump_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-bump-auto[
+
+``` r
+library(tidyverse)
+library(ggbump)
+
+us_cohort_life_exp_rank_2020 %&gt;%
+  ggplot() +
+  scale_y_reverse() +
+  aes(x = year) +
+  aes(y = life_exp_rank) +
+  geom_point() +
+  aes(color = country) +
+* geom_bump()
+```
+]
+ 
+.panel2-bump-auto[
+![](asa-cowy-fall-2024_files/figure-html/bump_auto_10_output-1.png)&lt;!-- --&gt;
 ]
 
 &lt;style&gt;
@@ -300,11 +341,11 @@ life_exp_rank_2020 %&gt;%
 
 ---
 
-Without geom_bumb(), drawing a bumpchart would be a non-starter in most settings (business, government, academic).
+#  Without geom_bumb(), drawing a bumpchart would be a non-starter in most settings (business, government, academic).
 
 --
 
-Layer extension can deliver high value. 
+# Layer extension can deliver high value. 
 
 --
 
@@ -317,7 +358,7 @@ Layer extension can deliver high value.
 
 --
 
-Delivering layer extension can be costly.
+# Delivering new layer extensions can be costly.
 
 ---
 
@@ -333,17 +374,19 @@ Delivering layer extension can be costly.
 
 ---
 
-Recognizing demands on peoples time and attention.
-
-Talk central question:  Can we lower the costs to delivering layer extension?
+## Recognizing demands on peoples time and attention.
 
 --
 
-Especially in academic setting...
+## Talk central question:  Can we lower the costs to delivering layer extension?
 
 --
 
-(These people may have staggeringly good extension ideas, and academic setting has potential to have ripple effect since educators have a lot of trainees...) :-)
+## Especially in academic setting...
+
+--
+
+## ... (These people generally have staggeringly good extension ideas, and academic setting has potential to have ripple effect since educators have a *lot* of trainees...) :-)
 
 ---
 
@@ -367,7 +410,7 @@ Especially in academic setting...
 
 ---
 
-# 'How to extend ggplot2 while drowning'...
+# 'How to extend ggplot2 without drowning'...?
 
 --
 
@@ -385,23 +428,20 @@ Don't swim alone!
 
 # Specifically...
 
-Check out new educational resources - super accessible recipes and cookbook.
+### Check out new educational resources - super accessible recipes and cookbook.
 
 --
 
-'early exits'
+### 'early exits' (no packaging, in script extension)
 
 --
 
-minimal packaging (no CRAN, minimal messaging testing)
+### minimal packaging (no CRAN, minimal messaging testing)
+
 
 --
 
-no packaging - in-script extension
-
---
-
-new, low code extension. (experimental) &lt;&lt;
+### new, low code extension. (experimental) &lt;&lt;
 
 ---
 
@@ -1065,6 +1105,13 @@ knitrExtra::chunk_code_get("StatSupport")
 ## [4] "                       required_aes = \"x\")"
 ```
 
+
+
+---
+
+# Part 0. Sketch epic poem on chalkboard or paper.
+
+
 ---
 
 count: false
@@ -1386,10 +1433,6 @@ donor |&gt;
 
 ---
 
-# Part 0. Sketch epic poem on chalkboard or paper.
-
----
-
 # Part 1. Sketch w qlayer and qstat
 
 
@@ -1583,7 +1626,7 @@ statexpress::qstat_panel
 ##     ggplot2::ggproto("StatTemp", Stat, compute_panel = compute_panel, 
 ##         ...)
 ## }
-## &lt;bytecode: 0x7fbbb389b660&gt;
+## &lt;bytecode: 0x7f93bc4753f0&gt;
 ## &lt;environment: namespace:statexpress&gt;
 ```
 
@@ -1605,7 +1648,7 @@ statexpress::qlayer
 ##         inherit.aes = inherit.aes, params = rlang::list2(na.rm = na.rm, 
 ##             ...))
 ## }
-## &lt;bytecode: 0x7fbbb1769e08&gt;
+## &lt;bytecode: 0x7f93becee3b0&gt;
 ## &lt;environment: namespace:statexpress&gt;
 ```
 
@@ -1622,7 +1665,7 @@ statexpress::qproto_update
 ##     proto_update("protoTemp", `_inherit`, default_aes_update = default_aes_update, 
 ##         ...)
 ## }
-## &lt;bytecode: 0x7fbbb176bd60&gt;
+## &lt;bytecode: 0x7f93becf7648&gt;
 ## &lt;environment: namespace:statexpress&gt;
 ```
 
@@ -1640,7 +1683,7 @@ statexpress::proto_update
 ##     ggplot2::ggproto(`_class` = `_class`, `_inherit` = `_inherit`, 
 ##         default_aes = default_aes, ...)
 ## }
-## &lt;bytecode: 0x7fbbb176b238&gt;
+## &lt;bytecode: 0x7f93becf6b20&gt;
 ## &lt;environment: namespace:statexpress&gt;
 ```
 

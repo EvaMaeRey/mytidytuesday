@@ -14,94 +14,30 @@ options(tidyverse.quiet = TRUE)
 
 
 
-
-## Intro Thoughts
-
-
-## Status Quo
-
-```{r}
+```{r, fig.height=50, fig.width=50}
 library(tidyverse)
+exported_package_author <- read.csv("exported_funs_exts_ggplot2_tidyverse_org.csv")
 
-```
+exported_package_author %>% tibble() %>% distinct()
 
-## Experiment
-
-```{r}
-extgalleryhtml <- read_lines("https://exts.ggplot2.tidyverse.org/gallery/")
-
-"https://raw.githubusercontent.com/lionel-/ggstance/refs/heads/main/NAMESPACE"
-"https://raw.githubusercontent.com/rcorty/ggQQunif/refs/heads/main/NAMESPACE"
-"https://raw.githubusercontent.com/statsmaths/ggimg/refs/heads/master/NAMESPACE"
-
-extgalleryhtml %>% 
-  str_detect("github.com/.+/gg.+") %>% 
-  extgalleryhtml[.] %>% 
-  str_extract("github.com/([a-zA-Z]|-)+/gg[a-zA-Z]+") %>% 
-  unique() %>% 
-  data.frame(repo_name = .) %>% 
-  mutate(repo_name = str_remove(repo_name, "github.com/")) %>% 
+exported_package_author %>% 
+  mutate(fun_prefix = fun_exported %>% str_extract(".*?_")) %>% 
   remove_missing() %>% 
-  mutate(namespace_url = paste0("https://raw.githubusercontent.com/", 
-                              repo_name, 
-                              "/refs/heads/master/NAMESPACE")) ->
-extensions_df
-```
-
-
-
-```{r, fig.width=20, fig.height=20}
-len <- nrow(extensions_df)
-
-namespace_contents <- vector(mode='list', len)
-
-for (i in 1:len){
-  
-  try(
-  namespace_contents[[i]] <-  read_lines(extensions_df$namespace_url[i])
-   )
-  
-  # if(!exists(namespace_contents[[i]])){}
-  
-  Sys.sleep(.2)
-}
-
-
-extensions_df %>% 
-  mutate(namespace_url = namespace_url,
-         namespace_contents = namespace_contents) %>% 
-  unnest(namespace_contents) %>% 
-  filter(str_detect(namespace_contents,"^export")) %>%
-  mutate(fun = str_remove_all(namespace_contents,"export\\(|\\)")) %>% 
-  mutate(fun_prefix = fun %>% str_extract(".*?_"))->
-extensions_df_exports
-
-extensions_df_exports %>% 
-  remove_missing() %>% 
-  select(repo_name, fun_prefix) %>% 
-  ggedgelist:::ggedgelist_quick(layout = "fr", include_names = T)
-
-
-extensions_df_exports %>% 
-  filter(str_detect(namespace_contents,"^export")) %>%
-  mutate(prefix = namespace_contents %>% str_extract(".*?_") %>% str_remove("export\\(")) %>% 
-  # remove_missing() %>% 
-  group_by(prefix) %>% 
-  mutate(n = n()) %>% 
-  # filter(prefix == "stat_") %>% 
-  select(repo_name, prefix) %>% 
-  ggedgelist:::ggedgelist_quick(layout = "fr", include_names = T)
-
-
-extensions_df_exports %>%   
+  select(repo, fun_prefix) %>% 
   group_by(fun_prefix) %>% 
-  mutate(n = n()) %>% 
-  filter(n > 10) %>% 
-  mutate(repo_fun = paste0(repo_name, "::", fun)) %>% 
-  select(fun_prefix, fun, repo_name) %>% 
+  filter(n() > 20) %>% 
+  filter(repo != "ggforce") %>% 
+  ggedgelist:::ggedgelist_quick(layout = "fr", include_names = T)
+
+exported_package_author %>%  
+  mutate(fun_prefix = fun_exported %>% str_extract(".*?_")) %>% 
+  mutate(user_repo = paste0(user, "/", repo)) %>% 
+  # filter(n() < 200, .by = user_repo) %>% 
+  # sample_n(500) %>% 
+  select(fun_prefix, fun_exported, user_repo) %>% 
   filter((fun_prefix %in% c("stat_", "facet_", "geom_", "coord_", "theme_", "scale_"))) %>% 
-  pivot_longer(cols= c(repo_name, fun_prefix)) %>% 
-  select(fun, value) %>% 
+  pivot_longer(cols= c(user_repo, fun_prefix)) %>% 
+  select(fun_exported, value) %>% 
   ggedgelist:::ggedgelist_quick(layout = "fr", include_names = T)
 ```
 

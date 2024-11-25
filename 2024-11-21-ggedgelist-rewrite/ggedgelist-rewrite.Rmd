@@ -18,13 +18,28 @@ options(tidyverse.quiet = TRUE)
 ## Intro Thoughts
 
 
-## Status Quo
+## w ggraph()
 
 ```{r}
 library(tidyverse)
 library(tidygraph)
 library(ggraph)
 
+set.seed(9876)
+as_tbl_graph(highschool) %>% 
+  activate("edges") %>% 
+  filter(year == 1957) %>% 
+  ggraph() + 
+  geom_node_point() + 
+  geom_edge_link()
+
+layer_data(i = 2) %>% tibble()
+```
+
+
+# preprocessing and piping into ggplot()
+
+```{r}
 set.seed(9876)
 as_tbl_graph(highschool) %>%
   activate("edges") %>% 
@@ -37,7 +52,6 @@ edgelist %>% # edgelist
   tidygraph::as_tbl_graph() %>% 
   create_layout(layout = "stress") ->
 node_layout
-
 
 edgelist %>% 
   left_join(node_layout %>% 
@@ -58,6 +72,8 @@ layer_data()  %>% tibble()
 
 
 
+# trying to make some Stats... 
+
 ```{r, eval = T}
 compute_panel_edgelist_nodes <- function(data, scales, layout = "stress"){
   
@@ -72,11 +88,6 @@ node_layout
 
 
 node_layout
-
-# graph %>% 
-#   activate("nodes") %>% 
-#   as_tibble() %>% 
-#   left_join()
   
 }
 
@@ -95,7 +106,6 @@ edgelist %>%
 
 compute_panel_edgelist_edges <- function(data = edgelist, scales, layout = "stress"){
   
-  
 data %>% # edgelist
   select(from, to, everything()) %>% 
   tidygraph::as_tbl_graph() %>% 
@@ -104,6 +114,7 @@ node_layout
   
 data %>% 
   select(from, to, everything()) %>% 
+  # group_by(PANEL, group) %>% 
   tidygraph::as_tbl_graph() %>% 
   activate("edges") %>% 
   as_tibble() %>% 
@@ -113,7 +124,9 @@ data %>%
   left_join(node_layout %>% 
               select(to = .ggraph.orig_index,
                      xend = x,
-                     yend = y)) 
+                     yend = y)) %>% 
+   mutate(group = 1, 
+          PANEL = 1)
   
 }
 
@@ -125,8 +138,6 @@ StatEdgelistEdges <- ggproto("StatEdgelistEdges",
                         compute_panel = compute_panel_edgelist_edges,
                         required_aes = c("from", "to"))
 
-
-
 last_plot() + 
   geom_segment(stat = StatEdgelistEdges) #uh oh!
 
@@ -136,7 +147,7 @@ layer_data(i = 2) %>% head()
 
 
 
-```{r, eval = F}
+```{r, eval = T, include = T}
 cran_20230905 <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-09-19/cran_20230905.csv')
 package_authors <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-09-19/package_authors.csv')
 
@@ -154,33 +165,48 @@ cran_20230905 %>%
   ggplot() + 
   aes(from = Package, to = authorsR) + 
   geom_point(stat = StatEdgelistNodes) + 
-  geom_poin
-  
+  geom_segment(stat = StatEdgelistEdges)
 
 
+gapminder::gapminder %>% 
+  ggplot() + 
+  aes(from = continent, to = country) + 
+  geom_point(stat = StatEdgelistNodes) + 
+  geom_segment(stat = StatEdgelistEdges)
+
+layer_data() %>% head()
 
 
 ```
 
 
 ```{r}
-set.seed(9876)
-as_tbl_graph(highschool) %>% 
-  activate("edges") %>% 
-  filter(year == 1957) %>% 
-  ggraph() + 
-  geom_node_point() + 
-  geom_edge_link()
 
-layer_data(i = 2) %>% tibble()
 
-# ggraph
-# 
-# layer_data(i = 2) %>% head()
-# 
-# geom_edge_link
+library(tidyverse)
+pkgs <- as_tibble(tools::CRAN_package_db())
+gg_pkgs <- pkgs %>% 
+  select(Package, Depends, Imports, Suggests) %>% 
+  filter(
+    str_detect(Package, "^gg"),
+    if_any(-Package, ~ str_detect(.x, "ggplot2"))
+  ) %>% 
+  mutate(
+    dep_grid = str_detect(Depends, "\\bgrid\\b") | str_detect(Imports, "\\bgrid\\b"),
+    dep_dplyr = str_detect(Depends, "\\bdplyr\\b") | str_detect(Imports, "\\bdplyr\\b")
+  ) %>% 
+  drop_na()
 
+gg_pkgs %>%
+pivot_longer(cols = dep_grid:dep_dplyr) %>%
+filter(value == T) %>%
+  ggplot() + 
+  aes(from = Package, to = name) + 
+  geom_point(stat = StatEdgelistNodes) + 
+  geom_segment(stat = StatEdgelistEdges)
 ```
+
+
 
 ## Experiment
 

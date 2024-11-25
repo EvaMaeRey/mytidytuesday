@@ -80,11 +80,11 @@ library(ggbump)
 
 us_cohort_life_exp_rank_2020 %>% 
   ggplot() + 
-  aes(x = year, 
-      y = life_exp_rank) + 
+  scale_y_reverse() +
+  aes(x = year) + 
+  aes(y = life_exp_rank) + 
   geom_point() + 
   aes(color = country) +
-  scale_y_reverse() +
   geom_bump()
 ```
 
@@ -110,11 +110,11 @@ life_exp_rank_2020 %>%
 
 ---
 
-Without geom_bumb(), drawing a bumpchart would be a non-starter in most settings (business, government, academic).
+#  Without geom_bumb(), drawing a bumpchart would be a non-starter in most settings (business, government, academic).
 
 --
 
-Layer extension can deliver high value. 
+# Layer extension can deliver high value. 
 
 --
 
@@ -127,7 +127,7 @@ Layer extension can deliver high value.
 
 --
 
-Delivering layer extension can be costly.
+# Delivering new layer extensions can be costly.
 
 ---
 
@@ -143,17 +143,19 @@ Delivering layer extension can be costly.
 
 ---
 
-Recognizing demands on peoples time and attention.
-
-Talk central question:  Can we lower the costs to delivering layer extension?
+## Recognizing demands on peoples time and attention.
 
 --
 
-Especially in academic setting...
+## Talk central question:  Can we lower the costs to delivering layer extension?
 
 --
 
-(These people may have staggeringly good extension ideas, and academic setting has potential to have ripple effect since educators have a lot of trainees...) :-)
+## Especially in academic setting...
+
+--
+
+## ... (These people generally have staggeringly good extension ideas, and academic setting has potential to have ripple effect since educators have a *lot* of trainees...) :-)
 
 ---
 
@@ -177,7 +179,7 @@ Especially in academic setting...
 
 ---
 
-# 'How to extend ggplot2 while drowning'...
+# 'How to extend ggplot2 without drowning'...?
 
 --
 
@@ -195,23 +197,20 @@ Don't swim alone!
 
 # Specifically...
 
-Check out new educational resources - super accessible recipes and cookbook.
+### Check out new educational resources - super accessible recipes and cookbook.
 
 --
 
-'early exits'
+### 'early exits' (no packaging, in script extension)
 
 --
 
-minimal packaging (no CRAN, minimal messaging testing)
+### minimal packaging (no CRAN, minimal messaging testing)
+
 
 --
 
-no packaging - in-script extension
-
---
-
-new, low code extension. (experimental) <<
+### new, low code extension. (experimental) <<
 
 ---
 
@@ -786,13 +785,16 @@ knitrExtra::chunk_code_get("StatSupport")
 
 ```
 
----
 
-`r chunk_reveal("wp_prop_poem_small", display = c("output", "code"))`
 
 ---
 
 # Part 0. Sketch epic poem on chalkboard or paper.
+
+
+---
+
+`r chunk_reveal("wp_prop_poem_small", display = c("output", "code"))`
 
 ---
 
