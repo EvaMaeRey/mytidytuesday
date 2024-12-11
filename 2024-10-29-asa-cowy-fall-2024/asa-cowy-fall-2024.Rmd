@@ -17,6 +17,17 @@ output:
 knitr::opts_chunk$set(echo = TRUE, cache = F, warning = F, message = F)
 options(tidyverse.quiet = TRUE)
 library(flipbookr)
+library(tidyverse)
+
+
+isi_donor_url <- "https://www.isi-stats.com/isi/data/prelim/OrganDonor.txt"
+
+donor <- read_delim(isi_donor_url) %>%
+  select(Default, Choice) %>% 
+  mutate(decision = ifelse(Choice == "donor", "donor (1)", "not (0)")) %>% 
+  mutate(decision = fct_rev(decision)) 
+
+
 ```
 
 ## Proposal:
@@ -110,7 +121,7 @@ life_exp_rank_2020 %>%
 
 ---
 
-#  Without geom_bumb(), drawing a bumpchart would be a non-starter in most settings (business, government, academic).
+#  Without geom_bump(), drawing a bumpchart would be a non-starter in most settings (business, government, academic).
 
 --
 
@@ -118,7 +129,7 @@ life_exp_rank_2020 %>%
 
 --
 
-"... creating new Stats is one of the most useful ways to extend the capabilities of ggplot2." – ggplot2: Elegant Graphics for Data Analysis
+## "... creating new Stats[-based layers] is one of the most useful ways to extend the capabilities of ggplot2." – ggplot2: Elegant Graphics for Data Analysis
 
 
 ---
@@ -195,6 +206,16 @@ Don't swim alone!
 
 ---
 
+
+
+
+
+
+
+
+---
+
+
 # Specifically...
 
 ### Check out new educational resources - super accessible recipes and cookbook.
@@ -214,158 +235,6 @@ Don't swim alone!
 
 ---
 
-### `geom_support()` layer creation via a Stat w/ 'new-classic' method
-
-What are the logical limits for observed proportions?
-
-```{r, echo = F, message = F, warning=F, fig.height=4}
-isi_donor_url <- "https://www.isi-stats.com/isi/data/prelim/OrganDonor.txt"
-
-donor <- read_delim(isi_donor_url) %>%
-  select(Default, Choice) %>% 
-  mutate(decision = ifelse(Choice == "donor", "donor (1)", "not (0)")) %>% 
-  mutate(decision = fct_rev(decision)) 
-
-head(donor) 
-
-donor |> 
-ggplot() + 
-  aes(x = decision) +
-  geom_bar(width = .2, aes(label = NULL)) +
-  stat_count(geom = "text", vjust = 0, mapping = aes(label = after_stat(count))) +
-  geom_segment(aes(x = min(as.numeric(decision)),
-                   xend = max(as.numeric(decision)),
-                   y = 0, 
-                   yend = 0)) + 
-  labs(title = "Proportion that sign up to be an organ donor...")
-```
-
-
-
----
-
-`r chunk_reveal("step0", title = "### Step 0. use base ggplot2, compute before plotting")`
-
-```{r step0}
-donor |> 
-  summarise(x = min(as.numeric(decision)),
-            xend = max(as.numeric(decision)),
-            y = 0, 
-            yend = 0) ->
-donor_min_max
-  
-donor |>
-ggplot() + 
-  aes(x = decision) +
-  geom_bar(width = .2) +
-  geom_segment(data = donor_min_max,
-               aes(x = x,
-                   xend = xend,
-                   y = 0, 
-                   yend = 0))
-```
-
----
-
-# Step 1. Define Compute
-
-
-```{r compute_panel_support}
-compute_panel_support <- function(data, scales){
-  
-  data |>
-    summarize(xend = max(x),
-              x = min(x),
-              yend = 0,
-              y = 0)
-  
-}
-```
-
----
-
-# Step 2. Define Stat
-
-
-```{r StatSupport}
-StatSupport <- ggproto(`_class` = "StatSupport",
-                       `_inherit` = ggplot2::Stat,
-                       compute_panel = compute_panel_support,
-                       required_aes = "x")
-```
-
----
-
-# Step 3. Define user-facing function
-
-
-```{r geom_support}
-geom_support <- function (mapping = NULL, data = NULL, 
-                          geom = "segment", position = "identity", 
-                          ..., show.legend = NA, inherit.aes = TRUE) 
-{
-    layer(data = data, mapping = mapping, stat = StatSupport, 
-        geom = geom, position = position, show.legend = show.legend, 
-        inherit.aes = inherit.aes, params = rlang::list2(na.rm = FALSE, 
-            ...))
-}
-
-```
-
----
-
-# Yippee!!  Such a nice poem!!
-
-```{r, fig.height=3.5}
-donor |> 
-  ggplot() + 
-  aes(x = decision) +
-  geom_bar(width = .2) + 
-  geom_support() #<<
-```
-
----
-
-
-# Style of Everyday ggplot2 extension Recipes and Cookbook
-
----
-
-# At what cost?  How much code? 
-
-```{r, echo = F, message = F}
-library(knitrExtra)
-count_chars <- function(x){x |> str_remove_all("\\s") |> nchar() |> sum()}
-
-compute_chars <- chunk_code_get("compute_panel_support") |> count_chars()
-stat_chars <- chunk_code_get("StatSupport") |> count_chars()
-layer_chars <- chunk_code_get("geom_support") |> count_chars()
-
-data.frame(wt = c(compute_chars, stat_chars + layer_chars),
-           type = c("compute code", "scaffolding code")) |>
-  ggplot() + 
-  aes(weight = wt) + 
-  ggwedge:::geom_pie() +
-  ggwedge:::geom_pie_label(r_nudge = 2, size = 4) +
-  aes(label = after_stat(paste0(percent,"\n(",  count, ")"))) +
-  coord_polar() + 
-  theme_void()
-```
-
----
-
-# At what cost?  How much code? 
-
-
-```{r, echo = F}
-last_plot() +
-  aes(fill = type) + 
-  labs(fill = NULL)
-  
-layer_data()
-
-
-```
 
 --- 
 
@@ -603,17 +472,14 @@ geom_normal_prop_null_sds <- function(...){
 
 theme_chalkboard <- function(){
   
-  list(
-  ggchalkboard::theme_chalkboard(),
-    aes(color = I("lightyellow")), 
-    aes(size = I(7)),
-    aes(linewidth = I(1)),
-    aes(fill = I("lightyellow")),
-     aes(alpha = I(.5))
-  )
-  
+theme_classic(ink = alpha("lightyellow", .7),
+           paper = "darkseagreen4", 
+           base_size = 15) + 
+    theme(geom = element_geom(accent = alpha("cadetblue2", 7)))
   
 }
+
+
 ```
 
 
@@ -640,17 +506,176 @@ donor |>
 
 ## *Long statistical graphical poems.*... are being written on the board all the time by stat's instructors.
 
-## And isn't what's draw is the *actual poem*
+## And is what's draw the *actual poem*?
 ![This isn't a pipe](https://upload.wikimedia.org/wikipedia/en/b/b9/MagrittePipe.jpg)
 
---
+---
 
 
-### ggplot2 *code* sometimes allows us to write those poems down in concise, logical, consistent ways... 
+### ggplot2 *code* sometimes allows us to record those poems in concise, logical, consistent ways... 
 
 --
 
 The code is an expression of the actual poem.
+
+---
+
+# Status quo layer function creation.
+
+---
+
+### `geom_support()` layer creation via a Stat w/ 'new-classic' method
+
+What are the logical limits for observed proportions?
+
+```{r, echo = F, message = F, warning=F, fig.height=4}
+isi_donor_url <- "https://www.isi-stats.com/isi/data/prelim/OrganDonor.txt"
+
+donor <- read_delim(isi_donor_url) %>%
+  select(Default, Choice) %>% 
+  mutate(decision = ifelse(Choice == "donor", "donor (1)", "not (0)")) %>% 
+  mutate(decision = fct_rev(decision)) 
+
+head(donor) 
+
+donor |> 
+ggplot() + 
+  aes(x = decision) +
+  geom_bar(width = .2, aes(label = NULL)) +
+  stat_count(geom = "text", vjust = 0, mapping = aes(label = after_stat(count))) +
+  geom_segment(aes(x = min(as.numeric(decision)),
+                   xend = max(as.numeric(decision)),
+                   y = 0, 
+                   yend = 0)) + 
+  labs(title = "Proportion that sign up to be an organ donor...")
+```
+
+
+
+---
+
+`r chunk_reveal("step0", title = "### Step 0. use base ggplot2, compute before plotting")`
+
+```{r step0}
+donor |> 
+  summarise(x = min(as.numeric(decision)),
+            xend = max(as.numeric(decision)),
+            y = 0, 
+            yend = 0) ->
+donor_min_max
+  
+donor |>
+ggplot() + 
+  aes(x = decision) +
+  geom_bar(width = .2) +
+  geom_segment(data = donor_min_max,
+               aes(x = x,
+                   xend = xend,
+                   y = 0, 
+                   yend = 0))
+```
+
+---
+
+# Step 1. Define Compute
+
+
+```{r compute_panel_support}
+compute_panel_support <- function(data, scales){
+  
+  data |>
+    summarize(xend = max(x),
+              x = min(x),
+              yend = 0,
+              y = 0)
+  
+}
+```
+
+---
+
+# Step 2. Define Stat
+
+
+```{r StatSupport}
+StatSupport <- ggproto(`_class` = "StatSupport",
+                       `_inherit` = ggplot2::Stat,
+                       compute_panel = compute_panel_support,
+                       required_aes = "x")
+```
+
+---
+
+# Step 3. Define user-facing function
+
+
+```{r geom_support}
+geom_support <- function (mapping = NULL, data = NULL, 
+                          geom = "segment", position = "identity", 
+                          ..., show.legend = NA, inherit.aes = TRUE) 
+{
+    layer(data = data, mapping = mapping, stat = StatSupport, 
+        geom = geom, position = position, show.legend = show.legend, 
+        inherit.aes = inherit.aes, params = rlang::list2(na.rm = FALSE, 
+            ...))
+}
+
+```
+
+---
+
+# Yippee!!  Such a nice poem!! 
+
+```{r, fig.height=3.5}
+donor |> 
+  ggplot() + 
+  aes(x = decision) +
+  geom_bar(width = .2) + 
+  geom_support() #<<
+```
+
+--
+
+But we are just getting started!!  😬😭
+
+
+---
+
+# At what cost?  How much code? 
+
+```{r, echo = F, message = F}
+library(knitrExtra)
+count_chars <- function(x){x |> str_remove_all("\\s") |> nchar() |> sum()}
+
+compute_chars <- chunk_code_get("compute_panel_support") |> count_chars()
+stat_chars <- chunk_code_get("StatSupport") |> count_chars()
+layer_chars <- chunk_code_get("geom_support") |> count_chars()
+
+data.frame(wt = c(compute_chars, stat_chars + layer_chars),
+           type = c("compute code", "scaffolding code")) |>
+  ggplot() + 
+  aes(weight = wt) + 
+  ggwedge:::geom_pie() +
+  ggwedge:::geom_pie_label(r_nudge = 2, size = 4) +
+  aes(label = after_stat(paste0(percent,"\n(",  count, ")"))) +
+  coord_polar() + 
+  theme_void()
+```
+
+---
+
+# At what cost?  How much code? 
+
+
+```{r, echo = F}
+last_plot() +
+  aes(fill = type) + 
+  labs(fill = NULL)
+  
+layer_data()
+
+
+```
 
 
 ---
@@ -661,8 +686,6 @@ The code is an expression of the actual poem.
 9 * # number of layers in ma206 lesson 1 poem
   (stat_chars + layer_chars) # scaffolding code per layer
 ```
-
-
 
 ---
 

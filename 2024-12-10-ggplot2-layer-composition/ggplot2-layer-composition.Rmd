@@ -25,7 +25,7 @@ library(tidyverse)
 
 ```
 
-## Experiment
+## Get namespace, pull out exported geom_ and stat_ functions, grab function definition
 
 ```{r}
 "https://raw.githubusercontent.com/tidyverse/ggplot2/refs/heads/main/NAMESPACE" |>
@@ -35,7 +35,7 @@ ggplot2_namespace
 ggplot2_namespace %>% 
   tibble(text = .) %>% 
   filter(str_detect(text, "export\\(")) %>% 
-  filter(str_detect(text, "geom_|stat_")) %>% 
+  filter(str_detect(text, "\\(geom_|\\(stat_")) %>% 
   mutate(exported_fun = str_remove_all(text, "export\\(|\\)")) ->
 df_exported_geom_stat
 
@@ -55,6 +55,14 @@ fun_contents[[i]] <- capture.output(get(df_exported_geom_stat$exported_fun[i]))
 
 df_exported_geom_stat$fun_contents <- fun_contents    
 
+head(df_exported_geom_stat)
+```
+
+
+# Cleaning to understand composition
+
+
+```{r}
 df_exported_geom_stat %>% 
   unnest() %>% 
   filter(fun_contents %>% str_detect("geom = |stat = |position =")) %>% 
@@ -90,9 +98,24 @@ exported_layer_fun_composition
 write_csv(exported_layer_fun_composition, "ggplot2_exported_layer_fun_composition.csv")
 
 head(exported_layer_fun_composition)
+```
 
+# exploring
 
-# expectations aren't met
+```{r}
+# exported_layer_fun_composition
+exported_layer_fun_composition %>% 
+  filter(type == "geom", 
+         fun_prefix == "geom_",
+         default_or_fixed == "default") 
+
+# exported_layer_fun_composition
+exported_layer_fun_composition %>% 
+  filter(type == "stat", 
+         fun_prefix == "geom_",
+         default_or_fixed == "fixed") 
+
+# expectations about existence of a geom aren't met based on name
 exported_layer_fun_composition %>% 
   filter(type == expected_type & object != expected_object) %>% 
   select(exported_fun, object, expected_object)
