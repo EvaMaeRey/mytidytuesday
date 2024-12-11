@@ -83,8 +83,8 @@ df_exported_geom_stat %>%
            str_to_title() %>% 
            str_remove_all(" ")
            ) %>% 
-  mutate(expected_type = str_extract(exported_fun, ".*?_") %>% 
-           str_remove("_")) ->
+  mutate(fun_prefix = str_extract(exported_fun, ".*?_")) %>% 
+  mutate(expected_type = fun_prefix %>% str_remove("_")) ->
 exported_layer_fun_composition
 
 write_csv(exported_layer_fun_composition, "ggplot2_exported_layer_fun_composition.csv")
@@ -110,19 +110,24 @@ exported_layer_fun_composition %>%
 
 last_plot() + 
   aes(fill = default_or_fixed)
+
+last_plot() + 
+  facet_grid(fun_prefix~type) 
+
+
 ```
 
 
 
 ```{r fig.width=20, fig.height=20}
 exported_layer_fun_composition %>%
-  select(-type) %>%
+  select(exported_fun, object) %>%
   ggedgelist:::ggedgelist_quick(
     layout = "kk", include_names = T)
 
 exported_layer_fun_composition %>%
   filter(type != "position") %>%
-  select(-type) %>%
+  select(exported_fun, object) %>%
   ggedgelist:::ggedgelist_quick(
     layout = "fr", include_names = T)
 ```
