@@ -1,0 +1,132 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+"https://raw.githubusercontent.com/tidyverse/ggplot2/refs/heads/main/NAMESPACE" |>
+read_lines() ->
+ggplot2_namespace
+
+ggplot2_namespace %>% 
+  tibble(text = .) %>% 
+  filter(str_detect(text, "export\\(")) %>% 
+  filter(str_detect(text, "geom_|stat_")) %>% 
+  mutate(exported_fun = str_remove_all(text, "export\\(|\\)")) ->
+df_exported_geom_stat
+
+fun_contents <- list()
+
+
+for (i in 1:nrow(df_exported_geom_stat)){
+
+  if(df_exported_geom_stat$exported_fun[i] != "stat_manual"){
+  
+fun_contents[[i]] <- capture.output(get(df_exported_geom_stat$exported_fun[i]))
+
+}
+
+}
+
+
+df_exported_geom_stat$fun_contents <- fun_contents    
+
+df_exported_geom_stat %>% 
+  unnest() %>% 
+  filter(fun_contents %>% str_detect("geom = |stat = |position =")) %>% 
+  mutate(stat = str_extract(fun_contents, "stat = .*?,")) %>% 
+  mutate(geom = str_extract(fun_contents, "geom = .*?,")) %>% 
+  mutate(position = str_extract(fun_contents, "position = .*?,")) %>% 
+  mutate(position = ifelse(position == "position = position,", NA, position)) %>% 
+  mutate(stat = ifelse(stat == "stat = stat,", NA, stat)) %>% 
+  mutate(geom = ifelse(geom == "geom = geom,", NA, geom)) %>% 
+  select(-text, -fun_contents) %>%
+  pivot_longer(cols = stat:position) %>% 
+  remove_missing() %>%
+  rename(argument = value,
+         type = name) %>% 
+  mutate(argument = argument %>% str_remove(".+ = ") %>% str_remove(",")) %>% 
+  mutate(default_or_fixed = ifelse(str_detect(argument, '"'), "default", "fixed")) %>% 
+  mutate(object = str_remove_all(argument, '"')) %>% 
+  mutate(object = ifelse(default_or_fixed == "default",
+                         str_replace_all(object, "_", " ") %>% 
+                           str_to_title() %>% 
+                           str_remove_all(" ") %>%
+                           paste0(str_to_title(type), .), 
+                         object)) %>% 
+  mutate(expected_object = exported_fun %>% 
+           str_replace_all("_", " ") %>% 
+           str_to_title() %>% 
+           str_remove_all(" ")
+           ) %>% 
+  mutate(expected_type = str_extract(exported_fun, ".*?_") %>% 
+           str_remove("_")) ->
+exported_layer_fun_composition
+
+write_csv(exported_layer_fun_composition, "ggplot2_exported_layer_fun_composition.csv")
+
+head(exported_layer_fun_composition)
+
+
+# expectations aren't met
+exported_layer_fun_composition %>% 
+  filter(type == expected_type & object != expected_object) %>% 
+  select(exported_fun, object, expected_object)
+
+  
+exported_layer_fun_composition %>% 
+  ggplot() + 
+  aes(id = object) + 
+  facet_wrap(~type) + 
+  ggcirclepack::geom_circlepack() + 
+  ggcirclepack::geom_circlepack_text() +
+  aes(size = after_stat(1/nchar(id)*area)) +
+  coord_equal() + 
+  labs(title = "ggplot2 geom-stat-position layer composition")
+
+last_plot() + 
+  aes(fill = default_or_fixed)
+```
+
+
+
+```{r fig.width=20, fig.height=20}
+exported_layer_fun_composition %>%
+  select(-type) %>%
+  ggedgelist:::ggedgelist_quick(
+    layout = "kk", include_names = T)
+
+exported_layer_fun_composition %>%
+  filter(type != "position") %>%
+  select(-type) %>%
+  ggedgelist:::ggedgelist_quick(
+    layout = "fr", include_names = T)
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

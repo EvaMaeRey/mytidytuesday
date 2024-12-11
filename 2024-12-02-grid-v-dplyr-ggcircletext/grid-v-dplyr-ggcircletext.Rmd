@@ -1,0 +1,88 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+library(tidyverse)
+pkgs <- as_tibble(tools::CRAN_package_db())
+gg_pkgs <- pkgs %>% 
+  select(Package, Depends, Imports, Suggests) %>% 
+  filter(
+    str_detect(Package, "^gg|^GG"),
+    if_any(-Package, ~ str_detect(.x, "ggplot2"))
+  ) %>% 
+  mutate(
+    dep_grid = str_detect(Depends, "\\bgrid\\b") | str_detect(Imports, "\\bgrid\\b"),
+    dep_dplyr = str_detect(Depends, "\\bdplyr\\b") | str_detect(Imports, "\\bdplyr\\b")
+  ) %>% 
+  drop_na() %>% 
+  mutate(type = case_when(dep_grid&dep_dplyr ~ "both",
+                          dep_grid ~ "grid", 
+                          dep_dplyr ~ "dplyr",
+                          TRUE ~ "neither"))
+```
+
+
+```{r, fig.height=8}
+GeomText$default_aes
+
+gg_pkgs %>% 
+  mutate(type = factor(type, c("dplyr", "grid", "both", "neither"))) %>% 
+  ggplot() + 
+  facet_wrap(facets = vars(type),  nrow = 2) + 
+  aes(label = Package) + 
+  ggtextcircle::geom_textcircle(hjust = 0, r = 4, size = 3) + 
+  coord_fixed() + 
+  geom_text(data = . %>% distinct(type), x = 0, y = 0, size = 12, font.face = "bold", 
+            aes(label = type)) + 
+  aes(color = type) +
+  scale_color_manual(values = c( "magenta", "darkolivegreen","grey", "grey")) +
+  # theme(geom = element_geom(ink = "lightyellow", accent = "red")) + 
+  theme_void() +
+  theme(legend.position = "none",
+  strip.background = element_blank(),
+  strip.text.x = element_blank())
+  
+```
+
+## Experiment
+
+```{r, fig.width= 40, fig.height=40}
+"https://raw.githubusercontent.com/EvaMaeRey/mytidytuesday/refs/heads/main/2024-11-19-gg-prefixes/exported_funs_exts_ggplot2_tidyverse_org.csv" |>
+  read_csv() |>
+  mutate(prefix = fun_exported %>% str_extract(".*?_")) %>% 
+  filter(n() >= 20, .by = prefix) %>% 
+  filter(!is.na(prefix)) %>% 
+  ggplot() + 
+  aes(label = fun_exported) + 
+  ggtextcircle::geom_textcircle(hjust = 0) + 
+  # ggtextcircle::geom_textcircle(hjust = 1, aes(label = repo)) + 
+  facet_wrap(~prefix) + 
+  coord_equal() +   
+  geom_text(data = . %>% distinct(prefix), x = 0, y = 0, size = 12, font.face = "bold", 
+            aes(label = prefix))
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

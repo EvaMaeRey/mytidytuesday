@@ -1,0 +1,152 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+# library(statexpress)
+library(tidyverse)
+
+qlayer <- function (mapping = NULL, data = NULL, geom = GeomPoint, stat = StatIdentity, 
+     position = position_identity(), ..., na.rm = FALSE, show.legend = NA, 
+     inherit.aes = TRUE)  {
+     ggplot2::layer(data = data, mapping = mapping, geom = geom, 
+         stat = stat, position = position, show.legend = show.legend, 
+         inherit.aes = inherit.aes, params = rlang::list2(na.rm = na.rm, 
+             ...))
+ }
+
+qstat_group <- function(compute_group, ...){
+  ggproto("StatTemp", Stat, compute_group = compute_group, ...)}
+
+qstat_panel <- function (compute_panel, ...){ggplot2::ggproto("StatTemp", Stat, compute_panel = compute_panel,  ...)}
+
+proto_update <- function (`_class`, `_inherit`, default_aes_update = NULL, ...) {
+    if (!is.null(default_aes_update)) {
+        default_aes <- aes(!!!modifyList(`_inherit`$default_aes, 
+            default_aes_update))
+    }
+    ggplot2::ggproto(`_class` = `_class`, `_inherit` = `_inherit`, 
+        default_aes = default_aes, ...)
+}
+
+qproto_update <- function (`_inherit`, default_aes_update = NULL, ...) {
+    proto_update("protoTemp", `_inherit`, default_aes_update = default_aes_update, 
+        ...)
+}
+
+
+# 1. layer stack of bricks
+compute_group_bricks <- function(data, scales, width = .2){
+  
+  data %>% 
+    mutate(row = row_number()) %>% 
+    mutate(y = row - .5) %>% 
+    mutate(width = width)
+  
+}
+
+# 2. layer label stack with count
+compute_group_count <- function(data, scales){
+  
+  data %>% 
+    count(x) %>% 
+    mutate(y = n,
+           label = n)
+  
+}
+
+
+# 3. layer add x span
+compute_scale <- function(data, scales){
+  
+  data %>% 
+    summarise(min_x = min(x),
+              xend = max(x),
+              y = 0,
+              yend = 0) %>% 
+    rename(x = min_x)
+  
+}
+
+
+# 4. layer add balancing point 
+compute_prop <- function(data, scales){
+  
+  data %>% 
+    summarise(x = mean(x),
+              y = 0, 
+              label = "^") 
+  
+}
+
+
+
+gapminder::gapminder |> 
+  mutate(is_africa = ifelse(continent == "Africa", "1 - Africa", "0 - Not Africa")) %>% 
+  filter(year == 2002) %>% 
+  ggplot() +
+  ggchalkboard::theme_chalkboard() +
+  aes(x = is_africa) + 
+  # 1 geom_stack
+  qlayer(geom = qproto_update(GeomTile, aes(color = "white")), 
+         stat = qstat_group(compute_group_bricks)) +
+  # 2 geom_stack_label() 
+  qlayer(geom = qproto_update(GeomText, aes(vjust = 0, size = 5)), 
+         stat = qstat_group(compute_group_count)) +
+  # 3 geom_xrange, show scale, range at y is zero
+  qlayer(geom = GeomSegment, 
+         stat = qstat_panel(compute = compute_scale)) +
+  # 8. geom_norm on prop plot
+  qlayer(geom = qproto_update(GeomText, aes(label = "^", vjust = 1, size = 8)),
+         stat = qstat_panel(compute_prop)) + 
+  geom_segment(aes(xend = 1.5, y = 25, yend = 7))
+
+
+last_plot() + 
+  aes(fill = I("lightyellow"), 
+      color = I("lightyellow"),
+      size = I(8),
+      linewidth = I(2),
+      alpha = I(.7))
+
+
+GeomText2 <- ggproto("GeomText2", GeomText)
+GeomText2$default_aes$label = "^"
+GeomText2$default_aes$size = 8
+
+
+last_plot() +  
+  qlayer(geom = qproto_update(GeomText, aes(label = "^", vjust = 1, size = 8)),
+         stat = qstat_group(compute_prop)) + 
+  qlayer(geom = GeomText2, 
+         stat = qstat_panel(compute_prop))
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

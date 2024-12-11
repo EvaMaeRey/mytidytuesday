@@ -1,0 +1,44 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(ggplot2)
+
+theme_set_last_plot <- function(){
+  
+  theme_set(theme_get() + last_plot()$theme)
+  
+}
+
+ggplot(cars) +
+  aes(x = speed, y = dist) + 
+  geom_point() +
+  theme(panel.grid = element_blank())
+
+theme_set_last_plot()
+
+ggplot(mtcars) + 
+  aes(wt, mpg) + 
+  geom_point()
+```
+
+

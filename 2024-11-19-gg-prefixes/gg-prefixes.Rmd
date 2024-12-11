@@ -8,13 +8,13 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
 options(tidyverse.quiet = TRUE)
 ```
 
 
 
-```{r, fig.height=50, fig.width=50}
+```{r, fig.height=50, fig.width=50, eval = F, include = F}
 library(tidyverse)
 exported_package_author <- read.csv("exported_funs_exts_ggplot2_tidyverse_org.csv")
 
@@ -39,6 +39,39 @@ exported_package_author %>%
   pivot_longer(cols= c(user_repo, fun_prefix)) %>% 
   select(fun_exported, value) %>% 
   ggedgelist:::ggedgelist_quick(layout = "fr", include_names = T)
+```
+
+
+```{r}
+library(tidyverse)
+user_repo_fun <- read_csv("https://raw.githubusercontent.com/EvaMaeRey/mytidytuesday/refs/heads/main/2024-11-19-gg-prefixes/exported_funs_exts_ggplot2_tidyverse_org.csv")
+
+# user_repo_fun %>% distinct(user, repo) # 137.. not 140
+
+user_repo_fun %>% 
+  ggplot() + 
+  aes(id = repo) + 
+  ggcirclepack::geom_circlepack() + 
+  ggcirclepack::geom_circlepack_text(color = "whitesmoke") + 
+  aes(size = after_stat(1/nchar(id)*area)) +
+  ggstamp::theme_void_fill("midnightblue") + 
+  coord_equal()
+
+last_plot() + 
+  aes(id = user)
+
+last_plot() + 
+  aes(id = fun_exported %>% str_extract(".*?_"))
+
+last_plot() + 
+  aes(id = fun_exported %>% str_extract(".+_"))
+
+# last_plot() %+%
+#   (user_repo_fun %>% 
+#      filter(fun_exported %>% str_extract(".+_")))
+
+# layer_data(i = 2)
+
 ```
 
 
@@ -91,7 +124,7 @@ gg_pkgs_tbl_graph_nodes
 ```
 
 
-```{r}
+```{r, eval = F}
 
 library(threejs)  
 fed <-  

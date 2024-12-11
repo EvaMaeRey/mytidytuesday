@@ -75,8 +75,12 @@ layer_data()  %>% tibble()
 # trying to make some Stats... 
 
 ```{r, eval = T}
-compute_panel_edgelist_nodes <- function(data, scales, layout = "stress"){
+compute_panel_edgelist_nodes <- function(data = edgelist, scales, layout = "stress", seed = 12345){
   
+set.seed(seed)
+    
+node_names <- unique(c(data$from, data$to))
+
 data %>% # edgelist
   select(from, to, everything()) %>% 
   tidygraph::as_tbl_graph() ->
@@ -87,6 +91,14 @@ graph %>%
 node_layout
 
 
+node_layout$name <- node_names
+node_layout$is_from <- node_names %in% data$from
+node_layout$is_to <- node_names %in% data$to
+node_layout$is_from_and_to <- node_layout$is_from & node_layout$is_to
+node_layout$node_type <- case_when(node_layout$is_from_and_to ~ "both",
+                                     node_layout$is_from ~ "from",
+                                     node_layout$is_to ~ "to", TRUE ~ "neither")
+
 node_layout
   
 }
@@ -95,16 +107,23 @@ node_layout
 StatEdgelistNodes <- ggproto("StatEdgelistNodes", 
                         Stat,
                         compute_panel = compute_panel_edgelist_nodes,
-                        required_aes = c("from", "to"))
+                        required_aes = c("from", "to"),
+                        default_aes = aes(label = after_stat(name)))
 
 
 edgelist %>% 
   ggplot() + 
   aes(from = from, to = to) + 
-  geom_point(stat = StatEdgelistNodes)
+  geom_point(stat = StatEdgelistNodes, color = "grey") + 
+  geom_text(stat = StatEdgelistNodes) + 
+  aes(size = after_stat(node_type) == "both")
+```
 
 
-compute_panel_edgelist_edges <- function(data = edgelist, scales, layout = "stress"){
+```{r}
+compute_panel_edgelist_edges <- function(data = edgelist, scales, layout = "stress", seed = 12345){
+  
+  set.seed(seed)
   
 data %>% # edgelist
   select(from, to, everything()) %>% 
@@ -126,7 +145,8 @@ data %>%
                      xend = x,
                      yend = y)) %>% 
    mutate(group = 1, 
-          PANEL = 1)
+          PANEL = 1) %>% 
+  mutate(node_type = "both")
   
 }
 
@@ -139,9 +159,41 @@ StatEdgelistEdges <- ggproto("StatEdgelistEdges",
                         required_aes = c("from", "to"))
 
 last_plot() + 
-  geom_segment(stat = StatEdgelistEdges) #uh oh!
+  geom_segment(stat = StatEdgelistEdges, size = .5, color = "grey") #uh oh!
 
 layer_data(i = 2) %>% head()
+
+```
+
+```{r}
+user_repo_fun <- read_csv("https://raw.githubusercontent.com/EvaMaeRey/mytidytuesday/refs/heads/main/2024-11-19-gg-prefixes/exported_funs_exts_ggplot2_tidyverse_org.csv")
+
+user_repo_fun |>
+  mutate(prefix_short = fun_exported %>% str_extract(".*?_")) %>% 
+  mutate(prefix_long = fun_exported %>% str_extract(".+_")) ->
+user_repo_fun_prefix
+  
+user_repo_fun_prefix |>
+  filter(!is.na(prefix_short)) |> 
+  filter(n() > 20, .by = prefix_short) |>
+  filter(prefix_short != "easy_") |>
+  ggplot() +
+  aes(from = repo, to = prefix_short) + 
+  geom_point(stat = StatEdgelistNodes, color = "grey") + 
+  geom_segment(stat = StatEdgelistEdges, color = "grey", size = .2) +
+  geom_text(stat = StatEdgelistNodes) + 
+  aes(size = after_stat(node_type) == "to") + 
+  theme(legend.position = "none") 
+
+last_plot() + 
+  aes(from = user)
+
+last_plot() + 
+  aes(id = fun_exported %>% str_extract(".+_"))
+
+last_plot()
+
+
 
 ```
 
@@ -176,6 +228,26 @@ gapminder::gapminder %>%
 
 layer_data() %>% head()
 
+
+gapminder::gapminder %>% 
+  ggplot() + 
+  aes(from = continent, to = country) + 
+  geom_point(stat = StatEdgelistNodes, layout = "circlepack") + 
+  geom_segment(stat = StatEdgelistEdges, layout = "circlepack")
+
+layer_data()
+
+graph <- tbl_graph(flare$vertices, flare$edges)
+set.seed(1)
+ggraph(graph, 'circlepack', weight = size) + 
+  geom_node_circle(aes(fill = depth), size = 0.25, n = 50) + 
+  coord_fixed()
+
+gapminder::gapminder %>% 
+  select(continent, country) %>% 
+  tidygraph::as_tbl_graph() %>% 
+  ggraph(layout = "circlepack") + 
+  geom_node_circle()
 
 ```
 
