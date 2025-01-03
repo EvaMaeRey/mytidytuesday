@@ -1,0 +1,110 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+parfumo_data_clean <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-12-10/parfumo_data_clean.csv')
+```
+
+
+```{r}
+parfumo_data_clean %>% 
+  names()
+
+parfumo_data_clean %>% 
+  ggplot() + 
+  aes(id = Brand) + 
+  ggcirclepack::geom_circlepack(alpha = .6) + 
+  ggcirclepack::geom_circlepack_text(check_overlap = T, 
+                                     color = "midnightblue") + 
+  coord_equal() +
+  aes(fill = after_stat(area)) +
+  scale_fill_viridis_c(end = .8, option = "magma") +
+  ggstamp::theme_void_fill("lavender") +
+  aes(id = Release_Year, fill = Release_Year) +
+  aes(id = Concentration, fill = after_stat(area)) +
+  aes(id = Rating_Value, fill = Rating_Value) + 
+  aes(id = Rating_Count, fill = Rating_Count) +
+  aes(id = Main_Accords, fill = after_stat(area)) + 
+  aes(id = Top_Notes, fill = after_stat(area)) + 
+  aes(id = Middle_Notes, fill = after_stat(area)) +
+  aes(id = Base_Notes, fill = after_stat(area))
+
+theme_set(theme_get() + last_plot()$theme)
+
+parfumo_data_clean %>%
+ggplot() + 
+  aes(x = Release_Year, Rating_Value, size = Rating_Count) + 
+  geom_point(alpha = .2) + 
+  scale_size(range = c(.5,9)) + 
+  theme_bw(ink = "grey18", paper = "lavender")
+
+```
+
+
+```{r}
+parfumo_data_clean %>% 
+  ggplot() + 
+  ggcirclepack::geom_circlepack(alpha = .6) + 
+  ggcirclepack::geom_circlepack_text(check_overlap = T, 
+                                     color = "midnightblue") + 
+  coord_equal() +
+  scale_fill_viridis_c(end = .8, option = "magma") +
+  ggstamp::theme_void_fill("lavender") +
+  aes(id = Main_Accords, fill = after_stat(area))
+
+last_plot() %+%
+  (parfumo_data_clean %>% 
+  mutate(Main_Accords = str_split(Main_Accords, ", ")) %>% 
+  unnest())
+
+parfumo_data_clean %>% 
+  filter(n()> 100, .by = Brand) %>% 
+  ggplot() + 
+  aes(id = Brand) + 
+  ggcirclepack::geom_circlepack() + 
+  ggcirclepack::geom_circlepack_text()
+
+
+parfumo_data_clean %>% 
+  filter(Release_Year < 1950) %>% 
+  filter(n()>25, .by = Brand) %>% 
+  ggplot() + 
+  ggcirclepack::geom_circlepack(alpha = .6) + 
+  ggcirclepack::geom_circlepack_text(check_overlap = T, 
+                                     color = "midnightblue") + 
+  coord_equal() +
+  scale_fill_viridis_c(end = .8, option = "magma") +
+  ggstamp::theme_void_fill("lavender") +
+  aes(id = Brand, fill = after_stat(area)) 
+
+
+```
+
+
+## Closing remarks, Other Relevant Work, Caveats

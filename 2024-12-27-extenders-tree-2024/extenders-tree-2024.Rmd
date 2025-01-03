@@ -1,0 +1,93 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+
+stamp_textbox <- function(label = "A label", x = I(.05), y = I(.95), size = 8, wrap_width = 30, hjust = 0, vjust = 1, ...){
+  
+  annotate(geom = ggtext::GeomTextBox, x = x, y = y, label = label, size = size, hjust = hjust, vjust = vjust, ...)
+  
+}
+
+```
+
+
+```{r, eval=T, fig.width=10, fig.height=10 }
+library(ggstamp)
+x0y0tree <- pos_branching(n = 21, y0 = 5, height = 2 )
+
+talks <- read_csv("https://raw.githubusercontent.com/teunbrand/ggplot-extension-club/refs/heads/main/meetings.csv")[2:22, ]
+
+talks$package[is.na(talks$package)] <- "Wilke's\n'Fundamentals'"
+talks$package[21] <- "First\nMeeting"
+
+
+library(ggstamp)
+ggcanvas() +
+   stamp_polygon(x0y0 = x0y0tree,
+               alpha = .5, 
+               fill = "darkolivegreen",
+               color = "lavender") |>  
+    ggfx::with_outer_glow()  +
+  stamp_text(label = talks$package, 
+            xy = x0y0tree, 
+            size = case_when(nchar(talks$package)<=9 ~ 6,
+                             nchar(talks$package)<=12 ~ 5,
+                             TRUE ~ 3.5),
+            color = "lavender",
+            vjust = 0) |>
+      ggfx::with_outer_glow() + 
+   stamp_text(label = talks$date, 
+            xy = x0y0tree, 
+            size = 4,
+            color = "lavender", alpha = .3,
+            vjust = 2) |>
+      ggfx::with_outer_glow() + 
+  stamp_textbox(label = "Looking back on the last few years, we are filled with gratitude.\n\n\n\nTo our presenters ... ", 
+                fill = "lavender",
+                fontface = "italic",
+                font = "Times",
+                size = 7,
+                y = I(.97)
+                ) |>
+      ggfx::with_outer_glow()  + 
+  stamp_text(label = "Thank you \n and happy holidays!", size = 18, x = I(.5), y = -8.5,
+             color = "violetred4",
+             vjust = 0) |>
+      ggfx::with_outer_glow() +
+  theme_void_fill("whitesmoke", color = alpha("violetred4", .7)) 
+```
+
+
+## Experiment
+
+```{r}
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

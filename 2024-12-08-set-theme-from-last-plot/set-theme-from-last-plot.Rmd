@@ -23,22 +23,31 @@ options(tidyverse.quiet = TRUE)
 ```{r}
 library(ggplot2)
 
-theme_set_last_plot <- function(){
-  
-  theme_set(theme_get() + last_plot()$theme)
-  
-}
+# theme_set_last_plot <- function(){
+#   
+#   theme_set(theme_get() + last_plot()$theme)
+#   
+# }
 
 ggplot(cars) +
   aes(x = speed, y = dist) + 
   geom_point() +
-  theme(panel.grid = element_blank())
-
-theme_set_last_plot()
+  theme_classic(ink = alpha("lightyellow", .7),
+                paper = "darkseagreen4",
+                base_size = 18) + 
+  geom_smooth() + 
+  theme(geom = element_geom(accent = "orange")) + 
+  theme(plot.title.position = "plot") +
+  labs(title = "My ad-hoc chalkboard theme,\nwith new ink, paper, accent arguments!") ->
+p; p
+  
+(theme_get() + last_plot()$theme) |> theme_set()
 
 ggplot(mtcars) + 
   aes(wt, mpg) + 
-  geom_point()
+  geom_point() + 
+  geom_smooth() + 
+  labs(title = "Themed consistent w/ previous plot where\ninteractive theming work was done!")
 ```
 
 

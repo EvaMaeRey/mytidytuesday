@@ -26,204 +26,34 @@
 count: false
  
 
-.panel1-the_chunk-auto[
+.panel1-the_chunk-user[
 
 ``` r
 *library(tidyverse)
-```
-]
- 
-.panel2-the_chunk-auto[
-
-]
-
----
-count: false
- 
-
-.panel1-the_chunk-auto[
-
-``` r
-library(tidyverse)
 *library(legendry)
-```
-]
- 
-.panel2-the_chunk-auto[
-
-]
-
----
-count: false
- 
-
-.panel1-the_chunk-auto[
-
-``` r
-library(tidyverse)
-library(legendry)
 *data.frame(
 * category = c("Meat", "Meat", "Vegetables", "Vegetables", "Dairy"),
 * food     = c("Beef", "Chicken", "Carrots", "Onions", "Cheese"),
 * gram     = c(85,  85, 150, 210, 225),
-* calories = c(245, 185, 45, 80, 240))
-```
-]
- 
-.panel2-the_chunk-auto[
-
-```
-    category    food gram calories
-1       Meat    Beef   85      245
-2       Meat Chicken   85      185
-3 Vegetables Carrots  150       45
-4 Vegetables  Onions  210       80
-5      Dairy  Cheese  225      240
-```
-]
-
----
-count: false
- 
-
-.panel1-the_chunk-auto[
-
-``` r
-library(tidyverse)
-library(legendry)
-data.frame(
-  category = c("Meat", "Meat", "Vegetables", "Vegetables", "Dairy"),
-  food     = c("Beef", "Chicken", "Carrots", "Onions", "Cheese"),
-  gram     = c(85,  85, 150, 210, 225),
-  calories = c(245, 185, 45, 80, 240)) %&gt;%
-* mutate(food_category = interaction(food, category))
-```
-]
- 
-.panel2-the_chunk-auto[
-
-```
-    category    food gram calories      food_category
-1       Meat    Beef   85      245          Beef.Meat
-2       Meat Chicken   85      185       Chicken.Meat
-3 Vegetables Carrots  150       45 Carrots.Vegetables
-4 Vegetables  Onions  210       80  Onions.Vegetables
-5      Dairy  Cheese  225      240       Cheese.Dairy
-```
-]
-
----
-count: false
- 
-
-.panel1-the_chunk-auto[
-
-``` r
-library(tidyverse)
-library(legendry)
-data.frame(
-  category = c("Meat", "Meat", "Vegetables", "Vegetables", "Dairy"),
-  food     = c("Beef", "Chicken", "Carrots", "Onions", "Cheese"),
-  gram     = c(85,  85, 150, 210, 225),
-  calories = c(245, 185, 45, 80, 240)) %&gt;%
-  mutate(food_category = interaction(food, category)) |&gt;
-* mutate(category_food = paste(category, food))
-```
-]
- 
-.panel2-the_chunk-auto[
-
-```
-    category    food gram calories      food_category      category_food
-1       Meat    Beef   85      245          Beef.Meat          Meat Beef
-2       Meat Chicken   85      185       Chicken.Meat       Meat Chicken
-3 Vegetables Carrots  150       45 Carrots.Vegetables Vegetables Carrots
-4 Vegetables  Onions  210       80  Onions.Vegetables  Vegetables Onions
-5      Dairy  Cheese  225      240       Cheese.Dairy       Dairy Cheese
-```
-]
-
----
-count: false
- 
-
-.panel1-the_chunk-auto[
-
-``` r
-library(tidyverse)
-library(legendry)
-data.frame(
-  category = c("Meat", "Meat", "Vegetables", "Vegetables", "Dairy"),
-  food     = c("Beef", "Chicken", "Carrots", "Onions", "Cheese"),
-  gram     = c(85,  85, 150, 210, 225),
-  calories = c(245, 185, 45, 80, 240)) %&gt;%
-  mutate(food_category = interaction(food, category)) |&gt;
-  mutate(category_food = paste(category, food)) |&gt;
-* ggplot()
-```
-]
- 
-.panel2-the_chunk-auto[
-![](legendry_chunk_flipbook_files/figure-html/the_chunk_auto_06_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-the_chunk-auto[
-
-``` r
-library(tidyverse)
-library(legendry)
-data.frame(
-  category = c("Meat", "Meat", "Vegetables", "Vegetables", "Dairy"),
-  food     = c("Beef", "Chicken", "Carrots", "Onions", "Cheese"),
-  gram     = c(85,  85, 150, 210, 225),
-  calories = c(245, 185, 45, 80, 240)) %&gt;%
-  mutate(food_category = interaction(food, category)) |&gt;
-  mutate(category_food = paste(category, food)) |&gt;
-  ggplot() +
-* theme_classic()
-```
-]
- 
-.panel2-the_chunk-auto[
-![](legendry_chunk_flipbook_files/figure-html/the_chunk_auto_07_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-the_chunk-auto[
-
-``` r
-library(tidyverse)
-library(legendry)
-data.frame(
-  category = c("Meat", "Meat", "Vegetables", "Vegetables", "Dairy"),
-  food     = c("Beef", "Chicken", "Carrots", "Onions", "Cheese"),
-  gram     = c(85,  85, 150, 210, 225),
-  calories = c(245, 185, 45, 80, 240)) %&gt;%
-  mutate(food_category = interaction(food, category)) |&gt;
-  mutate(category_food = paste(category, food)) |&gt;
-  ggplot() +
-  theme_classic() +
+* calories = c(245, 185, 45, 80, 240)) %&gt;%
+* mutate(food_category = interaction(food, category)) |&gt;
+* mutate(category_food = paste(category, food)) |&gt;
+* ggplot() +
 * aes(x = food_category,
-*     y = calories)
+*     y = calories) +
+* theme_classic(base_size = 15)
 ```
 ]
  
-.panel2-the_chunk-auto[
-![](legendry_chunk_flipbook_files/figure-html/the_chunk_auto_08_output-1.png)&lt;!-- --&gt;
+.panel2-the_chunk-user[
+![](legendry_chunk_flipbook_files/figure-html/the_chunk_user_01_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-the_chunk-auto[
+.panel1-the_chunk-user[
 
 ``` r
 library(tidyverse)
@@ -236,22 +66,22 @@ data.frame(
   mutate(food_category = interaction(food, category)) |&gt;
   mutate(category_food = paste(category, food)) |&gt;
   ggplot() +
-  theme_classic() +
   aes(x = food_category,
       y = calories) +
+  theme_classic(base_size = 15) +
 * geom_col()
 ```
 ]
  
-.panel2-the_chunk-auto[
-![](legendry_chunk_flipbook_files/figure-html/the_chunk_auto_09_output-1.png)&lt;!-- --&gt;
+.panel2-the_chunk-user[
+![](legendry_chunk_flipbook_files/figure-html/the_chunk_user_02_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-the_chunk-auto[
+.panel1-the_chunk-user[
 
 ``` r
 library(tidyverse)
@@ -264,53 +94,23 @@ data.frame(
   mutate(food_category = interaction(food, category)) |&gt;
   mutate(category_food = paste(category, food)) |&gt;
   ggplot() +
-  theme_classic() +
   aes(x = food_category,
       y = calories) +
+  theme_classic(base_size = 15) +
   geom_col() +
-* aes(fill = category_food)
-```
-]
- 
-.panel2-the_chunk-auto[
-![](legendry_chunk_flipbook_files/figure-html/the_chunk_auto_10_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-the_chunk-auto[
-
-``` r
-library(tidyverse)
-library(legendry)
-data.frame(
-  category = c("Meat", "Meat", "Vegetables", "Vegetables", "Dairy"),
-  food     = c("Beef", "Chicken", "Carrots", "Onions", "Cheese"),
-  gram     = c(85,  85, 150, 210, 225),
-  calories = c(245, 185, 45, 80, 240)) %&gt;%
-  mutate(food_category = interaction(food, category)) |&gt;
-  mutate(category_food = paste(category, food)) |&gt;
-  ggplot() +
-  theme_classic() +
-  aes(x = food_category,
-      y = calories) +
-  geom_col() +
-  aes(fill = category_food) +
 * guides(x = "axis_nested")
 ```
 ]
  
-.panel2-the_chunk-auto[
-![](legendry_chunk_flipbook_files/figure-html/the_chunk_auto_11_output-1.png)&lt;!-- --&gt;
+.panel2-the_chunk-user[
+![](legendry_chunk_flipbook_files/figure-html/the_chunk_user_03_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-the_chunk-auto[
+.panel1-the_chunk-user[
 
 ``` r
 library(tidyverse)
@@ -323,25 +123,55 @@ data.frame(
   mutate(food_category = interaction(food, category)) |&gt;
   mutate(category_food = paste(category, food)) |&gt;
   ggplot() +
-  theme_classic() +
   aes(x = food_category,
       y = calories) +
+  theme_classic(base_size = 15) +
   geom_col() +
-  aes(fill = category_food) +
   guides(x = "axis_nested") +
+* aes(fill = category_food)
+```
+]
+ 
+.panel2-the_chunk-user[
+![](legendry_chunk_flipbook_files/figure-html/the_chunk_user_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-the_chunk-user[
+
+``` r
+library(tidyverse)
+library(legendry)
+data.frame(
+  category = c("Meat", "Meat", "Vegetables", "Vegetables", "Dairy"),
+  food     = c("Beef", "Chicken", "Carrots", "Onions", "Cheese"),
+  gram     = c(85,  85, 150, 210, 225),
+  calories = c(245, 185, 45, 80, 240)) %&gt;%
+  mutate(food_category = interaction(food, category)) |&gt;
+  mutate(category_food = paste(category, food)) |&gt;
+  ggplot() +
+  aes(x = food_category,
+      y = calories) +
+  theme_classic(base_size = 15) +
+  geom_col() +
+  guides(x = "axis_nested") +
+  aes(fill = category_food) +
 * guides(fill = "legend_group")
 ```
 ]
  
-.panel2-the_chunk-auto[
-![](legendry_chunk_flipbook_files/figure-html/the_chunk_auto_12_output-1.png)&lt;!-- --&gt;
+.panel2-the_chunk-user[
+![](legendry_chunk_flipbook_files/figure-html/the_chunk_user_05_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-the_chunk-auto[
+.panel1-the_chunk-user[
 
 ``` r
 library(tidyverse)
@@ -354,26 +184,26 @@ data.frame(
   mutate(food_category = interaction(food, category)) |&gt;
   mutate(category_food = paste(category, food)) |&gt;
   ggplot() +
-  theme_classic() +
   aes(x = food_category,
       y = calories) +
+  theme_classic(base_size = 15) +
   geom_col() +
-  aes(fill = category_food) +
   guides(x = "axis_nested") +
+  aes(fill = category_food) +
   guides(fill = "legend_group") +
 * labs(x = NULL, fill = NULL)
 ```
 ]
  
-.panel2-the_chunk-auto[
-![](legendry_chunk_flipbook_files/figure-html/the_chunk_auto_13_output-1.png)&lt;!-- --&gt;
+.panel2-the_chunk-user[
+![](legendry_chunk_flipbook_files/figure-html/the_chunk_user_06_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-the_chunk-auto[
+.panel1-the_chunk-user[
 
 ``` r
 library(tidyverse)
@@ -386,29 +216,30 @@ data.frame(
   mutate(food_category = interaction(food, category)) |&gt;
   mutate(category_food = paste(category, food)) |&gt;
   ggplot() +
-  theme_classic() +
   aes(x = food_category,
       y = calories) +
+  theme_classic(base_size = 15) +
   geom_col() +
-  aes(fill = category_food) +
   guides(x = "axis_nested") +
+  aes(fill = category_food) +
   guides(fill = "legend_group") +
   labs(x = NULL, fill = NULL) +
 * guides(y = guide_axis_nested(
-*   key_range_manual(0, 100, "low calories"))
+*   key_range_manual(start = 0, end = 100,
+*                    name = "low calories"))
 *   )
 ```
 ]
  
-.panel2-the_chunk-auto[
-![](legendry_chunk_flipbook_files/figure-html/the_chunk_auto_14_output-1.png)&lt;!-- --&gt;
+.panel2-the_chunk-user[
+![](legendry_chunk_flipbook_files/figure-html/the_chunk_user_07_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-the_chunk-auto[
+.panel1-the_chunk-user[
 
 ``` r
 library(tidyverse)
@@ -421,81 +252,47 @@ data.frame(
   mutate(food_category = interaction(food, category)) |&gt;
   mutate(category_food = paste(category, food)) |&gt;
   ggplot() +
-  theme_classic() +
   aes(x = food_category,
       y = calories) +
+  theme_classic(base_size = 15) +
   geom_col() +
-  aes(fill = category_food) +
   guides(x = "axis_nested") +
+  aes(fill = category_food) +
   guides(fill = "legend_group") +
   labs(x = NULL, fill = NULL) +
   guides(y = guide_axis_nested(
-    key_range_manual(0, 100, "low calories"))
+    key_range_manual(start = 0, end = 100,
+                     name = "low calories"))
     ) +
-* theme_classic()
-```
-]
- 
-.panel2-the_chunk-auto[
-![](legendry_chunk_flipbook_files/figure-html/the_chunk_auto_15_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-the_chunk-auto[
-
-``` r
-library(tidyverse)
-library(legendry)
-data.frame(
-  category = c("Meat", "Meat", "Vegetables", "Vegetables", "Dairy"),
-  food     = c("Beef", "Chicken", "Carrots", "Onions", "Cheese"),
-  gram     = c(85,  85, 150, 210, 225),
-  calories = c(245, 185, 45, 80, 240)) %&gt;%
-  mutate(food_category = interaction(food, category)) |&gt;
-  mutate(category_food = paste(category, food)) |&gt;
-  ggplot() +
-  theme_classic() +
-  aes(x = food_category,
-      y = calories) +
-  geom_col() +
-  aes(fill = category_food) +
-  guides(x = "axis_nested") +
-  guides(fill = "legend_group") +
-  labs(x = NULL, fill = NULL) +
-  guides(y = guide_axis_nested(
-    key_range_manual(0, 100, "low calories"))
-    ) +
-  theme_classic() +
 * theme(axis.text.y.left =
-*         element_text(angle = 90, hjust = 0.5))
+*         element_text(angle = 90, hjust = 0.5)) +
+* theme(axis.ticks.x = element_blank()) +
+* scale_y_continuous(expand = expansion(mult = c(0, .2)))
 ```
 ]
  
-.panel2-the_chunk-auto[
-![](legendry_chunk_flipbook_files/figure-html/the_chunk_auto_16_output-1.png)&lt;!-- --&gt;
+.panel2-the_chunk-user[
+![](legendry_chunk_flipbook_files/figure-html/the_chunk_user_08_output-1.png)&lt;!-- --&gt;
 ]
 
 &lt;style&gt;
-.panel1-the_chunk-auto {
+.panel1-the_chunk-user {
   color: black;
-  width: 49%;
+  width: 39.2%;
   hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel2-the_chunk-auto {
+.panel2-the_chunk-user {
   color: black;
-  width: 49%;
+  width: 58.8%;
   hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel3-the_chunk-auto {
+.panel3-the_chunk-user {
   color: black;
   width: NA%;
   hight: 33%;
@@ -510,7 +307,7 @@ data.frame(
 
 
 &lt;style type="text/css"&gt;
-.remark-code{line-height: 1.5; font-size: 80%}
+.remark-code{line-height: 1.5; font-size: 100%}
 
 @media print {
   .has-continuation {

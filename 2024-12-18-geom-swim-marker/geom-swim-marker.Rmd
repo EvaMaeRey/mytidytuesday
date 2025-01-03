@@ -1,0 +1,137 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+library(ggswim)
+
+library(ggplot2)
+
+p1 <- ggplot() +
+  geom_swim_lane(
+    data = patient_data,
+    mapping = aes(
+      x = start_time, y = pt_id, xend = end_time,
+      colour = disease_assessment
+    )) 
+p1
+
+# Construct arrow_data for arrow display later
+arrow_data <- patient_data |>
+  dplyr::left_join(
+    end_study_events |>
+      dplyr::select(pt_id, label),
+    by = "pt_id"
+  ) |>
+  dplyr::select(pt_id, end_time, label) |>
+  dplyr::filter(.by = pt_id, end_time == max(end_time)) |>
+  dplyr::filter(is.na(label)) |>
+  unique()
+
+
+
+p2 <- ggplot() +
+  geom_swim_arrow(
+    data = arrow_data,
+    mapping = aes(xend = end_time, y = pt_id)
+  ) +
+  scale_colour_brewer(
+    name = "Disease Assessments",
+    palette = "Set1"
+  )
+p2
+
+all_events <- dplyr::bind_rows(
+  infusion_events,
+  end_study_events
+)
+
+head(all_events)
+
+p3 <- ggplot() +
+  geom_swim_marker(
+    data = all_events,
+    aes(x = time_from_initial_infusion, y = pt_id, marker = label),
+    size = 5
+  )
+p3
+
+library(patchwork)
+p1 / p2 / p3
+
+
+all_events %>% 
+  distinct(glyph, colour, label) ->
+marker_dictionary
+  
+marker_dictionary
+
+
+p4 <- p3 +
+  scale_marker_discrete(
+    glyphs = marker_dictionary$glyph,
+    colours = marker_dictionary$colour,
+    limits = marker_dictionary$label,
+    name = "Study Events"
+  )
+
+p4
+
+library(ggplot2)
+library(ggswim)
+geom_marker <- geom_swim_marker
+
+mtcars |>
+  ggplot() +
+  aes(x = wt, y = mpg, marker = factor(am)) +
+  geom_marker(size = 8) + 
+  scale_marker_discrete(
+    limits = 0:1,
+    colours = c("orange", "midnightblue")
+  )
+
+
+
+# scale_marker_discrete(
+#     limits = c("First Reinfusion",         
+#                "Second Reinfusion",         
+#                "Other End Study Reason", 
+#                "Deceased",
+#                "Completed Study Follow-Up"),
+#     glyphs = c( "⬤" , "⬤"  ,"⚠️" , "❌" ,"✅"),
+#     colours = c("#999999", "#f57dc1", NA, NA, NA),
+#     name = "Study Events"
+#   )
+
+
+
+```
+
+## Experiment
+
+```{r}
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

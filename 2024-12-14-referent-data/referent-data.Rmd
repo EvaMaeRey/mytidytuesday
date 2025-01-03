@@ -1,0 +1,85 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = T)
+options(tidyverse.quiet = TRUE)
+```
+
+
+```{r}
+
+library(tidyverse)
+
+# Simplify the Motor Trends data to two predictors legible at aspect ratio 1.
+mtcars |>
+  transform(hp00 = hp/100) |>
+  subset(select = c(mpg, hp00, wt)) ->
+subcars
+
+head(subcars)
+
+# Here's the setup; i want to project the data points onto the gradient axis.
+ggplot(subcars) +
+  aes(x = hp00, y = wt) +
+  coord_equal() +
+  geom_point()
+
+compute_group_proj <- function(data, scales, na.rm = FALSE) {
+    
+    # arbitrary values of computed aesthetics
+    res <- transform(
+      data,
+      xend = NA_real_,
+      yend = NA_real_
+    )
+    # empty initialized output
+    res <- data[c(), , drop = FALSE]
+    
+    lm(outcome ~ x + y, data) |>
+         coefficients() |>
+          as.list() |> as.data.frame() ->
+    gradient
+    
+    # no referent means no projection
+    if (is.null(gradient) || ! is.data.frame(gradient)) return(res)
+    
+    # compute and collect projections of `data` onto `referent` rows
+    inertias <- gradient$x^2 + gradient$y^2
+    for (i in seq(nrow(gradient))) {
+      data$dots <- data$x * gradient$x[i] + data$y * gradient$y[i]
+      res_i <- transform(
+        data,
+        xend = dots / inertias[i] * gradient$x[i],
+        yend = dots / inertias[i] * gradient$y[i]
+      )
+      res <- rbind(res, res_i)
+    }
+    
+    res
+}
+
+
+subcars %>% 
+  rename(x = hp00, y = wt, outcome = mpg) %>% 
+  compute_group_proj() %>% 
+  head()
+
+StatProj <- ggproto("StatProj", Stat,
+  required_aes = c("x", "y", "outcome"),
+  compute_group = compute_group_proj
+)
+
+last_plot() +
+  geom_segment(stat = StatProj, 
+               aes(outcome = mpg))
+
+
+
+```  

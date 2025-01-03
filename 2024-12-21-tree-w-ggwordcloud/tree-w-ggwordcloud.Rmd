@@ -1,0 +1,346 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = F)
+options(tidyverse.quiet = TRUE)
+```
+
+
+```{r, fig.height=20, fig.width=20}
+library(tidyverse)
+library(ggwordcloud)
+library(ggstamp)
+
+extension_exported <- "https://raw.githubusercontent.com/EvaMaeRey/mytidytuesday/refs/heads/main/2024-11-19-gg-prefixes/exported_funs_exts_ggplot2_tidyverse_org.csv" |> read_csv()
+
+
+extension_exported %>% 
+  distinct(user)
+```
+
+## Intro Thoughts
+
+
+# Description for Figure
+
+## website
+
+
+The ggplot2 extension gallery helps people explore the ggplot2 extension ecosystem.  Package developers can submit their extension packages to help others find their work.  About 140 packages have been submitted 
+
+
+
+## star
+
+The star contains packages names, with larger sized names corresponding to packages with greater numbers of exported functions.
+
+## branches
+
+Branches and background contain exported function names.  There are more than 5000 exported functions in the submitted packages. 
+
+## trunk
+
+The tree trunk is made up of package authors (github user). More than 100 unique package authors have contributed to the ecosystem.  
+
+
+
+
+```{r}
+lightparser::split_to_tbl("tree-w-ggwordcloud.Rmd") %>% 
+  filter(section %in% c("website", "star", "branches", "trunk")) %>% 
+  filter(type == "inline") %>% 
+  unnest(cols = text) %>% 
+  filter(text != "") %>% 
+  select(section, text) ->
+inline_text
+  
+inline_text$text
+
+
+```
+
+
+```{r}
+compute_panel_grid <- function(data, scales){
+  
+  data %>% 
+    mutate(grid_alpha = str_extract(grid, ".")) |>
+    mutate(y = case_when(grid_alpha == "A" ~ I(.95),
+                         grid_alpha == "B" ~ I(.85),
+                         grid_alpha == "C" ~ I(.75),
+                         grid_alpha == "D" ~ I(.65),
+                         grid_alpha == "E" ~ I(.55),
+                         grid_alpha == "F" ~ I(.45),
+                         grid_alpha == "G" ~ I(.35),
+                         grid_alpha == "H" ~ I(.25),
+                         grid_alpha == "J" ~ I(.15),
+                         grid_alpha == "K" ~ I(.05), TRUE ~ NA
+                      )) |>
+  mutate(x = str_extract(grid, "\\d+") |>
+           as.numeric())
+  
+}
+
+tibble(grid = c("B1", "E1")) |>
+  compute_panel_grid()
+
+
+StatGrid <- ggproto("StatGrid", Stat,
+                    compute_panel = compute_panel_grid)
+
+
+ggplot() + 
+  geom_text(stat = StatGrid, 
+            aes(grid = "A1"), 
+            label = "hi there") 
+
+```
+
+
+```{r, fig.width=20, fig.height=20}
+ggplot(cars) +
+  aes(speed, dist) + 
+  geom_point() + 
+  annotate(ggtext::GeomTextBox, 
+           x = I(.05), 
+           y = I(c(.95, .75, .5, .25)),
+           label = inline_text$text,
+           hjust = 0, vjust = 1, size = 8, 
+           width = unit(5, "inch"), fill = "lavender"
+           ) + 
+  theme_void()
+
+# stat
+# 
+# library(ggtext)
+# geom_textbox(width = unit(2, "inch"))
+
+
+
+```
+
+
+
+
+```{r}
+
+stamp_textbox <- function(label = "A label", x = I(.05), y = I(.95), size = 8, wrap_width = 30, hjust = 0, vjust = 1, ...){
+  
+  annotate(geom = ggtext::GeomTextBox, x = x, y = y, label = label, size = size, hjust = hjust, vjust = vjust, ...)
+  
+}
+
+```
+
+
+
+```{r, eval=T, fig.width=10, fig.height=10 }
+library(ggstamp)
+x0y0tree <- pos_branching(n = 21, y0 = 5, height = 2
+                          )
+
+talks <- read_csv("https://raw.githubusercontent.com/teunbrand/ggplot-extension-club/refs/heads/main/meetings.csv")[1:21, ]
+
+talks$package[is.na(talks$package)] <- "Fundamentals"
+
+library(ggstamp)
+ggcanvas() +
+   stamp_polygon(x0y0 = x0y0tree,
+               alpha = .5, 
+               fill = "darkolivegreen",
+               color = "lavender") |>  
+    ggfx::with_outer_glow()  +
+ stamp_text(label = talks$package, 
+            xy = x0y0tree, 
+            size = ifelse(nchar(talks$package)<=9, 6, 4),
+            color = "lavender",
+            vjust = 0) |>
+      ggfx::with_outer_glow() + 
+   stamp_text(label = talks$date, 
+            xy = x0y0tree, 
+            size = 4,
+            color = "lavender", alpha = .3,
+            vjust = 2) |>
+      ggfx::with_outer_glow() + 
+  stamp_textbox(label = "Looking back on the last few years, we are filled with gratitude.\n\n\n\nTo our presenters and attendees... ", 
+                fill = "lavender",
+                fontface = "italic",
+                font = "Times",
+                size = 7,
+                y = I(.97)
+                ) |>
+      ggfx::with_outer_glow()  + 
+  stamp_text(label = "Thank you \n and happy holidays", size = 18, x = I(.5), y = -8.5,
+             color = "violetred4",
+             vjust = 0) |>
+      ggfx::with_outer_glow() +
+  theme_void_fill("whitesmoke", color = alpha("violetred4", .7)) 
+```
+
+
+
+
+
+```{r wordcloud, fig.height=20,fig.width=20}
+# background
+ggplot() +    
+  geom_text_wordcloud(
+    aes(label = fun_exported, size = 2),
+    data = extension_exported %>% 
+      sample_n(1100),
+    shape = "square", alpha = .2) +
+  ggstamp::theme_void_fill(fill = "whitesmoke") +
+  NULL ->
+background; background
+
+
+# Star
+ggplot() + 
+  geom_text_wordcloud(
+    aes(label = repo, size = n),
+    data = extension_exported %>% count(repo),
+    shape = "star", color = "goldenrod4", y = .87) +
+  theme_void() +
+  # labs(title = "ggplot2 extensions on") +
+  # annotate("text", x = I(.1), y = I(.87),
+  #          label = "More than Extension packages...", size = 8) +
+  NULL ->
+star; star
+
+# branches
+ggplot() +    
+  geom_text_wordcloud(
+    aes(label = fun_exported, size = 2),
+    data = extension_exported %>% 
+      sample_n(500) %>%
+      filter(str_count(fun_exported) < 18),
+    shape = "triangle-upright",
+                      color = "darkseagreen4", y = .4) +
+  theme_void() +
+  # annotate("text", x = I(.1), y = I(.7),
+  #          label = "Exported Functions") +
+  NULL ->
+branches; branches
+
+
+# base
+ggplot() +
+  geom_text_wordcloud(
+    data = extension_exported %>% count(user),
+    aes(label = user),
+    shape = "square", color = "burlywood4", x = .5, y = .1) +
+  theme_void() +
+  # annotate("text", x = I(.1), y = I(.2),
+  #          label = "Extenders") +
+  NULL  + 
+  annotate(ggtext::GeomTextBox,
+           x = I(c(.05, .65, .12, .1)),
+           y = I(c(.95, .85, .6, .2)),
+           label = inline_text$text,
+           hjust = 0, vjust = 1, 
+           size = c(10,8,8,8),
+           width = unit(5, "inch"), fill = "lavender"
+           ) +
+  NULL           ->
+base; base
+
+ggsave("background.png", background, width = 20, height = 20)
+ggsave("star.png", star, width = 20, height = 20)
+ggsave("branches.png", branches, width = 20, height = 20)
+ggsave("base.png", base, width = 20, height = 20)
+
+```
+
+```{r}
+library(magick)
+c(image_read("background.png"),
+  image_read("star.png"),
+  image_read("branches.png"),
+  image_read("base.png")
+  ) %>% 
+  magick::image_flatten() %>% 
+  magick::image_write("tree.png")
+
+image_read("tree.png")
+
+```
+
+
+```{r}
+knitr::knit_exit()
+```
+
+
+
+
+
+```{r, eval=FALSE}
+
+download.file("https://github.com/CHOP-CGTInformatics/ggswim/raw/main/man/figures/logo.png", destfile = "ggswim_logo.png")
+
+download.file("https://github.com/teunbrand/ggh4x/raw/main/man/figures/logo_300px.png", destfile = "ggh4x_logo.png")
+
+download.file("https://github.com/yjunechoe/ggtrace/raw/main/man/figures/logo.png",
+              destfile = "ggtrace_logo.png")
+
+download.file("https://github.com/pharmaverse/ggsurvfit/raw/main/man/figures/logo.png", destfile = "ggsurvfit_logo.png")
+
+# ggstats, GGally
+
+
+logo_urls <- c("https://github.com/CHOP-CGTInformatics/ggswimraw/main/man/figures/logo.png",#swimlogo
+"https://github.com/corybrunson/ordr/raw/main/man/figures/logo.png"         ,#
+"https://github.com/tidyverse/ggplot2/raw/main/man/figures/logo.png"        ,#3
+"https://github.com/larmarange/ggstats/raw/main/man/figures/logo.png"       ,#
+"https://github.com/jamesotto852/ggdensity/raw/main/man/figures/logo.png"   ,#5
+"https://github.com/animint/animint2raw/main/man/figures/logo.png"          ,# 
+"https://github.com/eliocamp/ggnewscale/raw/main/man/figures/logo.png"      ,#7
+"https://github.com/yonicd/ggedit/raw/main/man/figures/logo.png"             ,#
+"https://github.com/ggobi/ggally/raw/main/man/figures/logo.png"             ,#
+"https://github.com/r-causal/ggdag/raw/main/man/figures/logo.png"           ,#10
+"https://github.com/nrennie/ggflowchart/raw/main/man/figures/logo.png"       ,# 
+"https://github.com/wjschne/arrowheadr/raw/main/man/figures/logo.png"        ,#
+"https://github.com/jonocarroll/ggeasy/raw/main/man/figures/logo.png"       ,#
+"https://github.com/pharmaverse/ggsurvfit/raw/main/man/figures/logo.png"    ,#14
+"https://github.com/EvaMaeRey/ggcirclepack/raw/main/man/figures/logo.png"    ,#
+"https://github.com/yjunechoe/ggtrace/raw/main/man/figures/logo.png"        ,# 16
+"https://github.com/teunbrand/ggh4x/raw/main/man/figures/logo.png"          ,#17
+"https://github.com/AllanCameron/geomtextpath/raw/main/man/figures/logo.png",#18
+"https://github.com/davidsjoberg/ggbump/raw/main/man/figures/logo.png"     )  
+
+```
+
+
+```{r, eval = F}
+for (i in 1:length(logo_urls)){
+  
+  try(download.file(logo_urls[i] #|> str_replace("main", "master")
+                    , 
+                    destfile = paste0("logo", i, ".png")
+                    )
+      )
+  
+}
+
+for (i in c(7,13)){
+  
+  try(download.file(logo_urls[i] |> str_replace("main", "master")
+                    , 
+                    destfile = paste0("logo", i, ".png")
+                    )
+      )
+  
+}
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

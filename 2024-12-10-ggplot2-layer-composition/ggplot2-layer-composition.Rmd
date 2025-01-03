@@ -153,6 +153,24 @@ exported_layer_fun_composition %>%
   select(exported_fun, object) %>%
   ggedgelist:::ggedgelist_quick(
     layout = "fr", include_names = T)
+
+
+exported_layer_fun_composition %>%
+  filter(object != "PositionIdentity") %>%
+  select(exported_fun, object) %>%
+  ggedgelist:::ggedgelist_quick(
+    layout = "fr", include_names = T) + 
+  labs(subtitle = "Position is included if not StatIdentity")
+
+
+exported_layer_fun_composition %>%
+  filter(object != "PositionIdentity") %>%
+  filter(object != "StatIdentity") %>%
+  filter(object != "GeomPoint") %>% 
+  select(exported_fun, object) %>%
+  ggedgelist:::ggedgelist_quick(
+    layout = "fr", include_names = T) + 
+  labs(subtitle = "Objects not included if StatIdentity, Position Identity or GeomPoint")
 ```
 
 

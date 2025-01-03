@@ -41,28 +41,30 @@ data.frame(
   mutate(food_category = interaction(food, category)) |>
   mutate(category_food = paste(category, food)) |>
   ggplot() +
-  theme_classic() +
   aes(x = food_category, 
       y = calories) +
-  geom_col() +
-  aes(fill = category_food) +
-  guides(x = "axis_nested") +
-  guides(fill = "legend_group") +
-  labs(x = NULL, fill = NULL) + 
+  theme_classic(base_size = 15) + #BREAK
+  geom_col() + #BREAK
+  guides(x = "axis_nested") + #BREAK
+  aes(fill = category_food) + #BREAK
+  guides(fill = "legend_group") + #BREAK
+  labs(x = NULL, fill = NULL) + #BREAK
   guides(y = guide_axis_nested(
-    key_range_manual(0, 100, "low calories"))
-    ) +
-  theme_classic() +
+    key_range_manual(start = 0, end = 100, 
+                     name = "low calories"))
+    ) + #BREAK
   theme(axis.text.y.left = 
-          element_text(angle = 90, hjust = 0.5))
+          element_text(angle = 90, hjust = 0.5)) + 
+  theme(axis.ticks.x = element_blank()) +
+  scale_y_continuous(expand = expansion(mult = c(0, .2))) #BREAK
 ```
 
-`r chunk_reveal(chunk_name = "the_chunk", break_type = "auto", widths = c(5,5))`
+`r chunk_reveal(chunk_name = "the_chunk", break_type = "user", widths = c(2,3))`
 
 
 
 ```{css, eval = TRUE, echo = FALSE}
-.remark-code{line-height: 1.5; font-size: 80%}
+.remark-code{line-height: 1.5; font-size: 100%}
 
 @media print {
   .has-continuation {
