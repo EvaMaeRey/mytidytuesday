@@ -1,0 +1,245 @@
+---
+title: My First Closeread
+format: closeread-html
+---
+
+Graphical poems with ggplot2.
+
+
+```{r,include=F}
+library(tidyverse)
+cars <- tibble(cars)
+knitr::opts_chunk$set(echo = T, message = F, warning = F, cache = T)
+
+```
+
+:::{.cr-section}
+
+Closeread enables scrollytelling.
+
+ggplot2 allows you build up your plot bit by bit - to write 'graphical poems' (Wickham 2010).  It is easy to gain insights simply by defining what variation i variables in dataset via channels in data,  @cr-features
+
+:::{#cr-features}
+1. Highlighting
+2. Zooming
+3. Panning
+:::
+
+
+:::{focus-on="cr-myplot000"}
+Now we add a point layer, ``r knitr::knit_code$get("myplot000") |> paste(collapse = "")``
+:::
+
+:::{#cr-myplot000}
+```{r myplot000, echo = T}
+library(ggplot2); 
+cars
+```
+:::
+
+
+
+:::{focus-on="cr-myplot00"}
+Now we add a point layer, ``r knitr::knit_code$get("myplot00") |> paste(collapse = "")``
+:::
+
+:::{#cr-myplot00}
+```{r myplot00, echo = T}
+cars |>
+ggplot(data = _) 
+```
+:::
+
+
+:::{focus-on="cr-myplot0"}
+Now we define positional mapping x and y, ``r knitr::knit_code$get("myplot0") |> paste(collapse = "")``
+:::
+
+:::{#cr-myplot0}
+```{r myplot0}
+last_plot() + 
+  aes(x = speed, y = dist)
+```
+:::
+
+
+
+:::{focus-on="cr-myplot1"}
+Now we add a point layer, ``r knitr::knit_code$get("myplot1") |> paste(collapse = "")``
+:::
+
+:::{#cr-myplot1}
+```{r myplot1}
+last_plot() + 
+  geom_point()
+```
+:::
+
+:::{focus-on="cr-myplot2"}
+Now we add a title, ``r knitr::knit_code$get("myplot2") |> paste(collapse = "")``
+:::
+
+:::{#cr-myplot2}
+```{r myplot2}
+last_plot() + 
+  labs(title = "A correlation study: speed to stopping distance")
+```
+:::
+
+
+:::{focus-on="cr-myplot3"}
+and smooth, ``r knitr::knit_code$get("myplot3") |> paste(collapse = "")``
+:::
+
+:::{#cr-myplot3}
+```{r myplot3}
+last_plot() + 
+  geom_smooth()
+```
+:::
+
+
+
+:::{focus-on="cr-myplot4"}
+And plot fitted, ``r knitr::knit_code$get("myplot4") |> paste(collapse = "")``
+:::
+
+
+:::{#cr-myplot4}
+```{r myplot4}
+last_plot() + 
+  stat_smooth(geom = GeomPoint, xseq = cars$speed, color = "blue")
+```
+:::
+
+
+
+
+
+
+:::{focus-on="cr-myplot5"}
+With subset of data, ``r knitr::knit_code$get("myplot5") |> paste(collapse = "")``
+:::
+
+:::{#cr-myplot5}
+```{r myplot5}
+last_plot() %+%
+  (cars |> filter(speed < 15))
+```
+:::
+
+
+
+
+:::{focus-on="cr-myplot6"}
+change to teaching theme, ``r knitr::knit_code$get("myplot6") |> paste(collapse = "")``
+:::
+
+:::{#cr-myplot6}
+```{r myplot6}
+last_plot() +
+  ggchalkboard::theme_chalkboard()
+```
+:::
+
+:::{focus-on="cr-walkthrough-1"}
+, `ggplot(cars)`
+:::
+
+:::{#cr-walkthrough-1}
+```{r walkthrough-1}
+
+  ggplot(cars)
+```
+:::
+
+
+:::{focus-on="cr-walkthrough-2"}
+, `  aes(x = speed, y = dist)`
+:::
+
+:::{#cr-walkthrough-2}
+```{r walkthrough-2}
+last_plot() +
+    aes(x = speed, y = dist)
+```
+:::
+
+
+:::{focus-on="cr-walkthrough-3"}
+, `  geom_point()`
+:::
+
+:::{#cr-walkthrough-3}
+```{r walkthrough-3}
+last_plot() +
+    geom_point()
+```
+:::
+
+
+:::{focus-on="cr-walkthrough-4"}
+, `  geom_smooth()`
+:::
+
+:::{#cr-walkthrough-4}
+```{r walkthrough-4}
+last_plot() +
+    geom_smooth()
+```
+:::
+
+:::
+
+````{verbatim}
+
+
+```{r walkthrough, include = T}
+ggplot(cars) +
+  aes(x = speed, y = dist) +
+  geom_point() +
+  geom_smooth()
+```
+
+
+````
+
+```{r walkthrough, include = T}
+ggplot(cars) +
+  aes(x = speed, y = dist) +
+  geom_point() +
+  geom_smooth()
+```
+
+```{r, eval = F}
+knitr::knit_code$get("walkthrough")
+```
+
+
+
+
+```{r}
+cr_last_plot_construction <- ':::{focus-on="cr-.PLOTXXX"}\n.COMMENT, `.CODE`\n:::\n\n:::{#cr-.PLOTXXX}\n```{r .PLOTXXX}\n.LEADING\n  .CODE\n```\n:::\n'  
+```
+
+
+```{r, eval = T}
+knitr::knit_code$get("walkthrough") |>
+  str_remove("\\s*?\\+$") |>
+  tibble(code = _) |>
+  mutate(index = row_number()) |>
+  mutate(plot_name = paste("walkthrough", sep = "-", index)) |>
+  mutate(explosion = cr_last_plot_construction) |>
+  mutate(explosion = str_replace_all(explosion, ".PLOTXXX", plot_name)) |>
+  mutate(explosion = str_replace(explosion, ".COMMENT", "")) |>
+  mutate(explosion = str_replace_all(explosion, ".CODE", code)) |>
+  mutate(explosion = str_replace(explosion, ".LEADING", ifelse(index == 1, "", "last_plot() +"))) |>
+  pull(explosion) |>
+  cat(sep = "\n") ->
+to_closeread
+```
+
+`r to_closeread`
+
+<!-- r to_closeread` -->
+

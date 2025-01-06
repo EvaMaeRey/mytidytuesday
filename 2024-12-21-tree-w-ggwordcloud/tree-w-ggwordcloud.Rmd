@@ -62,46 +62,8 @@ lightparser::split_to_tbl("tree-w-ggwordcloud.Rmd") %>%
 inline_text
   
 inline_text$text
-
-
 ```
 
-
-```{r}
-compute_panel_grid <- function(data, scales){
-  
-  data %>% 
-    mutate(grid_alpha = str_extract(grid, ".")) |>
-    mutate(y = case_when(grid_alpha == "A" ~ I(.95),
-                         grid_alpha == "B" ~ I(.85),
-                         grid_alpha == "C" ~ I(.75),
-                         grid_alpha == "D" ~ I(.65),
-                         grid_alpha == "E" ~ I(.55),
-                         grid_alpha == "F" ~ I(.45),
-                         grid_alpha == "G" ~ I(.35),
-                         grid_alpha == "H" ~ I(.25),
-                         grid_alpha == "J" ~ I(.15),
-                         grid_alpha == "K" ~ I(.05), TRUE ~ NA
-                      )) |>
-  mutate(x = str_extract(grid, "\\d+") |>
-           as.numeric())
-  
-}
-
-tibble(grid = c("B1", "E1")) |>
-  compute_panel_grid()
-
-
-StatGrid <- ggproto("StatGrid", Stat,
-                    compute_panel = compute_panel_grid)
-
-
-ggplot() + 
-  geom_text(stat = StatGrid, 
-            aes(grid = "A1"), 
-            label = "hi there") 
-
-```
 
 
 ```{r, fig.width=20, fig.height=20}
@@ -116,73 +78,11 @@ ggplot(cars) +
            width = unit(5, "inch"), fill = "lavender"
            ) + 
   theme_void()
-
-# stat
-# 
-# library(ggtext)
-# geom_textbox(width = unit(2, "inch"))
-
-
-
 ```
 
 
 
 
-```{r}
-
-stamp_textbox <- function(label = "A label", x = I(.05), y = I(.95), size = 8, wrap_width = 30, hjust = 0, vjust = 1, ...){
-  
-  annotate(geom = ggtext::GeomTextBox, x = x, y = y, label = label, size = size, hjust = hjust, vjust = vjust, ...)
-  
-}
-
-```
-
-
-
-```{r, eval=T, fig.width=10, fig.height=10 }
-library(ggstamp)
-x0y0tree <- pos_branching(n = 21, y0 = 5, height = 2
-                          )
-
-talks <- read_csv("https://raw.githubusercontent.com/teunbrand/ggplot-extension-club/refs/heads/main/meetings.csv")[1:21, ]
-
-talks$package[is.na(talks$package)] <- "Fundamentals"
-
-library(ggstamp)
-ggcanvas() +
-   stamp_polygon(x0y0 = x0y0tree,
-               alpha = .5, 
-               fill = "darkolivegreen",
-               color = "lavender") |>  
-    ggfx::with_outer_glow()  +
- stamp_text(label = talks$package, 
-            xy = x0y0tree, 
-            size = ifelse(nchar(talks$package)<=9, 6, 4),
-            color = "lavender",
-            vjust = 0) |>
-      ggfx::with_outer_glow() + 
-   stamp_text(label = talks$date, 
-            xy = x0y0tree, 
-            size = 4,
-            color = "lavender", alpha = .3,
-            vjust = 2) |>
-      ggfx::with_outer_glow() + 
-  stamp_textbox(label = "Looking back on the last few years, we are filled with gratitude.\n\n\n\nTo our presenters and attendees... ", 
-                fill = "lavender",
-                fontface = "italic",
-                font = "Times",
-                size = 7,
-                y = I(.97)
-                ) |>
-      ggfx::with_outer_glow()  + 
-  stamp_text(label = "Thank you \n and happy holidays", size = 18, x = I(.5), y = -8.5,
-             color = "violetred4",
-             vjust = 0) |>
-      ggfx::with_outer_glow() +
-  theme_void_fill("whitesmoke", color = alpha("violetred4", .7)) 
-```
 
 
 
@@ -224,8 +124,6 @@ ggplot() +
     shape = "triangle-upright",
                       color = "darkseagreen4", y = .4) +
   theme_void() +
-  # annotate("text", x = I(.1), y = I(.7),
-  #          label = "Exported Functions") +
   NULL ->
 branches; branches
 
@@ -237,9 +135,6 @@ ggplot() +
     aes(label = user),
     shape = "square", color = "burlywood4", x = .5, y = .1) +
   theme_void() +
-  # annotate("text", x = I(.1), y = I(.2),
-  #          label = "Extenders") +
-  NULL  + 
   annotate(ggtext::GeomTextBox,
            x = I(c(.05, .65, .12, .1)),
            y = I(c(.95, .85, .6, .2)),

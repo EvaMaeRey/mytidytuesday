@@ -1,0 +1,61 @@
+---
+title: My First Closeread
+format: closeread-html
+---
+
+Graphical poems with ggplot2.
+
+
+```{r,include=F}
+library(tidyverse)
+cars <- tibble(cars)
+knitr::opts_chunk$set(echo = T, message = F, warning = F)
+
+```
+
+
+Closeread enables scrollytelling.
+
+ggplot2 allows you build up your plot bit by bit - to write 'graphical poems' (Wickham 2010).  It is easy to gain insights simply by defining what aes
+
+
+Here is a graphical poem!
+
+```{r walkthrough, include = T}
+ggplot(cars) +
+  aes(x = speed, y = dist) +
+  geom_point() +
+  geom_smooth()
+```
+
+But let's read it 'aloud' now...
+
+```{r, echo = F}
+cr_last_plot_construction <- ':::{focus-on="cr-.PLOTXXX"}\n.COMMENT, `.CODE`\n:::\n\n:::{#cr-.PLOTXXX}\n```{r .PLOTXXX}\n.LEADING\n  .CODE\n```\n:::\n'  
+```
+
+
+```{r, echo = T}
+knitr::knit_code$get("walkthrough") |>
+  str_remove("\\s*?\\+$") |>
+  tibble(code = _) |>
+  mutate(index = row_number()) |>
+  mutate(plot_name = paste("walkthrough", sep = "-", index)) |>
+  mutate(explosion = cr_last_plot_construction) |>
+  mutate(explosion = str_replace_all(explosion, ".PLOTXXX", plot_name)) |>
+  mutate(explosion = str_replace(explosion, ".COMMENT", "")) |>
+  mutate(explosion = str_replace_all(explosion, ".CODE", code)) |>
+  mutate(explosion = str_replace(explosion, ".LEADING", ifelse(index == 1, "", "last_plot() +"))) |>
+  pull(explosion) -> 
+to_closeread
+```
+
+:::{.cr-section}
+
+`r paste(knitr::knit(text = to_closeread, quiet = F), collapse = "\n\n")`
+
+:::
+
+
+
+

@@ -92,8 +92,8 @@ parfumo_data_clean %>%
 
 
 parfumo_data_clean %>% 
-  filter(Release_Year < 1950) %>% 
-  filter(n()>25, .by = Brand) %>% 
+  filter(Release_Year < 1950) %>%
+  filter(n()>25, .by = Brand) %>%
   ggplot() + 
   ggcirclepack::geom_circlepack(alpha = .6) + 
   ggcirclepack::geom_circlepack_text(check_overlap = T, 

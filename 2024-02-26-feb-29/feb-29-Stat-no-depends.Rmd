@@ -1,6 +1,6 @@
 ---
 title: "Is there statistical evidence of aversion to Feb 29 births in the US?" 
-subtitle: "An evaluation using 2000-2014 data, now creating new user-facing layer functions on the fly with statexpress"
+# subtitle: "An evaluation using 2000-2014 data"
 author: "Evangeline Reynolds, PhD"
 date: "`r Sys.Date()`"
 output: rmdformats::readthedown
@@ -180,15 +180,15 @@ Looking at the time series above or the univariate distribution of daily births 
 ```{r}
 geom_xmean_line <- function(...){
 
-    statexpress::stat_group(function(df) df |> summarize(xintercept = mean(x)), 
-             "vline", 
+    statexpress::qstat_group(function(df) df |> summarize(xintercept = mean(x)), 
+             geom = "vline", 
              dropped_aes = c("x", "y"), ...)
 
   }
 
 geom_xmean_label <- function(round = 0, ...){
   
-  statexpress::stat_group(function(df) df |> summarise(x = mean(x), y = I(.5)), 
+  statexpress::qstat_group(function(df) df |> summarise(x = mean(x), y = I(.5)), 
              geom = "label", 
              default_aes = aes(label = after_stat(round(x, round))), 
              ...)

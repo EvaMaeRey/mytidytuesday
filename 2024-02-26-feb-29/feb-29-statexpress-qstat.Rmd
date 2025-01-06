@@ -149,19 +149,26 @@ compute_y_mean <- function(df) df |> summarize(yintercept = mean(y))
 
 geom_ymean_line <- function(...){
 
-    
   qlayer(geom = GeomHline, 
          stat = qstat_group(compute_y_mean,
-                            dropped_aes = c("x", "y")), ...)
+                            dropped_aes = c("x", "y")), 
+         ...)
 
   }
 
+compute_y_mean_label <- function(df){
+  
+  df |> summarise(y = mean(y), x = I(.5))
+  
+}
+
 geom_ymean_label <- function(round = 0, ...){
   
-  statexpress::stat_group(function(df) df |> summarise(y = mean(y), x = I(.5)), 
-             geom = "label", 
-             default_aes = aes(label = after_stat(round(y, round))), 
-             ...)
+  qlayer(geom = "label", 
+         stat = qstat_group(compute_y_mean_label,
+                            default_aes = 
+                              aes(label = after_stat(round(y, round)))), 
+         ...)
   
   } 
 
@@ -179,9 +186,11 @@ Looking at the time series above or the univariate distribution of daily births 
 *I use function geom_x_mean() from [ggxmean](https://github.com/EvaMaeRey/ggxmean) to quickly show and annotate the mean value.  The annotation label functions shows 3 significant digits by default to not overwhelm the reader.*
 
 ```{r}
+function(df) df |> summarize(xintercept = mean(x))
+
 geom_xmean_line <- function(...){
 
-    statexpress::stat_group(function(df) df |> summarize(xintercept = mean(x)), 
+    statexpress::stat_group(, 
              "vline", 
              dropped_aes = c("x", "y"), ...)
 

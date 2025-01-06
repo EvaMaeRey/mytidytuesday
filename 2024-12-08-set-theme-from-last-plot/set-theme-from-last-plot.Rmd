@@ -23,12 +23,6 @@ options(tidyverse.quiet = TRUE)
 ```{r}
 library(ggplot2)
 
-# theme_set_last_plot <- function(){
-#   
-#   theme_set(theme_get() + last_plot()$theme)
-#   
-# }
-
 ggplot(cars) +
   aes(x = speed, y = dist) + 
   geom_point() +
@@ -41,7 +35,9 @@ ggplot(cars) +
   labs(title = "My ad-hoc chalkboard theme,\nwith new ink, paper, accent arguments!") ->
 p; p
   
-(theme_get() + last_plot()$theme) |> theme_set()
+(theme_get() + 
+    last_plot()$theme) |> 
+  theme_set()
 
 ggplot(mtcars) + 
   aes(wt, mpg) + 
