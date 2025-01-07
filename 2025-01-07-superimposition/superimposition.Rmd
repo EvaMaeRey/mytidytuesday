@@ -1,0 +1,78 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+```
+
+## Experiment
+
+```{r, error = T}
+library(ggplot2)
+p1 <- ggplot() + 
+  geom_point(data = mtcars,
+             aes(mpg, mpg))
+
+p2 <- ggplot() + 
+  geom_point(aes(cty, hwy),
+             data = mpg,
+             color = "blue")
+
+
+ggplot() + 
+  p1$layers + 
+  p2$layers + 
+  coord_equal()
+
+
+library(ggplot2)
+p3 <- ggplot(data = mtcars) + 
+  geom_point(aes(mpg, mpg))
+
+ggplot() + 
+  p3$layers
+
+p3$layers$geom_point$data <- p3$data
+
+ggplot() + 
+  p3$layers
+
+p4 <- ggplot(data = mtcars) + 
+  aes(cty, hwy) +
+  geom_point()
+
+ggplot() +
+  p4$layers
+
+p4$layers$geom_point$data <- p4$data
+
+p1$layers$mapping <- p4$mapping
+p4$layers$geom_point <- p4$mapping
+
+ggplot() +
+  p4$layers
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

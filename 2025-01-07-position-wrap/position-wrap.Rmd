@@ -1,0 +1,143 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+
+normal_transformer <- function(x, sd) {
+  function(x) {x + rnorm(length(x), sd = sd)}
+}
+
+PositionJitterNormal <- ggproto('PositionJitterNormal', Position,
+           
+  # We need an x and y position aesthetic                              
+  required_aes = c('x', 'y'),
+  
+  # By using the "self" argument we can access parameters that the 
+  # user has passed to the position, and add them as layer parameters
+  setup_params = function(self, data) {
+    list(
+      sd_x = self$sd_x, 
+      sd_y = self$sd_y
+    )
+  },
+
+  # When computing the layer, we can read the standard deviation 
+  # parameters off the param list, and use them to transform the
+  # position aesthetics
+  compute_layer = function(data, params, panel) {
+    
+    # construct transformers for the x and y position scales 
+    x_transformer <- normal_transformer(x, params$sd_x)
+    y_transformer <- normal_transformer(y, params$sd_y)
+    
+    # return the transformed data
+    transform_position(
+      df = data,
+      trans_x = x_transformer,  
+      trans_y = y_transformer
+    )
+  }
+)
+
+position_jitternormal <- function(sd_x = .15, sd_y = .15) {
+  ggproto(NULL, PositionJitterNormal, sd_x = sd_x, sd_y = sd_y)
+}
+
+
+df <- data.frame(
+  x = sample(1:3, 1500, TRUE),
+  y = sample(1:3, 1500, TRUE)
+)
+
+ggplot(df, aes(x, y)) + geom_point(position = position_jitter())
+ggplot(df, aes(x, y)) + geom_point(position = position_jitternormal())
+
+```
+
+
+
+
+```{r}
+normal_transformer <- function(x) {
+  function(x) {(x - min(x))/(max(x)-min(x))}
+}
+
+PositionWrap <- ggproto('PositionWrap', Position,
+           
+  # We need an x and y position aesthetic                              
+  required_aes = c('x', 'y', 'wrap'),
+  
+  # By using the "self" argument we can access parameters that the 
+  # user has passed to the position, and add them as layer parameters
+  setup_params = function(self, data) {
+    list(
+      # sd_x = self$sd_x, 
+      # sd_y = self$sd_y
+    )
+  },
+
+  # When computing the layer, we can read the standard deviation 
+  # parameters off the param list, and use them to transform the
+  # position aesthetics
+  compute_layer = function(data, params, panel) {
+    
+    # # construct transformers for the x and y position scales 
+    # x_transformer <- normal_transformer(x)
+    # y_transformer <- normal_transformer(y) 
+    wrap <- as.numeric(as.factor(data$wrap))
+    
+    # return the transformed data
+    transform_position(
+      df = data,
+      trans_x = function(x) {(x - min(x))/(max(x)-min(x)) + (wrap %% 3) }, 
+      trans_y = function(y) {(y - max(y))/(max(y)-min(y)) - (wrap %/% 3)  }
+    )
+  }
+)
+
+position_wrap <- function(sd_x = .15, sd_y = .15) {
+  ggproto(NULL, PositionWrap, sd_x = sd_x, sd_y = sd_y)
+}
+
+
+df <- data.frame(
+  x = rnorm(50),
+  y = rnorm(50),
+  index = 1:50
+)
+
+ggplot(mtcars, aes(wt, mpg, color = factor(cyl))) + geom_point()
+ggplot(mtcars, aes(wt, mpg, color = factor(cyl), wrap = interaction(gear, cyl))) + geom_point(position = position_wrap()) + 
+  geom_vline(xintercept = 0:3, linetype = "dashed") + 
+  geom_hline(yintercept = 0:-3, linetype = "dashed")
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
