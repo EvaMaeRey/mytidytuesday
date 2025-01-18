@@ -84,8 +84,135 @@ ggcanvas() +
 
 ## Experiment
 
-```{r}
+```{r, fig.width=10, fig.height=10 }
+library(tidyverse)
 
+talks <- read_csv("https://raw.githubusercontent.com/teunbrand/ggplot-extension-club/refs/heads/main/meetings.csv")[1:22, ]
+
+talks$package <- str_extract(talks$package, "\\{.+\\}")
+talks$package[17] <- "Wilke's\n'Fundamentals'"
+talks$package[22] <- "First\nMeeting"
+talks$date[17] <- "2023-01-28"
+
+pos_honeycomb <- function (x0 = 0, y0 = 0, n = 5, ncol = 3, width = 2 * sqrt(0.75), 
+    height = width * 0.75/sqrt(0.75)) 
+{
+    data.frame(x0 = pos_honeycomb_x(x0 = x0, n = n, ncol = ncol, 
+        width = width), y0 = pos_honeycomb_y(y0 = y0, n = n, 
+        ncol = ncol, height = height))
+}
+
+
+compute_panel_honeycomb <- function(data, scales, ncol = 4){
+  
+  n <- nrow(data)
+  
+  pos_honeycomb(n = n, ncol = ncol) %>% 
+    mutate(x = x0, y = y0) %>% 
+    bind_cols(data)
+  
+} 
+
+compute_panel_honeycomb_hex <- function(data, scales, n_vertices = 6, radius = .9, rotation = -.5, ncol = 4){
+
+ n <- nrow(data)
+ x0y0 <- pos_honeycomb(n = n, ncol = ncol)
+
+ data %>% 
+   mutate(id = 1:n) %>% 
+   bind_cols(x0y0) %>% 
+   crossing(the_n = 1:n_vertices) %>% 
+   mutate(x = x0 + radius * cos(-2 * pi * 0:(n_vertices - 1)/n_vertices - rotation * pi), 
+          y = y0 + radius * sin(-2 * pi * 0:(n_vertices - 1)/n_vertices - rotation * pi))
+    
+}
+
+library(statexpress)
+
+my_pal <- c("black", "tomato", "white", "dodgerblue", "black")
+
+
+ggplot(talks) + 
+  aes(label = package) + 
+  geom_polygon(stat = qstat_panel(compute_panel_honeycomb_hex, 
+                                  default_aes = aes(group = after_stat(id))), 
+               ncol = 5,
+               aes(color = NULL)) |>
+  ggfx::with_outer_glow() +
+  qlayer(geom = "text",
+         stat = qstat_panel(compute_panel_honeycomb), 
+         mapping = aes(label = date), 
+         vjust = 3, 
+         ncol = 5) +
+  geom_text(stat = qstat_panel(compute_panel_honeycomb), 
+            aes(size = case_when(nchar(package) <= 10 ~ 6,
+                                 nchar(package)<= 15 ~ 5.5,
+                                 TRUE ~ 3.5) |> 
+                  I()),
+            ncol = 5, 
+            vjust = 0) +
+  coord_equal() +
+  aes(fill = year(date)) + 
+  aes(color = I("whitesmoke")) + 
+  scale_colour_gradientn(colours = my_pal) +
+  geom_polygon(stat = qstat_panel(compute_panel_honeycomb_hex, 
+                                  default_aes = aes(group = after_stat(id))), 
+               ncol = 4,
+               fill = alpha("black", 0),
+               data = . %>% slice(1)) |> 
+  ggfx::with_outer_glow(colour = "goldenrod", sigma = 3, expand = 5) + 
+  theme_void_fill("whitesmoke") + 
+  scale_fill_viridis_c(end = .6)
+
+
+
+```
+
+
+
+```{r , fig.width=10, fig.height=10}
+x0y0tree <- pos_branching(n = 21, y0 = 5, height = 2, ncol = 6)
+
+talks <- read_csv("https://raw.githubusercontent.com/teunbrand/ggplot-extension-club/refs/heads/main/meetings.csv")[2:22, ]
+
+talks$package <- str_extract(talks$package, "\\{.+\\}")
+talks$package[16] <- "Wilke's\n'Fundamentals'"
+talks$package[21] <- "First\nMeeting"
+
+library(ggstamp)
+ggcanvas() +
+   stamp_polygon(x0y0 = x0y0tree,
+               alpha = .5, 
+               fill = "darkolivegreen",
+               color = "lavender") |>  
+    ggfx::with_outer_glow()  +
+  stamp_text(label = talks$package, 
+            xy = x0y0tree, 
+            size = case_when(nchar(talks$package)<=9 ~ 6,
+                             nchar(talks$package)<=12 ~ 5,
+                             TRUE ~ 3.5),
+            color = "lavender",
+            vjust = 0) |>
+      ggfx::with_outer_glow() + 
+   stamp_text(label = talks$date, 
+            xy = x0y0tree, 
+            size = 4,
+            color = "lavender", alpha = .3,
+            vjust = 2) |>
+      ggfx::with_outer_glow() + NULL +
+  # stamp_textbox(label = "Looking back on the last few years, we are filled with gratitude.\n\n\n\nTo our presenters ... ", 
+  #               fill = "lavender",
+  #               fontface = "italic",
+  #               font = "Times",
+  #               size = 7,
+  #               y = I(.97)
+  #               ) |>
+  #     ggfx::with_outer_glow()  + 
+  stamp_text(label = "Thank you \n and happy holidays!", size = 18, x = I(.5), y = -8.5,
+             color = "violetred4",
+             vjust = 0) |>
+      ggfx::with_outer_glow() +
+  theme_void_fill("whitesmoke", color = alpha("violetred4", .7)) 
 ```
 
 

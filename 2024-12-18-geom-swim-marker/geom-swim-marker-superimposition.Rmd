@@ -20,7 +20,7 @@ options(tidyverse.quiet = TRUE)
 
 ## Status Quo
 
-```{r}
+```{r, error = T}
 library(tidyverse)
 library(ggswim)
 
@@ -83,6 +83,8 @@ ggplot() +
   p2$layers + 
   p3$layers
 
+
+# but...
 p1.2 <- ggplot(data = patient_data) +
   geom_swim_lane(
     mapping = aes(

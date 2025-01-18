@@ -56,17 +56,15 @@ p3$layers$geom_point$data <- p3$data
 ggplot() + 
   p3$layers
 
-p4 <- ggplot(data = mtcars) + 
+p4 <- ggplot() + 
   aes(cty, hwy) +
-  geom_point()
+  geom_point(data = mtcars)
 
 ggplot() +
   p4$layers
 
-p4$layers$geom_point$data <- p4$data
-
-p1$layers$mapping <- p4$mapping
-p4$layers$geom_point <- p4$mapping
+# p4$layers$geom_point$data <- p4$data
+p4$layers$geom_point$mapping <- p4$mapping
 
 ggplot() +
   p4$layers

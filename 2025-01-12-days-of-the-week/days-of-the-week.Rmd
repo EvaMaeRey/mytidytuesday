@@ -1,0 +1,58 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+tribble(~day, ~length, ~color,
+        "Monday", 12, "blue",
+        "Tuesday", 10.5, "yellow",
+        "Wednesday", 8.5, "red",
+        "Thursday", 7, "springgreen3",
+        "Friday", 6, "mediumpurple3",
+        "Saturday", 5, "orange",
+        "Sunday", 4, "pink",
+        "TDOTW", 3, "steelblue1") ->
+xylophone
+
+StatProp <- ggstats:::StatProp
+
+ggplot(xylophone) + 
+  aes(x = fct_inorder(day), weight = length) + 
+  ggstats:::geom_diverging(complete = T) + 
+  aes(fill = I(color)) + 
+  geom_text(y = 0, aes(label = day), angle = 90, size = 8, color = "whitesmoke") +
+  aes(label = day)
+```
+
+
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+
+## Experiment
+
+```{r}
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

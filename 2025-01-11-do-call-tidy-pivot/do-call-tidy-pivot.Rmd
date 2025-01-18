@@ -1,0 +1,48 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+do.call(mean, list(x = 1:10, na.rm = T))
+
+
+do.call(tidypivot::pivot_helper, list(data = tidytitanic::tidy_titanic))
+
+
+pivot_list <- list(data = tidytitanic::tidy_titanic, 
+                   rows = "sex",
+                   cols = "age")
+
+do.call(tidypivot::pivot_helper, pivot_list)
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
