@@ -1,0 +1,127 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+## Intro Thoughts
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+compute_fill_collapse <- function(data, scales){
+  
+  if(is.null(data$fill)){data$fill <- 1}
+  
+  data |> 
+    summarise(fill = sum(fill),
+              summary = sum(fill))
+  
+}
+
+
+StatFillCollapse <- ggproto("StatFillCollapse", 
+                            Stat,
+                            compute_group = compute_fill_collapse,
+                            default_aes = aes(fill = after_stat(fill)))
+
+
+set.seed(12346)
+
+tibble(x = sample(c("North", "South"), 100, replace = T, prob = c(.3,.7)), 
+       y = sample(c("Carolina", "Dakota"), 100, replace = T, prob = c(.3,.7)),
+       household_size = sample(1:7, 100, replace = T, prob = 7:1)) ->
+df
+
+df
+
+
+df |> 
+  summarise(agg = sum(household_size), .by = c(x,y))
+  
+ggplot(df) + 
+  aes(x = x, y = y, fill = household_size) + 
+  geom_point(shape = 21, size = 15, position = "jitter") + 
+  labs(title = "'depth' is shown via jitter")
+
+layer_data() |> nrow()
+
+# superficial fill, overplotting
+ggplot(df) + 
+  aes(x = x, y = y, fill = household_size) + 
+  geom_point(shape = 21, size = 15)
+
+layer_data() |> nrow()
+
+# deep fill, collapsing by group
+ggplot(df) + 
+  aes(x = x, y = y, fill = household_size) + 
+  geom_point(stat = StatFillCollapse, shape = 21, size = 15)
+
+layer_data()
+
+# uh-oh, log transformation not doing what might want
+last_plot() + 
+  scale_fill_viridis_c(transform = "log10")
+
+layer_data()
+
+```
+
+
+
+```{r}
+# which is 
+
+# superficial fill with jitter
+df |> 
+  group_by(x = x, y =  y) |>
+  summarise(z = sum(household_size)) ->
+precompute
+
+precompute |>
+  ggplot() + 
+  aes(x = x, y = y, fill = z) + 
+  geom_point(shape = 21, size = 15)
+
+last_plot() + 
+  scale_fill_viridis_c(transform = "log10")
+
+# so some variations on StatFillCollase
+
+# no default aes
+StatFillCollapse$default_aes <- aes()
+
+# gives us discrete scale
+ggplot(df) + 
+  aes(x = x, y = y, fill = household_size) + 
+  geom_point(stat = StatFillCollapse, shape = 21, size = 15)
+
+last_plot() + 
+  scale_fill_viridis_c(transform = "log")
+
+StatFillCollapse$default_aes <- aes(fill = after_stat(summary))
+
+ggplot(df) + 
+  aes(x = x, y = y, fill = household_size) + labs(fill = "agg household size") +
+  geom_point(stat = StatFillCollapse, shape = 21, size = 15)
+
+last_plot() + 
+  scale_fill_viridis_c(transform = "log")
+
+
+
+
+```
+
+## Closing remarks, Other Relevant Work, Caveats

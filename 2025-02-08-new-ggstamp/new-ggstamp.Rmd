@@ -1,0 +1,88 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+annotate
+
+
+compute_group_stampI <- function(data, scales){
+  
+  data.frame(x = I(.5), y = I(.5),
+             xend = I(.75), yend = I(.75),
+             xmin = I(.25), ymin = I(.25),
+             xmax = I(.75), ymax = I(.75))
+             # width = I(.5), height = I(.5))
+  
+}
+
+StatStampI <- ggproto("StatStampI", Stat,
+                     compute_group = compute_group_stampI)
+
+library(statexpress)
+
+ggplot(data = data.frame(x = NA)) + 
+  qlayer(stat = StatStampI, geom = GeomPoint) + 
+  qlayer(stat = StatStampI, geom = GeomSegment) + 
+  qlayer(stat = StatStampI, geom = GeomRect, alpha = .2, fill = "green") + 
+  qlayer(stat = StatStampI, geom = GeomPoint, x = I(.4), size = 8) + 
+  qlayer(stat = StatStampI, geom = GeomTile, alpha = .1) + 
+  coord_equal()
+
+  
+
+compute_group_stamp_numeric <- function(data, scales){
+  
+  data.frame(x = 0, y = 0,
+             xend = 1, yend = 1,
+             xmin = -.5, ymin = -.5,
+             xmax = .5, ymax = .5)
+             # width = I(.5), height = I(.5))
+  
+}
+
+StatStampNumeric <- ggproto("StatStampNumeric", Stat,
+                     compute_group = compute_group_stampI)
+
+library(statexpress)
+
+ggplot(data = data.frame(x = NA)) + 
+  ggchalkboard:::theme_glassboard() +
+  qlayer(stat = StatStampNumeric, geom = GeomPoint) + 
+  qlayer(stat = StatStampNumeric, geom = GeomSegment) + 
+  qlayer(stat = StatStampNumeric, geom = GeomRect, alpha = .2, fill = "green") + 
+  qlayer(stat = StatStampNumeric, geom = GeomPoint, x = .4, size = 8) + 
+  qlayer(stat = StatStampNumeric, geom = GeomTile, alpha = .3, color = "pink")
+
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

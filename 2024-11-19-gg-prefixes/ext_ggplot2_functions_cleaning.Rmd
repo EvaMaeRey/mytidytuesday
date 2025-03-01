@@ -26,47 +26,63 @@ knitr::opts_chunk$set(eval = F)
 
 ```
 
-## Experiment
+## 
+
+We want to look at the packages submitted to the ggplot2 extension gallery at https://exts.ggplot2.tidyverse.org/gallery/.
+
+To add an ggplot2 extension, there is this instruction
+
+> Add an entry for your extension in the _config.yml file of this repository with the meta data for your extension (copy another entry and modify). Please see below for guidance on the meta data.
 
 ```{r, eval = F}
-extgalleryhtml <- read_lines("https://exts.ggplot2.tidyverse.org/gallery/")
-
-"https://raw.githubusercontent.com/lionel-/ggstance/refs/heads/main/NAMESPACE"
-"https://raw.githubusercontent.com/rcorty/ggQQunif/refs/heads/main/NAMESPACE"
-"https://raw.githubusercontent.com/statsmaths/ggimg/refs/heads/master/NAMESPACE"
-
-extgalleryhtml %>% 
-  str_detect("github.com/.+/gg.+") %>% 
-  extgalleryhtml[.] %>% 
-  str_extract("github.com/([a-zA-Z]|-)+/gg[a-zA-Z]+") %>% 
-  unique() %>% 
-  data.frame(repo_name = .) %>% 
-  mutate(repo_name = str_remove(repo_name, "github.com/")) %>% 
-  remove_missing() %>% 
-  mutate(namespace_url = paste0("https://raw.githubusercontent.com/", 
-                              repo_name, 
-                              "/refs/heads/master/NAMESPACE")) ->
-extensions_df
-```
-
-
-```{r, eval = F}
- read_lines("https://raw.githubusercontent.com/ggplot2-exts/gallery/refs/heads/gh-pages/_config.yml") %>% 
+ read_lines("https://raw.githubusercontent.com/ggplot2-exts/gallery/refs/heads/gh-pages/_config.yml") |> 
   write_lines("ext_config_yml.txt")
 ```
+
+Here is one of the entries.
+
+```{r}
+read_lines("ext_config_yml.txt")[8:23]
+```
+
+Maybe we can easily collect all this info if we remove the returns before indentations... (the description fields)
+
+```{r}
+read_lines("ext_config_yml.txt") |>
+  paste(collapse = "\n") |>
+  str_replace_all("\\>\n    ", "") |>
+  str_replace_all("\n    ", "") |>
+  str_split("\n") ->
+config_initial_parse
+
+config_initial_parse |> head(20)
+
+```
+
+
+
 
 ```{r}
 read_lines("ext_config_yml.txt") %>% 
   str_detect("ghuser:|ghrepo:") %>% 
-  read_lines("ext_config_yml.txt")[.] %>% 
+  read_lines("ext_config_yml.txt")[.] ->
+info_github
+
+info_github |> head(12)
+
+info_github %>% 
   matrix(ncol = 2, byrow = T) %>% 
   as_tibble() %>% 
   rename(user = V1, repo = V2) %>% 
   mutate(user = str_remove(user, "ghuser: ") %>% str_trim()) %>% 
   mutate(repo = str_remove(repo, "ghrepo: ") %>% str_trim()) ->
-df_gh
+df_gh # data frame github repository info
+
+df_gh |> head(12)
 ```
 
+
+To get the exported functions, we'll collect all...
 
 ```{r, fig.width=20, fig.height=20}
 

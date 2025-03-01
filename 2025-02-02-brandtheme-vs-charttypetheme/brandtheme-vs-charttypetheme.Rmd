@@ -1,0 +1,153 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(ggplot2)
+
+ggplot(cars) + 
+  aes(speed, dist) + 
+  geom_point()
+
+last_plot() + 
+  theme(panel.grid = element_line(color = "black"))
+  
+last_plot() +
+  theme_classic()
+
+last_plot() + 
+  theme(panel.grid = element_line(color = "black"))
+  
+
+last_plot() + 
+  theme(panel.grid.major = element_line(color = "black"))
+
+last_plot()$theme$panel.grid
+last_plot()$theme$panel.grid.minor
+last_plot()$theme$panel.grid.major
+
+sessionInfo("ggplot2")
+
+```
+
+## Experiment
+
+```{r}
+theme_classic2 <- function(base_size = 11, base_family = "",
+                          header_family = NULL,
+                          base_line_size = base_size / 22,
+                          base_rect_size = base_size / 22,
+                          ink = "black", paper = "white") {
+  theme_bw(
+    base_size = base_size,
+    base_family = base_family,
+    header_family = header_family,
+    base_line_size = base_line_size,
+    base_rect_size = base_rect_size,
+    ink = ink, paper = paper
+  ) %+replace%
+    theme(
+      # no background and no grid
+      panel.border     = element_blank(),
+      panel.grid = element_blank(),             # Revision
+
+      # show axes
+      axis.text  = element_text(size = rel(0.8)),
+      axis.line  = element_line(lineend = "square"),
+      axis.ticks = element_line(),
+
+      # simple, black and white strips
+      strip.background = element_rect(linewidth = rel(2)),
+      # NB: size is 1 but clipped, it looks like the 0.5 of the axes
+
+      complete = TRUE
+    )
+}
+
+
+ggplot(cars) + 
+  aes(speed, dist) + 
+  geom_point()
+
+last_plot() + 
+  theme(panel.grid = element_line(color = "black"))
+  
+last_plot() +
+  theme_classic2()
+
+last_plot() + 
+  theme(panel.grid = element_line(color = "black"))
+```
+
+
+```{r, out.width="33%", fig.show='hold'}
+theme_blank <- function(base_size = 11, base_family = "",
+                              header_family = NULL,
+                              base_line_size = base_size / 22,
+                              base_rect_size = base_size / 22,
+                              ink = "black", paper = alpha(ink, 0)) {
+  force(ink)
+  # Based on theme_bw
+  theme_grey(
+    base_size = base_size,
+    base_family = base_family,
+    header_family = header_family,
+    base_line_size = base_line_size,
+    base_rect_size = base_rect_size,
+    ink = ink, paper = paper
+  ) %+replace%
+    theme(
+      panel.background  = element_blank(),
+      # plot.background   = element_blank(),
+      legend.background = element_blank(),
+      legend.key        = element_blank(),
+      panel.border      = element_blank(),
+      panel.grid        = element_blank(),
+      axis.title = element_blank(),
+      axis.ticks = element_blank(),
+      axis.text = element_blank(),
+      # contour strips to match panel contour
+      strip.background  = element_blank(),
+      complete = TRUE,
+      plot.margin = margin(10,10,10,10, unit = "pt")
+    )
+}
+
+library(ggplot2)
+
+ggplot(mtcars) + 
+  aes(wt, mpg) + 
+  geom_point() + 
+  facet_wrap(~am) + 
+  theme_transparent()
+
+last_plot() + 
+  theme_void(paper = "pink") + 
+  labs(title = "theme void")
+
+last_plot() + 
+  theme_blank(paper = "grey") + 
+  labs(title = "theme blank loves infographics")
+
+```
+
+
+## Closing remarks, Other Relevant Work, Caveats

@@ -1,0 +1,253 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+library(legendry)
+
+gapminder::gapminder %>% 
+  filter(continent == "Europe") %>% 
+  filter(year %in% c(1957, 2002)) %>% 
+  ggplot() + 
+  facet_wrap(~year) + 
+  aes(y = country, weight = pop) + 
+  geom_bar()
+
+gapminder::gapminder %>% 
+  filter(continent == "Europe") %>% 
+  filter(year %in% c(1957, 2002)) %>% 
+  ggplot() + 
+  facet_wrap(~year) + 
+  aes(y = country, weight = pop) + 
+  geom_bar() 
+
+last_plot() +
+  aes(y = tidytext::reorder_within(country, pop, year))
+
+last_plot() + 
+  tidytext::scale_y_reordered()
+
+last_plot() + 
+  scale_y_discrete()
+
+last_plot() + 
+  aes(y = fct_reorder(country, pop))
+
+last_plot() + 
+  aes(y = interaction(year, country, sep = "___") |> fct_infreq(w = 1/pop))
+
+last_plot() + 
+  tidytext::scale_y_reordered()
+
+
+last_plot() + 
+  aes(y = interaction(year, country, sep = "___") |> fct_infreq(w = 1/pop)) + 
+  scale_y_discrete(labels = function(x) str_remove(x, "^.+___"))
+
+last_plot() + 
+  aes(y = interaction(year, country) |> fct_infreq(w = 1/pop)) + scale_y_discrete()
+
+last_plot() + 
+  scale_y_discrete(labels = function(x) str_remove(x, ".+\\."))
+
+
+last_plot() + 
+  facet_wrap(~ year, scales = "free_y")
+
+
+gapminder::gapminder %>% 
+  filter(continent == "Oceania") %>% 
+  filter(year %in% c(1957, 2002)) %>% 
+  ggplot() + 
+  facet_wrap(~ year) + 
+  aes(y = country, weight = pop) + 
+  geom_bar() 
+
+last_plot() + 
+  aes(y = fct_infreq(interaction(year, country), w = pop)) 
+
+last_plot() + 
+  facet_wrap(~ year, scales = "free_y")
+
+last_plot() + 
+  scale_y_discrete(labels = function(x) str_remove(x, ".+\\."))
+  
+last_plot() + 
+  aes(y = fct_infreq(interaction(year, country), w = 1/pop)) 
+
+
+gapminder::gapminder %>% 
+  filter(continent == "Americas") %>% 
+  filter(year %in% c(1957, 2002)) %>% 
+  ggplot() + 
+  facet_wrap(~ year) + 
+  aes(x = pop, y = interaction(year, country, sep = "___") |> fct_reorder(pop)) + 
+  geom_col() 
+
+last_plot() + 
+  facet_wrap(~ year, scales = "free_y")
+
+last_plot() +
+  scale_y_discrete(labels = function(x) str_remove(x, ".+___")) + # don't show year part of factor
+  labs(y = NULL)
+
+
+read.csv("https://raw.githubusercontent.com/EvaMaeRey/mytidytuesday/refs/heads/main/2024-11-19-gg-prefixes/exported_funs_exts_ggplot2_tidyverse_org.csv") |>
+  mutate(prefix_short = fun_exported |> str_extract(".+?_")) |>
+  filter(prefix_short %in% c("geom_", "scale_", "stat_", "theme_", "layer_", "coord_", "position_")) |>
+  group_by(user) |> 
+  filter(n() >= 70) |>
+  filter(!is.na(prefix_short)) |>
+  ggplot() + 
+  facet_wrap(~user, scales = "free_y") +
+  aes(y = interaction(user, prefix_short) |> fct_infreq()) +
+  geom_bar() + 
+  scale_y_discrete(labels = function(x) str_remove(x, ".+\\.")) +
+  coord_trans(y = "reverse", ylim = c(1,6)) + 
+  labs(y = NULL) + 
+  theme_gray(paper = ggplot2:::col_mix("lavender", "white", .9),
+             ink = "grey10") + 
+  theme(axis.ticks = element_blank())
+```
+
+
+```{r}
+compute_panel_rank <- function(data, scales, width = .9){
+  
+  data|>
+    mutate(xmax = x,
+           xmin = 0,
+           ymin = rank(-x, ties.method = "random") - width/2,
+           ymax = ymin + width,
+           label = ranked) |>
+    arrange(ymin) |>
+    dplyr::select(-x) |>
+    slice(1:4)
+  
+}
+
+compute_panel_rank_label <- function(data, scales, width = .9){
+  
+  data|>
+    mutate(y = rank(-x, ties.method = "random"),
+           x = 0,
+           label = ranked) |>
+    arrange(y) |>
+    slice(1:4)
+  
+}
+
+
+library(statexpress)
+
+gapminder::gapminder |>
+  filter(year > 2000) |>
+  ggplot() + 
+  aes(ranked = country, x = pop) + 
+  geom_rect(stat = qstat_panel(compute_panel_rank)) + # geom_rbar
+  geom_label(stat = qstat_panel(compute_panel_rank_label)) + #geom_rbar_text
+  facet_wrap(~year) + 
+  coord_trans(y = "reverse")
+
+
+fct_rank <- function(x, by){
+  
+  rank(-by) |> interaction(x) |> fct_reorder(-by) 
+  
+}
+
+fct_rank_within <- function(x, by, within){
+  
+  data.frame(x, by, within) |>
+  mutate(rank = fct_rank(x, by), .by = within) |>
+  mutate(ranked = interaction(within, rank)) |>
+  pull(ranked)
+  
+}
+
+gapminder::gapminder |>
+  filter(continent == "Oceania") |>
+  filter(year > 2000) |>
+  select(country, pop, year) |>
+  mutate(ranked = fct_rank(country, pop))
+
+gapminder::gapminder |>
+  filter(continent == "Oceania") |>
+  filter(year > 2000) |>
+  select(country, pop, year) |>
+  mutate(ranked = fct_rank_within(country, pop, year))
+
+# fct_rank_within <- function(x, by, within){
+#   
+#   for(i in 1:len)
+#   rank(-by) |> interaction(x) |> fct_reorder(by) |> interaction(within)
+#   
+# }
+
+gapminder::gapminder |>
+  filter(continent == "Americas") |>
+  filter(year > 2000) |>
+  ggplot() + 
+  aes(y = fct_rank(country, pop), 
+      x = pop) +
+  geom_col() +
+  coord_trans(y = "reverse") # coord_page
+
+
+last_plot() +
+  facet_wrap(~year, scales = "free_y")
+
+last_plot() + 
+  scale_y_discrete(labels = function(x) str_remove(x, "\\d+\\.")) 
+
+
+  
+gapminder::gapminder |>
+  filter(continent == "Americas") |>
+  filter(year > 2000) |>
+  ggplot() + 
+  aes(y = fct_rank_within(country, pop, year), 
+      x = pop) +
+  geom_col() +
+  coord_trans(y = "reverse") # coord_page
+
+
+last_plot() +
+  facet_wrap(~year, scales = "free_y")
+
+last_plot() + 
+  scale_y_discrete(labels = function(x) str_remove(x, ".+\\.")) 
+
+
+```
+
+
+
+## Experiment
+
+```{r}
+tidytext::scale_y_reordered
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

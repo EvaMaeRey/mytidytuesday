@@ -9,7 +9,8 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,
-                      warning = F)
+                      warning = F,
+                      error = T)
 options(tidyverse.quiet = TRUE)
 ```
 
@@ -29,7 +30,7 @@ library(tidyverse)
 ## Experiment
 
 ```{r}
-library(tidyverse)
+library(ggplot2)
 data_filter <- function(.keep, .by) {
   structure(list(keep_specification = rlang::enquo(.keep), 
                  by_specification = rlang::enquo(.by)), 
@@ -46,9 +47,12 @@ ggplot_add.filterobs <- function(object, plot, object_name) {
 
 }
 
+mtcars
+plot(mtcars)
+
 ggplot(mtcars) + 
   aes(factor(cyl), fill = factor(cyl)) + 
-  geom_bar() -> p1
+  geom_bar() -> p1;p1
 
 ggplot(mtcars) + 
   aes(id = cyl, fill = factor(cyl)) + 
@@ -64,11 +68,62 @@ p1 + p2 + p3
 
 (p1 + p2 + p3) * data_filter(cyl != 4)
 
-
 (p1 + p2 + p3) * aes(alpha = cyl != 4)
+
+
 
 ```
 
 
+However, w/ `/` some repetition is required.
+
+```{r}
+
+(p1 + p2) * aes(alpha = cyl != 4) / p3 * aes(alpha = cyl != 4)
+
+
+(p1 + p2) * data_filter(cyl != 4)  / p3 * data_filter(cyl != 4)
+
+
+p1 * data_filter(cyl != 4)  / ((p2 + p3) * data_filter(cyl != 4))
+
+```
+
+
+This can be shorted by naming specification.
+
+
+```{r}
+cyl4spotlight <- aes(alpha = cyl == 4)
+
+(p1 + p2) * cyl4spotlight / p3 * cyl4spotlight
+
+rm4 <- data_filter(cyl != 4)
+
+(p1 + p2) * rm4 / p3 * rm4
+
+
+```
+
+
+There is an `&` operator, that is demonstrated with 'theme' in the documentation.
+
+> & will add the element to all subplots in the patchwork, and * will add the element to all the subplots in the current nesting level. As with | and /, be aware that operator precedence must be kept in mind.
+
+Which sounds promising, but isn't working with data_filter() as written but *does* work with the opaqueness spotlighting. Exciting!
+
+```{r}
+patchwork <- p3 / (p1 | p2)
+patchwork & theme_minimal()
+
+patchwork & aes(alpha = cyl == 4) & guides(alpha = "none")
+patchwork & data_filter(cyl != 4)
+```
+
+
+```{r}
+file.info("programmatic-crosstalk.Rmd")$ctime -
+  Sys.time()
+```
 
 ## Closing remarks, Other Relevant Work, Caveats

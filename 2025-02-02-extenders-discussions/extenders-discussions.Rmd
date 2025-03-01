@@ -1,0 +1,186 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+library(httr)
+library(jsonlite)
+library(dplyr)
+library(tidyr)
+
+# GitHub repository details
+owner <- "teunbrand"
+repo <- "ggplot-extension-club"
+
+# Base URL for GitHub API
+base_url <- paste0("https://api.github.com/repos/", owner, "/", repo)
+
+# Function to fetch discussions
+fetch_discussions <- function(owner, repo) {
+  url <- paste0(base_url, "/discussions")
+  discussions <- list()
+  
+  while (!is.null(url)) {
+    response <- GET(url, add_headers(Authorization = paste("token", github_token)))
+    stop_for_status(response)  # Raise error if the request fails
+    
+    data <- content(response, as = "text") %>% fromJSON(flatten = TRUE)
+    
+    # Append discussion details
+    discussions <- append(discussions, list(data))
+    
+    # Check for pagination (next page)
+    url <- ifelse("next" %in% names(headers(response)$link),
+                  strsplit(headers(response)$link, ";")[[1]][2] %>%
+                    gsub('<(.*)>', '\\1', .),
+                  NULL)
+  }
+  
+  # Combine all discussions into a data frame
+  discussions_df <- do.call(rbind, lapply(discussions, function(d) {
+    tibble(
+      discussion_id = d$id,
+      title = d$title,
+      created_at = d$created_at,
+      updated_at = d$updated_at,
+      author = d$user$login,
+      url = d$html_url
+    )
+  }))
+  
+  return(discussions_df)
+}
+
+# Function to fetch comments for a given discussion
+fetch_comments <- function(owner, repo, discussion_id) {
+  url <- paste0(base_url, "/discussions/", discussion_id, "/comments")
+  comments <- list()
+  
+  while (!is.null(url)) {
+    response <- GET(url, add_headers(Authorization = paste("token", github_token)))
+    stop_for_status(response)  # Raise error if the request fails
+    
+    data <- content(response, as = "text") %>% fromJSON(flatten = TRUE)
+    
+    # Append comments details
+    comments <- append(comments, list(data))
+    
+    # Check for pagination (next page)
+    url <- ifelse("next" %in% names(headers(response)$link),
+                  strsplit(headers(response)$link, ";")[[1]][2] %>%
+                    gsub('<(.*)>', '\\1', .),
+                  NULL)
+  }
+  
+  # Combine all comments into a data frame
+  comments_df <- do.call(rbind, lapply(comments, function(c) {
+    tibble(
+      discussion_id = discussion_id,
+      comment_body = c$body,
+      comment_author = c$user$login,
+      comment_created_at = c$created_at
+    )
+  }))
+  
+  return(comments_df)
+}
+
+# Function to get all discussions and comments in one DataFrame
+get_github_discussions_df <- function(owner, repo) {
+  # Fetch discussions
+  discussions_df <- fetch_discussions(owner, repo)
+  
+  # Fetch comments for each discussion
+  all_comments <- list()
+  for (discussion_id in discussions_df$discussion_id) {
+    comments_df <- fetch_comments(owner, repo, discussion_id)
+    all_comments <- append(all_comments, list(comments_df))
+  }
+  
+  # Combine all comments into one data frame
+  comments_df <- do.call(rbind, all_comments)
+  
+  # Merge discussions and comments by discussion_id
+  final_df <- left_join(discussions_df, comments_df, by = "discussion_id")
+  
+  return(final_df)
+}
+
+# Example usage
+df <- get_github_discussions_df(owner, repo)
+
+# Display the first few rows of the data frame
+head(df)
+
+```
+
+## Experiment
+
+```{r}
+library(rvest)
+
+# Function to scrape GitHub Discussions from a repository
+scrape_github_discussions <- function(repo_owner, repo_name) {
+  base_url <- paste0("https://github.com/", repo_owner, "/", repo_name, "/discussions")
+  
+  # Read the webpage
+  page <- read_html(base_url)
+  
+  # Extract discussion titles
+  titles <- page %>% html_nodes(".Link--primary") %>% html_text()
+  
+  # Extract discussion links
+  links <- page %>% html_nodes(".Link--primary") %>% html_attr("href")
+  links <- paste0("https://github.com", links)
+  
+  # Extract authors
+  authors <- page %>% html_nodes(".Link--secondary") %>% html_text()
+  
+  # Extract timestamps
+  timestamps <- page %>% html_nodes("relative-time") %>% html_attr("datetime")
+  
+  # Store results in a data frame
+  discussions_df <- data.frame(
+    Title = titles,
+    Link = links,
+    # Author = authors,
+    Timestamp = timestamps,
+    stringsAsFactors = FALSE
+  )
+  
+  return(discussions_df)
+}
+
+# Example usage: Replace with your target repository
+# GitHub repository details
+repo_owner <- "teunbrand"
+repo_name <- "ggplot-extension-club"
+
+discussions <- scrape_github_discussions(owner, repo)
+
+# Print the discussions
+print(discussions)
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

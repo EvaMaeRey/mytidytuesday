@@ -1,0 +1,102 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+GeomBoxplot$default_aes
+
+GeomBin2d$default_aes
+
+
+library(ggalluvial)
+GeomStratum$default_aes
+GeomRect$default_aes
+
+GeomStratum$default_aes <- modifyList(GeomRect$default_aes, aes(color = from_theme(ink),
+                                                                fill = from_theme(paper)))
+
+Titanic %>% 
+  data.frame() %>%  
+  ggplot() + 
+  aes(axis1 = Sex, axis2 = Age, y = Freq) +
+  geom_alluvium() +
+  geom_stratum() 
+
+GeomStratum$default_aes <- modifyList(GeomRect$default_aes, 
+                                      aes(color = from_theme(ink),
+                                          fill = from_theme(paper)))
+
+last_plot() 
+
+GeomStratum$default_aes <- GeomBoxplot$default_aes
+
+last_plot() 
+
+last_plot() + 
+  ggchalkboard::theme_chalkboard()
+```
+
+
+```{r}
+library(ggsankey)
+df <- mtcars %>%
+  make_long(cyl, vs, am, gear, carb)
+
+ggplot(df, aes(x = x, 
+               next_x = next_x, 
+               node = node, 
+               next_node = next_node,
+               fill = factor(node))) +
+  geom_sankey() +
+  scale_fill_discrete(drop=FALSE)
+
+last_plot() + 
+  ggchalkboard::theme_chalkboard()
+
+
+ggplot(df, aes(x = x, next_x = next_x, node = node, next_node = next_node, fill = factor(node), label = node)) +
+  geom_sankey(flow.alpha = .6,
+              node.color = "gray30") +
+  geom_sankey_label(aes(fill = NULL)) +
+  scale_fill_viridis_d(drop = FALSE) +
+  theme_sankey(base_size = 18) +
+  labs(x = NULL) +
+  theme(legend.position = "none",
+        plot.title = element_text(hjust = .5)) +
+  ggtitle("Car features")
+
+last_plot() + 
+  ggchalkboard:::theme_chalkboard()
+
+geom_sankey_label
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

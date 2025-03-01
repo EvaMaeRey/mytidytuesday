@@ -21,7 +21,7 @@ options(tidyverse.quiet = TRUE)
 ## Status Quo
 
 ```{r}
-library(tidyverse)
+
 
 ```
 
@@ -31,28 +31,9 @@ library(tidyverse)
 
 
 ```{r}
-normal_transformer <- function(x) {
-  function(x) {(x - min(x))/(max(x)-min(x))}
-}
+library(tidyverse)
 
-PositionWrap <- ggproto('PositionWrap', Position,
-           
-  # We need an x and y position aesthetic                              
-  required_aes = c('x', 'y', 'wrap'),
-  
-  # By using the "self" argument we can access parameters that the 
-  # user has passed to the position, and add them as layer parameters
-  setup_params = function(self, data) {
-    list(
-      # sd_x = self$sd_x, 
-      # sd_y = self$sd_y
-    )
-  },
-
-  # When computing the layer, we can read the standard deviation 
-  # parameters off the param list, and use them to transform the
-  # position aesthetics
-  compute_layer = function(data, params, panel) {
+compute_layer_wrap <- function(data, params, panel) {
     
     wrap <- as.numeric(as.factor(data$wrap))
     
@@ -64,19 +45,21 @@ PositionWrap <- ggproto('PositionWrap', Position,
     if(range_x == 0){range_x <- 1}
     if(range_y == 0){range_y <- 1}
     
-    # return the transformed data
-    transform_position(
+    ggplot2::transform_position(
       df = data,
       trans_x = function(x) {(x - min(x))/(range_x) + wrapping_x}, 
       trans_y = function(y) {(y - max(y))/(range_y) - wrapping_y}
     )
   }
-)
+
+PositionWrap <- ggproto(`_class` = 'PositionWrap', `_inherit` = Position,
+                        required_aes = c('x', 'y', 'wrap'),
+                        compute_layer = compute_layer_wrap)
+
 
 position_wrap <- function(sd_x = .15, sd_y = .15) {
   ggproto(NULL, PositionWrap, sd_x = sd_x, sd_y = sd_y)
 }
-
 
 df <- data.frame(
   x = rnorm(50),
@@ -84,22 +67,37 @@ df <- data.frame(
   index = 1:50
 )
 
+library(statexpress)
 
+compute_group_means <- function(data, scales){
+  
+  data |> 
+    summarise(x = mean(x),
+              y = mean(y))
+  
+}
 
-
-ggplot(mtcars, aes(wt, mpg, color = factor(cyl))) + geom_point()
+compute_group_label <- function(data, scales){
+  
+  data |> 
+    summarise(x = 0,
+              y = 0)
+  
+}
 
 ggplot(mtcars) +
   aes(wt, mpg, 
       color = factor(cyl), 
+      label = factor(cyl),
       wrap = interaction(gear, cyl)) +
   geom_point(position = position_wrap()) + 
+  geom_point(stat = ggproto("temp", Stat, 
+                            compute_group = compute_group_means), 
+             position = position_wrap(),
+             size = 8, alpha = .2) +
+  geom_label()
   geom_vline(xintercept = 0:3, linetype = "dashed") + 
   geom_hline(yintercept = 0:-3, linetype = "dashed")
-
-last_plot() + 
-  aes(wrap = interaction(cyl, gear))
-
 
 ```
 

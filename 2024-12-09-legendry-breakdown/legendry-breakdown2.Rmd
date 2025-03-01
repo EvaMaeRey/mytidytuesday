@@ -1,0 +1,147 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r legendry}
+library(tidyverse)
+library(legendry)
+data.frame(
+  category = c("Meat", "Meat", "Vegetables", "Vegetables", "Dairy"),
+  food     = c("Beef", "Chicken", "Carrots", "Onions", "Cheese"),
+  gram     = c(85,  85, 150, 210, 225),
+  calories = c(245, 185, 45, 80, 240)) %>%
+  mutate(food_category = interaction(food, category)) |>
+  mutate(category_food = paste(category, food)) |>
+  ggplot() +
+  theme_classic() +
+  aes(x = food_category,
+      y = calories) +
+  geom_col() +
+  aes(fill = category_food) +
+  guides(x = "axis_nested") +
+  guides(fill = "legend_group") +
+  labs(x = NULL, fill = NULL) +
+  guides(y = guide_axis_nested(
+    key_range_manual(0, 100, "low calories"))
+    ) +
+  theme(axis.text.y.left =
+          element_text(angle = 90, hjust = 0.5))
+
+```
+
+```{r multi_x_axis}
+
+# In addition, we might want to annotate the ruling president at the time
+head(presidential)
+
+ggplot(economics) +
+  aes(date, unemploy) + 
+  geom_line() +
+  guides(x = primitive_bracket(key = 
+                                 key_range_map(presidential, 
+                                               start = start, 
+                                               end = end, 
+                                               name = name),
+                               bracket = "square")
+         ) ->
+  p1
+
+air_dates <- data.frame(
+  year = as.Date(c("1974-01-01", "1985-01-01", "1994-01-01", "2008-01-01")),
+  title = c("Little House\non the Prairie", "The Golden\nGirls", 
+            "Friends", "Breaking\nBad")
+)
+
+head(air_dates)
+
+# Let's say we want to display when the shows started with arrows
+tv_show_guide <- guide_axis_base(
+  key = key_map(air_dates, aesthetic = year, label = title),
+  # Local theme for long arrows as ticks
+  theme = theme(
+    axis.ticks.length = unit(14, "pt"),
+    axis.ticks = element_line(arrow = arrow(length = unit(2, "mm")))
+  )
+)
+
+# We'd like to place these arrows ontop of a regular guide
+ontop <- compose_ontop("axis_base", tv_show_guide)
+
+# In addition, we might want to annotate the ruling president at the time
+president_guide <- primitive_bracket(
+  key = key_range_map(presidential, start = start, end = end, name = name),
+  bracket = "square"
+)
+
+ggplot(economics, aes(date, unemploy)) +
+  geom_line() +
+  guides(x = compose_stack(ontop, president_guide))
+
+```
+
+
+
+```{r}
+efficient_bracket <- primitive_bracket(
+  # Keys determine what is displayed
+  key = key_range_manual(start = 25, end = Inf, name = "Efficient"),
+  bracket = "square",
+  # We want vertical text
+  theme = theme(
+    legend.text = element_text(angle = 90, hjust = 0.5),
+    axis.text.y.left = element_text(angle = 90, hjust = 0.5)
+  )
+)
+
+library(ggplot2)
+library(legendry)
+ggplot(data = mpg) +
+  aes(x = displ, y = hwy, colour = hwy) +
+  geom_jitter() +
+  labs(x = "Engine displacement") +
+  labs(y = "Highway miles per gallon") +
+  labs(col = "Highway miles\nper gallon") +
+  theme(axis.line = element_line()) + 
+  scale_colour_viridis_c(limits = c(NA, 30), guide = "colbar") +
+  guides(x = guide_axis_base(bidi = TRUE)) + 
+  guides(y = guide_axis_stack("axis", efficient_bracket)) + 
+  scale_colour_viridis_c(
+    guide = compose_sandwich(
+      middle = gizmo_density(), 
+      text = "axis_base",
+      opposite = efficient_bracket
+    )
+  )
+
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

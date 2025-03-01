@@ -87,12 +87,15 @@ ggcanvas() +
 ```{r, fig.width=10, fig.height=10 }
 library(tidyverse)
 
-talks <- read_csv("https://raw.githubusercontent.com/teunbrand/ggplot-extension-club/refs/heads/main/meetings.csv")[1:22, ]
+talks <- read_csv("https://raw.githubusercontent.com/teunbrand/ggplot-extension-club/refs/heads/main/meetings.csv") %>% filter(!(date |> str_detect("Tentative")))
 
 talks$package <- str_extract(talks$package, "\\{.+\\}")
-talks$package[17] <- "Wilke's\n'Fundamentals'"
-talks$package[22] <- "First\nMeeting"
-talks$date[17] <- "2023-01-28"
+talks$package[talks$presenter == "Claus Wilke"] <- "Wilke's\n'Fundamentals'"
+talks$date[talks$presenter == "Claus Wilke"] <- "2023-01-28"
+talks$package[talks$date  == min(talks$date)] <- "First\nMeeting"
+talks$package[talks$presenter == "Winston Chang"] <- "R Graphics\nCookbook,ggproto"
+
+
 
 pos_honeycomb <- function (x0 = 0, y0 = 0, n = 5, ncol = 3, width = 2 * sqrt(0.75), 
     height = width * 0.75/sqrt(0.75)) 
@@ -137,32 +140,39 @@ ggplot(talks) +
   geom_polygon(stat = qstat_panel(compute_panel_honeycomb_hex, 
                                   default_aes = aes(group = after_stat(id))), 
                ncol = 5,
-               aes(color = NULL)) |>
-  ggfx::with_outer_glow() +
+               fill = alpha("black", 0),
+               aes(size = case_when(Sys.Date() < date ~ 2,
+                                    TRUE ~ 0))) |> 
+  ggfx::with_outer_glow(colour = "goldenrod", sigma = 3, expand = 5) + 
+  geom_polygon(stat = qstat_panel(compute_panel_honeycomb_hex, 
+                                  default_aes = aes(group = after_stat(id))), 
+               ncol = 5,
+               aes(color = NULL),
+               alpha = .85) |>
+  ggfx::with_inner_glow(colour = "goldenrod") +
   qlayer(geom = "text",
          stat = qstat_panel(compute_panel_honeycomb), 
          mapping = aes(label = date), 
          vjust = 3, 
          ncol = 5) +
   geom_text(stat = qstat_panel(compute_panel_honeycomb), 
+            lineheight = .8,
             aes(size = case_when(nchar(package) <= 10 ~ 6,
-                                 nchar(package)<= 15 ~ 5.5,
-                                 TRUE ~ 3.5) |> 
-                  I()),
+                                 nchar(package)<= 15 ~ 5,
+                                 TRUE ~ 3.5) ),
             ncol = 5, 
-            vjust = 0) +
+            vjust = 0) |>
+  ggfx::with_shadow(x_offset = I(.1), y_offset = I(-.3)) +
   coord_equal() +
   aes(fill = year(date)) + 
   aes(color = I("whitesmoke")) + 
   scale_colour_gradientn(colours = my_pal) +
-  geom_polygon(stat = qstat_panel(compute_panel_honeycomb_hex, 
-                                  default_aes = aes(group = after_stat(id))), 
-               ncol = 4,
-               fill = alpha("black", 0),
-               data = . %>% slice(1)) |> 
-  ggfx::with_outer_glow(colour = "goldenrod", sigma = 3, expand = 5) + 
+
+  guides(size = "none") +
   theme_void_fill("whitesmoke") + 
-  scale_fill_viridis_c(end = .6)
+  scale_fill_viridis_c(end = .6) + 
+  scale_size(range =  c(0, 5.25)) + 
+  guides(fill = "none")
 
 
 
