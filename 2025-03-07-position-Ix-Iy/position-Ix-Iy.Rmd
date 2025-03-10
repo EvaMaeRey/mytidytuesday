@@ -1,0 +1,72 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+library(tidyverse)
+theme_set(theme_bw())
+
+compute_layer_applique <- function(data, params, panel, ncol = 3, x0 = .5, y0 = .5, x_scale = .2, y_scale = .2) {
+    
+    range_x <- (max(data$x)-min(data$x))
+    range_y <- (max(data$y)-min(data$y))
+    if(range_x == 0){range_x <- 1}
+    if(range_y == 0){range_y <- 1}
+    
+    ggplot2::transform_position(
+      df = data,
+      trans_x = function(x) {I(x_scale * x/(range_x) + x0)}, 
+      trans_y = function(y) {I(y_scale * y/(range_y) + y0)}
+    )
+  }
+
+PositionApplique <- ggproto(`_class` = 'PositionApplique', 
+                        `_inherit` = Position,
+                        required_aes = c('x', 'y'),
+                        compute_layer = compute_layer_applique)
+
+
+position_applique <- function() {
+  ggproto(NULL, PositionApplique)
+}
+
+library(statexpress)
+
+ggplot(cars) + 
+  aes(x = dist, wrap = 1) + 
+  geom_histogram() + 
+  geom_histogram(position = "applique", 
+                 alpha = .3,
+                 x0 = .75, y0 = .75)
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

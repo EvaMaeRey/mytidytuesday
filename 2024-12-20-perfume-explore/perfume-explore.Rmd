@@ -81,7 +81,7 @@ parfumo_data_clean %>%
 last_plot() %+%
   (parfumo_data_clean %>% 
   mutate(Main_Accords = str_split(Main_Accords, ", ")) %>% 
-  unnest())
+  unnest(cols = Main_Accords))
 
 parfumo_data_clean %>% 
   filter(n()> 100, .by = Brand) %>% 

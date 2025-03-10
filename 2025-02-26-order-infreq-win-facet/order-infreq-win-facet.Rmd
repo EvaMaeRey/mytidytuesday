@@ -130,8 +130,29 @@ read.csv("https://raw.githubusercontent.com/EvaMaeRey/mytidytuesday/refs/heads/m
 ```
 
 
+
 ```{r}
-compute_panel_rank <- function(data, scales, width = .9){
+compute_panel_rank <- function(data, scales, width = .7, n = 5){
+  
+  data |> 
+    mutate(x = rank(y)) |> 
+    arrange(x) |>
+    slice(1:n) 
+  
+}
+
+
+ggplot(palmerpenguins::penguins) + 
+  aes(y = bill_length_mm) + 
+  geom_bar(stat = qstat(compute_panel_rank))
+
+
+
+```
+
+
+```{r}
+compute_panel_rank <- function(data, scales, width = .7, n = 5){
   
   data|>
     mutate(xmax = x,
@@ -141,37 +162,91 @@ compute_panel_rank <- function(data, scales, width = .9){
            label = ranked) |>
     arrange(ymin) |>
     dplyr::select(-x) |>
-    slice(1:4)
+    slice(1:n)
   
 }
 
-compute_panel_rank_label <- function(data, scales, width = .9){
+
+
+
+compute_panel_rank_label <- function(data, scales, width = .7, y_nudge = -.05, n = 5){
   
   data|>
-    mutate(y = rank(-x, ties.method = "random"),
+    mutate(y = rank(-x, ties.method = "random") - width/2 + y_nudge,
            x = 0,
            label = ranked) |>
     arrange(y) |>
-    slice(1:4)
+    slice(1:n)
+  
+}
+
+compute_panel_rank_value_label <- function(data, scales, width = .7,  n = 5){
+  
+  data|>
+    mutate(y = rank(-x, ties.method = "random"),
+           x = x,
+           label = x) |>
+    arrange(y) |>
+    slice(1:n) |>
+    mutate(large = x > quantile(range(x), .5) ) |>
+    mutate(hjust = large)
   
 }
 
 
 library(statexpress)
 
+contrast <- function(colour) {
+  out   <- rep("grey20", length(colour))
+  light <- farver::get_channel(colour, "l", space = "hcl")
+  out[light < 50] <- "grey80"
+  out
+}
+
+# from https://github.com/teunbrand/ggplot_tricks
+# aes_autocontrast <- aes(colour = after_scale(contrast(large)))
+
 gapminder::gapminder |>
   filter(year > 2000) |>
   ggplot() + 
   aes(ranked = country, x = pop) + 
   geom_rect(stat = qstat_panel(compute_panel_rank)) + # geom_rbar
-  geom_label(stat = qstat_panel(compute_panel_rank_label)) + #geom_rbar_text
+  qlayer(stat = qstat_panel(compute_panel_rank_label),
+        geom = qproto_update(GeomText, aes(hjust = 0, vjust = 0,
+                                      fill = "transparent",
+                                      linewidth = 0,
+                                      color = from_theme(ink)))) + #geom_rbar_text
+  qlayer(geom = qproto_update(GeomLabel, 
+                              aes(fill = "transparent",
+                                  linewidth = 0)),
+         stat = qstat_panel(compute_panel_rank_value_label)) +
   facet_wrap(~year) + 
-  coord_trans(y = "reverse")
+  coord_trans(y = "reverse") 
+
+last_plot() + 
+  ggchalkboard::theme_chalkboard(base_size = 13) 
+
+last_plot() + 
+  ggchalkboard::theme_chalkboard(base_size = 13, base_theme = theme_gray) + 
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank()) + 
+  labs(title = "Top 5 populations among countries, 2002 & 2007",
+       x = NULL)
 
 
+
+```
+
+
+
+
+
+
+
+```{r}
 fct_rank <- function(x, by){
   
-  rank(-by) |> interaction(x) |> fct_reorder(-by) 
+   rank(-by) |> interaction(x, lex.order = T)
   
 }
 
