@@ -31,7 +31,7 @@ library(tidyverse)
 library(tidyverse)
 theme_set(theme_bw())
 
-compute_layer_applique <- function(data, params, panel, ncol = 3, x0 = .5, y0 = .5, x_scale = .2, y_scale = .2) {
+compute_layer_applique <- function(data, params, panel, ncol = 3, x0 = .05, y0 = .75, x_scale = .2, y_scale = .2) {
     
     range_x <- (max(data$x)-min(data$x))
     range_y <- (max(data$y)-min(data$y))
@@ -58,12 +58,17 @@ position_applique <- function() {
 library(statexpress)
 
 ggplot(cars) + 
-  aes(x = dist, wrap = 1) + 
+  aes(x = speed) + 
   geom_histogram() + 
   geom_histogram(position = "applique", 
-                 alpha = .3,
-                 x0 = .75, y0 = .75)
+                 fill = "darkred")
 
+
+ggplot(cars) + 
+  aes(speed) + 
+  geom_point(aes(y = dist)) + 
+  geom_histogram(position = "applique", 
+                 fill = "darkred")
 
 ```
 
