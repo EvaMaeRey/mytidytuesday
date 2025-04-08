@@ -1,0 +1,112 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+library(ggpmisc)
+
+
+
+anscombe |>
+  ggplot() + 
+  aes(x2, y2) + 
+  geom_point() + 
+  geom_smooth(method = lm, formula = y ~ 1) +
+  ggpmisc::stat_fit_deviations(geom = ggsprings::GeomSpring,
+                               diameter = .3,
+                               formula = y ~ 1)
+
+compute_fit_mx_plus_b <- function(data, scales, slope = 0, intercept = NULL){
+  
+  intercept <- intercept %||% mean(data$y)
+  
+  data |>
+    dplyr::mutate(yend = y,
+                  y = slope * .data$x + intercept) |> 
+    dplyr::mutate(xend = .data$x)
+    
+  
+}
+
+
+anscombe |>
+  rename(x = x2, y = y2) |>
+  compute_fit_mx_plus_b()
+
+anscombe |>
+  ggplot() + 
+  aes(x2, y2) + 
+  geom_point(aes(y = y2)) + 
+  geom_smooth(method = lm, formula = y ~ x) +
+  ggpmisc::stat_fit_deviations(geom = ggsprings::GeomSpring,
+                               diameter = .3,
+                               formula = y ~ x)
+
+
+anscombe |>
+  ggplot() + 
+  aes(x2 - mean(x2), y2- mean(y2)) + 
+  geom_point() -> p
+
+library(statexpress)
+
+p +
+  geom_smooth(method = lm, formula = y ~ x) +
+  ggpmisc::stat_fit_deviations(geom = ggsprings::GeomSpring,
+                               diameter = .3,
+                               formula = y ~ x)
+
+p + 
+  qlayer(stat = qstat(compute_fit_mx_plus_b),
+                      geom = ggsprings::GeomSpring) + 
+  qlayer(stat = qstat(compute_fit_mx_plus_b),
+                      geom = "line")
+  
+
+p + 
+  qlayer(stat = qstat(compute_fit_mx_plus_b),
+                      geom = ggsprings::GeomSpring
+         ,slope = 2) + 
+  qlayer(stat = qstat(compute_fit_mx_plus_b),
+                      geom = "line", slope = 2)
+
+p + 
+  qlayer(stat = qstat(compute_fit_mx_plus_b),
+                      geom = ggsprings::GeomSpring
+         ,slope = 1) + 
+  qlayer(stat = qstat(compute_fit_mx_plus_b),
+                      geom = "line", slope = 1) + 
+  geom_smooth(method = lm)
+
+p + 
+  qlayer(stat = qstat(compute_fit_mx_plus_b),
+                      geom = ggsprings::GeomSpring
+         ,slope = .5) + 
+  qlayer(stat = qstat(compute_fit_mx_plus_b),
+                      geom = "line", slope = .5) + 
+  geom_smooth(method = lm)
+  
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

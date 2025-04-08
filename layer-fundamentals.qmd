@@ -1,0 +1,163 @@
+---
+title: "Layer fundamentals: from user to potential extender"
+author: "Gina Reynolds: ggplot2 extenders education"
+format: revealjs
+---
+
+
+---
+
+To start building a plot, you need to define the data and the variable encoding (i.e. what visual channels -- color, x position, size etc -- should represent your variables.)
+
+
+:::: {.columns}
+
+
+
+::: {.column width="50%"}
+
+
+```{r start, eval = F}
+#| echo: true
+library(ggplot2) 
+
+ggplot(mpg) + 
+  aes(x = hwy, y = cty) +
+  theme_gray(base_size = 18)
+```
+
+:::
+
+::: {.column width="50%"}
+
+```{r, code = knitr::knit_code$get("start")}
+
+```
+
+:::
+
+
+
+::::
+
+
+
+
+---
+
+
+```{r slideshow-outline, eval = F}
+# To start building a plot, you've got to define the data and the variable encoding (i.e. what visual channels -- color, x position, size etc -- should represent your variables.)
+library(ggplot2) 
+
+ggplot(mpg) + 
+  aes(x = hwy, y = cty) +
+  theme_gray(base_size = 18)
+
+# Then you can name a layer function that will take on those visual characteristics. 
+
+# Here, the geom_point() encapsulates the layer specification.
+last_plot() +
+  geom_point()
+
+
+# so we are interested this moment in a ggplot's definition - adding layers (this is how 'layer' is originally meant in the '*layered* grammar of graphics' though now layer is kind of used as a catch-all. 
+
+# but there are actually 3 main characters that define every layer.  geom, stat and position
+
+# maybe you are aware of moves that look like this: 
+
+ggplot(mpg) + 
+  aes(x = hwy, y = cty) + 
+  geom_point(position = "jitter") 
+
+
+# both the position and the stat can actually be adjusted via arguments within the geom_point() call
+
+# The following just gives us geom_point() since 'identity' is the default for point and stat
+ggplot(mpg) + 
+  aes(x = hwy, y = cty) + 
+  geom_point(position = "identity", stat = "identity") 
+
+
+
+# a function that lets us designate each of the 3 main characters is layer() usually used by developers.  The specification below is identical to geom_point() given it's defaults of identity for stat and identity for position
+ggplot(mpg) + 
+  aes(x = hwy, y = cty) + 
+  layer(geom = "point",
+        stat = "identity",
+        position = "identity")
+
+
+# Looking further into developer territory, we could replace the quoted text with the object that the quotation refers to!
+ggplot(mpg) + 
+  aes(x = hwy, y = cty) + 
+  layer(geom = GeomPoint,
+            stat = StatIdentity,
+             position = position_identity())
+
+
+# looking at StatIdentity, we see that there's a computation element
+names(StatIdentity)  
+  
+# It is, not surprisingly simple, in that it just returns the data passed into it.
+StatIdentity$compute_layer
+
+# We can see this in action...
+data.frame(x = 1, y = 1) |>
+  StatIdentity$compute_layer()
+  
+# for a case where the compute in the Stat is more interesting...
+ggplot(diamonds) + 
+  aes(x = cut) + 
+  geom_bar()
+
+# we see the layer() equivelant
+ggplot(diamonds) + 
+  aes(x = cut) + 
+  layer(geom = "bar",
+        stat = "count",
+        position = "stack")
+
+# we see the equivelant with the objects (and functions) themselves
+ggplot(diamonds) + 
+  aes(x = cut) + 
+  layer(geom = GeomBar,
+        stat = StatCount,
+        position = position_stack())
+
+names(StatCount)  
+
+# we see that the compute is indeed doing much more
+StatCount$compute_group
+
+# and look at what it does to a dataframe
+data.frame(x = c("A", "A", "B")) |> 
+  StatCount$compute_group()
+
+# and  see how much having this compute wrapped up in a stat saves us...
+# w/o, using StatIdentity
+library(dplyr)     
+diamonds |> 
+  dplyr::summarize(count = dplyr::n(), .by = cut) |>
+  ggplot() + 
+  aes(x = cut, y = count) + 
+  layer(geom = GeomBar,
+        stat = StatIdentity,   # non-computing Stat
+        position = position_stack())
+
+# collapses a little bit, using geom_col() 
+library(dplyr)     
+diamonds |> 
+  dplyr::summarize(count = dplyr::n(), .by = cut) |>
+  ggplot() + 
+  aes(x = cut, y = count) + 
+  geom_col()
+
+
+# but... geom_bar is very concise...
+ggplot(diamonds) + 
+  aes(x = cut) + 
+  geom_bar()
+
+```

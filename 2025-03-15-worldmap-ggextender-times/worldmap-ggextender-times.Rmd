@@ -23,6 +23,21 @@ options(tidyverse.quiet = TRUE)
 ```{r}
 library(tidyverse)
 
+library(sf2stat)
+
+sf2stat:::set_region_country_rnaturalearth()
+
+ggplot() + 
+  aes(iso3c = 1, fill = NULL) + # this shouldn't be required for stamp, but is
+  stamp_region() + 
+  stamp_region(keep_id = c("United States", "Brazil", "Canada", 
+                           "France", "South Korea", "United Kingdom",
+                           "Netherlands", "Austria", "Australia", 
+                           "Uganda", "Germany", "Denmark",
+                           "Sweden"), fill = "midnightblue") +
+  labs(title = "extenders tuning in ...")
+
+
 ```
 
 ## Experiment

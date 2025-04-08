@@ -1,0 +1,74 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+library(tidyplots)
+
+```
+
+## Experiment
+
+```{r}
+tidyplots::energy |>
+  tidyplot(x = energy_type, color = energy_source) |>
+  add_count_bar()
+
+tidyplots::energy |>
+  tidyplot(x = energy_type, y = energy) |>
+  add_mean_bar() |>
+  add_data_points_beeswarm(color = "black")
+  
+
+last_plot() + 
+  ggchalkboard::theme_chalkboard(base_size = 4)
+
+tidyplots::energy |>
+  tidyplot(color = energy_type) |>
+  add_donut()
+
+last_plot() + 
+  aes(alpha = energy_type)
+
+tidyplots::energy |>
+  tidyplot(color = energy_type, alpha = energy_type) |>
+  add_donut()
+
+tidyplots::energy |>
+  tidyplot(color = energy_type, alpha = energy_type) |>
+  add_donut(width = .1)
+
+
+add_donut
+
+
+tidyplots::gene_expression |>
+  tidyplot(color = group) |>
+  add_donut()
+
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

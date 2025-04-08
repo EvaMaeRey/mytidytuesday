@@ -1,0 +1,284 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+
+```{r feature, echo = F, out.width="70%", fig.align='center', include = F}
+library(tidyverse)
+# tidytuesday data
+global_human_day <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-09-12/global_human_day.csv" )
+```
+
+```{r textpathexample}
+library(ggplot2)
+library(geomtextpath)
+
+global_human_day %>% 
+  filter(Subcategory %in% 
+           c("Food preparation", 
+             "Meals")) |>
+  ggplot() + 
+  aes(x = Subcategory,
+      y = hoursPerDay) + 
+  geom_point() + 
+  aes(label = "Less time is spent preparing\nfood than having meals") +
+  geom_textpath(aes(x = Subcategory 
+                    |> as.factor() |> 
+                      as.numeric()))
+```
+
+
+```{r, fig.width=16, fig.height=8}
+library(ggjudge)
+
+judge_chunk_code(chunk_name = "textpathexample",
+                 judgement = "{geomtextpath} code") ->
+  codeplot
+
+judge_chunk_output_plot(chunk_name = "textpathexample",
+                 judgement = "{geomtextpath} in action") ->
+  plot2
+
+
+
+
+library(patchwork)
+
+# judge_chunk_code
+
+codeplot + plot2 
+```
+
+---
+
+### Contribute
+
+- https://github.com/EvaMaeRey/ggcirclepack
+
+---
+
+
+
+### Check out {packcircles} which does the computation in ggcirclepack
+
+- https://github.com/mbedward/packcircles
+
+---
+
+### Check out flipbookr, used to build this featurette
+
+- https://github.com/EvaMaeRey/flipbookr
+- discussion: https://github.com/EvaMaeRey/flipbookr/blob/master/docs/draft_jasa_submission.pdf 
+
+---
+
+### Check out more featurettes
+
+- https://EvaMaeRey.github.io/featurette
+
+
+```{r}
+clearhistory <- function() {
+  
+  temp <- tempfile()
+  write("", file=temp)
+  loadhistory(temp)
+  unlink(".blank")
+}
+
+library(tidyverse)
+
+ggram <- function(title = NULL){
+  
+  savehistory(file = ".Rhistory")
+  # eval(parse(text = readLines(".Rhistory")))
+  library(patchwork)
+  
+  my_code <- readLines(".Rhistory") |> 
+    paste(collapse = "\n") |> 
+    str_remove("ggram\\(.+\\)") |>
+    styler::style_text() |> 
+    as.character() |>
+    data.frame(code = _) |>
+    mutate(row = row_number()) |> 
+    mutate(is_highlighted = str_detect(code, "#<<")) |> 
+    mutate(code = str_remove(code, "#<<")) |>
+    mutate(code = str_split(code, "")) |>
+    unnest(code) |>
+    group_by(row) |> 
+    mutate(col = row_number()) |>
+    mutate(is_character = code != " ") |>
+    mutate(is_code = cumsum(is_character) |> as.logical())
+  
+  line_numbers <- my_code |> distinct(row) 
+  
+  plot <- last_plot()
+  
+  ggplot(data = my_code |> filter(is_code)) +
+    aes(x = col, y = row, label = code, 
+        color = highlighted) +
+    geom_tile(show.legend = F) + aes(fill = is_highlighted, color = NULL) +
+    geom_text(aes(alpha = is_highlighted),#hjust = 0, vjust = 1, 
+              family = "mono") + 
+    theme_void() +
+    theme(plot.background = element_rect(fill = alpha("whitesmoke", .1))) +
+    scale_y_reverse(limits = c(0, 20)) + 
+    scale_x_continuous(limits = c(-3, 35)) +
+    scale_alpha_discrete(range = c(.7, .9)) + 
+    scale_fill_manual(values = c(alpha("grey90",.4), alpha("yellow", .4)), breaks = c(FALSE, TRUE)) +
+    scale_color_manual(values = c("black", "blue2"), breaks = c(FALSE, TRUE)) +
+    guides(alpha = "none", color = "none") + 
+    annotate("rect", xmin = -3, xmax = 0, ymin = -Inf, ymax = Inf, fill = "grey93") + 
+    geom_text(data = line_numbers, aes(x = -1, y = row, label = row, fill = NULL), family = "mono") ->
+  code_plot
+  
+  code_plot + plot + patchwork::plot_layout(widths = c(1, 1)) +
+    patchwork::plot_annotation(title = title) & 
+    theme(plot.background = element_rect(colour = "black", linewidth = .05))
+  
+}
+
+
+clearhistory()
+
+ggplot(cars) +
+  aes(x = speed, y = dist) + 
+  geom_point() +
+  geom_smooth()#<<
+
+ggram(title = "points take on positions based on speed (x) and distance (y)")
+
+
+library(marquee)
+library(grid)
+library(ggplot2)
+
+p <- ggplot(mtcars, aes(wt, mpg))
+p + geom_marquee(aes(label = rownames(mtcars)))
+
+md_text <-
+"# Lorem Ipsum
+Lorem ipsum dolor sit amet, *consectetur* adipiscing elit, sed do eiusmod tempor incididunt ut
+labore et dolore magna **aliqua**. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+laboris nisi ut aliquip ex ea commodo _consequat_. Duis aute irure dolor in reprehenderit in
+voluptate velit esse cillum dolore eu fugiat nulla ~pariatur~. Excepteur sint occaecat
+cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+
+grob <- marquee_grob(md_text, classic_style())
+
+grid.draw(grob)
+
+
+```
+
+
+
+
+
+## Experiment
+
+```{r}
+clearhistory()
+
+library(ggplot2)
+library(geomtextpath)
+
+ggplot(cars) + 
+  aes(x = speed, y = dist) + 
+  geom_point(alpha = .2) +
+  geom_textpath(#<<
+    label = "OLS smoothing", #<<
+    stat = "smooth", #<<
+    color = "blue",#<<
+    method = lm #<<
+    )#<<
+
+
+ggram("geom_textpath is so easy to use!")
+
+
+
+gapminder::gapminder |>
+  filter(
+    country == "France" |
+    country == "Germany"
+    ) ->
+gapminder_fr_de
+
+library(ggplot2)
+library(geomtextpath)
+
+clearhistory()
+
+gapminder_fr_de |>
+  ggplot() + 
+  aes(x = year, 
+      y = pop/1000000,
+      label = country) +
+  labs(y = "Population (millions)") +
+  geom_textpath(color = "blue", ) #<<
+
+
+ggram("geom_textpath is so easy to use!")
+
+
+# library(tidyplots)
+# 
+# study |> 
+#   tidyplot(x = group, y = score, color = dose) |> 
+#   add_mean_bar(alpha = 0.4) |> 
+#   add_mean_dash() |> 
+#   add_mean_value()
+# 
+# ggram("checking out tidyplots")
+
+
+```
+
+
+```{r}
+clearhistory()
+
+gapminder::gapminder |>
+  filter(country %in% 
+           c("United Kingdom",
+             "Germany", 
+             "France",
+             "Spain",
+             "Netherlands")) |>
+  mutate(rank = rank(-lifeExp), 
+         .by = year) |>
+  ggplot() + 
+  aes(x = year, 
+      y = rank,
+      color = country) + 
+  geom_point() + 
+  ggbump::geom_bump() + #<<
+  scale_y_reverse()
+
+
+ggram("ggbump in action!")
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

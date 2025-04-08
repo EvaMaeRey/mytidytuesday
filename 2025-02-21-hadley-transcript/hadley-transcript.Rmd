@@ -8,7 +8,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = F)
 options(tidyverse.quiet = TRUE)
 ```
 
@@ -22,7 +22,7 @@ options(tidyverse.quiet = TRUE)
 
 ```{r, eval = T}
 library(tidyverse)
-text <- "gonna okay Co so hi
+hadley_transcript <- "gonna okay Co so hi
 Hadley's thoughts on the ggplot2 ecosystem
 everyone uh I did not really prepare anything today but I can uh and I feel
 like I don't really know about I mean Thomas Thomas and ton are on the call and they both know far more about gigot
@@ -581,16 +581,1048 @@ analysis all right great to see everybody aw thanks so much for having me it's l
 thank you thank you"
 
 
-data.frame(text = text) |>
+"
+0:00
+days and um and then we'll open it up for some discussion we planning to run
+0:05
+about an hour okay great yeah thanks for having me um um yeah and like J said I
+0:12
+haven't been working on ggplot for you know quite some time now um but
+0:20
+um and I was trying to refresh my memory I was like okay ha why okay I remember
+0:25
+making GG Proto I'm trying to remember okay why did we do this why did we you know why did we not use R six I'm going
+0:31
+to try to I'll try to cover these things I didn't I didn't have like a um a
+0:37
+specific plan for exactly how to uh how I'm going to go about this but um I will
+0:44
+try to walk everyone through like you know what we were thinking at the time um and also uh I have my copy of I don't
+0:51
+uh I don't know which version of of the our Graphics cook book you have this is the uh this is the second edition which
+0:57
+is also this is this is um when did this come out 2018 or something this has been
+1:02
+out for a while so this is not new stuff anymore um 2019 um but I liked I like
+1:08
+the first edition which had the black and white this is actually colorized uh the animal on there and I was kind of
+1:14
+sad that they did that I I like the classic black and white uh uh etchings
+1:21
+2012 2012 okay so you have you have the nicer one have a nice but not quite as up to date um
+1:28
+although the new one you know the I mean it's not so new anymore so it could stand to be updated as
+1:33
+well um okay so yeah so uh I have been working for posit since um
+1:43
+2012 and of course it was our studio back then um and and before that for
+1:51
+about I don't know before I started working for our studio um I I was working for Hadley this one he was a
+1:57
+professor still at at Rice University um and that was for about six months so um
+2:03
+so I finished my uh I finished my PhD I went to work for Hadley the time worked out very well for that because I was
+2:10
+not uh I I didn't want to continue on the academic path and I hadn't like looked at all for jobs or you know post
+2:17
+talks or anything like that and um and then this all this stuff came along um like working on the the book um and then
+2:25
+then working for Hadley so that all came together like right at the very end of grad school which was very uh very fortunate for me um and then I got to do
+2:32
+some of this stuff here like um like working on on uh you know GG plot 2 and this GG
+2:40
+Proto stuff um so uh so earlier today I
+ggproto
+2:46
+was like refreshing my memory about um G Proto and you know how does it work why
+2:51
+is it like this um so
+2:56
+in ancient history before before ggplot 2 used G Proto it uh was using a package
+3:05
+called Proto for um its object system and uh
+3:10
+it's Proto my understanding of it is that um it was
+3:21
+based on the the the same type of inheritance that JavaScript has so um so this is
+3:29
+Javascript before for uh JavaScript introduced classes which is um sort of
+3:35
+like the the JavaScript classes these days if you say like class Fu um those
+3:42
+are sort of a more sort of standard kind of objectoriented system so that's what you'd see in like C++ or Java or python
+3:50
+where you'd say class Fu and then You' Define some stuff um and that that defines the class and then to
+3:55
+instantiate the class you'd say new Fu um so that's the modern way of doing
+4:00
+it um the older way of doing it was with this prototypal inheritance so you'd have like some object
+4:07
+a um and then there's a way that you could say that object B uses a as a
+4:12
+prototype okay but you don't you don't instantiate classes or anything like that it's just like this literal object
+4:18
+B takes a as its prototype so if you change a property on a so like a.x if you change that to something else then
+4:25
+that will also show up changed on B um and that is that was how Proto worked uh
+4:33
+the Proto package and uh well so I believe the main motivator
+4:40
+for switching over to a new version of it which we call GG Proto was because um because of people
+4:49
+writing extensions right so like you know like a lot of people here
+4:54
+um doing inheritance across packages with Proto
+5:02
+was fraught with problems now this this is the part where it's a little bit fuzzy I would actually have to look at the code for Proto in order to to be
+5:08
+certain about this but um my what my recollection is that
+5:16
+uh if you did some inheritance from a Proto object to to another one um it would it would
+5:23
+evaluate and do that inherent buil time so let me actually I pulled up some code for uh for G Proto that explicitly
+5:30
+avoids this so I'll show this um let me share my screen here oh screen sharing
+5:35
+is not turned on so
+5:43
+okay all right this is so I was just I was just looking at
+5:49
+the this is on gith I'm just looking at it in their nice vs code um interface
+5:55
+you can go to Proto let me make this bigger just to
+6:01
+make sure so that people can see here um close the search bar this is GG Proto R and this is the
+6:08
+GG Proto function um there's this part right here where we say well you pass in
+6:16
+uh the name of the class what you want to call it and then inherit and this is
+6:22
+uh you pass it the object that you want it to inherit from so um if you're you
+6:27
+know if you've done non-standard evaluation in our before um this looks familiar this might look familiar you
+6:33
+should say substitute inherit um and so that would capture this captures that
+6:39
+whatever symbol it is that the person passes in um for so it can be evaluated later um and my memory is that Proto did
+6:48
+not do this and so what would happen is um
+6:53
+when if you've got some package that is inheriting from like ggplot you know back then it was probably like version
+6:59
+0.9 or something um and you've got your like um you know Gom X and it's
+7:07
+inheriting from the GM class in G plot so like this is you know this is the GM
+7:14
+back then it would have been the Proto class or Pro object uh the terminology
+7:19
+is a little bit fuzzy for me there um it would evaluate this it would run
+7:25
+this code when you built your package right so your extension package and then if
+7:31
+somebody up upgraded their version of uh gplot
+7:38
+um then your prototype for your GMX
+7:43
+would be still it would have captured the this old version uh of the GM class
+7:50
+from the old version of ggplot and actually that would sort of pull in a lot of stuff um like a lot of
+7:57
+stuff uh that is captured in uh like in these in these functions these closures
+8:02
+here that would um your your package would actually like have ingested and
+8:09
+like recorded a whole bunch of the act the old ggplot package and so when they build these packages on you know uh the
+8:15
+binary packages on the cran build servers like it's it's it would just capture those whatever version of GD plot 2 was there at the time and then
+8:24
+you know but things if the ggplot 2 changed later then you'd have this mismatch and things could go wrong
+8:30
+so um so GG Proto um oops Yeah so I this is you know this was the important part
+8:37
+this sort of this is capturing the symbol like the Gom symbol
+8:43
+um so let me show you here so uh oh this is the base GM class so if
+8:48
+we look at GM Point GM Point uh okay GG Proto the string name GM point and it
+8:55
+inherits from this Gom class um but it captures a symbol unevaluated and then
+9:01
+uh later on it will evaluate that so that's that is that is a key thing uh
+9:07
+for inheritance across packages um and you know I I I was also looking at
+9:15
+this vignette uh this extending DJ plot 2 and uh thought it was funny what did
+9:22
+he say yeah fortunately Winston is now very good at creating object oriented systems so at this at this time in the
+9:28
+past um I had I had created uh R six which is a objectoriented system that is
+9:35
+that's more similar to like classical objectoriented systems like you know that like in C++ and python uh and so on
+9:42
+uh and I I I ran into this very same problem so so I already knew you know from sort of struggling through that
+9:48
+like oh we just have to do this we just have to do this this thing where we capture the uh that expression
+9:55
+unevaluated and evaluate it later and you know it's funny talking about it now it's like oh this seems so straight before it's so obvious uh back then
+
+um like I I was just starting to have a decent understanding of how environments
+
+worked in R um and I think back then you know Hadley was still learning about
+
+like what how environments worked in R and I think since then you know um like
+
+the broader AR Community has learned a lot about it and uh like like the Arling package is is all about you know all the
+
+sorts of weird non-standard valuation and um and environments and things like
+
+that but back then that was um it was not like common knowledge like it is
+
+today or at least what it feels like it is to me today I mean I guess I I you know I I'm not sure if everybody is like
+
+super familiar with this stuff but there's a lot more written about it now than there was then okay um right so the Proto now
+
+um all right so this this is actually you know there's not a lot of code here right Proto and it does some things here
+
+and it um it captures this you know that inheritance thing um
+
+and then yeah this is it that's that's the function that's the code for uh inant creating a GG Proto
+
+object um I don't know what all the rest of the stuff is oh these are all like well a lot of these are like convenience
+
+methods and wrappers and things like that uh so you know it's I I also feel
+
+like maybe saying it's a new class system is or say yeah saying it's a new class
+
+system might be a little bit of um a stretch I guess
+
+uh it's because there isn't anything like super sophisticated or complicated here
+
+going on um it is it's another way to think about it is it's like syntactic sugar for creating objects um that look
+
+a certain way okay um
+
+right so uh that was the that was one of the problems with so that was that was the main issue
+
+with Proto now you might be wondering well um you know let's take a look at uh I I had it pulled up here so uh the
+
+Proto uh let's see Proto so if you take a look at this here um you'll see oh
+
+look Hadley's the headley's the maintainer of protto why is that why didn't he just change Proto
+
+um so a couple of reasons so originally somebody else wrote the Pho package and then Hadley became the maintainer
+
+because um ggplot 2 was was reliant on it and it was you know the most prominent package that depended on it
+
+now it's uh you know these are the packages that depend on it now so it's a lot less
+
+um and you know there was there's a few reasons for it I think
+
+um the way the code was written uh like
+
+I didn't fully understand the code in proto and Hadley did not fully understand the code in proto um and so
+
+we afraid of making changes that would break some other packages um and also like we didn't you
+
+know we didn't fully understand it and uh you know so even if we did understand it and we made changes to that
+
+inheritance like would that break things for somebody else like we don't you know we didn't know for sure so and there wasn't you know there wasn't so much
+
+code there to to implement this GG Proto stuff uh just in in GG plot 2 itself so
+
+we ended up going this way um now you know another
+
+thing that another idea that we played with was um using R six so uh instead of
+
+instead of using Proto using R six so like you know let's use this sort of classical object-oriented system um that
+
+is you looks a lot more like um you know other other languages out there and
+
+let's let's use that instead and um and so this was a part like no I I we
+
+definitely played around with this and I was actually trying to refresh my memory like why why did we not do this um and
+
+I I'm pretty sure the reason is that um there's a lot of assumptions baked
+
+into how ggplot worked um and you know people writing code for gplot 2 that
+
+assumed that that that they would have this prototypal in and not sort of the classical you know like the you know
+
+where you you have a class and then you instantiate uh the class
+
+um so that that is my memory of it if I spent some more time digging around I
+
+might be able to to answer that question a little bit better um so so if you know if anybody here's curious about it uh
+
+still I can I can still dig around a little bit um you know obviously I'm partial to R six um and uh and R six is
+
+nice it has some good performance characteristics um but I think in this
+
+in this particular case that that didn't really matter that much uh for for
+
+ggplot so um yeah so that is my that is my memory
+
+of um GG Proto why it's there um a little bit about how it works I I don't
+
+uh if does anybody have any like questions about like technical details or um ancient G anci G plot 2 history
+
+that that uh I could answer because uh I'd be happy
+
+to oh yeah Cory yeah
+themes element and ggproto
+
+um where did I hear this I think uh tune mentioned a few meetings ago that there was uh interest in
+
+finally turning themes into uh a GG Proto kind of approach uh whereas as as
+
+every other core element of ggplot uh of the grammar of Graphics has been correct
+
+me if I'm wrong about that was the plan always to make every sort of Step In in
+
+Wilkinson's sort of taxonomy into one of these um one of these protos or was
+
+it originally conceived just that like the layers and maybe the coordinate systemss or some some subset of those
+
+things would be wow that's a really good question
+
+um you know I so I had not started working on gplot at the very beginning
+
+so you know Hadley made some design decisions about
+
+um the structure of you know the class structure and things like that uh
+
+uh uh as for why theme yeah so themes um are kind of outside of that the
+
+Wilkinson um conception or the Wilkinson you know grammar of Graphics um I I
+
+actually don't know um if there was uh if had they had a specific reason for
+
+not using uh this prototype of Proto Proto typal inheritance for uh for
+
+themes I I do remember you know working on the themes and getting that all straightened out was um [Music]
+
+kind of a pain at the time I I it's I I think it's easier now it's better now but um it was it was quite a pain at the
+
+time so sorry that's that's what I that's all I can that's what I can remember about it and that's the best I
+
+can answer that question great thank you yeah
+
+June yeah thanks this is this is interesting um and I actually kind of have a similar question about like what
+scales and statefulness
+
+components get treated as like a gig Proto or not um and one thing that I'm thinking of is you know it's pretty
+
+clear that like an OP system is good for like extensibility and whatnot but I think you know some G protos behave a
+
+little differently than others so I think like scales are like sometimes stateful uh whereas if you consider
+
+things like stats and geoms those are just like um you know kind of placeholders for various functions so
+
+I'm wondering like you know if you were to kind of go go back like is G Proto the the best kind of like one siiz
+
+fits-all solution or would it maybe help to have different you know granular you know types of objects that are maybe
+
+some of them are for the you know geoms and Stu some of them for layers some of them are for skills and so on yes okay
+
+interesting um so you know uh I think so
+
+when we were working on this GG Proto stuff um you know like Hadley and I talked
+
+about it and you know we were def we definitely had conversations where we thought like oh man it'd be if we could do this you know like um like R6 style
+
+like modern or well not modern classical object-oriented style instead of being stuck with with Proto um I mean there's
+
+a lot of things that would be different like um you know like dig plot would use the pipe operator instead of plus um
+
+the plus operator to um you know to compose things um so yeah I mean I I I
+
+would definitely make no claim as to like that GG Proto would be
+
+is like the best way to do it U to to do these things it is it's sort of you know in my opinion it's sort of like a
+
+um it's like a historical like path dependence artifact you know like this
+
+is this is how it started and it ended up being really hard to change um so so
+
+that's why it's still like that s similar similar to like why ggplot uses Plus instead of you know piping even
+
+though the rest of the Tidy verse uses piping now um I am curious about the scales that you're talking about and
+
+like which uh what state parts of it there are I mean uh do you have any particular on just
+
+the like training of the skilles that you apply um so like within a plot it
+
+would get its own scale which has data about the the train scales that it would use for okay layer level
+
+operations yeah yeah right so um let's say let's see scale what's a good one um
+
+size okay so these are these are sort of the
+
+um the user level functions um and then
+
+where's the GG Proto or the discreet oh okay wait sorry I'm
+
+like okay so this is okay this is the sort of thing like scill Street um train
+
+and then there's some stateful stuff self range yeah and then this would have to
+
+be sorry I'm you you you guys might be able to interpret this faster than I can right now trying to remind myself how
+
+this works
+
+um yeah so some of the there is some some stateful stuff in there
+
+uh yeah I yeah where where does that go where does that stuff go the state full
+
+stuff um I think it's a little side effect if I remember it correctly from
+
+when you call those train functions yeah and this
+
+dis sorry if if every you know if this is a little bit too in the weeds for this kind of um this meeting but pleas
+
+let me know oh okay um has a comment yeah in the oh
+
+okay the discussion if you just want to jump in oh pleas uh yeah so the range which
+
+is the statable part of a scale uh that is actually implemented in R six and
+
+comes from the scales package oh okay interesting okay but I don't know
+
+why the scales class keeps a stateful part and in other instances like gom's
+
+stats uh people actively avoid introducing stayful things I don't know
+
+why this is yeah yeah
+
+um I don't know either uh I mean yeah I think if I think uh if it were using
+
+a yeah uh classical object-oriented system um it
+
+wouldn't there wouldn't be as much worry about this distinction like you just instantiate you know these uh the
+
+classes for every time you're um every time you're using them um but yeah that is that is that is
+
+a weird thing that this there's some stateful stuff here I mean I guess the scales need to have some
+
+State unless you store it that's the that information yeah I don't know other
+
+object you would store it on um but yeah that state full information would have
+
+to be somewhere I guess
+
+yeah all right um any other comments or questions about
+
+you know G plot this at least or this time this this time period for for G plot um
+R Graphics Cookbook story
+
+all right well I can I can talk a little bit about um our Graphics cookbook and how that came to be then if everyone's interested sounds
+
+good okay so that was um let's see all of this
+
+happened towards the end of 2012 so that is that's a long time ago now that's um
+
+you know a little bit over 12 years ago um so that was I was in my last year of
+
+grad school and um
+
+so at the time um when I was in graduate school this is for psychology uh I you
+
+know people were doing their statistics most of the people in my department were using
+
+SPSS um and I found that very confusing because you know uh you you do some
+
+analysis something simple right so like it's like a te test or an Nova and you'd you'd um you know you'd bring in your
+
+data and you'd um you click some buttons and you'd check some boxes for turning on various
+
+options uh and then you'd then you'd run you'd run your analysis and
+
+um but then if you got in more data you know like if you're if you if you're looking at this as you're running experiment which um I guess you know
+
+these days is probably uh frown upon but L you be a pcker um so but you know
+
+if you're you know if you're looking at your data and you want to analyze it and you get more data and you want to reanalyze it you have to there have to like remember like what things you
+
+selected or You' have to use like the SPSS you know quote syntax um where they it provides some code to do your
+
+analysis I I found that very confusing I had you know I had a somewhat of a computer programming background so
+
+um you know I mentioned that to my advisor and he gave me a
+
+uh the next day he came down with like this this burned copy of a of like a sass DVD and you know I was like I like
+
+okay you you can install this and it would be like several gigabytes on my computer and I was like okay I don't know I don't I heard people don't like
+
+sass either and then I knew that there were some people in the department that were using R um and it was in a
+
+different part of the department but I I heard that they were using it so I was like okay I'm going to I'll try R and try to learn it um and teach myself so
+
+that was that was uh that was you know was a struggle back then there wasn't
+
+there wasn't a lot there weren't a lot of good learning resources um this is back in oh thanks for turning off the
+
+screen sh um that was back in you know like 2008 2009 so
+
+um so I figure something out and I'd write it down and I I put it in this uh I I made a little website I just put it
+
+there um it was back then it was called um our cookbook not our Graphics cbook
+
+but just our cookbook um and later on I change it to the website named to cookbook for R so that there wouldn't be
+
+any confusion with the O'Reilly book that was also called R cookbook um so I
+
+just add stuff there and you know figure something out it's like I mean really basic stuff that was that
+
+was you know that it took a little bit of struggle for me to figure out um and I just kept growing that website and
+
+adding more stuff and adding more stuff about doing plots because I thought that was interesting um and
+
+uh so that was me not focusing on my Gra Graduate Studies um
+
+so uh um as Pro I'm guessing actually a fair
+
+number of people here might be like that um which is why you're here um so I was
+
+yeah so I was working on this thing and then and eventually uh this is in my last year of gr grad school you know somebody
+
+from like I I had no expectations from this right so but somebody from O'Reilly contacted me uh and asked me if I wanted
+
+to write a book about data visualization in R um and I was like yes that sounds
+
+amazing that was it was like really great timing it was you know I was just um I was in my my last year of graduate
+
+school um and I didn't know what I was going to do next so so I spent a lot of time working on that um and I using I was using ggplot
+
+so um I would you know I then there was I want to write something for the book
+
+and I was like okay like I want to do like Notch box plots right and um basar
+
+had that at the time ggplot didn't so I was like okay well I guess I'll try to I
+
+you know I'll file an issue on it and I'd file issues for for other like for bugs and stuff that I found and you know
+
+sometimes you know uh hadly would fix them um and then eventually I I worked on I tried coding against it so I tried
+
+okay I'll I think I I think Notch boox plots is one of the first things that implemented I can't remember for sure um
+
+and made a pull request you know figure out GitHub and all that sort of thing um and I kept doing that stuff mostly in
+
+service of of uh well mostly in service of being able to
+
+do the book um but also because I I found it it was fun and it was interesting to do these things uh to to
+
+do the coding and [Music] um yeah and then you know after a while
+
+maybe a few months of this um Hadley asked me like hey what are you what are
+
+you doing after you graduate you know after and what what you doing after you gradate and I was like I don't know and he so then he asked me if I wanted to
+
+work for him um after I graduated so um yeah so so a
+
+few months later I did graduate um I finished up the book um and then I started
+
+working uh with well started working for highle at Grace University um and that was yeah so that was sort of how that
+
+all happened um it all you know like the book and working in G plot 2 and all that um all sort of came together um and
+
+yeah so and that that was that was super fun uh it was very motivating to work in the book then um I really enjoyed it a
+
+lot I learned a lot um and is a you know um it great it's great to have that experience and to sort of uh it's also
+
+nice to have like it's like you've done to say like oh I've done this book um because that that actually can open a
+
+fair amount of doors so I mean that just I you know looking back at it I feel like I was very lucky that
+
+these things happened you know that that like these opportunities sort of came to me but you know a friend of mine also
+
+pointed out he's like hey Winston you know you also sort of set up your luck by putting that information out there so I you know and and he's right like like
+
+I I'm sure there's a lot of people that have done all sorts of interesting things right
+
+um but if you don't talk about you don't share these things then people don't
+
+know about it and so then there's going to be fewer opportunities that that come to you so um I was lucky you know that
+
+that all happen I wasn't planning on you know making opportunities out of this but it's sort of it it happened and uh
+
+yeah so I'm very I'm thankful but I'm also glad that I did these things even though I was not I was not doing the
+
+things that I was really I was not focused on the things I was supposed to be doing which was you know like the you know like the academic stuff that that
+
+um that I was in school for so um yeah so working on the book was
+
+very motivating and very very very fun
+
+um that said you know like by the time the by the time I was working on
+
+the second edition um I was not I had not been working in gplot
+
+for a little while then and uh you know and I had um I had one kid another one on the way
+
+for the second edition so like I could barely make myself think about it so it's there's definitely like time
+
+for uh like sometimes if you can have that motivation and you can capture it and
+
+you can ride that um that can be really good but sometimes you know that motivation just wasn't there for me the
+
+second for the second edition um and if you know if somebody asked me to do a third edition now I'd be like I I cannot
+
+I absolutely can't do it I'm not I'm not up on these on what the latest stuff is um and my mind is elsewhere these days
+
+um so so yeah I I did have help uh uh working on the second edition
+
+[Music] um but um yeah but it was it was it was
+
+a slog so uh but yeah I I know it's out of date and um it it does it does need
+
+to be updated so um if anybody's particularly motivated you know uh let me know okay
+
+uh ask you a question here so um oh uh okay yes do the original R cookbook
+
+still exists online yes it uh it's just called cookbook for R now um I so uh you
+
+know it's it's I think it's cookbook D r.org um and yeah I actually made that change
+
+around the time that uh the O'Reilly book deal came together um because my
+
+editor you know like we decided on the name cookbook for our or sorry our Graphics
+
+cookbook um and then he's like well you got this website our cookbook and it's got the same name as you know this book
+
+uh uh this book that we publish and so do you mind changing it I was like okay sure um cookbook for R doesn't have as
+
+quite of a nice ring to it but you know um but it's it's still okay I thought I
+
+don't know if people still look at it or not I haven't i't I don't look at the traffic at all for it anymore it's just a static website um so and I haven't I
+
+haven't been paying much attention to it oh oh cookbook d.com yes thank you um
+
+I said. org um but yeah my memory is like I said I've not been my mind has
+
+not been on it recently all right so that is that's the
+
+story of you know how um our Graphics hook book came to be um and you know I
+
+guess part of the story of like my life at the time also and uh the kinds of
+
+things that I was interested in working on so maybe can just open it up to
+
+questions general questions about either G perto and or the cookbook
+
+yeah uh Pedro yes yes uh I'm trying to
+
+remember I mean I I started using G PL very very long ago and remember that uh
+
+at some point uh hadly ask I mean in the
+
+in the mailing list if to support to be able to ask to apply for funding to get
+
+someone to work on the programming of GG plot and then I mean at that time it was
+
+very slow and then but I was wondering was you who was then the person
+
+employed after he got the ground yeah that's okay I don't remember
+
+seeing that on the mailing list that I don't know if that was before my time yeah I know that I was the first person
+
+to be paid to work on GG okay yeah probably it was yeah yeah okay yeah yeah
+
+so um yeah somehow I got paid through Rice University you know like my title is
+
+like program programmer associate 3 or something something like that yes
+
+yeah but I remember how the the huge change in the in the speed of I
+
+remember Early times I mean plotting many points it was very slow and then
+
+was kind of jump to something yeah working much better
+
+yeah yeah and then you know and then so many people have been working on gig plot 2 since then yes yeah it's yeah
+
+it's that's really great to see you know that off like [Music]
+
+that um I have a question um thanks for um yeah sort of sharing all of that
+
+history it's really interesting um I had a question actually about like writing
+
+the book and sort of that process um I mean not even as far as getting the publishing de but um having quickly
+
+looked at the The cookbook um website I noticed you have this sort of structure of like problem and solution and I was
+
+actually just wondering at a practical level like when when you're writing this stuff up like as so one piece of advice
+
+I was given around like writing blog posts is like as I'm working out a problem to like try and write the blog
+
+post because once it's solved I just don't care about it anymore um and I just I was wondering what your process
+
+was yeah uh so I think you know um the kinds of
+
+things so it it well it came from you know the cookbook for our website like
+
+that sort of approach um and that that was inspired by um I believe it was the
+
+Pearl cookbook like long long time ago um I learned how to do stuff with pearl from from that book um and you know most
+
+of the problems are like certainly on the website they're very bite-sized right it's like you know um you know
+
+like how to do a tea test or like how to you know how do I you know change the scales to be logarithmic or something on
+
+a plot um how do I make a box plot uh so and
+
+those I think when I was working on the website I'll come to the book in a
+
+little bit when I was working on the website like those are these are all like actual problems that I had um like how do I do this thing um and some of
+
+them were not maybe outside the bounds of like what my what I was actually trying to do in you know for for my
+
+research and for work um but there was all it was all pretty close to things that I was actually trying to do
+
+um and and the nice thing about that at
+
+least the problems that I was writing about then was that they were you know they're they were like bite-sized things
+
+they're bite-sized problems and so um you know if you look at the the website um which uh Joyce posted in the in the
+
+zoom chat here um they're all they're all pretty small things and you know it's like I try to like give you know
+
+here's the problem and then here's like the little bit of code that'll solve the problem
+
+um and you know for the our Graphics
+
+book The you know the O'Reilly book um I I tried to keep that mindset you know
+
+there's actually a lot of things in there that I had never done before that I hadn't used for you know um for any
+
+work like like a lot like the mapping stuff for example I never I never used maps for for any of my research or anything but um I tried to get in the
+
+mindset of like okay what you know what would somebody try to do like how do I you know what are the
+
+um what kind of question would they have would come into their mind about like about when when they're trying to to to
+
+make one of these these plots um and because I wanted I I really liked
+
+the cookbook format you know like um again going back to the the Pearl cookbook uh I really like that format
+
+it's just like here's a problem and here's the answer and also with with Graphics it's it's nice you know having the having the print book here um you
+
+know like this this is also on the web but you know having the print book it's just like nice you can just paste for it and look at pictures and stuff and then
+
+it's like if you can see what oh what is the you know what is the thing that this is trying to do here what's the problem is trying to solve
+
+um yeah so that I I you know it's I feel like Gigi plot and and also the problems
+
+that are uh the types of problems that or the issues that I would um that I had that write about in the
+
+book those are like kind of bite-sized things like ggplot
+
+um you know like like most of the problems are pretty small right they might not be super like if you're if you're not familiar with with how this
+
+works it might not be super uh super easy but most of the problems are like relatively small they don't take a lot
+
+of code um so you know it's fortunate that that it lends itself to that cookbook format um you know there's
+
+other things that you might work on that that don't that that aren't like
+
+cookbook you know aren't cookbook like um you know like really
+
+complicated um programming things um or like yeah dealing with you know
+
+complicated data structures or you know um but the sort of you know for these
+
+plots and the visual format that's like the cookbook uh The cookbook style book I think worked well I mean so I'm
+
+curious Cynthia like what kind of what kind of things do you write about that um you don't want to think about after
+
+after you've done them um so actually often it there's these like b side things um and I was thinking a lot of so
+
+I got on the water train fairly early um and like I was sort of just solving like
+
+these little things and even the fluency I think I have of navigating the quarter docks I forget that other people like
+
+don't have I'll just be like oh just look at the docs and then I'll like look at the the website again and be like
+
+this is actually not super easy to to of navigate um so that was like one thing
+
+that sort of came to mind but I also yeah sometimes I'm thinking about like a set of more complex things and got a
+
+particular interest in sort of like design patterns for like data science tools and like gplot um
+
+extensions particularly as well um and so those ones are like kind of more
+
+involved but I was just more interested in yeah like where you got the inspiration to do to write up these
+
+bite-sized things because for me I like I don't know I've shoe on it for a bit so it and then move on and then like three months later be like I really wish
+
+I had written myself a note um because then I'm like solving it again yeah yeah you know well I mean if you
+
+can motivate yourself to do to write it down then you know the world can benefit from it so that's um it's it's a
+
+worthwhile it's worthwhile Endeavor um yeah I and I I I I I totally get what
+
+you're saying like sometimes it's it can be hard some things don't lend themselves to that format like I
+
+you know I've been working on um shiny for a long time and like it's that's that's something where it's just
+
+inherently like you you can't have like a reproducible example and like this much code you need like you need a lot maybe not a ton but you need a fair
+
+amount of codee and so it's it's a little bit um that's where where you know the
+
+cookbook thing is doesn't work as well I've I've wanted to do one but um it doesn't just doesn't work as well for
+
+that um so yeah I imagine for CTO it's the same like you got um you're going to have a lot of stuff like to set up a
+
+whole quter document that's reproducible like there's a lot of other stuff you need to put there so yeah anyway um so
+
+yeah I I I yeah not everything works for that that cookbook format but if you can I feel
+
+like it's it's a really nice digestible way for people to to learn
+
+something I was wondering if you could talk a little bit about your transition to shiny and if like you saw the Lessons
+
+Learned working on jot to um kind of impacted your work there I think there's
+
+of modularity that's like really Central to both Frameworks yeah
+
+um yeah let's see so so um yeah so I had started working
+
+at r studio and I I was mostly I was working on you know tidy verse related stuff
+
+for for a while like maybe I don't know actually maybe like a
+
+year maybe a little bit less before I started also working on some shiny stuff
+
+um yeah and of course back then it wasn't wasn't called the Tidy verse it just there's just like separate things
+
+uh and there's yeah uh deep didn't exist back
+
+then um maybe it was less than a year anyway
+
+so I started working on shiny and shiny related stuff so uh Joe Joe Chang who is now the CTO of uh
+
+posit uh he was the person who originally created shiny uh
+
+he actually gave he gave a super interesting keynote at um our studio K
+
+several years ago about it um about how it came to be um it was actually very it was very moving talk
+
+it's very interesting uh so if you you know uh it's worth it's worth checking
+
+out even even though it's like an hour anyway so he created shiny um and you
+
+know that that it so you know at the time like our studio just needed more people working
+
+on shiny and it was because it shiny was starting to become a thing back then you know it was um like you know as a web
+
+framework for our people were starting to use it more and more and so um so
+
+that's that's how I I started working on it you know I got pulled into that um
+
+and you know as for Lessons Learned From ggplot I think I don't know so much you know I
+
+can't speak to the modularity actually uh Joe is the one who came up with the module system for shiny um but I
+
+think that the time that I had spent working with Hadley was very useful for
+
+um for thinking about how to design interfaces that are um that
+
+are very usable for people and easy to understand and so um you know
+
+trying to make things composable um that's that's something that uh I hope you know I brought some
+
+of that sensibility shiny um and also thinking about you know how
+
+um yeah how functions should be um how the function interfaces should
+
+be designed um you know that's something that that Hadley is exceptionally good at and I I hope I learned something from
+
+that and brought some of that into shiny um there are some places you know where that composability
+
+you know I consciously tried to bring that in like um uh
+
+for uh there's some things that are similar to like decorative functions like uh like like bind
+
+event um in shiny uh you can you can take a
+
+reactive expression or uh an observer and then um p type it to bind event and
+
+uh and then you can compose some of these things together um
+
+so yeah that I hope that answers the question shiny is is inherently it's a much more complicated system than than
+
+ggplot like ggplot is fairly modular and especially
+
+actually well especially with the grammar of Graphics as like sort of like the guiding set of principles behind it um that that really helped make it more
+
+modular but shiny is you know it's this interactive web application so there's a lot of a lot of moving interlocking
+
+parts so and I I wish we could separate it out more to make it um easier to understand and in
+
+smaller pieces but um but it's that's a hard that's a hard thing to do for something like
+
+shiny you fall back on the um cognitive psychology background and any of
+
+that um you know that's okay I I don't I don't think so uh I mean I think maybe
+
+maybe I have a bit more background knowledge um
+
+than the average person about some things like perceptual things I I I this wasn't in my research but like before
+
+before I was in s not my grad school research but before I was in grad school I worked in like visual cognition labs
+
+and visual perception stuff so like maybe some of that sank in um but I think I think the most important thing
+
+about that was uh about having done Graduate Studies and that was just you
+
+know understanding what people do as scientists and you know like as what do
+
+statisticians do um like what are the actual problems that that people have when they're dealing with data uh you
+
+know there's there's other people um there's other people who work
+
+at posit who have a more pure software engineering background and they don't you know so like and smart people and so
+
+you know they they'll they'll understand to some degree like the the kinds of things that statisticians and
+
+data scientists do but they don't like have a really deep feel for it um because they're sort of they've learned
+
+that sort of from from the outside looking in um now with that said I'm not you know I haven't been I haven't been
+
+doing like that sciency stuff for a long time but I'm hoping that um I'm hoping
+
+that some some of the stuff that I learned still you know still informing the way that I think
+
+we have like five minutes for questions still there's any
+
+remaining um I guess I I think that like um hadly cells a lot
+
+um are based on the expensive ability and and that the fact that um like G
+
+Proto allows for that cross package um
+
+um inheritance um working um um do you think that that is like
+
+overselling things a little bit can I mean can can um plot nine have a robust
+
+extension that is a very good question and I'm glad that Hassan is here n
+
+uh are you are you happen to be uh do you happen to be available to answer this oh wait did
+
+he just disappear oh I I am on um yes it to some
+
+extent it does um to the extent that it doesn't it's about uh being hard to do
+
+it given the underlying U System especially if um um uh I'll say this
+
+like for for for the r environment um I know there are some qus about uh
+
+grid being slow and whatnot but it allows you guys to do so many
+
+things much more easily than working on top of M plot lid so that is a that is a
+
+bone for like extensibility of like the types of Graphics that you can do um in
+
+terms of design yeah the extend you can extend you can extend plot nine to to a
+
+great uh to almost u a similar degree as G2 only that you soon run into the types
+
+of Graphics that you can make and you can compose um uh with uh with the layout
+
+manager that is enabled by uh that is facilitated by say Grid or in this in in
+
+in um in the python side that is not really well facilitated by like um the
+
+mbook Deep architecture so yeah do you use a prototypal inheritance
+
+in uh plot 9 no no just U it's it's just no Pyon
+
+classes okay all right yeah yeah yeah um I um recently I turned most of what I'm
+
+um like almost each class that I could to a data class to PO some kind of like um
+
+discipline and yeah that worked so okay great great that's nice but I
+
+ask a really quick followup to that on on the side of python so I was I remember like Winston made a big point
+
+about you know substitute being really important to to preserves the the laziness so that the you know at
+
+compiled time you don't get the lock in situation and like as if I understand
+
+correctly python doesn't have that much flexibility in like his metaprogramming capabilities like do you do you solve it
+
+another way or is that just kind of not a concern about how python packages are compiled and
+
+distributed um uh in terms of um implementing um something like G
+
+something like gg+ 2 in Python there isn't um uh the only place where you
+
+have uh uh what you would say where non-standard evaluation counts is in the
+
+mappings aesthetic mappings so so yes those capture the those capture the environment they refer to variables in
+
+the data um in the in the data frame environment and whatnot and you evaluate
+
+them later in the python side what we do what they do is like just like just put the stuff into Strings and evaluate them
+
+later so you yeah I think I suspect um so June I think so H I don't know if you
+
+were here for this whole thing um what I when I was talking about um when you create a GG Proto object and you specify
+
+what it inherits from um it it captures that expression um but it doesn't evaluate it
+
+until you know until later uh so in Python if you have um you know like
+
+you've got like your GMX class right GMX and that inherits that's in your own
+
+package and that inherits from the Gom class uh in GG or sorry in plot 9 then
+
+um because it's not uh so that because
+
+it's sort of this classical object oriented thing it's when you instantiate your
+
+GMX um that is when it will look at the super class uh and so so that it that
+
+inherently is like you know that's delayed Val I I believe that's correct I don't know H tell me if I'm being if I'm
+
+wrong here but yeah that's um yeah that's that's uh
+
+that's delayed inher although the although um that because that's the
+
+common way things uh things work there's uh uh most people like most of the time
+
+you don't think of it as like hey this is delayed inheritance it's just like this is how it's supposed to work and this is how it works you know but if you
+
+are comparing to like prototo then yeah then it makes sense to add the word delayed because before you had um um you
+
+get those side effects and then you think about like hey when when does The Inheritance occur and what not
+
+yeah well we're um we're at about an hour so um I don't want to take up any
+
+more of your time um it was a real treat to uh have you today Winston and and to
+
+hear about this important moment in GG plot 2 extension history um I think
+
+everybody's really appreciative to to have been able to to hear from you um
+
+and I Thanks for thanks for organizing this and uh giving me the opportunity to talk about this stuff I had I haven't
+
+yeah I haven't talked about many of these things in a long time so it's it's kind of fun" ->
+  winston_transcript
+
+data.frame(text = c(hadley_transcript, winston_transcript),
+           whose = c("hadley", "winston")) |>
   tidytext::unnest_tokens(output = word, input = text) |>
   anti_join(tidytext::stop_words) |>
-  inner_join(tidytext::get_sentiments("bing"), 
+  left_join(tidytext::get_sentiments("bing"), 
              by = "word", 
              relationship = "many-to-many") %>% 
-  count(word, sentiment) ->
+  count(word, sentiment, whose) ->
 hadley_meetup_bing_sentiments 
+```
 
-hadley_meetup_bing_sentiments
+
+```{r}
+hadley_meetup_bing_sentiments |> 
+  head()
 
 hadley_meetup_bing_sentiments |>
   ggplot() + 
@@ -600,12 +1632,27 @@ hadley_meetup_bing_sentiments |>
   facet_wrap(~sentiment) + 
   coord_equal() + 
   aes(size = after_stat(1/nchar(id)*area)) + 
-  scale_size(range = c(.5, 7.5))
+  scale_size(range = c(.5, 7.5)) 
+
+last_plot() + 
+  facet_grid(whose~sentiment)
+
+last_plot() %+%
+  (hadley_meetup_bing_sentiments |> 
+  filter(!(is.na(sentiment)))) + 
+  scale_size(range = c(.5, 7.5)) 
+
+
+last_plot() %+%
+  (hadley_meetup_bing_sentiments |> 
+  filter(!(is.na(sentiment)),
+    !(word %in% c("plot", "object", "shiny", "bump")))) + 
+  scale_size(range = c(.35, 6.5)) 
   
-hadley_meetup_bing_sentiments |>
-  ggplot() + 
-  aes(label = word, color = sentiment, size = n) +    
-  ggwordcloud::geom_text_wordcloud_area()
+# hadley_meetup_bing_sentiments |>
+#   ggplot() + 
+#   aes(label = word, color = sentiment, size = n) +    
+#   ggwordcloud::geom_text_wordcloud_area()
 
 
 

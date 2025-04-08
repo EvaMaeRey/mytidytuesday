@@ -1,0 +1,58 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+library(ggcalendar)
+
+data.frame(date = c("2025-01-21", "2025-02-12", 
+                    "2025-03-05", "2025-04-09"),
+           event = c("legendry", "ggtime", 
+                    "ggproto", "tidyplots")) |>
+  ggcalendar() + 
+  # add fill color mapping for events
+  geom_tile_calendar(aes(fill = event |> fct_inorder())) + 
+  # add day of month
+  geom_text_calendar(data = df_dates_interval("2025-01-2025", 
+                                              "2025-04-30")) +
+  # cross off days in the past
+  geom_text_calendar(label = "X", color = "grey", 
+                     data = df_dates_interval("2025-01-2025", 
+                                              Sys.Date() - days(1)),
+                     size = 8, alpha = .8) +
+  # calendar theming 
+  # uses development version of ggplot2 - w/ new theming capabilities
+  theme_grey_calendar(base_size = 15, 
+                      # paper = "grey30", 
+                      # ink = "grey90"
+                      ) + 
+  # add a plot title and remove fill guide title
+  labs(title = "Meetings of ggplot2 Extenders, 2025",
+       fill = NULL)
+
+```
+
+
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
