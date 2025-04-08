@@ -106,7 +106,7 @@ clearhistory <- function() {
 
 library(tidyverse)
 
-ggram <- function(title = NULL){
+ggram <- function(title = NULL, widths = c(1,1), ...){
   
   savehistory(file = ".Rhistory")
   # eval(parse(text = readLines(".Rhistory")))
@@ -133,29 +133,32 @@ ggram <- function(title = NULL){
   plot <- last_plot()
   
   ggplot(data = my_code |> filter(is_code)) +
-    aes(x = col, y = row, label = code, 
-        color = highlighted) +
+    aes(x = col, y = row, label = code) +
     geom_tile(show.legend = F) + aes(fill = is_highlighted, color = NULL) +
-    geom_text(aes(alpha = is_highlighted),#hjust = 0, vjust = 1, 
-              family = "mono") + 
+    geom_text(alpha = .7, family = "mono") + 
     theme_void() +
     theme(plot.background = element_rect(fill = alpha("whitesmoke", .1))) +
-    scale_y_reverse(limits = c(0, 20)) + 
+    scale_y_reverse(limits = c(-1, 20)) +
+    coord_cartesian(expand = FALSE) +
     scale_x_continuous(limits = c(-3, 35)) +
-    scale_alpha_discrete(range = c(.7, .9)) + 
     scale_fill_manual(values = c(alpha("grey90",.4), alpha("yellow", .4)), breaks = c(FALSE, TRUE)) +
     scale_color_manual(values = c("black", "blue2"), breaks = c(FALSE, TRUE)) +
     guides(alpha = "none", color = "none") + 
-    annotate("rect", xmin = -3, xmax = 0, ymin = -Inf, ymax = Inf, fill = "grey93") + 
-    geom_text(data = line_numbers, aes(x = -1, y = row, label = row, fill = NULL), family = "mono") ->
+    # annotate("rect", xmin = -3, xmax = 0, ymin = -Inf, ymax = Inf, fill = "grey93") + 
+    geom_text(data = line_numbers, aes(x = -1, y = row, label = row, fill = NULL), family = "mono") + 
+    geom_vline(xintercept = 0, color = "darkred") + 
+    geom_hline(yintercept = 1:24 + .5, color = "blue", linewidth = .2, alpha = .5) + 
+    annotate("point", x = -1.5, y = c(1,9,17) + .25, alpha = .3, size = 5) ->
   code_plot
   
-  code_plot + plot + patchwork::plot_layout(widths = c(1, 1)) +
-    patchwork::plot_annotation(title = title) & 
+  code_plot + plot + patchwork::plot_layout(widths = widths) +
+    patchwork::plot_annotation(title = title, ...) & 
     theme(plot.background = element_rect(colour = "black", linewidth = .05))
   
 }
 
+theme_set(new = ggchalkboard:::theme_whiteboard(accent = "blue", paper = "grey99", 
+                                                base_size = 11))
 
 clearhistory()
 
@@ -164,7 +167,7 @@ ggplot(cars) +
   geom_point() +
   geom_smooth()#<<
 
-ggram(title = "points take on positions based on speed (x) and distance (y)")
+ggram(title = "geom_smooth() is the best")
 
 
 library(marquee)
@@ -186,7 +189,7 @@ grob <- marquee_grob(md_text, classic_style())
 
 grid.draw(grob)
 
-
+theme(axes = elementte)
 ```
 
 
@@ -264,18 +267,28 @@ gapminder::gapminder |>
              "France",
              "Spain",
              "Netherlands")) |>
-  mutate(rank = rank(-lifeExp), 
+  mutate(rank_life_exp_by_year = rank(-lifeExp), 
          .by = year) |>
+  filter(year > 1960) ->
+gapminder_euro_select_ranked
+  
+library(scales)
+
+clearhistory()
+
+gapminder_euro_select_ranked |>
   ggplot() + 
   aes(x = year, 
-      y = rank,
+      y = rank_life_exp_by_year,
       color = country) + 
   geom_point() + 
-  ggbump::geom_bump() + #<<
-  scale_y_reverse()
+  scale_y_reverse(
+    label = label_ordinal()) +
+  labs(y = NULL) +
+  ggbump::geom_bump()  #<<
 
 
-ggram("ggbump in action!")
+ggram("Who are the ggplot2 extenders?", subtitle = "@davidsjoberg's {ggbump} makes bump charts a snap ", widths = c(1.5,1))
 
 ```
 
