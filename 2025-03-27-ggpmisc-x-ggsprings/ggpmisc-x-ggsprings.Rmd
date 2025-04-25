@@ -109,4 +109,31 @@ p +
 
 
 
+```{r}
+
+compute_fit_custom_linear <- function(data, scales, slope = 0, intercept = NULL){
+  
+  intercept <- intercept %||% mean(data$y)
+  
+  data |>
+    dplyr::mutate(yend = y,
+                  y = slope * .data$x + intercept) |> 
+    dplyr::mutate(xend = .data$x)
+    
+  
+}
+
+StatFitCustomLinear <- ggproto("StatFitCustomLinear", Stat, compute_group = compute_fit_custom_linear)
+
+anscombe |>
+  ggplot() + 
+  aes(x2 - mean(x2), y2- mean(y2)) + 
+  geom_point() + 
+  ggsprings::geom_spring(stat = StatFitCustomLinear) + 
+  geom_line(stat = StatFitCustomLinear)
+
+```
+
+
+
 ## Closing remarks, Other Relevant Work, Caveats

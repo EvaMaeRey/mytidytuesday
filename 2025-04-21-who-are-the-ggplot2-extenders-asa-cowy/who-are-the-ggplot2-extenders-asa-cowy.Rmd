@@ -1,0 +1,207 @@
+---
+title: "Who are the ggplot2 extenders and how to become one..."
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+# Who are the ggplot2 extenders? And how to become one?
+
+---
+
+# What does extension promise?
+
+What does ggplot2 give us?
+
+ggplot2 give us intuitive, composible interface for plotting.
+
+'Speak your plot into existence'
+
+
+---
+
+And extension: More of the same.
+
+'extension allows fluid ggplot2-consistent syntax in domains that base ggplot2 doesn't handle.' 
+
+(you almost *don't need to look at documentation* 🥹). Well-written extensions will be aligned with ggplot2 syntax and afford applying that already-learned knowledge.
+
+'Speak your ('diverging bar chart/bump chart/circlepacking chart') into existence'
+
+
+---
+
+# But ggplot2 extension is ...
+
+
+'not for the faint of heart'. 💔  2X  
+
+
+---
+
+Epic journey to extension
+
+1. 💪 kind of effortful plotting with base ggplot2
+2. 🗡🛡⛔️ *valient* effort to produce an extensions (bravery)
+3. 👶 plotting with the extensions (woohoo!) - child's play
+
+
+---
+
+How can something that is *so useful* be out of reach for *so many*? 😭
+
+'ggplot2 extenders is *such* an exclusive club' - 2022
+
+---
+
+'Draw anything with ggplot2.'
+
+'Draw anything with ggplot2 - without loosing your mind 🧠' 
+
+
+
+
+
+
+---
+
+# Super extenders
+
+-- Show production...
+
+
+
+---
+
+# Super extenders... 
+
+1. something happens, and adding extension doesn't feel effort-ful, and they see extension opportunities everywhere...
+
+1. 💪 kind of effortful plotting with base ggplot2 
+2. 🧠 focused attention and effort (not bravery)
+3. 👶 plotting with the extensions (woohoo!) - child's play
+
+
+
+---
+
+# What if we worked on this
+
+From 🗡🛡⛔️ *valient* effort to produce an extensions (bravery)
+
+To 🧠 focused attention and effort (not bravery) 
+
+from the start..
+
+
+
+
+
+
+#
+
+- Can we lower the barriers to entry?
+
+Educational materials... 
+As step by step as possible...  
+With accessible examples.
+
+---
+
+Easy Geom Recipes
+
+```{r, eval = F}
+
+
+```
+
+
+```{r}
+library(ggram)
+library(tidyverse)
+compute_group_means <- function(data, scales){
+  
+  data |>
+    summarize(x = mean(x),
+              y = mean(y))
+  
+}
+
+cars |> 
+  select(x = speed, y = dist) |> 
+  compute_group_means()
+
+
+ggram_df_output("Step 1: Define compute")
+```
+
+
+```{r}
+StatMeans <- 
+  ggproto(`_class` = "StatMeans",
+          `_inherit` = Stat,
+          compute_group = 
+            compute_group_means)
+#'
+#'
+ggplot(cars) + 
+  aes(x = speed, y = dist) + 
+  geom_point() + 
+  geom_point(stat = StatMeans, 
+             size = 8)
+
+ggram("Step 2: Define Stat and Test", widths = c(1, .7))
+
+```
+
+
+
+
+---
+
+- when there are inevitable roadblocks, surprises, etc can we provide a safety net? 
+
+# Who are the ggplot2 extenders? 
+
+COWY-2023: 'We have a support group for that' 
+
+COWY-2025: 'We have a support group for that... growing in numbers, video recordings, double digit attendees, active discussion board, our first COWY attendee, social media presence, Posit supported, testimonials'
+
+---
+
+2023 - small group of extenders
+
+2025 - group of extenders and extension-interested
+
+
+---
+
+# Extension competencies
+
+How can something that is *so useful* be commanded by *so few*? 😭
+
+- domain specific expertise
+
+--
+
+- knowing that extension is possible
+- extension mechanisms education
+- packaging know-how
+- packaging know how specific to ggplot2
+
+
+Extender unicorns... Maybe AI aleviates some of this...  Or maybe community.
+
+
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

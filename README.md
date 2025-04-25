@@ -711,5 +711,5 @@ new_experiment_rmd <- function(name){
 }   
 
   
-new_experiment_rmd(name = "ggram")
+new_experiment_rmd(name = "mahalanobis")
 ```

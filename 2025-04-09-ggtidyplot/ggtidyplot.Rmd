@@ -1,0 +1,117 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+library(tidyplots)
+
+study |>
+  ggplot(aes(group, score, fill = dose, color = dose)) + 
+  geom_bar(stat = "summary", fun = mean, 
+           position = position_dodge(width = .8),
+           alpha = .3, color = NA, width = .6) + 
+  geom_errorbar(stat = "summary", fun.data = mean_se, position = position_dodge(width = .8),
+           alpha = .3, width = .6) +
+  geom_point(position = position_dodge(width = .8))
+
+study |> 
+  tidyplot(x = group, y = score, color = dose) |>
+  add_mean_bar(alpha = .3) |>
+  add_sem_errorbar() |>
+  add_data_points()
+
+
+StatSummary$compute_panel
+
+GeomMeanBar <- ggproto(`_class` = "GeomMeanBar", 
+                       `_inherit` = GeomBar,
+                       default_aes = modifyList(GeomBar$default_aes, aes(color = NA, linewidth = 0, width = .6)))
+
+
+
+geom_mean_bar <- function (mapping = NULL, data = NULL, stat = "summary", position = position_dodge(width = .8), 
+    ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) 
+{
+    layer(data = data, mapping = mapping, stat = stat, geom = GeomMeanBar, 
+        position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
+        params = rlang::list2(na.rm = na.rm, fun = "mean", ...))
+}
+
+
+StatSem <- StatSummary
+
+geom_sem_errorbar <- function (mapping = NULL, data = NULL, stat = "sem", position = position_dodge(width = .8), width = .4, 
+    ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) 
+{
+    layer(data = data, mapping = mapping, stat = stat, geom = GeomErrorbar, 
+        position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
+        params = rlang::list2(na.rm = na.rm, fun = "mean", fun.data = mean_se, width = width, ...))
+}
+
+geom_point_dodge <- function (mapping = NULL, data = NULL, stat = "summary", position = position_dodge(width = .8), 
+    ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) 
+{
+    layer(data = data, mapping = mapping, stat = stat, geom = GeomPoint, 
+        position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
+        params = rlang::list2(na.rm = na.rm, fun = "mean", fun.data = mean_se, ...))
+}
+
+# 
+# position_dodge_if_discrete <- function(){
+#   
+#   
+#   
+#   
+# }
+
+
+study |>
+  ggplot() + 
+  aes(group, score, fill = dose, color = dose) +
+  geom_mean_bar(alpha = .4) +
+  geom_sem_errorbar() +
+  geom_point()
+
+
+
+cars |>
+  tidyplot(speed, dist, dist) |>
+  add_data_points()
+
+
+add_data_points
+
+tidyplots:::f_points
+
+tidyplot
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

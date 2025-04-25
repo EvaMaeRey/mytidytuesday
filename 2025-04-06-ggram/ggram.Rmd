@@ -145,10 +145,11 @@ ggram <- function(title = NULL, widths = c(1,1), ...){
     scale_color_manual(values = c("black", "blue2"), breaks = c(FALSE, TRUE)) +
     guides(alpha = "none", color = "none") + 
     # annotate("rect", xmin = -3, xmax = 0, ymin = -Inf, ymax = Inf, fill = "grey93") + 
-    geom_text(data = line_numbers, aes(x = -1, y = row, label = row, fill = NULL), family = "mono") + 
+    geom_text(data = line_numbers, hjust = 1, aes(x = -.5, y = row, label = row, fill = NULL), family = "mono") + 
     geom_vline(xintercept = 0, color = "darkred") + 
     geom_hline(yintercept = 1:24 + .5, color = "blue", linewidth = .2, alpha = .5) + 
-    annotate("point", x = -1.5, y = c(1,9,17) + .25, alpha = .3, size = 5) ->
+    annotate("point", x = -1.5, y = c(1,9,17) + .25, color = "white", size = 5) +
+    annotate("point", x = -1.5, y = c(1,9,17) + .25, shape = 21, alpha = .3, size = 5, fill = "grey92") ->
   code_plot
   
   code_plot + plot + patchwork::plot_layout(widths = widths) +
@@ -158,7 +159,8 @@ ggram <- function(title = NULL, widths = c(1,1), ...){
 }
 
 theme_set(new = ggchalkboard:::theme_whiteboard(accent = "blue", paper = "grey99", 
-                                                base_size = 11))
+                                                #ink = "grey20",
+                                                base_size = 9))
 
 clearhistory()
 
@@ -168,11 +170,16 @@ ggplot(cars) +
   geom_smooth()#<<
 
 ggram(title = "geom_smooth() is the best")
+```
 
 
+```{r}
 library(marquee)
 library(grid)
 library(ggplot2)
+
+
+ggstats::
 
 p <- ggplot(mtcars, aes(wt, mpg))
 p + geom_marquee(aes(label = rownames(mtcars)))
@@ -237,10 +244,24 @@ gapminder_fr_de |>
       y = pop/1000000,
       label = country) +
   labs(y = "Population (millions)") +
-  geom_textpath(color = "blue", ) #<<
+  geom_textpath() #<<
 
 
 ggram("geom_textpath is so easy to use!")
+
+clearhistory()
+
+
+pressure |>
+  ggplot() + 
+  aes(x = temperature, 
+      y = pressure,
+      label = 
+        "tempature vs. pressure") +
+  geom_textpath() #<<
+
+
+ggram("#30DayChartChallenge, Day #2: Slopes", subtitle = "with ggplot2 extender github.com/AllanCameron's and Teun van den Brand's {geomtextpath}", widths = c(1,1))
 
 
 # library(tidyplots)
@@ -288,10 +309,172 @@ gapminder_euro_select_ranked |>
   ggbump::geom_bump()  #<<
 
 
-ggram("Who are the ggplot2 extenders?", subtitle = "@davidsjoberg's {ggbump} makes bump charts a snap ", widths = c(1.5,1))
+ggram("#30DayChartChallenge, Day #5: Ranking", subtitle = "with ggplot2 extender github.com/davidsjoberg's {ggbump}", widths = c(1.5,1))
 
 ```
 
+
+```{r}
+
+likert_levels <- c(
+  "Strongly disagree",
+  "Disagree",
+  "Neither agree nor disagree",
+  "Agree",
+  "Strongly agree"
+)
+
+set.seed(42)
+survey_likert_long <-
+  tibble(
+    q1 = sample(likert_levels, 150, replace = TRUE),
+    q2 = sample(likert_levels, 150, replace = TRUE, prob = 5:1),
+    q3 = sample(likert_levels, 150, replace = TRUE, prob = 1:5),
+    q4 = sample(likert_levels, 150, replace = TRUE, prob = 1:5),
+    q5 = sample(c(likert_levels, NA), 150, replace = TRUE),
+    q6 = sample(likert_levels, 150, replace = TRUE, prob = c(1, 0, 1, 1, 0))
+  ) |>
+  mutate(across(everything(), ~ factor(.x, levels = likert_levels))) |>
+  pivot_longer(q1:q6, names_to = "question", values_to = "response")
+
+
+
+clearhistory()
+
+
+library(ggstats)
+
+survey_likert_long |>
+  ggplot() + 
+  aes(y = question, 
+      fill = response) + 
+  geom_likert() + 
+  geom_likert_text() + 
+  scale_fill_likert()
+
+
+
+options(scipen = 10)
+
+clearhistory()
+
+library(ggstats)
+chilemapas::censo_2017_comunas |>
+  ggplot() + 
+  aes(y = edad,
+      fill = sexo,
+      weight = poblacion) + 
+  geom_diverging() + #<<
+  geom_diverging_text( #<<
+    hide_below = 490000 #<<
+    ) + #<<
+  theme(
+    legend.position = c(.2,.85))
+
+ggram("#30DayChartChallenge, Day #9: Diverging", subtitle = "with ggplot2 extender github.com/larmarange's {ggstats}", widths = c(1,1), caption = "further styling could remove minus sign in x axis: `+ scale_x_continuous( labels = function(x){abs(x)})`; and change x and fill axis label: `+ labs(x = 'Population', fill = NULL)`" |> str_wrap(100))
+
+geomtextpath::GeomTextpath$default_aes
+
+chilemapas::censo_2017_comunas$edad |> levels()
+```
+
+```{r}
+library(tidyverse)
+
+palmerpenguins::penguins |>
+  filter(!is.na(sex)) ->
+  penguins_mf
+
+library(ggram)
+ggram:::clearhistory()
+
+library(ggridges)
+ggplot(penguins_mf) + 
+  aes(
+    x = body_mass_g, 
+    y = interaction(sex, species), 
+    fill = sex,
+    ) +
+  geom_point(shape = "|") +
+  geom_density_ridges(alpha = .7) + #<<
+  guides(fill = "none")
+
+
+ggram("#30DayChartChallenge, Day #7: Outliers", subtitle = "with ggplot2 extender github.com/wilkelab's (Claus Wilke) {ggridges}", widths = c(1.2,1), caption = "Further styling: `+ labs(y = NULL, fill = NULL, x = 'Body Mass (grams)')`; set space or return as sep in `interaction()`: `sep = ' ' or `sep = '\\n'` " |> str_wrap(80))
+```
+
+
+
+```{r}
+read.csv("../../../ggplot-extension-club/meetings.csv") |>
+  mutate(date = as_date(date)) |>
+  filter(!is.na(date)) ->
+ggplot2_extenders_meetup
+
+ggram:::clearhistory()
+
+library(ggtextcircle)
+ggplot2_extenders_meetup |>
+ggplot() + 
+  aes(label = str_wrap(presenter, 8), 
+      alpha = date,
+      color = 
+        presenter == "Nicola Rennie"
+      ) + 
+  geom_textcircle(#<<
+    lineheight = .75,  #<<
+               size = 3,   hjust = 0 #<<
+    ) + #<<
+  coord_equal() + 
+  theme(legend.position = "none")
+
+gapminder::gapminder |> 
+  filter(year == 2002) ->
+gapminder_2002
+
+ggram:::clearhistory()
+
+library(ggtextcircle)
+ggplot(gapminder_2002) + 
+  aes(label = country, 
+      color = continent
+      ) + 
+  geom_textcircle(#<<
+               size = 2,   hjust = 0 #<<
+    ) + #<<
+  coord_equal() + 
+  theme(legend.position = "none")
+
+ggram("#30DayChartChallenge, Day #3: Circular", subtitle = "with ggplot2 extender github.com/nrennie's (Nicola Rennie) {ggtextcircle}", widths = c(1.2,1))
+
+```
+
+
+```{r}
+
+gapminder::gapminder |> 
+  filter(year == 2002) ->
+gapminder_2002
+
+ggram:::clearhistory()
+
+
+library(ggcirclepack)
+ggplot(gapminder_2002) + 
+  aes(id = country,
+      area = pop,
+      color = continent) + 
+  geom_circlepack() + #<<
+  geom_circlepack_text() + #<<
+  coord_equal() + 
+  theme(legend.position = "none")
+  
+
+ggram("#30DayChartChallenge, Day #3: Circular", subtitle = "with ggplot2 extender github.com/evamaerey's (Gina Reynold's) {ggcirclepack}", widths = c(1.2,1))
+
+
+
+```
 
 
 ## Closing remarks, Other Relevant Work, Caveats

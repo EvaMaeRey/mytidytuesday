@@ -164,7 +164,9 @@ library(ggbump)
 
 us_cohort_life_exp_rank_2020 %&gt;%
   ggplot() +
-* scale_y_reverse()
+* aes(x = year,
+*     y = life_exp_rank,
+*     color = country)
 ```
 ]
  
@@ -184,8 +186,10 @@ library(ggbump)
 
 us_cohort_life_exp_rank_2020 %&gt;%
   ggplot() +
-  scale_y_reverse() +
-* aes(x = year)
+  aes(x = year,
+      y = life_exp_rank,
+      color = country) +
+* geom_point()
 ```
 ]
  
@@ -205,86 +209,16 @@ library(ggbump)
 
 us_cohort_life_exp_rank_2020 %&gt;%
   ggplot() +
-  scale_y_reverse() +
-  aes(x = year) +
-* aes(y = life_exp_rank)
-```
-]
- 
-.panel2-bump-auto[
-![](asa-cowy-fall-2024_files/figure-html/bump_auto_07_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-bump-auto[
-
-``` r
-library(tidyverse)
-library(ggbump)
-
-us_cohort_life_exp_rank_2020 %&gt;%
-  ggplot() +
-  scale_y_reverse() +
-  aes(x = year) +
-  aes(y = life_exp_rank) +
-* geom_point()
-```
-]
- 
-.panel2-bump-auto[
-![](asa-cowy-fall-2024_files/figure-html/bump_auto_08_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-bump-auto[
-
-``` r
-library(tidyverse)
-library(ggbump)
-
-us_cohort_life_exp_rank_2020 %&gt;%
-  ggplot() +
-  scale_y_reverse() +
-  aes(x = year) +
-  aes(y = life_exp_rank) +
+  aes(x = year,
+      y = life_exp_rank,
+      color = country) +
   geom_point() +
-* aes(color = country)
-```
-]
- 
-.panel2-bump-auto[
-![](asa-cowy-fall-2024_files/figure-html/bump_auto_09_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-bump-auto[
-
-``` r
-library(tidyverse)
-library(ggbump)
-
-us_cohort_life_exp_rank_2020 %&gt;%
-  ggplot() +
-  scale_y_reverse() +
-  aes(x = year) +
-  aes(y = life_exp_rank) +
-  geom_point() +
-  aes(color = country) +
 * geom_bump()
 ```
 ]
  
 .panel2-bump-auto[
-![](asa-cowy-fall-2024_files/figure-html/bump_auto_10_output-1.png)&lt;!-- --&gt;
+![](asa-cowy-fall-2024_files/figure-html/bump_auto_07_output-1.png)&lt;!-- --&gt;
 ]
 
 &lt;style&gt;
@@ -322,10 +256,6 @@ us_cohort_life_exp_rank_2020 %&gt;%
 
 # Graphical Poem!!!
 
---
-
-"The article concludes by discussing some perceptual issues, and thinking about how we can build on the grammar to learn how to create graphical 'poems.'"
-
 
 
 ``` r
@@ -334,10 +264,14 @@ life_exp_rank_2020 %&gt;%
   aes(x = year, 
       y = life_exp_rank, 
       color = country) + 
-  scale_y_reverse() +
   geom_point() + 
 * geom_bump()
 ```
+
+--
+
+## "The article concludes by discussing some perceptual issues, and thinking about how we can build on the grammar to learn how to create graphical 'poems.'"
+
 
 ---
 
@@ -351,109 +285,8 @@ life_exp_rank_2020 %&gt;%
 
 ## "... creating new Stats[-based layers] is one of the most useful ways to extend the capabilities of ggplot2." – ggplot2: Elegant Graphics for Data Analysis
 
-
 ---
 
-# - 'I have two kids, it's so hard to be so deep in ggplot, it takes at least two days just to get all the information in your head again.  So I'm struggling with maintaining [ggbump, ggaluvial, ggsankey]'
-
---
-
-# Delivering new layer extensions can be costly.
-
----
-
-# - 'I have 200 kids...'  Univeristy Professor
-
----
-
-# - 'I have 1000 kids...'  Academy Curriculum Director
-
----
-
-# - 'I have a thesis to finish'  Graduate Student
-
----
-
-## Recognizing demands on peoples time and attention.
-
---
-
-## Talk central question:  Can we lower the costs to delivering layer extension?
-
---
-
-## Especially in academic setting...
-
---
-
-## ... (These people generally have staggeringly good extension ideas, and academic setting has potential to have ripple effect since educators have a *lot* of trainees...) :-)
-
----
-
-# 'How to extend ggplot2 while drowning'...?
-
---
-
-## managing 'care tasks' ...
-
-![](https://m.media-amazon.com/images/I/61DJiOiZeGL._SY445_SX342_QL70_FMwebp_.jpg)
-
-
----
-
-## 1. extension is be an analytic 'care task' - can help you in the long run
-
---
-
-## 2. but in the short run, barriers to entry and maintanance present a burden
-
-
----
-
-# 'How to extend ggplot2 without drowning'...?
-
---
-
-Don't go deep.  Stay intentionally light-weight, and superficial.
-
---
-
-Don't go too far.  Keep things local.
-
---
-
-Don't swim alone!  
-
----
-
-
-
-
-
-
-
-
----
-
-
-# Specifically...
-
-### Check out new educational resources - super accessible recipes and cookbook.
-
---
-
-### 'early exits' (no packaging, in script extension)
-
---
-
-### minimal packaging (no CRAN, minimal messaging testing)
-
-
---
-
-### new, low code extension. (experimental) &lt;&lt;
-
----
 
 
 --- 
@@ -473,6 +306,8 @@ Don't swim alone!
 
 
 
+
+---
 
 count: false
 
@@ -549,11 +384,6 @@ count: false
 
 ![](asa-cowy-fall-2024_files/figure-html/wp_prop_poem_small_auto_12_output-1.png)&lt;!-- --&gt;
 
----
-count: false
-
-![](asa-cowy-fall-2024_files/figure-html/wp_prop_poem_small_auto_13_output-1.png)&lt;!-- --&gt;
-
 &lt;style&gt;
 .panel1-wp_prop_poem_small-auto {
   color: black;
@@ -588,19 +418,138 @@ count: false
 
 ---
 
-## *Long statistical graphical poems.*... are being written on the board all the time by stat's instructors.
+## *Long form statistical graphical poems.*... are being written on the board *all the time* by stat's instructors and students.
 
-## And is what's draw the *actual poem*?
+## And isn't what's draw the *actual* graphical poem?
 ![This isn't a pipe](https://upload.wikimedia.org/wikipedia/en/b/b9/MagrittePipe.jpg)
 
 ---
 
 
-### ggplot2 *code* sometimes allows us to record those poems in concise, logical, consistent ways... 
+### ggplot2 *sometimes* allows us to record those poems in concise, logical, consistent ways... 
 
 --
 
-The code is an expression of the actual poem.
+
+
+
+## The code is an expression of the *actual*, *drawn* poem.
+
+
+--
+
+## What is a a song? (is it the performed work or written down?)
+
+
+
+---
+
+# - 'I have two kids, it's so hard to be so deep in ggplot, it takes at least two days just to get all the information in your head again.  So I'm struggling with maintaining [ggbump, ggaluvial, ggsankey]'
+
+--
+
+# Delivering new layer extensions can be costly.
+
+---
+
+# - 'I have 200 kids...'  Univeristy Professor
+
+---
+
+# - 'I have 1000 kids...'  Academy Curriculum Director
+
+---
+
+# - 'I have a thesis to finish'  Graduate Student
+
+---
+
+## Recognizing demands on peoples time and attention.
+
+--
+
+## Talk central question:  Can we lower the costs to delivering layer extension?
+
+--
+
+## Especially in academic setting...
+
+--
+
+## ... (These people generally have staggeringly good extension ideas, and academic setting has potential to have ripple effect since educators have a *lot* of trainees...) :-)
+
+---
+
+# 'How to extend ggplot2 while drowning'...?
+
+--
+
+## managing 'care tasks' ...
+
+![](https://m.media-amazon.com/images/I/61DJiOiZeGL._SY445_SX342_QL70_FMwebp_.jpg)
+
+
+---
+
+## 1. extension is be an analytic 'care task' - can help you in the long run
+
+--
+
+## 2. but in the short run, barriers to entry and maintanance present a burden
+
+
+---
+
+# 'How to extend ggplot2 without drowning'...?
+
+### new, low code extension. (experimental) &lt;&lt;
+
+
+&lt;!-- -- --&gt;
+
+&lt;!-- Don't go deep.  Stay intentionally light-weight, and superficial. --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- Don't go too far.  Keep things local. --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- Don't swim alone!   --&gt;
+
+&lt;!-- --- --&gt;
+
+
+
+
+
+
+
+
+&lt;!-- --- --&gt;
+
+
+&lt;!-- # Specifically... --&gt;
+
+&lt;!-- ### Check out new educational resources - super accessible recipes and cookbook. --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- ### 'early exits' (no packaging, in script extension) --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- ### minimal packaging (no CRAN, minimal messaging testing) --&gt;
+
+
+&lt;!-- -- --&gt;
+
+--
+
+
+---
+
+
 
 ---
 
@@ -963,7 +912,7 @@ donor |&gt;
 
 --
 
-But we are just getting started!!  😬😭
+## But we are just getting started!!  😬😭
 
 
 ---
@@ -1005,6 +954,15 @@ But we are just getting started!!  😬😭
 ```
 ## [1] 3627
 ```
+
+--
+
+## Making logic harder to follow
+
+--
+
+## and code less readable
+
 
 ---
 
@@ -1103,7 +1061,7 @@ donor |&gt;
 
 # Code burden comparison
 
-![](asa-cowy-fall-2024_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+&lt;img src="asa-cowy-fall-2024_files/figure-html/unnamed-chunk-12-1.png" width="70%" /&gt;
 
 
 ---
@@ -1171,7 +1129,7 @@ count: false
 
 ``` r
 donor |&gt;
-* ggplot()
+* ggplot() + theme_chalkboard(base_size = 18)
 ```
 ]
 
@@ -1187,8 +1145,8 @@ count: false
 
 ``` r
 donor |&gt;
-  ggplot() +
-* theme_chalkboard()
+  ggplot() + theme_chalkboard(base_size = 18) +
+* aes(x = decision)
 ```
 ]
 
@@ -1204,9 +1162,9 @@ count: false
 
 ``` r
 donor |&gt;
-  ggplot() +
-  theme_chalkboard() +
-* aes(x = decision)
+  ggplot() + theme_chalkboard(base_size = 18) +
+  aes(x = decision) +
+* geom_stack()
 ```
 ]
 
@@ -1222,10 +1180,10 @@ count: false
 
 ``` r
 donor |&gt;
-  ggplot() +
-  theme_chalkboard() +
+  ggplot() + theme_chalkboard(base_size = 18) +
   aes(x = decision) +
-* geom_stack()
+  geom_stack() +
+* geom_stack_label()
 ```
 ]
 
@@ -1241,11 +1199,11 @@ count: false
 
 ``` r
 donor |&gt;
-  ggplot() +
-  theme_chalkboard() +
+  ggplot() + theme_chalkboard(base_size = 18) +
   aes(x = decision) +
   geom_stack() +
-* geom_stack_label()
+  geom_stack_label() +
+* geom_support()
 ```
 ]
 
@@ -1261,12 +1219,12 @@ count: false
 
 ``` r
 donor |&gt;
-  ggplot() +
-  theme_chalkboard() +
+  ggplot() + theme_chalkboard(base_size = 18) +
   aes(x = decision) +
   geom_stack() +
   geom_stack_label() +
-* geom_support()
+  geom_support() +
+* geom_prop()
 ```
 ]
 
@@ -1282,13 +1240,13 @@ count: false
 
 ``` r
 donor |&gt;
-  ggplot() +
-  theme_chalkboard() +
+  ggplot() + theme_chalkboard(base_size = 18) +
   aes(x = decision) +
   geom_stack() +
   geom_stack_label() +
   geom_support() +
-* geom_prop()
+  geom_prop() +
+* geom_prop_label()
 ```
 ]
 
@@ -1304,31 +1262,7 @@ count: false
 
 ``` r
 donor |&gt;
-  ggplot() +
-  theme_chalkboard() +
-  aes(x = decision) +
-  geom_stack() +
-  geom_stack_label() +
-  geom_support() +
-  geom_prop() +
-* geom_prop_label()
-```
-]
-
----
-count: false
- 
-
-.panel1-wp_prop_poem_small-auto[
-![](asa-cowy-fall-2024_files/figure-html/wp_prop_poem_small_auto_10_output-1.png)&lt;!-- --&gt;
-]
- 
-.panel2-wp_prop_poem_small-auto[
-
-``` r
-donor |&gt;
-  ggplot() +
-  theme_chalkboard() +
+  ggplot() + theme_chalkboard(base_size = 18) +
   aes(x = decision) +
   geom_stack() +
   geom_stack_label() +
@@ -1344,15 +1278,14 @@ count: false
  
 
 .panel1-wp_prop_poem_small-auto[
-![](asa-cowy-fall-2024_files/figure-html/wp_prop_poem_small_auto_11_output-1.png)&lt;!-- --&gt;
+![](asa-cowy-fall-2024_files/figure-html/wp_prop_poem_small_auto_10_output-1.png)&lt;!-- --&gt;
 ]
  
 .panel2-wp_prop_poem_small-auto[
 
 ``` r
 donor |&gt;
-  ggplot() +
-  theme_chalkboard() +
+  ggplot() + theme_chalkboard(base_size = 18) +
   aes(x = decision) +
   geom_stack() +
   geom_stack_label() +
@@ -1369,15 +1302,14 @@ count: false
  
 
 .panel1-wp_prop_poem_small-auto[
-![](asa-cowy-fall-2024_files/figure-html/wp_prop_poem_small_auto_12_output-1.png)&lt;!-- --&gt;
+![](asa-cowy-fall-2024_files/figure-html/wp_prop_poem_small_auto_11_output-1.png)&lt;!-- --&gt;
 ]
  
 .panel2-wp_prop_poem_small-auto[
 
 ``` r
 donor |&gt;
-  ggplot() +
-  theme_chalkboard() +
+  ggplot() + theme_chalkboard(base_size = 18) +
   aes(x = decision) +
   geom_stack() +
   geom_stack_label() +
@@ -1395,15 +1327,14 @@ count: false
  
 
 .panel1-wp_prop_poem_small-auto[
-![](asa-cowy-fall-2024_files/figure-html/wp_prop_poem_small_auto_13_output-1.png)&lt;!-- --&gt;
+![](asa-cowy-fall-2024_files/figure-html/wp_prop_poem_small_auto_12_output-1.png)&lt;!-- --&gt;
 ]
  
 .panel2-wp_prop_poem_small-auto[
 
 ``` r
 donor |&gt;
-  ggplot() +
-  theme_chalkboard() +
+  ggplot() + theme_chalkboard(base_size = 18) +
   aes(x = decision) +
   geom_stack() +
   geom_stack_label() +
@@ -1641,7 +1572,7 @@ statexpress::qstat_panel
 ##     ggplot2::ggproto("StatTemp", Stat, compute_panel = compute_panel, 
 ##         ...)
 ## }
-## &lt;bytecode: 0x7f880feb46f8&gt;
+## &lt;bytecode: 0x7fe7db683850&gt;
 ## &lt;environment: namespace:statexpress&gt;
 ```
 
@@ -1663,7 +1594,7 @@ statexpress::qlayer
 ##         inherit.aes = inherit.aes, params = rlang::list2(na.rm = na.rm, 
 ##             ...))
 ## }
-## &lt;bytecode: 0x7f880fd7ec00&gt;
+## &lt;bytecode: 0x7fe7df4545b8&gt;
 ## &lt;environment: namespace:statexpress&gt;
 ```
 
@@ -1680,7 +1611,7 @@ statexpress::qproto_update
 ##     proto_update("protoTemp", `_inherit`, default_aes_update = default_aes_update, 
 ##         ...)
 ## }
-## &lt;bytecode: 0x7f880fd80928&gt;
+## &lt;bytecode: 0x7fe7df45d0a8&gt;
 ## &lt;environment: namespace:statexpress&gt;
 ```
 
@@ -1698,7 +1629,7 @@ statexpress::proto_update
 ##     ggplot2::ggproto(`_class` = `_class`, `_inherit` = `_inherit`, 
 ##         default_aes = default_aes, ...)
 ## }
-## &lt;bytecode: 0x7f880fd83878&gt;
+## &lt;bytecode: 0x7fe7df45c580&gt;
 ## &lt;environment: namespace:statexpress&gt;
 ```
 
@@ -1921,16 +1852,14 @@ Acknowledgements
 knitr::knit_exit()
 ```
 
-
-
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"ratio": "16:9",
-"highlightStyle": "github",
-"highlightLines": true,
-"countIncrementalSlides": false
+  "ratio": "16:9",
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));

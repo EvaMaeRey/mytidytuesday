@@ -91,21 +91,16 @@ library(ggbump)
 
 us_cohort_life_exp_rank_2020 %>% 
   ggplot() + 
-  scale_y_reverse() +
-  aes(x = year) + 
-  aes(y = life_exp_rank) + 
+  aes(x = year, 
+      y = life_exp_rank, 
+      color = country) + 
   geom_point() + 
-  aes(color = country) +
   geom_bump()
 ```
 
 ---
 
 # Graphical Poem!!!
-
---
-
-"The article concludes by discussing some perceptual issues, and thinking about how we can build on the grammar to learn how to create graphical 'poems.'"
 
 
 ```{r, eval = F}
@@ -114,10 +109,14 @@ life_exp_rank_2020 %>%
   aes(x = year, 
       y = life_exp_rank, 
       color = country) + 
-  scale_y_reverse() +
   geom_point() + 
   geom_bump()  #<<
 ```
+
+--
+
+## "The article concludes by discussing some perceptual issues, and thinking about how we can build on the grammar to learn how to create graphical 'poems.'"
+
 
 ---
 
@@ -131,109 +130,8 @@ life_exp_rank_2020 %>%
 
 ## "... creating new Stats[-based layers] is one of the most useful ways to extend the capabilities of ggplot2." – ggplot2: Elegant Graphics for Data Analysis
 
-
 ---
 
-# - 'I have two kids, it's so hard to be so deep in ggplot, it takes at least two days just to get all the information in your head again.  So I'm struggling with maintaining [ggbump, ggaluvial, ggsankey]'
-
---
-
-# Delivering new layer extensions can be costly.
-
----
-
-# - 'I have 200 kids...'  Univeristy Professor
-
----
-
-# - 'I have 1000 kids...'  Academy Curriculum Director
-
----
-
-# - 'I have a thesis to finish'  Graduate Student
-
----
-
-## Recognizing demands on peoples time and attention.
-
---
-
-## Talk central question:  Can we lower the costs to delivering layer extension?
-
---
-
-## Especially in academic setting...
-
---
-
-## ... (These people generally have staggeringly good extension ideas, and academic setting has potential to have ripple effect since educators have a *lot* of trainees...) :-)
-
----
-
-# 'How to extend ggplot2 while drowning'...?
-
---
-
-## managing 'care tasks' ...
-
-![](https://m.media-amazon.com/images/I/61DJiOiZeGL._SY445_SX342_QL70_FMwebp_.jpg)
-
-
----
-
-## 1. extension is be an analytic 'care task' - can help you in the long run
-
---
-
-## 2. but in the short run, barriers to entry and maintanance present a burden
-
-
----
-
-# 'How to extend ggplot2 without drowning'...?
-
---
-
-Don't go deep.  Stay intentionally light-weight, and superficial.
-
---
-
-Don't go too far.  Keep things local.
-
---
-
-Don't swim alone!  
-
----
-
-
-
-
-
-
-
-
----
-
-
-# Specifically...
-
-### Check out new educational resources - super accessible recipes and cookbook.
-
---
-
-### 'early exits' (no packaging, in script extension)
-
---
-
-### minimal packaging (no CRAN, minimal messaging testing)
-
-
---
-
-### new, low code extension. (experimental) <<
-
----
 
 
 --- 
@@ -408,6 +306,7 @@ donor |>
 
 
 
+
 ```{r wp_prop_poem_functions, echo = F, message = F, warning=F}
 geom_stack <- function(...){
   qlayer(geom = qproto_update(GeomTile, aes(color = "white")), 
@@ -442,7 +341,7 @@ geom_prop_label <- function(...){
   }
 
 stamp_prop <- function(...){ 
-  qlayer(geom = qproto_update(GeomText, aes(size = 6, vjust = 1, color = "red")),
+  qlayer(geom = qproto_update(GeomText, aes(size = 6, vjust = 1, color = "darkred")),
          stat = qstat_panel(compute_panel_prop_asserted), 
          ...)
   }
@@ -450,7 +349,7 @@ stamp_prop <- function(...){
   
 stamp_prop_label <- function(...){  
   qlayer(geom = qproto_update(GeomLabel, 
-                              aes(fill = NA, label.size = NA, vjust = 0, color = "red")),
+                              aes(fill = NA, label.size = NA, vjust = 0, color = "darkred")),
          stat = qstat_panel(compute_panel_prop_asserted_label), 
          ...)
   }
@@ -470,11 +369,10 @@ geom_normal_prop_null_sds <- function(...){
   }
 
 
-theme_chalkboard <- function(){
+theme_chalkboard <- function(...){
   
 theme_classic(ink = alpha("lightyellow", .7),
-           paper = "darkseagreen4", 
-           base_size = 15) + 
+           paper = "darkseagreen4", ...) + 
     theme(geom = element_geom(accent = alpha("cadetblue2", 7)))
   
 }
@@ -482,14 +380,14 @@ theme_classic(ink = alpha("lightyellow", .7),
 
 ```
 
+---
 
 `r chunk_reveal("wp_prop_poem_small", display = "output")`
 
 
 ```{r wp_prop_poem_small, include = F}
 donor |>
-  ggplot() + 
-  theme_chalkboard() +
+  ggplot() + theme_chalkboard(base_size = 18) +
   aes(x = decision) +
   geom_stack() +
   geom_stack_label() + 
@@ -504,19 +402,138 @@ donor |>
 
 ---
 
-## *Long statistical graphical poems.*... are being written on the board all the time by stat's instructors.
+## *Long form statistical graphical poems.*... are being written on the board *all the time* by stat's instructors and students.
 
-## And is what's draw the *actual poem*?
+## And isn't what's draw the *actual* graphical poem?
 ![This isn't a pipe](https://upload.wikimedia.org/wikipedia/en/b/b9/MagrittePipe.jpg)
 
 ---
 
 
-### ggplot2 *code* sometimes allows us to record those poems in concise, logical, consistent ways... 
+### ggplot2 *sometimes* allows us to record those poems in concise, logical, consistent ways... 
 
 --
 
-The code is an expression of the actual poem.
+
+
+
+## The code is an expression of the *actual*, *drawn* poem.
+
+
+--
+
+## What is a a song? (is it the performed work or written down?)
+
+
+
+---
+
+# - 'I have two kids, it's so hard to be so deep in ggplot, it takes at least two days just to get all the information in your head again.  So I'm struggling with maintaining [ggbump, ggaluvial, ggsankey]'
+
+--
+
+# Delivering new layer extensions can be costly.
+
+---
+
+# - 'I have 200 kids...'  Univeristy Professor
+
+---
+
+# - 'I have 1000 kids...'  Academy Curriculum Director
+
+---
+
+# - 'I have a thesis to finish'  Graduate Student
+
+---
+
+## Recognizing demands on peoples time and attention.
+
+--
+
+## Talk central question:  Can we lower the costs to delivering layer extension?
+
+--
+
+## Especially in academic setting...
+
+--
+
+## ... (These people generally have staggeringly good extension ideas, and academic setting has potential to have ripple effect since educators have a *lot* of trainees...) :-)
+
+---
+
+# 'How to extend ggplot2 while drowning'...?
+
+--
+
+## managing 'care tasks' ...
+
+![](https://m.media-amazon.com/images/I/61DJiOiZeGL._SY445_SX342_QL70_FMwebp_.jpg)
+
+
+---
+
+## 1. extension is be an analytic 'care task' - can help you in the long run
+
+--
+
+## 2. but in the short run, barriers to entry and maintanance present a burden
+
+
+---
+
+# 'How to extend ggplot2 without drowning'...?
+
+### new, low code extension. (experimental) <<
+
+
+<!-- -- -->
+
+<!-- Don't go deep.  Stay intentionally light-weight, and superficial. -->
+
+<!-- -- -->
+
+<!-- Don't go too far.  Keep things local. -->
+
+<!-- -- -->
+
+<!-- Don't swim alone!   -->
+
+<!-- --- -->
+
+
+
+
+
+
+
+
+<!-- --- -->
+
+
+<!-- # Specifically... -->
+
+<!-- ### Check out new educational resources - super accessible recipes and cookbook. -->
+
+<!-- -- -->
+
+<!-- ### 'early exits' (no packaging, in script extension) -->
+
+<!-- -- -->
+
+<!-- ### minimal packaging (no CRAN, minimal messaging testing) -->
+
+
+<!-- -- -->
+
+--
+
+
+---
+
+
 
 ---
 
@@ -636,7 +653,7 @@ donor |>
 
 --
 
-But we are just getting started!!  😬😭
+## But we are just getting started!!  😬😭
 
 
 ---
@@ -659,7 +676,7 @@ data.frame(wt = c(compute_chars, stat_chars + layer_chars),
   ggwedge:::geom_pie_label(r_nudge = 2, size = 4) +
   aes(label = after_stat(paste0(percent,"\n(",  count, ")"))) +
   coord_polar() + 
-  theme_void()
+  theme_void(base_size = 18)
 ```
 
 ---
@@ -673,8 +690,6 @@ last_plot() +
   labs(fill = NULL)
   
 layer_data()
-
-
 ```
 
 
@@ -686,6 +701,15 @@ layer_data()
 9 * # number of layers in ma206 lesson 1 poem
   (stat_chars + layer_chars) # scaffolding code per layer
 ```
+
+--
+
+## Making logic harder to follow
+
+--
+
+## and code less readable
+
 
 ---
 
@@ -775,7 +799,7 @@ donor |>
 
 # Code burden comparison
 
-```{r, echo = F, message = F, warning = F}
+```{r, echo = F, message = F, warning = F, out.width = "70%"}
 qlayer_qstat_chars <- chunk_code_get("geom_support_express") |>
   count_chars()
   
@@ -795,7 +819,8 @@ data.frame(wt = c(compute_chars, stat_chars + layer_chars, compute_chars, qlayer
   theme(legend.position = "top",
         legend.justification = 0) + 
   theme(strip.background = element_rect(fill = "darkgrey")) +
-  labs(title = "Creating geom_support with new classic v. statexpress method")
+  labs(title = "Code burden Comparison",
+    subtitle = "Creating geom_support with 'new classic' v. statexpress method")
 ```
 
 
@@ -803,9 +828,6 @@ data.frame(wt = c(compute_chars, stat_chars + layer_chars, compute_chars, qlayer
 
 ```{r}
 knitrExtra::chunk_code_get("StatSupport")
-
-
-
 ```
 
 
