@@ -54,7 +54,7 @@ layer_heat <- function(...){list(
   theme(panel.grid.minor = element_line(color = "darkgrey")))
 }
 
-encode <- function(color, ...){
+viz <- function(color, ...){
   aes(color = {{color}}, fill = {{color}}, ...) 
 }
 
@@ -154,9 +154,16 @@ data(palmerpenguins::penguins) +
   size(body_mass_g) + 
   guides(size = "none")
 
+library(ggram)
+ggram::clearhistory()
+
 data(palmerpenguins::penguins) + 
-  encode(x = island, color = species) + 
-  layer_bar()
+  viz(x = island, color = species) + 
+  layer_bar(position = "dodge2")
+
+ggram(widths = c(2,1))
+
+
 
 data(palmerpenguins::penguins) + 
   x(body_mass_g) + 

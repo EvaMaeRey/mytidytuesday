@@ -49,7 +49,17 @@ gapminder::gapminder |>
 ## Experiment
 
 ```{r}
+library(tidyverse)
 
+label_max_diamonds <- function(x){
+        ifelse(x == max(x, na.rm = T), paste0(x, '\ndiamonds'), 
+          x)}
+
+mtcars |>
+  ggplot() +
+  aes(x = factor(am)) +
+  geom_bar()  + 
+  scale_y_continuous(labels = label_max_diamonds)
 ```
 
 

@@ -563,13 +563,13 @@ theme_void <- function(base_size = 11, base_family = "",
     title =              element_text(family = header_family),
     spacing =            unit(half_line, "pt"),
     margins =            margin_auto(half_line),
-    geom =               element_geom(
-                           ink = ink, paper = paper, accent = accent,
-                           linewidth = base_line_size, borderwidth = base_line_size,
-                           linetype = 1L, bordertype = 1L,
-                           family = base_family, fontsize = base_size,
-                           pointsize = (base_size / 11) * 1.5, pointshape = 19
-                         ),
+    # geom =               element_geom(
+    #                        ink = ink, paper = paper, accent = accent,
+    #                        linewidth = base_line_size, borderwidth = base_line_size,
+    #                        linetype = 1L, bordertype = 1L,
+    #                        family = base_family, fontsize = base_size,
+    #                        pointsize = (base_size / 11) * 1.5, pointshape = 19
+    #                      ),
     axis.text =          element_blank(),
     axis.title =         element_blank(),
     axis.ticks.length =  rel(0),
@@ -670,13 +670,13 @@ theme_test <- function(base_size = 11, base_family = "",
     title =              element_text(family = header_family),
     spacing = unit(half_line, "pt"),
     margins = margin_auto(half_line),
-    # geom =               element_geom(
-    #                        ink = ink, paper = paper, accent = accent,
-    #                        linewidth = base_line_size, borderwidth = base_line_size,
-    #                        family = base_family, fontsize = base_size,
-    #                        linetype = 1L,
-    #                        pointsize = (base_size / 11) * 1.5, pointshape = 19
-    #                      ),
+    geom =               element_geom(
+                           ink = ink, paper = paper, accent = accent,
+                           linewidth = base_line_size, borderwidth = base_line_size,
+                           family = base_family, fontsize = base_size,
+                           linetype = 1L,
+                           pointsize = (base_size / 11) * 1.5, pointshape = 19
+                         ),
 
     axis.line =          element_blank(),
     axis.line.x =        NULL,
@@ -821,9 +821,17 @@ p <- ggplot(cars) + aes(speed, dist) + geom_point() + geom_smooth()
 
 p + theme_gray(paper = "darkseagreen4", ink = alpha("lightyellow", .6), accent = alpha("coral", .6))
 
+p + theme_minimal(paper = "darkseagreen4", ink = alpha("lightyellow", .6), accent = alpha("coral", .6))
+
+p + theme_classic(paper = "darkseagreen4", ink = alpha("lightyellow", .6), accent = alpha("coral", .6))
+
 
 p + theme_void()
-p + theme_void(paper = "darkseagreen4", ink = alpha("lightyellow", .6), accent = alpha("coral", .6))
+
+p + theme_void()
+p + theme_void(paper = "darkseagreen4", 
+               ink = alpha("lightyellow", .6), 
+               accent = alpha("coral", .6))
 
 ggplot(mtcars) + aes()
 ```

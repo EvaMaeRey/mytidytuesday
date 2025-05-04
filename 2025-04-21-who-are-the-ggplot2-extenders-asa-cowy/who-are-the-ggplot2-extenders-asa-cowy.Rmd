@@ -85,7 +85,7 @@ How can something that is *so useful* be out of reach for *so many*? 😭
 
 1. something happens, and adding extension doesn't feel effort-ful, and they see extension opportunities everywhere...
 
-1. 💪 kind of effortful plotting with base ggplot2 
+1. 💪 kind of effort-ful plotting with base ggplot2 
 2. 🧠 focused attention and effort (not bravery)
 3. 👶 plotting with the extensions (woohoo!) - child's play
 
@@ -127,7 +127,9 @@ Easy Geom Recipes
 ```{r}
 library(ggram)
 library(tidyverse)
-compute_group_means <- function(data, scales){
+
+#' Define compute
+compute_means <- function(data, scales){
   
   data |>
     summarize(x = mean(x),
@@ -135,12 +137,13 @@ compute_group_means <- function(data, scales){
   
 }
 
+#' Test compute
 cars |> 
   select(x = speed, y = dist) |> 
   compute_group_means()
 
 
-ggram_df_output("Step 1: Define compute")
+ggram_df_output("Step 1: Define compute; test", widths = c(4,2))
 ```
 
 
@@ -150,7 +153,6 @@ StatMeans <-
           `_inherit` = Stat,
           compute_group = 
             compute_group_means)
-#'
 #'
 ggplot(cars) + 
   aes(x = speed, y = dist) + 
@@ -162,6 +164,13 @@ ggram("Step 2: Define Stat and Test", widths = c(1, .7))
 
 ```
 
+
+```{r}
+
+
+ggram("Step 2: Define Stat and Test", widths = c(1, .7))
+
+```
 
 
 

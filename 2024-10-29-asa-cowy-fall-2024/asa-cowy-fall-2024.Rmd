@@ -1,5 +1,5 @@
 ---
-title: "ASA-COWY, Fall 2024"
+title: "ASA-COWY, Spring 2025"
 subtitle: "Everyday ggplot2 extension: New approaches to light-weight 'geom' (layer) extension"
 author: "Evangeline 'Gina' Reynolds"
 output:
@@ -30,7 +30,7 @@ donor <- read_delim(isi_donor_url) %>%
 
 ```
 
-## What to expect:
+## Overview:
 
 ### 1. Creating new layers (geom_* functions) in ggplot2 extension has been described as an 'involved process'. 
 
@@ -40,7 +40,7 @@ donor <- read_delim(isi_donor_url) %>%
 
 --
 
-### 3. I'll discuss strategies and tools to make experimentation with new layer functionality, especially for pedagogy, more light-weight and fun.  
+### 3. I'll discuss strategies and tools to make experimentation with new layer functionality, especially for pedagogy,  lighter-weight and more fun.  
 
 
 ---
@@ -121,7 +121,7 @@ life_exp_rank_2020 %>%
 
 --
 
-## "The article concludes by discussing some perceptual issues, and thinking about how we can build on the grammar to learn how to create graphical 'poems.'"
+## "The article concludes by discussing some perceptual issues, and thinking about how we can build on the grammar to learn how to create graphical 'poems.'" - Hadley Wickham
 
 
 ---
@@ -130,17 +130,15 @@ life_exp_rank_2020 %>%
 
 --
 
-# Layer extension can deliver high value. 
+# Layer extension delivers value. 
 
 --
 
 ## "... creating new Stats[-based layers] is one of the most useful ways to extend the capabilities of ggplot2." – ggplot2: Elegant Graphics for Data Analysis
 
----
-
-
 
 --- 
+class: inverse, center, middle
 
 # What if you have a much longer graphical poem in mind?
 
@@ -839,7 +837,8 @@ knitrExtra::chunk_code_get("StatSupport")
 
 ---
 
-# Part 0. Sketch epic poem on chalkboard or paper.
+# Part 0. Sketch epic poem on chalkboard or paper, and the sketch the ggplot2 extension syntax that would support that. 
+
 
 
 ---
@@ -960,8 +959,22 @@ geom_prop <- function(...){
 
 ---
 
-r chunk_reveal("wp_prop_poem_small", display = "output")`
+`r chunk_reveal("wp_prop_poem_small2")`
 
+```{r wp_prop_poem_small2, include = F}
+donor |>
+  ggplot() + theme_chalkboard(base_size = 18) +
+  aes(x = decision) +
+  geom_stack() +
+  geom_stack_label() + 
+  geom_support() +
+  geom_prop() + 
+  geom_prop_label() + 
+  stamp_prop() + 
+  stamp_prop_label() + 
+  geom_normal_prop_null() +
+  geom_normal_prop_null_sds()
+```
 
 ---
 
@@ -974,44 +987,19 @@ r chunk_reveal("wp_prop_poem_small", display = "output")`
 
 ---
 
+# Part 4. Circulate to Collegues; make adjustments
 
+## 'Wow! That is great. What I like about it most is that it provides the visualization or the comparison of the statistics to the null distribution right there. I find that is the most challenging concept for *cadets* and it is cumbersome to either go to the applet or to draw it on the board to visualize this relationship. It disrupts the flow and their train of thought. Doing it all in one is very slick! Very easy code too!' Kyle
 
+--
 
-
-
-# Part 4. Bundle?
-
-```{r}
-layers_proportion_test <- function(asserted = .5, ...){
-  
-  list(
-    geom_stack(),
-    geom_stack_label(),
-    geom_support(), 
-    geom_prop(),
-    geom_prop_label(),
-    stamp_prop(),
-    stamp_prop_label(),
-    geom_normal_prop_null(),
-    geom_normal_prop_null_sds()
-    )
-  
-}
-
-```
-
-
+## 'I'm not a statistician, but showing a normal distribution for a binary variable for e.g. the prop test seems sketchy to me. Shouldn't it be some weird beta distribution that is bounded in [0, 1]?' Teun
 
 
 ---
 
-# Part 4. Circulate to Collegues; make adjustments
 
-## 'Wow! That is great. What I like about it most is that it provides the visualization or the comparison of the statistics to the null distribution right there. I find that is the most challenging concept for *cadets* and it is cumbersome to either go to the applet or to draw it on the board to visualize this relationship. It disrupts the flow and their train of thought. Doing it all in one is very slick! Very easy code too!'
-
---
-
-## 'I'm not a statistician, but showing a normal distribution for a binary variable for e.g. the prop test seems sketchy to me. Shouldn't it be some weird beta distribution that is bounded in [0, 1]?'
+https://ggplot2-extenders.github.io/ggplot-extension-club/
 
 
 ---
@@ -1019,6 +1007,7 @@ layers_proportion_test <- function(asserted = .5, ...){
 # Appendix.   Details about {statexpress}
 
 https://github.com/EvaMaeRey/statexpress
+
 
 
 

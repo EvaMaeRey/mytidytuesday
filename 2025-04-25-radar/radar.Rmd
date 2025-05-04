@@ -1,0 +1,270 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+#' stat_radar
+#'
+#' @param mapping []
+#' @param data []
+#' @param geom []
+#' @param position []
+#' @param na.rm []
+#' @param show.legend []
+#' @param inherit.aes []
+#' @param ... []
+#'
+#' @return theme
+#' @export
+stat_radar <- function(
+  mapping = NULL,
+  data = NULL,
+  geom = "path",
+  position = "identity",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE,
+  ...
+) {
+  ggplot2::layer(
+    stat = StatRadar,
+    data = data,
+    mapping = mapping,
+    geom = geom,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(
+      na.rm = na.rm,
+      ...
+    )
+  )
+}
+
+
+#' @rdname stat_radar
+#' @export
+geom_radar <- function(
+  mapping = NULL,
+  data = NULL,
+  geom = "point",
+  position = "identity",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE,
+  ...
+) {
+  list(
+    stat_radar(
+      mapping = mapping,
+      data = data,
+      geom = "path",
+      position = "identity",
+      na.rm = na.rm,
+      show.legend = show.legend,
+      inherit.aes = inherit.aes,
+      ...
+    ),
+    stat_radar(
+      mapping = mapping,
+      data = data,
+      geom = "point",
+      position = "identity",
+      na.rm = TRUE,
+      show.legend = show.legend,
+      inherit.aes = inherit.aes,
+      ...
+    )
+  )
+}
+
+
+#' @rdname stat_radar
+#'
+#' @format NULL
+#' @usage NULL
+#'
+#' @export
+StatRadar <- ggplot2::ggproto("StatRadar", ggplot2::Stat,
+  required_aes = c("x", "y"),
+  setup_data = function(data, params) {
+    max_x <- max(data$x)
+    data %>%
+      dplyr::mutate(
+        x = purrr::map_if(
+          .x = x,
+          .p = ~.x==1,
+          .f = ~c(.x, 13)
+        )
+      ) %>%
+      tidyr::unnest() %>%
+      dplyr::arrange(x)
+  },
+  compute_group = function(data, scales, params) {
+    data
+  }
+)
+
+
+#' @rdname stat_radar
+#'
+#' @format NULL
+#' @usage NULL
+#'
+#' @export
+StatRadarMajor <- ggplot2::ggproto("StatRadarMajor", ggplot2::Stat,
+  required_aes = "y",
+  setup_params = function(data, params) {
+    if (is.null(params$ymax)) {
+      params$ymax <- max(data$y, na.rm = TRUE)
+    }
+    params
+  },
+  compute_group = function(data, scales, params, ymax) {
+    tmp <- scales::pretty_breaks(5)(c(0, ymax))
+    data.frame(yintercept = tmp)
+  }
+)
+
+
+#' @rdname stat_radar
+#'
+#' @format NULL
+#' @usage NULL
+#'
+#' @export
+StatRadarMinor <- ggplot2::ggproto("StatRadarMinor", ggplot2::Stat,
+  required_aes = "y",
+  setup_params = function(data, params) {
+    if (is.null(params$ymax)) {
+      params$ymax <- max(data$y, na.rm = TRUE)
+    }
+    params
+  },
+  compute_group = function(data, scales, params, ymax) {
+    tmp <- scales::pretty_breaks(5)(c(0, ymax))
+    data.frame(yintercept = tmp[-length(tmp)] + diff(tmp)/2)
+  }
+)
+
+
+#' annotation_radar
+#'
+#' @param mapping []
+#' @param data []
+#' @param na.rm []
+#' @param inherit.aes []
+#' @param abbreviate.month []
+#' @param locale []
+#' @param colour []
+#' @param ymax []
+#' @param ... []
+#'
+#' @return gg
+#' @export
+annotation_radar <- function(
+  mapping = NULL,
+  data = NULL,
+  na.rm = TRUE,
+  inherit.aes = TRUE,
+  abbreviate.month = TRUE,
+  locale = readr::locale(),
+  colour = "white",
+  ymax = NULL,
+  ...
+) {
+  list(
+    # ggplot2::layer(
+    #   stat = StatRadarMajor,
+    #   data = data,
+    #   mapping = mapping[-grep("colo[u]*r", names(mapping))],
+    #   geom = ggplot2::GeomHline,
+    #   position = ggplot2::PositionIdentity,
+    #   show.legend = FALSE,
+    #   inherit.aes = inherit.aes,
+    #   params = list(na.rm = na.rm, size = 0.4, ymax = ymax, colour = colour, ...)
+    # ),
+    # ggplot2::layer(
+    #   stat = StatRadarMinor,
+    #   data = data,
+    #   mapping = mapping[-grep("colo[u]*r", names(mapping))],
+    #   geom = ggplot2::GeomHline,
+    #   position = ggplot2::PositionIdentity,
+    #   show.legend = FALSE,
+    #   inherit.aes = inherit.aes,
+    #   params = list(na.rm = na.rm, size = 0.2, ymax = ymax, colour = colour, ...)
+    # ),
+    ggplot2::layer(
+      stat = ggplot2::StatIdentity,
+      data = data.frame(xintercept = 1:13),
+      mapping = ggplot2::aes_all("xintercept"),
+      geom = ggplot2::GeomVline,
+      position = ggplot2::PositionIdentity,
+      show.legend = FALSE,
+      inherit.aes = FALSE,
+      params = list(na.rm = na.rm, size = 0.4, colour = colour, ...)
+    ),
+    ggplot2::coord_polar(theta = "x"),
+    ggplot2::theme(
+      axis.text.y = ggplot2::element_blank(),
+      axis.title = ggplot2::element_blank(),
+      axis.ticks = ggplot2::element_blank(),
+      axis.line = ggplot2::element_blank(),
+      panel.grid = ggplot2::element_blank(),
+      panel.border = ggplot2::element_blank()
+    ),
+    ggplot2::scale_y_continuous(
+      limits = c(0, NA),
+      expand = ggplot2::expand_scale(mult = c(0, 0.05))
+    ),
+    ggplot2::scale_x_continuous(
+      breaks = 1:12,
+      labels = if (abbreviate.month) locale$date_names$mon_ab else locale$date_names$mon,
+      expand = c(0, 0)
+    )
+  )
+}
+
+
+library(tidyverse)
+tibble(x = rep(c(1,2,3), 2), 
+       y = rep(c(1,2,3), 2), 
+       id = c(1,1,1,2,2,2) ) |>
+         slice(1:3) |>
+         ggplot() + 
+         aes(x = x, y = y) +
+         geom_radar() + 
+  annotation_radar() + 
+  stat_radar()
+       
+       
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
