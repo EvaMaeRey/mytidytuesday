@@ -27,10 +27,14 @@ library(tidyverse)
 
 ## Get namespace, pull out exported geom_ and stat_ functions, grab function definition
 
-```{r}
+```{r, eval = F}
 "https://raw.githubusercontent.com/tidyverse/ggplot2/refs/heads/main/NAMESPACE" |>
-read_lines() ->
-ggplot2_namespace
+read_lines() |> 
+  write_rds("ggplot2_namespace.rds")
+```
+
+```{r}
+ggplot2_namespace <- read_rds("ggplot2_namespace.rds")
 
 ggplot2_namespace %>% 
   tibble(text = .) %>% 
@@ -44,7 +48,7 @@ fun_contents <- list()
 
 for (i in 1:nrow(df_exported_geom_stat)){
 
-  if(df_exported_geom_stat$exported_fun[i] != "stat_manual"){
+  if(c(df_exported_geom_stat$exported_fun[i] %in% c("stat_manual", "stat_connect"){
   
 fun_contents[[i]] <- capture.output(get(df_exported_geom_stat$exported_fun[i]))
 

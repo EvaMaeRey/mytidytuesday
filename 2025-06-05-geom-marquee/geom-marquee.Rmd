@@ -1,0 +1,114 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+```{r}
+library(tidyverse)
+`🔥` <- function(){
+  
+  "ouch"
+}
+
+`🔥`()
+
+`🎨` <- function(color){aes(color = {{color}})}
+`↕` <- function(y){aes(color = {{y}})}
+`↔` <- function(x){aes(color = {{x}})}
+`📜`<- function(label){aes(color = {{label}})}
+
+
+`🎨`(animal)
+
+
+```
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+data.frame(
+    x = rnorm(20),
+    y = rnorm(20),
+    shape = rep(c("smiley", "poop"), 10)
+) |> 
+    ggplot(aes(x, y, shape = shape)) +
+    geom_point(size = 10) +
+    scale_shape_manual(
+        labels = c(smiley = "Completed Study", poop = "Pooped"),
+        values = c(smiley = "😀", poop = "💩"),
+        guide = guide_legend(override.aes = list(size = 5))
+    ) +
+    theme_classic()
+
+
+
+library(grid)
+grid.newpage()
+grid.points(.5, .5, pch = "😀", default.units = "npc")
+```
+
+
+```{r}
+library(ggswim)
+p <- patient_data |>
+  ggplot() +
+  geom_swim_lane(
+    mapping = aes(
+      x = start_time, y = pt_id, xend = end_time,
+      colour = disease_assessment
+    )
+  ) 
+
+all_events <- dplyr::bind_rows(
+  infusion_events,
+  end_study_events
+)
+
+p +
+  geom_swim_marker(
+    data = all_events,
+    aes(x = time_from_initial_infusion, y = pt_id, marker = label),
+    size = 5
+  )
+
+geom_swim_marker
+
+GeomSwimMarker
+
+
+last_plot() + 
+   scale_marker_discrete(
+    glyphs = c("⬤", "⬤", "⚠️", "❌" ,"✅"),
+    colours = c("#ffde00", "#ed207f", NA, NA, NA),
+    limits = c("First Reinfusion", "Second Reinfusion", "Other End Study Reason", "Deceased", "Completed Study Follow-Up"),
+    name = "Study Events"
+  )
+
+
+```
+
+## Experiment
+
+```{r}
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

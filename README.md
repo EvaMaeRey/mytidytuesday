@@ -709,7 +709,7 @@ working on problems that arose in my work and personal interests.
 ``` r
 new_experiment_rmd <- function(name){
   
-  dir <- paste0(Sys.Date(),"-", name)
+  dir <- paste0(Sys.Date(), "-", name)
   
   dir.create(dir, recursive = F)
   
@@ -721,5 +721,5 @@ new_experiment_rmd <- function(name){
 }   
 
   
-new_experiment_rmd(name = "asa-cowy-linkedin")
+new_experiment_rmd(name = "new-classic-stat-introduction-ggram")
 ```

@@ -55,7 +55,7 @@ ggram("Step 0: Get the job done with base ggplot2")
 clearhistory()
 #
 # Define compute.
-compute_group_medians <- 
+compute_group_medians <-  #<<
   function(data, scales){ 
   data |> 
     summarize(x = median(x),
@@ -64,9 +64,8 @@ compute_group_medians <-
 #
 # Test compute. 
 mpg |>
-  select(x = cty,  
-         y = hwy) |>  
-  compute_group_medians()
+  select(x = cty, y = hwy) |>  
+  compute_group_medians()  #<<
 
 ggram::ggram_df_output("Step 1: Define compute. Test.")
 ```
@@ -81,15 +80,17 @@ clearhistory()
 ####### Define Stat ##########
 StatMedians <- ggplot2::ggproto(`_class` = "StatMedians",
                    `_inherit` = ggplot2::Stat,
-                   compute_group = compute_group_medians,
+                   compute_group = #<<
+                     compute_group_medians, #<<
                    required_aes = c("x", "y"))
 #
 ###### Test ########
 ggplot(data = mpg) + 
   aes(x = cty, y = hwy) + 
   geom_point() + 
-  geom_point(stat = StatMedians, 
-             size = 7)
+  geom_point(
+    stat = StatMedians, #<<
+    size = 7)
 
 ggram("Step 2: Define Stat. Test.")
 ```
@@ -100,34 +101,51 @@ ggram("Step 2: Define Stat. Test.")
 
 ```{r}
 clearhistory()
+##### use stat_identity() as a model #####
+stat_identity #<< for reference... 
+
+ggram_text_output("Assist to Step 3: Consult stat_identity definition.")
+
+```
 
 
-##### Define user-facing stat_ function #####
-stat_identity
+```{r}
+clearhistory()
 
-##### Protip: use stat_identity() as a model #####
+
+##### Define user-facing stat_* function #####
 stat_medians <- function(
     mapping = NULL, data = NULL, 
-                         geom = "point", position = "identity", 
-                         ..., show.legend = NA, inherit.aes = TRUE) 
+    geom = "point", #<<
+    position = "identity", 
+    ..., show.legend = NA, inherit.aes = TRUE) 
 {
-    layer(data = data, mapping = mapping, stat = StatMedians, 
-        geom = geom, position = position, show.legend = show.legend, 
-        inherit.aes = inherit.aes, params = rlang::list2(na.rm = FALSE, 
-            ...))
+    layer(data = data, mapping = mapping, 
+          stat = StatMedians, #<<
+        geom = geom, position = position, 
+        show.legend = show.legend, 
+        inherit.aes = inherit.aes, 
+        params = rlang::list2(na.rm = FALSE, ...))
 }
 #
 ###### Alias if desired #########
 geom_medians <- stat_medians
+#
 
 
-ggram("Step 3: Define user-facing function(s). ")
+
+ggram_text_output("Step 3: Define user-facing function() usable in Step 00. ", widths = c(2, 0))
+
+ggsave("hi.png", width = 4, height = 5)
+```
 
 
+
+```{r}
 clearhistory()
 
 
-###### Done!  Uwe the function ###############
+###### Done! Use the geom_medians ###############
 ggplot(data = mpg) + 
   aes(x = cty, y = hwy) + 
   geom_point() + 

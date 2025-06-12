@@ -1,0 +1,271 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+
+# Load packages for data handling and plotting
+library(tidyverse)
+library(patchwork)
+library(broom)
+
+# Reproducible "random" results
+set.seed(40)
+
+# Generate normal data with known parameters
+rnorm_fixed = function(N, mu = 0, sd = 1)
+  scale(rnorm(N)) * sd + mu
+
+# Plot style.
+theme_axis = function(P,
+                      jitter = FALSE,
+                      xlim = c(-0.5, 2),
+                      ylim = c(-0.5, 2),
+                      legend.position = NULL) {
+  P = P + theme_bw(15) +
+    geom_segment(
+      x = -1000, xend = 1000,
+      y = 0, yend = 0,
+      lty = 2, color = 'dark gray', lwd = 0.5
+    ) +
+    geom_segment(
+      x = 0, xend = 0,
+      y = -1000, yend = 1000,
+      lty = 2, color = 'dark gray', lwd = 0.5
+    ) +
+    coord_cartesian(xlim = xlim, ylim = ylim) +
+    theme(
+      axis.title = element_blank(),
+      axis.text = element_blank(),
+      axis.ticks = element_blank(),
+      panel.border = element_blank(),
+      panel.grid = element_blank(),
+      legend.position = legend.position
+    )
+  
+  # Return jittered or non-jittered plot?
+  if (jitter) {
+    P + geom_jitter(width = 0.1, size = 2)
+  }
+  else {
+    P + geom_point(size = 2)
+  }
+}
+
+```
+
+## Experiment
+
+```{r}
+library(tidyverse)
+# Fixed correlation
+D_correlation = data.frame(MASS::mvrnorm(30, mu = c(0.9, 0.9), Sigma = matrix(c(1, 0.8, 1, 0.8), ncol = 2), empirical = TRUE))  # Correlated data
+
+# Add labels (for next plot)
+D_correlation$label_num = sprintf('(%.1f,%.1f)', D_correlation$X1, D_correlation$X2)
+D_correlation$label_rank = sprintf('(%i,%i)', rank(D_correlation$X1), rank(D_correlation$X2))
+
+# Plot it
+fit = lm(I(X2 * 0.5 + 0.4) ~ I(X1 * 0.5 + 0.2), D_correlation)
+intercept_pearson = coefficients(fit)[1]
+
+P_pearson = ggplot(D_correlation, aes(x=X1*0.5+0.2, y=X2*0.5+0.4)) +
+  geom_smooth(method=lm, se=FALSE, lwd=2, aes(colour='beta_1')) + 
+  geom_segment(x = -100, xend=100, 
+               y = intercept_pearson, 
+               yend = intercept_pearson, 
+               lwd = 2, 
+               aes(color="beta_0")) + 
+  scale_color_manual(name=NULL, values=c("blue", "red"), labels=c(bquote(beta[0]*" (intercept)"), bquote(beta[1]*" (slope)")))
+  
+theme_axis(P_pearson, legend.position = c(0.4, 0.9))
+```
+
+
+```{r}
+geom_lm <- function(..., se = FALSE){geom_smooth(method=lm, se = se, ...)}
+
+compute_group_lm_intercept <- function(data, scales){
+  data
+  
+  fit = lm(I(y) ~ I(x), data)
+  data.frame(yintercept = coefficients(fit)[1][[1]])
+  
+}
+
+library(statexpress)
+geom_lm_intercept <- function(...){
+  qlayer(geom = qproto_update(GeomHline, 
+                              aes(linewidth = from_theme(2* linewidth))),
+         stat = qstat(compute_group_lm_intercept,
+                      dropped_aes = c("x", "y")),
+         ...)
+  
+}
+```
+
+```{r}
+compute_group_coords <- function(data, scales){
+  
+  data |>
+    mutate(label = )
+  
+}
+
+
+```
+
+
+```{r}
+scatter_data = D_correlation |> 
+  mutate(x = X1*0.5+0.2,
+         y = X2*0.5+0.4)
+
+(ggchalkboard:::theme_blackboard() +
+    theme(legend.position = c(.2,.85))) |> 
+  theme_set()
+```
+
+https://lindeloev.github.io/tests-as-linear/
+
+# pearson
+
+The slope is r if x and y are normalized...
+
+```{r}
+ggplot(scatter_data) +
+  aes(x=x, y=y) +
+  geom_point() +
+  geom_lm(aes(color = "beta_1")) + 
+  geom_lm_intercept(aes(color = "beta_0"))
+
+last_plot() +
+  labs(color = NULL) +
+  scale_color_discrete(labels = 
+                         c(bquote(beta[0]*" (intercept)"), 
+                           bquote(beta[1]*" (slope)")))
+```
+
+
+# spearman
+
+```{r}
+last_plot() + 
+  aes(x = rank(x), y = rank(y))
+```
+
+
+
+```{r}
+signed_rank = function(x) sign(x) * rank(abs(x))
+
+# T-test
+D_t1 = data.frame(y = rnorm_fixed(20, 0.5, 0.6),
+                  x = runif(20, 0.93, 1.07))  # Fix mean and SD
+
+compute_group_vspread <- function(data, scales){
+  
+  data |>
+    mutate(x = 0)
+  
+}
+
+geom_vspread <- function(...){
+  
+  qlayer(geom = GeomPoint,
+         stat = qstat(compute_group_vspread),
+         ...)
+  
+}
+
+compute_group_vmean <- function(data, scales){
+  
+  data$x <- data$x %||% 0
+  
+  data |>
+    summarise(y = mean(y),
+              x = mean(x)) 
+  
+}
+
+geom_vmean <- function(...){
+  
+  qlayer(geom = qproto_update(GeomPoint, 
+                              aes(size = from_theme(pointsize*3))),
+         stat = qstat(compute_group_vmean),
+         ...)
+  
+}
+
+
+```
+
+# T-Test
+
+```{r}
+ggplot(D_t1) +
+  aes(y = y) + 
+  geom_vspread() + 
+  geom_vmean(aes(color = "beta_0")) +
+  labs(title = "t-test")
+
+ttest <- last_plot()
+```
+
+```{r}
+last_plot() + 
+  aes(y = signed_rank(y)) + 
+  labs(title = "Wilcoxon")
+
+wilcoxon <- last_plot()
+
+ttest + wilcoxon
+```
+
+```{r}
+ggplot(D_t1) +
+  aes(y = y, x = 0) +
+  stat_summary(fun.y= mean, geom = "errorbar", aes(ymax = ..y.., ymin = ..y.., color='beta_0'), lwd=2) +
+  scale_color_manual(name = NULL, values = c("blue"), labels = c(bquote(beta[0] * " (intercept)"))) +
+  
+  geom_text(aes(label = round(y, 1)), nudge_x = 0.2, size = 3, color = 'dark gray') + 
+  labs(title='         T-test') -> P_t1
+
+# Wilcoxon
+D_t1_rank = data.frame(y = signed_rank(D_t1$y))
+
+P_t1_rank = ggplot(D_t1_rank, aes(y = y, x = 0)) + 
+  stat_summary(fun.y = mean, geom = "errorbar", aes(ymax = ..y.., ymin = ..y..,  color = 'beta_0'), lwd = 2) +
+  scale_color_manual(name = NULL, values = c("blue"), labels = c(bquote(beta[0] * " (intercept)"))) +
+
+  geom_text(aes(label = y), nudge_x = 0.2, size = 3, color = 'dark gray') + 
+  labs(title='         Wilcoxon')
+
+library(patchwork)
+# Stich together using patchwork
+theme_axis(P_t1, ylim = c(-1, 2), legend.position = c(0.6, 0.1)) + 
+  theme_axis(P_t1_rank, ylim = NULL,  legend.position = c(0.6, 0.1))
+
+
+```
+

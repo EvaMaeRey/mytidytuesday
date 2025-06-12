@@ -478,3 +478,37 @@ ggram("#30DayChartChallenge, Day #3: Circular", subtitle = "with ggplot2 extende
 
 
 ## Closing remarks, Other Relevant Work, Caveats
+
+
+
+```{r}
+
+
+library(ggplot2)
+ggram::clearhistory()
+
+labs_plus <- function(x){
+  
+  is_max <- x == max(x, na.rm = T)
+
+  add_info <- 
+    paste0("\n", x, "\ndiamonds")
+
+  ifelse(is_max, add_info, x)
+  
+  } 
+#
+ggplot(diamonds) + 
+  aes(x = cut) + 
+  geom_bar() + 
+  scale_y_continuous( #<<
+    labels = labs_plus #<<
+    ) + #<<
+  labs(y = NULL) 
+
+ggram(widths = c(1,.8))
+
+
+last_plot() + annotate("point", shape = 21, x = I(-.2), y = I(.85), color = "goldenrod1", size = 23, stroke = ) + coord_cartesian(clip = "off")
+
+```

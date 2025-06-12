@@ -23,6 +23,97 @@ options(tidyverse.quiet = TRUE)
 ```{r}
 library(tidyverse)
 
+
+compute_panel_radar <- function(data, scales, rating_norm = T){
+  
+  data |>
+    mutate(cat_numeric = cat |> as.factor() |> as.numeric()) |>
+    mutate(around = -2*pi*(cat_numeric-1)/max(cat_numeric)+pi/2) |>
+    mutate(rating_norm = 100*rating/max(rating)) |>
+    mutate(x = cos(around) * (rating_norm),
+           y = sin(around) * (rating_norm)) 
+  
+}
+
+compute_panel_web <- function(data, scales, rating_norm = 0:5*20){
+  
+  marked_ratings_df <- data.frame(rating_norm = rating_norm)
+  
+  data |>
+    mutate(cat_numeric = cat |> as.factor() |> as.numeric()) |>
+    mutate(around = -2*pi*(cat_numeric-1)/max(cat_numeric)+pi/2) |>
+    crossing(marked_ratings_df) |>
+    mutate(x = cos(around) * rating_norm,
+           y = sin(around) * rating_norm) ->
+    d
+  
+  d |>
+    bind_rows(d |> filter(around == pi/2)) |>
+    arrange(rating_norm) |>
+    mutate(group = rating_norm) 
+  
+}
+
+compute_panel_web_spokes <- function(data, scales, rating_norm = 100){
+  
+  data |>
+    mutate(cat_numeric = cat |> as.factor() |> as.numeric()) |>
+    mutate(around = -2*pi*(cat_numeric-1)/max(cat_numeric)+pi/2) |>
+    # mutate(rating_norm = (rating - min(rating))/(max(rating)-min(rating)) + .5) |>
+    mutate(x = cos(around) * rating_norm,
+           y = sin(around) * rating_norm) |>
+    mutate(xend = 0, yend = 0) 
+  
+}
+
+library(statexpress)
+
+tribble(~cat, ~rating, ~group,
+        "geom_*", 20, "gguke",
+        "stat_*", 25, "gguke",
+        "theme_*", 15, "gguke",
+        "coord_*", 5, "gguke",
+        "facet_*", 12, "gguke",
+        "geom_*", 10,  "ggdoremi",
+        "stat_*", 15, "ggdoremi",
+        "theme_*", 30, "ggdoremi",
+        "coord_*", 12, "ggdoremi",
+        "facet_*", 3, "ggdoremi"
+        ) |>
+  ggplot() + 
+  labs(title = "toy data") +
+  aes(cat = cat, rating = rating, group = group, fill = group, color = group) + 
+  # geom_radar_web
+  qlayer(stat = qstat_panel(compute_panel_web),
+         geom = GeomPath, alpha = .7, color = "grey") +
+  qlayer(stat = qstat_panel(compute_panel_web_spokes),
+         geom = GeomSegment, alpha = .7, color = "grey") +
+  # geom_radar_cats
+  qlayer(stat = qstat_panel(compute_panel_web, 
+                            default_aes = aes(label = after_stat(cat))), 
+         geom = GeomLabel,  rating_norm = 100, linewidth = 0, 
+         fill = NA, vjust = "outward", hjust = "outward", color = "darkgrey") +
+  qlayer(stat = qstat_panel(compute_panel_web), 
+         geom = GeomBlank,  rating_norm = 170) +
+  coord_equal() + 
+  theme_classic() +
+  #  geom_radar
+  qlayer(stat = qstat_panel(compute_panel_radar),
+         geom = qproto_update(GeomPolygon, 
+                              aes(alpha = .2, 
+                                  color = from_theme(ink)))) + 
+  # geom_radar_point
+  qlayer(stat = qstat_panel(compute_panel_radar),
+         geom = GeomPoint)
+  
+
+last_plot() +
+  facet_wrap(~group) +
+  qlayer(stat = qstat_panel(compute_panel_radar), 
+         geom = GeomLabel, hjust = "outward", vjust = "outward", fill = NA, linewidth = 0,
+         aes(label = rating)) 
+
+
 ```
 
 ## Experiment

@@ -52,8 +52,8 @@ gapminder::gapminder |>
 library(tidyverse)
 
 label_max_diamonds <- function(x){
-        ifelse(x == max(x, na.rm = T), paste0(x, '\ndiamonds'), 
-          x)}
+        ifelse(x == max(x, na.rm = T), 
+               paste0('\n', x, '\ncars'), x)}
 
 mtcars |>
   ggplot() +
