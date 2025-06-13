@@ -1,5 +1,5 @@
 ---
-title: "New ggplot2 theming capabilities make plots more harmonious and sparkly ✨"
+title: "New ggplot2 theming to make plots more harmonious and sparkly ✨"
 subtitle: "And notes for using and updating extensions that haven't adopted the dynamic `geom_*` theming yet."
 author: "Evangeline Reynolds"
 date: "`r Sys.Date()`"
@@ -64,6 +64,8 @@ Let's see how new arguments  `paper`, `ink` and `accent` as well as old stalwart
 
 In example A. we make and use the `theme_chalkboard` -- a modification of `theme_classic`. In example B. we make and use the `theme_whitesmoke` -- a modification of `theme_classic`.
 
+### Example A. `theme_chalkboard`
+
 `r chunk_return_two_col("bchalk")`
 
 ```{r bchalk, include = F}
@@ -82,13 +84,18 @@ theme_chalkboard <- theme_classic(
 theme_chalkboard |> 
   theme_set()
 
-# 3. Plot!
+# 3. Get plotting!
 ggplot(data = cars) + 
   aes(x = speed, y = dist) + 
   geom_point() + 
-  geom_smooth() + 
-  labs(title = "Scatter with loess smoothing")
+  geom_smooth()
+
+ggplot(data = diamonds) + 
+  aes(x = cut) + 
+  geom_bar()
 ```
+
+## Example B. `theme_whitesmoke`
 
 `r chunk_return_two_col("hello")`
 
@@ -105,12 +112,15 @@ theme_whitesmoke <- theme_bw(
 theme_whitesmoke |> 
   theme_set()
 
-# 3. Plot!
+# 3. Get plotting!
 ggplot(data = cars) + 
   aes(x = speed, y = dist) + 
   geom_point() + 
-  geom_smooth() + 
-  labs(title = "Scatter with loess smoothing")
+  geom_smooth()
+
+ggplot(data = diamonds) + 
+  aes(x = cut) + 
+  geom_bar()
 ```
 
 # What if my favorite geom\_\*() extension isn't up-to-date with dynamic layer theming? How do I keep the chart to come into line with theme?
@@ -131,6 +141,7 @@ two_countries <- gapminder::gapminder |>
   filter(country %in% c("Netherlands",
                         "Belgium"))
 
+# Uh-oh!  geom_textpath ...
 ggplot(data = two_countries) + 
   aes(x = year, 
       y = lifeExp,
@@ -138,7 +149,21 @@ ggplot(data = two_countries) +
   geomtextpath::geom_textpath()
 ```
 
-### Solution: use `theme_*$geom$ink`, `theme_*$geom$fontsize` and friends for more harmonious look
+`r chunk_return_two_col("textpath-override")`
+
+```{r textpath-override, include = F}
+# Set defaults manually
+ggplot(data = two_countries) + 
+  aes(x = year, 
+      y = lifeExp,
+      label = country) + 
+  geomtextpath::geom_textpath(
+    color = "lightyellow",
+    size = 5
+  )
+```
+
+### A more dynamic solution: use `theme_*$geom$ink`, `theme_*$geom$fontsize` and friends for more harmonious look
 
 `r chunk_return_two_col("textpath2")`
 
@@ -157,7 +182,7 @@ ggplot(data = two_countries) +
 
 ### More dynamic solution: use `get_theme()$geom$ink`
 
-Should you anticipate changing up your theme, you might switch out the name of your theme, e.g. theme_chalkboard, with get_theme(). 
+Should you anticipate a possible change-up of your theme, you might use `get_theme()` instead of the name of the theme in the formulation above. 
 
 `r chunk_return_two_col("textpath3")`
 
@@ -179,13 +204,22 @@ ggplot(data = two_countries) +
 
 ```
 
-# Notes for Extenders.  
+---
+
+
+> Are you an extender that needs to update your Geoms to take advantage of ggplot2's new theming capabilities? Read on (maybe separate blog post)
+
+---
+
+Start new blog post...
+
+# Notes for Extenders on layered themes!
 
 There's great news for extensions that define new layers that use Geoms from 'base' ggplot2 lock stock and barrel - the dynamism will carry through to your layers if the new version of ggplot2 is loaded.
 
 However, if you've created your own Geom object, you may have hard-coded default aesthetics. Color may be "black" and fill may be some shade of gray. This is modeled in the ggplot2 extension vignette geom_chull() example. Let's have a look at that.
 
-### The old way
+### Your Geom may have hardcoded default aesthetics
 
 Suppose you have created StatChull from the ggplot2 extension vignette, and have also created the modified GeomPolygon
 
@@ -220,8 +254,8 @@ StatChull <- ggproto(
 ::: {.column width="49%"}
 ```{r, fig.show='hide'}
 # 3. Define Geom: Modified GeomPolygon
-GeomPolygonHallow <- 
-  ggproto("GeomPolygonHallow",
+GeomPolygonHollow <- 
+  ggproto("GeomPolygonHollow",
           GeomPolygon, 
           default_aes = 
             aes(colour = "black", 
@@ -239,7 +273,7 @@ ggplot(mtcars) +
   aes(x = drat, y = wt) + 
   geom_point() +
   layer(stat = StatChull,
-        geom = GeomPolygonHallow,
+        geom = GeomPolygonHollow,
         position = position_identity())
 ```
 :::
@@ -254,7 +288,7 @@ ggplot(mtcars) +
   aes(x = drat, y = wt) + 
   geom_point() +
   layer(stat = StatChull,
-        geom = GeomPolygonHallow,
+        geom = GeomPolygonHollow,
         position = position_identity())
 ```
 
@@ -266,39 +300,43 @@ GeomPolygon$default_aes
 ```
 
 
-### Use modifyList to piggy back on 'base' ggplot2 default aesthetics, and create 
+### Use modifyList to piggy back on default aesthetics of  'base' ggplot2 Geoms, and get dynamism for free (also will be backward compatible!). 
 
 For extenders, there are a few ways to update Geom default aes so that they take on characteristics specified by theme.
 
 ```{r}
-# determine aesthetics that need defaults
+# 1. determine aesthetics that need defaults
 GeomPolygon$default_aes
 
-GeomPolygonHallow <- 
-  ggproto(`_class` = "GeomPolygonHallow",
+# Update create GeomPolygonHollow to have 
+# GeomLine defaults and fill = NA
+GeomPolygonHollow <- 
+  ggproto(`_class` = "GeomPolygonHollow",
           `_inherit` = GeomPolygon, 
           default_aes = 
             GeomPolygon$default_aes |>
-              # override GeomLine$default_aes
               modifyList(GeomLine$default_aes) |>
-              # override fill with NA
               modifyList(aes(fill = NA))
           )
 
-# inspect newly defined aesthetics
-GeomPolygonHallow$default_aes
+# 2. inspect newly defined aesthetics
+GeomPolygonHollow$default_aes
 
-# plot!
+# 3. Try out GeomPolygonHollow
 ggplot(mtcars) +
   aes(x = drat, 
       y = wt) + 
   geom_point() +
   layer(stat = StatChull,
-        geom = GeomPolygonHallow,
+        geom = GeomPolygonHollow,
         position = "identity")
 ```
 
-### Or use onLoad
+### 'wait until 4.0.0 is released and bump your required ggplot2 version' 
+
+
+
+### Or use onLoad for backward compatibility
 
 To be written up...
 > another way is described in PR ggforce 
