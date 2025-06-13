@@ -1,0 +1,343 @@
+---
+title: "New ggplot2 theming capabilities make plots more harmonious and sparkly ✨"
+subtitle: "And notes for using and updating extensions that haven't adopted the dynamic `geom_*` theming yet."
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+format: html
+---
+
+TLDR: The next release of ggplot2's theming is something to be excited for!
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
+options(tidyverse.quiet = TRUE)
+```
+
+A ton of value is delivered to analysts in the form of not needed to worry about fiddly details when it comes to adhering to brand theme -- enabling more focus on analysis and interpretation.
+
+To that end transformative innovations are coming to ggplot2's theming system:  (thanks to the creative vision of PR \# and release ggplot2_3.5.2.9000 it's nearly here!
+)  We'll look at two of them, and then implications for ggplot2 extension.
+
+1.  It's never been easier to change the look and feel of your plot, as  `paper`, `ink` and `accent` color governing arguments have been added to convenience functions like `theme_grey()`, `theme_classic()`, `theme_minimal()` etc.
+
+2.  Now ggplot2's `geom_*()`s (and `stat_*()`s)  are responsive to theme! Now, geom\_ and stat\_ layers should automatically take on the look and feel of your theme!
+
+
+```{r, echo = F}
+two_columns <- 
+':::: {.columns}
+::: {.column width="3%"}
+:::
+::: {.column width="55%"}
+\n```{r code-chunk_name, code = knitr::knit_code$get("chunk_name"), eval = F}
+\n```
+:::
+::: {.column width="1%"}
+:::
+::: {.column width="41%"}
+\n```{r output-chunk_name,, code = knitr::knit_code$get("chunk_name"), echo = F}
+\n```
+:::
+::::
+'
+
+
+the_code <- "hi"
+
+
+chunk_return_two_col <- function(chunk_name = "chunk_name"){
+  
+  text = two_columns |> stringr::str_replace_all("chunk_name", chunk_name) 
+  
+  paste(knitr::knit(text = text, quiet = F), collapse = "\n")
+
+  
+} 
+
+# chunk_return_two_col("bchalk")
+# chunk_name =  "bchalk"
+```
+
+## Radical changes to plot look and theme from convenience functions  `theme_grey()`, `theme_classic()`, `theme_minimal()` etc.
+
+Let's see how new arguments  `paper`, `ink` and `accent` as well as old stalwarts `base_size` and `base_family`, can dramatically change the look and feel of your plot.
+
+In example A. we make and use the `theme_chalkboard` -- a modification of `theme_classic`. In example B. we make and use the `theme_whitesmoke` -- a modification of `theme_classic`.
+
+`r chunk_return_two_col("bchalk")`
+
+```{r bchalk, include = F}
+library(tidyverse)
+
+# 1. define theme from convenience 
+# functions theme_grey, theme_classic
+# theme_bw, etc.
+theme_chalkboard <- theme_classic(
+         base_size = 20,
+         paper = "darkseagreen",
+         ink = alpha("lightyellow", .8),
+         accent = "orange")
+
+# 2. Set theme
+theme_chalkboard |> 
+  theme_set()
+
+# 3. Plot!
+ggplot(data = cars) + 
+  aes(x = speed, y = dist) + 
+  geom_point() + 
+  geom_smooth() + 
+  labs(title = "Scatter with loess smoothing")
+```
+
+`r chunk_return_two_col("hello")`
+
+```{r hello, include=F}
+# 1. define theme
+theme_whitesmoke <- theme_bw(
+         base_size = 18,
+         base_family = "Times",
+         paper = "whitesmoke",
+         ink = "gray20",
+         accent = "magenta4")
+
+# 2. set theme
+theme_whitesmoke |> 
+  theme_set()
+
+# 3. Plot!
+ggplot(data = cars) + 
+  aes(x = speed, y = dist) + 
+  geom_point() + 
+  geom_smooth() + 
+  labs(title = "Scatter with loess smoothing")
+```
+
+# What if my favorite geom\_\*() extension isn't up-to-date with dynamic layer theming? How do I keep the chart to come into line with theme?
+
+One unfortunate downside is that layer extensions that involve the creation of new Geom ggproto objects, with new default_aes defined are likely to fail to shine as brightly amid the glamour that the new changes bring.
+
+### Problem: ggextension::geom\_\*() doesn't dynamically theme.
+
+As we see below 
+
+`r chunk_return_two_col("textpath")`
+
+```{r textpath, include = F}
+theme_chalkboard |> 
+  theme_set() 
+
+two_countries <- gapminder::gapminder |> 
+  filter(country %in% c("Netherlands",
+                        "Belgium"))
+
+ggplot(data = two_countries) + 
+  aes(x = year, 
+      y = lifeExp,
+      label = country) + 
+  geomtextpath::geom_textpath()
+```
+
+### Solution: use `theme_*$geom$ink`, `theme_*$geom$fontsize` and friends for more harmonious look
+
+`r chunk_return_two_col("textpath2")`
+
+```{r textpath2, include=F}
+#| code-line-numbers: "1"
+ggplot(data = two_countries) + 
+  aes(x = year, 
+      y = lifeExp,
+      label = country) + 
+  geomtextpath::geom_textpath(
+    # set color, size from theme
+    color = theme_chalkboard$geom$ink, 
+    size = theme_chalkboard$geom$fontsize
+    )
+```
+
+### More dynamic solution: use `get_theme()$geom$ink`
+
+Should you anticipate changing up your theme, you might switch out the name of your theme, e.g. theme_chalkboard, with get_theme(). 
+
+`r chunk_return_two_col("textpath3")`
+
+```{r textpath3, include=F}
+theme_whitesmoke |> 
+  theme_set()
+
+get_theme()$geom$ink
+
+ggplot(data = two_countries) + 
+  aes(x = year, 
+      y = lifeExp,
+      label = country) + 
+  geomtextpath::geom_textpath(
+    # set color, size from theme
+    color = get_theme()$geom$ink, 
+    size = get_theme()$geom$fontsize
+    )
+
+```
+
+# Notes for Extenders.  
+
+There's great news for extensions that define new layers that use Geoms from 'base' ggplot2 lock stock and barrel - the dynamism will carry through to your layers if the new version of ggplot2 is loaded.
+
+However, if you've created your own Geom object, you may have hard-coded default aesthetics. Color may be "black" and fill may be some shade of gray. This is modeled in the ggplot2 extension vignette geom_chull() example. Let's have a look at that.
+
+### The old way
+
+Suppose you have created StatChull from the ggplot2 extension vignette, and have also created the modified GeomPolygon
+
+::: columns
+::: {.column width="49%"}
+```{r}
+# 1. Define compute
+compute_group_chull <- function(data,
+                                scales){
+  
+  row_num_convex_hull_members <- 
+    chull(x = data$x, y = data$y)
+  
+  data |> 
+    slice(row_num_convex_hull_members)
+  
+}
+
+# 2. Define Stat
+StatChull <- ggproto(
+  `_class` = "StatChull",
+  `_inherit` = Stat,
+  required_aes = c("x", "y"),
+  compute_group = compute_group_chull
+  )
+```
+:::
+
+::: {.column width="2%"}
+:::
+
+::: {.column width="49%"}
+```{r, fig.show='hide'}
+# 3. Define Geom: Modified GeomPolygon
+GeomPolygonHallow <- 
+  ggproto("GeomPolygonHallow",
+          GeomPolygon, 
+          default_aes = 
+            aes(colour = "black", 
+                fill = NA, 
+                linewidth = 0.5, 
+                linetype = 1, 
+                alpha = NA)
+          )
+
+# 4. Test Geom X Stat w/ theme
+theme_chalkboard |> 
+  theme_set()
+
+ggplot(mtcars) +
+  aes(x = drat, y = wt) + 
+  geom_point() +
+  layer(stat = StatChull,
+        geom = GeomPolygonHallow,
+        position = position_identity())
+```
+:::
+:::
+
+```{r statchull, echo = F}
+# Use geom_*() X Stat w/ theme
+theme_chalkboard |> 
+  theme_set()
+
+ggplot(mtcars) +
+  aes(x = drat, y = wt) + 
+  geom_point() +
+  layer(stat = StatChull,
+        geom = GeomPolygonHallow,
+        position = position_identity())
+```
+
+
+But, if we look at the definition of GeomPolygon in the latest ggplot2 development version, we see default aesthetics are no longer hardcoded, which is what allows our layers to be themed. 
+
+```{r}
+GeomPolygon$default_aes
+```
+
+
+### Use modifyList to piggy back on 'base' ggplot2 default aesthetics, and create 
+
+For extenders, there are a few ways to update Geom default aes so that they take on characteristics specified by theme.
+
+```{r}
+# determine aesthetics that need defaults
+GeomPolygon$default_aes
+
+GeomPolygonHallow <- 
+  ggproto(`_class` = "GeomPolygonHallow",
+          `_inherit` = GeomPolygon, 
+          default_aes = 
+            GeomPolygon$default_aes |>
+              # override GeomLine$default_aes
+              modifyList(GeomLine$default_aes) |>
+              # override fill with NA
+              modifyList(aes(fill = NA))
+          )
+
+# inspect newly defined aesthetics
+GeomPolygonHallow$default_aes
+
+# plot!
+ggplot(mtcars) +
+  aes(x = drat, 
+      y = wt) + 
+  geom_point() +
+  layer(stat = StatChull,
+        geom = GeomPolygonHallow,
+        position = "identity")
+```
+
+### Or use onLoad
+
+To be written up...
+> another way is described in PR ggforce 
+
+------------------------------------------------------------------------
+
+```{r, eval = F, echo = F}
+library(ggplot2)
+library(patchwork)
+
+library(ggram)
+ggram:::clearhistory()
+#
+p1 <- ggplot(data = cars) + 
+  aes(x = speed, y = dist) + 
+  geom_point() + 
+  geom_smooth() + 
+  labs(title = "Scatter with Loess")
+#
+brand_theme1 <- theme_grey(base_size = 15,
+         paper = "darkseagreen",
+         ink = alpha("lightyellow", .8),
+         accent = "orange")
+
+brand_theme2 <- theme_grey(base_size = 10,
+         paper = "grey20",
+         ink = alpha("whitesmoke", .8),
+         accent = "magenta3")
+#
+p2 <- p1 + learning_theme
+#
+p1 / p2
+
+ggram("Now layers (e.g. geom_point, geom_smooth) are also responsive to theme specification", widths = c(2.3, 2))
+
+ggsave("new-theme.png")
+
+```
+
+```{r, eval = F, echo = T}
+knitr::include_graphics("new-theme.png")
+```
