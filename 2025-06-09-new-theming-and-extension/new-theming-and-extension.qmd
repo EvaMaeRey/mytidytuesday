@@ -388,7 +388,7 @@ To be written up...
 
 
 
-# End blog post #2.
+# End blog post for extenders...
 
 ---
 
@@ -425,13 +425,16 @@ scale_color_logical <- function(..., show.guide = F){
 }
 ```
 
-```{r}
+
+`r chunk_return_two_col("chalk-logical")`
+
+```{r chalk-logical, include = F}
 theme_chalkboard |> theme_set()
  
 ggplot(diamonds) + 
   aes(y = cut, fill = cut == "Premium") + 
   ggpro::geom_hbar() + 
-  scale_fill_logical() -> p1; p1
+  scale_fill_logical()
 
 palmerpenguins::penguins |>
 ggplot() + 
@@ -442,17 +445,23 @@ ggplot() +
   geom_point(shape = 21) + 
   scale_color_logical() + 
   scale_fill_logical()
+```
 
+`r chunk_return_two_col("whitesmoke-logical")`
+
+```{r whitesmoke-logical, include = F}
 theme_whitesmoke |> theme_set()
 
-p1
- 
 ggplot(diamonds) + 
   aes(y = cut, fill = cut == "Very Good") + 
   ggpro::geom_hbar() + 
   scale_fill_logical()
 
+```
 
+`r chunk_return_two_col("classic-logical")`
+
+```{r classic-logical, include = F}
 theme_classic(base_size = 18) |> theme_set()
 
 ggplot(diamonds) + 
@@ -470,10 +479,14 @@ ggplot() +
              size = get_theme()$geom$pointsize * 1.5) + 
   scale_color_logical() + 
   scale_fill_logical()
+```
 
+`r chunk_return_two_col("whitesmoke-logical2")`
+
+```{r whitesmoke-logical2, include = F}
 theme_grey(ink = "whitesmoke", 
          paper = "grey30", 
-         accent = "magenta",
+         accent = "green",
          base_size = 18
          ) |> 
   theme_set()
