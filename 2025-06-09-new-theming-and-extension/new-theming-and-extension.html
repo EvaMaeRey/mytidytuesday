@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Evangeline Reynolds">
-<meta name="dcterms.date" content="2025-06-13">
+<meta name="dcterms.date" content="2025-06-16">
 
-<title>New ggplot2 theming to make plots more harmonious and sparkly ✨</title>
+<title>New ggplot2 theming will make plots super-sparkly ✨</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -81,8 +81,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">New ggplot2 theming to make plots more harmonious and sparkly ✨</h1>
-<p class="subtitle lead">And notes for using and updating extensions that haven’t adopted the dynamic <code>geom_*</code> theming yet.</p>
+<h1 class="title">New ggplot2 theming will make plots super-sparkly ✨</h1>
+<p class="subtitle lead">And notes for using ggplot2 extensions that haven’t adopted dynamic <code>geom_*</code> theming yet.</p>
 </div>
 
 
@@ -99,7 +99,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 13, 2025</p>
+      <p class="date">June 16, 2025</p>
     </div>
   </div>
   
@@ -112,99 +112,50 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>TLDR: The next release of ggplot2’s theming is something to be excited for!</p>
-<p>A ton of value is delivered to analysts in the form of not needed to worry about fiddly details when it comes to adhering to brand theme – enabling more focus on analysis and interpretation.</p>
-<p>To that end transformative innovations are coming to ggplot2’s theming system: (thanks to the creative vision of PR # and release ggplot2_3.5.2.9000 it’s nearly here! ) We’ll look at two of them, and then implications for ggplot2 extension.</p>
+<p>A lot of value is delivered to analysts in the form of not needed to worry about fiddly details to adhering to brand theme – so we can focus more on the actual data analysis!</p>
+<p>So the impactful innovations that are coming to ggplot2’s theming system are something to celebrate! (thanks to the creative vision of PR # and release ggplot2_3.5.2.9000 it’s nearly here! ) In our examples, we’ll celebrate new realities that we’re particularly excited for:</p>
 <ol type="1">
-<li><p>It’s never been easier to change the look and feel of your plot, as <code>paper</code>, <code>ink</code> and <code>accent</code> color governing arguments have been added to convenience functions like <code>theme_grey()</code>, <code>theme_classic()</code>, <code>theme_minimal()</code> etc.</p></li>
-<li><p>Now ggplot2’s <code>geom_*()</code>s (and <code>stat_*()</code>s) are responsive to theme! Now, geom_ and stat_ layers should automatically take on the look and feel of your theme!</p></li>
+<li><p>First, it’s never been easier to change the look and feel of your plot, as <code>paper</code>, <code>ink</code> and <code>accent</code> color governing arguments have been added to convenience functions like <code>theme_grey()</code>, <code>theme_classic()</code>, <code>theme_minimal()</code> etc.</p></li>
+<li><p>Second, <code>geom_*()</code>s (and <code>stat_*()</code>s) will be responsive to theme! Now, geom_ and stat_ layers should <em>automatically</em> take on the look and feel of your theme!</p></li>
 </ol>
-<section id="radical-changes-to-plot-look-and-theme-from-convenience-functions-theme_grey-theme_classic-theme_minimal-etc." class="level2">
-<h2 class="anchored" data-anchor-id="radical-changes-to-plot-look-and-theme-from-convenience-functions-theme_grey-theme_classic-theme_minimal-etc.">Radical changes to plot look and theme from convenience functions <code>theme_grey()</code>, <code>theme_classic()</code>, <code>theme_minimal()</code> etc.</h2>
-<p>Let’s see how new arguments <code>paper</code>, <code>ink</code> and <code>accent</code> as well as old stalwarts <code>base_size</code> and <code>base_family</code>, can dramatically change the look and feel of your plot.</p>
-<p>In example A. we make and use the <code>theme_chalkboard</code> – a modification of <code>theme_classic</code>. In example B. we make and use the <code>theme_whitesmoke</code> – a modification of <code>theme_classic</code>.</p>
-<section id="example-a.-theme_chalkboard" class="level3">
-<h3 class="anchored" data-anchor-id="example-a.-theme_chalkboard">Example A. <code>theme_chalkboard</code></h3>
+<p>With these changes, you might be able to get to good enough when adhearing to brand theme with <em>very</em> little effort.</p>
+<section id="radically-change-plot-look-and-theme-from-convenience-functions-theme_grey-theme_classic-theme_minimal-etc." class="level2">
+<h2 class="anchored" data-anchor-id="radically-change-plot-look-and-theme-from-convenience-functions-theme_grey-theme_classic-theme_minimal-etc.">Radically change plot look and theme from convenience functions <code>theme_grey()</code>, <code>theme_classic()</code>, <code>theme_minimal()</code> etc.</h2>
+<p>Let’s see how new arguments <code>paper</code>, <code>ink</code> and <code>accent</code> in theming convenience functions <code>theme_classic</code>, <code>theme_grey</code> etc can dramatically change the look and feel of your plot! We’ll also use as old favorites like <code>base_size</code> and <code>base_family</code>.</p>
+<p>In example A. we create the <code>theme_whitesmoke</code> – a modification of <code>theme_classic</code>. In example B. we create <code>theme_chalkboard</code> – a modification of <code>theme_classic</code>.</p>
+<section id="example-a.-theme_whitesmoke" class="level3">
+<h3 class="anchored" data-anchor-id="example-a.-theme_whitesmoke">Example A. <code>theme_whitesmoke</code></h3>
 <div class="columns">
 <div class="column" style="width:3%;">
 
 </div><div class="column" style="width:55%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. define theme from convenience </span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># functions theme_grey, theme_classic</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># theme_bw, etc.</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>theme_chalkboard <span class="ot">&lt;-</span> <span class="fu">theme_classic</span>(</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">base_size =</span> <span class="dv">20</span>,</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">paper =</span> <span class="st">"darkseagreen"</span>,</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">ink =</span> <span class="fu">alpha</span>(<span class="st">"lightyellow"</span>, .<span class="dv">8</span>),</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">accent =</span> <span class="st">"orange"</span>)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Set theme</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>theme_chalkboard <span class="sc">|&gt;</span> </span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_set</span>()</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Get plotting!</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> cars) <span class="sc">+</span> </span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> speed, <span class="at">y =</span> dist) <span class="sc">+</span> </span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>()</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> diamonds) <span class="sc">+</span> </span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> cut) <span class="sc">+</span> </span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div><div class="column" style="width:1%;">
-
-</div><div class="column" style="width:41%;">
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="new-theming-and-extension_files/figure-html/output-bchalk,-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="new-theming-and-extension_files/figure-html/output-bchalk,-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-</section>
-<section id="example-b.-theme_whitesmoke" class="level2">
-<h2 class="anchored" data-anchor-id="example-b.-theme_whitesmoke">Example B. <code>theme_whitesmoke</code></h2>
-<div class="columns">
-<div class="column" style="width:3%;">
-
-</div><div class="column" style="width:55%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. define theme</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>theme_whitesmoke <span class="ot">&lt;-</span> <span class="fu">theme_bw</span>(</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">base_size =</span> <span class="dv">18</span>,</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">base_family =</span> <span class="st">"Times"</span>,</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">paper =</span> <span class="st">"whitesmoke"</span>,</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">ink =</span> <span class="st">"gray20"</span>,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">accent =</span> <span class="st">"magenta4"</span>)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. set theme</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>theme_whitesmoke <span class="sc">|&gt;</span> </span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_set</span>()</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Get plotting!</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> cars) <span class="sc">+</span> </span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> speed, <span class="at">y =</span> dist) <span class="sc">+</span> </span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>()</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> diamonds) <span class="sc">+</span> </span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> cut) <span class="sc">+</span> </span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 0. Use tidyverse</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. define theme from convenience </span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># functions theme_grey, theme_classic</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># theme_bw, etc.</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>theme_whitesmoke <span class="ot">&lt;-</span> <span class="fu">theme_bw</span>(</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">base_size =</span> <span class="dv">18</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">base_family =</span> <span class="st">"Times"</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">paper =</span> <span class="st">"whitesmoke"</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">ink =</span> <span class="st">"gray30"</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">accent =</span> <span class="st">"magenta4"</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. set theme</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>theme_whitesmoke <span class="sc">|&gt;</span> </span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_set</span>()</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Get plotting!</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> cars) <span class="sc">+</span> </span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> speed, <span class="at">y =</span> dist) <span class="sc">+</span> </span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>()</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> diamonds) <span class="sc">+</span> </span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> cut) <span class="sc">+</span> </span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:1%;">
 
@@ -228,8 +179,72 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="what-if-my-favorite-geom_-extension-isnt-up-to-date-with-dynamic-layer-theming-how-do-i-keep-the-chart-to-come-into-line-with-theme" class="level1">
-<h1>What if my favorite geom_*() extension isn’t up-to-date with dynamic layer theming? How do I keep the chart to come into line with theme?</h1>
+<section id="example-b.-theme_chalkboard" class="level3">
+<h3 class="anchored" data-anchor-id="example-b.-theme_chalkboard">Example B. <code>theme_chalkboard</code></h3>
+<p>For fun let’s also look at a more whimsical, classroom-inspired example.</p>
+<div class="columns">
+<div class="column" style="width:3%;">
+
+</div><div class="column" style="width:55%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. define theme from convenience </span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># functions theme_grey, theme_classic</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># theme_bw, etc.</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>theme_chalkboard <span class="ot">&lt;-</span> <span class="fu">theme_classic</span>(</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">base_size =</span> <span class="dv">20</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">paper =</span> <span class="st">"darkseagreen"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">ink =</span> <span class="fu">alpha</span>(<span class="st">"lightyellow"</span>, .<span class="dv">8</span>),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">accent =</span> <span class="fu">alpha</span>(<span class="st">"orange"</span>, .<span class="dv">8</span>))</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Set theme</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>theme_chalkboard <span class="sc">|&gt;</span> </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_set</span>()</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Get plotting!</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> cars) <span class="sc">+</span> </span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> speed, <span class="at">y =</span> dist) <span class="sc">+</span> </span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>()</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> diamonds) <span class="sc">+</span> </span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> cut) <span class="sc">+</span> </span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:1%;">
+
+</div><div class="column" style="width:41%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="new-theming-and-extension_files/figure-html/output-bchalk,-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="new-theming-and-extension_files/figure-html/output-bchalk,-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Are plots are classroom ready! And just so that we can appreciate the changes, without the new theming sytsem, you could define a theme that looked ‘chalkboardy’ with some effort, but the chalk (ink) wouldn’t automatically be used in the plotting space. So you’d get a visual like when setting or applying your theme, which leaves you asking ‘Who used a black sharpie on the chalkboard!?’:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="new-theming-and-extension_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="but-what-if-my-favorite-geom_-extension-isnt-up-to-date-with-dynamic-layer-theming-how-do-i-keep-the-chart-to-come-into-line-with-theme" class="level1">
+<h1>But, what if my favorite geom_*() extension isn’t up-to-date with dynamic layer theming? How do I keep the chart to come into line with theme?</h1>
 <p>One unfortunate downside is that layer extensions that involve the creation of new Geom ggproto objects, with new default_aes defined are likely to fail to shine as brightly amid the glamour that the new changes bring.</p>
 <section id="problem-ggextensiongeom_-doesnt-dynamically-theme." class="level3">
 <h3 class="anchored" data-anchor-id="problem-ggextensiongeom_-doesnt-dynamically-theme.">Problem: ggextension::geom_*() doesn’t dynamically theme.</h3>
@@ -246,12 +261,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(country <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Netherlands"</span>,</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"Belgium"</span>))</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Uh-oh!  geom_textpath ...</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> two_countries) <span class="sc">+</span> </span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> year, </span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> lifeExp,</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">label =</span> country) <span class="sc">+</span> </span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  geomtextpath<span class="sc">::</span><span class="fu">geom_textpath</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Uh-oh! we see that geom_textpath has</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># hardcoded set aesthetics </span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> two_countries) <span class="sc">+</span> </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> year, </span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> lifeExp,</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">label =</span> country) <span class="sc">+</span> </span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  geomtextpath<span class="sc">::</span><span class="fu">geom_textpath</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:1%;">
 
@@ -268,8 +284,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="solution-override-with-set-colorssizes-etc." class="level3">
-<h3 class="anchored" data-anchor-id="solution-override-with-set-colorssizes-etc.">Solution: Override with set colors/sizes etc.</h3>
+<section id="solution-i-override-defaults-by-naming-colorssizes-that-go-with-the-theme" class="level3">
+<h3 class="anchored" data-anchor-id="solution-i-override-defaults-by-naming-colorssizes-that-go-with-the-theme">Solution i: Override defaults by naming colors/sizes that go with the theme</h3>
+<p>You can of course set geom_*() aesthetics in the usual way to get the layer to match the theme aesthetics!</p>
 <div class="columns">
 <div class="column" style="width:3%;">
 
@@ -300,8 +317,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="a-more-dynamic-solution-use-theme_geomink-theme_geomfontsize-and-friends-for-more-harmonious-look" class="level3">
-<h3 class="anchored" data-anchor-id="a-more-dynamic-solution-use-theme_geomink-theme_geomfontsize-and-friends-for-more-harmonious-look">A more dynamic solution: use <code>theme_*$geom$ink</code>, <code>theme_*$geom$fontsize</code> and friends for more harmonious look</h3>
+<section id="a-more-dynamic-solution-ii-use-theme_geomink-theme_geomfontsize-and-friends-for-more-harmonious-look" class="level3">
+<h3 class="anchored" data-anchor-id="a-more-dynamic-solution-ii-use-theme_geomink-theme_geomfontsize-and-friends-for-more-harmonious-look">A more dynamic solution (ii): use <code>theme_*$geom$ink</code>, <code>theme_*$geom$fontsize</code> and friends for more harmonious look</h3>
+<p>A little more dynamic approach, anticipating that I might</p>
 <div class="columns">
 <div class="column" style="width:3%;">
 
@@ -332,35 +350,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="an-even-more-dynamic-solution-use-get_themegeomink" class="level3">
-<h3 class="anchored" data-anchor-id="an-even-more-dynamic-solution-use-get_themegeomink">An even more dynamic solution: use <code>get_theme()$geom$ink</code></h3>
+<section id="an-even-more-dynamic-solution-iii-use-get_themegeomink" class="level3">
+<h3 class="anchored" data-anchor-id="an-even-more-dynamic-solution-iii-use-get_themegeomink">An even more dynamic solution (iii): use <code>get_theme()$geom$ink</code></h3>
 <p>Should you anticipate a possible change-up of your theme, you might use <code>get_theme()</code> instead of the name of the theme in the formulation above.</p>
 <div class="columns">
 <div class="column" style="width:3%;">
 
 </div><div class="column" style="width:55%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>theme_whitesmoke <span class="sc">|&gt;</span> </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_set</span>()</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">get_theme</span>()<span class="sc">$</span>geom<span class="sc">$</span>ink</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> two_countries) <span class="sc">+</span> </span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> year, </span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> lifeExp,</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">label =</span> country) <span class="sc">+</span> </span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  geomtextpath<span class="sc">::</span><span class="fu">geom_textpath</span>(</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># set color, size from theme</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="fu">get_theme</span>()<span class="sc">$</span>geom<span class="sc">$</span>ink, </span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fu">get_theme</span>()<span class="sc">$</span>geom<span class="sc">$</span>fontsize</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>theme_whitesmoke <span class="sc">|&gt;</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_set</span>()</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">get_theme</span>()<span class="sc">$</span>geom<span class="sc">$</span>ink</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> two_countries) <span class="sc">+</span> </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> year, </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> lifeExp,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">label =</span> country) <span class="sc">+</span> </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  geomtextpath<span class="sc">::</span><span class="fu">geom_textpath</span>(</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># set color, size from theme</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="fu">get_theme</span>()<span class="sc">$</span>geom<span class="sc">$</span>ink, </span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fu">get_theme</span>()<span class="sc">$</span>geom<span class="sc">$</span>fontsize</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:1%;">
 
 </div><div class="column" style="width:41%;">
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "gray20"</code></pre>
+<pre><code>[1] "gray30"</code></pre>
 </div>
 <div class="cell-output-display">
 <div>
@@ -372,16 +391,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+<p>End.</p>
 <hr>
 <blockquote class="blockquote">
 <p>Are you an extender that needs to update your Geoms to take advantage of ggplot2’s new theming capabilities? Read on (maybe separate blog post)</p>
 </blockquote>
 <hr>
-<p>Start new blog post…</p>
+<p>—- Start new blog post… —-</p>
 </section>
 </section>
-<section id="notes-for-extenders-on-layered-themes" class="level1">
-<h1>Notes for Extenders on layered themes!</h1>
+<section id="notes-for-extenders-on-writing-layers-that-respond-to-theming-declaration" class="level1">
+<h1>Notes for Extenders on writing layers that respond to theming declaration!</h1>
 <p>There’s great news for extensions that define new layers that use Geoms from ‘base’ ggplot2 lock stock and barrel - the dynamism will carry through to your layers if the new version of ggplot2 is loaded.</p>
 <p>However, if you’ve created your own Geom object, you may have hard-coded default aesthetics. Color may be “black” and fill may be some shade of gray. This is modeled in the ggplot2 extension vignette geom_chull() example. Let’s have a look at that.</p>
 <section id="your-geom-may-have-hardcoded-default-aesthetics" class="level3">
@@ -462,8 +482,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="use-modifylist-to-piggy-back-on-default-aesthetics-of-base-ggplot2-geoms-and-get-dynamism-for-free-also-will-be-backward-compatible." class="level3">
-<h3 class="anchored" data-anchor-id="use-modifylist-to-piggy-back-on-default-aesthetics-of-base-ggplot2-geoms-and-get-dynamism-for-free-also-will-be-backward-compatible.">Use modifyList to piggy back on default aesthetics of ‘base’ ggplot2 Geoms, and get dynamism for free (also will be backward compatible!).</h3>
+<section id="use-piggy-back-on-default-aesthetics-of-base-ggplot2-geoms-to-inherit-dynamism-and-get-backward-compatiblity-for-free." class="level3">
+<h3 class="anchored" data-anchor-id="use-piggy-back-on-default-aesthetics-of-base-ggplot2-geoms-to-inherit-dynamism-and-get-backward-compatiblity-for-free.">Use piggy back on default aesthetics of ‘base’ ggplot2 Geoms, to inherit dynamism (and get backward compatiblity for free!).</h3>
 <p>For extenders, there are a few ways to update Geom default aes so that they take on characteristics specified by theme.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. determine aesthetics that need defaults</span></span>
@@ -510,23 +530,149 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="new-theming-and-extension_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="new-theming-and-extension_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="wait-until-4.0.0-is-released-and-bump-your-required-ggplot2-version" class="level3">
-<h3 class="anchored" data-anchor-id="wait-until-4.0.0-is-released-and-bump-your-required-ggplot2-version">‘wait until 4.0.0 is released and bump your required ggplot2 version’</h3>
+<section id="to-write-wait-until-4.0.0-is-released-and-bump-your-required-ggplot2-version" class="level3">
+<h3 class="anchored" data-anchor-id="to-write-wait-until-4.0.0-is-released-and-bump-your-required-ggplot2-version">To write: ‘wait until 4.0.0 is released and bump your required ggplot2 version’</h3>
 </section>
-<section id="or-use-onload-for-backward-compatibility" class="level3">
-<h3 class="anchored" data-anchor-id="or-use-onload-for-backward-compatibility">Or use onLoad for backward compatibility</h3>
+<section id="to-write-or-use-onload-for-backward-compatibility" class="level3">
+<h3 class="anchored" data-anchor-id="to-write-or-use-onload-for-backward-compatibility">To write: Or use onLoad for backward compatibility</h3>
 <p>To be written up… &gt; another way is described in PR ggforce</p>
+</section>
+</section>
+<section id="end-blog-post-2." class="level1">
+<h1>End blog post #2.</h1>
+<hr>
+</section>
+<section id="while-we-are-here-experiment-with-one-more-idea-scale_fill_logical" class="level1">
+<h1>While we are here, experiment with one more idea: <code>scale_fill_logical()</code></h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>theme_chalkboard <span class="sc">|&gt;</span> <span class="fu">theme_set</span>()</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(diamonds) <span class="sc">+</span> </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">y =</span> cut, <span class="at">fill =</span> cut <span class="sc">==</span> <span class="st">"Premium"</span>) <span class="sc">+</span> </span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  ggpro<span class="sc">::</span><span class="fu">geom_hbar</span>() <span class="sc">+</span> </span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_logical</span>() <span class="ot">-&gt;</span> p1; p1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="new-theming-and-extension_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>palmerpenguins<span class="sc">::</span>penguins <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g, </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> flipper_length_mm,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">color =</span> species <span class="sc">==</span> <span class="st">"Chinstrap"</span>,</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">fill =</span> species <span class="sc">==</span> <span class="st">"Chinstrap"</span>) <span class="sc">+</span> </span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">shape =</span> <span class="dv">21</span>) <span class="sc">+</span> </span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_logical</span>() <span class="sc">+</span> </span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_logical</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="new-theming-and-extension_files/figure-html/unnamed-chunk-9-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>theme_whitesmoke <span class="sc">|&gt;</span> <span class="fu">theme_set</span>()</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>p1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="new-theming-and-extension_files/figure-html/unnamed-chunk-9-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(diamonds) <span class="sc">+</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">y =</span> cut, <span class="at">fill =</span> cut <span class="sc">==</span> <span class="st">"Very Good"</span>) <span class="sc">+</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  ggpro<span class="sc">::</span><span class="fu">geom_hbar</span>() <span class="sc">+</span> </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_logical</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="new-theming-and-extension_files/figure-html/unnamed-chunk-9-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">18</span>) <span class="sc">|&gt;</span> <span class="fu">theme_set</span>()</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(diamonds) <span class="sc">+</span> </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">y =</span> cut, <span class="at">fill =</span> cut <span class="sc">==</span> <span class="st">"Good"</span>) <span class="sc">+</span> </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  ggpro<span class="sc">::</span><span class="fu">geom_hbar</span>() <span class="sc">+</span> </span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_logical</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="new-theming-and-extension_files/figure-html/unnamed-chunk-9-5.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>palmerpenguins<span class="sc">::</span>penguins <span class="sc">|&gt;</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g, </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> flipper_length_mm,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">color =</span> species <span class="sc">==</span> <span class="st">"Chinstrap"</span>,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">fill =</span> species <span class="sc">==</span> <span class="st">"Chinstrap"</span>) <span class="sc">+</span> </span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">shape =</span> <span class="dv">21</span>,</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fu">get_theme</span>()<span class="sc">$</span>geom<span class="sc">$</span>pointsize <span class="sc">*</span> <span class="fl">1.5</span>) <span class="sc">+</span> </span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_logical</span>() <span class="sc">+</span> </span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_logical</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="new-theming-and-extension_files/figure-html/unnamed-chunk-9-6.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_grey</span>(<span class="at">ink =</span> <span class="st">"whitesmoke"</span>, </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">paper =</span> <span class="st">"grey30"</span>, </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">accent =</span> <span class="st">"magenta"</span>,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">base_size =</span> <span class="dv">18</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>         ) <span class="sc">|&gt;</span> </span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_set</span>()</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> diamonds) <span class="sc">+</span> </span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> cut, </span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> cut <span class="sc">==</span> <span class="st">"Very Good"</span>,</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> cut <span class="sc">==</span> <span class="st">"Very Good"</span></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span> </span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>  ggpro<span class="sc">::</span><span class="fu">geom_hbar</span>() <span class="sc">+</span> </span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_logical</span>() <span class="sc">+</span> </span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_logical</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="new-theming-and-extension_files/figure-html/unnamed-chunk-9-7.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>palmerpenguins<span class="sc">::</span>penguins <span class="sc">|&gt;</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(body_mass_g, flipper_length_mm,</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">color =</span> species <span class="sc">==</span> <span class="st">"Chinstrap"</span>,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">+</span> </span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_logical</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="new-theming-and-extension_files/figure-html/unnamed-chunk-9-8.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 <hr>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"new-theme.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"new-theme.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
 </section>
 
 </main>

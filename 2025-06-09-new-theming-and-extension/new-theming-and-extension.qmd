@@ -1,6 +1,6 @@
 ---
-title: "New ggplot2 theming to make plots more harmonious and sparkly ✨"
-subtitle: "And notes for using and updating extensions that haven't adopted the dynamic `geom_*` theming yet."
+title: "New ggplot2 theming will make plots super-sparkly ✨"
+subtitle: "And notes for using ggplot2 extensions that haven't adopted dynamic `geom_*` theming yet."
 author: "Evangeline Reynolds"
 date: "`r Sys.Date()`"
 format: html
@@ -13,14 +13,17 @@ knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
 options(tidyverse.quiet = TRUE)
 ```
 
-A ton of value is delivered to analysts in the form of not needed to worry about fiddly details when it comes to adhering to brand theme -- enabling more focus on analysis and interpretation.
+A lot of value is delivered to analysts in the form of not needed to worry about fiddly details to adhering to brand theme -- so we can focus more on the actual data analysis!
 
-To that end transformative innovations are coming to ggplot2's theming system:  (thanks to the creative vision of PR \# and release ggplot2_3.5.2.9000 it's nearly here!
-)  We'll look at two of them, and then implications for ggplot2 extension.
+So the impactful innovations that are coming to ggplot2's theming system are something to celebrate!  (thanks to the creative vision of PR \# and release ggplot2_3.5.2.9000 it's nearly here!
+)  In our examples, we'll celebrate new realities that we're particularly excited for:
 
-1.  It's never been easier to change the look and feel of your plot, as  `paper`, `ink` and `accent` color governing arguments have been added to convenience functions like `theme_grey()`, `theme_classic()`, `theme_minimal()` etc.
+1.  First, it's never been easier to change the look and feel of your plot, as  `paper`, `ink` and `accent` color governing arguments have been added to convenience functions like `theme_grey()`, `theme_classic()`, `theme_minimal()` etc.
 
-2.  Now ggplot2's `geom_*()`s (and `stat_*()`s)  are responsive to theme! Now, geom\_ and stat\_ layers should automatically take on the look and feel of your theme!
+2.  Second, `geom_*()`s (and `stat_*()`s) will be responsive to theme! Now, geom\_ and stat\_ layers should *automatically* take on the look and feel of your theme!
+
+With these changes, you might be able to get to good enough when adhearing to brand theme with *very* little effort.
+
 
 
 ```{r, echo = F}
@@ -58,54 +61,29 @@ chunk_return_two_col <- function(chunk_name = "chunk_name"){
 # chunk_name =  "bchalk"
 ```
 
-## Radical changes to plot look and theme from convenience functions  `theme_grey()`, `theme_classic()`, `theme_minimal()` etc.
+## Radically change plot look and theme from convenience functions  `theme_grey()`, `theme_classic()`, `theme_minimal()` etc.
 
-Let's see how new arguments  `paper`, `ink` and `accent` as well as old stalwarts `base_size` and `base_family`, can dramatically change the look and feel of your plot.
+Let's see how new arguments  `paper`, `ink` and `accent` in theming convenience functions `theme_classic`, `theme_grey` etc can dramatically change the look and feel of your plot!  We'll also use  as old favorites like `base_size` and `base_family`.
 
-In example A. we make and use the `theme_chalkboard` -- a modification of `theme_classic`. In example B. we make and use the `theme_whitesmoke` -- a modification of `theme_classic`.
+In example A. we create the `theme_whitesmoke` -- a modification of `theme_classic`.  In example B. we create `theme_chalkboard` -- a modification of `theme_classic`.
 
-### Example A. `theme_chalkboard`
 
-`r chunk_return_two_col("bchalk")`
+### Example A. `theme_whitesmoke`
 
-```{r bchalk, include = F}
+`r chunk_return_two_col("hello")`
+
+```{r hello, include=F}
+# 0. Use tidyverse
 library(tidyverse)
 
 # 1. define theme from convenience 
 # functions theme_grey, theme_classic
 # theme_bw, etc.
-theme_chalkboard <- theme_classic(
-         base_size = 20,
-         paper = "darkseagreen",
-         ink = alpha("lightyellow", .8),
-         accent = "orange")
-
-# 2. Set theme
-theme_chalkboard |> 
-  theme_set()
-
-# 3. Get plotting!
-ggplot(data = cars) + 
-  aes(x = speed, y = dist) + 
-  geom_point() + 
-  geom_smooth()
-
-ggplot(data = diamonds) + 
-  aes(x = cut) + 
-  geom_bar()
-```
-
-## Example B. `theme_whitesmoke`
-
-`r chunk_return_two_col("hello")`
-
-```{r hello, include=F}
-# 1. define theme
 theme_whitesmoke <- theme_bw(
          base_size = 18,
          base_family = "Times",
          paper = "whitesmoke",
-         ink = "gray20",
+         ink = "gray30",
          accent = "magenta4")
 
 # 2. set theme
@@ -123,7 +101,50 @@ ggplot(data = diamonds) +
   geom_bar()
 ```
 
-# What if my favorite geom\_\*() extension isn't up-to-date with dynamic layer theming? How do I keep the chart to come into line with theme?
+
+
+### Example B. `theme_chalkboard`
+
+For fun let's also look at a more whimsical, classroom-inspired example.
+
+`r chunk_return_two_col("bchalk")`
+
+```{r bchalk, include = F}
+# 1. define theme from convenience 
+# functions theme_grey, theme_classic
+# theme_bw, etc.
+theme_chalkboard <- theme_classic(
+         base_size = 20,
+         paper = "darkseagreen",
+         ink = alpha("lightyellow", .8),
+         accent = alpha("orange", .8))
+
+# 2. Set theme
+theme_chalkboard |> 
+  theme_set()
+
+# 3. Get plotting!
+ggplot(data = cars) + 
+  aes(x = speed, y = dist) + 
+  geom_point() + 
+  geom_smooth()
+
+ggplot(data = diamonds) + 
+  aes(x = cut) + 
+  geom_bar()
+```
+
+Are plots are classroom ready!  And just so that we can appreciate the changes, without the new theming sytsem, you could define a theme that looked 'chalkboardy' with some effort, but the chalk (ink) wouldn't automatically be used in the plotting space. So you'd get a visual like when setting or applying your theme, which leaves you asking 'Who used a black sharpie on the chalkboard!?':
+
+```{r, echo= F}
+ggplot(data = cars) + 
+  aes(x = speed, y = dist) + 
+  geom_point(color = "black")
+```
+
+
+
+# But, what if my favorite geom\_\*() extension isn't up-to-date with dynamic layer theming? How do I keep the chart to come into line with theme?
 
 One unfortunate downside is that layer extensions that involve the creation of new Geom ggproto objects, with new default_aes defined are likely to fail to shine as brightly amid the glamour that the new changes bring.
 
@@ -141,7 +162,8 @@ two_countries <- gapminder::gapminder |>
   filter(country %in% c("Netherlands",
                         "Belgium"))
 
-# Uh-oh!  geom_textpath ...
+# Uh-oh! we see that geom_textpath has
+# hardcoded set aesthetics 
 ggplot(data = two_countries) + 
   aes(x = year, 
       y = lifeExp,
@@ -149,7 +171,9 @@ ggplot(data = two_countries) +
   geomtextpath::geom_textpath()
 ```
 
-### Solution: Override with set colors/sizes etc.
+### Solution i: Override defaults by naming colors/sizes that go with the theme
+
+You can of course set geom_*() aesthetics in the usual way to get the layer to match the theme aesthetics!
 
 `r chunk_return_two_col("textpath-override")`
 
@@ -165,7 +189,9 @@ ggplot(data = two_countries) +
   )
 ```
 
-### A more dynamic solution: use `theme_*$geom$ink`, `theme_*$geom$fontsize` and friends for more harmonious look
+### A more dynamic solution (ii): use `theme_*$geom$ink`, `theme_*$geom$fontsize` and friends for more harmonious look
+
+A little more dynamic approach, anticipating that I might 
 
 `r chunk_return_two_col("textpath2")`
 
@@ -182,13 +208,14 @@ ggplot(data = two_countries) +
     )
 ```
 
-### An even more dynamic solution: use `get_theme()$geom$ink`
+### An even more dynamic solution (iii): use `get_theme()$geom$ink`
 
 Should you anticipate a possible change-up of your theme, you might use `get_theme()` instead of the name of the theme in the formulation above. 
 
 `r chunk_return_two_col("textpath3")`
 
 ```{r textpath3, include=F}
+library(tidyverse)
 theme_whitesmoke |> 
   theme_set()
 
@@ -203,8 +230,9 @@ ggplot(data = two_countries) +
     color = get_theme()$geom$ink, 
     size = get_theme()$geom$fontsize
     )
-
 ```
+
+End.
 
 ---
 
@@ -213,9 +241,9 @@ ggplot(data = two_countries) +
 
 ---
 
-Start new blog post...
+---- Start new blog post... ----
 
-# Notes for Extenders on layered themes!
+# Notes for Extenders on writing layers that respond to theming declaration!
 
 There's great news for extensions that define new layers that use Geoms from 'base' ggplot2 lock stock and barrel - the dynamism will carry through to your layers if the new version of ggplot2 is loaded.
 
@@ -302,7 +330,7 @@ GeomPolygon$default_aes
 ```
 
 
-### Use modifyList to piggy back on default aesthetics of  'base' ggplot2 Geoms, and get dynamism for free (also will be backward compatible!). 
+### Use piggy back on default aesthetics of  'base' ggplot2 Geoms, to inherit dynamism (and get backward compatiblity for free!). 
 
 For extenders, there are a few ways to update Geom default aes so that they take on characteristics specified by theme.
 
@@ -334,14 +362,141 @@ ggplot(mtcars) +
         position = "identity")
 ```
 
-### 'wait until 4.0.0 is released and bump your required ggplot2 version' 
+```{r, eval = F, include=F}
+library(ggplot2)
+deeptime:::GeomPointsRange$default_aes
+ggplot2::GeomPointrange$default_aes
+
+theme_grey()$geom$ink
+theme_grey()$geom$pointsize/3
+theme_grey()$geom$linewidth
+theme_grey()$geom$pointshape
+theme_grey()$geom$borderwidth
+theme_grey()$geom$linetype
+```
 
 
 
-### Or use onLoad for backward compatibility
+### To write: 'wait until 4.0.0 is released and bump your required ggplot2 version' 
+
+
+
+### To write: Or use onLoad for backward compatibility
 
 To be written up...
 > another way is described in PR ggforce 
+
+
+
+# End blog post #2.
+
+---
+
+# While we are here, experiment with one more idea: `scale_fill_logical()`
+
+
+```{r, echo = F}
+scale_fill_logical <- function(..., show.guide = F){
+  
+  list(
+  scale_fill_manual(values = 
+                      c(get_theme()$geom$ink |> 
+                          scales::col_mix(get_theme()$geom$paper, .6), 
+                        get_theme()$geom$accent |> 
+                          scales::col_mix(get_theme()$geom$paper, .3) |> 
+                          scales::col_mix(get_theme()$geom$ink, .1)), 
+                        ...),
+  if(show.guide){NULL}else{guides(fill = "none")}
+  )
+  
+}
+
+scale_color_logical <- function(..., show.guide = F){
+  
+  list(
+  scale_color_manual(values = 
+                      c(get_theme()$geom$ink |> 
+                          scales::col_mix(get_theme()$geom$paper, .4), 
+                        get_theme()$geom$accent), 
+                        ...),
+  if(show.guide){NULL}else{guides(color = "none")}
+  )
+  
+}
+```
+
+```{r}
+theme_chalkboard |> theme_set()
+ 
+ggplot(diamonds) + 
+  aes(y = cut, fill = cut == "Premium") + 
+  ggpro::geom_hbar() + 
+  scale_fill_logical() -> p1; p1
+
+palmerpenguins::penguins |>
+ggplot() + 
+  aes(x = body_mass_g, 
+      y = flipper_length_mm,
+      color = species == "Chinstrap",
+      fill = species == "Chinstrap") + 
+  geom_point(shape = 21) + 
+  scale_color_logical() + 
+  scale_fill_logical()
+
+theme_whitesmoke |> theme_set()
+
+p1
+ 
+ggplot(diamonds) + 
+  aes(y = cut, fill = cut == "Very Good") + 
+  ggpro::geom_hbar() + 
+  scale_fill_logical()
+
+
+theme_classic(base_size = 18) |> theme_set()
+
+ggplot(diamonds) + 
+  aes(y = cut, fill = cut == "Good") + 
+  ggpro::geom_hbar() + 
+  scale_fill_logical()
+
+palmerpenguins::penguins |>
+ggplot() + 
+  aes(x = body_mass_g, 
+      y = flipper_length_mm,
+      color = species == "Chinstrap",
+      fill = species == "Chinstrap") + 
+  geom_point(shape = 21,
+             size = get_theme()$geom$pointsize * 1.5) + 
+  scale_color_logical() + 
+  scale_fill_logical()
+
+theme_grey(ink = "whitesmoke", 
+         paper = "grey30", 
+         accent = "magenta",
+         base_size = 18
+         ) |> 
+  theme_set()
+
+ggplot(data = diamonds) + 
+  aes(
+    y = cut, 
+    fill = cut == "Very Good",
+    color = cut == "Very Good"
+    ) + 
+  ggpro::geom_hbar() + 
+  scale_fill_logical() + 
+  scale_color_logical()
+
+palmerpenguins::penguins |>
+ggplot() + 
+  aes(body_mass_g, flipper_length_mm,
+      color = species == "Chinstrap",
+      ) + 
+  geom_point() + 
+  scale_color_logical()
+
+```
 
 ------------------------------------------------------------------------
 
@@ -361,7 +516,7 @@ p1 <- ggplot(data = cars) +
 brand_theme1 <- theme_grey(base_size = 15,
          paper = "darkseagreen",
          ink = alpha("lightyellow", .8),
-         accent = "orange")
+         accent = alpha("orange", .8))
 
 brand_theme2 <- theme_grey(base_size = 10,
          paper = "grey20",
@@ -371,6 +526,8 @@ brand_theme2 <- theme_grey(base_size = 10,
 p2 <- p1 + learning_theme
 #
 p1 / p2
+
+
 
 ggram("Now layers (e.g. geom_point, geom_smooth) are also responsive to theme specification", widths = c(2.3, 2))
 
