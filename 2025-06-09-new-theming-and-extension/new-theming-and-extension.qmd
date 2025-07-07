@@ -1,6 +1,6 @@
 ---
-title: "New ggplot2 theming will make plots super-sparkly ✨"
-subtitle: "And notes for using ggplot2 extensions that haven't adopted dynamic `geom_*` theming yet."
+title: "New ggplot2 theming will make plots extra sparkly ✨"
+subtitle: "And notes for using ggplot2 extensions that haven't yet adopted dynamic `geom_*` theming"
 author: "Evangeline Reynolds"
 date: "`r Sys.Date()`"
 format: html
@@ -79,15 +79,17 @@ library(tidyverse)
 # 1. define theme from convenience 
 # functions theme_grey, theme_classic
 # theme_bw, etc.
-theme_whitesmoke <- theme_bw(
+theme_whitesmoke <- function(){
+  theme_bw(
          base_size = 18,
          base_family = "Times",
          paper = "whitesmoke",
          ink = "gray30",
          accent = "magenta4")
+}
 
 # 2. set theme
-theme_whitesmoke |> 
+theme_whitesmoke() |> 
   theme_set()
 
 # 3. Get plotting!
@@ -113,14 +115,16 @@ For fun let's also look at a more whimsical, classroom-inspired example.
 # 1. define theme from convenience 
 # functions theme_grey, theme_classic
 # theme_bw, etc.
-theme_chalkboard <- theme_classic(
+theme_chalkboard <- function(){
+  theme_classic(
          base_size = 20,
          paper = "darkseagreen",
          ink = alpha("lightyellow", .8),
          accent = alpha("orange", .8))
+}
 
 # 2. Set theme
-theme_chalkboard |> 
+theme_chalkboard() |> 
   theme_set()
 
 # 3. Get plotting!
@@ -146,16 +150,16 @@ ggplot(data = cars) +
 
 # But, what if my favorite geom\_\*() extension isn't up-to-date with dynamic layer theming? How do I keep the chart to come into line with theme?
 
-One unfortunate downside is that layer extensions that involve the creation of new Geom ggproto objects, with new default_aes defined are likely to fail to shine as brightly amid the glamour that the new changes bring.
+Unfortunate, ggplot2's new theming won't necessarily automatically benefit from the theming changes.  Let's have a look at this problem.
 
 ### Problem: ggextension::geom\_\*() doesn't dynamically theme.
 
-As we see below 
+As we see below
 
 `r chunk_return_two_col("textpath")`
 
 ```{r textpath, include = F}
-theme_chalkboard |> 
+theme_chalkboard() |> 
   theme_set() 
 
 two_countries <- gapminder::gapminder |> 
@@ -173,7 +177,7 @@ ggplot(data = two_countries) +
 
 ### Solution i: Override defaults by naming colors/sizes that go with the theme
 
-You can of course set geom_*() aesthetics in the usual way to get the layer to match the theme aesthetics!
+You can of course set geom_*() aesthetics in the usual way to get the layer to match the theme aesthetics, but you won't scale
 
 `r chunk_return_two_col("textpath-override")`
 
@@ -189,26 +193,9 @@ ggplot(data = two_countries) +
   )
 ```
 
-### A more dynamic solution (ii): use `theme_*$geom$ink`, `theme_*$geom$fontsize` and friends for more harmonious look
 
-A little more dynamic approach, anticipating that I might 
 
-`r chunk_return_two_col("textpath2")`
-
-```{r textpath2, include=F}
-#| code-line-numbers: "1"
-ggplot(data = two_countries) + 
-  aes(x = year, 
-      y = lifeExp,
-      label = country) + 
-  geomtextpath::geom_textpath(
-    # set color, size from theme
-    color = theme_chalkboard$geom$ink, 
-    size = theme_chalkboard$geom$fontsize
-    )
-```
-
-### An even more dynamic solution (iii): use `get_theme()$geom$ink`
+### An more dynamic solution (ii): use `aes(color = from_theme(ink), size = from_theme(fontsize))`
 
 Should you anticipate a possible change-up of your theme, you might use `get_theme()` instead of the name of the theme in the formulation above. 
 
@@ -216,10 +203,8 @@ Should you anticipate a possible change-up of your theme, you might use `get_the
 
 ```{r textpath3, include=F}
 library(tidyverse)
-theme_whitesmoke |> 
+theme_whitesmoke() |> 
   theme_set()
-
-get_theme()$geom$ink
 
 ggplot(data = two_countries) + 
   aes(x = year, 
@@ -227,10 +212,65 @@ ggplot(data = two_countries) +
       label = country) + 
   geomtextpath::geom_textpath(
     # set color, size from theme
-    color = get_theme()$geom$ink, 
-    size = get_theme()$geom$fontsize
+    aes(color = from_theme(ink), 
+        size = from_theme(fontsize))
     )
+    
+# Set a new theme...
+theme_chalkboard() |> 
+  theme_set()
+
+# call plot again!
+last_plot() 
 ```
+
+This method is also useful, if you want to adjust your plot keeping in harmony with theme settings. 
+
+```{r}
+library(ggplot2)
+
+theme_bw(paper = "whitesmoke",
+         ink = "grey25",
+         base_size = 15) |> 
+  theme_set()
+
+p <- ggplot(data = cars) + 
+  aes(x = speed, 
+      y = dist) + 
+  geom_line()
+
+p1 <- p + geom_smooth()
+
+p2 <- p + 
+  geom_smooth(aes(linewidth = 
+                    from_theme(linewidth)))
+
+library(patchwork)
+p1 + p2
+
+
+
+GeomSmooth$default_aes$linewidth
+
+theme_bw()$geom$linewidth
+
+```
+
+
+### Curious about the evaluated theme values?
+
+Although not a user-facing method.  
+
+`r chunk_return_two_col("textpath2")`
+
+```{r textpath2, include=F}
+#| code-line-numbers: "1"
+
+theme_chalkboard()$geom$linewidth
+theme_chalkboard()$geom$ink
+theme_chalkboard()$geom$paper
+```
+
 
 End.
 
@@ -243,9 +283,9 @@ End.
 
 ---- Start new blog post... ----
 
-# Notes for Extenders on writing layers that respond to theming declaration!
+# Notes for Extenders: on writing layers that respond to theming declaration
 
-There's great news for extensions that define new layers that use Geoms from 'base' ggplot2 lock stock and barrel - the dynamism will carry through to your layers if the new version of ggplot2 is loaded.
+There's great news for extensions that define new layers that use Geoms from 'base' ggplot2 lock, stock and barrel - the dynamism will carry through to your layers if the new version of ggplot2 is loaded.
 
 However, if you've created your own Geom object, you may have hard-coded default aesthetics. Color may be "black" and fill may be some shade of gray. This is modeled in the ggplot2 extension vignette geom_chull() example. Let's have a look at that.
 
@@ -325,7 +365,10 @@ ggplot(mtcars) +
 
 But, if we look at the definition of GeomPolygon in the latest ggplot2 development version, we see default aesthetics are no longer hardcoded, which is what allows our layers to be themed. 
 
-```{r}
+`r chunk_return_two_col("polygon-defaults")`
+
+```{r polygon-defaults, include = F}
+
 GeomPolygon$default_aes
 ```
 
@@ -334,10 +377,15 @@ GeomPolygon$default_aes
 
 For extenders, there are a few ways to update Geom default aes so that they take on characteristics specified by theme.
 
-```{r}
+`r chunk_return_two_col("polygon-defaults2")`
+
+```{r polygon-defaults2, include = F}
 # 1. determine aesthetics that need defaults
 GeomPolygon$default_aes
+```
 
+
+```{r}
 # Update create GeomPolygonHollow to have 
 # GeomLine defaults and fill = NA
 GeomPolygonHollow <- 
@@ -348,7 +396,11 @@ GeomPolygonHollow <-
               modifyList(GeomLine$default_aes) |>
               modifyList(aes(fill = NA))
           )
+```
 
+`r chunk_return_two_col("polygon-defaults3")`
+
+```{r polygon-defaults3, include = F}
 # 2. inspect newly defined aesthetics
 GeomPolygonHollow$default_aes
 

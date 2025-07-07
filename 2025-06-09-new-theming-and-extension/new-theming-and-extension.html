@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Evangeline Reynolds">
-<meta name="dcterms.date" content="2025-06-16">
+<meta name="dcterms.date" content="2025-07-02">
 
-<title>New ggplot2 theming will make plots super-sparkly ✨</title>
+<title>New ggplot2 theming will make plots extra sparkly ✨</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -81,8 +81,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">New ggplot2 theming will make plots super-sparkly ✨</h1>
-<p class="subtitle lead">And notes for using ggplot2 extensions that haven’t adopted dynamic <code>geom_*</code> theming yet.</p>
+<h1 class="title">New ggplot2 theming will make plots extra sparkly ✨</h1>
+<p class="subtitle lead">And notes for using ggplot2 extensions that haven’t yet adopted dynamic <code>geom_*</code> theming</p>
 </div>
 
 
@@ -99,7 +99,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 16, 2025</p>
+      <p class="date">July 2, 2025</p>
     </div>
   </div>
   
@@ -245,7 +245,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="but-what-if-my-favorite-geom_-extension-isnt-up-to-date-with-dynamic-layer-theming-how-do-i-keep-the-chart-to-come-into-line-with-theme" class="level1">
 <h1>But, what if my favorite geom_*() extension isn’t up-to-date with dynamic layer theming? How do I keep the chart to come into line with theme?</h1>
-<p>One unfortunate downside is that layer extensions that involve the creation of new Geom ggproto objects, with new default_aes defined are likely to fail to shine as brightly amid the glamour that the new changes bring.</p>
+<p>Unfortunate, ggplot2’s new theming won’t necessarily automatically benefit from the theming changes. Let’s have a look at this problem.</p>
 <section id="problem-ggextensiongeom_-doesnt-dynamically-theme." class="level3">
 <h3 class="anchored" data-anchor-id="problem-ggextensiongeom_-doesnt-dynamically-theme.">Problem: ggextension::geom_*() doesn’t dynamically theme.</h3>
 <p>As we see below</p>
@@ -350,8 +350,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="an-even-more-dynamic-solution-iii-use-get_themegeomink" class="level3">
-<h3 class="anchored" data-anchor-id="an-even-more-dynamic-solution-iii-use-get_themegeomink">An even more dynamic solution (iii): use <code>get_theme()$geom$ink</code></h3>
+<section id="an-even-more-dynamic-solution-iii-use-aescolor-from_themeink-size-from_themefontsize" class="level3">
+<h3 class="anchored" data-anchor-id="an-even-more-dynamic-solution-iii-use-aescolor-from_themeink-size-from_themefontsize">An even more dynamic solution (iii): use <code>aes(color = from_theme(ink), size = from_theme(fontsize))</code></h3>
 <p>Should you anticipate a possible change-up of your theme, you might use <code>get_theme()</code> instead of the name of the theme in the formulation above.</p>
 <div class="columns">
 <div class="column" style="width:3%;">
@@ -370,9 +370,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">label =</span> country) <span class="sc">+</span> </span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  geomtextpath<span class="sc">::</span><span class="fu">geom_textpath</span>(</span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># set color, size from theme</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="fu">get_theme</span>()<span class="sc">$</span>geom<span class="sc">$</span>ink, </span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fu">get_theme</span>()<span class="sc">$</span>geom<span class="sc">$</span>fontsize</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">from_theme</span>(ink), </span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">size =</span> <span class="fu">from_theme</span>(fontsize))</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Set a new theme...</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>theme_chalkboard <span class="sc">|&gt;</span> </span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_set</span>()</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co"># call plot again!</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="fu">last_plot</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:1%;">
 
@@ -385,6 +392,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div>
 <figure class="figure">
 <p><img src="new-theming-and-extension_files/figure-html/output-textpath3,-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="new-theming-and-extension_files/figure-html/output-textpath3,-2.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -401,8 +415,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 </section>
 <section id="notes-for-extenders-on-writing-layers-that-respond-to-theming-declaration" class="level1">
-<h1>Notes for Extenders on writing layers that respond to theming declaration!</h1>
-<p>There’s great news for extensions that define new layers that use Geoms from ‘base’ ggplot2 lock stock and barrel - the dynamism will carry through to your layers if the new version of ggplot2 is loaded.</p>
+<h1>Notes for Extenders: on writing layers that respond to theming declaration</h1>
+<p>There’s great news for extensions that define new layers that use Geoms from ‘base’ ggplot2 lock, stock and barrel - the dynamism will carry through to your layers if the new version of ggplot2 is loaded.</p>
 <p>However, if you’ve created your own Geom object, you may have hard-coded default aesthetics. Color may be “black” and fill may be some shade of gray. This is modeled in the ggplot2 extension vignette geom_chull() example. Let’s have a look at that.</p>
 <section id="your-geom-may-have-hardcoded-default-aesthetics" class="level3">
 <h3 class="anchored" data-anchor-id="your-geom-may-have-hardcoded-default-aesthetics">Your Geom may have hardcoded default aesthetics</h3>
@@ -469,8 +483,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>But, if we look at the definition of GeomPolygon in the latest ggplot2 development version, we see default aesthetics are no longer hardcoded, which is what allows our layers to be themed.</p>
+<div class="columns">
+<div class="column" style="width:3%;">
+
+</div><div class="column" style="width:55%;">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>GeomPolygon<span class="sc">$</span>default_aes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:1%;">
+
+</div><div class="column" style="width:41%;">
+<div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>Aesthetic mapping: 
 * `colour`    -&gt; `from_theme(colour %||% NA)`
@@ -479,15 +502,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 * `linetype`  -&gt; `from_theme(bordertype)`
 * `alpha`     -&gt; NA
 * `subgroup`  -&gt; NULL</code></pre>
+</div>
+</div>
 </div>
 </div>
 </section>
 <section id="use-piggy-back-on-default-aesthetics-of-base-ggplot2-geoms-to-inherit-dynamism-and-get-backward-compatiblity-for-free." class="level3">
 <h3 class="anchored" data-anchor-id="use-piggy-back-on-default-aesthetics-of-base-ggplot2-geoms-to-inherit-dynamism-and-get-backward-compatiblity-for-free.">Use piggy back on default aesthetics of ‘base’ ggplot2 Geoms, to inherit dynamism (and get backward compatiblity for free!).</h3>
 <p>For extenders, there are a few ways to update Geom default aes so that they take on characteristics specified by theme.</p>
+<div class="columns">
+<div class="column" style="width:3%;">
+
+</div><div class="column" style="width:55%;">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. determine aesthetics that need defaults</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>GeomPolygon<span class="sc">$</span>default_aes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:1%;">
+
+</div><div class="column" style="width:41%;">
+<div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>Aesthetic mapping: 
 * `colour`    -&gt; `from_theme(colour %||% NA)`
@@ -497,6 +531,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 * `alpha`     -&gt; NA
 * `subgroup`  -&gt; NULL</code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Update create GeomPolygonHollow to have </span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># GeomLine defaults and fill = NA</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>GeomPolygonHollow <span class="ot">&lt;-</span> </span>
@@ -506,10 +544,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>            GeomPolygon<span class="sc">$</span>default_aes <span class="sc">|&gt;</span></span>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>              <span class="fu">modifyList</span>(GeomLine<span class="sc">$</span>default_aes) <span class="sc">|&gt;</span></span>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>              <span class="fu">modifyList</span>(<span class="fu">aes</span>(<span class="at">fill =</span> <span class="cn">NA</span>))</span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>          )</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. inspect newly defined aesthetics</span></span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>GeomPolygonHollow<span class="sc">$</span>default_aes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>          )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="columns">
+<div class="column" style="width:3%;">
+
+</div><div class="column" style="width:55%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. inspect newly defined aesthetics</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>GeomPolygonHollow<span class="sc">$</span>default_aes</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Try out GeomPolygonHollow</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars) <span class="sc">+</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> drat, </span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> wt) <span class="sc">+</span> </span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer</span>(<span class="at">stat =</span> StatChull,</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">geom =</span> GeomPolygonHollow,</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">position =</span> <span class="st">"identity"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:1%;">
+
+</div><div class="column" style="width:41%;">
+<div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>Aesthetic mapping: 
 * `colour`    -&gt; `from_theme(ink)`
@@ -519,19 +576,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 * `alpha`     -&gt; NA
 * `subgroup`  -&gt; NULL</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Try out GeomPolygonHollow</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars) <span class="sc">+</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> drat, </span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> wt) <span class="sc">+</span> </span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer</span>(<span class="at">stat =</span> StatChull,</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">geom =</span> GeomPolygonHollow,</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">position =</span> <span class="st">"identity"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="new-theming-and-extension_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="new-theming-and-extension_files/figure-html/output-polygon-defaults3,-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
+</div>
+</div>
 </div>
 </div>
 </div>

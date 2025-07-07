@@ -1,0 +1,92 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+library(mosaicData)
+library(ggplot2)
+
+model <- lm(totalbill ~ temp + month + temp:month, Utilities)
+
+compute_group_slice = function(data, scales, model, xaxis, facet, n = 100, ...) {
+
+    vars <- names(model$model) #Identify col names from model
+    oldnames <- names(data) #Identify & save names from ggplot data
+    
+    names(data)[1:3] <- c(xaxis, vars[1], facet) #HARDCODED: Rename ggplot data to     match model names
+    data$month <- as.numeric(data$month) #HARDCODED: Adjust class of facet variable as    needed
+    
+    tmp <- predict(model, newdata = data) #Predict new y col for displaying the model
+    names(data)<- oldnames #Revert col names to old names
+    data$y<- tmp
+    
+    data
+}
+
+StatSlice <- ggproto("StatSlice",
+                     Stat,
+                     required_aes = c('x','y'),
+                     compute_group = compute_group_slice)
+
+# b <- coef(model)
+
+p <- ggplot(Utilities, 
+       aes(x = temp, y = totalbill)) +
+  geom_point() +
+  facet_wrap(~ month)
+
+# you can retrieve facet specification 
+p$facet$params[[1]]
+
+p$facet$params[[1]] |> names()
+
+p +
+  geom_line(stat = StatSlice, 
+            model = model, 
+            xaxis = 'temp',
+            facet = 'month', 
+            color = "skyblue",
+            linewidth = 2)
+
+```
+
+
+```{r}
+
+ggplot(mtcars) + 
+  aes(y = mpg, x = wt) +
+  aes_all(mtcars |> names()) + 
+  aes(formula = "y ~ x + x^2")
+
+
+formula(y ~ x + x^2) |> str()
+
+```
+
+
+## Closing remarks, Other Relevant Work, Caveats

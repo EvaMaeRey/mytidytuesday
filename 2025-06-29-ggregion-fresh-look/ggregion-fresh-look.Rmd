@@ -1,0 +1,251 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+nc_ref <- sf::st_read(system.file("shape/nc.shp", package="sf")) |>
+  select(county_name = NAME, fips = FIPS)
+#> Reading layer `nc' from data source 
+#>   `/Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/library/sf/shape/nc.shp' 
+#>   using driver `ESRI Shapefile'
+#> Simple feature collection with 100 features and 14 fields
+#> Geometry type: MULTIPOLYGON
+#> Dimension:     XY
+#> Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+#> Geodetic CRS:  NAD27
+
+read.csv("https://raw.githubusercontent.com/EvaMaeRey/sf2stat/refs/heads/main/nc-midterms.csv") |>
+  mutate(county_name = str_to_title(desc_county)) |>
+  left_join(nc_ref) %>% 
+  ggplot() + 
+  geom_sf() +
+  aes(fill = cd_party, 
+      label = county_name,
+      geometry = geometry)+
+  geom_sf_text(check_overlap = T)
+#> Joining with `by = join_by(county_name)`
+
+
+# we want our stat to do stuff that StatSf and StatSfCoordinates does.
+prep_geo_reference <- function(ref_data, id_index = 1){
+  
+  ref_data |>
+  ggplot2::StatSf$compute_panel(coord = ggplot2::CoordSf) |>
+  ggplot2::StatSfCoordinates$compute_group(coord = ggplot2::CoordSf) %>% 
+    mutate(id_col = .[[id_index]])
+  
+}
+
+
+compute_panel_aggregation <- function(data, scales, fun = sum, non_grouping = c("fill", "wt", "within")){
+  
+  grp_cols <-  names(data)[!names(data) %in% non_grouping]
+  
+  # Thanks June! https://github.com/teunbrand/ggplot-extension-club/discussions/15
+  data %>% 
+    group_by(group_by(pick(any_of(grp_cols)))) ->   
+  data
+  
+  if(is.null(data$fill)){data <- mutate(data, fill = 1)}
+  if(is.null(data$wt)){data$wt <- 1}
+  
+  data %>% 
+    summarize(fill = fun(.data$fill*.data$wt), .groups = 'drop') |>
+    mutate(summary = fill) ->
+  data
+    
+  if(is.null(data$within)){data$within <- 1}
+
+  data %>%   
+    group_by(.data$within) %>% 
+    mutate(prop = .data$fill/sum(.data$fill)) %>%
+    mutate(percent = round(.data$prop*100)) -> 
+  data
+  
+  data
+  
+}
+
+# Flip the script... prepare compute (join) to happen in layer (NEW!)
+compute_panel_region <- function(data, scales, ref_data, id_index = 1,
+                                 stamp = FALSE, keep_id = NULL,
+                                 drop_id = NULL, fun = sum){
+  
+  fill_is_category <- is.character(data$fill)|is.factor(data$fill)|is.logical(data$fill)
+  
+  if(!(fill_is_category)){
+  
+  data <- data |> compute_panel_aggregation(scales, fun = fun, non_grouping = c("fill", "wt", "within")) 
+  
+  }
+  
+  ref_data %>% 
+    prep_geo_reference(id_index = id_index) ->
+  ref_data
+  
+  if(!is.null(keep_id)){
+  
+  ref_data %>% 
+    filter(id_col %in% keep_id) ->
+  ref_data
+  
+    }
+  
+  if(!is.null(drop_id)){
+  
+  ref_data %>% 
+    filter(!(id_col %in% drop_id)) ->
+  ref_data
+  
+    }
+  
+  if(stamp){
+    
+    ref_data |>
+      mutate(fill = ifelse(fill_is_category, NA, NA |> as.numeric()))
+    
+  }else{
+  
+ ref_data %>% 
+    inner_join(data) 
+      
+  
+  }
+    
+}
+
+
+StatSfJoin <- ggproto("StatSfJoin", Stat, 
+                      compute_panel = compute_panel_region, 
+                      default_aes = aes(label = after_stat(id_col), 
+                                          fill = after_stat(fill)))
+
+
+stat_region <- function(mapping = NULL, data = NULL, geom = "sf", 
+                           stat = StatSfJoin, position = "identity", 
+                           na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, 
+                           ref_data = getOption("sf2stat.ref_data", nc_ref), 
+                        crs = sf::st_crs(ref_data), 
+                        id_index = 1, 
+                        required_aes = getOption("sf2stat.required_aes", "fips|county_name"), 
+                        ...){
+
+      StatSfJoin$required_aes <- required_aes
+  
+     c(layer_sf(geom = geom, data = data, mapping = mapping, 
+        stat = StatSfJoin, position = position, show.legend = show.legend, 
+        inherit.aes = inherit.aes, 
+        params = rlang::list2(na.rm = na.rm, ref_data = ref_data, 
+                              id_index = id_index, ...)), 
+      coord_sf(crs = sf::st_crs(ref_data)))
+  
+}
+
+#  geom_sf  # want to look at quieting the coord message...
+
+
+GeomOutline <- ggproto("GeomOutline", GeomSf,
+                       default_aes = aes(!!!modifyList(GeomSf$default_aes,
+                                                       aes(fill = "transparent", 
+                                                           color = "black"))))
+
+geom_region_sf <- function(mapping = NULL, ...){stat_region(geom = GeomSf, mapping = mapping, ...)}
+geom_region <- geom_region_sf   # convenience short name
+geom_region_outline <- function(mapping = NULL, ...){stat_region(geom = GeomOutline, mapping = mapping, ...)}
+geom_region_label <- function(mapping = NULL, ...){stat_region(geom = GeomLabel,mapping = mapping,...)}
+geom_region_text <- function(mapping = NULL, ...){stat_region(geom = GeomText, mapping = mapping,...)}
+geom_region_textrepel <- function(mapping = NULL, ...){stat_region(geom = ggrepel::GeomTextRepel, mapping = mapping, ...)}
+
+
+stamp_region_sf <- function(...){geom_region_sf(stamp = T, required_aes = Stat$required_aes, ...)}
+stamp_region <- stamp_region_sf
+stamp_region_outline <- function(...){geom_region_outline(stamp = T, required_aes = Stat$required_aes, ...)}
+stamp_region_label <- function(...){geom_region_label(stamp = T, required_aes = Stat$required_aes, ...)}
+stamp_region_text <- function(...){geom_region_text(stamp = T, required_aes = Stat$required_aes, ...)}
+```
+
+
+```{r}
+# set_region_sf_nc_counties <- function(return_region_names = F, region = "county"){
+# 
+# sf::st_read(system.file("shape/nc.shp", package="sf")) |>
+#   select(county_name = NAME, fips = FIPS) |>
+#   set_region(region = region, return_region_names = return_region_names)
+# 
+# }
+
+nc_midterms <- read.csv("https://raw.githubusercontent.com/EvaMaeRey/sf2stat/refs/heads/main/nc-midterms.csv")
+head(nc_midterms)
+#>   desc_county     n  cd_party  ind_vote
+#> 1      ONSLOW 24406 0.2059283 0.3862985
+#> 2     ROBESON 36367 0.5061306 0.4066599
+#> 3    RANDOLPH 15867 0.1651505 0.4230793
+#> 4       ANSON  9028 0.5674062 0.4267833
+#> 5     HALIFAX 21875 0.5865712 0.4337829
+#> 6       ROWAN 23667 0.2424922 0.4338108
+
+# set_region_sf_nc_counties()
+#> Reading layer `nc' from data source 
+#>   `/Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/library/sf/shape/nc.shp' 
+#>   using driver `ESRI Shapefile'
+#> Simple feature collection with 100 features and 14 fields
+#> Geometry type: MULTIPOLYGON
+#> Dimension:     XY
+#> Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+#> Geodetic CRS:  NAD27
+#> Region iscounty
+#> Required aes: 'county_name|fips'
+
+nc_midterms |>
+  ggplot() + 
+  aes(county_name = str_to_title(desc_county)) + 
+  stamp_region(fill = 'darkgrey') + 
+  geom_region() + 
+  aes(fill = n/1000) + 
+  geom_region_outline(
+    keep_id = "Mecklenburg",
+    color = "orange",
+    linewidth = 1) + 
+  geom_region_text(check_overlap = T,
+                   color = "whitesmoke")
+#> Coordinate system already present. Adding new coordinate system, which will
+#> replace the existing one.
+#> Coordinate system already present. Adding new coordinate system, which will
+#> replace the existing one.
+#> Coordinate system already present. Adding new coordinate system, which will
+#> replace the existing one.
+#> Joining with `by = join_by(county_name)`
+#> Joining with `by = join_by(county_name)`
+
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

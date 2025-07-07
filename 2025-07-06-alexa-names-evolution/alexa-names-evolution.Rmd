@@ -1,0 +1,75 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+library(babynames)
+```
+
+## Experiment
+
+https://www.linkedin.com/posts/morgandepenbusch_impact-of-amazon-alexa-on-the-baby-name-activity-7338558156018462725-n8c6?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAIFK0wBe0Q89iD-ZEWren9Fjl9ugLy3zB0
+
+```{r}
+
+
+compute_endpoint <- function(data, scales){
+  
+  data |> 
+    filter(x == max(x, na.rm = T))
+  
+}
+
+StatEndpoint <- ggproto(NULL, 
+                        Stat,
+                        compute_group = compute_endpoint)
+
+library(ggplyr)
+
+babynames::babynames |> 
+  filter(name == "Alexa", sex == "F") |>
+  filter(year > 1970) |>
+  ggplot() + 
+  aes(year, n) + labs(x = NULL, y = NULL) +
+  geom_line() + 
+  geom_point(stat = StatEndpoint) + 
+  labs(title = "Alexa seems to peak in 2006") + data_filter(year < 2007) +
+  intercept() +
+  labs(title = "Amazon begins using 'Alexa' 2014") + data_refilter(year < 2014) + 
+  intercept() +
+  labs(title = "Post-'Amazon Alexa' rebound") + data_refilter(year < 2016) + 
+  intercept() +
+  labs(title = "Followed by decline towards zero") + data_refilter() +
+  intercept()
+    
+
+library(patchwork)
+(p1 + p2) / (p3 + p4) &
+  scale_x_continuous(limits = c(1980, 2020)) &
+  scale_y_continuous(limits = c(0, 6500))
+  
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
