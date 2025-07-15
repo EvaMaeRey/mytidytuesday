@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Everyday ggplot2 extension</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Evangeline ‘Gina’ Reynolds, ggplot2 extenders meetup, July 2025" />
+    <script src="libs/header-attrs-2.26/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Everyday ggplot2 extension
+]
+.subtitle[
+## New approaches to introducing layer extension
+]
+.author[
+### Evangeline ‘Gina’ Reynolds, ggplot2 extenders meetup, July 2025
+]
+
+---
+
+
+
+
+## Overview:
+
+### 1. Creating new layers (geom_* functions) in ggplot2 extension has been described as an 'involved process'. 
+
+--
+
+### 2. I'll discuss 'easy-geom-recipes' designed to make getting into layer extension more fun!
+
+
+---
+
+
+
+---
+
+
+### 1. Why ggplot2
+### 2. Limitations of base ggplot2
+### 3. Promise of extension
+### 4. ggplot2 super-users not leveraging extension
+### 5. New super-user-tailored educational material
+### 6. Challenges on the horizon
+
+
+
+---
+
+class: middle, inverse, center
+# Part 1. So ggplot2...
+
+--
+#               ... what's the fuss?
+
+
+
+
+
+
+
+
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # gg in ggplot2 --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- # Grammar of Graphics --&gt;
+
+---
+class: middle, inverse, center
+
+
+# It lets you *'speak your plot into existence'*. (Thomas Lin Pederson) 
+
+---
+
+
+# Hans Rosling &amp; BBC in 2010  
+
+
+
+&lt;iframe width="767" height="431" src="https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
+https://www.youtube.com/embed/jbkSRLYSojo?list=PL6F8D7054D12E7C5A
+
+
+---
+
+
+## ... I know having the data is not enough. I have to show it in ways people both enjoy and understand
+
+&lt;img src="images/hans_argument.png" width="65%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# 'Here we go. Life expectancy on the y-axis'
+
+
+&lt;img src="images/hans_y_axis.png" width="80%" /&gt;
+
+---
+
+# 'On the x-axis, wealth'
+
+
+&lt;img src="images/hans_x_axis.png" width="80%" /&gt;
+
+---
+
+# 'Colors represent the different continents'
+
+&lt;img src="images/hans_colors.png" width="80%" /&gt;
+
+
+---
+
+# 'Size represents population'
+
+&lt;img src="images/hans_size.png" width="80%" /&gt;
+
+---
+class: inverse, center, middle
+
+#  Response to speaking plot into existence?
+
+--
+
+# 10 million views...
+
+--
+
+(also does animation at the end... which I don't show)
+
+
+
+---
+class: inverse, center, middle
+
+# And ggplot2 also affords this build-up-your-plot-bit-by-bit experience.  
+
+--
+# i.e. 'speaking your plot into existence.' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+
+count: false
+ 
+## Now, we all have Rosling capabilities with ggplot2
+.panel1-scatter-auto[
+
+``` r
+*ggplot(data = gapminder_2002)
+```
+]
+ 
+.panel2-scatter-auto[
+&lt;img src="extenders-2025-recipes_files/figure-html/scatter_auto_01_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+## Now, we all have Rosling capabilities with ggplot2
+.panel1-scatter-auto[
+
+``` r
+ggplot(data = gapminder_2002) +
+* aes(y = lifeExp)
+```
+]
+ 
+.panel2-scatter-auto[
+&lt;img src="extenders-2025-recipes_files/figure-html/scatter_auto_02_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+## Now, we all have Rosling capabilities with ggplot2
+.panel1-scatter-auto[
+
+``` r
+ggplot(data = gapminder_2002) +
+  aes(y = lifeExp) +
+* aes(x = gdpPercap)
+```
+]
+ 
+.panel2-scatter-auto[
+&lt;img src="extenders-2025-recipes_files/figure-html/scatter_auto_03_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+## Now, we all have Rosling capabilities with ggplot2
+.panel1-scatter-auto[
+
+``` r
+ggplot(data = gapminder_2002) +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+* geom_point()
+```
+]
+ 
+.panel2-scatter-auto[
+&lt;img src="extenders-2025-recipes_files/figure-html/scatter_auto_04_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+## Now, we all have Rosling capabilities with ggplot2
+.panel1-scatter-auto[
+
+``` r
+ggplot(data = gapminder_2002) +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  geom_point() +
+* aes(size = pop/1000000000)
+```
+]
+ 
+.panel2-scatter-auto[
+&lt;img src="extenders-2025-recipes_files/figure-html/scatter_auto_05_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+## Now, we all have Rosling capabilities with ggplot2
+.panel1-scatter-auto[
+
+``` r
+ggplot(data = gapminder_2002) +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  geom_point() +
+  aes(size = pop/1000000000) +
+* aes(color = continent)
+```
+]
+ 
+.panel2-scatter-auto[
+&lt;img src="extenders-2025-recipes_files/figure-html/scatter_auto_06_output-1.png" width="504" /&gt;
+]
+
+&lt;style&gt;
+.panel1-scatter-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-scatter-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-scatter-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+
+## We get the 'Hans Rosling' speak-it experience ...
+
+--
+## ... because ggplot2 is based on the grammar of graphics, (gg = grammar of graphics) ...
+
+--
+## ... which breaks up the plot elements into *orthogonal* parts ...
+
+--
+## ... and allows user to manipulate those parts bit by bit.
+
+---
+class: inverse, center, middle
+
+&gt; # "the Grammar of Graphics makes [building plots] easy because you've just got all these, like, little nice decomposable components" -- Hadley Wickham
+
+
+
+---
+
+## Leland Wilkinson identified orthogonal elements in 'The Grammar of Graphics'. Wilkinson on the Policy Viz Podcast [here](https://policyviz.com/podcast/episode-201-leland-wilkinson/).
+
+&lt;img src="https://miro.medium.com/max/1400/1*MMZuYgeC_YjXNC1r4D4sog.png" width="75%" /&gt;
+
+
+---
+
+
+
+# Skip at COWY: discussing origins of ggplot2
+
+--
+
+Hadley Wickham, on it's motivation:
+
+&gt; ### And, you know, I'd get a dataset. And, *in my head I could very clearly kind of picture*, I want to put this on the x-axis. Let's put this on the y-axis, draw a line, put some points here, break it up by this variable.
+
+--
+&gt; ### And then, like, getting that vision out of my head, and into reality, it's just really, really hard. Just, like, felt harder than it should be. Like, there's a lot of custom programming involved,
+
+---
+
+&gt; ### where I just felt, like, to me, I just wanted to say, like, you know, *this is what I'm thinking, this is how I'm picturing this plot. Like you're the computer 'Go and do it'.*
+
+--
+&gt; ### ... and I'd also been reading about the Grammar of Graphics by Leland Wilkinson, I got to meet him a couple of times and ... I was, like, this book has been, like, written for me.
+https://www.trifacta.com/podcast/tidy-data-with-hadley-wickham/
+
+
+
+
+---
+
+
+&gt;  "Even though I now mostly write Python, C, and Rust, I still pop open #rstats and ggplot2 when I need to make sense of some data and it continues to be just the best thing ever." Dewey Dunningham
+
+
+
+---
+
+&lt;!-- Tell you about: --&gt;
+
+&lt;!-- [Everyday ggplot2 extension](https://evamaerey.github.io/everyday_ggplot2_extension/) initiatives --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- 1. Learning resources --&gt;
+&lt;!--     a. [easy recipes] --&gt;
+&lt;!--     b. [cookbook](https://evamaerey.github.io/ggplot2-extension-cookbook/) --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- 2. Community - [Extenders club](https://github.com/teunbrand/ggplot-extension-club) --&gt;
+
+&lt;!--     a. meetup  --&gt;
+&lt;!--     b. club --&gt;
+&lt;!--     c. workshop? --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- 3. Light-weight approach to ggplot2 extension... --&gt;
+    
+---
+
+## Intro Thoughts
+
+## ggbump
+
+
+
+---
+
+count: false
+ 
+
+.panel1-bump-auto[
+
+``` r
+*library(tidyverse)
+```
+]
+ 
+.panel2-bump-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-bump-auto[
+
+``` r
+library(tidyverse)
+*library(ggbump)
+```
+]
+ 
+.panel2-bump-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-bump-auto[
+
+``` r
+library(tidyverse)
+library(ggbump)
+
+*us_cohort_life_exp_rank_2020
+```
+]
+ 
+.panel2-bump-auto[
+
+```
+# A tibble: 60 × 7
+   country continent  year lifeExp      pop gdpPercap life_exp_rank
+   &lt;fct&gt;   &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;         &lt;dbl&gt;
+ 1 Canada  Americas   1952    68.8 14785584    11367.             2
+ 2 Canada  Americas   1957    70.0 17010154    12490.             2
+ 3 Canada  Americas   1962    71.3 18985849    13462.             1
+ 4 Canada  Americas   1967    72.1 20819767    16077.             1
+ 5 Canada  Americas   1972    72.9 22284500    18971.             1
+ 6 Canada  Americas   1977    74.2 23796400    22091.             1
+ 7 Canada  Americas   1982    75.8 25201900    22899.             1
+ 8 Canada  Americas   1987    76.9 26549700    26627.             1
+ 9 Canada  Americas   1992    78.0 28523502    26343.             1
+10 Canada  Americas   1997    78.6 30305843    28955.             2
+# ℹ 50 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-bump-auto[
+
+``` r
+library(tidyverse)
+library(ggbump)
+
+us_cohort_life_exp_rank_2020 %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-bump-auto[
+&lt;img src="extenders-2025-recipes_files/figure-html/bump_auto_04_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-bump-auto[
+
+``` r
+library(tidyverse)
+library(ggbump)
+
+us_cohort_life_exp_rank_2020 %&gt;%
+  ggplot() +
+* aes(x = year,
+*     y = life_exp_rank,
+*     color = country)
+```
+]
+ 
+.panel2-bump-auto[
+&lt;img src="extenders-2025-recipes_files/figure-html/bump_auto_05_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-bump-auto[
+
+``` r
+library(tidyverse)
+library(ggbump)
+
+us_cohort_life_exp_rank_2020 %&gt;%
+  ggplot() +
+  aes(x = year,
+      y = life_exp_rank,
+      color = country) +
+* geom_point()
+```
+]
+ 
+.panel2-bump-auto[
+&lt;img src="extenders-2025-recipes_files/figure-html/bump_auto_06_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-bump-auto[
+
+``` r
+library(tidyverse)
+library(ggbump)
+
+us_cohort_life_exp_rank_2020 %&gt;%
+  ggplot() +
+  aes(x = year,
+      y = life_exp_rank,
+      color = country) +
+  geom_point() +
+* geom_bump()
+```
+]
+ 
+.panel2-bump-auto[
+&lt;img src="extenders-2025-recipes_files/figure-html/bump_auto_07_output-1.png" width="504" /&gt;
+]
+
+&lt;style&gt;
+.panel1-bump-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-bump-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-bump-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+# Graphical Poem!!!
+
+
+
+
+--
+
+## "The article concludes by discussing some perceptual issues, and thinking about how we can build on the grammar to learn how to create graphical 'poems.'" - Hadley Wickham
+
+
+---
+
+#  Without geom_bump(), drawing a bumpchart would be a non-starter in most settings (business, government, academic).*
+
+--
+
+# Layer extension delivers value. 
+
+--
+
+## "... creating new Stats[-based layers] is one of the most useful ways to extend the capabilities of ggplot2." – ggplot2: Elegant Graphics for Data Analysis
+
+
+
+
+
+---
+
+But...
+
+# - 'I have two kids, it's so hard to be so deep in ggplot, it takes at least two days just to get all the information in your head again.  So I'm struggling with maintaining [ggbump, ggaluvial, ggsankey]'
+
+--
+
+# Delivering new layer extensions can be costly.
+
+---
+
+# - 'I have 200 kids...'  Univeristy Professor
+
+---
+
+# - 'I have 1000 kids...'  University Curriculum Director
+
+---
+
+# - 'I have a thesis to finish'  Graduate Student
+
+---
+
+## Recognizing demands on peoples time and attention.
+
+--
+
+## Talk central question:  Can we lower the costs to getting into layer extension?
+
+--
+
+## Especially in academic setting...
+
+--
+
+## ... (These people generally have staggeringly good extension ideas, and academic setting has potential to have ripple effect since educators have a *lot* of trainees...) :-)
+
+---
+
+# 'How to learn ggplot2 while drowning'...?
+
+--
+
+## managing 'care tasks' ...
+
+![](https://m.media-amazon.com/images/I/61DJiOiZeGL._SY445_SX342_QL70_FMwebp_.jpg)
+
+
+---
+
+## 1. extension is be an analytic 'care task' - can help you in the long run
+
+--
+
+## 2. but in the short run, barriers to entry and maintanance present a burden
+
+
+---
+
+# 'How to introduce ggplot2 layer extension without it feeling overwhelming (drowning)'...?
+
+---
+
+![](../../posit-consulting/report_figures/unnamed-chunk-35-1.svg)&lt;!-- --&gt;![](../../posit-consulting/report_figures/unnamed-chunk-35-2.svg)&lt;!-- --&gt;![](../../posit-consulting/report_figures/unnamed-chunk-35-3.svg)&lt;!-- --&gt;
+
+
+---
+
+In an LLMs world?  
+
+---
+
+'Easy Geom Recipes' (Recipe cards)
+
+&lt;img src="../../posit-consulting/step0.png" width="933" /&gt;
+
+---
+
+
+
+&lt;img src="../../posit-consulting/step1.png" width="933" /&gt;
+
+---
+
+
+
+&lt;img src="../../posit-consulting/step2.png" width="933" /&gt;
+
+
+&lt;img src="../../posit-consulting/step3.png" width="533" /&gt;
+
+
+&lt;img src="../../posit-consulting/done.png" width="933" /&gt;
+
+
+---
+
+Note: w/ new release: Step 3 becomes:
+
+
+
+
+
+
+---
+
+
+
+
+![](../../posit-consulting/report_figures/unnamed-chunk-12-1.svg)&lt;!-- --&gt;![](../../posit-consulting/report_figures/unnamed-chunk-12-2.svg)&lt;!-- --&gt;![](../../posit-consulting/report_figures/unnamed-chunk-35-2.svg)&lt;!-- --&gt;![](../../posit-consulting/report_figures/unnamed-chunk-35-3.svg)&lt;!-- --&gt;
+
+
+
+
+---
+
+In an LLMs world?  
+
+But I can ask an LLM to write me an extension...
+
+--
+
+And it may manage...
+
+--
+
+Can we design entry points that are more informative?
+
+--
+
+Is it worthwhile to do so? 
+
+--
+
+Should we even care what the code that writes the plot looks like any more?
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+  "ratio": "16:9",
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

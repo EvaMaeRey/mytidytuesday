@@ -1,0 +1,107 @@
+---
+title: "Untitled"
+author: "Evangeline Reynolds"
+date: "2025-07-14"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+library(ggplot2)
+
+# 1. Stat to compute the balance point
+StatBalPoint <- ggproto("StatBalPoint", Stat,
+  required_aes = c("x", "y"),
+  
+  compute_group = function(data, scales) {
+    # Convert x to numeric position (important for factors)
+    data$x_num <- as.numeric(factor(data$x, levels = unique(data$x)))
+    
+    balance <- sum(data$x_num * data$y, na.rm = TRUE) / sum(data$y, na.rm = TRUE)
+    
+    data.frame(x = balance, y = 0, label = "^")
+  }
+)
+
+# 2. Define geom_bal_point
+geom_bal_point <- function(mapping = NULL, data = NULL,
+                           stat = "bal_point", position = "identity",
+                           ..., na.rm = FALSE, show.legend = NA,
+                           inherit.aes = TRUE) {
+  layer(
+    stat = StatBalPoint, geom = GeomText, mapping = mapping, data = data,
+    position = position, show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, vjust = 1, ...)  # vjust=1 puts tip at y = 0
+  )
+}
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+df <- data.frame(x = c("A", "B", "C"), y = c(2, 4, 3))
+
+ggplot(df, aes(x = x, y = y)) +
+  geom_col() +
+  geom_bal_point(size = 8, color = "red")
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+```{r}
+
+library(ggplot2)
+
+# Step 1: Stat that calculates weighted average of x positions
+StatBalPoint <- ggproto("StatBalPoint", Stat,
+  required_aes = c("x", "y"),
+  
+  compute_panel = function(data, scales) {
+    # Map discrete x values to numeric positions (used for geom_col())
+    x_positions <- scales$x$map(data$x)
+
+    # Weighted mean x (balance point)
+    balance <- sum(x_positions * data$y, na.rm = TRUE) / sum(data$y, na.rm = TRUE)
+    
+    data.frame(x = balance, y = 0, label = "^")
+  }
+)
+
+# Step 2: geom_bal_point() using GeomText with vertical alignment
+geom_bal_point <- function(mapping = NULL, data = NULL,
+                           stat = "bal_point", position = "identity",
+                           ..., na.rm = FALSE, show.legend = NA,
+                           inherit.aes = TRUE) {
+  layer(
+    stat = StatBalPoint, geom = GeomText, mapping = mapping, data = data,
+    position = position, show.legend = show.legend, inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, vjust = 1, ...)  # vjust = 1 aligns tip of "^" at y = 0
+  )
+}
+
+
+df <- data.frame(
+  category = c("A", "B", "C", "D"),
+  value = c(2, 6, 3, 1)
+)
+
+ggplot(df, aes(x = category, y = value)) +
+  geom_col() +
+  geom_bal_point(aes(x = category, y = value), size = 10, color = "red")
+
+
+```

@@ -13,50 +13,112 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Step 00: Press play on 'Extending your Ability to Extend' https://www.youtube.com/watch?v=uj7A3i2fi54
 
-Step 0: Do it with ggplot2.
 
-# Step 0: get it done with base ggplot2/tidyverse
 
-```{r step0}
+
+### Verbatim approach
+
+![create_cicle](create_circle.png)
+
+```{r}
 library(tidyverse)
-create_circle <- function(x0, y0, r = 1, n = 7){
-  
-    angles <- seq(from = 0,
+create_circle <- function(data, n){
+
+  angles <- seq(from = 0, 
                 to = 2 * pi,
-                length.out = n)
+                length.out = n + 1)
 
   data.frame(
-    x = c(x0 + r * cos(angles)),
-    y = c(y0 + r * sin(angles))
+    x = cos(angles) * data$r + data$x0,
+    y = sin(angles) * data$r + data$y0,
+    data
   )
+
 }
 
-cars %>% 
-  .[1:5,] ->
-five_cars
-
-five_cars %>% 
-  mutate(diamond = 
-           purrr::map2(.x = speed,
-                       .y = dist, 
-                       create_circle)) %>% 
-  mutate(group = row_number()) %>% 
-  unnest() ->
-five_cars_circles
-  
-five_cars %>% 
-  ggplot() + 
-  aes(x = speed, dist) +
-  geom_point() + 
-  geom_polygon(data = five_cars_circles, 
-            aes(x = x, y = y, group = group),
-            alpha = .5) + 
-  coord_equal()
 ```
+
+![StatCirc](StatCirc.png)
+
+
+```{r}
+StatCircle <- ggproto(`_class` = "StatCircle", 
+                      `_inherit` = Stat, 
+                      setup_data = function(data, params) {
+  
+    if (data$group[1] == -1) {
+      nrows <- nrow(data)
+      data$group <- seq_len(nrows)
+    }
+  
+    data  # return data with a group variable
+
+},
+                      compute_group = function(data, scales, n = 5){create_circle(data, n = n)},
+                      required_aes = c("x0", "y0", "r")
+                      )
+
+
+```
+
+
+![using](use_our_new_stat.png)
+![usingfacet](faceting.png)
+
+```{r}
+circles <- data.frame(x0 = c(-5,5), y0 = c(5, -5),
+                      r = c(5, 4), class = c("A", "B"))
+
+ggplot(circles) + 
+  geom_polygon(stat = StatCircle,
+               aes(x0 = x0, y0 = y0, 
+                   r = r, fill = class))
+
+
+
+```
+
+![usingfacet](faceting.png)
+
+
+```{r}
+ggplot(circles) + 
+  geom_polygon(stat = StatCircle,
+               aes(x0 = x0, y0 = y0, 
+                   r = r, fill = class)) + 
+  facet_wrap(~ class)
+```
+
+
+```{r}
+ggplot(cars) + 
+  aes(x = speed, y = dist) + 
+  geom_point() +
+  aes(x0 = speed, y0 = dist, r = 1) + 
+  geom_polygon(stat = StatCircle) + 
+  aes(fill = speed > 15) + 
+  facet_wrap(~ speed > 15)
+
+```
+
+
+---
+
+
+
+--------
+
+
+
+# extension
+
+![StatCirc](StatCirc.png)
+
 
 # step 1a:  write `setup_data` function
 
-```{r cars}
+```{r cars, message=F, warning=F}
+library(tidyverse)
 setup_data_circle <- function(data, params) {
   
     if (data$group[1] == -1) {
@@ -89,6 +151,9 @@ cars %>%
 
 We write a routine that will act on each group in the data (in this case each row)
 
+![create_circle()](create_circle.png)
+
+
 ---
 
 ```{r step_2a}
@@ -96,12 +161,12 @@ compute_group_circle <- function(data, scales, n = 5){
 
   angles <- seq(from = 0, 
                 to = 2 * pi,
-                length.out = n)
+                length.out = n + 1)
 
   data.frame(
-    x = c(data$x0 + data$r * cos(angles)),
-    y = c(data$y0 + data$r * sin(angles)),
-    data
+    x = cos(angles) * data$r + data$x0,
+    y = sin(angles) * data$r + data$y0#,
+    # data
   )
 
 }
@@ -131,9 +196,9 @@ cars %>%
 
 
 
-# Step 3: write ggproto to create StatCircle; `setup_data` and `compute_group` functions will be inputs
+# Step 3: use `ggproto()` to create StatCircle; `setup_data` and `compute_group` functions will be inputs
 
-```{r 3}
+```{r}
 StatCircle <- ggproto(`_class` = "StatCircle", 
                       `_inherit` = Stat, 
                       setup_data = setup_data_circle,
@@ -143,39 +208,6 @@ StatCircle <- ggproto(`_class` = "StatCircle",
 ```
 
 
-
-# Step 4: write `geom_circle`, inheriting from `GeomPolygon`
-
-```{r 4}
-geom_circle <- function(mapping = NULL, 
-                        data = NULL, 
-                        stat = "circle", 
-                        position = "identity", 
-                        ..., 
-                        n = 8, 
-                        lineend = "butt", 
-                        linejoin = "round", 
-                        na.rm = FALSE, 
-                        show.legend = NA, 
-                        inherit.aes = TRUE) {
-  layer(
-    data = data, 
-    mapping = mapping, 
-    stat = stat, 
-    geom = GeomPolygon, 
-    position = position, 
-    show.legend = show.legend, 
-    inherit.aes = inherit.aes, 
-    params = list(
-      n = n, 
-      lineend = lineend, 
-      linejoin = linejoin, 
-      na.rm = na.rm, 
-      ...
-    )
-  )
-}
-```
 
 # Step 5: Enjoy! Test out `geom_circle`
 
@@ -202,7 +234,7 @@ cars %>%
 baseplot
 
 baseplot +
-  geom_circle(n = 7, alpha = .2)
+  geom_polygon(stat = StatCircle, n = 7, alpha = .2)
 ```
 
 # Keep testing; second guess everything; dispare
@@ -210,11 +242,11 @@ baseplot +
 ```{r}
 baseplot + 
   aes(fill = speed == 6) +
-  geom_circle(n = 7, alpha = .2)
+  geom_polygon(stat = StatCircle, n = 7, alpha = .2)
 
 baseplot + 
   aes(fill = speed > 6) +
-  geom_circle(n = 7, alpha = .2)
+  geom_polygon(stat = StatCircle, n = 7, alpha = .2)
 ```
 
 
@@ -227,23 +259,128 @@ baseplot +
 ```
 
 
+### Verbatim approach
+
+![create_cicle](create_circle.png)
+
+```{r}
+create_circle <- function(data, n){
+
+  angles <- seq(from = 0, 
+                to = 2 * pi,
+                length.out = n + 1)
+
+  data.frame(
+    x = cos(angles) * data$r + data$x0,
+    y = sin(angles) * data$r + data$y0,
+    data
+  )
+
+}
+
+```
+
+![StatCirc](StatCirc.png)
+
+
+```{r}
+StatCircle <- ggproto(`_class` = "StatCircle", 
+                      `_inherit` = Stat, 
+                      setup_data = function(data, params) {
+  
+    if (data$group[1] == -1) {
+      nrows <- nrow(data)
+      data$group <- seq_len(nrows)
+    }
+  
+    data  # return data with a group variable
+
+},
+                      compute_group = function(data, scales, n = 5){create_circle(data, n = n)},
+                      required_aes = c("x0", "y0", "r")
+                      )
+
+
+```
+
+
+![using](use_our_new_stat.png)
+![usingfacet](faceting.png)
+
+```{r}
+circles <- data.frame(x0 = c(-5,5), y0 = c(5, -5),
+                      r = c(5, 4), class = c("A", "B"))
+
+ggplot(circles) + 
+  geom_polygon(stat = StatCircle,
+               aes(x0 = x0, y0 = y0, 
+                   r = r, fill = class))
+
+
+
+```
+
+![usingfacet](faceting.png)
+
+
+```{r}
+ggplot(circles) + 
+  geom_polygon(stat = StatCircle,
+               aes(x0 = x0, y0 = y0, 
+                   r = r, fill = class)) + 
+  facet_wrap(~ class)
+```
+
+
+```{r}
+ggplot(cars) + 
+  aes(x = speed, y = dist) + 
+  geom_point() +
+  aes(x0 = speed, y0 = dist, r = 1) + 
+  geom_polygon(stat = StatCircle) + 
+  aes(fill = speed > 15) + 
+  facet_wrap(~ speed > 15)
+
+```
+
+
+---
+
+```{r}
+ggforce:::StatCircle$compute_group
+ggforce:::StatCircle$compute_panel
+ggforce:::StatCircle$setup_params
+```
+
+
+```{r}
+ggforce:::arcPaths
+```
+
 
 # Step 6: Post Mordem using `layer_data` to look at the data frame
 
 
 ```{r 6}
 baseplot +
-  geom_circle(n = 7, alpha = .2) ->
+  geom_polygon(stat = StatCircle, n = 7, alpha = .2) ->
 p1
 
 layer_data(p1, 2)
 
 baseplot + 
   aes(fill = speed > 6) +
-  geom_circle(n = 7, alpha = .2) ->
+  geom_polygon(stat = StatCircle, n = 7, alpha = .2) ->
 p2
 
-layer_data(p2, 2)
+layer_data(p2, 2) |>
+  slice(1:5)
 ```
 
 
+
+# verbatim
+
+
+
+---
