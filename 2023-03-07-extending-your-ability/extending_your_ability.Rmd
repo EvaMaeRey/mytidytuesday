@@ -91,19 +91,30 @@ ggplot(circles) +
 
 
 ```{r}
-ggplot(cars) + 
-  aes(x = speed, y = dist) + 
-  geom_point() +
-  aes(x0 = speed, y0 = dist, r = 1) + 
+ggplot(cars |> mutate(row = row_number())) + 
+  
+  aes(x0 = speed, y0 = dist, r = 5) + 
   geom_polygon(stat = StatCircle) + 
   aes(fill = speed > 15) + 
   facet_wrap(~ speed > 15)
+```
 
+
+```{r, warning=F}
+last_plot() +
+  aes(group = row) + 
+  geom_point(aes(x = speed, y = dist))
 ```
 
 
 ---
 
+
+```{r}
+knitr::knit_exit()
+
+
+```
 
 
 --------
