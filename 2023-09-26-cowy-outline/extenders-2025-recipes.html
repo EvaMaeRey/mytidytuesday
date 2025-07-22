@@ -208,7 +208,7 @@ count: false
 
 ``` r
 ggplot(data = gapminder_2002) +
-* aes(y = lifeExp)
+* theme_bw(ink = "cadetblue2", paper = alpha("black", .8), base_size = 20)
 ```
 ]
  
@@ -224,8 +224,8 @@ count: false
 
 ``` r
 ggplot(data = gapminder_2002) +
-  aes(y = lifeExp) +
-* aes(x = gdpPercap)
+  theme_bw(ink = "cadetblue2", paper = alpha("black", .8), base_size = 20) +
+* aes(y = lifeExp)
 ```
 ]
  
@@ -241,9 +241,9 @@ count: false
 
 ``` r
 ggplot(data = gapminder_2002) +
+  theme_bw(ink = "cadetblue2", paper = alpha("black", .8), base_size = 20) +
   aes(y = lifeExp) +
-  aes(x = gdpPercap) +
-* geom_point()
+* aes(x = gdpPercap)
 ```
 ]
  
@@ -259,10 +259,10 @@ count: false
 
 ``` r
 ggplot(data = gapminder_2002) +
+  theme_bw(ink = "cadetblue2", paper = alpha("black", .8), base_size = 20) +
   aes(y = lifeExp) +
   aes(x = gdpPercap) +
-  geom_point() +
-* aes(size = pop/1000000000)
+* geom_point()
 ```
 ]
  
@@ -278,6 +278,27 @@ count: false
 
 ``` r
 ggplot(data = gapminder_2002) +
+  theme_bw(ink = "cadetblue2", paper = alpha("black", .8), base_size = 20) +
+  aes(y = lifeExp) +
+  aes(x = gdpPercap) +
+  geom_point() +
+* aes(size = pop/1000000000)
+```
+]
+ 
+.panel2-scatter-auto[
+&lt;img src="extenders-2025-recipes_files/figure-html/scatter_auto_06_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+## Now, we all have Rosling capabilities with ggplot2
+.panel1-scatter-auto[
+
+``` r
+ggplot(data = gapminder_2002) +
+  theme_bw(ink = "cadetblue2", paper = alpha("black", .8), base_size = 20) +
   aes(y = lifeExp) +
   aes(x = gdpPercap) +
   geom_point() +
@@ -287,13 +308,13 @@ ggplot(data = gapminder_2002) +
 ]
  
 .panel2-scatter-auto[
-&lt;img src="extenders-2025-recipes_files/figure-html/scatter_auto_06_output-1.png" width="504" /&gt;
+&lt;img src="extenders-2025-recipes_files/figure-html/scatter_auto_07_output-1.png" width="504" /&gt;
 ]
 
 &lt;style&gt;
 .panel1-scatter-auto {
   color: black;
-  width: 38.6060606060606%;
+  width: 39.2%;
   hight: 32%;
   float: left;
   padding-left: 1%;
@@ -301,7 +322,7 @@ ggplot(data = gapminder_2002) +
 }
 .panel2-scatter-auto {
   color: black;
-  width: 59.3939393939394%;
+  width: 58.8%;
   hight: 32%;
   float: left;
   padding-left: 1%;
@@ -1223,9 +1244,7 @@ library(ggbump)
 
 us_cohort_life_exp_rank_2020 %&gt;%
   ggplot() +
-* aes(x = year,
-*     y = life_exp_rank,
-*     color = country)
+* aes(x = year)
 ```
 ]
  
@@ -1245,10 +1264,8 @@ library(ggbump)
 
 us_cohort_life_exp_rank_2020 %&gt;%
   ggplot() +
-  aes(x = year,
-      y = life_exp_rank,
-      color = country) +
-* geom_point()
+  aes(x = year) +
+* aes(y = life_exp_rank)
 ```
 ]
  
@@ -1268,16 +1285,61 @@ library(ggbump)
 
 us_cohort_life_exp_rank_2020 %&gt;%
   ggplot() +
-  aes(x = year,
-      y = life_exp_rank,
-      color = country) +
-  geom_point() +
-* geom_bump()  #&lt;&lt;
+  aes(x = year) +
+  aes(y = life_exp_rank) +
+* geom_point()
 ```
 ]
  
 .panel2-bump-auto[
 &lt;img src="extenders-2025-recipes_files/figure-html/bump_auto_07_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-bump-auto[
+
+``` r
+library(tidyverse)
+library(ggbump)
+
+us_cohort_life_exp_rank_2020 %&gt;%
+  ggplot() +
+  aes(x = year) +
+  aes(y = life_exp_rank) +
+  geom_point() +
+* aes(color = country)
+```
+]
+ 
+.panel2-bump-auto[
+&lt;img src="extenders-2025-recipes_files/figure-html/bump_auto_08_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-bump-auto[
+
+``` r
+library(tidyverse)
+library(ggbump)
+
+us_cohort_life_exp_rank_2020 %&gt;%
+  ggplot() +
+  aes(x = year) +
+  aes(y = life_exp_rank) +
+  geom_point() +
+  aes(color = country) +
+* geom_bump()  #&lt;&lt;
+```
+]
+ 
+.panel2-bump-auto[
+&lt;img src="extenders-2025-recipes_files/figure-html/bump_auto_09_output-1.png" width="504" /&gt;
 ]
 
 &lt;style&gt;
@@ -1377,12 +1439,6 @@ Fall 2021 Independent studies... https://github.com/EvaMaeRey/ay_2022_2_advanced
 
 ---
 
-
-
-
-
----
-
 ## Spring 2022 independent study: make a tutorial. 
 
 ### w/ Morgan: 'a no-struggle introduction to layer extension, for unsophisticated ggplot2 users'
@@ -1421,13 +1477,16 @@ Fall 2021 Independent studies... https://github.com/EvaMaeRey/ay_2022_2_advanced
 
 # Stat-based geom_*() functions is focus.  Why?
 
-## - Stats easy,
---
-(can be relatively easy)
+## - Stats are easy*
+
 
 --
 
 ## - `geoms_\*()`s are familiar
+
+--
+
+* relatively easy compared to Geoms and position...
 
 ---
 
@@ -1449,6 +1508,8 @@ Fall 2021 Independent studies... https://github.com/EvaMaeRey/ay_2022_2_advanced
 ## May 2025 survey + focus group...
 
 ---
+
+## Participant profile
 
 &lt;img src="../../posit-consulting/report_figures/unnamed-chunk-12-1.svg" width="25%" /&gt;&lt;img src="../../posit-consulting/report_figures/unnamed-chunk-12-2.svg" width="25%" /&gt;&lt;img src="../../posit-consulting/report_figures/unnamed-chunk-12-3.svg" width="25%" /&gt;&lt;img src="../../posit-consulting/report_figures/unnamed-chunk-13-1.svg" width="25%" /&gt;&lt;img src="../../posit-consulting/report_figures/unnamed-chunk-13-2.svg" width="25%" /&gt;&lt;img src="../../posit-consulting/report_figures/unnamed-chunk-15-1.svg" width="25%" /&gt;&lt;img src="../../posit-consulting/report_figures/unnamed-chunk-16-1.svg" width="25%" /&gt;&lt;img src="../../posit-consulting/report_figures/unnamed-chunk-19-1.svg" width="25%" /&gt;
 
@@ -1483,14 +1544,17 @@ Fall 2021 Independent studies... https://github.com/EvaMaeRey/ay_2022_2_advanced
 ---
 
 
-![](../../posit-consulting/report_figures/unnamed-chunk-25-1.svg)![](../../posit-consulting/report_figures/unnamed-chunk-26-1.svg)![](../../posit-consulting/report_figures/unnamed-chunk-27-1.svg)![](../../posit-consulting/report_figures/unnamed-chunk-30-1.svg)
+## Participant feedback
+
+
+![](../../posit-consulting/report_figures/unnamed-chunk-23-1.svg)![](../../posit-consulting/report_figures/unnamed-chunk-25-1.svg)![](../../posit-consulting/report_figures/unnamed-chunk-26-1.svg)![](../../posit-consulting/report_figures/unnamed-chunk-27-1.svg)![](../../posit-consulting/report_figures/unnamed-chunk-29-1.svg)![](../../posit-consulting/report_figures/unnamed-chunk-30-1.svg)![](../../posit-consulting/report_figures/unnamed-chunk-32-1.svg)![](../../posit-consulting/report_figures/unnamed-chunk-33-1.svg)
 
 
 
 
 ---
 
-#  'You are here𐄂'
+#  'You are here 𐄂'
 
 --
 
@@ -1549,9 +1613,7 @@ https://github.com/tidyverse/ggplot2/pull/6143
 
 ---
 
-# Epilogue
-
-## our vline at mean of x motivating example w/ ggplot2 4.0.0 stat_manual... Not bad!
+### ggplot2 4.0.0 Epilogue: our vline at mean of x motivating example w/ ggplot2 4.0.0 stat_manual... Not bad!
 
 
 ``` r
@@ -1570,13 +1632,13 @@ last_plot() +
 
 ---
 
-# And writing `geom_xmean` w/ 'easy recipes' X ggplot2 4.0.0's make_constructor()?
+## Willing to type a tad more: `geom_xmean` 'easy recipes approach' X ggplot2 4.0.0's make_constructor()?
 
 
 
 ---
 
-# the ggplot2 experience!
+# --&gt; the ggplot2 experience!
 
 
 ``` r
@@ -1584,16 +1646,12 @@ ggplot(airquality) +
   aes(x = Ozone) +
   geom_histogram() +
 * geom_xmean()
-```
 
-&lt;img src="extenders-2025-recipes_files/figure-html/unnamed-chunk-25-1.png" width="25%" /&gt;
-
-``` r
 last_plot() + 
   facet_grid(rows = vars(Month))
 ```
 
-&lt;img src="extenders-2025-recipes_files/figure-html/unnamed-chunk-25-2.png" width="25%" /&gt;
+&lt;img src="extenders-2025-recipes_files/figure-html/unnamed-chunk-25-1.png" width="25%" /&gt;&lt;img src="extenders-2025-recipes_files/figure-html/unnamed-chunk-25-2.png" width="25%" /&gt;
 
 
 ---

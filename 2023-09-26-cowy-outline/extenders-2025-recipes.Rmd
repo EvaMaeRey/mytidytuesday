@@ -221,10 +221,11 @@ gapminder_2002
 
 ---
 
-`r chunk_reveal("scatter", title = "## Now, we all have Rosling capabilities with ggplot2")`
+`r chunk_reveal("scatter", title = "## Now, we all have Rosling capabilities with ggplot2", widths = c(2,3))`
 
 ```{r scatter, include = F}
 ggplot(data = gapminder_2002) + #BREAK1
+  theme_bw(ink = "cadetblue2", paper = alpha("black", .8), base_size = 20, legend.position = "none") +
   aes(y = lifeExp) + #BREAK2
   aes(x = gdpPercap) + #BREAK3
   geom_point() +  #BREAK5
@@ -372,10 +373,10 @@ library(ggbump)
 
 us_cohort_life_exp_rank_2020 %>% 
   ggplot() + 
-  aes(x = year, 
-      y = life_exp_rank, 
-      color = country) + 
+  aes(x = year) + 
+  aes(y = life_exp_rank) + 
   geom_point() + 
+  aes(color = country) + 
   geom_bump() #<<
 ```
 
@@ -459,12 +460,6 @@ Fall 2021 Independent studies... https://github.com/EvaMaeRey/ay_2022_2_advanced
 
 ---
 
-
-
-
-
----
-
 ## Spring 2022 independent study: make a tutorial. 
 
 ### w/ Morgan: 'a no-struggle introduction to layer extension, for unsophisticated ggplot2 users'
@@ -503,13 +498,16 @@ Fall 2021 Independent studies... https://github.com/EvaMaeRey/ay_2022_2_advanced
 
 # Stat-based geom_*() functions is focus.  Why?
 
-## - Stats easy,
---
-(can be relatively easy)
+## - Stats are easy*
+
 
 --
 
 ## - `geoms_\*()`s are familiar
+
+--
+
+* relatively easy compared to Geoms and position...
 
 ---
 
@@ -531,6 +529,8 @@ Fall 2021 Independent studies... https://github.com/EvaMaeRey/ay_2022_2_advanced
 ## May 2025 survey + focus group...
 
 ---
+
+## Participant profile
 
 ```{r, echo = F, fig.show='hold', out.width="25%"}
 files <- fs::dir_ls("../../posit-consulting/report_figures/")
@@ -584,13 +584,21 @@ knitr::include_graphics("../../posit-consulting/done.png")
 ---
 
 
+## Participant feedback
+
+
 ```{r, echo = F, fig.show='hold'}
 files <- fs::dir_ls("../../posit-consulting/report_figures/")
 
+knitr::include_graphics(path = files[11])
 knitr::include_graphics(path = files[12])
 knitr::include_graphics(path = files[13])
 knitr::include_graphics(path = files[14])
+knitr::include_graphics(path = files[15])
 knitr::include_graphics(path = files[16])
+knitr::include_graphics(path = files[17])
+knitr::include_graphics(path = files[18])
+
 ```
 
 
@@ -598,7 +606,7 @@ knitr::include_graphics(path = files[16])
 
 ---
 
-#  'You are here𐄂'
+#  'You are here 𐄂'
 
 --
 
@@ -648,9 +656,7 @@ https://github.com/tidyverse/ggplot2/pull/6143
 
 ---
 
-# Epilogue
-
-## our vline at mean of x motivating example w/ ggplot2 4.0.0 stat_manual... Not bad!
+### ggplot2 4.0.0 Epilogue: our vline at mean of x motivating example w/ ggplot2 4.0.0 stat_manual... Not bad!
 
 ```{r, echo = T, fig.show="hold", out.width="25%"}
 library(ggplot2)
@@ -666,7 +672,7 @@ last_plot() +
 
 ---
 
-# And writing `geom_xmean` w/ 'easy recipes' X ggplot2 4.0.0's make_constructor()?
+## Willing to type a tad more: `geom_xmean` 'easy recipes approach' X ggplot2 4.0.0's make_constructor()?
 
 ```{r, fig.show="hold"}
 compute_means <- function(data, scales){
@@ -683,9 +689,9 @@ geom_xmean <- make_constructor(GeomVline, stat = StatXmean)
 
 ---
 
-# the ggplot2 experience!
+# --> the ggplot2 experience!
 
-```{r, out.width="25%", echo= T}
+```{r, out.width="25%", echo= T, fig.show='hold'}
 ggplot(airquality) +
   aes(x = Ozone) +
   geom_histogram() +
