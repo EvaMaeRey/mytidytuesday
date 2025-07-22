@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Everyday ggplot2 extension</title>
+    <title>Easy geom_*() recipes</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Evangeline ‘Gina’ Reynolds, ggplot2 extenders meetup, July 2025" />
+    <meta name="author" content="Evangeline ‘Gina’ Reynolds, ggplot2 extenders meetup, July 16, 2025" />
     <script src="libs/header-attrs-2.26/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
@@ -14,13 +14,13 @@
 class: center, middle, inverse, title-slide
 
 .title[
-# Everyday ggplot2 extension
+# Easy geom_*() recipes
 ]
 .subtitle[
-## Easy geom_*() recipes: introducing layer extension
+## and the ggplot2 4.0.0 release
 ]
 .author[
-### Evangeline ‘Gina’ Reynolds, ggplot2 extenders meetup, July 2025
+### Evangeline ‘Gina’ Reynolds, ggplot2 extenders meetup, July 16, 2025
 ]
 
 ---
@@ -46,7 +46,7 @@ class: center, middle, inverse, title-slide
 
 --
 
-## What the next release means for the recipes
+## What the ggplot2 4.0.0 release means for the recipes
 
 
 
@@ -59,11 +59,11 @@ class: center, middle, inverse, title-slide
 
 --
 
-### Summer 2017, Started using ggplot2 in 'Zurich Summer School for Women in Political Methodology ...' ggplot2 workshop run by Denise Traber
+### Summer 2017, Started using ggplot2 in 'Zurich Summer School for Women in Political Methodology ...' ggplot2 workshop run by **Denise Traber**
 
----
+--
 
-### 'Makeover Monday' (Tableau community's TidyTuesday) Eva Murry and Andy Krebel, Heard about on Data Stories, A podcast on data visualization with Enrico Bertini and Moritz Stefaner
+### 'Makeover Monday' (Tableau community's TidyTuesday) **Eva Murry** and **Andy Krebel**, Heard about on Data Stories, A podcast on data visualization with **Enrico Bertini** and **Moritz Stefaner**
 
 --
 
@@ -72,7 +72,11 @@ class: center, middle, inverse, title-slide
 
 ---
 
-&gt; ### "When I need to make sense of some data and [ggplot2] continues to be just the best thing ever." -- Dewey Dunningham
+&gt; ### "When I need to make sense of some data ... [ggplot2] continues to be just the best thing ever." -- Dewey Dunningham
+
+--
+
+# Me: Same!  You had me at hello.
 
 
 ---
@@ -154,7 +158,27 @@ class: inverse, center, middle
 &gt; # "the Grammar of Graphics makes [building plots] easy because you've just got all these, like, little nice decomposable components" -- Hadley Wickham
 
 
+---
 
+
+Hadley Wickham, on it's motivation:
+
+&gt; ### And, you know, I'd get a dataset. And, *in my head I could very clearly kind of picture*, I want to put this on the x-axis. Let's put this on the y-axis, draw a line, put some points here, break it up by this variable.
+
+--
+&gt; ### And then, like, getting that vision out of my head, and into reality, it's just really, really hard. Just, like, felt harder than it should be. Like, there's a lot of custom programming involved,
+
+---
+
+&gt; ### where I just felt, like, to me, I just wanted to say, like, you know, *this is what I'm thinking, this is how I'm picturing this plot. Like you're the computer 'Go and do it'.*
+
+--
+&gt; ### ... and I'd also been reading about the Grammar of Graphics by Leland Wilkinson, I got to meet him a couple of times and ... I was, like, this book has been, like, written for me.
+https://www.trifacta.com/podcast/tidy-data-with-hadley-wickham/
+
+
+
+---
 
 
 
@@ -300,38 +324,13 @@ ggplot(data = gapminder_2002) +
 ---
 class: inverse, center, middle
 
-&gt; # "I'd never know quite how to get things done with matplotlib.  But with ggplot2 I could understand it without even looking at documentation - Hassan Kibirige (paraphrase)
+&gt; # "I'd never know quite how to get things done with matplotlib.  But with ggplot2 I could understand it without even looking at documentation (paraphrase) - Hassan Kibirige (plotnine: 'grammar of graphics for python' author)
 
 
 
 ---
 
-
-&lt;!-- --- --&gt;
-
-
-&lt;!-- Hadley Wickham, on it's motivation: --&gt;
-
-&lt;!-- &gt; ### And, you know, I'd get a dataset. And, *in my head I could very clearly kind of picture*, I want to put this on the x-axis. Let's put this on the y-axis, draw a line, put some points here, break it up by this variable. --&gt;
-
-&lt;!-- -- --&gt;
-&lt;!-- &gt; ### And then, like, getting that vision out of my head, and into reality, it's just really, really hard. Just, like, felt harder than it should be. Like, there's a lot of custom programming involved, --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- &gt; ### where I just felt, like, to me, I just wanted to say, like, you know, *this is what I'm thinking, this is how I'm picturing this plot. Like you're the computer 'Go and do it'.* --&gt;
-
-&lt;!-- -- --&gt;
-&lt;!-- &gt; ### ... and I'd also been reading about the Grammar of Graphics by Leland Wilkinson, I got to meet him a couple of times and ... I was, like, this book has been, like, written for me. --&gt;
-&lt;!-- https://www.trifacta.com/podcast/tidy-data-with-hadley-wickham/ --&gt;
-
-
-&lt;!-- --- --&gt;
-
----
-
-&lt;img src="../../ggram/transcriber_of_imagined_plots.png" width="25%" /&gt;
-
+&lt;img src="../../ggram/transcriber_of_imagined_plots.png" width="45%" /&gt;
 
 ---
 
@@ -341,7 +340,7 @@ class: inverse, center, middle
 --
 
 
-## And started to feel a a little bit of pain even w/ ggplot2. 
+## And started to feel a little bit of pain even with ggplot2. 
 
 --
 
@@ -1321,7 +1320,7 @@ us_cohort_life_exp_rank_2020 %&gt;%
 
 ---
 
-## Saw Thomas Lin Pederson's talk 'Extending your ability to extend ggplot2' January 2020  geom_circle()
+## Saw Thomas Lin Pederson's talk 'Extending your ability to extend ggplot2' January 2020  geom_circle() - (live at RStudio::Conf)
 
 --
 
@@ -1349,6 +1348,23 @@ And it was everything I'd hoped for!
 
 ---
 
+My experience, might be pretty typical... 2x I've heard folks say 'extension is not for the faint of heart'.
+
+---
+
+![](../../posit-consulting/report_figures/unnamed-chunk-35-1.svg)&lt;!-- --&gt;
+
+---
+
+![](../../posit-consulting/report_figures/unnamed-chunk-35-2.svg)&lt;!-- --&gt;
+
+
+---
+
+![](../../posit-consulting/report_figures/unnamed-chunk-35-3.svg)&lt;!-- --&gt;
+
+---
+
 Wanted to fit in more extension to my life 
 
 --
@@ -1357,6 +1373,11 @@ Fall 2021 Independent studies... https://github.com/EvaMaeRey/ay_2022_2_advanced
 
 - `geom_high_leverage` Morgan 
 - `geom_high_influence` Madison
+
+
+---
+
+
 
 
 
@@ -1368,38 +1389,52 @@ Fall 2021 Independent studies... https://github.com/EvaMaeRey/ay_2022_2_advanced
 
 ---
 
-## 3 examples, 3 exercise, 3 objectives:
+## 3 examples, 3 exercises, 3 objectives:
 
 --
 
-- 1. How to prepare compute for group-wise computation in a layer
+## - 1. Learn how to prepare compute for group-wise computation in a layer
 
 --
 
-- 2. How to define a Stat (and test)
+## - 2. Learn how to define a Stat (and test)
 
 --
 
-- 3. How to combine a Stat and Geom into a user-facing function
+## - 3. Learn how to combine a Stat and Geom into a user-facing function
 
 ---
 
 ## How to make it easy?
 
-- easy, familiar (boring) compute
-- step-by-step 
-- pre step - connect it to what you know (get the job done with base ggplot2)
+## - easy, familiar (boring) compute
+
+--
+
+## - step-by-step 
+
+--
+
+## - pre step (Step 0) - connect it to what you know (get the job done with base ggplot2)
 
 ---
 
-# Stat based geom_*() functions is focus.  Why?
+# Stat-based geom_*() functions is focus.  Why?
 
-- Stats are easy,
-- `geoms_\*()`s are familiar
+## - Stats easy,
+--
+(can be relatively easy)
+
+--
+
+## - `geoms_\*()`s are familiar
 
 ---
 
-# &gt; I've used ggplot for a very long time... Conceptually I get \[the difference between `stat_*()` functions and `geom_()*`s functions.\] But... I would not put `+ stat_*()` anything. That's not something I would naturally do after using the gg platform... for 10 years.
+# Stat-based geom_*() functions is focus.  Why?
+
+
+#### &gt; I've used ggplot for a very long time... Conceptually I get \[the difference between `stat_*()` functions and `geom_()*`s functions.\] But... I would not put `+ stat_*()` anything. That's not something I would naturally do after using the gg platform... for 10 years.
 
 ---
 
@@ -1415,7 +1450,7 @@ Fall 2021 Independent studies... https://github.com/EvaMaeRey/ay_2022_2_advanced
 
 ---
 
-&lt;img src="../../posit-consulting/report_figures/unnamed-chunk-12-1.svg" width="40%" /&gt;&lt;img src="../../posit-consulting/report_figures/unnamed-chunk-12-2.svg" width="40%" /&gt;&lt;img src="../../posit-consulting/report_figures/unnamed-chunk-12-3.svg" width="40%" /&gt;&lt;img src="../../posit-consulting/report_figures/unnamed-chunk-13-1.svg" width="40%" /&gt;
+&lt;img src="../../posit-consulting/report_figures/unnamed-chunk-12-1.svg" width="25%" /&gt;&lt;img src="../../posit-consulting/report_figures/unnamed-chunk-12-2.svg" width="25%" /&gt;&lt;img src="../../posit-consulting/report_figures/unnamed-chunk-12-3.svg" width="25%" /&gt;&lt;img src="../../posit-consulting/report_figures/unnamed-chunk-13-1.svg" width="25%" /&gt;&lt;img src="../../posit-consulting/report_figures/unnamed-chunk-13-2.svg" width="25%" /&gt;&lt;img src="../../posit-consulting/report_figures/unnamed-chunk-15-1.svg" width="25%" /&gt;&lt;img src="../../posit-consulting/report_figures/unnamed-chunk-16-1.svg" width="25%" /&gt;&lt;img src="../../posit-consulting/report_figures/unnamed-chunk-19-1.svg" width="25%" /&gt;
 
 
 
@@ -1443,12 +1478,9 @@ Fall 2021 Independent studies... https://github.com/EvaMaeRey/ay_2022_2_advanced
 
 &lt;img src="../../posit-consulting/done.png" width="933" /&gt;
 
+
+
 ---
-
-
-
-&lt;img src="../../posit-consulting/step2.png" width="933" /&gt;
-
 
 
 ![](../../posit-consulting/report_figures/unnamed-chunk-25-1.svg)![](../../posit-consulting/report_figures/unnamed-chunk-26-1.svg)![](../../posit-consulting/report_figures/unnamed-chunk-27-1.svg)![](../../posit-consulting/report_figures/unnamed-chunk-30-1.svg)
@@ -1458,7 +1490,7 @@ Fall 2021 Independent studies... https://github.com/EvaMaeRey/ay_2022_2_advanced
 
 ---
 
-#  'X - you are here'
+#  'You are here𐄂'
 
 --
 
@@ -1495,7 +1527,7 @@ function (mapping = NULL, data = NULL, stat = "medians", position = "identity",
         position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
         params = list2(na.rm = na.rm, ...))
 }
-&lt;environment: 0x7fac62d2ebe0&gt;
+&lt;environment: 0x7fe3c01fe220&gt;
 ```
 
 
@@ -1503,7 +1535,7 @@ function (mapping = NULL, data = NULL, stat = "medians", position = "identity",
 
 ---
 
-#### Also,
+### Also,
 
 --
 
@@ -1514,9 +1546,12 @@ function (mapping = NULL, data = NULL, stat = "medians", position = "identity",
 
 https://github.com/tidyverse/ggplot2/pull/6143
 
----
 
 ---
+
+# Epilogue
+
+## our vline at mean of x motivating example w/ ggplot2 4.0.0 stat_manual... Not bad!
 
 
 ``` r
@@ -1531,42 +1566,53 @@ last_plot() +
   facet_grid(rows = vars(Month))
 ```
 
-&lt;img src="extenders-2025-recipes_files/figure-html/unnamed-chunk-21-1.png" width="504" 25% /&gt;&lt;img src="extenders-2025-recipes_files/figure-html/unnamed-chunk-21-2.png" width="504" 25% /&gt;
+&lt;img src="extenders-2025-recipes_files/figure-html/unnamed-chunk-23-1.png" width="25%" /&gt;&lt;img src="extenders-2025-recipes_files/figure-html/unnamed-chunk-23-2.png" width="25%" /&gt;
 
 ---
 
+# And writing `geom_xmean` w/ 'easy recipes' X ggplot2 4.0.0's make_constructor()?
+
+
+
+---
+
+# the ggplot2 experience!
+
 
 ``` r
-library(statexpress)
-
-compute_means &lt;- function(data, scales){ 
-  data |&gt; 
-    summarise(xintercept = mean(x, na.rm = T)) 
-  }
-
 ggplot(airquality) +
   aes(x = Ozone) +
   geom_histogram() +
-  qlayer(geom = GeomVline, stat = qstat(compute_means))
+* geom_xmean()
+```
 
+&lt;img src="extenders-2025-recipes_files/figure-html/unnamed-chunk-25-1.png" width="25%" /&gt;
+
+``` r
 last_plot() + 
   facet_grid(rows = vars(Month))
 ```
 
-&lt;img src="extenders-2025-recipes_files/figure-html/unnamed-chunk-22-1.png" width="504" 25% /&gt;&lt;img src="extenders-2025-recipes_files/figure-html/unnamed-chunk-22-2.png" width="504" 25% /&gt;
+&lt;img src="extenders-2025-recipes_files/figure-html/unnamed-chunk-25-2.png" width="25%" /&gt;
 
 
+---
 
-
-## So...  Now there are 4 recipes, where compute_panel is introduced in recipe 2 and used in 3 and 4. 
-
---
-
-## Are compute_panel recipes they still accessible, interesting enough, correct?
+## But, stat_manual made me feel I should cover more territory (lest you ask why do I need the recipes, I can get everything done w/ stat_manual)
 
 --
 
-## Do you still feel motivated by compute_group Stat example?
+So now there are 4 recipes, where compute_panel is introduced (not just compute_group) in recipe 2 and used in 3 and 4. 
+
+---
+
+New questions...
+
+## Are `compute_panel` recipes they still accessible, interesting enough, correct?
+
+--
+
+## Do you still feel motivated by `compute_group` Stat example given stat_manual?
 
 
 ---
@@ -1599,9 +1645,6 @@ last_plot() +
 
 
 
-
-
-![](../../posit-consulting/report_figures/unnamed-chunk-35-1.svg)&lt;!-- --&gt;![](../../posit-consulting/report_figures/unnamed-chunk-35-2.svg)&lt;!-- --&gt;![](../../posit-consulting/report_figures/unnamed-chunk-35-3.svg)&lt;!-- --&gt;
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
