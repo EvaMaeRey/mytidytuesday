@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 # Everyday ggplot2 extension
 ]
 .subtitle[
-## New approaches to introducing layer extension
+## Easy geom_*() recipes: introducing layer extension
 ]
 .author[
 ### Evangeline ‘Gina’ Reynolds, ggplot2 extenders meetup, July 2025
@@ -28,62 +28,66 @@ class: center, middle, inverse, title-slide
 
 
 
-## Overview:
+#  Outline
 
-### 1. Creating new layers (geom_* functions) in ggplot2 extension has been described as an 'involved process'. 
+## when life w/ ggplot2 began
+
+--
+
+## when I felt like I started to need layer extension
 
 --
 
-### 2. I'll discuss 'easy-geom-recipes' designed to make getting into layer extension more fun!
-
-
----
-
-
-
----
-
-
-### 1. Why ggplot2
-### 2. Limitations of base ggplot2
-### 3. Promise of extension
-### 4. ggplot2 super-users not leveraging extension
-### 5. New super-user-tailored educational material
-### 6. Challenges on the horizon
-
-
-
----
-
-class: middle, inverse, center
-# Part 1. So ggplot2...
+## my experience with learning extension
 
 --
-#               ... what's the fuss?
+
+## And how the recipes came to be...
+
+--
+
+## What the next release means for the recipes
 
 
 
 
 
 
+---
+
+### When did my ggplot2 life begin?
+
+--
+
+### Summer 2017, Started using ggplot2 in 'Zurich Summer School for Women in Political Methodology ...' ggplot2 workshop run by Denise Traber
+
+---
+
+### 'Makeover Monday' (Tableau community's TidyTuesday) Eva Murry and Andy Krebel, Heard about on Data Stories, A podcast on data visualization with Enrico Bertini and Moritz Stefaner
+
+--
+
+### *When did your ggplot2 life begin?*
 
 
+---
 
-&lt;!-- --- --&gt;
+&gt; ### "When I need to make sense of some data and [ggplot2] continues to be just the best thing ever." -- Dewey Dunningham
 
-&lt;!-- # gg in ggplot2 --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- # Grammar of Graphics --&gt;
 
 ---
 class: middle, inverse, center
 
 
-# It lets you *'speak your plot into existence'*. (Thomas Lin Pederson) 
+# It lets you *'speak your plot into existence'*. (Thomas Lin Pederson) (so your data can easily speak back to you! i.e. reveal patterns)
 
 ---
+
+
+
+
+
+
 
 
 # Hans Rosling &amp; BBC in 2010  
@@ -147,17 +151,7 @@ class: inverse, center, middle
 ---
 class: inverse, center, middle
 
-# And ggplot2 also affords this build-up-your-plot-bit-by-bit experience.  
-
---
-# i.e. 'speaking your plot into existence.' 
-
-
-
-
-
-
-
+&gt; # "the Grammar of Graphics makes [building plots] easy because you've just got all these, like, little nice decomposable components" -- Hadley Wickham
 
 
 
@@ -304,93 +298,830 @@ ggplot(data = gapminder_2002) +
 
 
 ---
-
-
-## We get the 'Hans Rosling' speak-it experience ...
-
---
-## ... because ggplot2 is based on the grammar of graphics, (gg = grammar of graphics) ...
-
---
-## ... which breaks up the plot elements into *orthogonal* parts ...
-
---
-## ... and allows user to manipulate those parts bit by bit.
-
----
 class: inverse, center, middle
 
-&gt; # "the Grammar of Graphics makes [building plots] easy because you've just got all these, like, little nice decomposable components" -- Hadley Wickham
+&gt; # "I'd never know quite how to get things done with matplotlib.  But with ggplot2 I could understand it without even looking at documentation - Hassan Kibirige (paraphrase)
 
 
 
 ---
 
-## Leland Wilkinson identified orthogonal elements in 'The Grammar of Graphics'. Wilkinson on the Policy Viz Podcast [here](https://policyviz.com/podcast/episode-201-leland-wilkinson/).
 
-&lt;img src="https://miro.medium.com/max/1400/1*MMZuYgeC_YjXNC1r4D4sog.png" width="75%" /&gt;
+&lt;!-- --- --&gt;
+
+
+&lt;!-- Hadley Wickham, on it's motivation: --&gt;
+
+&lt;!-- &gt; ### And, you know, I'd get a dataset. And, *in my head I could very clearly kind of picture*, I want to put this on the x-axis. Let's put this on the y-axis, draw a line, put some points here, break it up by this variable. --&gt;
+
+&lt;!-- -- --&gt;
+&lt;!-- &gt; ### And then, like, getting that vision out of my head, and into reality, it's just really, really hard. Just, like, felt harder than it should be. Like, there's a lot of custom programming involved, --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- &gt; ### where I just felt, like, to me, I just wanted to say, like, you know, *this is what I'm thinking, this is how I'm picturing this plot. Like you're the computer 'Go and do it'.* --&gt;
+
+&lt;!-- -- --&gt;
+&lt;!-- &gt; ### ... and I'd also been reading about the Grammar of Graphics by Leland Wilkinson, I got to meet him a couple of times and ... I was, like, this book has been, like, written for me. --&gt;
+&lt;!-- https://www.trifacta.com/podcast/tidy-data-with-hadley-wickham/ --&gt;
+
+
+&lt;!-- --- --&gt;
+
+---
+
+&lt;img src="../../ggram/transcriber_of_imagined_plots.png" width="25%" /&gt;
 
 
 ---
 
+## Taught Intro Stats w/ tidyverse/ggplot2 in Dresden and Denver (2018-2020)
 
-
-# Skip at COWY: discussing origins of ggplot2
 
 --
 
-Hadley Wickham, on it's motivation:
 
-&gt; ### And, you know, I'd get a dataset. And, *in my head I could very clearly kind of picture*, I want to put this on the x-axis. Let's put this on the y-axis, draw a line, put some points here, break it up by this variable.
-
---
-&gt; ### And then, like, getting that vision out of my head, and into reality, it's just really, really hard. Just, like, felt harder than it should be. Like, there's a lot of custom programming involved,
-
----
-
-&gt; ### where I just felt, like, to me, I just wanted to say, like, you know, *this is what I'm thinking, this is how I'm picturing this plot. Like you're the computer 'Go and do it'.*
+## And started to feel a a little bit of pain even w/ ggplot2. 
 
 --
-&gt; ### ... and I'd also been reading about the Grammar of Graphics by Leland Wilkinson, I got to meet him a couple of times and ... I was, like, this book has been, like, written for me.
-https://www.trifacta.com/podcast/tidy-data-with-hadley-wickham/
+
+## Sometimes we don't have the vocabulary that's needed to keep 'speaking' fluently.
+
+---
+
+## Example: What's the graphical poem here? 
+
+&lt;img src="extenders-2025-recipes_files/figure-html/unnamed-chunk-9-1.png" width="504" /&gt;
+
+???
+Consider for example, a the seemingly simple enterprise of adding a vertical line at the mean of x, perhaps atop a histogram or density plot.
+
+
+---
+
+count: false
+ 
+### What's the *base* ggplot2 experience
+.panel1-basic-auto[
+
+``` r
+*airquality
+```
+]
+ 
+.panel2-basic-auto[
+
+```
+    Ozone Solar.R Wind Temp Month Day
+1      41     190  7.4   67     5   1
+2      36     118  8.0   72     5   2
+3      12     149 12.6   74     5   3
+4      18     313 11.5   62     5   4
+5      NA      NA 14.3   56     5   5
+6      28      NA 14.9   66     5   6
+7      23     299  8.6   65     5   7
+8      19      99 13.8   59     5   8
+9       8      19 20.1   61     5   9
+10     NA     194  8.6   69     5  10
+11      7      NA  6.9   74     5  11
+12     16     256  9.7   69     5  12
+13     11     290  9.2   66     5  13
+14     14     274 10.9   68     5  14
+15     18      65 13.2   58     5  15
+16     14     334 11.5   64     5  16
+17     34     307 12.0   66     5  17
+18      6      78 18.4   57     5  18
+19     30     322 11.5   68     5  19
+20     11      44  9.7   62     5  20
+21      1       8  9.7   59     5  21
+22     11     320 16.6   73     5  22
+23      4      25  9.7   61     5  23
+24     32      92 12.0   61     5  24
+25     NA      66 16.6   57     5  25
+26     NA     266 14.9   58     5  26
+27     NA      NA  8.0   57     5  27
+28     23      13 12.0   67     5  28
+29     45     252 14.9   81     5  29
+30    115     223  5.7   79     5  30
+31     37     279  7.4   76     5  31
+32     NA     286  8.6   78     6   1
+33     NA     287  9.7   74     6   2
+34     NA     242 16.1   67     6   3
+35     NA     186  9.2   84     6   4
+36     NA     220  8.6   85     6   5
+37     NA     264 14.3   79     6   6
+38     29     127  9.7   82     6   7
+39     NA     273  6.9   87     6   8
+40     71     291 13.8   90     6   9
+41     39     323 11.5   87     6  10
+42     NA     259 10.9   93     6  11
+43     NA     250  9.2   92     6  12
+44     23     148  8.0   82     6  13
+45     NA     332 13.8   80     6  14
+46     NA     322 11.5   79     6  15
+47     21     191 14.9   77     6  16
+48     37     284 20.7   72     6  17
+49     20      37  9.2   65     6  18
+50     12     120 11.5   73     6  19
+51     13     137 10.3   76     6  20
+52     NA     150  6.3   77     6  21
+53     NA      59  1.7   76     6  22
+54     NA      91  4.6   76     6  23
+55     NA     250  6.3   76     6  24
+56     NA     135  8.0   75     6  25
+57     NA     127  8.0   78     6  26
+58     NA      47 10.3   73     6  27
+59     NA      98 11.5   80     6  28
+60     NA      31 14.9   77     6  29
+61     NA     138  8.0   83     6  30
+62    135     269  4.1   84     7   1
+63     49     248  9.2   85     7   2
+64     32     236  9.2   81     7   3
+65     NA     101 10.9   84     7   4
+66     64     175  4.6   83     7   5
+67     40     314 10.9   83     7   6
+68     77     276  5.1   88     7   7
+69     97     267  6.3   92     7   8
+70     97     272  5.7   92     7   9
+71     85     175  7.4   89     7  10
+72     NA     139  8.6   82     7  11
+73     10     264 14.3   73     7  12
+74     27     175 14.9   81     7  13
+75     NA     291 14.9   91     7  14
+76      7      48 14.3   80     7  15
+77     48     260  6.9   81     7  16
+78     35     274 10.3   82     7  17
+79     61     285  6.3   84     7  18
+80     79     187  5.1   87     7  19
+81     63     220 11.5   85     7  20
+82     16       7  6.9   74     7  21
+83     NA     258  9.7   81     7  22
+84     NA     295 11.5   82     7  23
+85     80     294  8.6   86     7  24
+86    108     223  8.0   85     7  25
+87     20      81  8.6   82     7  26
+88     52      82 12.0   86     7  27
+89     82     213  7.4   88     7  28
+90     50     275  7.4   86     7  29
+91     64     253  7.4   83     7  30
+92     59     254  9.2   81     7  31
+93     39      83  6.9   81     8   1
+94      9      24 13.8   81     8   2
+95     16      77  7.4   82     8   3
+96     78      NA  6.9   86     8   4
+97     35      NA  7.4   85     8   5
+98     66      NA  4.6   87     8   6
+99    122     255  4.0   89     8   7
+100    89     229 10.3   90     8   8
+101   110     207  8.0   90     8   9
+102    NA     222  8.6   92     8  10
+103    NA     137 11.5   86     8  11
+104    44     192 11.5   86     8  12
+105    28     273 11.5   82     8  13
+106    65     157  9.7   80     8  14
+107    NA      64 11.5   79     8  15
+108    22      71 10.3   77     8  16
+109    59      51  6.3   79     8  17
+110    23     115  7.4   76     8  18
+111    31     244 10.9   78     8  19
+112    44     190 10.3   78     8  20
+113    21     259 15.5   77     8  21
+114     9      36 14.3   72     8  22
+115    NA     255 12.6   75     8  23
+116    45     212  9.7   79     8  24
+117   168     238  3.4   81     8  25
+118    73     215  8.0   86     8  26
+119    NA     153  5.7   88     8  27
+120    76     203  9.7   97     8  28
+121   118     225  2.3   94     8  29
+122    84     237  6.3   96     8  30
+123    85     188  6.3   94     8  31
+124    96     167  6.9   91     9   1
+125    78     197  5.1   92     9   2
+126    73     183  2.8   93     9   3
+127    91     189  4.6   93     9   4
+128    47      95  7.4   87     9   5
+129    32      92 15.5   84     9   6
+130    20     252 10.9   80     9   7
+131    23     220 10.3   78     9   8
+132    21     230 10.9   75     9   9
+133    24     259  9.7   73     9  10
+134    44     236 14.9   81     9  11
+135    21     259 15.5   76     9  12
+136    28     238  6.3   77     9  13
+137     9      24 10.9   71     9  14
+138    13     112 11.5   71     9  15
+139    46     237  6.9   78     9  16
+140    18     224 13.8   67     9  17
+141    13      27 10.3   76     9  18
+142    24     238 10.3   68     9  19
+143    16     201  8.0   82     9  20
+144    13     238 12.6   64     9  21
+145    23      14  9.2   71     9  22
+146    36     139 10.3   81     9  23
+147     7      49 10.3   69     9  24
+148    14      20 16.6   63     9  25
+149    30     193  6.9   70     9  26
+150    NA     145 13.2   77     9  27
+151    14     191 14.3   75     9  28
+152    18     131  8.0   76     9  29
+153    20     223 11.5   68     9  30
+```
+]
+
+---
+count: false
+ 
+### What's the *base* ggplot2 experience
+.panel1-basic-auto[
+
+``` r
+airquality %&gt;%
+* ggplot(data = .)
+```
+]
+ 
+.panel2-basic-auto[
+&lt;img src="extenders-2025-recipes_files/figure-html/basic_auto_02_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+### What's the *base* ggplot2 experience
+.panel1-basic-auto[
+
+``` r
+airquality %&gt;%
+  ggplot(data = .) +
+* aes(x = Ozone)
+```
+]
+ 
+.panel2-basic-auto[
+&lt;img src="extenders-2025-recipes_files/figure-html/basic_auto_03_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+### What's the *base* ggplot2 experience
+.panel1-basic-auto[
+
+``` r
+airquality %&gt;%
+  ggplot(data = .) +
+  aes(x = Ozone) +
+* geom_rug()
+```
+]
+ 
+.panel2-basic-auto[
+&lt;img src="extenders-2025-recipes_files/figure-html/basic_auto_04_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+### What's the *base* ggplot2 experience
+.panel1-basic-auto[
+
+``` r
+airquality %&gt;%
+  ggplot(data = .) +
+  aes(x = Ozone) +
+  geom_rug() +
+* geom_histogram()
+```
+]
+ 
+.panel2-basic-auto[
+&lt;img src="extenders-2025-recipes_files/figure-html/basic_auto_05_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+### What's the *base* ggplot2 experience
+.panel1-basic-auto[
+
+``` r
+airquality %&gt;%
+  ggplot(data = .) +
+  aes(x = Ozone) +
+  geom_rug() +
+  geom_histogram() +
+* geom_vline(
+*   xintercept =
+*     mean(airquality$Ozone,
+*          na.rm = T)
+*   )
+```
+]
+ 
+.panel2-basic-auto[
+&lt;img src="extenders-2025-recipes_files/figure-html/basic_auto_06_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+### What's the *base* ggplot2 experience
+.panel1-basic-auto[
+
+``` r
+airquality %&gt;%
+  ggplot(data = .) +
+  aes(x = Ozone) +
+  geom_rug() +
+  geom_histogram() +
+  geom_vline(
+    xintercept =
+      mean(airquality$Ozone,
+           na.rm = T)
+    ) -&gt;
+*g 
+```
+]
+ 
+.panel2-basic-auto[
+
+]
+
+&lt;style&gt;
+.panel1-basic-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-basic-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-basic-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+???
+Creating this plot requires greater focus on ggplot2 *syntax*, likely detracting from discussion of *the mean* that statistical instructors desire.
+It may require a discussion about dollar sign syntax and how geom_vline is actually a special geom -- an annotation -- rather than being mapped to the data. None of this is relevant to the point you as an instructor aim to make: maybe that the the mean is the balancing point of the data or maybe a comment about skewness.
+
+
+
+---
+
+### Adding the conditional means?
+
+&lt;img src="extenders-2025-recipes_files/figure-html/cond_means_hard-1.png" width="504" /&gt;
+
+???
+
+Further, for the case of adding a vertical line at the mean for different subsets of the data, a different approach is required. This enterprise may take instructor/analyst/student on an even larger detour -- possibly googling, and maybe landing on the following stack overflow page where 11,000 analytics souls (some repeats to be sure) have landed:
+
+---
+
+count: false
+ 
+#### Conditional means (may require a trip to stackoverflow!)
+.panel1-cond_means_hard-auto[
+
+``` r
+*airquality
+```
+]
+ 
+.panel2-cond_means_hard-auto[
+
+```
+    Ozone Solar.R Wind Temp Month Day
+1      41     190  7.4   67     5   1
+2      36     118  8.0   72     5   2
+3      12     149 12.6   74     5   3
+4      18     313 11.5   62     5   4
+5      NA      NA 14.3   56     5   5
+6      28      NA 14.9   66     5   6
+7      23     299  8.6   65     5   7
+8      19      99 13.8   59     5   8
+9       8      19 20.1   61     5   9
+10     NA     194  8.6   69     5  10
+11      7      NA  6.9   74     5  11
+12     16     256  9.7   69     5  12
+13     11     290  9.2   66     5  13
+14     14     274 10.9   68     5  14
+15     18      65 13.2   58     5  15
+16     14     334 11.5   64     5  16
+17     34     307 12.0   66     5  17
+18      6      78 18.4   57     5  18
+19     30     322 11.5   68     5  19
+20     11      44  9.7   62     5  20
+21      1       8  9.7   59     5  21
+22     11     320 16.6   73     5  22
+23      4      25  9.7   61     5  23
+24     32      92 12.0   61     5  24
+25     NA      66 16.6   57     5  25
+26     NA     266 14.9   58     5  26
+27     NA      NA  8.0   57     5  27
+28     23      13 12.0   67     5  28
+29     45     252 14.9   81     5  29
+30    115     223  5.7   79     5  30
+31     37     279  7.4   76     5  31
+32     NA     286  8.6   78     6   1
+33     NA     287  9.7   74     6   2
+34     NA     242 16.1   67     6   3
+35     NA     186  9.2   84     6   4
+36     NA     220  8.6   85     6   5
+37     NA     264 14.3   79     6   6
+38     29     127  9.7   82     6   7
+39     NA     273  6.9   87     6   8
+40     71     291 13.8   90     6   9
+41     39     323 11.5   87     6  10
+42     NA     259 10.9   93     6  11
+43     NA     250  9.2   92     6  12
+44     23     148  8.0   82     6  13
+45     NA     332 13.8   80     6  14
+46     NA     322 11.5   79     6  15
+47     21     191 14.9   77     6  16
+48     37     284 20.7   72     6  17
+49     20      37  9.2   65     6  18
+50     12     120 11.5   73     6  19
+51     13     137 10.3   76     6  20
+52     NA     150  6.3   77     6  21
+53     NA      59  1.7   76     6  22
+54     NA      91  4.6   76     6  23
+55     NA     250  6.3   76     6  24
+56     NA     135  8.0   75     6  25
+57     NA     127  8.0   78     6  26
+58     NA      47 10.3   73     6  27
+59     NA      98 11.5   80     6  28
+60     NA      31 14.9   77     6  29
+61     NA     138  8.0   83     6  30
+62    135     269  4.1   84     7   1
+63     49     248  9.2   85     7   2
+64     32     236  9.2   81     7   3
+65     NA     101 10.9   84     7   4
+66     64     175  4.6   83     7   5
+67     40     314 10.9   83     7   6
+68     77     276  5.1   88     7   7
+69     97     267  6.3   92     7   8
+70     97     272  5.7   92     7   9
+71     85     175  7.4   89     7  10
+72     NA     139  8.6   82     7  11
+73     10     264 14.3   73     7  12
+74     27     175 14.9   81     7  13
+75     NA     291 14.9   91     7  14
+76      7      48 14.3   80     7  15
+77     48     260  6.9   81     7  16
+78     35     274 10.3   82     7  17
+79     61     285  6.3   84     7  18
+80     79     187  5.1   87     7  19
+81     63     220 11.5   85     7  20
+82     16       7  6.9   74     7  21
+83     NA     258  9.7   81     7  22
+84     NA     295 11.5   82     7  23
+85     80     294  8.6   86     7  24
+86    108     223  8.0   85     7  25
+87     20      81  8.6   82     7  26
+88     52      82 12.0   86     7  27
+89     82     213  7.4   88     7  28
+90     50     275  7.4   86     7  29
+91     64     253  7.4   83     7  30
+92     59     254  9.2   81     7  31
+93     39      83  6.9   81     8   1
+94      9      24 13.8   81     8   2
+95     16      77  7.4   82     8   3
+96     78      NA  6.9   86     8   4
+97     35      NA  7.4   85     8   5
+98     66      NA  4.6   87     8   6
+99    122     255  4.0   89     8   7
+100    89     229 10.3   90     8   8
+101   110     207  8.0   90     8   9
+102    NA     222  8.6   92     8  10
+103    NA     137 11.5   86     8  11
+104    44     192 11.5   86     8  12
+105    28     273 11.5   82     8  13
+106    65     157  9.7   80     8  14
+107    NA      64 11.5   79     8  15
+108    22      71 10.3   77     8  16
+109    59      51  6.3   79     8  17
+110    23     115  7.4   76     8  18
+111    31     244 10.9   78     8  19
+112    44     190 10.3   78     8  20
+113    21     259 15.5   77     8  21
+114     9      36 14.3   72     8  22
+115    NA     255 12.6   75     8  23
+116    45     212  9.7   79     8  24
+117   168     238  3.4   81     8  25
+118    73     215  8.0   86     8  26
+119    NA     153  5.7   88     8  27
+120    76     203  9.7   97     8  28
+121   118     225  2.3   94     8  29
+122    84     237  6.3   96     8  30
+123    85     188  6.3   94     8  31
+124    96     167  6.9   91     9   1
+125    78     197  5.1   92     9   2
+126    73     183  2.8   93     9   3
+127    91     189  4.6   93     9   4
+128    47      95  7.4   87     9   5
+129    32      92 15.5   84     9   6
+130    20     252 10.9   80     9   7
+131    23     220 10.3   78     9   8
+132    21     230 10.9   75     9   9
+133    24     259  9.7   73     9  10
+134    44     236 14.9   81     9  11
+135    21     259 15.5   76     9  12
+136    28     238  6.3   77     9  13
+137     9      24 10.9   71     9  14
+138    13     112 11.5   71     9  15
+139    46     237  6.9   78     9  16
+140    18     224 13.8   67     9  17
+141    13      27 10.3   76     9  18
+142    24     238 10.3   68     9  19
+143    16     201  8.0   82     9  20
+144    13     238 12.6   64     9  21
+145    23      14  9.2   71     9  22
+146    36     139 10.3   81     9  23
+147     7      49 10.3   69     9  24
+148    14      20 16.6   63     9  25
+149    30     193  6.9   70     9  26
+150    NA     145 13.2   77     9  27
+151    14     191 14.3   75     9  28
+152    18     131  8.0   76     9  29
+153    20     223 11.5   68     9  30
+```
+]
+
+---
+count: false
+ 
+#### Conditional means (may require a trip to stackoverflow!)
+.panel1-cond_means_hard-auto[
+
+``` r
+airquality %&gt;%
+* group_by(Month)
+```
+]
+ 
+.panel2-cond_means_hard-auto[
+
+```
+# A tibble: 153 × 6
+# Groups:   Month [5]
+   Ozone Solar.R  Wind  Temp Month   Day
+   &lt;int&gt;   &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
+ 1    41     190   7.4    67     5     1
+ 2    36     118   8      72     5     2
+ 3    12     149  12.6    74     5     3
+ 4    18     313  11.5    62     5     4
+ 5    NA      NA  14.3    56     5     5
+ 6    28      NA  14.9    66     5     6
+ 7    23     299   8.6    65     5     7
+ 8    19      99  13.8    59     5     8
+ 9     8      19  20.1    61     5     9
+10    NA     194   8.6    69     5    10
+# ℹ 143 more rows
+```
+]
+
+---
+count: false
+ 
+#### Conditional means (may require a trip to stackoverflow!)
+.panel1-cond_means_hard-auto[
+
+``` r
+airquality %&gt;%
+  group_by(Month) %&gt;%
+* summarise(
+*   Ozone_mean =
+*     mean(Ozone, na.rm = T)
+*   )
+```
+]
+ 
+.panel2-cond_means_hard-auto[
+
+```
+# A tibble: 5 × 2
+  Month Ozone_mean
+  &lt;int&gt;      &lt;dbl&gt;
+1     5       23.6
+2     6       29.4
+3     7       59.1
+4     8       60.0
+5     9       31.4
+```
+]
+
+---
+count: false
+ 
+#### Conditional means (may require a trip to stackoverflow!)
+.panel1-cond_means_hard-auto[
+
+``` r
+airquality %&gt;%
+  group_by(Month) %&gt;%
+  summarise(
+    Ozone_mean =
+      mean(Ozone, na.rm = T)
+    ) -&gt;
+*airquality_by_month
+```
+]
+ 
+.panel2-cond_means_hard-auto[
+
+]
+
+---
+count: false
+ 
+#### Conditional means (may require a trip to stackoverflow!)
+.panel1-cond_means_hard-auto[
+
+``` r
+airquality %&gt;%
+  group_by(Month) %&gt;%
+  summarise(
+    Ozone_mean =
+      mean(Ozone, na.rm = T)
+    ) -&gt;
+airquality_by_month
+
+*ggplot(airquality)
+```
+]
+ 
+.panel2-cond_means_hard-auto[
+&lt;img src="extenders-2025-recipes_files/figure-html/cond_means_hard_auto_05_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+#### Conditional means (may require a trip to stackoverflow!)
+.panel1-cond_means_hard-auto[
+
+``` r
+airquality %&gt;%
+  group_by(Month) %&gt;%
+  summarise(
+    Ozone_mean =
+      mean(Ozone, na.rm = T)
+    ) -&gt;
+airquality_by_month
+
+ggplot(airquality) +
+* aes(x = Ozone)
+```
+]
+ 
+.panel2-cond_means_hard-auto[
+&lt;img src="extenders-2025-recipes_files/figure-html/cond_means_hard_auto_06_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+#### Conditional means (may require a trip to stackoverflow!)
+.panel1-cond_means_hard-auto[
+
+``` r
+airquality %&gt;%
+  group_by(Month) %&gt;%
+  summarise(
+    Ozone_mean =
+      mean(Ozone, na.rm = T)
+    ) -&gt;
+airquality_by_month
+
+ggplot(airquality) +
+  aes(x = Ozone) +
+* geom_histogram()
+```
+]
+ 
+.panel2-cond_means_hard-auto[
+&lt;img src="extenders-2025-recipes_files/figure-html/cond_means_hard_auto_07_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+#### Conditional means (may require a trip to stackoverflow!)
+.panel1-cond_means_hard-auto[
+
+``` r
+airquality %&gt;%
+  group_by(Month) %&gt;%
+  summarise(
+    Ozone_mean =
+      mean(Ozone, na.rm = T)
+    ) -&gt;
+airquality_by_month
+
+ggplot(airquality) +
+  aes(x = Ozone) +
+  geom_histogram() +
+* facet_grid(rows = vars(Month))
+```
+]
+ 
+.panel2-cond_means_hard-auto[
+&lt;img src="extenders-2025-recipes_files/figure-html/cond_means_hard_auto_08_output-1.png" width="504" /&gt;
+]
+
+---
+count: false
+ 
+#### Conditional means (may require a trip to stackoverflow!)
+.panel1-cond_means_hard-auto[
+
+``` r
+airquality %&gt;%
+  group_by(Month) %&gt;%
+  summarise(
+    Ozone_mean =
+      mean(Ozone, na.rm = T)
+    ) -&gt;
+airquality_by_month
+
+ggplot(airquality) +
+  aes(x = Ozone) +
+  geom_histogram() +
+  facet_grid(rows = vars(Month)) +
+* geom_vline(data = airquality_by_month,
+*            aes(xintercept =
+*              Ozone_mean))
+```
+]
+ 
+.panel2-cond_means_hard-auto[
+&lt;img src="extenders-2025-recipes_files/figure-html/cond_means_hard_auto_09_output-1.png" width="504" /&gt;
+]
+
+&lt;style&gt;
+.panel1-cond_means_hard-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-cond_means_hard-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-cond_means_hard-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
 
 
 
 
 ---
 
-
-&gt;  "Even though I now mostly write Python, C, and Rust, I still pop open #rstats and ggplot2 when I need to make sense of some data and it continues to be just the best thing ever." Dewey Dunningham
+# Why is geom_smooth() is so easy, and my mean of x line is so hard?
 
 
 
 ---
 
-&lt;!-- Tell you about: --&gt;
+&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;So, math notation and visual representation builds of basic statistics! They coevolve speaking to different learning styles. Plus DRY principles for coders and a walk through of calc w num vals, for numerophiles! &lt;a href="https://twitter.com/hashtag/ggplot2?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#ggplot2&lt;/a&gt; &lt;a href="https://twitter.com/hashtag/xaringan?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#xaringan&lt;/a&gt; &lt;a href="https://twitter.com/hashtag/flipbookr?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#flipbookr&lt;/a&gt; &lt;a href="https://twitter.com/hashtag/rstats?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#rstats&lt;/a&gt; &lt;a href="https://t.co/JgWLxo94Ms"&gt;https://t.co/JgWLxo94Ms&lt;/a&gt; &lt;a href="https://t.co/ol08lMGdtD"&gt;pic.twitter.com/ol08lMGdtD&lt;/a&gt;&lt;/p&gt;&amp;mdash; Gina Reynolds (@EvaMaeRey) &lt;a href="https://twitter.com/EvaMaeRey/status/1276260233577238528?ref_src=twsrc%5Etfw"&gt;June 25, 2020&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
 
-&lt;!-- [Everyday ggplot2 extension](https://evamaerey.github.io/everyday_ggplot2_extension/) initiatives --&gt;
 
-&lt;!-- -- --&gt;
 
-&lt;!-- 1. Learning resources --&gt;
-&lt;!--     a. [easy recipes] --&gt;
-&lt;!--     b. [cookbook](https://evamaerey.github.io/ggplot2-extension-cookbook/) --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- 2. Community - [Extenders club](https://github.com/teunbrand/ggplot-extension-club) --&gt;
-
-&lt;!--     a. meetup  --&gt;
-&lt;!--     b. club --&gt;
-&lt;!--     c. workshop? --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- 3. Light-weight approach to ggplot2 extension... --&gt;
-    
 ---
-
-## Intro Thoughts
 
 ## ggbump
 
@@ -542,7 +1273,7 @@ us_cohort_life_exp_rank_2020 %&gt;%
       y = life_exp_rank,
       color = country) +
   geom_point() +
-* geom_bump()
+* geom_bump()  #&lt;&lt;
 ```
 ]
  
@@ -588,101 +1319,109 @@ us_cohort_life_exp_rank_2020 %&gt;%
 
 
 
---
-
-## "The article concludes by discussing some perceptual issues, and thinking about how we can build on the grammar to learn how to create graphical 'poems.'" - Hadley Wickham
-
-
 ---
 
-#  Without geom_bump(), drawing a bumpchart would be a non-starter in most settings (business, government, academic).*
+## Saw Thomas Lin Pederson's talk 'Extending your ability to extend ggplot2' January 2020  geom_circle()
 
 --
 
-# Layer extension delivers value. 
+#### and tried
 
 --
 
-## "... creating new Stats[-based layers] is one of the most useful ways to extend the capabilities of ggplot2." – ggplot2: Elegant Graphics for Data Analysis
-
-
-
-
-
----
-
-But...
-
-# - 'I have two kids, it's so hard to be so deep in ggplot, it takes at least two days just to get all the information in your head again.  So I'm struggling with maintaining [ggbump, ggaluvial, ggsankey]'
+#### and failed 
 
 --
 
-# Delivering new layer extensions can be costly.
-
----
-
-# - 'I have 200 kids...'  Univeristy Professor
-
----
-
-# - 'I have 1000 kids...'  University Curriculum Director
-
----
-
-# - 'I have a thesis to finish'  Graduate Student
-
----
-
-## Recognizing demands on peoples time and attention.
+#### and tried
 
 --
 
-## Talk central question:  Can we lower the costs to getting into layer extension?
+#### and failed
 
 --
 
-## Especially in academic setting...
+####  and kind of figured things out in December 2020....
 
 --
 
-## ... (These people generally have staggeringly good extension ideas, and academic setting has potential to have ripple effect since educators have a *lot* of trainees...) :-)
+And it was everything I'd hoped for!
 
 ---
 
-# 'How to learn ggplot2 while drowning'...?
+Wanted to fit in more extension to my life 
 
 --
 
-## managing 'care tasks' ...
+Fall 2021 Independent studies... https://github.com/EvaMaeRey/ay_2022_2_advanced_individual_study-
 
-![](https://m.media-amazon.com/images/I/61DJiOiZeGL._SY445_SX342_QL70_FMwebp_.jpg)
+- `geom_high_leverage` Morgan 
+- `geom_high_influence` Madison
+
 
 
 ---
 
-## 1. extension is be an analytic 'care task' - can help you in the long run
+## Spring 2022 independent study: make a tutorial. 
+
+### w/ Morgan: 'a no-struggle introduction to layer extension, for unsophisticated ggplot2 users'
+
+---
+
+## 3 examples, 3 exercise, 3 objectives:
 
 --
 
-## 2. but in the short run, barriers to entry and maintanance present a burden
+- 1. How to prepare compute for group-wise computation in a layer
+
+--
+
+- 2. How to define a Stat (and test)
+
+--
+
+- 3. How to combine a Stat and Geom into a user-facing function
+
+---
+
+## How to make it easy?
+
+- easy, familiar (boring) compute
+- step-by-step 
+- pre step - connect it to what you know (get the job done with base ggplot2)
+
+---
+
+# Stat based geom_*() functions is focus.  Why?
+
+- Stats are easy,
+- `geoms_\*()`s are familiar
+
+---
+
+# &gt; I've used ggplot for a very long time... Conceptually I get \[the difference between `stat_*()` functions and `geom_()*`s functions.\] But... I would not put `+ stat_*()` anything. That's not something I would naturally do after using the gg platform... for 10 years.
+
+---
+
+## In 2023, survey, focus group about bare-bones, download a .Rmd
+
+--
+
+## 2024 Moved to webr/quarto, added explanation (I didn't really have much vocabulary in 2023!)
+
+--
+
+## May 2025 survey + focus group...
+
+---
+
+&lt;img src="../../posit-consulting/report_figures/unnamed-chunk-12-1.svg" width="40%" /&gt;&lt;img src="../../posit-consulting/report_figures/unnamed-chunk-12-2.svg" width="40%" /&gt;&lt;img src="../../posit-consulting/report_figures/unnamed-chunk-12-3.svg" width="40%" /&gt;&lt;img src="../../posit-consulting/report_figures/unnamed-chunk-13-1.svg" width="40%" /&gt;
+
 
 
 ---
 
-# 'How to introduce ggplot2 layer extension without it feeling overwhelming (drowning)'...?
 
----
-
-![](../../posit-consulting/report_figures/unnamed-chunk-35-1.svg)&lt;!-- --&gt;![](../../posit-consulting/report_figures/unnamed-chunk-35-2.svg)&lt;!-- --&gt;![](../../posit-consulting/report_figures/unnamed-chunk-35-3.svg)&lt;!-- --&gt;
-
-
----
-
-In an LLMs world?  
-
----
-
-'Easy Geom Recipes' (Recipe cards)
 
 &lt;img src="../../posit-consulting/step0.png" width="933" /&gt;
 
@@ -696,60 +1435,178 @@ In an LLMs world?
 
 
 
-&lt;img src="../../posit-consulting/step2.png" width="933" /&gt;
-
-
 &lt;img src="../../posit-consulting/step3.png" width="533" /&gt;
+
+---
+
 
 
 &lt;img src="../../posit-consulting/done.png" width="933" /&gt;
 
-
----
-
-Note: w/ new release: Step 3 becomes:
-
-
-
-
-
-
 ---
 
 
 
+&lt;img src="../../posit-consulting/step2.png" width="933" /&gt;
 
-![](../../posit-consulting/report_figures/unnamed-chunk-12-1.svg)&lt;!-- --&gt;![](../../posit-consulting/report_figures/unnamed-chunk-12-2.svg)&lt;!-- --&gt;![](../../posit-consulting/report_figures/unnamed-chunk-35-2.svg)&lt;!-- --&gt;![](../../posit-consulting/report_figures/unnamed-chunk-35-3.svg)&lt;!-- --&gt;
+
+
+![](../../posit-consulting/report_figures/unnamed-chunk-25-1.svg)![](../../posit-consulting/report_figures/unnamed-chunk-26-1.svg)![](../../posit-consulting/report_figures/unnamed-chunk-27-1.svg)![](../../posit-consulting/report_figures/unnamed-chunk-30-1.svg)
 
 
 
 
 ---
 
-In an LLMs world?  
-
-But I can ask an LLM to write me an extension...
+#  'X - you are here'
 
 --
 
-And it may manage...
+## Now 'easy geom recipes' X July 2025 release
+
+
+---
+
+# In next ggplot2 release
+
+
+
+---
+
+&gt; #### 'take care to match the argument order and naming used in the ggplot2’s constructors so you don’t surprise your users.'
 
 --
 
-Can we design entry points that are more informative?
+#### Writing user-facing function will get so easy! (and maybe a little more mysterious...)
+
+
+``` r
+stat_medians &lt;- make_constructor(StatMedians, geom = "point")
+geom_medians &lt;- make_constructor(GeomPoint, stat = "medians")
+
+geom_medians
+```
+
+```
+function (mapping = NULL, data = NULL, stat = "medians", position = "identity", 
+    ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) 
+{
+    layer(mapping = mapping, data = data, geom = "point", stat = stat, 
+        position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
+        params = list2(na.rm = na.rm, ...))
+}
+&lt;environment: 0x7fac62d2ebe0&gt;
+```
+
+
+
+
+---
+
+#### Also,
 
 --
 
-Is it worthwhile to do so? 
+### 'I've opened a PR for adding a 'manual' stat, where essentially the compute_group() method is available to the user.
+
+### Probably a lot of your recipes work there as well, without having to actually build a Stat :)' - Teun in extenders discussions Sept 2024
+
+
+https://github.com/tidyverse/ggplot2/pull/6143
+
+---
+
+---
+
+
+``` r
+library(ggplot2)
+ggplot(airquality) +
+  aes(x = Ozone) +
+  geom_histogram() +
+  stat_manual(geom = GeomVline,
+              fun = ~ summarize(.x, xintercept = mean(x, na.rm = T)))
+
+last_plot() + 
+  facet_grid(rows = vars(Month))
+```
+
+&lt;img src="extenders-2025-recipes_files/figure-html/unnamed-chunk-21-1.png" width="504" 25% /&gt;&lt;img src="extenders-2025-recipes_files/figure-html/unnamed-chunk-21-2.png" width="504" 25% /&gt;
+
+---
+
+
+``` r
+library(statexpress)
+
+compute_means &lt;- function(data, scales){ 
+  data |&gt; 
+    summarise(xintercept = mean(x, na.rm = T)) 
+  }
+
+ggplot(airquality) +
+  aes(x = Ozone) +
+  geom_histogram() +
+  qlayer(geom = GeomVline, stat = qstat(compute_means))
+
+last_plot() + 
+  facet_grid(rows = vars(Month))
+```
+
+&lt;img src="extenders-2025-recipes_files/figure-html/unnamed-chunk-22-1.png" width="504" 25% /&gt;&lt;img src="extenders-2025-recipes_files/figure-html/unnamed-chunk-22-2.png" width="504" 25% /&gt;
+
+
+
+
+## So...  Now there are 4 recipes, where compute_panel is introduced in recipe 2 and used in 3 and 4. 
 
 --
 
-Should we even care what the code that writes the plot looks like any more?
+## Are compute_panel recipes they still accessible, interesting enough, correct?
 
+--
+
+## Do you still feel motivated by compute_group Stat example?
+
+
+---
+
+&gt; # It was that easy. And I felt empowered as a result of that…. But you know, like, my problem isn’t gonna be that easy.
+
+
+
+---
+
+
+&gt;  Wait, why did we do a Stat and not a Geom like, like ... the tutorial starts with, you're gonna make a geom_*() but I made a stat_*().
+
+
+---
+
+&gt; **Participant H** I just think that it's weird to have two things that live at the \[same level\], because ultimately they all filter down to layer. And it's really a layer that you're creating.
+
+---
+
+&gt; **Participant D** There's a sense in which also, like, you feel that maybe everything should just be 'layer\_'. But the problem is that nobody actually does that in practice. And so, you know, you would be teaching something, and it would be kind of a ggplot variant that nobody else really uses.
+
+---
+
+
+
+&gt; 'Stat objects are almost always paired with a geom\_\*() constructor because most ggplot2 users are accustomed to adding geom_\*()s, not stat_\*()s, when building up a plot.' - ggplot2 book, Extension springs case study
+
+
+
+
+
+
+
+![](../../posit-consulting/report_figures/unnamed-chunk-35-1.svg)&lt;!-- --&gt;![](../../posit-consulting/report_figures/unnamed-chunk-35-2.svg)&lt;!-- --&gt;![](../../posit-consulting/report_figures/unnamed-chunk-35-3.svg)&lt;!-- --&gt;
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
 <script>var slideshow = remark.create({
   "ratio": "16:9",
   "highlightStyle": "github",

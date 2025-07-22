@@ -1,0 +1,215 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+https://stackoverflow.com/questions/44837536/how-to-use-ggplot-to-plot-t-sne-clustering
+
+https://satijalab.org/seurat/articles/seurat5_sketch_analysis
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+
+## Experiment
+
+```{r}
+library(tidyverse)
+library(Rtsne)
+iris_unique <- unique(iris) # Remove duplicates
+iris_matrix <- as.matrix(iris_unique[,1:4])
+set.seed(42) # Set a seed if you want reproducible results
+tsne_out <- Rtsne(iris_matrix)
+
+
+library(ggplot2)
+tsne_plot <- data.frame(x = tsne_out$Y[,1], 
+                        y = tsne_out$Y[,2], 
+                        col = iris_unique$Species)
+
+ggplot(tsne_plot) + 
+  geom_point(aes(x=x, y=y, color=col))
+
+compute_tsne <- function(data, scales, vars){
+  
+# identify duplicates just based on tsne data
+data |>
+  select(all_of(vars)) |>
+  duplicated() ->
+dups
+   
+#  
+data |>
+    _[!dups,] |>
+  remove_missing() ->
+clean_data
+
+clean_data |>
+  select(all_of(vars)) |>
+  as.matrix() |>
+  Rtsne() |> 
+  _$Y |> 
+  as_tibble() |> 
+  rename(x = V1, y = V2) |>
+  bind_cols(clean_data)
+  
+}
+
+StatTsne <- ggproto("StatTsne", Stat, 
+                    compute_panel = compute_tsne)
+
+geom_tsne <- make_constructor(GeomPoint, stat = StatTsne)
+
+
+
+library(ggplyr)
+iris |>
+  ggplot() +
+  aes_from_data() + 
+  geom_tsne(vars = 
+              c("Sepal.Length", "Sepal.Width", 
+                "Petal.Length", "Petal.Width")) + 
+  aes(color = Species)
+
+
+```
+
+
+```{r}
+
+library(tidyverse)
+
+vars_pack <- function(...) {
+  
+  varnames <- as.character(ensyms(...))
+  vars <- list(...)
+  listvec <- asplit(do.call(cbind, vars), 1)
+  structure(listvec, varnames = varnames)
+
+  }
+
+vars_unpack <- function(x) {
+  pca_vars <- x
+  df <- do.call(rbind, pca_vars)
+  colnames(df) <- attr(pca_vars, "varnames")
+  as.data.frame(df)
+  
+}
+
+
+palmerpenguins::penguins %>% 
+  mutate(outcome = species, 
+         vars = vars_pack(bill_length_mm, species, sex)) %>% 
+  select(outcome, vars) ->
+data
+
+data |> head()
+
+head(data$vars)
+
+data %>%
+  mutate(vars_unpack(vars)) %>% 
+  select(-vars) ->
+data
+
+data |> head()
+
+
+
+compute_tsne2 <- function(data, ...){
+  
+  set.seed(1345)
+  
+data  
+  
+# identify duplicates just based on tsne data
+data |>
+  select(tsne_vars) |>
+  mutate(vars_unpack(tsne_vars)) |>
+  select(-tsne_vars) ->
+data_unpacked ; data_unpacked
+
+names_predictors <- names(data_unpacked); names_predictors
+
+data_unpacked |>
+   duplicated() ->
+dups ; dups
+# #
+# # #
+data_unpacked |>
+    bind_cols(data) |>
+     _[!dups,] |> 
+  remove_missing() ->
+clean_data ; clean_data
+# # # 
+clean_data |>
+  _[names_predictors] |>
+  as.matrix() |>
+  Rtsne() |>
+  _$Y |>
+  as_tibble() |>
+ rename(x = V1, y = V2) |>
+  bind_cols(clean_data)
+#   
+
+}
+
+
+iris |> 
+  mutate(tsne_vars = vars_pack(Sepal.Length, Sepal.Width, 
+                Petal.Length, Petal.Width)) |>
+  select(tsne_vars) |>
+  compute_tsne2()
+  
+
+StatTsne2 <- ggproto("StatTsne2", Stat, 
+                     compute_layer = compute_tsne2)
+
+geom_tsne <- make_constructor(GeomPoint, stat = StatTsne2)
+
+
+
+iris |> 
+  ggplot() + 
+  aes(tsne_vars = 
+        vars_pack(Sepal.Length, Sepal.Width, 
+                Petal.Length, Petal.Width),
+      color = Species) + 
+  geom_tsne()
+
+
+aes_tsne <- function(...){aes(vars = vars_pack(vars(...)))}
+
+
+palmerpenguins::penguins |>
+   ggplot() + 
+   aes(tsne_vars = vars_pack(bill_length_mm, bill_depth_mm, 
+                        flipper_length_mm)) + 
+   geom_tsne() 
+
+last_plot() + 
+   aes(color = species,
+       shape = sex) 
+
+last_plot() + 
+  facet_wrap(~island)
+
+```
+
+
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

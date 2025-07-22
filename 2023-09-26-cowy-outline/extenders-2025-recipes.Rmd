@@ -1,6 +1,6 @@
 ---
 title: "Everyday ggplot2 extension"
-subtitle: "New approaches to introducing layer extension"
+subtitle: "Easy geom_*() recipes: introducing layer extension"
 author: "Evangeline 'Gina' Reynolds, ggplot2 extenders meetup, July 2025"
 output:
   xaringan::moon_reader:
@@ -11,7 +11,33 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+      beforeInit: "https://platform.twitter.com/widgets.js"
 ---
+
+
+
+#  Outline
+
+## when life w/ ggplot2 began
+
+--
+
+## when I felt like I started to need layer extension
+
+--
+
+## my experience with learning extension
+
+--
+
+## And how the recipes came to be...
+
+--
+
+## What the next release means for the recipes
+
+
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, cache = F, warning = F, message = F)
@@ -30,42 +56,35 @@ donor <- read_delim(isi_donor_url) %>%
 
 ```
 
-## Overview:
+---
 
-### 1. Creating new layers (geom_* functions) in ggplot2 extension has been described as an 'involved process'. 
+### When did my ggplot2 life begin?
 
 --
 
-### 2. I'll discuss 'easy-geom-recipes' designed to make getting into layer extension more fun!
+### Summer 2017, Started using ggplot2 in 'Zurich Summer School for Women in Political Methodology ...' ggplot2 workshop run by Denise Traber
+
+---
+
+### 'Makeover Monday' (Tableau community's TidyTuesday) Eva Murry and Andy Krebel, Heard about on Data Stories, A podcast on data visualization with Enrico Bertini and Moritz Stefaner
+
+--
+
+### *When did your ggplot2 life begin?*
 
 
 ---
 
+> ### "When I need to make sense of some data and [ggplot2] continues to be just the best thing ever." -- Dewey Dunningham
 
 
 ---
-
-
-### 1. Why ggplot2
-### 2. Limitations of base ggplot2
-### 3. Promise of extension
-### 4. ggplot2 super-users not leveraging extension
-### 5. New super-user-tailored educational material
-### 6. Challenges on the horizon
-
-
-
----
-
 class: middle, inverse, center
-# Part 1. So ggplot2...
-
---
-#               ... what's the fuss?
 
 
+# It lets you *'speak your plot into existence'*. (Thomas Lin Pederson) (so your data can easily speak back to you! i.e. reveal patterns)
 
-
+---
 
 
 ```{r, include = F}
@@ -85,21 +104,7 @@ theme_set(theme_gray(base_size = 20))
 ```
 
 
-<!-- --- -->
 
-<!-- # gg in ggplot2 -->
-
-<!-- -- -->
-
-<!-- # Grammar of Graphics -->
-
----
-class: middle, inverse, center
-
-
-# It lets you *'speak your plot into existence'*. (Thomas Lin Pederson) 
-
----
 
 
 # Hans Rosling & BBC in 2010  
@@ -175,17 +180,7 @@ class: inverse, center, middle
 ---
 class: inverse, center, middle
 
-# And ggplot2 also affords this build-up-your-plot-bit-by-bit experience.  
-
---
-# i.e. 'speaking your plot into existence.' 
-
-
-
-
-
-
-
+> # "the Grammar of Graphics makes [building plots] easy because you've just got all these, like, little nice decomposable components" -- Hadley Wickham
 
 
 
@@ -214,93 +209,56 @@ ggplot(data = gapminder_2002) + #BREAK1
 ```
 
 ---
-
-
-## We get the 'Hans Rosling' speak-it experience ...
-
---
-## ... because ggplot2 is based on the grammar of graphics, (gg = grammar of graphics) ...
-
---
-## ... which breaks up the plot elements into *orthogonal* parts ...
-
---
-## ... and allows user to manipulate those parts bit by bit.
-
----
 class: inverse, center, middle
 
-> # "the Grammar of Graphics makes [building plots] easy because you've just got all these, like, little nice decomposable components" -- Hadley Wickham
+> # "I'd never know quite how to get things done with matplotlib.  But with ggplot2 I could understand it without even looking at documentation - Hassan Kibirige (paraphrase)
 
 
 
 ---
 
-## Leland Wilkinson identified orthogonal elements in 'The Grammar of Graphics'. Wilkinson on the Policy Viz Podcast [here](https://policyviz.com/podcast/episode-201-leland-wilkinson/).
 
-```{r, echo = F, eval = T, out.width="75%"}
-knitr::include_graphics("https://miro.medium.com/max/1400/1*MMZuYgeC_YjXNC1r4D4sog.png")
+<!-- --- -->
+
+
+<!-- Hadley Wickham, on it's motivation: -->
+
+<!-- > ### And, you know, I'd get a dataset. And, *in my head I could very clearly kind of picture*, I want to put this on the x-axis. Let's put this on the y-axis, draw a line, put some points here, break it up by this variable. -->
+
+<!-- -- -->
+<!-- > ### And then, like, getting that vision out of my head, and into reality, it's just really, really hard. Just, like, felt harder than it should be. Like, there's a lot of custom programming involved, -->
+
+<!-- --- -->
+
+<!-- > ### where I just felt, like, to me, I just wanted to say, like, you know, *this is what I'm thinking, this is how I'm picturing this plot. Like you're the computer 'Go and do it'.* -->
+
+<!-- -- -->
+<!-- > ### ... and I'd also been reading about the Grammar of Graphics by Leland Wilkinson, I got to meet him a couple of times and ... I was, like, this book has been, like, written for me. -->
+<!-- https://www.trifacta.com/podcast/tidy-data-with-hadley-wickham/ -->
+
+
+<!-- --- -->
+
+---
+
+```{r, out.width="25%"}
+knitr::include_graphics("../../ggram/transcriber_of_imagined_plots.png")
 ```
 
 
 ---
 
+## Taught Intro Stats w/ tidyverse/ggplot2 in Dresden and Denver (2018-2020)
 
->  "Even though I now mostly write Python, C, and Rust, I still pop open #rstats and ggplot2 when I need to make sense of some data and it continues to be just the best thing ever." -- Dewey Dunningham
-
-
-
----
-
-
-Hadley Wickham, on it's motivation:
-
-> ### And, you know, I'd get a dataset. And, *in my head I could very clearly kind of picture*, I want to put this on the x-axis. Let's put this on the y-axis, draw a line, put some points here, break it up by this variable.
-
---
-> ### And then, like, getting that vision out of my head, and into reality, it's just really, really hard. Just, like, felt harder than it should be. Like, there's a lot of custom programming involved,
-
----
-
-> ### where I just felt, like, to me, I just wanted to say, like, you know, *this is what I'm thinking, this is how I'm picturing this plot. Like you're the computer 'Go and do it'.*
-
---
-> ### ... and I'd also been reading about the Grammar of Graphics by Leland Wilkinson, I got to meet him a couple of times and ... I was, like, this book has been, like, written for me.
-https://www.trifacta.com/podcast/tidy-data-with-hadley-wickham/
-
-```{r}
-knitr::include_graphics(path = "../../ggram/")
-
-
-```
-
-
-
----
-
-# So why ggplot2 extension?
-
-
----
-class: inverse, middle, center
-
-
-# ggplot2 let us "... create graphical 'poems'." - Hadley Wickham (2010) in 'A Layered Grammar of Graphics', *Journal of Computational and Graphical Statistics*
 
 --
 
 
-# But... sometimes there are limits to what we can express
-
-
----
-class: inverse, center, middle
-
-# Part 2. The problem
+## And started to feel a a little bit of pain even w/ ggplot2. 
 
 --
 
-## Sometimes we don't have the vocabulary that's needed to 'speak' fluently.
+## Sometimes we don't have the vocabulary that's needed to keep 'speaking' fluently.
 
 ---
 
@@ -379,40 +337,15 @@ Further, for the case of adding a vertical line at the mean for different subset
 
 # Why is geom_smooth() is so easy, and my mean of x line is so hard?
 
---
-
-### Like geom_smooth does a bunch of compute in the background
-
---
-
-### then uses geometric primitives to show computed values
-
-- line
-- ribbon geometry 
-
---
-
-### geom_xmean() doesn't exist; we have to do the compute
 
 
 ---
 
-## ggplot2 intentionally lean for maintenance purposes.
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">So, math notation and visual representation builds of basic statistics! They coevolve speaking to different learning styles. Plus DRY principles for coders and a walk through of calc w num vals, for numerophiles! <a href="https://twitter.com/hashtag/ggplot2?src=hash&amp;ref_src=twsrc%5Etfw">#ggplot2</a> <a href="https://twitter.com/hashtag/xaringan?src=hash&amp;ref_src=twsrc%5Etfw">#xaringan</a> <a href="https://twitter.com/hashtag/flipbookr?src=hash&amp;ref_src=twsrc%5Etfw">#flipbookr</a> <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> <a href="https://t.co/JgWLxo94Ms">https://t.co/JgWLxo94Ms</a> <a href="https://t.co/ol08lMGdtD">pic.twitter.com/ol08lMGdtD</a></p>&mdash; Gina Reynolds (@EvaMaeRey) <a href="https://twitter.com/EvaMaeRey/status/1276260233577238528?ref_src=twsrc%5Etfw">June 25, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
---
-
-## ... but geom_xmean() would be nice!
-
----
-class: middle, center, inverse
-
-
-## Part 3. ggplot2 extension can be used to help restore that 'speak it into existance' feel, when base ggplot2 'words' fail
 
 
 ---
-
-## Intro Thoughts
 
 ## ggbump
 
@@ -444,7 +377,7 @@ us_cohort_life_exp_rank_2020 %>%
       y = life_exp_rank, 
       color = country) + 
   geom_point() + 
-  geom_bump()
+  geom_bump() #<<
 ```
 
 ---
@@ -462,99 +395,117 @@ life_exp_rank_2020 %>%
   geom_bump()  #<<
 ```
 
-
 ---
 
-#  Without geom_bump(), drawing a bumpchart would be a non-starter in most settings (business, government, academic).*
+## Saw Thomas Lin Pederson's talk 'Extending your ability to extend ggplot2' January 2020  geom_circle()
 
 --
 
-# Layer extension delivers value. 
+#### and tried
 
 --
 
-## "... creating new Stats[-based layers] is one of the most useful ways to extend the capabilities of ggplot2." – ggplot2: Elegant Graphics for Data Analysis
-
-
-
-
-
----
-
-But...
-
-# - 'I have two kids, it's so hard to be so deep in ggplot, it takes at least two days just to get all the information in your head again.  So I'm struggling with maintaining [ggbump, ggaluvial, ggsankey]'
+#### and failed 
 
 --
 
-# Delivering new layer extensions can be costly.
-
----
-
-# - 'I have 200 kids...'  Univeristy Professor
-
----
-
-# - 'I have 1000 kids...'  University Curriculum Director
-
----
-
-# - 'I have a thesis to finish'  Graduate Student
-
----
-
-## Recognizing demands on peoples time and attention.
+#### and tried
 
 --
 
-## Talk central question:  Can we lower the costs to getting into layer extension?
+#### and failed
 
 --
 
-## Especially in academic setting...
+####  and kind of figured things out in December 2020....
 
 --
 
-## ... (These people generally have staggeringly good extension ideas, and academic setting has potential to have ripple effect since educators have a *lot* of trainees...) :-)
+And it was everything I'd hoped for!
 
 ---
 
-# 'How to learn ggplot2 while drowning'...?
+Wanted to fit in more extension to my life 
 
 --
 
-## managing 'care tasks' ...
+Fall 2021 Independent studies... https://github.com/EvaMaeRey/ay_2022_2_advanced_individual_study-
 
-![](https://m.media-amazon.com/images/I/61DJiOiZeGL._SY445_SX342_QL70_FMwebp_.jpg)
+- `geom_high_leverage` Morgan 
+- `geom_high_influence` Madison
 
-
----
-
-## 1. extension is be an analytic 'care task' - can help you in the long run
-
---
-
-## 2. but in the short run, barriers to entry and maintanance present a burden
 
 
 ---
 
-# 'How to introduce ggplot2 layer extension without it feeling overwhelming (drowning)'...?
+## Spring 2022 independent study: make a tutorial. 
+
+### w/ Morgan: 'a no-struggle introduction to layer extension, for unsophisticated ggplot2 users'
 
 ---
 
-```{r}
-knitr::include_graphics("../../posit-consulting/report_figures/unnamed-chunk-35-1.svg")
-knitr::include_graphics("../../posit-consulting/report_figures/unnamed-chunk-35-2.svg")
-knitr::include_graphics("../../posit-consulting/report_figures/unnamed-chunk-35-3.svg")
+## 3 examples, 3 exercise, 3 objectives:
+
+--
+
+- 1. How to prepare compute for group-wise computation in a layer
+
+--
+
+- 2. How to define a Stat (and test)
+
+--
+
+- 3. How to combine a Stat and Geom into a user-facing function
+
+---
+
+## How to make it easy?
+
+- easy, familiar (boring) compute
+- step-by-step 
+- pre step - connect it to what you know (get the job done with base ggplot2)
+
+---
+
+# Stat based geom_*() functions is focus.  Why?
+
+- Stats are easy,
+- `geoms_\*()`s are familiar
+
+---
+
+# > I've used ggplot for a very long time... Conceptually I get \[the difference between `stat_*()` functions and `geom_()*`s functions.\] But... I would not put `+ stat_*()` anything. That's not something I would naturally do after using the gg platform... for 10 years.
+
+---
+
+## In 2023, survey, focus group about bare-bones, download a .Rmd
+
+--
+
+## 2024 Moved to webr/quarto, added explanation (I didn't really have much vocabulary in 2023!)
+
+--
+
+## May 2025 survey + focus group...
+
+---
+
+```{r, echo = F, fig.show='hold', out.width="40%"}
+files <- fs::dir_ls("../../posit-consulting/report_figures/")
+
+knitr::include_graphics(path = files[1])
+knitr::include_graphics(path = files[2])
+knitr::include_graphics(path = files[3])
+knitr::include_graphics(path = files[4])
+
 ```
 
 
 
-
 ---
 
-'Easy Geom Recipes' (Recipe cards)
+
 
 ```{r}
 knitr::include_graphics("../../posit-consulting/step0.png")
@@ -573,68 +524,142 @@ knitr::include_graphics("../../posit-consulting/step1.png")
 
 
 ```{r}
-knitr::include_graphics("../../posit-consulting/step2.png")
-```
-
-
-```{r}
 knitr::include_graphics("../../posit-consulting/step3.png")
 ```
+
+---
+
+
 
 ```{r}
 knitr::include_graphics("../../posit-consulting/done.png")
 ```
+
+---
+
+
+
+```{r}
+knitr::include_graphics("../../posit-consulting/step2.png")
+```
+
+
+
+```{r, echo = F, fig.show='hold'}
+files <- fs::dir_ls("../../posit-consulting/report_figures/")
+
+knitr::include_graphics(path = files[12])
+knitr::include_graphics(path = files[13])
+knitr::include_graphics(path = files[14])
+knitr::include_graphics(path = files[16])
+```
+
+
+
+
+---
+
+#  'X - you are here'
+
+--
+
+## Now 'easy geom recipes' X July 2025 release
 
 
 ---
 
 # In next ggplot2 release
 
-```{r}
-stat_medians <- make_constructor(StatMedians, geom = "point")
-geom_medians <- make_constructor(GeomPoint, stat = "medians")
+```{r, echo = F}
+library(ggplot2)
+StatMedians <- ggproto("StatMedians", Stat)
 ```
-
-
-
-
 
 ---
 
-
-
-```{r, eval = F}
-files <- fs::dir_ls("../../posit-consulting/report_figures/")
-
-knitr::include_graphics(path = files[1])
-knitr::include_graphics(path = files[2])
-knitr::include_graphics(path = files[3])
-knitr::include_graphics(path = files[4])
-knitr::include_graphics(path = files[5])
-knitr::include_graphics(path = files[6])
-knitr::include_graphics(path = files[7])
-
-knitr::include_graphics(path = files[8])
-knitr::include_graphics(path = files[9])
-knitr::include_graphics(path = files[10])
-knitr::include_graphics(path = files[11])
-knitr::include_graphics(path = files[12])
-knitr::include_graphics(path = files[13])
-knitr::include_graphics(path = files[14])
-knitr::include_graphics(path = files[15])
-
-
-
-```
-
-
----
-
-> I've used ggplot for a very long time... Conceptually I get \[the difference between `stat_*()` functions and `geom_()*`s functions.\]
+> #### 'take care to match the argument order and naming used in the ggplot2’s constructors so you don’t surprise your users.'
 
 --
 
-> ... But like ... I would not put `+ stat_*()` anything. That's not something I would naturally do after using the gg platform... for 10 years.
+#### Writing user-facing function will get so easy! (and maybe a little more mysterious...)
+
+```{r, eval = T, echo = T}
+stat_medians <- make_constructor(StatMedians, geom = "point")
+geom_medians <- make_constructor(GeomPoint, stat = "medians")
+
+geom_medians
+```
+
+
+
+
+---
+
+#### Also,
+
+--
+
+### 'I've opened a PR for adding a 'manual' stat, where essentially the compute_group() method is available to the user.
+
+### Probably a lot of your recipes work there as well, without having to actually build a Stat :)' - Teun in extenders discussions Sept 2024
+
+
+https://github.com/tidyverse/ggplot2/pull/6143
+
+---
+
+---
+
+```{r, echo = T, fig.show="hold", out.extra="25%"}
+library(ggplot2)
+ggplot(airquality) +
+  aes(x = Ozone) +
+  geom_histogram() +
+  stat_manual(geom = GeomVline,
+              fun = ~ summarize(.x, xintercept = mean(x, na.rm = T)))
+
+last_plot() + 
+  facet_grid(rows = vars(Month))
+```
+
+---
+
+```{r, fig.show="hold", out.extra="25%", echo= T}
+library(statexpress)
+
+compute_means <- function(data, scales){ 
+  data |> 
+    summarise(xintercept = mean(x, na.rm = T)) 
+  }
+
+ggplot(airquality) +
+  aes(x = Ozone) +
+  geom_histogram() +
+  qlayer(geom = GeomVline, stat = qstat(compute_means))
+
+last_plot() + 
+  facet_grid(rows = vars(Month))
+```
+
+
+
+
+## So...  Now there are 4 recipes, where compute_panel is introduced in recipe 2 and used in 3 and 4. 
+
+--
+
+## Are compute_panel recipes they still accessible, interesting enough, correct?
+
+--
+
+## Do you still feel motivated by compute_group Stat example?
+
+
+---
+
+> # It was that easy. And I felt empowered as a result of that…. But you know, like, my problem isn’t gonna be that easy.
+
+
 
 ---
 
@@ -657,35 +682,86 @@ knitr::include_graphics(path = files[15])
 > 'Stat objects are almost always paired with a geom\_\*() constructor because most ggplot2 users are accustomed to adding geom_\*()s, not stat_\*()s, when building up a plot.' - ggplot2 book, Extension springs case study
 
 
+```{r}
+geom_vline <- function(mapping = NULL, data = NULL, 
+                       ...,
+                       xintercept,
+                       na.rm = FALSE,
+                       show.legend = NA, 
+                       stat = "identity") {
+
+  # Act like an annotation
+  if (!missing(xintercept)) {
+    # Warn if supplied mapping and/or data is going to be overwritten
+    if (!is.null(mapping)) {
+      cli::cli_warn("{.fn geom_vline}: Ignoring {.arg mapping} because {.arg xintercept} was provided.")
+    }
+    if (!is.null(data)) {
+      cli::cli_warn("{.fn geom_vline}: Ignoring {.arg data} because {.arg xintercept} was provided.")
+    }
+
+    data <- data_frame0(xintercept = xintercept)
+    mapping <- aes(xintercept = xintercept)
+    show.legend <- FALSE
+  }
+
+  layer(
+    data = data,
+    mapping = mapping,
+    stat = stat,
+    geom = GeomVline,
+    position = PositionIdentity,
+    show.legend = show.legend,
+    inherit.aes = missing(xintercept),
+    params = rlang::list2(
+      na.rm = na.rm,
+      ...
+    )
+  )
+}
+
+
+library(statexpress)
+
+compute_means <- function(data, scales){ 
+  data |> 
+    summarise(xintercept = mean(x, na.rm = T)) 
+  }
+
+ggplot(airquality) +
+  aes(x = Ozone) +
+  geom_histogram() +
+    layer(
+    data = NULL,
+    mapping = NULL,
+    stat = qstat(compute_means),
+    geom = GeomVline,
+    position = PositionIdentity,
+    show.legend = NA,
+    inherit.aes = FALSE,
+    params = rlang::list2(
+      na.rm = F
+    )
+  )
+
+ggplot(airquality) +
+  aes(x = Ozone) +
+  geom_histogram() +
+  geom_vline(stat = qstat(compute_means))
+
+last_plot() + 
+  facet_grid(rows = vars(Month))
+
+layer_data(i = 2)
+
+```
 
 
 
----
 
-In an LLMs world?  
-
-
-
----
-
-In an LLMs world?  
-
-But I can ask an LLM to write me an extension...
-
---
-
-And it may manage...
-
---
-
-Can we design entry points that are more informative?
-
---
-
-Is it worthwhile to do so? 
-
---
-
-Should we even care what the code that writes the plot looks like any more?
-
+```{r}
+knitr::include_graphics("../../posit-consulting/report_figures/unnamed-chunk-35-1.svg")
+knitr::include_graphics("../../posit-consulting/report_figures/unnamed-chunk-35-2.svg")
+knitr::include_graphics("../../posit-consulting/report_figures/unnamed-chunk-35-3.svg")
+```
 
