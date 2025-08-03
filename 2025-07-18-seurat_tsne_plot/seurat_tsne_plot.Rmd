@@ -8,6 +8,8 @@ output:
 ---
 
 ```{r setup, include=FALSE}
+library(Rtsne)
+
 knitr::opts_chunk$set(echo = TRUE)
 options(tidyverse.quiet = TRUE)
 ```
@@ -21,6 +23,187 @@ https://satijalab.org/seurat/articles/seurat5_sketch_analysis
 
 
 ## Status Quo
+
+
+
+```{r}
+
+library(tidyverse)
+
+vars_pack <- function(...) {
+  
+  varnames <- as.character(ensyms(...))
+  vars <- list(...)
+  listvec <- asplit(do.call(cbind, vars), 1)
+  structure(listvec, varnames = varnames)
+
+  }
+
+vars_unpack <- function(x) {
+  pca_vars <- x
+  df <- do.call(rbind, pca_vars)
+  colnames(df) <- attr(pca_vars, "varnames")
+  as.data.frame(df)
+  
+}
+
+
+palmerpenguins::penguins %>% 
+  mutate(outcome = species, 
+         vars = vars_pack(bill_length_mm, species, sex)) %>% 
+  select(outcome, vars) ->
+data
+
+data |> head()
+
+head(data$vars)
+
+data %>%
+  mutate(vars_unpack(vars)) %>% 
+  select(-vars) ->
+data
+
+data |> head()
+
+
+
+compute_tsne2 <- function(data, scales, perplexity = 30){
+  
+  set.seed(1345)
+  
+data  
+  
+# identify duplicates just based on tsne data
+data |>
+  select(tsne_vars) |>
+  mutate(vars_unpack(tsne_vars)) |>
+  select(-tsne_vars) ->
+data_unpacked ; data_unpacked
+
+names_predictors <- names(data_unpacked); names_predictors
+
+data_unpacked |>
+   duplicated() ->
+dups ; dups
+# #
+# # #
+data_unpacked |>
+    bind_cols(data) |>
+     _[!dups,] |> 
+  remove_missing() ->
+clean_data ; clean_data
+# # # 
+clean_data |>
+  _[names_predictors] |>
+  as.matrix() |>
+  Rtsne::Rtsne(perplexity = perplexity) |>
+  _$Y |>
+  as_tibble() |>
+ rename(x = V1, y = V2) |>
+ bind_cols(clean_data)
+#   
+
+}
+
+
+iris |> 
+  mutate(tsne_vars = vars_pack(Sepal.Length, Sepal.Width, 
+                Petal.Length, Petal.Width)) |>
+  select(tsne_vars) |>
+  compute_tsne2()
+  
+
+StatTsne2 <- ggproto("StatTsne2", Stat, 
+                     compute_panel = compute_tsne2)
+
+GeomPointFill <- ggproto("GeomPointFill", 
+                         GeomPoint,
+                         default_aes = 
+                           modifyList(GeomPoint$default_aes, 
+                                      aes(shape = 21, 
+                                          color = from_theme(paper),
+                                          size = from_theme(pointsize * 2.5),
+                                          alpha = .7,
+                                          fill = from_theme(ink))))
+
+geom_tsne <- make_constructor(GeomPointFill, stat = StatTsne2)
+
+
+iris |> 
+  ggplot() + 
+  aes(tsne_vars = 
+        vars_pack(Sepal.Length, Sepal.Width, 
+                Petal.Length, Petal.Width),
+      fill = Species) + 
+  geom_tsne(perplexity = 2)
+
+# not sure what is going on with last_plot_wipe. 
+# last_plot_wipe() + 
+#   geom_tsne(perplexity = 5)
+
+iris |> 
+  ggplot() + 
+  aes(tsne_vars = 
+        vars_pack(Sepal.Length, Sepal.Width, 
+                Petal.Length, Petal.Width),
+      fill = Species) + 
+  geom_tsne(perplexity = 5)
+
+
+iris |> 
+  ggplot() + 
+  aes(tsne_vars = 
+        vars_pack(Sepal.Length, Sepal.Width, 
+                Petal.Length, Petal.Width),
+      fill = Species) + 
+  geom_tsne(perplexity = 12)
+
+iris |> 
+  ggplot() + 
+  aes(tsne_vars = 
+        vars_pack(Sepal.Length, Sepal.Width, 
+                Petal.Length, Petal.Width),
+      fill = Species) + 
+  geom_tsne(perplexity = 20)
+
+iris |> 
+  ggplot() + 
+  aes(tsne_vars = 
+        vars_pack(Sepal.Length, Sepal.Width, 
+                Petal.Length, Petal.Width),
+      fill = Species) + 
+  geom_tsne(perplexity = 30)
+
+## ! perplexity is too large for the number of samples
+# ggwipe::last_plot_wipe() + 
+#  geom_tsne(perplexity = 50)
+
+# to great for sample
+# ggwipe::last_plot_wipe() + 
+#   geom_tsne(perplexity = 100)
+
+aes_tsne <- function(...){aes(vars = vars_pack(vars(...)))}
+
+
+palmerpenguins::penguins |>
+   ggplot() + 
+   aes(tsne_vars = vars_pack(bill_length_mm, bill_depth_mm, 
+                        flipper_length_mm)) + 
+   geom_tsne() 
+
+last_plot() + 
+   aes(fill = species)
+
+last_plot() + 
+  aes(shape = sex)
+
+last_plot() + 
+  facet_wrap(~island)
+
+```
+
+
+------
 
 
 ## Experiment
@@ -88,125 +271,73 @@ iris |>
 
 
 ```{r}
+library(tidyverse)
+library(quanteda)
+
+# ggplot2.extension.scrapers::cran_gg_w_ggplot2_depends_or_imports |>
+#   select(package, description) |>
+#   filter(row_number() == 1, .by = package) |>
+#   tidytext::unnest_ngrams(word, description, n = 1) |> 
+#   mutate(exists = 1) |>
+#   pivot_wider(names_from = word, 
+#               values_from = exists)
+
+
+
+ggplot2.extension.scrapers::cran_gg_w_ggplot2_depends_or_imports |> 
+  select(package, description) |>
+  mutate(doc_id = package) |>  
+  select(doc_id, description) |>  
+  corpus(text_field = "description", docid_field = "doc_id") |>  
+  tokens(remove_punct = TRUE, remove_numbers = TRUE) |>  
+  tokens_tolower() |>  
+  tokens_remove(stopwords("en")) |>
+  dfm() |>  # document-feature matrix
+  convert(to = "data.frame") |>
+  select(-doc_id) |>
+  Rtsne::Rtsne(perplexity = 25) |>
+  _$Y |>
+  as_data_frame() |>
+  bind_cols(ggplot2.extension.scrapers::cran_gg_w_ggplot2_depends_or_imports["package"]) |>
+  ggplot() +
+  aes(V1, V2, label = package) +
+  geom_point(color = "grey") +
+  geom_text(check_overlap = T, size = 3)
+
 
 library(tidyverse)
-
-vars_pack <- function(...) {
+library(quanteda)
+set.seed(12456)
+tools::CRAN_package_db() |> 
+  janitor::clean_names() |>
+  select(package, description) |>
+  sample_frac(.25) |>
+  mutate(doc_id = package) |>  
+  mutate(row_number = row_number(), .by = package) |>
+  filter(row_number == 1) ->
+doc_text_df
   
-  varnames <- as.character(ensyms(...))
-  vars <- list(...)
-  listvec <- asplit(do.call(cbind, vars), 1)
-  structure(listvec, varnames = varnames)
-
-  }
-
-vars_unpack <- function(x) {
-  pca_vars <- x
-  df <- do.call(rbind, pca_vars)
-  colnames(df) <- attr(pca_vars, "varnames")
-  as.data.frame(df)
-  
-}
-
-
-palmerpenguins::penguins %>% 
-  mutate(outcome = species, 
-         vars = vars_pack(bill_length_mm, species, sex)) %>% 
-  select(outcome, vars) ->
-data
-
-data |> head()
-
-head(data$vars)
-
-data %>%
-  mutate(vars_unpack(vars)) %>% 
-  select(-vars) ->
-data
-
-data |> head()
-
-
-
-compute_tsne2 <- function(data, ...){
-  
-  set.seed(1345)
-  
-data  
-  
-# identify duplicates just based on tsne data
-data |>
-  select(tsne_vars) |>
-  mutate(vars_unpack(tsne_vars)) |>
-  select(-tsne_vars) ->
-data_unpacked ; data_unpacked
-
-names_predictors <- names(data_unpacked); names_predictors
-
-data_unpacked |>
-   duplicated() ->
-dups ; dups
-# #
-# # #
-data_unpacked |>
-    bind_cols(data) |>
-     _[!dups,] |> 
-  remove_missing() ->
-clean_data ; clean_data
-# # # 
-clean_data |>
-  _[names_predictors] |>
-  as.matrix() |>
-  Rtsne() |>
+doc_text_df |>  
+  select(doc_id, description) |>  
+  corpus(text_field = "description", docid_field = "doc_id") |>  
+  tokens(remove_punct = TRUE, remove_numbers = TRUE) |>  
+  tokens_tolower() |>  
+  tokens_remove(stopwords("en")) |>
+  dfm() |>  # document-feature matrix
+  convert(to = "data.frame") |>
+  select(-doc_id) |>
+  Rtsne::Rtsne(perplexity = 25) |>
   _$Y |>
-  as_tibble() |>
- rename(x = V1, y = V2) |>
-  bind_cols(clean_data)
-#   
-
-}
-
-
-iris |> 
-  mutate(tsne_vars = vars_pack(Sepal.Length, Sepal.Width, 
-                Petal.Length, Petal.Width)) |>
-  select(tsne_vars) |>
-  compute_tsne2()
-  
-
-StatTsne2 <- ggproto("StatTsne2", Stat, 
-                     compute_layer = compute_tsne2)
-
-geom_tsne <- make_constructor(GeomPoint, stat = StatTsne2)
+  as_data_frame() |>
+  bind_cols(doc_text_df |> select(package)) |>
+  ggplot() +
+  aes(V1, V2, label = package) +
+  geom_point() +
+  # aes(color = package |> str_detect("gg|GG|geom"))
+  geom_text(check_overlap = T, size = 3)
 
 
 
-iris |> 
-  ggplot() + 
-  aes(tsne_vars = 
-        vars_pack(Sepal.Length, Sepal.Width, 
-                Petal.Length, Petal.Width),
-      color = Species) + 
-  geom_tsne()
-
-
-aes_tsne <- function(...){aes(vars = vars_pack(vars(...)))}
-
-
-palmerpenguins::penguins |>
-   ggplot() + 
-   aes(tsne_vars = vars_pack(bill_length_mm, bill_depth_mm, 
-                        flipper_length_mm)) + 
-   geom_tsne() 
-
-last_plot() + 
-   aes(color = species)
-
-last_plot() + 
-  aes(shape = sex) 
-
-last_plot() + 
-  facet_wrap(~island)
 
 ```
 
