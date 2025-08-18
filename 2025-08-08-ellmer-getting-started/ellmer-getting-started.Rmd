@@ -1,0 +1,110 @@
+---
+title: "Getting started with {ellmer} - w/ API presteps"
+author: "Evangeline 'Gina' Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = T)
+options(tidyverse.quiet = TRUE)
+```
+
+# Introduction
+
+[Getting started with ellmer](https://ellmer.tidyverse.org/) looks easy enough: install the package, load it, create a chat object and boom start chatting!
+
+```{r, eval = F}
+# Step 1
+install.package("ellmer")
+
+# Step 2
+library(ellmer)
+
+# Step 3
+my_chat_object <- chat_google_gemini()
+
+# Step 4 - query from R!
+chat$chat("What preceding languages most influenced R?")
+
+```
+
+
+But there are some pre-steps which may be blockers involving API key set up.  The intent of this 
+
+# {ellmer} presteps
+
+## ~~Step 000 Find your credit card?~~
+
+## Step 00. get API key
+
+### Step 00.a make sure you are logged into google account
+
+### Step 00.b navigate to aistudio.google.com
+
+### Step 00.c accept terms and conditions (but not email updates)
+
+### Step 00.d select get API key (not use in studio...?)
+
+### Step 00.e copy API key
+
+## Step 0. Save API key as an environment variable
+
+### Step 0.a install {usethis} if you haven't already
+
+```{r, eval = F}
+# install.packages("usethis")
+```
+
+### Step 0.b use the `usethis::edit_r_environ()` to open .Renviron file
+
+```
+usethis::edit_r_environ()
+```
+
+Alternatively, you can fine your .Renviron file on your own.
+
+### Step 0.c
+
+Edit file
+
+:::{.callout-note title=".Renviron"}
+gemini_api_key = "XXXXyourXAPIXkeyXhereXXXXX"
+:::
+
+### Step 0.d  Save .Renviron & Restart R
+
+Session -> Restart R
+
+
+# Take {ellmer} for a spin!
+
+
+# Step 1
+
+```{r, eval = T}
+# install.package("ellmer")
+```
+
+
+# Step 2
+
+```{r}
+library(ellmer)
+```
+
+
+# Step 3 retrieve key from .Renviron file, and use it in `chat_google_gemini`
+
+```{r}
+gemini_key <- Sys.getenv("gemini_key") # check key interactively `gemini_key` if desired
+my_chat_object <- chat_google_gemini(api_key = gemini_key)
+```
+
+# Step 4 - query from R!
+my_chat_object$chat("Who is the elephant that the R package ellmer invokes?")
+
+```
+

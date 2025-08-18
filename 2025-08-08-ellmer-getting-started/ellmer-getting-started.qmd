@@ -1,0 +1,166 @@
+---
+title: "Draft: Getting started with {ellmer} X Google Gemini"
+subtitle: "A pre-steps mini workshop 🐘✨ "
+author: "Evangeline 'Gina' Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = T)
+options(tidyverse.quiet = TRUE)
+```
+
+# Introduction
+
+
+
+::: {.columns}
+::: {.column width="15%"}
+![](https://ellmer.tidyverse.org/logo.png)
+:::
+::: {.column width="2.5%"}
+:::
+::: {.column width="82.5%"}
+[Getting started with {ellmer}](https://ellmer.tidyverse.org/) looks easy enough. Install the package, load it, create a chat object and then, boom, start chatting! Right?
+:::
+:::
+
+
+
+```{r, eval = F}
+# Step 1 - install ellmer
+install.package("ellmer")
+
+# Step 2 - load ellmer
+library(ellmer)
+
+# Step 3 - create a chat object
+my_chat_object <- chat_google_gemini()
+
+# Step 4 - query!
+my_chat_object$chat("What preceding languages most influenced R?")
+
+```
+
+Yes! But, there are some pre-steps which might feel like *blockers* involving API key set up. So, for this mini-workshop, we focus on these pre-steps. 
+
+We'll only assume 1) that you are an R user and 2) that you have a Google account.  
+
+After getting through the pre-steps, you should be able to query an LLM from R.  Specifically, we'll query Google Gemini about why {ellmer} features an elephant in its branding! 
+
+# Pre-steps to getting started with {ellmer}
+
+As discussed above, getting and API and setting it up as an environmental variable (recommended), are required before you can actually dive in and use {ellmer}.  We go through these steps for using Google Gemini.  Steps should be similar for other LLM providers.  
+
+
+
+## Pre-step A. Get API key
+
+Getting a Google geminani account involves five mini steps.
+
+0. [x] ~~Find your credit card~~  
+
+
+
+::: {.columns}
+
+
+::: {.column width="52.5%"}
+Actually don't worry about this step!  We'll use a free tier of Google Gemini, which is free, so finding your credit card (and giving it to a third party) won't be a blocker! However, *note* that your conversations and any uploaded will be used to further train the model. ⚠️
+:::
+::: {.column width="2.5%"}
+:::
+::: {.column width="40%"}
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Google_Gemini_logo.svg/344px-Google_Gemini_logo.svg.png)
+:::
+:::
+
+
+
+i. [ ] Make sure you are logged into your Google account. 
+
+ii. [ ] Navigate to <a href="aistudio.google.com" 
+target="_blank">aistudio.google.com</a>.
+
+iii. [ ] Accept terms and conditions (at your own risk). 
+
+iv. [ ] Select 'Get API key'. ![](images/clipboard-1765685668.png) 
+
+v. [ ] Copy API key 
+
+## Pre-step B. Save API key as an environment variable
+
+i. [ ] Install `{usethis}` if you haven't already
+
+```{r, eval = F}
+# if not yet installed
+install.packages("usethis")
+```
+
+ii. [ ] Open the .Renviron file with `usethis::edit_r_environ()` 
+    
+      
+```{r, eval = F}
+usethis::edit_r_environ()
+```
+
+The .Renviron file should open in your RStudio or Positron session.
+
+iii. [ ] Edit the `.Renviron` file to contain the line shown below.
+
+Paste the API key that you copied in Prestep A.v on the right hand side and in quotation marks. Make sure to have an *empty line* as the last line in the file.
+
+::: {.callout-note title=".Renviron file contents:"}
+GOOGLE_API_KEY <- "xxxxYOURxAPIxKEYxHERExxxx"
+:::
+
+*Important:*  For ellmer's function `chat_google_gemini` to automatically recognize the API key, the variable must be named `GOOGLE_API_KEY`
+
+
+iii. [ ] Save `.Renviron` file: `File -> Save`
+
+
+iv. [ ] Restart R: e.g. `Session -> Restart R`
+
+
+# Done with Pre-steps! *Now* we can do a 'hello ellmer'!
+
+### Step 1. 
+
+```{r, eval = F}
+install.package("ellmer")
+```
+
+### Step 2. 
+
+```{r}
+library(ellmer)
+```
+
+### Step 3 Create a chat object with `ellmer::chat_google_gemini()`
+
+
+```{r, message = F}
+my_chat_object <- chat_google_gemini()
+```
+
+The environmental variable will automatically be retrieved and used as the `api_key` argument in `chat_google_gemini()` as long as it is named `GOOGLE_API_KEY`, as shown in Prestep B.iii.
+
+
+### Step 4 Ready to query!
+
+```{r, cache = T}
+my_chat_object$chat("Who is the elephant that the ellmer R package aludes to?")
+```
+
+# What's next?  Explore more together
+
+<!-- We hope you've enjoyed this mini workshop! If you haven't done so yet, please consider joining the Posit's R X LLMs community to hear about creative uses of LLMs with R (and beyond), join our discussions, and get more getting started content! -->
+
+```{r, echo = F}
+ask <- my_chat_object$chat
+
+```
