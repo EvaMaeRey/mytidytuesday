@@ -1,0 +1,102 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+fct_reorder_within <- function(x, y, group, decreasing = FALSE) {
+  # Input validation
+  if (!is.factor(x)) x <- as.factor(x)  # Ensure x is a factor
+  if (length(x) != length(y) || length(x) != length(group)) {
+    stop("All arguments (x, y, group) must have the same length")
+  }
+  
+  # Create a data frame (base R)
+  df <- data.frame(x = x, y = y, group = group, stringsAsFactors = FALSE)
+  
+  # Create a unique identifier combining x and group
+  # Rationale: Ensures uniqueness across groups
+  df$combined <- paste(df$x, df$group, sep = "__")
+  
+  # Order the data by group and value
+  # Rationale: order() with decreasing = FALSE puts smallest first, so highest is last
+  ord <- order(df$group, df$y, decreasing = decreasing)
+  df <- df[ord, ]
+  
+  # Create a factor with ordered levels based on the combined identifier
+  # Rationale: Levels go smallest to largest, flipping to largest at top with coord_flip
+  result <- factor(df$combined, levels = unique(df$combined))
+  
+  # Reorder back to original row order
+  # Rationale: Matches input row order for plotting
+  result <- result[order(ord)]
+  
+  return(result)
+}
+
+library(tidyverse)
+data <- tibble(
+  country = c("Sudan", "South Africa", "Zambia", "South Africa", "Egypt", "Morocco"),
+  category = c("biofuel", "biofuel", "biofuel", "coal", "coal", "coal"),
+  value = c(0.94, 0.4, 0.88, 192.73, 179.22, 33.12)
+)
+
+tidytext::reorder_within(data$country, data$category, data$value)
+
+fct_cross(data$country, data$category) |> 
+  fct_reorder(data$value) |>
+  levels()
+
+
+library(tidyverse)
+data <- tibble(
+  country = c("Sudan", "South Africa", "Zambia", "South Africa", "Egypt", "Morocco"),
+  category = c("biofuel", "biofuel", "biofuel", "coal", "coal", "coal"),
+  value = c(0.94, 0.4, 0.88, 192.73, 179.22, 33.12)
+)
+
+tidytext::reorder_within(x = data$country, 
+                         by = data$value,
+                         within = data$category) |>
+  tibble(cat = _, data$value) |> 
+  arrange(cat)
+
+
+fct_cross(data$country, data$category, sep = "____") |> # create new levels
+  fct_reorder(data$value) |>               # reorder on value (`by` argument)
+  fct_reorder(data$category) |>            # reorder on cat (`within` argument) 
+  tibble(cat = _, value = data$value) |> 
+  arrange(cat)
+
+
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

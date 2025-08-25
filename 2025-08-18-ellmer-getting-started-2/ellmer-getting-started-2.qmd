@@ -1,0 +1,83 @@
+---
+title: "Draft: Getting started with {ellmer} X Google Gemini"
+subtitle: "A pre-steps mini workshop 🐘✨ "
+author: "Evangeline 'Gina' Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = T)
+options(tidyverse.quiet = TRUE)
+```
+
+# Introduction
+
+
+
+::: {.columns}
+::: {.column width="15%"}
+![](https://ellmer.tidyverse.org/logo.png)
+:::
+::: {.column width="2.5%"}
+:::
+::: {.column width="82.5%"}
+[Getting started with {ellmer}](https://ellmer.tidyverse.org/) looks easy enough. Install the package, load it, create a chat object and then, boom, start chatting! Right?
+:::
+:::
+
+
+
+```{r, eval = F}
+# Step 1 - install ellmer
+#install.package("ellmer")
+
+# Step 2 - load ellmer
+library(ellmer)
+
+# Step 3 - create a chat object
+chat <- chat_google_gemini()
+
+# Step 4 - query!
+chat$chat("Wanna say hello?")
+
+# Step 5 - consider an alias for interactive chats in console
+ask <- chat$chat
+ask("Here's a throw-away question:  What's your favorite color")
+```
+
+```{r}
+name_age_typ_obj <- type_object(
+    name = type_string(),
+    age = type_number()
+  )
+
+"My name is Susan and I'm 13 years old" |>
+  chat$chat_structured(type = name_age_typ_obj)
+```
+
+
+
+
+
+```{r}
+prompts <- list(
+  "I go by Alex. 42 years on this planet and counting.",
+  "Pleased to meet you! I'm Jamal, age 27.",
+  "They call me Li Wei. Nineteen years young.",
+  "Fatima here. Just celebrated my 35th birthday last week.",
+  "The name's Robert - 51 years old and proud of it.",
+  "Kwame here - just hit the big 5-0 this year."
+)
+
+name_age_typ_obj <- type_object(
+    name = type_string(),
+    age = type_number()
+  ) 
+
+chat |>
+parallel_chat_structured(, prompts, type = name_age_typ_obj)
+
+```

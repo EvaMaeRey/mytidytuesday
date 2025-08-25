@@ -1,0 +1,272 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = T)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+
+library(tidyverse)
+
+mvars <- function(...) {
+  
+  varnames <- as.character(ensyms(...))
+  vars <- list(...)
+  listvec <- asplit(do.call(cbind, vars), 1)
+  structure(listvec, varnames = varnames)
+
+  }
+
+vars_unpack <- function(x) {
+  pca_vars <- x
+  df <- do.call(rbind, pca_vars)
+  colnames(df) <- attr(pca_vars, "varnames")
+  as.data.frame(df)
+  
+}
+
+
+
+compute_tsne2 <- function(data, scales, perplexity = 20){
+  
+  set.seed(1345)
+  
+data  
+  
+# identify duplicates just based on tsne data
+data |>
+  select(vars) |>
+  mutate(vars_unpack(vars)) |>
+  select(-vars) ->
+data_unpacked ; data_unpacked
+
+names_predictors <- names(data_unpacked); names_predictors
+
+data_unpacked |>
+   duplicated() ->
+dups ; dups
+# #
+# # #
+data_unpacked |>
+    bind_cols(data) |>
+     _[!dups,] |> 
+  remove_missing() ->
+clean_data ; clean_data
+# # # 
+clean_data |>
+  _[names_predictors] |>
+  as.matrix() |>
+  Rtsne::Rtsne(perplexity = perplexity) |>
+  _$Y |>
+  as_tibble() |>
+ rename(x = V1, y = V2) |>
+ bind_cols(clean_data)
+#   
+
+}
+
+
+iris |> 
+  mutate(vars = mvars(Sepal.Length, Sepal.Width, 
+                Petal.Length, Petal.Width)) |>
+  select(vars) |>
+  compute_tsne2()
+  
+
+StatTsne2 <- ggproto("StatTsne2", Stat, 
+                     compute_panel = compute_tsne2)
+
+GeomPointFill <- ggproto("GeomPointFill", 
+                         GeomPoint,
+                         default_aes = 
+                           modifyList(GeomPoint$default_aes, 
+                                      aes(shape = 21, 
+                                          color = from_theme(paper),
+                                          size = from_theme(pointsize * 2.5),
+                                          alpha = .7,
+                                          fill = from_theme(ink))))
+
+geom_tsne <- make_constructor(GeomPointFill, stat = StatTsne2, perplexity = 30)
+```
+
+
+
+```{r}
+library(umap) 
+```
+
+
+
+```{r}
+compute_umap <- function(data, scales, n_components = 2, random_state = 15){
+  
+set.seed(1345)
+  
+# identify duplicates just based on tsne data
+data |>
+  select(vars) |>
+  mutate(vars_unpack(vars)) |>
+  select(-vars) ->
+data_unpacked ; data_unpacked
+
+names_predictors <- names(data_unpacked); names_predictors
+
+data_unpacked |>
+    bind_cols(data) |>
+  remove_missing() ->
+clean_data ; clean_data
+
+# # # 
+clean_data |>
+  _[names_predictors] |>
+  umap(n_components = n_components, random_state = random_state)  |>
+  _$layout |>
+  as_tibble() |>
+ rename(x = V1, y = V2) |>
+ bind_cols(clean_data)
+#   
+
+}
+
+iris |> 
+  mutate(vars = 
+        mvars(Sepal.Length, Sepal.Width, 
+                Petal.Length, Petal.Width)) |>
+  select(color = Species, vars) |>
+  compute_umap()
+
+StatUmap <- ggproto("StatUmap", Stat, 
+                     compute_panel = compute_umap)
+
+GeomPointFill <- ggproto("GeomPointFill", 
+                         GeomPoint,
+                         default_aes = 
+                           modifyList(GeomPoint$default_aes, 
+                                      aes(shape = 21, 
+                                          color = from_theme(paper),
+                                          size = from_theme(pointsize * 2.5),
+                                          alpha = .7,
+                                          fill = from_theme(ink))))
+
+geom_umap <- make_constructor(GeomPointFill, stat = StatUmap, random_state = 15, n_components = 4)
+
+
+iris |> 
+  ggplot() + 
+  aes(vars = 
+        mvars(Sepal.Length, Sepal.Width, 
+                Petal.Length, Petal.Width),
+      fill = Species) + 
+  geom_umap()
+  
+iris |> 
+  ggplot() + 
+  aes(vars = 
+        mvars(Sepal.Length, Sepal.Width, 
+                Petal.Length, Petal.Width),
+      fill = Species) +
+  geom_tsne()
+
+palmerpenguins::penguins |> 
+  ggplot() + 
+  aes(vars = 
+        mvars(bill_length_mm, bill_depth_mm, 
+              flipper_length_mm, body_mass_g),
+      fill = species,
+      alpha = sex) +
+  geom_tsne(perplexity = 30)
+
+palmerpenguins::penguins |> 
+  ggplot() + 
+  aes(vars = 
+        mvars(bill_length_mm, bill_depth_mm, 
+              flipper_length_mm, body_mass_g),
+      fill = species,
+      alpha = sex) +
+  geom_umap()
+
+palmerpenguins::penguins |> 
+  ggplot() + 
+  aes(vars = 
+        mvars(bill_length_mm, bill_depth_mm, 
+              flipper_length_mm, body_mass_g),
+      fill = species,
+      alpha = sex) +
+  geom_umap()
+
+unvotes::un_votes |> 
+  mutate(num_vote = case_when(vote == "yes" ~ 1,
+                              vote == "abstain" ~ .5,
+                              vote == "no" ~ 0,
+                              TRUE ~ 0 )) |>
+  # filter(rcid %in% 1:30) |>
+  pivot_wider(id_cols = c(country, country_code),
+    names_from = rcid, 
+              values_from = num_vote,
+              values_fill = .5
+            ) |>
+  mutate(continent = country_code |> 
+           countrycode::countrycode(origin = "iso2c", destination = "continent")) |>
+  mutate(continent = continent |> is.na() |> ifelse("unknown", continent)) ->
+un_ga_country_wide_rcid
+  
+
+un_ga_country_wide_rcid |>
+  ggplot() + 
+  aes(vars = 
+        mvars(`113`, `114`, `115`, `116`, `117`, `118`, `119`, 
+              `120`, `121`, `122`, `123`, `124`, `125`, 
+              `126`, `127`, `128`, `129`, `220` )) + 
+  geom_umap() +
+  aes(fill = continent)
+
+
+last_plot() + 
+  geom_text(stat = StatUmap, check_overlap = T, aes(fill = NULL)) +
+  aes(label = country)
+
+layer_data(i = 2)
+
+
+un_ga_country_wide_rcid |>
+  ggplot() + 
+  aes(vars = 
+        mvars(`113`, `114`, `115`, `116`, `117`, `118`, `119`, 
+              `120`, `121`, `122`, `123`, `124`, `125`, 
+              `126`, `127`, `128`, `129`, `220`, `221`,
+              `1113`, `1114`, `1115`, `1116`, `1117`, `1118`, `119`, 
+              `1120`, `1121`, `1122`, `1123`, `1124`, `1125`)) + 
+  geom_tsne(perplexity = 5) +
+  aes(fill = continent)
+
+
+last_plot() + 
+  geom_text(stat = StatTsne2, 
+            check_overlap = T, 
+            aes(fill = NULL), 
+            perplexity = 5) +
+  aes(label = country)
+
+```
+
+
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

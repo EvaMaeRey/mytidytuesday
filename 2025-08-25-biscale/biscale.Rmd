@@ -1,0 +1,73 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+knitr::opts_chunk$set(error = T)
+
+```
+
+## Experiment
+
+```{r}
+library(biscale)
+
+# create classes
+example <- bi_class(stl_race_income, x = pctWhite, y = medInc, style = "quantile", dim = 3)
+
+example |> names()
+
+ggplot(example) +
+  geom_sf(show.legend = FALSE)
+
+```
+
+# or?
+
+```{r, eval = T}
+library(tidyverse)
+library(biscale)
+
+bi_cross <- function(fill1, fill2){
+  
+  paste(
+    cut_number({{fill1}}, 3) |> as.numeric(), 
+    cut_number({{fill2}}, 3) |> as.numeric(),
+    sep = "-")
+  
+}
+
+stl_race_income |>
+  ggplot() +
+  aes(fill = bi_cross(pctWhite, medInc)) +
+  geom_sf(show.legend = F) +
+  bi_scale_fill(pal = "GrPink", dim = 3) #+
+  #labs(title = "Race and Income in St. Louis, MO") +
+  #bi_theme()
+
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
