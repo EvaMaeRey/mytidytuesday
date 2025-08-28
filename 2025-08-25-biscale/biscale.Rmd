@@ -50,20 +50,21 @@ library(biscale)
 bi_cross <- function(fill1, fill2){
   
   paste(
-    cut_number({{fill1}}, 3) |> as.numeric(), 
-    cut_number({{fill2}}, 3) |> as.numeric(),
+    cut_number({{fill1}}, 4) |> as.numeric(), 
+    cut_number({{fill2}}, 4) |> as.numeric(),
     sep = "-")
   
 }
 
+
+library(biscale)
+
 stl_race_income |>
   ggplot() +
-  aes(fill = bi_cross(pctWhite, medInc)) +
+  aes(fill = 
+        bi_cross(pctWhite, medInc)) +
   geom_sf(show.legend = F) +
-  bi_scale_fill(pal = "GrPink", dim = 3) #+
-  #labs(title = "Race and Income in St. Louis, MO") +
-  #bi_theme()
-
+  bi_scale_fill("GrPink") 
 
 
 ```
