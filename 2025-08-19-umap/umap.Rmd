@@ -47,13 +47,13 @@ compute_tsne2 <- function(data, scales, perplexity = 20){
   
   set.seed(1345)
   
-data  
+# data  
   
 # identify duplicates just based on tsne data
 data |>
-  select(vars) |>
-  mutate(vars_unpack(vars)) |>
-  select(-vars) ->
+  select(dims) |>
+  mutate(vars_unpack(dims)) |>
+  select(-dims) ->
 data_unpacked ; data_unpacked
 
 names_predictors <- names(data_unpacked); names_predictors
@@ -83,9 +83,9 @@ clean_data |>
 
 
 iris |> 
-  mutate(vars = mvars(Sepal.Length, Sepal.Width, 
+  mutate(dims = mvars(Sepal.Length, Sepal.Width, 
                 Petal.Length, Petal.Width)) |>
-  select(vars) |>
+  select(dims) |>
   compute_tsne2()
   
 
@@ -108,21 +108,15 @@ geom_tsne <- make_constructor(GeomPointFill, stat = StatTsne2, perplexity = 30)
 
 
 ```{r}
-library(umap) 
-```
-
-
-
-```{r}
 compute_umap <- function(data, scales, n_components = 2, random_state = 15){
   
 set.seed(1345)
   
 # identify duplicates just based on tsne data
 data |>
-  select(vars) |>
-  mutate(vars_unpack(vars)) |>
-  select(-vars) ->
+  select(dims) |>
+  mutate(vars_unpack(dims)) |>
+  select(-dims) ->
 data_unpacked ; data_unpacked
 
 names_predictors <- names(data_unpacked); names_predictors
@@ -135,7 +129,7 @@ clean_data ; clean_data
 # # # 
 clean_data |>
   _[names_predictors] |>
-  umap(n_components = n_components, random_state = random_state)  |>
+  umap::umap(n_components = n_components, random_state = random_state)  |>
   _$layout |>
   as_tibble() |>
  rename(x = V1, y = V2) |>
@@ -145,10 +139,10 @@ clean_data |>
 }
 
 iris |> 
-  mutate(vars = 
+  mutate(dims = 
         mvars(Sepal.Length, Sepal.Width, 
                 Petal.Length, Petal.Width)) |>
-  select(color = Species, vars) |>
+  select(color = Species, dims) |>
   compute_umap()
 
 StatUmap <- ggproto("StatUmap", Stat, 
@@ -169,7 +163,7 @@ geom_umap <- make_constructor(GeomPointFill, stat = StatUmap, random_state = 15,
 
 iris |> 
   ggplot() + 
-  aes(vars = 
+  aes(dims = 
         mvars(Sepal.Length, Sepal.Width, 
                 Petal.Length, Petal.Width),
       fill = Species) + 
@@ -177,7 +171,7 @@ iris |>
   
 iris |> 
   ggplot() + 
-  aes(vars = 
+  aes(dims = 
         mvars(Sepal.Length, Sepal.Width, 
                 Petal.Length, Petal.Width),
       fill = Species) +
@@ -185,7 +179,7 @@ iris |>
 
 palmerpenguins::penguins |> 
   ggplot() + 
-  aes(vars = 
+  aes(dims = 
         mvars(bill_length_mm, bill_depth_mm, 
               flipper_length_mm, body_mass_g),
       fill = species,
@@ -194,7 +188,7 @@ palmerpenguins::penguins |>
 
 palmerpenguins::penguins |> 
   ggplot() + 
-  aes(vars = 
+  aes(dims = 
         mvars(bill_length_mm, bill_depth_mm, 
               flipper_length_mm, body_mass_g),
       fill = species,
@@ -203,7 +197,7 @@ palmerpenguins::penguins |>
 
 palmerpenguins::penguins |> 
   ggplot() + 
-  aes(vars = 
+  aes(dims = 
         mvars(bill_length_mm, bill_depth_mm, 
               flipper_length_mm, body_mass_g),
       fill = species,
@@ -227,12 +221,11 @@ unvotes::un_votes |>
 un_ga_country_wide_rcid
   
 
+unvotes::un_votes$rcid |> max()
+
 un_ga_country_wide_rcid |>
   ggplot() + 
-  aes(vars = 
-        mvars(`113`, `114`, `115`, `116`, `117`, `118`, `119`, 
-              `120`, `121`, `122`, `123`, `124`, `125`, 
-              `126`, `127`, `128`, `129`, `220` )) + 
+  ggplyr::aes_dims(`3`:`9147`) + 
   geom_umap() +
   aes(fill = continent)
 
@@ -241,27 +234,27 @@ last_plot() +
   geom_text(stat = StatUmap, check_overlap = T, aes(fill = NULL)) +
   aes(label = country)
 
-layer_data(i = 2)
+# layer_data(i = 2)
+```
 
 
+```{r, fig.height=12, fig.width= 8 }
+library(ggplyr)
+snapshot <- ggplyr::intercept
 un_ga_country_wide_rcid |>
   ggplot() + 
-  aes(vars = 
-        mvars(`113`, `114`, `115`, `116`, `117`, `118`, `119`, 
-              `120`, `121`, `122`, `123`, `124`, `125`, 
-              `126`, `127`, `128`, `129`, `220`, `221`,
-              `1113`, `1114`, `1115`, `1116`, `1117`, `1118`, `119`, 
-              `1120`, `1121`, `1122`, `1123`, `1124`, `1125`)) + 
-  geom_tsne(perplexity = 5) +
-  aes(fill = continent)
-
-
-last_plot() + 
+  aes_dims(`9001`:`9147`) + 
+  geom_tsne(perplexity = 5) + snapshot("p1") +
+  aes(fill = continent) + snapshot("p2") + 
   geom_text(stat = StatTsne2, 
             check_overlap = T, 
-            aes(fill = NULL), 
-            perplexity = 5) +
-  aes(label = country)
+            aes(fill = NULL, label = country), # do this in the Stat?
+            perplexity = 5) + snapshot("p3") -> hide
+  
+library(patchwork)
+p1 / p2 / p3 + plot_annotation(title = "TSNE dimention reduction", tag_levels = 1,
+                               subtitle = 
+                               "    1. Use TSNE to reduce many dimensions to two dimensions,   \n    2. fill by continent, \n    3. label some countries")
 
 ```
 
