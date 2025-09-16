@@ -1,0 +1,301 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = T)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+library(tidyverse)
+library(ozmaps)
+sf_oz <- ozmap("states")
+
+crs_au_states <- sf::st_crs(sf_oz)
+
+sf_oz |> names()
+#> [1] "NAME"     "geometry"
+#> 
+sf_oz |>
+  select(state_name = NAME) %>% 
+    ggplot2::StatSf$compute_panel(coord = ggplot2::CoordSf) |>
+    ggplot2::StatSfCoordinates$compute_group(coord = ggplot2::CoordSf) ->
+australia_state_ref
+
+# layer_county w/ inner join
+compute_panel_australia_states <- function(data, scales){
+
+australia_state_ref  |>
+    inner_join(data)
+
+}
+
+StatAuStates <- ggproto("StatAuStates",
+                        Stat,
+                        compute_panel = compute_panel_australia_states,
+                        default_aes = aes(label = after_stat(state_name)),
+                        required_aes = c("state_name"))
+
+tribble(~state, ~pop,
+        "Victoria", 1,
+        "Queensland", 2,
+        "New South Wales", 3,
+        "Western Australia", 4,
+        "Northern Territory", 5,
+        "Tasmania", 6,
+        "South Australia", 7,
+        "Australian Capital Territory", 8,
+        "Other Territories", 9
+        ) ->
+au_states
+
+ggplot(au_states) +
+  aes(state_name = state) + 
+  geom_sf(stat = StatAuStates) + 
+  geom_sf_text(stat = StatAuStates,
+               check_overlap = T,
+               size = 2) + 
+  aes(fill = pop) +
+  theme(panel.background = element_rect(fill = "lightblue")) + 
+  coord_sf(crs = crs_au_states)
+
+```
+
+
+
+# w make_constructor
+
+
+```{r, eval = T, error = T}
+# library(australians)
+geom_states_wo_crs <- make_constructor(GeomSf, stat = StatAuStates)
+geom_states <- function(...){list(geom_states0(...), coord_sf(crs = crs_au_states))}
+geom_states_text <- make_constructor(GeomText, stat = StatAuStates)
+
+
+geom_sf
+
+
+ggplot(au_states) +
+  aes(state_name = state,
+      fill = pop) + 
+  geom_states()# +
+  # geom_states_text()
+
+last_plot() + 
+  coord_sf(crs = crs_au_states) # you would want to have this tucked in though.
+  # geom_states_text() 
+  NULL
+
+geom_sf  
+  
+```
+
+
+```{r}
+sf_oz <- ozmap("states") |> rename(state = NAME)
+crs_au_states <- sf::st_crs(sf_oz)
+
+
+layer_coord_sf <- function(ref_data, geom = GeomSf){
+
+ref_data |>
+    ggplot2::StatSf$compute_panel(coord = ggplot2::CoordSf) |>
+    ggplot2::StatSfCoordinates$compute_group(coord = ggplot2::CoordSf) ->
+ref_data_plus_sf
+
+ref_data_plus_sf$id_col <- ref_data_plus_sf[,1][[1]]
+
+# layer_county w/ inner join
+compute_panel_ref_data <- function(data, scales){
+
+ref_data_plus_sf  |>
+    inner_join(data)
+
+}
+
+StatTemp <- ggproto(NULL, Stat,
+                    compute_panel = compute_panel_ref_data,
+                    default_aes = aes(label = after_stat(id_col))#,
+                    # required_aes = required_aes
+                    )
+
+c(
+layer_sf(geom = geom, stat = StatTemp, position = "identity"),
+coord_sf(crs = sf::st_crs(ref_data))
+)
+
+}
+
+geom_state <- function(...){layer_coord_sf(sf_oz, ...)}
+geom_state_text <- function(...){layer_coord_sf(sf_oz, GeomText)}
+
+
+
+au_states |> 
+  ggplot() + 
+  aes(state = state) + 
+  geom_state() + 
+  geom_state_text() + 
+  aes(fill = pop)
+
+###### us states ###########
+usmapdata::us_map() |> 
+  select(state = full, geometry = geom, everything()) ->
+states
+
+geom_state <- function(...){layer_coord_sf(states, ...)}
+geom_state_text <- function(...){layer_coord_sf(states, GeomText)}
+
+USArrests |> 
+  rownames_to_column(var = "state") |> 
+  ggplot() + 
+  aes(state = state, 
+      fill = Rape) + 
+  geom_state() + 
+  geom_state_text() + 
+  aes(label = after_stat(abbr))
+
+
+```
+
+
+
+
+```{r}
+library(rlang)
+make_constructor <- function(x, ...) {
+  UseMethod("make_constructor")
+}
+
+
+layer_coord_sf <- function (mapping = aes(), data = NULL, geom = GeomSf, stat = "sf", position = "identity", 
+    na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ..., crs) 
+{
+    c(layer_sf(geom = geom, data = data, mapping = mapping, 
+        stat = stat, position = position, show.legend = show.legend, 
+        inherit.aes = inherit.aes, params = list2(na.rm = na.rm, 
+            ...)), coord_sf(crs = crs))
+}
+
+make_constructor.Geom <- function(x, ..., checks = exprs(), omit = character(),
+                                  env = rlang::caller_env()) {
+
+  # Check that we can independently find the geom
+  geom <- gsub("^geom_", "", ggplot2:::snake_class(x))
+  ggplot2:::validate_subclass(geom, "Geom", env = env)
+
+  # Split additional arguments into required and extra ones
+  args <- enexprs(...)
+  fixed_fmls_names <- c("mapping", "data", "stat", "position", "...",
+                        "na.rm", "show.legend", "inherit.aes")
+  extra_args <- setdiff(names(args), fixed_fmls_names)
+  if ("geom" %in% extra_args) {
+    cli::cli_abort("{.arg geom} is a reserved argument.")
+  }
+
+  # Fill in values for parameters from draw functions
+  known_params <-
+    unique(c(names(args), fixed_fmls_names, "flipped_aes", x$aesthetics(), omit))
+  missing_params <- setdiff(x$parameters(), known_params)
+  if (length(missing_params) > 0) {
+    draw_args <- ggplot2:::ggproto_formals(x$draw_panel)
+    if ("..." %in% names(draw_args)) {
+      draw_args <- ggproto_formals(x$draw_group)
+    }
+    params <- intersect(missing_params, names(draw_args))
+    extra_args <- c(extra_args, params)
+    for (param in params) {
+      if (!identical(draw_args[[param]], quote(expr = ))) {
+        args[param] <- draw_args[param]
+      }
+    }
+    extra_args <- intersect(extra_args, names(args))
+    missing_params <- setdiff(missing_params, names(args))
+    if (length(missing_params) > 0) {
+      cli::cli_warn(
+        "In {.fn geom_{geom}}: please consider providing default values for: \\
+        {missing_params}."
+      )
+    }
+  }
+
+  # Build function formals
+  fmls <- rlang::pairlist2(
+    mapping  = args$mapping,
+    data     = args$data,
+    stat     = args$stat %||% "identity",
+    position = args$position %||% "identity",
+    `...` = rlang::missing_arg(),
+    !!!args[extra_args],
+    na.rm    = args$na.rm %||% FALSE,
+    show.legend = args$show.legend %||% NA,
+    inherit.aes = args$inherit.aes %||% TRUE
+  )
+
+  # Construct call for the 'layer(params)' argument
+  params <- rlang::exprs(!!!syms(c("na.rm", extra_args)), .named = TRUE)
+  params <- rlang::call2("list2", !!!params, quote(...))
+
+  # Construct rest of 'layer()' call
+  layer_args <- syms(setdiff(fixed_fmls_names, c("...", "na.rm")))
+  layer_args <- append(layer_args, list(geom = geom), after = 2)
+  layer_args <- rlang::exprs(!!!layer_args, params = !!params, .named = TRUE)
+  body <- rlang::call2("layer_coord_sf", !!!layer_args)
+
+  # Prepend any checks
+  if (length(exprs) > 0) {
+    lang <- vapply(checks, is_call, logical(1))
+    if (!all(lang)) {
+      cli::cli_abort(
+        "{.arg checks} must be a list of calls, such as one constructed \\
+        with {.fn rlang::exprs}."
+      )
+    }
+  }
+  body <- rlang::call2("{", !!!checks, body)
+
+  # We encapsulate rlang::list2
+  new_env <- new_environment(list(list2 = list2), env)
+
+  new_function(fmls, body, new_env)
+}
+
+
+```
+
+
+```{r}
+geom_states <- make_constructor(GeomSf, stat = StatAuStates, crs = crs_au_states)
+geom_states
+
+ggplot(au_states) +
+  aes(state_name = state,
+      fill = pop) + 
+  geom_states()
+
+
+```
+
+## Closing remarks, Other Relevant Work, Caveats

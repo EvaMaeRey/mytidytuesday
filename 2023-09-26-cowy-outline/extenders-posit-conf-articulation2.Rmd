@@ -35,118 +35,232 @@ background-size: cover
 
 # Part 1. Who are the ggplot2 extenders?
 
---
 
-# I'm here to advertise a ggplot2 extension meetup/club/working group…
-
----
-
-# Also known as 'the ggplot2 extenders'
-
-
-<img src="images/clipboard-527321121.png" width="45%" alt="Alt text" />
 
 
 ---
-
+class: center
 <!-- # So instead of answering Part I. 'who are the ggplot2 extenders?’ -->
 
 <!-- -- -->
 
 <!-- # as 'who has extended ggplot2’, -->
 
-<!-- ![](images/clipboard-4242710445.png) -->
+<!-- Who are the authors of the extension packages that you may know -->
 
-
-
----
-
-# Part 0. Why ggplot2 and why extension?
-
---
-
-# Part 2. How to become an extender? (pathways...)
-
---
-
-# Part 1. Who are 'the ggplot2 extenders'?
-
+<img src="images/clipboard-4242710445.png" width="125%" alt="Alt text" />
 
 
 ---
-class: inverse
-
-# Part 00. Why ggplot2?
-
---
-
-#  Because of the way it sounds... 
-
----
-
-## ggplot2 'poems'
-
----
-
-## ggplot2 ~~'poems'~~
-
----
-
-## ggplot2 'songs' 
---
-are bubbly. 
---
-effervescent. 
---
-easy.  
---
-articulated. 
---
-springy. 
---
-staccato.  
-
----
-
-class: inverse, bottom
-background-image: url(images/frueling_ubers_jahr_articulation.png)
-background-size: contain
-
----
-
-[00:00-00:04 intro](https://youtu.be/ytqXCO3-lOs?si=rF8znHifImsacwXo&t=1)
-
----
-
-class: inverse, bottom
-background-image: url(https://images.unsplash.com/photo-1517093911940-08cb5b3952e7?q=80&w=444&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)
-background-size: cover
-
-
-
-
----
+class: center
+<!-- # But, actually I'm here to advertise a ggplot2 extension meetup/club/working group… -->
 
 <!-- --- -->
-<!-- class: inverse -->
 
-<!-- # On motivation: -->
+<!-- # Also known as 'the ggplot2 extenders' -->
 
-<!-- > ### And, you know, I'd get a dataset. And, *in my head I could very clearly kind of picture*, I want to put this on the x-axis. Let's put this on the y-axis, draw a line, put some points here, break it up by this variable. -->
 
-<!-- -- -->
+<img src="images/clipboard-527321121.png" width="65%" alt="Alt text" />
 
-<!-- > ### And then, like, getting that vision out of my head, and into reality, it's just really, really hard. Just, like, felt harder than it should be. Like, there's a lot of custom programming involved, -->
+
+???
+
+## ‘the ggplot2 extenders’ group has been meeting virtually since April 2022
+
+--
+
+### Exists to facilitate conversations about extension experiences.
+
+--
+
+```{r, eval = F, echo = F}
+library(ggraph)
+
+tribble(~from, ~to,
+  "Gina", "June",
+  "June", "Teun",
+  "Gina", "David S.",
+  "Gina", "Daniel S.",
+  "Daniel S.", "Rich",
+  "Teun", "Allan",
+  "Teun", "Joel",
+  "Gina", "Winston",
+  "Gina", "Hassan",
+  "Gina", "Joyce",
+  "Joyce", "Cory",
+  "Cory", "David K.",
+  "Cory", "James",
+  "Gina", "Hadley",
+  "Hadley", "Cynthia",
+  "Cynthia", "Mitch",
+  "Gina", "Di",
+  "Gina", "Matt",
+  "Teun", "Matt") |>
+  ggraph(layout = "fr") + 
+  geom_edge_arc2(strength = .1) + 
+  geom_node_label(aes(label = name))
+  
+  
+
+
+```
+
+
+### Co-founded w/ June Choe and myself
+
+--
+
+### benefits from early and continued involvement of Teun van den Brand, current maintainer of ggplot2
+
+--
+
+### Has heard from almost 30 extenders on their projects
+
+---
+class: center
+
+<img src="images/clipboard-836013170.png" width="65%" alt="Alt text" />
+
+
+---
+
+### Notable: David Sjoberg (ggbump), **June Choe (ggtrace),** Claus Wilke (cowplot, ggtext, ggridgeline), Di Cook (GGally), Thomas Lin Pedersen\* (patchwork) , Winston Chang\* (ggproto extension mechanism), Teun van den Brand (ggh4x, legendry, ggplot2 maintainer), and Hadley Wickham\* (ggplot2), **Cory Brunson (ggalluvial, order), Mitchell O’Hara-Wild (ggtime, distributional), Matthew Kay\* (ggdist, ggblend),**
+
+--
+
+### Speakers talk about motivations, challenges, equivocations, design decision — in general, extension journeys!
+
+--
+
+#### \* recorded talks available on our website
+
+
+---
+
+![](images/clipboard-4093491883.png){width="60%"}
+
+## And since spring 2024, our between-meeting discussions has also been an exciting space to exchange ideas about extension strategies and design choices!
+
+--
+
+### - almost 100 discussions initiated
+
+--
+
+### - more than 1000 contributionscontact 
+
+---
+
+# Part II.  How to become one? 
+
+# bit.ly/ggplot2extenders
+
+---
+
+... But, why join us? Why be interest in ggplot2 extension at all?
+
+
+---
+
+<!-- For this question I will just try to get bring you along with personal story... -->
+
+<!-- So we are trying to teach my son Spanish.  He's been in an immersion class, and we do books and sometimes speak Spanish at home. -->
 
 <!-- --- -->
-<!-- class: inverse -->
 
+<!-- But you know what?  -->
+
+<!-- ---  -->
+
+<!-- The results are pretty mixed. -->
+
+<!-- --- -->
+
+<!-- You know what his number 1 phrase is? -->
+
+---
+class: inverse, center, middle
+
+
+# Dime en Inglés.
+
+--
+
+# (Tell me in English)
+
+
+
+???
+ 
+And I guess I'm actually pretty sympathetic to this sentiment.  Because actually I see a lot of parallels between what he's saying --- tell me in my first language--- and what has me so fixated on data viz, ggplot2 and ggplot2 extension.  
+
+
+---
+class: inverse, center, middle
+
+
+# Tell me in pictures.
+
+???
+
+Instead of saying 'Dime en Inglés' I might say 'Tell me in pictures'.  Tell me in visual language - cause isn't that really our 'first' language. 
+
+Visual information has been informative since day one for most people, and it continues to be a superhighway throughout our lives.  It's 'preattentively processed' so we don't need to expend effort or focus to see patterns, outliers, distributions.
+
+It's effortless, no-friction communication.  
+
+<!-- So I'm happy if someone sits me down and explains things in s -->
+<!-- A lot of us who feel compelled to visualize our data and fixate on figures in reports or papers are 'Tell me in pictures' people. -->
+
+
+But you know, just going back to Spanish v. English, even though just using English might be the easy choice, we just can't give up on Spanish because... 
+
+
+---
+class: inverse, center, middle
+
+# Orthography
+
+# (how you spell stuff) 
+
+--
+
+Like English is a disaster... And Spanish is a delight.  Say it, write it down, read it back. It sounds just the way you right it.  Everyone deserves to have a great spelling experience!  
+
+<!-- Express yourself without worrying, hmm I'm not sure if this is spelled right.  You have to go down some rabbit hole on the origin of the word to know how to correctly spell a word. -->
+
+
+---
+
+And ggplot2 is kind of like this... It let's you write down your plot in such an intuitve way.  
+
+---
+
+
+# Hadley Wickham:
+
+> ### And, you know, I'd get a dataset. And, *in my head I could very clearly kind of picture*, I want to put this on the x-axis. Let's put this on the y-axis, draw a line, put some points here, break it up by this variable.
+
+--
+
+> ### And then, like, getting that vision out of my head, and into reality, it's just really, really hard. Just, like, felt harder than it should be. Like, there's a lot of custom programming involved...
+
+---
+class: inverse, middle, center
+
+# 'I just want to spell my plot how it sounds.' (paraphrase)
+
+------------------------------------------------------------------------
 
 <!-- > ### where I just felt, like, to me, I just wanted to say, like, you know, *this is what I'm thinking, this is how I'm picturing this plot. Like you're the computer 'Go and do it'.* -->
 
-<!-- -- -->
 
-<!-- > ### ... and I'd also been reading about the Grammar of Graphics by Leland Wilkinson, I got to meet him a couple of times and ... I was, like, this book has been, like, written for me. <https://www.trifacta.com/podcast/tidy-data-with-hadley-wickham/> -->
+
+---
+
+And so much of the time ggplot2 just nails it... 
+
+---
 
 ```{r, include = F}
 library(tidyverse)
@@ -159,11 +273,10 @@ theme_grey(base_size =18) |>
   theme_set()
 ```
 
----
 
-`r chunk_reveal("scatter", title = "## effervecent ggplot2...", widths = c(2,3))`
+`r chunk_reveal("scatter0", title = "## easy to write, easy to read ggplot2...", widths = c(2,3))`
 
-```{r scatter, include = F}
+```{r scatter0, include = F}
 gapminder_2002 |>
   ggplot() +
   aes(x = gdpPercap) +
@@ -173,20 +286,25 @@ gapminder_2002 |>
   facet_wrap(vars(continent))
 ```
 
+---
+
+## ggplot2's 'graphical poems' 
+
+--
+# articulated. 
+--
+
+# staccato.  
+--
+
+# bubbly. 
+--
+
+# effervescent. 
+
 
 ---
 
-class: inverse, center, middle
-
-# staccato. 
---
-graphical. 
---
-poems. 
-
-
-
----
 
 # Hadley:
 
@@ -204,20 +322,108 @@ poems.
 
 > ## components.
 
+---
+
+class: inverse, bottom
+background-image: url(https://images.unsplash.com/photo-1517093911940-08cb5b3952e7?q=80&w=444&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)
+background-size: cover
+
+---
+
+And ggplot2 extension helps you keep thing easy and stacatto.
 
 
 ---
 
-![](images/square-in-square.png)
+Instead of ...
 
 
-<!-- # deeply satisfying. -->
 
---
 
-<!-- # but sometimes it's not like that. -->
+circle packing routine. 
 
-![](images/semicircle-in-square.png)
+
+---
+
+you can do...
+
+```{r bubble, include = F}
+library(ggcirclepack)
+gapminder_2002 |>
+  ggplot() +
+  aes(area = pop, 
+      id = country) + 
+  geom_circlepack() + 
+  geom_circlepack_text(color = "white") + 
+  coord_equal()
+```
+
+
+---
+
+```{r}
+geom_residual_springs <- ggsprings:::geom_residual_springs
+
+
+```
+
+
+```{r scatter0, include = F}
+library(ggsprings)
+anscombe |>
+  ggplot() +
+  aes(x = x1) +
+  aes(y = y1) +
+  geom_point() +
+  geom_smooth(method = "lm") + 
+  geom_residual_springs(method = "lm")
+```
+
+
+```
+
+
+Bubbly ggplot2! 
+
+---
+
+Instead of...
+
+
+```{r}
+
+
+```
+
+
+---
+
+you can do 
+
+
+---
+
+
+Springy ggplot2!
+
+---
+
+<!-- --- -->
+
+<!-- class: inverse, bottom -->
+<!-- background-image: url(images/frueling_ubers_jahr_articulation.png) -->
+<!-- background-size: contain -->
+
+<!-- --- -->
+
+<!-- [00:00-00:04 intro](https://youtu.be/ytqXCO3-lOs?si=rF8znHifImsacwXo&t=1) -->
+
+
+
+---
+
+
+But it's not always like that
 
 
 ---
@@ -544,65 +750,7 @@ ggplot(airquality) +
   facet_grid(rows = vars(Month))
 ```
 
----
 
-# So instead of answering Part I. ‘who are the ggplot2 extenders?’
-
-# as ‘who has extended ggplot2’,
-
-# I’ll answer in the very specific sense, ‘what’s this new meet up/community’?
-
----
-
-## ‘the ggplot2 extenders’ group has been meeting virtually since April 2022
-
---
-
-### Exists to facilitate conversations about extension experiences.
-
---
-
-### Co-founded w/ June Choe and myself, and benefited from early and continued involvement of Teun van den Brand, current maintainer of ggplot2
-
---
-
-### Has heard from almost 30 extenders on their projects
-
----
-
-![](images/clipboard-836013170.png)
-
----
-
-### Notable: David Sjoberg (ggbump), **June Choe (ggtrace),** Claus Wilke (cowplot, ggtext, ggridgeline), Di Cook (GGally), Thomas Lin Pedersen\* (patchwork) , Winston Chang\* (ggproto extension mechanism), Teun van den Brand (ggh4x, legendry, ggplot2 maintainer), and Hadley Wickham\* (ggplot2), **Cory Brunson (ggalluvial, order), Mitchell O’Hara-Wild (ggtime, distributional), Matthew Kay\* (ggdist, ggblend),**
-
---
-
-### Speakers talk about motivations, challenges, equivocations, design decision — in general, extension journeys!
-
---
-
-#### \* recorded talks available on our website
-
----
-
-## Since spring 2024, our between-meeting discussions has also been an exciting space to exchange ideas about extension strategies and design choices!
-
---
-
-### - almost 100 discussions initiated
-
---
-
-### - more than 1000 contributions
-
---
-
-<!-- ### - Supported by Posit since March...  -->
-
----
-
-![](images/clipboard-4093491883.png){width="60%"}
 
 ---
 
@@ -901,17 +1049,7 @@ class: center, middle
 
 <!-- --- -->
 
-<!-- Hadley Wickham, on it's motivation: -->
 
-<!-- > ### And, you know, I'd get a dataset. And, *in my head I could very clearly kind of picture*, I want to put this on the x-axis. Let's put this on the y-axis, draw a line, put some points here, break it up by this variable. -->
-
-<!-- -- -->
-
-<!-- > ### And then, like, getting that vision out of my head, and into reality, it's just really, really hard. Just, like, felt harder than it should be. Like, there's a lot of custom programming involved, -->
-
-<!-- ------------------------------------------------------------------------ -->
-
-<!-- > ### where I just felt, like, to me, I just wanted to say, like, you know, *this is what I'm thinking, this is how I'm picturing this plot. Like you're the computer 'Go and do it'.* -->
 
 <!-- |                                                                                                                                                                                                                                                               | -->
 
