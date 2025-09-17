@@ -118,47 +118,96 @@ sf_oz <- ozmap("states") |> rename(state = NAME)
 crs_au_states <- sf::st_crs(sf_oz)
 
 
-layer_coord_sf <- function(ref_data, geom = GeomSf){
+layer_coord_sf <- function(ref_data, geom = GeomSf, keep = NULL, drop = NULL, required_aes = Stat$required_aes, stamp = FALSE, ...){
 
 ref_data |>
     ggplot2::StatSf$compute_panel(coord = ggplot2::CoordSf) |>
     ggplot2::StatSfCoordinates$compute_group(coord = ggplot2::CoordSf) ->
 ref_data_plus_sf
+  
 
 ref_data_plus_sf$id_col <- ref_data_plus_sf[,1][[1]]
+
+if(!is.null(keep)){ref_data_plus_sf <- ref_data_plus_sf |> filter(id_col %in% keep)}
+if(!is.null(drop)){ref_data_plus_sf <- ref_data_plus_sf |> filter(!(id_col %in% drop))}
+
 
 # layer_county w/ inner join
 compute_panel_ref_data <- function(data, scales){
 
+if(stamp){
+  
+  ref_data_plus_sf
+
+    }else{
+  
 ref_data_plus_sf  |>
     inner_join(data)
+  
+}
 
 }
 
 StatTemp <- ggproto(NULL, Stat,
                     compute_panel = compute_panel_ref_data,
-                    default_aes = aes(label = after_stat(id_col))#,
-                    # required_aes = required_aes
+                    default_aes = aes(label = after_stat(id_col)),
+                    required_aes = required_aes
                     )
 
-c(
-layer_sf(geom = geom, stat = StatTemp, position = "identity"),
-coord_sf(crs = sf::st_crs(ref_data))
-)
+
+
+
+
+if(stamp){
+  #  x = NULL; y = NULL; xmin = NULL; xmax = NULL; 
+  #   ymin = NULL; ymax = NULL; xend = NULL; yend = NULL; na.rm = FALSE
+  # 
+  # position <- compact(list(x = x, xmin = xmin, xmax = xmax, 
+  #       xend = xend, y = y, ymin = ymin, ymax = ymax, yend = yend))
+  # aesthetics <- c(position, list(...))
+  #   lengths <- lengths(aesthetics)
+  #   n <- ggplot2:::unique0(lengths)
+  #   if (length(n) > 1L) {
+  #       n <- setdiff(n, 1L)
+  #   }
+  # if (length(n) > 1L) {
+  #       bad <- lengths != 1L
+  #       details <- paste0(names(aesthetics)[bad], " (", lengths[bad], 
+  #           ")")
+  #       cli::cli_abort("Unequal parameter lengths: {details}")
+  #   }
+  #   data <- ggplot2:::data_frame0(!!!position) #, .size = n
+
+ c(layer_sf(geom = geom, stat = StatTemp, position = "identity", #mapping = aes_all(names(data)), 
+            params = list(...)),
+   coord_sf(crs = sf::st_crs(ref_data)))
+  
+}else{
+ 
+ c( layer_sf(geom = geom, stat = StatTemp, position = "identity", params = list(...)),
+    coord_sf(crs = sf::st_crs(ref_data)))
+  
+}
 
 }
 
 geom_state <- function(...){layer_coord_sf(sf_oz, ...)}
-geom_state_text <- function(...){layer_coord_sf(sf_oz, GeomText)}
-
-
+geom_state_text <- function(...){layer_coord_sf(sf_oz, GeomText, ...)}
+stamp_state <- function(...){layer_coord_sf(sf_oz, stamp = TRUE, ...)}
 
 au_states |> 
   ggplot() + 
   aes(state = state) + 
   geom_state() + 
   geom_state_text() + 
-  aes(fill = pop)
+  aes(fill = pop) + 
+  geom_state(keep = "Northern Territory",
+             fill = "green") + 
+  geom_state_text()
+
+
+ggplot() + 
+  stamp_state()
 
 ###### us states ###########
 usmapdata::us_map() |> 
