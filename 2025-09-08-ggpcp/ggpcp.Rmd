@@ -57,6 +57,18 @@ library(tidyverse)
 ## Experiment
 
 ```{r}
+compute_hibye <- function(data,scales){
+  
+  data.frame(x = "hi",
+             y = "bye")
+  
+}
+
+library(ggplot2)
+library(statexpress)
+
+ggplot(cars) + 
+  qlayer(stat = qstat(compute_hibye))
 
 ```
 

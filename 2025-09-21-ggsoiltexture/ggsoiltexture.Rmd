@@ -1,0 +1,176 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+library(ggsoiltexture)
+
+
+```
+
+## Experiment
+
+```{r}
+ggsoiltexture(tibble(sand = c(20, 80),
+                     silt = c(15, 10),
+                     clay = c(65, 10)),
+              show_grid = T,
+              class = NULL)
+
+# palmerpenguins::penguins |>
+#   remove_missing() |>
+#   mutate(bill_length_mm = bill_length_mm / mean(bill_length_mm),
+#          bill_depth_mm = bill_depth_mm / mean(bill_depth_mm),
+#          flipper_length_mm = flipper_length_mm / mean(flipper_length_mm)) |>
+#   mutate(total_length = bill_length_mm + bill_depth_mm + flipper_length_mm) |>
+#   mutate(sand = 100*bill_length_mm/total_length) |> 
+#   mutate(silt = 100*bill_depth_mm/total_length) |>
+#   mutate(clay = 100*flipper_length_mm/total_length) |>
+#   ggsoiltexture() + 
+#   geom_point(aes(color = species))
+
+#' @export
+data_filter <- function(.keep, .by) {
+  structure(list(keep_specification = rlang::enquo(.keep), 
+                 by_specification = rlang::enquo(.by)), 
+            class = "filterobs")
+}
+
+#' @export
+ggplot_add.filterobs <- function(object, plot, object_name) {
+  
+  plot$unfiltered_data <- plot$unfiltered_data %||% plot$data
+  
+  new_data <- dplyr::filter(plot$data, 
+                            !!object$keep_specification, 
+                            .by = !!object$by_specification)
+  plot$data <- new_data
+  plot
+
+}
+
+#' @export
+data_unfilter <- function(){
+    structure(list(), 
+            class = "unfilterobs")
+  
+}
+
+
+#' @export
+ggplot_add.unfilterobs <- function(object, plot, object_name) {
+  
+  plot$data <- plot$unfiltered_data %||% plot$data
+  
+  plot
+
+}
+
+
+#' @export
+data_refilter <- function(.keep, .by) {
+  structure(list(keep_specification = rlang::enquo(.keep), 
+                 by_specification = rlang::enquo(.by)), 
+            class = "refilterobs")
+}
+
+#' @export
+ggplot_add.refilterobs <- function(object, plot, object_name) {
+  
+  plot$data <- plot$unfiltered_data
+  
+  new_data <- dplyr::filter(plot$data, 
+                            !!object$keep_specification, 
+                            .by = !!object$by_specification)
+  plot$data <- new_data
+  plot
+
+}
+
+
+tibble(clay = runif(1000, 0, 100),
+       silt = runif(1000, 0, 100),
+       sand_random = runif(1000, 0, 100),
+       sand_computed = 100 - clay - silt) |> 
+  ggplot() + 
+  aes(y = clay) + 
+  geom_rug() + labs(title = "first dimention") +
+  # ggplyr::intercept("p1") +
+  aes(x = silt) + 
+  geom_point() +  
+  labs(title = "second dimention") +
+  # ggplyr::intercept("p2") +
+  aes(alpha = (clay + silt) < 100) + 
+  labs(title = "highlight possible") + 
+  # ggplyr::intercept("p3") +
+  data_filter((clay + silt) < 100) + aes(alpha = NULL) + 
+  labs(title = "remove impossible") + 
+  # ggplyr::intercept("p4") +
+  scale_color_viridis_c() +
+  aes(color = sand_random) + 
+  labs(title = "third dimension") + 
+  # ggplyr::intercept("p5") +
+  aes(color = sand_computed) + 
+  labs(title = "third component computed") +
+  # ggplyr::intercept("p6") + 
+  NULL
+
+library(patchwork)
+# (p1 + p2)/
+# (p3 + p4)/
+# (p5 + p6)
+```
+
+
+
+```{r}
+tibble(sand = runif(1000, 0, 100),
+       silt = runif(1000, 0, 100), 
+       clay = 100 - sand - silt) |>
+  filter((sand+silt) < 100) |>
+  ggsoiltexture() + 
+  geom_point(aes(color = sand)) + 
+  coord_equal() + 
+  scale_color_viridis_c() + 
+  NULL
+
+
+
+library(ggplot2)
+# library(ggplyr)
+
+ggplot(mtcars) + 
+  aes(wt) +
+  geom_density() +
+  aes(color = factor(cyl))
+
+last_plot() +
+  data_filter(cyl != 4)
+
+
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
