@@ -1,0 +1,110 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+GeomBarbell <- ggproto("GeomBarbell", Geom,
+  
+  required_aes = c("x", "y", "xend", "yend"),
+  
+  default_aes = aes(
+    colour = "black",
+    linewidth = .5,
+    size = 2,
+    linetype = 1,
+    shape = 19,
+    fill = NA,
+    alpha = NA,
+    stroke = 1
+  ),
+  
+  draw_panel = function(data, panel_params, coord, ...) {
+    
+    # Transformed data for the points
+    point1 <- transform(data) 
+    point2 <- transform(data, x = xend, y = yend)    
+    
+    # Return all three components
+    grid::gList(
+      GeomSegment$draw_panel(data, panel_params, coord, ...),
+      GeomPoint$draw_panel(point1, panel_params, coord, ...),
+      GeomPoint$draw_panel(point2, panel_params, coord, ...)
+    )
+  }
+) 
+
+ggplot(cars) + 
+  aes(speed, dist, xend = speed + 2, yend = dist) +
+  stat_identity(geom = GeomBarbell)
+
+```
+
+
+```{r, error = T}
+combine_geoms <- function(geom1 = GeomPoint, geom2 = GeomText){
+  
+GeomCombo2 <-   ggproto("GeomCombo2", Geom,
+          required_aes = unique(c(geom1$required_aes, geom2$required_aes)),
+          default_aes = modifyList(geom1$default_aes, geom2$default_aes),
+  draw_panel = function(data, panel_params, coord, ...) {
+    
+    # Return all three components
+    grid::gList(
+      geom1$draw_panel(data, panel_params, coord, ...),
+      geom2$draw_panel(data, panel_params, coord, ...)
+    )
+  }
+         )
+   
+GeomCombo2
+
+ }
+   
+
+
+   
+
+library(ggplot2)
+ggplot(cars) + 
+  aes(speed, dist, label = speed) + 
+  stat_identity(geom = combine_geoms(), alpha = .5)
+
+
+library(ggplot2)
+ggplot(cars) + 
+  aes(speed, dist, label = speed) + 
+  stat_identity(geom = combine_geoms(GeomPoint, GeomLabel), 
+                alpha = .5,
+                hjust = 1)
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

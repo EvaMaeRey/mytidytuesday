@@ -1,0 +1,88 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+library(gt)
+
+islands_tbl <-
+  tibble(
+    name = names(islands),
+    size = islands
+  ) |>
+  slice_max(size, n = 10)
+
+gt_snapshot <- function(gt, name = "t1"){
+  
+  assign(name, value = gt, pos = 1)
+  
+  return(gt)
+}
+
+
+islands_tbl |>
+gt() |>                                               
+  gt_snapshot("A") |>
+  tab_header(
+    title = "Large Landmasses of the World",
+    subtitle = "The top ten largest are presented"
+  ) |>                                               
+  gt_snapshot("B") |>
+  tab_header(
+    title = md("**Large Landmasses of the World**"),
+    subtitle = md("The *top two* largest are presented")
+  )  |>                                               
+  gt_snapshot("C") |>
+  tab_source_note(
+    source_note = "Source: The World Almanac and Book of Facts, 1975, page 406."
+  ) |>
+  gt_snapshot("D") |>
+  tab_footnote(
+    footnote = "The Americas.",
+    locations = cells_body(columns = name, rows = 3:4)
+  ) |>
+  gt_snapshot("E") -> full_table
+
+```
+
+
+```{r, fig.height=12, fig.width=20}
+
+library(patchwork)
+
+wrap_table(A) + B + C + D + E + patchwork::plot_annotation(tag_levels = "A")
+
+
+
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

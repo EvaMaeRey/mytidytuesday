@@ -1,0 +1,107 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+library(palmerpenguins)
+
+beak_means_df <- penguins |>
+  dplyr::group_by(species) |>
+  # I just need to change this name...
+  dplyr::summarise(mean_length = mean(bill_length_mm, na.rm = TRUE))
+
+penguins |>
+  ggplot(aes(x = bill_length_mm, y = species)) +
+  # ... and this accordingly
+  geom_segment(
+    data = beak_means_df,
+    aes(x = mean_length, xend = mean_length, y = -Inf, yend = species),
+    linetype = 3
+  ) +
+  geom_jitter(
+    aes(
+      fill = species,
+      size = body_mass_g
+    ),
+    shape = 21,
+    width = 0,
+    height = 0.15,
+    colour = "#1A242F",
+    stroke = 0.5
+  ) +
+  ggtext::geom_textbox(
+    data = beak_means_df,
+    aes(
+     # ... and this
+      x = mean_length,
+      y = species,
+      label = paste0(
+        species,
+        " mean<br>**",
+        janitor::round_half_up(mean_length),
+        "mm**"
+      )
+    ),
+    hjust = 0,
+    fill = NA,
+    nudge_y = -0.3,
+    box.colour = NA
+  )
+
+
+
+
+
+```
+
+
+## Experiment
+```{r}
+# install.packages("renv")
+renv::init()
+```
+    This will create a `renv/` folder and an `.Rprofile` file in your project directory. It also creates a 
+project-local library.
+3.  **Install the desired version of the package within *this project*:**
+    *   **From CRAN archives:** Use `remotes::install_version()`
+        ```R
+        # If you don't have remotes installed globally:
+        # install.packages("remotes")
+        remotes::install_version("ggplot2", version = "3.3.0", repos = "http://cran.us.r-project.org")
+        ```
+    *   **From GitHub (if it's a dev version or specific tag):** Use `remotes::install_github()`
+        ```R
+        remotes::install_github("tidyverse/ggplot2", ref = "v3.3.0") # Use a specific tag or commit
+        ```
+    R will install this version into your project's `renv/library` directory.
+4.  **Load the package:**
+    ```R
+    library(ggplot2)
+    packageVersion("ggplot2")
+    ```
+    This will now load the version installed in your project's `renv` library.
+5.  **Snapshot (optional but recommended):**
+    ```R
+    renv::snapshot()
+
+
+## Closing remarks, Other Relevant Work, Caveats

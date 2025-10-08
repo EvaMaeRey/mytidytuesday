@@ -1,0 +1,133 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r, error = T}
+GuideColourbar2 <- ggproto("GuideColourbar2", `_inherit` = GuideColourbar)
+```
+
+```{r}
+guide_colorbar2 <- function (title = waiver(), theme = NULL, nbin = NULL, display = "raster", 
+    raster = deprecated(), alpha = NA, draw.ulim = TRUE, draw.llim = TRUE, 
+    angle = NULL, position = NULL, direction = NULL, reverse = FALSE, 
+    order = 0, available_aes = c("colour2", "color2", "fill2"), 
+    ...) 
+{
+    if (lifecycle::is_present(raster)) {
+        deprecate_soft0("3.5.0", "guide_colourbar2(raster)", "guide_colourbar2(display)")
+        check_bool(raster)
+        display <- if (raster) 
+            "raster"
+        else "rectangles"
+    }
+    display <- arg_match0(display, c("raster", "rectangles", 
+        "gradient"))
+    nbin <- nbin %||% switch(display, gradient = 15, 300)
+    theme <- deprecated_guide_args(theme, ...)
+    if (!is.null(position)) {
+        position <- arg_match0(position, c(.trbl, "inside"))
+    }
+    check_number_decimal(alpha, min = 0, max = 1, allow_na = TRUE)
+    new_guide(title = title, theme = theme, nbin = nbin, display = display, 
+        alpha = alpha, angle = angle, draw_lim = c(isTRUE(draw.llim), 
+            isTRUE(draw.ulim)), position = position, direction = direction, 
+        reverse = reverse, order = order, available_aes = available_aes, 
+        name = "colourbar2", super = GuideColourbar2)
+}
+
+
+GuideColourbar2 <- ggplot2::new_guide("GuideColourbar2", super = GuideColourbar)
+
+```
+
+
+
+```{r}
+scale_fill2_viridis_c <- function (name = waiver(), ..., alpha = 1, begin = 0, end = 1, 
+    direction = 1, option = "D", values = NULL, space = "Lab", 
+    na.value = "grey50", guide = "colourbar2", aesthetics = "fill") 
+{
+    continuous_scale(aesthetics, name = name, palette = scales::pal_gradient_n(scales::pal_viridis(alpha, 
+        begin, end, direction, option)(6), values, space), na.value = na.value, 
+        guide = guide, ...)
+}
+
+
+sf::st_read(system.file("shape/nc.shp", package="sf")) |>
+  tibble() |>
+  ggplot() + 
+  aes(geometry = geometry) + 
+  geom_sf()
+
+
+last_plot() + 
+  aes(fill2 = as.numeric(FIPS)) + 
+  scale_fill2_viridis_c()
+
+ggplot2:::validate_guide
+
+```
+
+
+
+```{r}
+library(ggplot2)
+library(ggnewscale)
+# Equivalent to melt(volcano)
+topography <- expand.grid(x = 1:nrow(volcano),
+                          y = 1:ncol(volcano))
+topography$z <- c(volcano)
+
+# point measurements of something at a few locations
+set.seed(42)
+measurements <- data.frame(x = runif(30, 1, 80),
+                           y = runif(30, 1, 60),
+                           thing = rnorm(30))
+
+ggplot(mapping = aes(x, y)) +
+  geom_contour(data = topography, aes(z = z, color = stat(level))) +
+  # Color scale for topography
+  scale_color_viridis_c(option = "D") +
+  # geoms below will use another color scale
+  new_scale_color() +
+  geom_point(data = measurements, size = 3, aes(color = thing)) +
+  # Color scale applied to geoms added after new_scale_color()
+  scale_color_viridis_c(option = "A")
+
+p <- last_plot()
+
+p$scales$scales[[1]]$aesthetics
+p$scales$scales[[2]]$aesthetics
+
+p$scales$scales[[1]]$guide
+p$scales$scales[[2]]$guide
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

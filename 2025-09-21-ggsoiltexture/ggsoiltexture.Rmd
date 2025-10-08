@@ -48,62 +48,24 @@ ggsoiltexture(tibble(sand = c(20, 80),
 #   ggsoiltexture() + 
 #   geom_point(aes(color = species))
 
-#' @export
-data_filter <- function(.keep, .by) {
-  structure(list(keep_specification = rlang::enquo(.keep), 
-                 by_specification = rlang::enquo(.by)), 
-            class = "filterobs")
-}
 
-#' @export
-ggplot_add.filterobs <- function(object, plot, object_name) {
+snapshot <- ggplyr::intercept
+
+compute_tern_shift <- function(data, scales){
   
-  plot$unfiltered_data <- plot$unfiltered_data %||% plot$data
+  out <- data |> 
+    mutate(x = x + y/2)
   
-  new_data <- dplyr::filter(plot$data, 
-                            !!object$keep_specification, 
-                            .by = !!object$by_specification)
-  plot$data <- new_data
-  plot
-
-}
-
-#' @export
-data_unfilter <- function(){
-    structure(list(), 
-            class = "unfilterobs")
+  if(!is.null(out$xend)){
+    
+    out <- out |> 
+      mutate(xend = xend + yend/2)
+    
+  }
   
-}
-
-
-#' @export
-ggplot_add.unfilterobs <- function(object, plot, object_name) {
+  out
   
-  plot$data <- plot$unfiltered_data %||% plot$data
   
-  plot
-
-}
-
-
-#' @export
-data_refilter <- function(.keep, .by) {
-  structure(list(keep_specification = rlang::enquo(.keep), 
-                 by_specification = rlang::enquo(.by)), 
-            class = "refilterobs")
-}
-
-#' @export
-ggplot_add.refilterobs <- function(object, plot, object_name) {
-  
-  plot$data <- plot$unfiltered_data
-  
-  new_data <- dplyr::filter(plot$data, 
-                            !!object$keep_specification, 
-                            .by = !!object$by_specification)
-  plot$data <- new_data
-  plot
-
 }
 
 
@@ -113,36 +75,66 @@ tibble(clay = runif(1000, 0, 100),
        sand_computed = 100 - clay - silt) |> 
   ggplot() + 
   aes(y = clay) + 
-  geom_rug() + labs(title = "first dimention") +
-  # ggplyr::intercept("p1") +
+  geom_rug() + labs(title = "first dimention, random 0% to 100%") +
+  snapshot("p1") +
+  scale_x_continuous(position = "top") +
   aes(x = silt) + 
-  geom_point() +  
-  labs(title = "second dimention") +
-  # ggplyr::intercept("p2") +
+  coord_fixed(sqrt(3)/2) +
+  geom_point() +   
+  labs(title = "second dimention, random 0% to 100%") +
+  snapshot("p2") +
   aes(alpha = (clay + silt) < 100) + 
-  labs(title = "highlight possible") + 
-  # ggplyr::intercept("p3") +
-  data_filter((clay + silt) < 100) + aes(alpha = NULL) + 
-  labs(title = "remove impossible") + 
-  # ggplyr::intercept("p4") +
+  labs(title = "highlight possible (does not exceed 100%)") + 
+  snapshot("p3") +
+  ggplyr::data_filter((clay + silt) < 100) + aes(alpha = NULL) + 
+  labs(title = "remove impossible (drop > 100%)") + 
+  snapshot("p4") +
   scale_color_viridis_c() +
   aes(color = sand_random) + 
-  labs(title = "third dimension") + 
-  # ggplyr::intercept("p5") +
+  labs(title = "third dimension, random 0 to 100") + 
+  snapshot("p5") +
   aes(color = sand_computed) + 
   labs(title = "third component computed") +
-  # ggplyr::intercept("p6") + 
+  snapshot("p6") 
+
+
+ggplyr::last_plot_wipe_last() + 
+  geom_point(stat = ggproto("hi", Stat, compute_group = compute_tern_shift)) +
+  snapshot("p7")  +
   NULL
 
+# ggram:::gif_from_ggplots(list(p1, p2, p3, p4, p5, p6, p7))
+
+
+
+```
+
+```{r, fig.width=18, fig.height=12}
 library(patchwork)
-# (p1 + p2)/
-# (p3 + p4)/
-# (p5 + p6)
+((p1 + p2)/
+(p3 + p4)/
+(p5 + p6)) + patchwork::plot_annotation(tag_levels = "A")
+
 ```
 
 
 
 ```{r}
+library(ggsoiltexture)
+library(tidyverse)
+
+tibble(clay = runif(1000, 0, 100),
+       silt = runif(1000, 0, 100),
+       sand_random = runif(1000, 0, 100),
+       sand_computed = 100 - clay - silt) |> 
+  ggplot() + 
+  aes(y = clay) + # axis 1
+  aes(x = silt) + # axis 2
+  geom_point() +  
+  aes(alpha = (clay + silt) < 100) + # highlight possible
+  scale_color_viridis_c(limits = c(0,100)) + 
+  aes(color = sand_computed) # axis 3
+
 tibble(sand = runif(1000, 0, 100),
        silt = runif(1000, 0, 100), 
        clay = 100 - sand - silt) |>
@@ -153,24 +145,50 @@ tibble(sand = runif(1000, 0, 100),
   scale_color_viridis_c() + 
   NULL
 
-
-
-library(ggplot2)
-# library(ggplyr)
-
-ggplot(mtcars) + 
-  aes(wt) +
-  geom_density() +
-  aes(color = factor(cyl))
-
-last_plot() +
-  data_filter(cyl != 4)
-
-
-
-
 ```
 
 
+```{r}
+library(tidyverse)
 
-## Closing remarks, Other Relevant Work, Caveats
+compute_tern_shift <- function(data, scales){
+  
+  out <- data |> 
+    mutate(x = x + y/2)
+  
+  if(!is.null(out$xend)){
+    
+    out <- out |> 
+      mutate(xend = xend + yend/2)
+    
+  }
+  
+  out
+  
+  
+}
+
+StatTernShift <- ggproto("StatTernShift", Stat, 
+                         compute_group = compute_tern_shift)
+
+tern_axes <- tibble(x = 0, y = 0:10*10, label = y) |> 
+  bind_rows(tibble(x = 10:0*10, y = 0:10*10, label = x)) |>
+  bind_rows(tibble(x = 0:10*10, y = 0, label = x)) 
+
+ggplot(tern_axes) + 
+  aes(x,y) + 
+  geom_point(color = "lightgrey") +
+  geom_point(data = tern_axis, stat = StatTernShift, color = "grey35", linetype = "dashed")
+
+
+
+tibble(y = 9:1*10, x = 0, yend = 9:1*10, xend = 1:9*10) |>
+  bind_rows(tibble(x = 1:9*10, y = 9:1*10, xend = 1:9*10, yend = 0)) |>
+  bind_rows(tibble(x = 0, y = 9:1*10, xend = 9:1*10, yend = 0)) |>
+  ggplot() + 
+  aes(x = x, y = y, xend = xend, yend = yend) + 
+  geom_segment() +
+  geom_segment(stat = StatTernShift, color = "grey", linetype = "dashed")
+
+```
+

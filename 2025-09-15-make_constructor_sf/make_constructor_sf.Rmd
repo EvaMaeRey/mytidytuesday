@@ -1,5 +1,5 @@
 ---
-title: "another experiment"
+title: "choropleths w/ same data+where+layer construction"
 author: "Evangeline Reynolds"
 date: "`r Sys.Date()`"
 output: 
@@ -22,42 +22,10 @@ options(tidyverse.quiet = TRUE)
 
 ```{r}
 library(tidyverse)
-
-```
-
-## Experiment
-
-```{r}
-library(tidyverse)
 library(ozmaps)
-sf_oz <- ozmap("states")
 
-crs_au_states <- sf::st_crs(sf_oz)
-
-sf_oz |> names()
-#> [1] "NAME"     "geometry"
-#> 
-sf_oz |>
-  select(state_name = NAME) %>% 
-    ggplot2::StatSf$compute_panel(coord = ggplot2::CoordSf) |>
-    ggplot2::StatSfCoordinates$compute_group(coord = ggplot2::CoordSf) ->
-australia_state_ref
-
-# layer_county w/ inner join
-compute_panel_australia_states <- function(data, scales){
-
-australia_state_ref  |>
-    inner_join(data)
-
-}
-
-StatAuStates <- ggproto("StatAuStates",
-                        Stat,
-                        compute_panel = compute_panel_australia_states,
-                        default_aes = aes(label = after_stat(state_name)),
-                        required_aes = c("state_name"))
-
-tribble(~state, ~pop,
+# some data that we want to viz
+au_states <- tribble(~state, ~pop,
         "Victoria", 1,
         "Queensland", 2,
         "New South Wales", 3,
@@ -67,282 +35,279 @@ tribble(~state, ~pop,
         "South Australia", 7,
         "Australian Capital Territory", 8,
         "Other Territories", 9
-        ) ->
-au_states
+        )
+
+sf_oz <- ozmap("states")
+
+sf_oz |> names()
+
+sf_oz |>
+  full_join(au_states, by = join_by(NAME == state )) |> 
+  ggplot() + 
+  geom_sf() +
+  aes(fill = pop)
+```
+
+
+# But awkward, so... Step 1. Compute
+
+```{r}
+australia_state_ref <- sf_oz |>
+  select(state_name = NAME)
+
+
+compute_panel_regions <- function(data = au_states, scales, ref_data = australia_state_ref, keep = NULL, drop = NULL, stamp = F){
+
+ref_data$id <- ref_data[1][[1]]
+
+if(!is.null(keep)){ref_data <- ref_data |> filter(id %in% keep)}
+if(!is.null(drop)){ref_data <- ref_data |> filter(!(id %in% drop))}
+
+ref_data <- ref_data |> 
+    ggplot2::StatSf$compute_panel(coord = ggplot2::CoordSf) |>
+    ggplot2::StatSfCoordinates$compute_group(coord = ggplot2::CoordSf)
+
+if(!stamp){ ref_data |> inner_join(data) } else { ref_data }
+
+}
+```
+
+
+# Test Compute
+
+```{r}
+au_states |> 
+  rename(state_name = state) |>
+  compute_panel_regions()
+
+ggplot(au_states) +
+  aes(state_name = state) +
+  geom_sf(stat = ggproto(NULL, Stat, 
+                         compute_panel = compute_panel_regions)) + 
+  aes(fill = pop)
+```
+
+# Step 2. Define Stat
+
+```{r}
+StatRegion <- ggproto("StatRegion",
+                        Stat,
+                        compute_panel = compute_panel_regions,
+                        default_aes = aes(label = after_stat(id)))
+```
+
+# Test Stat
+
+```{r}
+ggplot(au_states) +
+  aes(state_name = state) +
+  geom_sf(stat = StatRegion) + 
+  geom_text(stat = StatRegion) +
+  aes(fill = pop)
+```
+
+
+# Step 3. Define user facing function w/ `make_constructor`... But: coord_sf must be added separately
+
+```{r}
+geom_au_state <- make_constructor(GeomSf, stat = StatRegion, ref_data = australia_state_ref)
+geom_au_state_text <- make_constructor(GeomText, stat = StatRegion, ref_data = australia_state_ref)
+
+crs_au_states <- sf::st_crs(sf_oz)
 
 ggplot(au_states) +
   aes(state_name = state) + 
-  geom_sf(stat = StatAuStates) + 
-  geom_sf_text(stat = StatAuStates,
-               check_overlap = T,
-               size = 2) + 
+  geom_state() + # errors without coord_sf, and needs the right one
+  geom_state_text(check_overlap = T, size = 2) + 
   aes(fill = pop) +
-  theme(panel.background = element_rect(fill = "lightblue")) + 
   coord_sf(crs = crs_au_states)
 
 ```
 
 
-
-# w make_constructor
+# Step 3.0.1 make geom_region0 (no coords) and friends w/ `make_constructor`... and geom_region (w/ coords)... and friends.
 
 
 ```{r, eval = T, error = T}
-# library(australians)
-geom_states_wo_crs <- make_constructor(GeomSf, stat = StatAuStates)
-geom_states <- function(...){list(geom_states0(...), coord_sf(crs = crs_au_states))}
-geom_states_text <- make_constructor(GeomText, stat = StatAuStates)
-
-
-geom_sf
-
-
-ggplot(au_states) +
-  aes(state_name = state,
-      fill = pop) + 
-  geom_states()# +
-  # geom_states_text()
-
-last_plot() + 
-  coord_sf(crs = crs_au_states) # you would want to have this tucked in though.
-  # geom_states_text() 
-  NULL
-
-geom_sf  
-  
+geom_region0 <- make_constructor(GeomSf, stat = StatRegion) # no crs
+geom_region_text0 <- make_constructor(GeomText, stat = StatRegion) # no crs
+stamp_region0 <- make_constructor(GeomSf, stat = StatRegion, stamp = T, inherit.aes = F) # no crs
+stamp_region_text0 <- make_constructor(GeomText, stat = StatRegion, stamp = T, inherit.aes = F) # no crs
 ```
 
 
+# Test things out with pass the dots argument 
+
 ```{r}
-sf_oz <- ozmap("states") |> rename(state = NAME)
-crs_au_states <- sf::st_crs(sf_oz)
-
-
-layer_coord_sf <- function(ref_data, geom = GeomSf, keep = NULL, drop = NULL, required_aes = Stat$required_aes, stamp = FALSE, ...){
-
-ref_data |>
-    ggplot2::StatSf$compute_panel(coord = ggplot2::CoordSf) |>
-    ggplot2::StatSfCoordinates$compute_group(coord = ggplot2::CoordSf) ->
-ref_data_plus_sf
-  
-
-ref_data_plus_sf$id_col <- ref_data_plus_sf[,1][[1]]
-
-if(!is.null(keep)){ref_data_plus_sf <- ref_data_plus_sf |> filter(id_col %in% keep)}
-if(!is.null(drop)){ref_data_plus_sf <- ref_data_plus_sf |> filter(!(id_col %in% drop))}
-
-
-# layer_county w/ inner join
-compute_panel_ref_data <- function(data, scales){
-
-if(stamp){
-  
-  ref_data_plus_sf
-
-    }else{
-  
-ref_data_plus_sf  |>
-    inner_join(data)
-  
+# all the arguments should be passed
+geom_region <- function(..., ref_data){
+  c(geom_region0(..., ref_data = ref_data), 
+    coord_sf(crs = sf::st_crs(ref_data)))
 }
 
+geom_region_text <- function(..., ref_data){
+  c(geom_region_text0(..., ref_data = ref_data), 
+    coord_sf(crs = sf::st_crs(ref_data)))
 }
+```
 
-StatTemp <- ggproto(NULL, Stat,
-                    compute_panel = compute_panel_ref_data,
-                    default_aes = aes(label = after_stat(id_col)),
-                    required_aes = required_aes
-                    )
+# Step 4. make region-specific user-facing functions!
 
+```{r}
+# all arguments above that should be passed, could be passed, or, 
+geom_states <- function(...){geom_region(..., ref_data = australia_state_ref)}
+geom_states_text <- function(...){geom_region_text(..., ref_data = australia_state_ref)}
+```
 
+# test!
 
+```{r}
+au_states |>
+  ggplot() +
+  aes(state_name = state,
+      fill = pop) + 
+  geom_states() +
+  geom_states(keep = "Western Australia", 
+              color = "red",
+              fill = NA) +
+  geom_states_text() + 
+  geom_states(stamp = T,
+              keep = "Tasmania", 
+              fill = "orange")
 
+au_states |>
+  ggplot() +
+  aes(state_name = state) + 
+  geom_states(aes(fill = pop))
 
-if(stamp){
-  #  x = NULL; y = NULL; xmin = NULL; xmax = NULL; 
-  #   ymin = NULL; ymax = NULL; xend = NULL; yend = NULL; na.rm = FALSE
-  # 
-  # position <- compact(list(x = x, xmin = xmin, xmax = xmax, 
-  #       xend = xend, y = y, ymin = ymin, ymax = ymax, yend = yend))
-  # aesthetics <- c(position, list(...))
-  #   lengths <- lengths(aesthetics)
-  #   n <- ggplot2:::unique0(lengths)
-  #   if (length(n) > 1L) {
-  #       n <- setdiff(n, 1L)
-  #   }
-  # if (length(n) > 1L) {
-  #       bad <- lengths != 1L
-  #       details <- paste0(names(aesthetics)[bad], " (", lengths[bad], 
-  #           ")")
-  #       cli::cli_abort("Unequal parameter lengths: {details}")
-  #   }
-  #   data <- ggplot2:::data_frame0(!!!position) #, .size = n
-
- c(layer_sf(geom = geom, stat = StatTemp, position = "identity", #mapping = aes_all(names(data)), 
-            params = list(...)),
-   coord_sf(crs = sf::st_crs(ref_data)))
   
-}else{
- 
- c( layer_sf(geom = geom, stat = StatTemp, position = "identity", params = list(...)),
+```
+
+# epiloge, something nicer for for geom_region -> geom_province, geom_state, etc?  `specify_geom_region()`
+
+```{r}
+geom_region0
+
+# all the arguments should be passed
+geom_region <- function(mapping = NULL, data = NULL, stat = StatRegion, position = "identity", ..., legend = NULL, lineend = "butt", linejoin = "round", 
+    linemitre = 10, arrow = NULL, arrow.fill = NULL, na.rm = FALSE, 
+    show.legend = NA, inherit.aes = TRUE, ref_data){
+  
+  c(geom_region0(mapping = mapping, data = data, geom = "sf", stat = stat, 
+        position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
+        params = list2(na.rm = na.rm, legend = legend, lineend = lineend, 
+            linejoin = linejoin, linemitre = linemitre, arrow = arrow, 
+            arrow.fill = arrow.fill, ..., ref_data = ref_data)), 
     coord_sf(crs = sf::st_crs(ref_data)))
   
 }
 
+
+geom_au_state <- purrr::partial(geom_region, ref_data = australia_state_ref)
+
+
+clone_w_fixed <- function(original_function, arg_name, fixed_value) {
+  orig_formals <- formals(original_function)
+  new_formals <- orig_formals
+  new_formals[[arg_name]] <- NULL
+
+  call_args <- lapply(names(orig_formals), function(an) {
+    if (an == arg_name) fixed_value
+    else if (an == "...") quote(...)
+    else as.symbol(an)
+  })
+  names(call_args) <- names(orig_formals)
+  call_expr <- as.call(c(list(original_function), call_args))
+
+  new_func <- function() {}
+  formals(new_func) <- new_formals
+  body(new_func) <- call_expr
+  environment(new_func) <- environment(original_function)
+  return(new_func)
 }
 
-geom_state <- function(...){layer_coord_sf(sf_oz, ...)}
-geom_state_text <- function(...){layer_coord_sf(sf_oz, GeomText, ...)}
-stamp_state <- function(...){layer_coord_sf(sf_oz, stamp = TRUE, ...)}
+# Example Usage:
+my_original_function <- function(x, y = 10, z, verbose = FALSE){ x * y + z }
+my_fixed_y_function <- clone_w_fixed(my_original_function, "y", 5)
 
-au_states |> 
-  ggplot() + 
-  aes(state = state) + 
-  geom_state() + 
-  geom_state_text() + 
-  aes(fill = pop) + 
-  geom_state(keep = "Northern Territory",
-             fill = "green") + 
-  geom_state_text()
+geom_region
 
 
-ggplot() + 
-  stamp_state()
+my_fixed_y_function
 
-###### us states ###########
-usmapdata::us_map() |> 
-  select(state = full, geometry = geom, everything()) ->
-states
-
-geom_state <- function(...){layer_coord_sf(states, ...)}
-geom_state_text <- function(...){layer_coord_sf(states, GeomText)}
-
-USArrests |> 
-  rownames_to_column(var = "state") |> 
-  ggplot() + 
-  aes(state = state, 
-      fill = Rape) + 
-  geom_state() + 
-  geom_state_text() + 
-  aes(label = after_stat(abbr))
+# Test:
+my_fixed_y_function(x = 2, z = 4) # Returns 14 (2*5+4)
+formals(my_fixed_y_function) # Shows x, z, verbose
 
 
-```
+clone_w_fixed <- function(func_expr, arg_name, fixed_value, env = parent.frame()) {
 
+  # Capture the expression for the original function (e.g., `my_original_function`)
+  # This will be used directly in the body of the new function for clean printing.
+  func_symbol_or_expr <- substitute(func_expr)
 
+  # Evaluate the expression to get the actual function object.
+  # This is used to extract formals and the function's environment.
+  original_function <- eval(func_symbol_or_expr, envir = env)
 
+  orig_formals <- formals(original_function)
+  new_formals <- orig_formals
+  new_formals[[arg_name]] <- NULL # Remove the fixed argument from the new function's signature
 
-```{r}
-library(rlang)
-make_constructor <- function(x, ...) {
-  UseMethod("make_constructor")
+  # Construct the arguments for the internal call to the original function
+  call_args <- lapply(names(orig_formals), function(an) {
+    if (an == arg_name) fixed_value
+    else if (an == "...") quote(...) # Pass along '...' if present
+    else as.symbol(an)                # Pass other arguments by their name
+  })
+  names(call_args) <- names(orig_formals) # Preserve argument names
+
+  # Create the actual call expression for the body.
+  # Use the captured symbol/expression for cleaner printing.
+  call_expr <- as.call(c(list(func_symbol_or_expr), call_args))
+
+  # Create the new function
+  new_func <- function() {} # Placeholder function
+  formals(new_func) <- new_formals
+  body(new_func) <- call_expr
+
+  # Set the environment of the new function to that of the original function.
+  # This ensures the new function can find the original function (by its symbol).
+  environment(new_func) <- environment(original_function)
+
+  return(new_func)
 }
 
+# --- Example Usage ---
 
-layer_coord_sf <- function (mapping = aes(), data = NULL, geom = GeomSf, stat = "sf", position = "identity", 
-    na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ..., crs) 
-{
-    c(layer_sf(geom = geom, data = data, mapping = mapping, 
-        stat = stat, position = position, show.legend = show.legend, 
-        inherit.aes = inherit.aes, params = list2(na.rm = na.rm, 
-            ...)), coord_sf(crs = crs))
-}
-
-make_constructor.Geom <- function(x, ..., checks = exprs(), omit = character(),
-                                  env = rlang::caller_env()) {
-
-  # Check that we can independently find the geom
-  geom <- gsub("^geom_", "", ggplot2:::snake_class(x))
-  ggplot2:::validate_subclass(geom, "Geom", env = env)
-
-  # Split additional arguments into required and extra ones
-  args <- enexprs(...)
-  fixed_fmls_names <- c("mapping", "data", "stat", "position", "...",
-                        "na.rm", "show.legend", "inherit.aes")
-  extra_args <- setdiff(names(args), fixed_fmls_names)
-  if ("geom" %in% extra_args) {
-    cli::cli_abort("{.arg geom} is a reserved argument.")
+# Define an original function
+my_original_function <- function(x, y = 10, z, verbose = FALSE, ...) {
+  result <- x * y + z + sum(...)
+  if (verbose) {
+    message(paste("Calculating:", x, "*", y, "+", z, "+ sum(...) =", result))
   }
-
-  # Fill in values for parameters from draw functions
-  known_params <-
-    unique(c(names(args), fixed_fmls_names, "flipped_aes", x$aesthetics(), omit))
-  missing_params <- setdiff(x$parameters(), known_params)
-  if (length(missing_params) > 0) {
-    draw_args <- ggplot2:::ggproto_formals(x$draw_panel)
-    if ("..." %in% names(draw_args)) {
-      draw_args <- ggproto_formals(x$draw_group)
-    }
-    params <- intersect(missing_params, names(draw_args))
-    extra_args <- c(extra_args, params)
-    for (param in params) {
-      if (!identical(draw_args[[param]], quote(expr = ))) {
-        args[param] <- draw_args[param]
-      }
-    }
-    extra_args <- intersect(extra_args, names(args))
-    missing_params <- setdiff(missing_params, names(args))
-    if (length(missing_params) > 0) {
-      cli::cli_warn(
-        "In {.fn geom_{geom}}: please consider providing default values for: \\
-        {missing_params}."
-      )
-    }
-  }
-
-  # Build function formals
-  fmls <- rlang::pairlist2(
-    mapping  = args$mapping,
-    data     = args$data,
-    stat     = args$stat %||% "identity",
-    position = args$position %||% "identity",
-    `...` = rlang::missing_arg(),
-    !!!args[extra_args],
-    na.rm    = args$na.rm %||% FALSE,
-    show.legend = args$show.legend %||% NA,
-    inherit.aes = args$inherit.aes %||% TRUE
-  )
-
-  # Construct call for the 'layer(params)' argument
-  params <- rlang::exprs(!!!syms(c("na.rm", extra_args)), .named = TRUE)
-  params <- rlang::call2("list2", !!!params, quote(...))
-
-  # Construct rest of 'layer()' call
-  layer_args <- syms(setdiff(fixed_fmls_names, c("...", "na.rm")))
-  layer_args <- append(layer_args, list(geom = geom), after = 2)
-  layer_args <- rlang::exprs(!!!layer_args, params = !!params, .named = TRUE)
-  body <- rlang::call2("layer_coord_sf", !!!layer_args)
-
-  # Prepend any checks
-  if (length(exprs) > 0) {
-    lang <- vapply(checks, is_call, logical(1))
-    if (!all(lang)) {
-      cli::cli_abort(
-        "{.arg checks} must be a list of calls, such as one constructed \\
-        with {.fn rlang::exprs}."
-      )
-    }
-  }
-  body <- rlang::call2("{", !!!checks, body)
-
-  # We encapsulate rlang::list2
-  new_env <- new_environment(list(list2 = list2), env)
-
-  new_function(fmls, body, new_env)
+  return(result)
 }
 
+# Clone it, fixing 'y' to 5
+my_fixed_y_function <- clone_w_fixed(my_original_function, "y", 5)
 
-```
+# Observe the output:
+print(my_fixed_y_function)
+# function (x, z, verbose = FALSE, ...)
+# my_original_function(x = x, y = 5, z = z, verbose = verbose, ...)
+
+# Test the new function
+my_fixed_y_function(x = 2, z = 4)
+# [1] 14 (2*5+4)
+my_fixed_y_function(x = 2, z = 4, 100, verbose = TRUE)
+# Calculating: 2 * 5 + 4 + sum(...) = 114
+# [1] 114
 
 
-```{r}
-geom_states <- make_constructor(GeomSf, stat = StatAuStates, crs = crs_au_states)
-geom_states
-
-ggplot(au_states) +
-  aes(state_name = state,
-      fill = pop) + 
-  geom_states()
+ggplot(cars) + 
+  labs(x = "hello") + 
+  aes(x = speed)
 
 
 ```
