@@ -368,6 +368,39 @@ last_plot() +
 
 
 ```{r}
+unvotes::un_votes |> 
+  mutate(num_vote = case_when(vote == "yes" ~ 1,
+                              vote == "abstain" ~ .5,
+                              vote == "no" ~ 0,
+                              TRUE ~ .5 )) |>
+  # filter(rcid %in% 1:30) |>
+  pivot_wider(id_cols = c(country, country_code),
+    names_from = rcid, 
+              values_from = num_vote,
+              values_fill = .5
+            ) |>
+  mutate(continent = country_code |> 
+           countrycode::countrycode(origin = "iso2c", destination = "continent")) |>
+  mutate(continent = continent |> is.na() |> ifelse("unknown", continent)) ->
+un_ga_country_wide_rcid
+
+names(un_ga_country_wide_rcid) <- paste0("rcid", names(un_ga_country_wide_rcid))
+  
+
+unvotes::un_votes$rcid |> max()
+
+un_ga_country_wide_rcid |>
+  ggplot() + 
+  aes(dims = dims(rcid3:rcid9147)) + 
+  geom_umap() +
+  aes(fill = rcidcontinent)
+
+
+```
+
+
+
+```{r}
 knitr::knit_exit()
 
 ```
