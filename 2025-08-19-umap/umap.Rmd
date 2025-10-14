@@ -178,12 +178,14 @@ iris |>
   geom_tsne()
 
 palmerpenguins::penguins |> 
+  remove_missing() |>
   ggplot() + 
   aes(dims = 
         mvars(bill_length_mm, bill_depth_mm, 
               flipper_length_mm, body_mass_g),
-      fill = species,
-      alpha = sex) +
+      # fill = species,
+      # alpha = sex
+      ) +
   geom_tsne(perplexity = 30)
 
 palmerpenguins::penguins |> 
@@ -238,7 +240,7 @@ last_plot() +
 
 ggplyr::aes_dims
 
-ggplyr:::data_select
+
 ```
 
 
