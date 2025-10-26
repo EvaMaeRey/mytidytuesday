@@ -1,0 +1,186 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = T)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+
+
+
+```{r}
+library(tidyverse)
+
+```
+
+## Status Quo:  "A pie chart is just a bar chart with polar coordinates!" 
+
+But you do need to make sure that you do a couple of things with your standard geom_bar specification to make sure you you have a good experience.   
+
+1. You've got to supply x or y constant
+2. Ideally, for #1 y that you supply, so you don't need to mess with the theta specification in coord_polar
+3. If you do any faceting, you'll want to have position set to "fill" in the geom_bar.
+
+```{r}
+mpg_three <- mpg |> 
+  filter(manufacturer %in% c("audi", "chevrolet", "dodge")) |>
+  mutate(cyl = factor(cyl))
+
+mpg_three |>
+  ggplot() + 
+  aes(y = 1) + # remember, use constant y (not x)
+  aes(fill = cyl) + 
+  geom_bar(
+    position = "fill" # remember, if you want to facet, you'll need to reset this argument so your pies are all complete
+    ) + 
+  coord_polar() + 
+  facet_wrap(~manufacturer)
+```
+
+# Let's look at a high level first cut with `make_constructor`!
+
+```{r}
+geom_pie <- make_constructor(GeomBar, 
+                             stat = "count", 
+                             position = "fill", 
+                             mapping = aes(y = 1))
+
+
+mpg_three |>
+  ggplot() + 
+  aes(fill = cyl) + 
+  geom_pie() + 
+  coord_polar() + 
+  facet_wrap(~manufacturer)
+```
+
+# but does not play nice with declaring aes locally 😔
+
+```{r} 
+mpg_three |>
+  ggplot() + 
+  geom_pie(aes(fill = cyl)) + # uh-oh
+  coord_polar() + 
+  facet_wrap(~manufacturer)
+```
+
+#  maybe we can use modify list to specify aes(y = 0) by default
+
+```{r}
+geom_pie
+
+
+geom_pie <- function (mapping = NULL, data = NULL, stat = "count", 
+    position = "fill", ..., lineend = "butt", linejoin = "mitre", 
+    na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) 
+{
+  
+  the_usual_required_mapping <- aes(y = 0)  #< new
+  
+  full_mapping <- if(is.null(mapping)){the_usual_required_mapping}else{
+    modifyList(the_usual_required_mapping, mapping) #< new
+    }
+    
+
+  
+    layer(mapping = full_mapping, #< new
+          data = data, geom = "bar", stat = stat, 
+        position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
+        params = rlang::list2(na.rm = na.rm, lineend = lineend, linejoin = linejoin, 
+            ...))
+}
+```
+
+
+# Hooray!  A `geom_pie()` that's *really* like, 1) bar chart + 2) polar coords!
+
+```{r}
+mpg_three |>
+  ggplot() + 
+  geom_pie(aes(fill = cyl)) + 
+  coord_polar() + 
+  facet_wrap(~manufacturer)
+
+
+# demonstrate w/ global aes.
+mpg_three |>
+  ggplot() + 
+  aes(fill = cyl) +
+  geom_pie() + 
+  coord_polar() 
+
+```
+
+
+
+
+
+
+
+# but then we might also want to know relative size of pies - I would!
+
+And is there any hacky way to do this?  Seems like with width possibly but unsure...
+
+```{r}
+
+
+mpg_three |>
+  ggplot() + 
+  aes(alpha = manufacturer) +
+  geom_pie() + 
+  coord_polar()
+```
+
+```{r, eval = F, echo = F}
+
+# geom_pie <- function (mapping = NULL, data = NULL, stat = "count", 
+#     position = "fill", ..., lineend = "butt", linejoin = "mitre", 
+#     na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) 
+# {
+#   
+#   quick_redefault_mapping <- aes(y = 1, 
+#                                  width = after_stat(count |> sum()))
+#   
+#   full_mapping <- modifyList(quick_redefault_mapping, mapping)
+#   
+#     layer(mapping = full_mapping, data = data, geom = "bar", stat = stat, 
+#         position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
+#         params = rlang::list2(na.rm = na.rm, lineend = lineend, linejoin = linejoin, 
+#             ...))
+# }
+# 
+# mpg |> 
+#   head(70) |>
+#   ggplot() + 
+#   geom_pie(aes(fill = paste("cyl:", cyl))) + 
+#   coord_polar() + 
+#   facet_wrap(~manufacturer)
+# 
+# ## this does not get to 
+# mpg |> 
+#   head(70) |>
+#   count(cyl, manufacturer) |>
+#   mutate(total_manufacturer = sum(n), .by = manufacturer) |>
+#   ggplot() + 
+#   aes(weight = n, fill = factor(cyl), y = 1, width = total_manufacturer) + 
+#   geom_bar(position = "fill")
+# 
+# last_plot() + 
+#   facet_wrap(~manufacturer)
+# 
+# last_plot() + 
+#   coord_polar()
+
+```
+
+

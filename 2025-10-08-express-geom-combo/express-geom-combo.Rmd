@@ -69,11 +69,9 @@ ggplot(cars) +
 combine_geoms <- function(geom1 = GeomPoint, geom2 = GeomText){
   
 GeomCombo2 <-   ggproto("GeomCombo2", Geom,
-          # required_aes = unique(c(geom1$required_aes, geom2$required_aes)),
-          default_aes = modifyList(geom1$default_aes, geom2$default_aes),
-  draw_panel = function(data, panel_params, coord, ...) {
+                        default_aes = modifyList(geom1$default_aes, geom2$default_aes),
+                        draw_panel = function(data, panel_params, coord, ...) {
     
-    # Return all three components
     grid::gList(
       geom1$draw_panel(data, panel_params, coord, ...),
       geom2$draw_panel(data, panel_params, coord, ...)
@@ -93,6 +91,12 @@ library(ggplot2)
 ggplot(cars) + 
   aes(speed, dist, label = speed) + 
   stat_identity(geom = combine_geoms(), alpha = .5)
+
+
+ggplot(mtcars) + 
+  aes(x = cyl, y = disp, label = "hi") + 
+  geom_pointrange(stat = )
+
 
 
 library(ggplot2)

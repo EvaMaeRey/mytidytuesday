@@ -1,0 +1,113 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+
+compute_train_test <- function(data = cars, scales, seed = getOption("seed", 1999), step = getOption("tt_step", "train")){
+  
+  set.seed(seed)
+  n <- nrow(data)
+  n_train = n/2 |> round()
+  which_train_num <- sample(1:n, size = n_train,  replace = F)
+  which_train <- 1:n %in% which_train_num 
+  which_test <- !which_train
+  
+  if(step == "train"){
+    data |> _[which_train, ]
+  }else{
+      data |> _[which_test, ]
+    }
+  
+}
+
+
+compute_train_test_lm <- function(data, scales, step = getOption("tt_step", "train")){
+  
+  train_data <- data |> compute_train_test(step = "train")
+  split_data <- data |> compute_train_test(step = step)
+  
+  model <- lm(y ~ x, data = train_data)
+  
+  split_data$y = predict(model, split_data)
+  
+  split_data
+  
+}
+
+cars |>
+  rename(x = speed, y = dist) |>
+  compute_train_test() |>
+  compute_train_test_lm()
+
+library(statexpress)
+
+# train
+ggplot(cars) + 
+  aes(speed, dist) +
+  geom_point(stat = qstat(compute_train_test)) + 
+  geom_point(stat = qstat(compute_train_test_lm), color = "blue")
+
+
+# test
+options(tt_step = "test")
+ggplot(cars) + 
+  aes(speed, dist) +
+  geom_point(stat = qstat(compute_train_test)) + 
+  geom_point(stat = qstat(compute_train_test_lm),
+             color = "green")
+
+# train
+options(tt_step = "train")
+test <- ggplot(mpg) + 
+  aes(cty, hwy) +
+  geom_point(stat = qstat(compute_train_test)) + 
+  geom_point(stat = qstat(compute_train_test_lm), color = "blue")
+
+# test
+options(tt_step = "test")
+train <- ggplot(mpg) + 
+  aes(cty, hwy) +
+  geom_point(stat = qstat(compute_train_test)) + 
+  geom_point(stat = qstat(compute_train_test_lm),
+             color = "green")
+
+
+## the lesson of why not to use options!  😬
+library(patchwork)
+test + train
+
+```
+
+
+
+
+## Experiment
+
+```{r}
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

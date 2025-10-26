@@ -1,0 +1,174 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+# Load packages
+library(ggiraph)
+library(tidyverse)
+library(sf)
+library(patchwork)
+
+# Load data
+vmap_data <- read_csv(file = "data/vmap_data.csv")
+vendor_dots  <-  read_csv(file = "data/vendor_dots.csv")
+
+# Create a World map
+p_vmap_ggiraph <- ggplot(vmap_data, aes(x = long, y = lat, group = group)) +
+  
+  # ggiraph function
+  geom_polygon_interactive(
+    aes(fill = total_value,
+        tooltip = paste0(
+          "<b>", region, "</b><br/>",
+          "Total Value: ", ifelse(is.na(total_value), 
+                                 "No data", 
+                                 paste0("$", scales::dollar(total_value, scale = 1e-6, suffix = "M"))),
+          "<br/>",
+          "Shipments: ", ifelse(is.na(total_shipments), 
+                               "No data", 
+                               format(total_shipments, big.mark = ",")),
+          "<br/>",
+          "On-Time: ", ifelse(is.na(on_time_pct), 
+                             "No data", 
+                             paste0(round(on_time_pct, 1), "%"))
+        ),
+        data_id = region),  
+    color = "white", 
+    size = 0.1
+  ) +
+  scale_fill_viridis(
+    option = "plasma",
+    name = "Total Shipment Value ($)",
+    labels = scales::dollar_format(scale = 1e-6, suffix = "M"),
+    na.value = "grey90",
+    trans = "log10"
+  ) +
+  labs(
+    title = "Global Pharma Vendors",
+    subtitle = "Total value shipped by country (log scale)",
+    caption = "Data: USAID Supply Chain 2006-2015"
+  ) +
+  theme_void() +
+  theme(
+    plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+    plot.subtitle = element_text(size = 12, hjust = 0.5),
+    legend.position = "bottom",
+    legend.key.width = unit(2, "cm")
+  ) +
+  coord_fixed(1.3)
+
+# Create a dot chart for vendor stands
+p_dot_ggiraph <- vendor_dots %>%
+  ggplot(aes(x = overall_score, y = reorder(vendor_short, overall_score))) +
+  
+  # ggiraph
+  geom_segment_interactive(
+    aes(x = 0, xend = overall_score, 
+        y = vendor_short, yend = vendor_short,
+        color = vendor_tier,
+        tooltip = paste0(
+          "<b>", vendor_short, "</b><br/>",
+          "Country: ", vendor_map, "<br/>",
+          "Rank: ", rank, "<br/>",
+          "Overall Score: ", round(overall_score, 1), "<br/>",
+          "Delivery: ", round(delivery_score, 1), "<br/>",
+          "Volume: ", round(volume_score, 1), "<br/>",
+          "Price: ", round(price_score, 1)
+        ),
+        data_id = vendor_map),  
+    size = 1.5, alpha = 0.6
+  ) +
+  
+  # ggiraph
+  geom_point_interactive(
+    aes(color = vendor_tier,
+        tooltip = paste0(
+          "<b>", vendor_short, "</b><br/>",
+          "Country: ", vendor_map, "<br/>",
+          "Rank: ", rank, "<br/>",
+          "Score: ", round(overall_score, 1)
+        ),
+        data_id = vendor_map),
+    size = 5, alpha = 0.9
+  ) +
+  
+  # Add annotations
+  geom_text(aes(label = rank), color = "white", size = 2.5, fontface = "bold") +
+  geom_text(aes(label = round(overall_score, 0)), 
+            hjust = -0.5, size = 3, fontface = "bold") +
+  geom_vline(xintercept = c(50, 75), linetype = "dashed", 
+             color = "grey60", alpha = 0.5) +
+  
+  scale_color_manual(
+    values = c("Star Vendors" = "#2ecc71",
+               "Solid Performers" = "#3498db",
+               "Average Vendors" = "#f39c12")
+  ) +
+  scale_x_continuous(limits = c(0, 105), breaks = seq(0, 100, 25)) +
+  labs(
+    title = "Vendor Overall Performance Ranking",
+    subtitle = "Top 20 vendors by composite score | Number in circle = rank",
+    x = "Overall Performance Score (0-100)",
+    y = NULL,
+    caption = "Weight: Delivery Score:4, Volume Score:3, Price Score:3",
+    color = "Vendor Tier"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(face = "bold", size = 16),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank(),
+    legend.position = "top"
+  )
+
+# Combine map chart and dot chart
+combined_map <- p_vmap_ggiraph | p_dot_ggiraph
+
+giraph_map <- girafe(
+  ggobj = combined_map,
+  width_svg = 16,
+  height_svg = 8,
+  options = list(
+    opts_hover(css = "fill:#e74c3c;stroke:#c0392b;opacity:0.8;cursor:pointer;"),
+    opts_hover_inv(css = "opacity:0.3;"),
+    opts_tooltip(
+      css = "background-color:#2c3e50;color:white;padding:10px;border-radius:5px;font-size:11px;",
+      use_fill = FALSE
+    ),
+    opts_toolbar(saveaspng = TRUE),
+    opts_sizing(rescale = TRUE)
+  )
+)
+
+giraph_map
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
