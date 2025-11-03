@@ -95,7 +95,7 @@ ggplot(cars) +
 
 ggplot(mtcars) + 
   aes(x = cyl, y = disp, label = "hi") + 
-  geom_pointrange(stat = )
+  geom_pointrange( )
 
 
 
@@ -111,6 +111,11 @@ ggplot(cars) +
   stat_identity(geom = combine_geoms(GeomPoint, GeomTile), 
                 alpha = .5,
                 hjust = 1)
+
+ggplot(cars) + 
+  aes(speed, dist, label = speed) + 
+  stat_identity() + 
+  stat_identity(geom = GeomTile)
 
 
 ```

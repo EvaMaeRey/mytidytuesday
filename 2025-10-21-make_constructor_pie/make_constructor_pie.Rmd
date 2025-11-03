@@ -12,24 +12,18 @@ knitr::opts_chunk$set(echo = TRUE, error = T)
 options(tidyverse.quiet = TRUE)
 ```
 
-
-
-
-
-
-
 ```{r}
 library(tidyverse)
-
 ```
 
-## Status Quo:  "A pie chart is just a bar chart with polar coordinates!" 
+## Status Quo:  "A pie chart is just a bar chart with polar coordinates!*" 
 
-But you do need to make sure that you do a couple of things with your standard geom_bar specification to make sure you you have a good experience.   
+*But you do need to make sure that you do a couple of things with your standard geom_bar specification to make sure you you have a good experience.   
 
 1. You've got to supply x or y constant
-2. Ideally, for #1 y that you supply, so you don't need to mess with the theta specification in coord_polar
+2. Ideally, for #1, it's y that you supply, so you don't need to mess with the theta specification in coord_polar
 3. If you do any faceting, you'll want to have position set to "fill" in the geom_bar.
+4. Also (not addressed here) reverse direction?  clockwise from the top?
 
 ```{r}
 mpg_three <- mpg |> 
@@ -38,16 +32,20 @@ mpg_three <- mpg |>
 
 mpg_three |>
   ggplot() + 
-  aes(y = 1) + # remember, use constant y (not x)
+  aes(y = 0) + # remember, use constant y (not x)
   aes(fill = cyl) + 
   geom_bar(
     position = "fill" # remember, if you want to facet, you'll need to reset this argument so your pies are all complete
     ) + 
   coord_polar() + 
-  facet_wrap(~manufacturer)
+  facet_wrap(~manufacturer) + 
+  scale_x_reverse() 
+
+last_plot() + 
+  aes(fill = fct_infreq(cyl))
 ```
 
-# Let's look at a high level first cut with `make_constructor`!
+# Let's look at a high-level, first cut of `geom_pie()` that takes care of some of these finicky "*" requirements with `make_constructor`!
 
 ```{r}
 geom_pie <- make_constructor(GeomBar, 
@@ -87,8 +85,10 @@ geom_pie <- function (mapping = NULL, data = NULL, stat = "count",
   
   the_usual_required_mapping <- aes(y = 0)  #< new
   
-  full_mapping <- if(is.null(mapping)){the_usual_required_mapping}else{
-    modifyList(the_usual_required_mapping, mapping) #< new
+  full_mapping <- if(is.null(mapping)){
+      the_usual_required_mapping
+    }else{
+      modifyList(the_usual_required_mapping, mapping) #< new
     }
     
 
@@ -99,26 +99,48 @@ geom_pie <- function (mapping = NULL, data = NULL, stat = "count",
         params = rlang::list2(na.rm = na.rm, lineend = lineend, linejoin = linejoin, 
             ...))
 }
+
+
+# or a bit problematic (like what if you really wanted to set y yourself) but easier to think about 
+# geom_pie <- function (mapping = NULL, data = NULL, stat = "count",
+#     position = "fill", ..., lineend = "butt", linejoin = "mitre",
+#     na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+# {
+# 
+#   list(
+#     layer(mapping = mapping,
+#           data = data, geom = "bar", stat = stat,
+#         position = position, show.legend = show.legend, inherit.aes = inherit.aes,
+#         params = rlang::list2(na.rm = na.rm, lineend = lineend, linejoin = linejoin,
+#             ...)),
+#   aes(y = 0))
+# 
+#   }
+
 ```
 
 
 # Hooray!  A `geom_pie()` that's *really* like, 1) bar chart + 2) polar coords!
 
-```{r}
+```{r, out.width="33%", fig.show='hold'}
 mpg_three |>
   ggplot() + 
-  geom_pie(aes(fill = cyl)) + 
-  coord_polar() + 
+  geom_pie(aes(fill = cyl)) 
+
+last_plot()  + 
   facet_wrap(~manufacturer)
 
+last_plot() + 
+  coord_polar()
+```
 
+```{r}
 # demonstrate w/ global aes.
 mpg_three |>
   ggplot() + 
   aes(fill = cyl) +
   geom_pie() + 
   coord_polar() 
-
 ```
 
 
@@ -129,16 +151,16 @@ mpg_three |>
 
 # but then we might also want to know relative size of pies - I would!
 
-And is there any hacky way to do this?  Seems like with width possibly but unsure...
+And is there any hacky way to do this with GeomBar?  Seems like with width possibly but unsure...
 
 ```{r}
-
-
 mpg_three |>
   ggplot() + 
   aes(alpha = manufacturer) +
   geom_pie() + 
   coord_polar()
+
+ggforce::GeomArc
 ```
 
 ```{r, eval = F, echo = F}
