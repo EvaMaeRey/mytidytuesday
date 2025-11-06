@@ -1,0 +1,325 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+https://github.com/EvaMaeRey/tidypivot?tab=readme-ov-file#tidypivot-object
+
+```{r}
+library(tidyverse)
+library(GGally)
+pm <- ggpairs(tips, mapping = aes(color = sex), columns = c("total_bill", "time", "tip"))
+pm
+
+ggpairs |> formals() |> names()
+
+new_tidypivot <- function(){}
+
+formals(new_tidypivot) <- formals(ggpairs)
+formals(new_tidypivot)$data <- tips #
+formals(new_tidypivot)$upper <- "blank" #
+formals(new_tidypivot)$lower <- "blank" #
+
+
+body(new_tidypivot) <- quote({
+  
+  tp <- list(
+    data = data,
+    mapping = mapping,
+    columns = columns,
+    title = title,
+    upper = upper,
+    lower = lower,
+    diag = diag, 
+    # params = params,
+    xlab = xlab,
+    ylab = ylab,
+    axisLabels = axisLabels,
+    # columnLabels = columnLabels,
+    labeller = labeller,
+    switch = switch,
+    showStrips = showStrips,
+    legend = legend,
+    cardinality_threshold = cardinality_threshold, 
+    progress = progress,
+    proportions = proportions
+    # legends = legends
+    # more 'slots' to be added
+  )
+
+  # declare class 'tidypivot'
+  class(tp) <- "tidypivot"
+
+  # Return the created object
+  invisible(tp)
+  
+})
+```
+
+
+```{r}
+
+# 
+# new_tidypivot <- function(data = tips, mapping = NULL, columns = 1:ncol(data), title = NULL,
+#                           upper = list(continuous = "cor", combo = "box_no_facet", discrete = "count", 
+#     na = "na"),
+#     lower = list(continuous = "points", combo = "facethist", discrete = "facetbar", 
+#     na = "na"),
+#     diag = list(continuous = "densityDiag", discrete = "barDiag", na = "naDiag")
+#                                
+# ){
+#   
+#   # table specification components !
+#   tp <- list(
+#     data = data,
+#     mapping = mapping,
+#     columns = columns,
+#     title = title,
+#     upper = upper,
+#     lower = lower,
+#     diag = diag
+#     # more 'slots' to be added
+#   )
+# 
+#   # declare class 'tidypivot'
+#   class(tp) <- "tidypivot"
+# 
+#   # Return the created object
+#   invisible(tp)
+#   
+# } 
+```
+
+
+```{r}
+#' @export
+print.tidypivot <- function(tp){
+  
+  print(do.call(ggpairs, tp))
+  
+  invisible(tp)
+  
+}
+
+#' @export
+ggpipedpairs <- function(data = NULL){
+  
+  # thedata <<- data # don't love this
+  data <- data %||% data.frame()
+  
+  tp <- new_tidypivot()
+  
+  tp$data <- data
+  
+  last_tp <<- tp
+  
+  tp
+
+}
+
+
+#' @export
+last_ggpairs <- function(){
+  
+  last_tp
+  
+}
+
+
+set_columns <- function(tp, columns = NULL){
+  tp$columns <- columns; last_tp <<- tp; tp
+}
+
+set_mapping <- function(tp, mapping = NULL){
+  tp$mapping <- mapping; last_tp <<- tp; tp
+}
+
+set_upper <- function(tp, upper = formals(ggpairs)$upper){
+  tp$upper <- upper
+  last_tp <<- tp
+  tp
+}
+
+set_lower <- function(tp, lower = formals(ggpairs)$lower){
+  tp$lower <- lower
+  last_tp <<- tp
+  tp
+}
+
+set_diag <- function(tp, diag = NULL){
+  tp$diag <- diag
+  last_tp <<- tp
+  tp
+}
+
+set_xlab <- function(tp, xlab = NULL){
+  tp$xlab <- xlab
+  last_tp <<- tp
+  tp
+}
+
+set_ylab <- function(tp, ylab = NULL){
+  tp$ylab <- ylab
+  last_tp <<- tp
+  tp
+}
+
+set_columnLabels <- function(tp, columnLabels = NULL){
+  tp$columnLabels <- columnLabels
+  last_tp <<- tp
+  tp
+}
+
+set_labeller <- function(tp, labeller = NULL){
+  tp$labeller <- labeller
+  last_tp <<- tp
+  tp
+}
+
+set_switch <- function(tp, switch = NULL){
+  tp$switch <- switch
+  last_tp <<- tp
+  tp
+}
+
+set_showStrips <- function(tp, showStrips = NULL){
+  tp$showStrips <- showStrips
+  last_tp <<- tp
+  tp
+}
+
+set_legend <- function(tp, legend = NULL){
+  tp$legend <- legend
+  last_tp <<- tp
+  tp
+}
+
+set_cardinality_threshold <- function(tp, cardinality_threshold = NULL){
+  tp$cardinality_threshold <- cardinality_threshold
+  last_tp <<- tp
+  tp
+}
+
+set_progress <- function(tp, progress = NULL){
+  tp$progress <- progress
+  last_tp <<- tp
+  tp
+}
+
+set_proportions <- function(tp, proportions = NULL){
+  tp$proportions <- proportions
+  last_tp <<- tp
+  tp
+}
+
+
+
+set_title <- function(tp, title = NULL){
+
+  tp$title <- title
+
+  last_tp <<- tp
+
+  tp
+  
+}
+```
+
+
+```{r}
+# ggpairs()
+
+ggpipedpairs(tips) 
+
+last_ggpairs() |>
+  set_columns(c("total_bill", "time", "tip")) 
+
+last_ggpairs() |> 
+  set_lower()  # brings in ggpairs defaults
+
+last_ggpairs() |> 
+  set_mapping(aes(color = time))
+
+last_ggpairs() |> 
+  set_mapping(aes(color = time, alpha = I(.7)))
+
+last_ggpairs() |> 
+  set_upper()
+
+last_ggpairs() |>
+  set_title("A ggpairs plot!")
+
+last_ggpairs() |>
+  set_columns(c("total_bill", "tip", "size")) 
+```
+
+
+```{r}
+# discrete x discrete
+ggpipedpairs(tips) |>
+  set_columns(c("time", "sex", "smoker")) 
+
+last_ggpairs() |> 
+  set_lower()  # brings in ggpairs defaults
+
+last_ggpairs() |> 
+  set_upper()  # brings in ggpairs defaults
+
+last_ggpairs() |> 
+  set_mapping(aes(color = time))
+
+last_ggpairs() |> 
+  set_mapping(aes(color = smoker))
+
+last_ggpairs() |> 
+  set_mapping(aes(color = day)) + scale_color_viridis_d()
+```
+
+```{r}
+ggpipedpairs(tips) |>
+  set_lower()
+
+
+
+```
+
+
+
+```{r beauty}
+ggpipedpairs(tips) |>
+  set_columns(c("total_bill", "time", "tip")) |> 
+  set_lower() |> # brings in ggpairs defaults  
+  set_mapping(aes(color = time)) |> 
+  set_mapping(aes(color = time, alpha = I(.7))) |> 
+  set_upper() |>
+  set_title("A ggpairs plot") |>
+  set_columns(c("total_bill", "tip", "size")) 
+```
+
+
+## Experiment
+
+```{r}
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

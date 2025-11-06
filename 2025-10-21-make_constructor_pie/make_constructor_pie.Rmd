@@ -54,11 +54,13 @@ geom_pie <- make_constructor(GeomBar,
                              mapping = aes(y = 1))
 
 
-mpg_three |>
-  ggplot() + 
+
+ggplot(mpg_three) + 
   aes(fill = cyl) + 
   geom_pie() + 
-  coord_polar() + 
+  coord_polar()
+
+last_plot() +
   facet_wrap(~manufacturer)
 ```
 
