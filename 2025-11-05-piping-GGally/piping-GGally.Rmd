@@ -119,7 +119,7 @@ print.tidypivot <- function(tp){
 }
 
 #' @export
-ggpipedpairs <- function(data = NULL){
+ggpairs_piped <- function(data = NULL){
   
   # thedata <<- data # don't love this
   data <- data %||% data.frame()
@@ -246,7 +246,7 @@ set_title <- function(tp, title = NULL){
 ```{r}
 # ggpairs()
 
-ggpipedpairs(tips) 
+ggpairs_piped(tips) 
 
 last_ggpairs() |>
   set_columns(c("total_bill", "time", "tip")) 
@@ -273,7 +273,7 @@ last_ggpairs() |>
 
 ```{r}
 # discrete x discrete
-ggpipedpairs(tips) |>
+ggpairs_piped(tips) |>
   set_columns(c("time", "sex", "smoker")) 
 
 last_ggpairs() |> 
@@ -293,7 +293,7 @@ last_ggpairs() |>
 ```
 
 ```{r}
-ggpipedpairs(tips) |>
+ggpairs_piped(tips) |>
   set_lower()
 
 
@@ -303,7 +303,7 @@ ggpipedpairs(tips) |>
 
 
 ```{r beauty}
-ggpipedpairs(tips) |>
+ggpairs_piped(tips) |>
   set_columns(c("total_bill", "time", "tip")) |> 
   set_lower() |> # brings in ggpairs defaults  
   set_mapping(aes(color = time)) |> 
