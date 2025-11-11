@@ -19,12 +19,12 @@ working on problems that arose in my work and personal interests.
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/layer-fundamentals.Rmd)**
 3.  [experiment-template-columns.qmd.html](https://evamaerey.github.io/mytidytuesday/experiment-template-columns.qmd.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/experiment-template-columns.qmd.Rmd)**
-4.  [embedded_flipbooks/legendry_embed.html](https://evamaerey.github.io/mytidytuesday/embedded_flipbooks/legendry_embed.html)
+4.  [embedded_flipbooks/twoway-ggpairs_embed.html](https://evamaerey.github.io/mytidytuesday/embedded_flipbooks/twoway-ggpairs_embed.html)
+    **[source](https://github.com/evamaerey/mytidytuesday/blob/master/embedded_flipbooks/twoway-ggpairs_embed.Rmd)**
+5.  [embedded_flipbooks/legendry_embed.html](https://evamaerey.github.io/mytidytuesday/embedded_flipbooks/legendry_embed.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/embedded_flipbooks/legendry_embed.Rmd)**
-5.  [embedded_flipbooks/ggpairspiped_embed.html](https://evamaerey.github.io/mytidytuesday/embedded_flipbooks/ggpairspiped_embed.html)
+6.  [embedded_flipbooks/ggpairspiped_embed.html](https://evamaerey.github.io/mytidytuesday/embedded_flipbooks/ggpairspiped_embed.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/embedded_flipbooks/ggpairspiped_embed.Rmd)**
-6.  [embedded_flipbooks/beauty_embed.html](https://evamaerey.github.io/mytidytuesday/embedded_flipbooks/beauty_embed.html)
-    **[source](https://github.com/evamaerey/mytidytuesday/blob/master/embedded_flipbooks/beauty_embed.Rmd)**
 7.  [chat_test.html](https://evamaerey.github.io/mytidytuesday/chat_test.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/chat_test.Rmd)**
 8.  [2025-11-08-ggpal/ggpal.html](https://evamaerey.github.io/mytidytuesday/2025-11-08-ggpal/ggpal.html)

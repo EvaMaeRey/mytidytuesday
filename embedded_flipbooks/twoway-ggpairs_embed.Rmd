@@ -1,0 +1,91 @@
+---
+title: "twoway-ggpairs"
+subtitle: ""
+author: ""
+output:
+  xaringan::moon_reader:
+    seal: FALSE
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r, include = F}
+options(knitr.duplicate.label = "allow")
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F)
+library(flipbookr)
+library(tidyverse)
+load("current_image.Rdata")
+```
+
+
+```{r, echo = F, eval = FALSE , message = F, warning = F}
+xaringanExtra::use_share_again()
+```
+
+
+```{r the_chunk, include = F}
+ggpairs_piped(tips) |> 
+  set_lower() |> # 
+  set_columns(c("tip", "total_bill")) |>
+  set_lower(list(continuous = "smooth")) |> # lm is default
+  set_lower(list(continuous = "autopoint")) |>
+  set_lower(list(continuous = "cor")) |>
+  set_lower(list(continuous = "density")) |>
+  set_lower(list(continuous = "smooth_lm")) |>
+  set_lower(list(continuous = "smooth_loess")) |>
+  set_columns(c("time", "smoker")) |> 
+  set_lower(list(discrete = "autopoint")) |>
+  set_lower(list(discrete = "count")) |>
+  set_lower(list(discrete = "cross")) |>
+  set_lower(list(discrete = "table")) |>
+  set_lower(list(discrete = "crosstable")) |>
+  set_lower(list(discrete = "ratio")) |> 
+  set_lower(list(discrete = "rowbar")) |>
+  set_lower(list(discrete = "trends")) |>
+  set_lower(list(discrete = "facetbar")) |> # default
+  set_columns(c("tip", "smoker")) |>
+  set_lower(list(combo = "autopoint")) |>
+  set_lower(list(combo = "box")) |>
+  set_lower(list(combo = "box_no_facet")) |>
+  set_lower(list(combo = "denstrip")) |>
+  set_lower(list(combo = "dot")) |>
+  set_lower(list(combo = "dot_no_facet"))|>
+  set_lower(list(combo = "facetdensitystrip")) |>
+  set_lower(list(combo = "facethist")) |>
+  set_lower(list(combo = "summarise_by")) |>
+  set_lower(list(combo = "trends"))
+```
+
+`r chunk_reveal(chunk_name = "the_chunk", break_type = "auto")`
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 120%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+
