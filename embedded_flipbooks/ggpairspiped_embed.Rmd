@@ -1,0 +1,89 @@
+---
+title: "ggpairspiped"
+subtitle: ""
+author: ""
+output:
+  xaringan::moon_reader:
+    seal: FALSE
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r, include = F}
+options(knitr.duplicate.label = "allow")
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F)
+library(flipbookr)
+library(tidyverse)
+load("current_image.Rdata")
+```
+
+
+```{r, echo = F, eval = FALSE , message = F, warning = F}
+xaringanExtra::use_share_again()
+```
+
+
+```{r the_chunk, include = F}
+ggpairs_piped(tips) |> # simple start univariate plots 
+  # to ggpairs - pairwise plots
+  set_lower() |> 
+  set_upper() |>
+  # Columns and Mapping
+  set_columns(c("tip", "total_bill", 
+                "time", "smoker")) |> 
+  set_columns(c( 2, 1, 6, 4)) |>
+  set_columnLabels( c("Tip", "Total Bill", 
+                      "Time of Day", "Smoker")) |>
+  set_mapping(aes(color = time)) |> 
+  set_mapping(aes(color = time, alpha = I(.7))) |> 
+  # Matrix Sections
+  set_lower(list(continuous = "smooth", 
+                 combo = "facetdensity",
+                 discrete = "crosstable", 
+                 mapping = aes(color = NULL))) |>
+  set_upper("blank") |>
+  set_diag("blank") |>
+  collect() ->
+pairs
+
+
+pairs[2, 1] +
+  theme_dark() ->
+pairs[2, 1]
+  
+pairs
+```
+
+`r chunk_reveal(chunk_name = "the_chunk", break_type = "auto")`
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 70%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+

@@ -40,7 +40,7 @@ formals(new_tidypivot)$lower <- "blank" #
 
 body(new_tidypivot) <- quote({
   
-  tp <- list(
+  pairs_obj <- list(
     data = data,
     mapping = mapping,
     columns = columns,
@@ -65,56 +65,25 @@ body(new_tidypivot) <- quote({
   )
 
   # declare class 'tidypivot'
-  class(tp) <- "tidypivot"
+  class(pairs_obj) <- "tidypivot"
 
   # Return the created object
-  invisible(tp)
+  invisible(pairs_obj)
   
 })
 ```
 
 
-```{r}
 
-# 
-# new_tidypivot <- function(data = tips, mapping = NULL, columns = 1:ncol(data), title = NULL,
-#                           upper = list(continuous = "cor", combo = "box_no_facet", discrete = "count", 
-#     na = "na"),
-#     lower = list(continuous = "points", combo = "facethist", discrete = "facetbar", 
-#     na = "na"),
-#     diag = list(continuous = "densityDiag", discrete = "barDiag", na = "naDiag")
-#                                
-# ){
-#   
-#   # table specification components !
-#   tp <- list(
-#     data = data,
-#     mapping = mapping,
-#     columns = columns,
-#     title = title,
-#     upper = upper,
-#     lower = lower,
-#     diag = diag
-#     # more 'slots' to be added
-#   )
-# 
-#   # declare class 'tidypivot'
-#   class(tp) <- "tidypivot"
-# 
-#   # Return the created object
-#   invisible(tp)
-#   
-# } 
-```
 
 
 ```{r}
 #' @export
-print.tidypivot <- function(tp){
+print.tidypivot <- function(pairs_obj){
   
-  print(do.call(ggpairs, tp))
+  print(do.call(ggpairs, pairs_obj))
   
-  invisible(tp)
+  invisible(pairs_obj)
   
 }
 
@@ -124,13 +93,13 @@ ggpairs_piped <- function(data = NULL){
   # thedata <<- data # don't love this
   data <- data %||% data.frame()
   
-  tp <- new_tidypivot()
+  pairs_obj <- new_tidypivot()
   
-  tp$data <- data
+  pairs_obj$data <- data
   
-  last_tp <<- tp
+  last_pairs_obj <<- pairs_obj
   
-  tp
+  pairs_obj
 
 }
 
@@ -138,106 +107,117 @@ ggpairs_piped <- function(data = NULL){
 #' @export
 last_ggpairs <- function(){
   
-  last_tp
+  last_pairs_obj
   
 }
 
 
-set_columns <- function(tp, columns = NULL){
-  tp$columns <- columns; last_tp <<- tp; tp
+set_columns <- function(pairs_obj, columns = NULL){
+  pairs_obj$columns <- columns
+  last_pairs_obj <<- pairs_obj
+  pairs_obj
 }
 
-set_mapping <- function(tp, mapping = NULL){
-  tp$mapping <- mapping; last_tp <<- tp; tp
+set_mapping <- function(pairs_obj, mapping = NULL){
+  pairs_obj$mapping <- mapping
+  last_pairs_obj <<- pairs_obj
+  pairs_obj
 }
 
-set_upper <- function(tp, upper = formals(ggpairs)$upper){
-  tp$upper <- upper
-  last_tp <<- tp
-  tp
+set_upper <- function(pairs_obj, upper = formals(ggpairs)$upper){
+  pairs_obj$upper <- upper
+  last_pairs_obj <<- pairs_obj
+  pairs_obj
 }
 
-set_lower <- function(tp, lower = formals(ggpairs)$lower){
-  tp$lower <- lower
-  last_tp <<- tp
-  tp
+set_lower <- function(pairs_obj, lower = formals(ggpairs)$lower){
+  pairs_obj$lower <- lower
+  last_pairs_obj <<- pairs_obj
+  pairs_obj
 }
 
-set_diag <- function(tp, diag = NULL){
-  tp$diag <- diag
-  last_tp <<- tp
-  tp
+set_diag <- function(pairs_obj, diag = NULL){
+  pairs_obj$diag <- diag
+  last_pairs_obj <<- pairs_obj
+  pairs_obj
 }
 
-set_xlab <- function(tp, xlab = NULL){
-  tp$xlab <- xlab
-  last_tp <<- tp
-  tp
+set_xlab <- function(pairs_obj, xlab = NULL){
+  pairs_obj$xlab <- xlab
+  last_pairs_obj <<- pairs_obj
+  pairs_obj
 }
 
-set_ylab <- function(tp, ylab = NULL){
-  tp$ylab <- ylab
-  last_tp <<- tp
-  tp
+set_ylab <- function(pairs_obj, ylab = NULL){
+  pairs_obj$ylab <- ylab
+  last_pairs_obj <<- pairs_obj
+  pairs_obj
 }
 
-set_columnLabels <- function(tp, columnLabels = NULL){
-  tp$columnLabels <- columnLabels
-  last_tp <<- tp
-  tp
+set_columnLabels <- function(pairs_obj, columnLabels = NULL){
+  pairs_obj$columnLabels <- columnLabels
+  last_pairs_obj <<- pairs_obj
+  pairs_obj
 }
 
-set_labeller <- function(tp, labeller = NULL){
-  tp$labeller <- labeller
-  last_tp <<- tp
-  tp
+set_labeller <- function(pairs_obj, labeller = NULL){
+  pairs_obj$labeller <- labeller
+  last_pairs_obj <<- pairs_obj
+  pairs_obj
 }
 
-set_switch <- function(tp, switch = NULL){
-  tp$switch <- switch
-  last_tp <<- tp
-  tp
+set_switch <- function(pairs_obj, switch = NULL){
+  pairs_obj$switch <- switch
+  last_pairs_obj <<- pairs_obj
+  pairs_obj
 }
 
-set_showStrips <- function(tp, showStrips = NULL){
-  tp$showStrips <- showStrips
-  last_tp <<- tp
-  tp
+set_showStrips <- function(pairs_obj, showStrips = NULL){
+  pairs_obj$showStrips <- showStrips
+  last_pairs_obj <<- pairs_obj
+  pairs_obj
 }
 
-set_legend <- function(tp, legend = NULL){
-  tp$legend <- legend
-  last_tp <<- tp
-  tp
+set_legend <- function(pairs_obj, legend = NULL){
+  pairs_obj$legend <- legend
+  last_pairs_obj <<- pairs_obj
+  pairs_obj
 }
 
-set_cardinality_threshold <- function(tp, cardinality_threshold = NULL){
-  tp$cardinality_threshold <- cardinality_threshold
-  last_tp <<- tp
-  tp
+set_cardinality_threshold <- function(pairs_obj, cardinality_threshold = NULL){
+  pairs_obj$cardinality_threshold <- cardinality_threshold
+  last_pairs_obj <<- pairs_obj
+  pairs_obj
 }
 
-set_progress <- function(tp, progress = NULL){
-  tp$progress <- progress
-  last_tp <<- tp
-  tp
+set_progress <- function(pairs_obj, progress = NULL){
+  pairs_obj$progress <- progress
+  last_pairs_obj <<- pairs_obj
+  pairs_obj
 }
 
-set_proportions <- function(tp, proportions = NULL){
-  tp$proportions <- proportions
-  last_tp <<- tp
-  tp
+set_proportions <- function(pairs_obj, proportions = NULL){
+  pairs_obj$proportions <- proportions
+  last_pairs_obj <<- pairs_obj
+  pairs_obj
 }
 
 
 
-set_title <- function(tp, title = NULL){
+set_title <- function(pairs_obj, title = NULL){
 
-  tp$title <- title
+  pairs_obj$title <- title
 
-  last_tp <<- tp
+  last_pairs_obj <<- pairs_obj
 
-  tp
+  pairs_obj
+  
+}
+
+
+collect <- function(pairs_obj){
+  
+  do.call(ggpairs, pairs_obj)
   
 }
 ```
@@ -255,9 +235,6 @@ last_ggpairs() |>
   set_lower()  # brings in ggpairs defaults
 
 last_ggpairs() |> 
-  set_mapping(aes(color = time))
-
-last_ggpairs() |> 
   set_mapping(aes(color = time, alpha = I(.7)))
 
 last_ggpairs() |> 
@@ -265,61 +242,44 @@ last_ggpairs() |>
 
 last_ggpairs() |>
   set_title("A ggpairs plot!")
-
-last_ggpairs() |>
-  set_columns(c("total_bill", "tip", "size")) 
-```
-
-
-```{r}
-# discrete x discrete
-ggpairs_piped(tips) |>
-  set_columns(c("time", "sex", "smoker")) 
-
-last_ggpairs() |> 
-  set_lower()  # brings in ggpairs defaults
-
-last_ggpairs() |> 
-  set_upper()  # brings in ggpairs defaults
-
-last_ggpairs() |> 
-  set_mapping(aes(color = time))
-
-last_ggpairs() |> 
-  set_mapping(aes(color = smoker))
-
-last_ggpairs() |> 
-  set_mapping(aes(color = day)) + scale_color_viridis_d()
-```
-
-```{r}
-ggpairs_piped(tips) |>
-  set_lower()
-
-
-
 ```
 
 
 
-```{r beauty}
-ggpairs_piped(tips) |>
-  set_columns(c("total_bill", "time", "tip")) |> 
-  set_lower() |> # brings in ggpairs defaults  
+
+
+
+
+```{r ggpairspiped}
+ggpairs_piped(tips) |> # simple start univariate plots 
+  # to ggpairs - pairwise plots
+  set_lower() |> 
+  set_upper() |>
+  # Columns and Mapping
+  set_columns(c("tip", "total_bill", 
+                "time", "smoker")) |> 
+  set_columns(c( 2, 1, 6, 4)) |>
+  set_columnLabels( c("Tip", "Total Bill", 
+                      "Time of Day", "Smoker")) |>
   set_mapping(aes(color = time)) |> 
   set_mapping(aes(color = time, alpha = I(.7))) |> 
-  set_upper() |>
-  set_title("A ggpairs plot") |>
-  set_columns(c("total_bill", "tip", "size")) 
+  # Matrix Sections
+  set_lower(list(continuous = "smooth", 
+                 combo = "facetdensity",
+                 discrete = "crosstable", 
+                 mapping = aes(color = NULL))) |>
+  set_upper("blank") |>
+  set_diag("blank") |>
+  collect() ->
+pairs
+
+
+pairs[2, 1] +
+  theme_dark() ->
+pairs[2, 1]
+  
+pairs
 ```
 
 
-## Experiment
 
-```{r}
-
-```
-
-
-
-## Closing remarks, Other Relevant Work, Caveats
