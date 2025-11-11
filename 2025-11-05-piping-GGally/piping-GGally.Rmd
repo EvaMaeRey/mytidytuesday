@@ -32,8 +32,10 @@ ggpairs |> formals() |> names()
 
 new_tidypivot <- function(){}
 
+formals(ggpairs)
+
 formals(new_tidypivot) <- formals(ggpairs)
-formals(new_tidypivot)$data <- tips #
+# formals(new_tidypivot)$data <- tips #
 formals(new_tidypivot)$upper <- "blank" #
 formals(new_tidypivot)$lower <- "blank" #
 
@@ -41,27 +43,12 @@ formals(new_tidypivot)$lower <- "blank" #
 body(new_tidypivot) <- quote({
   
   pairs_obj <- list(
-    data = data,
-    mapping = mapping,
-    columns = columns,
-    title = title,
+    # data = data,
+    # mapping = mapping,
+    # columns = columns,
+    # title = title,
     upper = upper,
-    lower = lower,
-    diag = diag, 
-    # params = params,
-    xlab = xlab,
-    ylab = ylab,
-    axisLabels = axisLabels,
-    # columnLabels = columnLabels,
-    labeller = labeller,
-    switch = switch,
-    showStrips = showStrips,
-    legend = legend,
-    cardinality_threshold = cardinality_threshold, 
-    progress = progress,
-    proportions = proportions
-    # legends = legends
-    # more 'slots' to be added
+    lower = lower
   )
 
   # declare class 'tidypivot'
@@ -230,6 +217,9 @@ ggpairs_piped(tips)
 
 last_ggpairs() |>
   set_columns(c("total_bill", "time", "tip")) 
+
+last_ggpairs() |>
+  set_columnLabels(c("Total Bill", "Lunch or Dinner", "Tip"))
 
 last_ggpairs() |> 
   set_lower()  # brings in ggpairs defaults
