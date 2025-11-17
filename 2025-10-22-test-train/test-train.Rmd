@@ -24,29 +24,17 @@ options(tidyverse.quiet = TRUE)
 library(tidyverse)
 
 
-compute_split <- function(data = cars, scales, seed = getOption("seed", 1999), step = getOption("tt_step", "train")){
+compute_split <- function(data, scales, seed = getOption("seed", 1999), step = getOption("tt_step", "train")){
   
   set.seed(seed)
   n <- nrow(data)
-  n_train = (n/2) |> round()
+  n_train = (n*.7) |> round()
   which_train_num <- sample(1:n, size = n_train,  replace = F)
   
   data |> 
     mutate(train_test = ifelse(row_number() %in% which_train_num, "train", "test")) |>
     mutate(ind_step = train_test == step)
-  
-  # 
-  #   mutate()
-  #   
-  #   
-  # which_train <- 1:n %in% which_train_num 
-  # which_test <- !which_train
-  # 
-  # if(step == "train"){
-  #   data |> _[which_train, ]
-  # }else{
-  #     data |> _[which_test, ]
-  #   }
+
   
 }
 
@@ -94,7 +82,7 @@ cars |>
 # train
 ggplot(cars) + 
   aes(speed, dist) +
-  geom_point(stat = StatSplit) + 
+  geom_point(stat = StatSplit) + # geom_point_train
   geom_line(stat = StatLmSplit, step = "test", alpha = 1) + 
   geom_point(stat = StatLmSplit) + 
   geom_segment(stat = StatLmSplit, lty = "dashed") + 
@@ -104,9 +92,8 @@ p_test
 # test
 ggplot(cars) + 
   aes(speed, dist) +
-  geom_point(stat = StatSplit, step = "test") + 
+  geom_point(stat = StatSplit, step = "test") + # geom_point_test
   geom_line(stat = StatLmSplit, step = "test", alpha = 1) + 
-  # geom_point(stat = StatLmSplit, step = "test") +
   geom_segment(stat = StatLmSplit, step = "test", lty = "dashed") + 
   labs(title = "testing step")  ->
 p_train
@@ -131,7 +118,7 @@ compute_split_lm_se <- function(data, scales, step = getOption("tt_step", "train
   data$width = data$residual
   data$height = data$residual
 
-  data |> select(residual, x, y, width, height, ind_step)
+  data |> select(train_test, residual, x, y, width, height, ind_step)
   
   }
 
@@ -149,14 +136,14 @@ ggplot(cars) +
   aes(speed, dist) +
   geom_rect(stat = StatLmSplitSE, linetype = "dashed") +
   coord_equal() +
-  scale_alpha(range = c(0,.6)) ->
+  scale_alpha_discrete(range = c(0,.6)) ->
 squared_error_train
 
 ggplot(cars) +
   aes(speed, dist) +
-  geom_rect(stat = StatLmSplitSE, step = "test", linetype = "dashed") +
+  geom_rect(stat = StatLmSplitSE, step = "test", color = "black", linetype = "dashed") +
   coord_equal() +
-  scale_alpha(range = c(0,.6)) ->
+  scale_alpha_discrete(range = c(0,.6)) ->
 squared_error_test
 
 squared_error_train + squared_error_test
@@ -171,16 +158,16 @@ compute_split_lm_rmse <- function(data, scales, step = getOption("tt_step", "tra
   
   data <- data |> 
     compute_split_lm_se(step = step) |>
-    group_by(ind_step) |>
-    summarise(rootmeansquarederror = sqrt(mean(residual^2)))
+    group_by(ind_step, train_test) |>
+    summarise(rmse = sqrt(mean(residual^2)))
 
-  data$x = data$rootmeansquarederror/2
-  data$y = data$rootmeansquarederror/2
-  data$width = data$rootmeansquarederror
-  data$height = data$rootmeansquarederror
+  data$x = data$rmse/2
+  data$y = data$rmse/2
+  data$width = data$rmse
+  data$height = data$rmse
 
   data |>
-    select(rootmeansquarederror, x,y, width, height, ind_step)
+    select(train_test, rmse, x,y, width, height, ind_step)
 
 }
 
@@ -197,7 +184,7 @@ StatLmSplitRMSE <- ggproto("StatLmSplitRMSE", Stat,
 
 ggplot(cars) +
   aes(speed, dist) +
-  geom_rect(stat = StatLmSplitSE, linetype = "dashed") +
+  geom_rect(stat = StatLmSplitSE, linetype = "dashed", color = "black") +
   geom_rect(stat = StatLmSplitRMSE, fill = "blue") +
   coord_equal() +
   scale_alpha(range = c(0,.6)) ->
@@ -205,7 +192,7 @@ squared_error_train
 
 ggplot(cars) +
   aes(speed, dist) +
-  geom_rect(stat = StatLmSplitSE, step = "test", linetype = "dashed") +
+  geom_rect(stat = StatLmSplitSE, step = "test", linetype = "dashed", color = "black") +
   geom_rect(stat = StatLmSplitRMSE, step = "test", fill = "blue") +
   coord_equal() +
   scale_alpha(range = c(0,.6)) ->
