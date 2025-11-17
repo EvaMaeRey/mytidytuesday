@@ -24,85 +24,96 @@ options(tidyverse.quiet = TRUE)
 library(tidyverse)
 
 
-compute_train_test <- function(data = cars, scales, seed = getOption("seed", 1999), step = getOption("tt_step", "train")){
+compute_split <- function(data = cars, scales, seed = getOption("seed", 1999), step = getOption("tt_step", "train")){
   
   set.seed(seed)
   n <- nrow(data)
-  n_train = n/2 |> round()
+  n_train = (n/2) |> round()
   which_train_num <- sample(1:n, size = n_train,  replace = F)
-  which_train <- 1:n %in% which_train_num 
-  which_test <- !which_train
   
-  if(step == "train"){
-    data |> _[which_train, ]
-  }else{
-      data |> _[which_test, ]
-    }
+  data |> 
+    mutate(train_test = ifelse(row_number() %in% which_train_num, "train", "test")) |>
+    mutate(ind_step = train_test == step)
+  
+  # 
+  #   mutate()
+  #   
+  #   
+  # which_train <- 1:n %in% which_train_num 
+  # which_test <- !which_train
+  # 
+  # if(step == "train"){
+  #   data |> _[which_train, ]
+  # }else{
+  #     data |> _[which_test, ]
+  #   }
   
 }
 
-
-compute_train_test_lm <- function(data, scales, step = getOption("tt_step", "train")){
-  
-  train_data <- data |> compute_train_test(step = "train")
-  split_data <- data |> compute_train_test(step = step)
-  
-  model <- lm(y ~ x, data = train_data)
-  
-  split_data$y = predict(model, split_data)
-  
-  split_data
-  
-}
+StatSplit <- ggproto("StatSplit", Stat,
+                           compute_panel = compute_split,
+                           default_aes = aes(alpha = after_stat(ind_step)))
 
 cars |>
   rename(x = speed, y = dist) |>
-  compute_train_test() |>
-  compute_train_test_lm()
-
-library(statexpress)
-
-# train
-ggplot(cars) + 
-  aes(speed, dist) +
-  geom_point(stat = qstat(compute_train_test)) + 
-  geom_point(stat = qstat(compute_train_test_lm), color = "blue")
+  compute_split() |>
+  head()
 
 
-# test
-options(tt_step = "test")
-ggplot(cars) + 
-  aes(speed, dist) +
-  geom_point(stat = qstat(compute_train_test)) + 
-  geom_point(stat = qstat(compute_train_test_lm),
-             color = "green")
+
+compute_split_lm <- function(data, scales, step = getOption("tt_step", "train")){
+  
+  data <- data |> compute_split(step = step)
+
+  data$yend = data$y
+  data$xend = data$x
+
+  model <- lm(y ~ x, data = data |> filter(train_test == "train"))
+
+  data$y = predict(model, data)
+
+  data
+  
+}
+
+
+StatLmSplit <- ggproto("StatLmSplit", Stat,
+                        compute_panel = compute_split_lm,
+                        default_aes = aes(alpha = after_stat(ind_step)))
+
+cars |>
+  rename(x = speed, y = dist) |>
+  compute_split_lm() |>
+  head()
 ```
 
 
 ```{r}
 # train
-options(tt_step = "train")
-test <- ggplot(mpg) + 
-  aes(cty, hwy) +
-  geom_point(stat = qstat(compute_train_test)) + 
-  geom_point(stat = qstat(compute_train_test_lm), color = "blue")
+ggplot(cars) + 
+  aes(speed, dist) +
+  geom_point(stat = StatSplit) + 
+  geom_line(stat = StatLmSplit, step = "test", alpha = 1) + 
+  geom_point(stat = StatLmSplit) + 
+  geom_segment(stat = StatLmSplit, lty = "dashed") + 
+  labs(title = "training step") ->
+p_test
 
 # test
-options(tt_step = "test")
-train <- ggplot(mpg) + 
-  aes(cty, hwy) +
-  geom_point(stat = qstat(compute_train_test)) + 
-  geom_point(stat = qstat(compute_train_test_lm),
-             color = "green")
+ggplot(cars) + 
+  aes(speed, dist) +
+  geom_point(stat = StatSplit, step = "test") + 
+  geom_line(stat = StatLmSplit, step = "test", alpha = 1) + 
+  # geom_point(stat = StatLmSplit, step = "test") +
+  geom_segment(stat = StatLmSplit, step = "test", lty = "dashed") + 
+  labs(title = "testing step")  ->
+p_train
 
 
-## the lesson of why not to use options!  😬
 library(patchwork)
-test + train
+p_test + p_train
 
 ```
-
-
 
 
 ## Experiment
