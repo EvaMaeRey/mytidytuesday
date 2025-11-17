@@ -73,7 +73,6 @@ compute_split_lm <- function(data, scales, step = getOption("tt_step", "train"))
   data$y = predict(model, data)
 
   data
-  
 }
 
 
@@ -86,6 +85,9 @@ cars |>
   compute_split_lm() |>
   head()
 ```
+
+
+
 
 
 ```{r}
@@ -116,10 +118,102 @@ p_test + p_train
 ```
 
 
+```{r}
+compute_split_lm_se <- function(data, scales, step = getOption("tt_step", "train")){
+  
+  data <- data |> compute_split_lm(step = step)
+  data
+
+  data$residual = data$yend - data$y
+
+  data$x = data$residual/2
+  data$y = data$residual/2
+  data$width = data$residual
+  data$height = data$residual
+
+  data |> select(residual, x, y, width, height, ind_step)
+  
+  }
+
+
+cars |>
+  rename(x = speed, y = dist) |>
+  compute_split_lm_se() |>
+  head()
+
+StatLmSplitSE <- ggproto("StatLmSplitSE", Stat,
+                        compute_panel = compute_split_lm_se,
+                        default_aes = aes(alpha = after_stat(ind_step)))
+
+ggplot(cars) +
+  aes(speed, dist) +
+  geom_rect(stat = StatLmSplitSE, linetype = "dashed") +
+  coord_equal() +
+  scale_alpha(range = c(0,.6)) ->
+squared_error_train
+
+ggplot(cars) +
+  aes(speed, dist) +
+  geom_rect(stat = StatLmSplitSE, step = "test", linetype = "dashed") +
+  coord_equal() +
+  scale_alpha(range = c(0,.6)) ->
+squared_error_test
+
+squared_error_train + squared_error_test
+
+```
+
+
 ## Experiment
 
 ```{r}
+compute_split_lm_rmse <- function(data, scales, step = getOption("tt_step", "train")){
+  
+  data <- data |> 
+    compute_split_lm_se(step = step) |>
+    group_by(ind_step) |>
+    summarise(rootmeansquarederror = sqrt(mean(residual^2)))
 
+  data$x = data$rootmeansquarederror/2
+  data$y = data$rootmeansquarederror/2
+  data$width = data$rootmeansquarederror
+  data$height = data$rootmeansquarederror
+
+  data |>
+    select(rootmeansquarederror, x,y, width, height, ind_step)
+
+}
+
+cars |>
+  rename(x = speed, y = dist) |>
+  compute_split_lm_rmse() |>
+  head()
+
+
+StatLmSplitRMSE <- ggproto("StatLmSplitRMSE", Stat,
+                        compute_panel = compute_split_lm_rmse,
+                        default_aes = aes(alpha = after_stat(ind_step)))
+
+
+ggplot(cars) +
+  aes(speed, dist) +
+  geom_rect(stat = StatLmSplitSE, linetype = "dashed") +
+  geom_rect(stat = StatLmSplitRMSE, fill = "blue") +
+  coord_equal() +
+  scale_alpha(range = c(0,.6)) ->
+squared_error_train
+
+ggplot(cars) +
+  aes(speed, dist) +
+  geom_rect(stat = StatLmSplitSE, step = "test", linetype = "dashed") +
+  geom_rect(stat = StatLmSplitRMSE, step = "test", fill = "blue") +
+  coord_equal() +
+  scale_alpha(range = c(0,.6)) ->
+squared_error_test
+
+squared_error_train + squared_error_test
+
+layer_data(i = 2)
 ```
 
 
