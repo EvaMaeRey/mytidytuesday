@@ -1,0 +1,156 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+```
+
+
+## Goal
+
+```{r, eval = F}
+
+ggplot(data = cars) + 
+  aes(y = dist) + # x is row number
+  geom_outcome() +
+  geom_model_fit()
+
+ggplot(data = cars) + 
+  aes(y = dist) + 
+  geom_model_fit(formula = y ~ .)
+
+ggplot(data = cars) + 
+  aes(y = dist, x = speed) + 
+  geom_model_fit(formula = y ~ .)
+
+
+```
+
+
+## Experiment
+
+```{r}
+
+compute_panel_outcome <- function(data, scales){
+  
+  data |> 
+    mutate(x = row_number())
+  
+}
+
+library(statexpress)
+ggplot(mtcars) +
+  aes(y = mpg) + 
+  geom_point(stat = qstat_panel(compute_panel_outcome))
+```
+
+
+
+```{r}
+model <- lm(mpg~ disp, mtcars)
+model$fitted.values
+
+compute_panel_model <- function(data, scales, formula = y ~ .){
+  
+  y_var_names <- c()
+  
+  for(i in 1:ncol(data)){
+    
+    is_identical <- identical(data$y, data[,i])
+    var_name <- names(data)[i]
+    
+    y_var_names <- c(y_var_names, if(is_identical){var_name}else{c()})
+    
+  }
+  
+  y_var_names <- y_var_names[y_var_names != "y"]
+  
+  # if(length(y_var_names) > 0){
+  model <- lm(formula, data = data |> select(-group, - PANEL, -y_var_names))
+  # }else{model <- lm(formula, data = data |> select(-group, - PANEL))}
+
+  data$y <- model$fitted.values
+
+  data |>
+    mutate(x = row_number())
+  
+}
+
+model <- lm(mpg ~ mpg, mtcars)
+model$residuals
+
+mtcars |> 
+  select(y = mpg, t = disp, x = mpg, group = 2, PANEL = 2) |> 
+  compute_panel_model()
+```
+
+
+```{r}
+library(statexpress)
+ggplot(mtcars) +
+  aes(y = mpg) +
+  geom_point(stat = qstat_panel(compute_panel_outcome))
+  
+last_plot() + 
+  aes_all("cyl") +
+  # geom model
+  geom_point(stat = qstat_panel(compute_panel_model), color = "blue") +
+  NULL
+
+last_plot() + 
+  aes_all("gear") 
+
+last_plot() + 
+  aes_all(names(mtcars)[2:11]) # the rest but not y
+
+last_plot() + 
+  aes_all(names(mtcars)) # uh-oh y predicts y perfectly...
+
+library(statexpress)
+ggplot(mtcars) +
+  aes(y = mpg) +
+  # geom_outcome
+  geom_point(stat = qstat_panel(compute_panel_outcome)) + 
+  ggplyr::aes_from_data() + 
+  # geom_lm_predictions
+  geom_point(stat = qstat_panel(compute_panel_model), color = "blue") 
+
+layer_data(i = 2)
+
+library(statexpress)
+ggplot(mtcars) +
+  aes(y = mpg, color = factor(cyl)) +
+  # geom_outcome
+  geom_point(stat = qstat_panel(compute_panel_outcome)) + 
+  ggplyr::aes_from_data() + 
+  # geom_lm_predictions
+  geom_point(stat = qstat_panel(compute_panel_model), 
+             color = "blue",
+             formula = y ~ drat + cyl)
+
+layer_data(i = 2)
+```
+
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

@@ -1,0 +1,171 @@
+---
+title: "Conversational ggplot2: recording visual trains of thought"
+subtitle: "Replicating 'Visualizing-Why-Yesterdays-Stock-Market-reversal-was-so-weird-and-unnerving'"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+options(tidyverse.quiet = TRUE)
+
+```
+
+
+## Intro Thoughts
+
+
+ggplot2 is noted for its ability to create stunning visualizations with relative ease given its intuitive syntax.  Maintainer Thomas Lin Pedersen has compared the ggplot charting experience as akin to 'speaking your plots into existence' and practitioners often celebrate how they arrive a final polished plots via incremental adjustments, i.e. combining snapshots of unfinished plots to help others appreciate the evolution.  Not generally discussed is the fact that ggplot2's incrementalism might assist in taking people through complex trains-of-thought, again, in a way that is relatively effortless, with code that is extraordinarily concise and easy to read and reason about.  The exercise (a replication of a recent visual media article) below explores this powerful, conversational character of ggplot2 with the experimental ggplyr package, designed to allow for more fluid movement between plots.  It also uses the ggcirclepack and ggbeeswarm extensions.
+
+
+```{r}
+# this data getting block from an ellmer `okgemini()` query 
+
+library(tidyquant)
+library(dplyr)
+library(lubridate) # For today()
+
+# --- 1. Define Parameters ---
+symbol <- "^GSPC" # S&P 500 Yahoo Finance symbol
+start_date <- "2015-01-01" # Corrected from 20215
+end_date <- "2025-11-21" 
+
+# --- 2. Load Data ---
+# tq_get fetches financial data
+sp500_data <- tq_get(symbol,
+                     get = "stock.prices", # Specify we want stock prices
+                     from = start_date,
+                     to = end_date)
+```
+
+
+
+
+
+
+
+## Experiment
+
+https://sherwood.news/markets/visualizing-why-yesterdays-stock-market-reversal-was-so-weird-and-unnerving/
+
+
+
+```{r}
+# remotes::install_github("https://github.com/EvaMaeRey/ggplyr")
+# remotes::install_github("https://github.com/EvaMaeRey/ggcirclepack")
+
+library(tidyverse)
+library(ggplyr)
+library(ggcirclepack)
+
+sp_500_data_calcs <- 
+  sp500_data  |>
+  mutate(
+    year = year(date), 
+    return = (close - lag(close))/lag(close)*100,
+    open_pct = (open - lag(close))/lag(close)*100,
+    intraday_pct = 100*(close-open)/open,
+    ind_yesterday = date == "2025-11-20"
+         )
+```
+
+
+> Viz move: *Every dot here represents one day of the S&P 500 Index’s return.*  `aes(id = date) + 
+  geom_circlepack()`
+
+
+```{r}
+library(RColorBrewer)
+sp_500_data_calcs |>
+  ggplot() + 
+  aes(id = date) + 
+  aes(color = ind_yesterday) + 
+  aes(fill = year |> as_factor()) + 
+  aes(linewidth = I(.3)) +
+  geom_circlepack() + 
+  coord_equal() + 
+  scale_fill_manual(values = brewer.pal(8, "Dark2")[c(1:8, 1:3)])  +
+  scale_color_manual(values = c("transparent", "magenta"))
+```
+
+
+> Viz move: *Here are those days, colored by the return on that day.* `aes(fill = return) `
+
+```{r}
+last_plot() + 
+  aes(fill = return) + scale_fill_gradient2(mid = "lightgrey", low = "#410000", high = "darkblue", )
+```
+
+> Reflection: *Even from a glance, you can see the volatility ...*
+
+
+> Viz move: *... of the pandemic era, as well as the bear market of 2022. * `facet_wrap(~ year)`
+
+
+```{r}
+last_plot() + 
+  facet_wrap(~ year)
+```
+
+> Reflection/viz move: *Although there have been worse days,* (back to 10 year context w `facet_null()`)
+
+
+```{r}
+last_plot() + 
+  facet_null()
+```
+
+
+> Forshadowing: *...what was remarkable about yesterday was how the good mood soured. *
+
+
+> Viz move: *Here are all of the days again, this time arranged by how much the S&P 500 opened up in its very first trade of the day.* `aes(x = open_pct) + geom_beeswarm()`
+
+```{r}
+last_plot_wipe_last() + 
+  aes(y = "All", x = open_pct) +
+  ggbeeswarm::geom_beeswarm(shape = 21) + 
+  coord_cartesian()
+```
+
+> Viz move: *... but now let’s only show the days when the S&P 500 Index opened up more than 1%. * `data_filter(open_pct > 1)`
+
+```{r}
+last_plot() + 
+  data_filter(open_pct > 1) + aes(size = I(5)) + 
+  scale_color_manual(values = c("whitesmoke", "magenta"))
+```
+
+> Reflection: *Such a good mood at 9:30 a.m. ET is pretty rare — only on 61 occasions out of 2,739 days did the market open up >1%.*
+
+> *Most of the time, stocks held onto that strong start throughout the day to finish with a gain; hence why most of the dots here are blue — but there are two notable outliers.* `aes(x = return)`
+
+
+```{r}
+last_plot() + 
+  aes(x = return)
+```
+
+
+> Viz move/reflection: *Both of those anomalies happened in 2025 (`facet_grid(year~.)` helps us look year-wise), and one of them was yesterday, when stocks opened up nearly 1.44%, only to slide nearly the entire session, closing down 1.56%.*
+
+```{r}
+last_plot() +
+  aes(y = "") + facet_grid(year~.)
+```
+
+> *All told, the SPX Index slid ~3% intraday. That’s only happened a handful of times in the last decade after opening up more than 1% — one of the others being the market’s tariff-induced meltdown in April. *
+
+
+```{r}
+last_plot() +
+  facet_null() + aes(y = intraday_pct, x = open_pct) 
+```
+
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

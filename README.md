@@ -27,777 +27,781 @@ working on problems that arose in my work and personal interests.
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/embedded_flipbooks/ggpairspiped_embed.Rmd)**
 7.  [chat_test.html](https://evamaerey.github.io/mytidytuesday/chat_test.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/chat_test.Rmd)**
-8.  [2025-11-08-ggpal/ggpal.html](https://evamaerey.github.io/mytidytuesday/2025-11-08-ggpal/ggpal.html)
+8.  [2025-11-24-stat-model/stat-model.html](https://evamaerey.github.io/mytidytuesday/2025-11-24-stat-model/stat-model.html)
+    **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-11-24-stat-model/stat-model.Rmd)**
+9.  [2025-11-24-s-and-p-since-2015/s-and-p-since-2015.html](https://evamaerey.github.io/mytidytuesday/2025-11-24-s-and-p-since-2015/s-and-p-since-2015.html)
+    **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-11-24-s-and-p-since-2015/s-and-p-since-2015.Rmd)**
+10. [2025-11-08-ggpal/ggpal.html](https://evamaerey.github.io/mytidytuesday/2025-11-08-ggpal/ggpal.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-11-08-ggpal/ggpal.Rmd)**
-9.  [2025-11-08-gg-extension-introduction/gg-extension-introduction.html](https://evamaerey.github.io/mytidytuesday/2025-11-08-gg-extension-introduction/gg-extension-introduction.html)
+11. [2025-11-08-gg-extension-introduction/gg-extension-introduction.html](https://evamaerey.github.io/mytidytuesday/2025-11-08-gg-extension-introduction/gg-extension-introduction.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-11-08-gg-extension-introduction/gg-extension-introduction.Rmd)**
-10. [2025-11-05-piping-GGally/piping-GGally.html](https://evamaerey.github.io/mytidytuesday/2025-11-05-piping-GGally/piping-GGally.html)
+12. [2025-11-05-piping-GGally/piping-GGally.html](https://evamaerey.github.io/mytidytuesday/2025-11-05-piping-GGally/piping-GGally.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-11-05-piping-GGally/piping-GGally.Rmd)**
-11. [2025-10-22-test-train/test-train.html](https://evamaerey.github.io/mytidytuesday/2025-10-22-test-train/test-train.html)
+13. [2025-10-22-test-train/test-train.html](https://evamaerey.github.io/mytidytuesday/2025-10-22-test-train/test-train.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-10-22-test-train/test-train.Rmd)**
-12. [2025-10-21-make_constructor_pie/make_constructor_pie.html](https://evamaerey.github.io/mytidytuesday/2025-10-21-make_constructor_pie/make_constructor_pie.html)
+14. [2025-10-21-make_constructor_pie/make_constructor_pie.html](https://evamaerey.github.io/mytidytuesday/2025-10-21-make_constructor_pie/make_constructor_pie.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-10-21-make_constructor_pie/make_constructor_pie.Rmd)**
-13. [2025-10-11-ggdims/ggdims.html](https://evamaerey.github.io/mytidytuesday/2025-10-11-ggdims/ggdims.html)
+15. [2025-10-11-ggdims/ggdims.html](https://evamaerey.github.io/mytidytuesday/2025-10-11-ggdims/ggdims.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-10-11-ggdims/ggdims.Rmd)**
-14. [2025-10-08-express-geom-combo/express-geom-combo.html](https://evamaerey.github.io/mytidytuesday/2025-10-08-express-geom-combo/express-geom-combo.html)
+16. [2025-10-08-express-geom-combo/express-geom-combo.html](https://evamaerey.github.io/mytidytuesday/2025-10-08-express-geom-combo/express-geom-combo.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-10-08-express-geom-combo/express-geom-combo.Rmd)**
-15. [2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/html/00Index.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/html/00Index.html)
+17. [2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/html/00Index.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/html/00Index.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/00Index.html.Rmd)**
-16. [2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/rsconnect.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/rsconnect.html)
+18. [2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/rsconnect.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/rsconnect.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/rsconnect.Rmd)**
-17. [2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/renv.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/renv.html)
+19. [2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/renv.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/renv.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/renv.Rmd)**
-18. [2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/python.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/python.html)
+20. [2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/python.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/python.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/python.Rmd)**
-19. [2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/profiles.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/profiles.html)
+21. [2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/profiles.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/profiles.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/profiles.Rmd)**
-20. [2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/packrat.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/packrat.html)
+22. [2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/packrat.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/packrat.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/packrat.Rmd)**
-21. [2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/packages.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/packages.html)
+23. [2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/packages.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/packages.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/packages.Rmd)**
-22. [2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/package-sources.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/package-sources.html)
+24. [2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/package-sources.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/package-sources.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/package-sources.Rmd)**
-23. [2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/package-install.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/package-install.html)
+25. [2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/package-install.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/package-install.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/package-install.Rmd)**
-24. [2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/index.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/index.html)
+26. [2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/index.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/index.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/index.Rmd)**
-25. [2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/faq.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/faq.html)
+27. [2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/faq.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/faq.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/faq.Rmd)**
-26. [2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/docker.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/docker.html)
+28. [2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/docker.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/docker.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/docker.Rmd)**
-27. [2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/ci.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/ci.html)
+29. [2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/ci.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/ci.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-09-29-means_from_issues/renv/library/macos/R-4.4/x86_64-apple-darwin20/renv/doc/ci.Rmd)**
-28. [2025-09-29-gt_snapshot/gt_snapshot.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-gt_snapshot/gt_snapshot.html)
+30. [2025-09-29-gt_snapshot/gt_snapshot.html](https://evamaerey.github.io/mytidytuesday/2025-09-29-gt_snapshot/gt_snapshot.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-09-29-gt_snapshot/gt_snapshot.Rmd)**
-29. [2025-09-28-fill2/fill2.html](https://evamaerey.github.io/mytidytuesday/2025-09-28-fill2/fill2.html)
+31. [2025-09-28-fill2/fill2.html](https://evamaerey.github.io/mytidytuesday/2025-09-28-fill2/fill2.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-09-28-fill2/fill2.Rmd)**
-30. [2025-09-21-ggsoiltexture/ggsoiltexture.html](https://evamaerey.github.io/mytidytuesday/2025-09-21-ggsoiltexture/ggsoiltexture.html)
+32. [2025-09-21-ggsoiltexture/ggsoiltexture.html](https://evamaerey.github.io/mytidytuesday/2025-09-21-ggsoiltexture/ggsoiltexture.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-09-21-ggsoiltexture/ggsoiltexture.Rmd)**
-31. [2025-09-15-make_constructor_sf/make_constructor_sf.html](https://evamaerey.github.io/mytidytuesday/2025-09-15-make_constructor_sf/make_constructor_sf.html)
+33. [2025-09-15-make_constructor_sf/make_constructor_sf.html](https://evamaerey.github.io/mytidytuesday/2025-09-15-make_constructor_sf/make_constructor_sf.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-09-15-make_constructor_sf/make_constructor_sf.Rmd)**
-32. [2025-09-15-ggtern/ggtern.html](https://evamaerey.github.io/mytidytuesday/2025-09-15-ggtern/ggtern.html)
+34. [2025-09-15-ggtern/ggtern.html](https://evamaerey.github.io/mytidytuesday/2025-09-15-ggtern/ggtern.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-09-15-ggtern/ggtern.Rmd)**
-33. [2025-08-25-biscale/biscale.html](https://evamaerey.github.io/mytidytuesday/2025-08-25-biscale/biscale.html)
+35. [2025-08-25-biscale/biscale.html](https://evamaerey.github.io/mytidytuesday/2025-08-25-biscale/biscale.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-08-25-biscale/biscale.Rmd)**
-34. [2025-08-19-umap/umap.html](https://evamaerey.github.io/mytidytuesday/2025-08-19-umap/umap.html)
+36. [2025-08-19-umap/umap.html](https://evamaerey.github.io/mytidytuesday/2025-08-19-umap/umap.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-08-19-umap/umap.Rmd)**
-35. [2025-08-19-forcats-reorder-within/forcats-reorder-within.html](https://evamaerey.github.io/mytidytuesday/2025-08-19-forcats-reorder-within/forcats-reorder-within.html)
+37. [2025-08-19-forcats-reorder-within/forcats-reorder-within.html](https://evamaerey.github.io/mytidytuesday/2025-08-19-forcats-reorder-within/forcats-reorder-within.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-08-19-forcats-reorder-within/forcats-reorder-within.Rmd)**
-36. [2025-08-08-ellmer-getting-started/ellmer-getting-started.html](https://evamaerey.github.io/mytidytuesday/2025-08-08-ellmer-getting-started/ellmer-getting-started.html)
+38. [2025-08-08-ellmer-getting-started/ellmer-getting-started.html](https://evamaerey.github.io/mytidytuesday/2025-08-08-ellmer-getting-started/ellmer-getting-started.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-08-08-ellmer-getting-started/ellmer-getting-started.Rmd)**
-37. [2025-07-22-ggplot2-release-party/ggplot2-release-party.html](https://evamaerey.github.io/mytidytuesday/2025-07-22-ggplot2-release-party/ggplot2-release-party.html)
+39. [2025-07-22-ggplot2-release-party/ggplot2-release-party.html](https://evamaerey.github.io/mytidytuesday/2025-07-22-ggplot2-release-party/ggplot2-release-party.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-07-22-ggplot2-release-party/ggplot2-release-party.Rmd)**
-38. [2025-07-18-seurat_tsne_plot/seurat_tsne_plot.html](https://evamaerey.github.io/mytidytuesday/2025-07-18-seurat_tsne_plot/seurat_tsne_plot.html)
+40. [2025-07-18-seurat_tsne_plot/seurat_tsne_plot.html](https://evamaerey.github.io/mytidytuesday/2025-07-18-seurat_tsne_plot/seurat_tsne_plot.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-07-18-seurat_tsne_plot/seurat_tsne_plot.Rmd)**
-39. [2025-07-18-second_axis_stat/second_axis_stat.html](https://evamaerey.github.io/mytidytuesday/2025-07-18-second_axis_stat/second_axis_stat.html)
+41. [2025-07-18-second_axis_stat/second_axis_stat.html](https://evamaerey.github.io/mytidytuesday/2025-07-18-second_axis_stat/second_axis_stat.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-07-18-second_axis_stat/second_axis_stat.Rmd)**
-40. [2025-07-09-stat_manual_for_easy_recipes/stat_manual_for_easy_recipes.html](https://evamaerey.github.io/mytidytuesday/2025-07-09-stat_manual_for_easy_recipes/stat_manual_for_easy_recipes.html)
+42. [2025-07-09-stat_manual_for_easy_recipes/stat_manual_for_easy_recipes.html](https://evamaerey.github.io/mytidytuesday/2025-07-09-stat_manual_for_easy_recipes/stat_manual_for_easy_recipes.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-07-09-stat_manual_for_easy_recipes/stat_manual_for_easy_recipes.Rmd)**
-41. [2025-07-06-alexa-names-evolution/alexa-names-evolution.html](https://evamaerey.github.io/mytidytuesday/2025-07-06-alexa-names-evolution/alexa-names-evolution.html)
+43. [2025-07-06-alexa-names-evolution/alexa-names-evolution.html](https://evamaerey.github.io/mytidytuesday/2025-07-06-alexa-names-evolution/alexa-names-evolution.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-07-06-alexa-names-evolution/alexa-names-evolution.Rmd)**
-42. [2025-06-29-ggregion-fresh-look/ggregion-fresh-look.html](https://evamaerey.github.io/mytidytuesday/2025-06-29-ggregion-fresh-look/ggregion-fresh-look.html)
+44. [2025-06-29-ggregion-fresh-look/ggregion-fresh-look.html](https://evamaerey.github.io/mytidytuesday/2025-06-29-ggregion-fresh-look/ggregion-fresh-look.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-06-29-ggregion-fresh-look/ggregion-fresh-look.Rmd)**
-43. [2025-06-26-multi_variate/multi_variate.html](https://evamaerey.github.io/mytidytuesday/2025-06-26-multi_variate/multi_variate.html)
+45. [2025-06-26-multi_variate/multi_variate.html](https://evamaerey.github.io/mytidytuesday/2025-06-26-multi_variate/multi_variate.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-06-26-multi_variate/multi_variate.Rmd)**
-44. [2025-06-09-new-theming-and-extension/new-theming-and-extension.html](https://evamaerey.github.io/mytidytuesday/2025-06-09-new-theming-and-extension/new-theming-and-extension.html)
+46. [2025-06-09-new-theming-and-extension/new-theming-and-extension.html](https://evamaerey.github.io/mytidytuesday/2025-06-09-new-theming-and-extension/new-theming-and-extension.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-06-09-new-theming-and-extension/new-theming-and-extension.Rmd)**
-45. [2025-06-06-tests-as-linear/tests-as-linear.html](https://evamaerey.github.io/mytidytuesday/2025-06-06-tests-as-linear/tests-as-linear.html)
+47. [2025-06-06-tests-as-linear/tests-as-linear.html](https://evamaerey.github.io/mytidytuesday/2025-06-06-tests-as-linear/tests-as-linear.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-06-06-tests-as-linear/tests-as-linear.Rmd)**
-46. [2025-06-05-geom-marquee/geom-marquee.html](https://evamaerey.github.io/mytidytuesday/2025-06-05-geom-marquee/geom-marquee.html)
+48. [2025-06-05-geom-marquee/geom-marquee.html](https://evamaerey.github.io/mytidytuesday/2025-06-05-geom-marquee/geom-marquee.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-06-05-geom-marquee/geom-marquee.Rmd)**
-47. [2025-05-01-asa-linked-in-post/asa-linked-in-post.html](https://evamaerey.github.io/mytidytuesday/2025-05-01-asa-linked-in-post/asa-linked-in-post.html)
+49. [2025-05-01-asa-linked-in-post/asa-linked-in-post.html](https://evamaerey.github.io/mytidytuesday/2025-05-01-asa-linked-in-post/asa-linked-in-post.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-05-01-asa-linked-in-post/asa-linked-in-post.Rmd)**
-48. [2025-04-25-radar/radar.html](https://evamaerey.github.io/mytidytuesday/2025-04-25-radar/radar.html)
+50. [2025-04-25-radar/radar.html](https://evamaerey.github.io/mytidytuesday/2025-04-25-radar/radar.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-04-25-radar/radar.Rmd)**
-49. [2025-04-24-extension-club-discussions/extension-club-discussions.html](https://evamaerey.github.io/mytidytuesday/2025-04-24-extension-club-discussions/extension-club-discussions.html)
+51. [2025-04-24-extension-club-discussions/extension-club-discussions.html](https://evamaerey.github.io/mytidytuesday/2025-04-24-extension-club-discussions/extension-club-discussions.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-04-24-extension-club-discussions/extension-club-discussions.Rmd)**
-50. [2025-04-22-theme-w-accent/theme-w-accent.html](https://evamaerey.github.io/mytidytuesday/2025-04-22-theme-w-accent/theme-w-accent.html)
+52. [2025-04-22-theme-w-accent/theme-w-accent.html](https://evamaerey.github.io/mytidytuesday/2025-04-22-theme-w-accent/theme-w-accent.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-04-22-theme-w-accent/theme-w-accent.Rmd)**
-51. [2025-04-21-who-are-the-ggplot2-extenders-asa-cowy/who-are-the-ggplot2-extenders-asa-cowy.html](https://evamaerey.github.io/mytidytuesday/2025-04-21-who-are-the-ggplot2-extenders-asa-cowy/who-are-the-ggplot2-extenders-asa-cowy.html)
+53. [2025-04-21-who-are-the-ggplot2-extenders-asa-cowy/who-are-the-ggplot2-extenders-asa-cowy.html](https://evamaerey.github.io/mytidytuesday/2025-04-21-who-are-the-ggplot2-extenders-asa-cowy/who-are-the-ggplot2-extenders-asa-cowy.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-04-21-who-are-the-ggplot2-extenders-asa-cowy/who-are-the-ggplot2-extenders-asa-cowy.Rmd)**
-52. [2025-04-06-tidyplots/tidyplots.html](https://evamaerey.github.io/mytidytuesday/2025-04-06-tidyplots/tidyplots.html)
+54. [2025-04-06-tidyplots/tidyplots.html](https://evamaerey.github.io/mytidytuesday/2025-04-06-tidyplots/tidyplots.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-04-06-tidyplots/tidyplots.Rmd)**
-53. [2025-03-27-ggpmisc-x-ggsprings/ggpmisc-x-ggsprings.html](https://evamaerey.github.io/mytidytuesday/2025-03-27-ggpmisc-x-ggsprings/ggpmisc-x-ggsprings.html)
+55. [2025-03-27-ggpmisc-x-ggsprings/ggpmisc-x-ggsprings.html](https://evamaerey.github.io/mytidytuesday/2025-03-27-ggpmisc-x-ggsprings/ggpmisc-x-ggsprings.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-03-27-ggpmisc-x-ggsprings/ggpmisc-x-ggsprings.Rmd)**
-54. [2025-03-18-mark_your_ggcalendar/mark_your_ggcalendar.html](https://evamaerey.github.io/mytidytuesday/2025-03-18-mark_your_ggcalendar/mark_your_ggcalendar.html)
+56. [2025-03-18-mark_your_ggcalendar/mark_your_ggcalendar.html](https://evamaerey.github.io/mytidytuesday/2025-03-18-mark_your_ggcalendar/mark_your_ggcalendar.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-03-18-mark_your_ggcalendar/mark_your_ggcalendar.Rmd)**
-55. [2025-03-15-stat_spring/stat_spring.html](https://evamaerey.github.io/mytidytuesday/2025-03-15-stat_spring/stat_spring.html)
+57. [2025-03-15-stat_spring/stat_spring.html](https://evamaerey.github.io/mytidytuesday/2025-03-15-stat_spring/stat_spring.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-03-15-stat_spring/stat_spring.Rmd)**
-56. [2025-03-07-position-Ix-Iy/position-Ix-Iy.html](https://evamaerey.github.io/mytidytuesday/2025-03-07-position-Ix-Iy/position-Ix-Iy.html)
+58. [2025-03-07-position-Ix-Iy/position-Ix-Iy.html](https://evamaerey.github.io/mytidytuesday/2025-03-07-position-Ix-Iy/position-Ix-Iy.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-03-07-position-Ix-Iy/position-Ix-Iy.Rmd)**
-57. [2025-03-04-scales_string_manipulation/scales_string_manipulation.html](https://evamaerey.github.io/mytidytuesday/2025-03-04-scales_string_manipulation/scales_string_manipulation.html)
+59. [2025-03-04-scales_string_manipulation/scales_string_manipulation.html](https://evamaerey.github.io/mytidytuesday/2025-03-04-scales_string_manipulation/scales_string_manipulation.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-03-04-scales_string_manipulation/scales_string_manipulation.Rmd)**
-58. [2025-02-26-order-infreq-win-facet/order-infreq-win-facet.html](https://evamaerey.github.io/mytidytuesday/2025-02-26-order-infreq-win-facet/order-infreq-win-facet.html)
+60. [2025-02-26-order-infreq-win-facet/order-infreq-win-facet.html](https://evamaerey.github.io/mytidytuesday/2025-02-26-order-infreq-win-facet/order-infreq-win-facet.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-02-26-order-infreq-win-facet/order-infreq-win-facet.Rmd)**
-59. [2025-02-21-hadley-transcript/hadley-transcript.html](https://evamaerey.github.io/mytidytuesday/2025-02-21-hadley-transcript/hadley-transcript.html)
+61. [2025-02-21-hadley-transcript/hadley-transcript.html](https://evamaerey.github.io/mytidytuesday/2025-02-21-hadley-transcript/hadley-transcript.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-02-21-hadley-transcript/hadley-transcript.Rmd)**
-60. [2025-02-18-useful-new-geom-default-aes/useful-new-geom-default-aes.html](https://evamaerey.github.io/mytidytuesday/2025-02-18-useful-new-geom-default-aes/useful-new-geom-default-aes.html)
+62. [2025-02-18-useful-new-geom-default-aes/useful-new-geom-default-aes.html](https://evamaerey.github.io/mytidytuesday/2025-02-18-useful-new-geom-default-aes/useful-new-geom-default-aes.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-02-18-useful-new-geom-default-aes/useful-new-geom-default-aes.Rmd)**
-61. [2025-02-15-combine_aes/combine_aes.html](https://evamaerey.github.io/mytidytuesday/2025-02-15-combine_aes/combine_aes.html)
+63. [2025-02-15-combine_aes/combine_aes.html](https://evamaerey.github.io/mytidytuesday/2025-02-15-combine_aes/combine_aes.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-02-15-combine_aes/combine_aes.Rmd)**
-62. [2025-02-08-new-ggstamp/new-ggstamp.html](https://evamaerey.github.io/mytidytuesday/2025-02-08-new-ggstamp/new-ggstamp.html)
+64. [2025-02-08-new-ggstamp/new-ggstamp.html](https://evamaerey.github.io/mytidytuesday/2025-02-08-new-ggstamp/new-ggstamp.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-02-08-new-ggstamp/new-ggstamp.Rmd)**
-63. [2025-02-06-deep-fill/deep-fill.html](https://evamaerey.github.io/mytidytuesday/2025-02-06-deep-fill/deep-fill.html)
+65. [2025-02-06-deep-fill/deep-fill.html](https://evamaerey.github.io/mytidytuesday/2025-02-06-deep-fill/deep-fill.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-02-06-deep-fill/deep-fill.Rmd)**
-64. [2025-02-02-brandtheme-vs-charttypetheme/brandtheme-vs-charttypetheme.html](https://evamaerey.github.io/mytidytuesday/2025-02-02-brandtheme-vs-charttypetheme/brandtheme-vs-charttypetheme.html)
+66. [2025-02-02-brandtheme-vs-charttypetheme/brandtheme-vs-charttypetheme.html](https://evamaerey.github.io/mytidytuesday/2025-02-02-brandtheme-vs-charttypetheme/brandtheme-vs-charttypetheme.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-02-02-brandtheme-vs-charttypetheme/brandtheme-vs-charttypetheme.Rmd)**
-65. [2025-01-28-ggkids/ggkids.html](https://evamaerey.github.io/mytidytuesday/2025-01-28-ggkids/ggkids.html)
+67. [2025-01-28-ggkids/ggkids.html](https://evamaerey.github.io/mytidytuesday/2025-01-28-ggkids/ggkids.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-01-28-ggkids/ggkids.Rmd)**
-66. [2025-01-18-programmatic-crosstalk/programmatic-crosstalk.html](https://evamaerey.github.io/mytidytuesday/2025-01-18-programmatic-crosstalk/programmatic-crosstalk.html)
+68. [2025-01-18-programmatic-crosstalk/programmatic-crosstalk.html](https://evamaerey.github.io/mytidytuesday/2025-01-18-programmatic-crosstalk/programmatic-crosstalk.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-01-18-programmatic-crosstalk/programmatic-crosstalk.Rmd)**
-67. [2025-01-12-days-of-the-week/days-of-the-week.html](https://evamaerey.github.io/mytidytuesday/2025-01-12-days-of-the-week/days-of-the-week.html)
+69. [2025-01-12-days-of-the-week/days-of-the-week.html](https://evamaerey.github.io/mytidytuesday/2025-01-12-days-of-the-week/days-of-the-week.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-01-12-days-of-the-week/days-of-the-week.Rmd)**
-68. [2025-01-11-do-call-tidy-pivot/do-call-tidy-pivot.html](https://evamaerey.github.io/mytidytuesday/2025-01-11-do-call-tidy-pivot/do-call-tidy-pivot.html)
+70. [2025-01-11-do-call-tidy-pivot/do-call-tidy-pivot.html](https://evamaerey.github.io/mytidytuesday/2025-01-11-do-call-tidy-pivot/do-call-tidy-pivot.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-01-11-do-call-tidy-pivot/do-call-tidy-pivot.Rmd)**
-69. [2025-01-07-superimposition/superimposition.html](https://evamaerey.github.io/mytidytuesday/2025-01-07-superimposition/superimposition.html)
+71. [2025-01-07-superimposition/superimposition.html](https://evamaerey.github.io/mytidytuesday/2025-01-07-superimposition/superimposition.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-01-07-superimposition/superimposition.Rmd)**
-70. [2025-01-07-position-wrap/position-wrap.html](https://evamaerey.github.io/mytidytuesday/2025-01-07-position-wrap/position-wrap.html)
+72. [2025-01-07-position-wrap/position-wrap.html](https://evamaerey.github.io/mytidytuesday/2025-01-07-position-wrap/position-wrap.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-01-07-position-wrap/position-wrap.Rmd)**
-71. [2025-01-07-position-waterfall/position-waterfall.html](https://evamaerey.github.io/mytidytuesday/2025-01-07-position-waterfall/position-waterfall.html)
+73. [2025-01-07-position-waterfall/position-waterfall.html](https://evamaerey.github.io/mytidytuesday/2025-01-07-position-waterfall/position-waterfall.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-01-07-position-waterfall/position-waterfall.Rmd)**
-72. [2025-01-03-closereads/closereads.html](https://evamaerey.github.io/mytidytuesday/2025-01-03-closereads/closereads.html)
+74. [2025-01-03-closereads/closereads.html](https://evamaerey.github.io/mytidytuesday/2025-01-03-closereads/closereads.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-01-03-closereads/closereads.Rmd)**
-73. [2025-01-03-closereads/closereads-flipbook.html](https://evamaerey.github.io/mytidytuesday/2025-01-03-closereads/closereads-flipbook.html)
+75. [2025-01-03-closereads/closereads-flipbook.html](https://evamaerey.github.io/mytidytuesday/2025-01-03-closereads/closereads-flipbook.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-01-03-closereads/closereads-flipbook.Rmd)**
-74. [2025-01-03-closereads/closereads-chunk-reveal.html](https://evamaerey.github.io/mytidytuesday/2025-01-03-closereads/closereads-chunk-reveal.html)
+76. [2025-01-03-closereads/closereads-chunk-reveal.html](https://evamaerey.github.io/mytidytuesday/2025-01-03-closereads/closereads-chunk-reveal.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-01-03-closereads/closereads-chunk-reveal.Rmd)**
-75. [2025-01-03-closereads/closereads-chunk-reveal-minimal.html](https://evamaerey.github.io/mytidytuesday/2025-01-03-closereads/closereads-chunk-reveal-minimal.html)
+77. [2025-01-03-closereads/closereads-chunk-reveal-minimal.html](https://evamaerey.github.io/mytidytuesday/2025-01-03-closereads/closereads-chunk-reveal-minimal.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2025-01-03-closereads/closereads-chunk-reveal-minimal.Rmd)**
-76. [2024-12-27-extenders-tree-2024/extenders-tree-2024.html](https://evamaerey.github.io/mytidytuesday/2024-12-27-extenders-tree-2024/extenders-tree-2024.html)
+78. [2024-12-27-extenders-tree-2024/extenders-tree-2024.html](https://evamaerey.github.io/mytidytuesday/2024-12-27-extenders-tree-2024/extenders-tree-2024.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-12-27-extenders-tree-2024/extenders-tree-2024.Rmd)**
-77. [2024-12-21-tree-w-ggwordcloud/tree-w-ggwordcloud.html](https://evamaerey.github.io/mytidytuesday/2024-12-21-tree-w-ggwordcloud/tree-w-ggwordcloud.html)
+79. [2024-12-21-tree-w-ggwordcloud/tree-w-ggwordcloud.html](https://evamaerey.github.io/mytidytuesday/2024-12-21-tree-w-ggwordcloud/tree-w-ggwordcloud.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-12-21-tree-w-ggwordcloud/tree-w-ggwordcloud.Rmd)**
-78. [2024-12-20-perfume-explore/perfume-explore.html](https://evamaerey.github.io/mytidytuesday/2024-12-20-perfume-explore/perfume-explore.html)
+80. [2024-12-20-perfume-explore/perfume-explore.html](https://evamaerey.github.io/mytidytuesday/2024-12-20-perfume-explore/perfume-explore.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-12-20-perfume-explore/perfume-explore.Rmd)**
-79. [2024-12-18-theme-void-new-ggplot2/theme-void-new-ggplot2.html](https://evamaerey.github.io/mytidytuesday/2024-12-18-theme-void-new-ggplot2/theme-void-new-ggplot2.html)
+81. [2024-12-18-theme-void-new-ggplot2/theme-void-new-ggplot2.html](https://evamaerey.github.io/mytidytuesday/2024-12-18-theme-void-new-ggplot2/theme-void-new-ggplot2.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-12-18-theme-void-new-ggplot2/theme-void-new-ggplot2.Rmd)**
-80. [2024-12-18-geom-swim-marker/geom-swim-marker.html](https://evamaerey.github.io/mytidytuesday/2024-12-18-geom-swim-marker/geom-swim-marker.html)
+82. [2024-12-18-geom-swim-marker/geom-swim-marker.html](https://evamaerey.github.io/mytidytuesday/2024-12-18-geom-swim-marker/geom-swim-marker.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-12-18-geom-swim-marker/geom-swim-marker.Rmd)**
-81. [2024-12-18-geom-swim-marker/geom-swim-marker-superimposition.html](https://evamaerey.github.io/mytidytuesday/2024-12-18-geom-swim-marker/geom-swim-marker-superimposition.html)
+83. [2024-12-18-geom-swim-marker/geom-swim-marker-superimposition.html](https://evamaerey.github.io/mytidytuesday/2024-12-18-geom-swim-marker/geom-swim-marker-superimposition.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-12-18-geom-swim-marker/geom-swim-marker-superimposition.Rmd)**
-82. [2024-12-14-referent-data/referent-data.html](https://evamaerey.github.io/mytidytuesday/2024-12-14-referent-data/referent-data.html)
+84. [2024-12-14-referent-data/referent-data.html](https://evamaerey.github.io/mytidytuesday/2024-12-14-referent-data/referent-data.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-12-14-referent-data/referent-data.Rmd)**
-83. [2024-12-10-ggplot2-layer-composition/ggplot2-layer-composition.html](https://evamaerey.github.io/mytidytuesday/2024-12-10-ggplot2-layer-composition/ggplot2-layer-composition.html)
+85. [2024-12-10-ggplot2-layer-composition/ggplot2-layer-composition.html](https://evamaerey.github.io/mytidytuesday/2024-12-10-ggplot2-layer-composition/ggplot2-layer-composition.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-12-10-ggplot2-layer-composition/ggplot2-layer-composition.Rmd)**
-84. [2024-12-09-legendry-breakdown/legendry_chunk_flipbook.html](https://evamaerey.github.io/mytidytuesday/2024-12-09-legendry-breakdown/legendry_chunk_flipbook.html)
+86. [2024-12-09-legendry-breakdown/legendry_chunk_flipbook.html](https://evamaerey.github.io/mytidytuesday/2024-12-09-legendry-breakdown/legendry_chunk_flipbook.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-12-09-legendry-breakdown/legendry_chunk_flipbook.Rmd)**
-85. [2024-12-09-legendry-breakdown/legendry-breakdown.html](https://evamaerey.github.io/mytidytuesday/2024-12-09-legendry-breakdown/legendry-breakdown.html)
+87. [2024-12-09-legendry-breakdown/legendry-breakdown.html](https://evamaerey.github.io/mytidytuesday/2024-12-09-legendry-breakdown/legendry-breakdown.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-12-09-legendry-breakdown/legendry-breakdown.Rmd)**
-86. [2024-12-08-set-theme-from-last-plot/set-theme-from-last-plot.html](https://evamaerey.github.io/mytidytuesday/2024-12-08-set-theme-from-last-plot/set-theme-from-last-plot.html)
+88. [2024-12-08-set-theme-from-last-plot/set-theme-from-last-plot.html](https://evamaerey.github.io/mytidytuesday/2024-12-08-set-theme-from-last-plot/set-theme-from-last-plot.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-12-08-set-theme-from-last-plot/set-theme-from-last-plot.Rmd)**
-87. [2024-12-02-grid-v-dplyr-ggcircletext/grid-v-dplyr-ggcircletext.html](https://evamaerey.github.io/mytidytuesday/2024-12-02-grid-v-dplyr-ggcircletext/grid-v-dplyr-ggcircletext.html)
+89. [2024-12-02-grid-v-dplyr-ggcircletext/grid-v-dplyr-ggcircletext.html](https://evamaerey.github.io/mytidytuesday/2024-12-02-grid-v-dplyr-ggcircletext/grid-v-dplyr-ggcircletext.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-12-02-grid-v-dplyr-ggcircletext/grid-v-dplyr-ggcircletext.Rmd)**
-88. [2024-12-02-geom-theme-for-cowy-chalkboard/geom-theme-for-cowy-chalkboard.html](https://evamaerey.github.io/mytidytuesday/2024-12-02-geom-theme-for-cowy-chalkboard/geom-theme-for-cowy-chalkboard.html)
+90. [2024-12-02-geom-theme-for-cowy-chalkboard/geom-theme-for-cowy-chalkboard.html](https://evamaerey.github.io/mytidytuesday/2024-12-02-geom-theme-for-cowy-chalkboard/geom-theme-for-cowy-chalkboard.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-12-02-geom-theme-for-cowy-chalkboard/geom-theme-for-cowy-chalkboard.Rmd)**
-89. [2024-11-21-ggedgelist-rewrite/ggedgelist-rewrite.html](https://evamaerey.github.io/mytidytuesday/2024-11-21-ggedgelist-rewrite/ggedgelist-rewrite.html)
+91. [2024-11-21-ggedgelist-rewrite/ggedgelist-rewrite.html](https://evamaerey.github.io/mytidytuesday/2024-11-21-ggedgelist-rewrite/ggedgelist-rewrite.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-11-21-ggedgelist-rewrite/ggedgelist-rewrite.Rmd)**
-90. [2024-11-20-point-voronoi-colors/point-voronoi-colors.html](https://evamaerey.github.io/mytidytuesday/2024-11-20-point-voronoi-colors/point-voronoi-colors.html)
+92. [2024-11-20-point-voronoi-colors/point-voronoi-colors.html](https://evamaerey.github.io/mytidytuesday/2024-11-20-point-voronoi-colors/point-voronoi-colors.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-11-20-point-voronoi-colors/point-voronoi-colors.Rmd)**
-91. [2024-11-19-gg-prefixes/gg-prefixes.html](https://evamaerey.github.io/mytidytuesday/2024-11-19-gg-prefixes/gg-prefixes.html)
+93. [2024-11-19-gg-prefixes/gg-prefixes.html](https://evamaerey.github.io/mytidytuesday/2024-11-19-gg-prefixes/gg-prefixes.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-11-19-gg-prefixes/gg-prefixes.Rmd)**
-92. [2024-11-19-gg-prefixes/ext_ggplot2_functions_cleaning.html](https://evamaerey.github.io/mytidytuesday/2024-11-19-gg-prefixes/ext_ggplot2_functions_cleaning.html)
+94. [2024-11-19-gg-prefixes/ext_ggplot2_functions_cleaning.html](https://evamaerey.github.io/mytidytuesday/2024-11-19-gg-prefixes/ext_ggplot2_functions_cleaning.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-11-19-gg-prefixes/ext_ggplot2_functions_cleaning.Rmd)**
-93. [2024-11-17-australia-3rdway/australia-3rdway.html](https://evamaerey.github.io/mytidytuesday/2024-11-17-australia-3rdway/australia-3rdway.html)
+95. [2024-11-17-australia-3rdway/australia-3rdway.html](https://evamaerey.github.io/mytidytuesday/2024-11-17-australia-3rdway/australia-3rdway.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-11-17-australia-3rdway/australia-3rdway.Rmd)**
-94. [2024-11-14-usamap-3rdway/usamap-3rdway.html](https://evamaerey.github.io/mytidytuesday/2024-11-14-usamap-3rdway/usamap-3rdway.html)
+96. [2024-11-14-usamap-3rdway/usamap-3rdway.html](https://evamaerey.github.io/mytidytuesday/2024-11-14-usamap-3rdway/usamap-3rdway.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-11-14-usamap-3rdway/usamap-3rdway.Rmd)**
-95. [2024-11-13-replacing_geom_defaults/replacing_geom_defaults.html](https://evamaerey.github.io/mytidytuesday/2024-11-13-replacing_geom_defaults/replacing_geom_defaults.html)
+97. [2024-11-13-replacing_geom_defaults/replacing_geom_defaults.html](https://evamaerey.github.io/mytidytuesday/2024-11-13-replacing_geom_defaults/replacing_geom_defaults.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-11-13-replacing_geom_defaults/replacing_geom_defaults.Rmd)**
-96. [2024-11-06-graphical-poem-proportions/graphical-poem-proportions.html](https://evamaerey.github.io/mytidytuesday/2024-11-06-graphical-poem-proportions/graphical-poem-proportions.html)
+98. [2024-11-06-graphical-poem-proportions/graphical-poem-proportions.html](https://evamaerey.github.io/mytidytuesday/2024-11-06-graphical-poem-proportions/graphical-poem-proportions.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-11-06-graphical-poem-proportions/graphical-poem-proportions.Rmd)**
-97. [2024-10-30-packcircles-in-script-geom/packcircles-in-script-geom.html](https://evamaerey.github.io/mytidytuesday/2024-10-30-packcircles-in-script-geom/packcircles-in-script-geom.html)
+99. [2024-10-30-packcircles-in-script-geom/packcircles-in-script-geom.html](https://evamaerey.github.io/mytidytuesday/2024-10-30-packcircles-in-script-geom/packcircles-in-script-geom.html)
     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-10-30-packcircles-in-script-geom/packcircles-in-script-geom.Rmd)**
-98. [2024-10-29-asa-cowy-fall-2024/asa-cowy-fall-2024.html](https://evamaerey.github.io/mytidytuesday/2024-10-29-asa-cowy-fall-2024/asa-cowy-fall-2024.html)
-    **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-10-29-asa-cowy-fall-2024/asa-cowy-fall-2024.Rmd)**
-99. [2024-10-24-wax-wick-candlestick/wax-wick-candlestick.html](https://evamaerey.github.io/mytidytuesday/2024-10-24-wax-wick-candlestick/wax-wick-candlestick.html)
-    **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-10-24-wax-wick-candlestick/wax-wick-candlestick.Rmd)**
-100. [2024-10-22-correlation-covariance-flipbook-rewrite/correlation-covariance-flipbook-rewrite.html](https://evamaerey.github.io/mytidytuesday/2024-10-22-correlation-covariance-flipbook-rewrite/correlation-covariance-flipbook-rewrite.html)
+100. [2024-10-29-asa-cowy-fall-2024/asa-cowy-fall-2024.html](https://evamaerey.github.io/mytidytuesday/2024-10-29-asa-cowy-fall-2024/asa-cowy-fall-2024.html)
+     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-10-29-asa-cowy-fall-2024/asa-cowy-fall-2024.Rmd)**
+101. [2024-10-24-wax-wick-candlestick/wax-wick-candlestick.html](https://evamaerey.github.io/mytidytuesday/2024-10-24-wax-wick-candlestick/wax-wick-candlestick.html)
+     **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-10-24-wax-wick-candlestick/wax-wick-candlestick.Rmd)**
+102. [2024-10-22-correlation-covariance-flipbook-rewrite/correlation-covariance-flipbook-rewrite.html](https://evamaerey.github.io/mytidytuesday/2024-10-22-correlation-covariance-flipbook-rewrite/correlation-covariance-flipbook-rewrite.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-10-22-correlation-covariance-flipbook-rewrite/correlation-covariance-flipbook-rewrite.Rmd)**
-101. [2024-10-20-flipbookr-outside-object/flipbookr-outside-object.html](https://evamaerey.github.io/mytidytuesday/2024-10-20-flipbookr-outside-object/flipbookr-outside-object.html)
+103. [2024-10-20-flipbookr-outside-object/flipbookr-outside-object.html](https://evamaerey.github.io/mytidytuesday/2024-10-20-flipbookr-outside-object/flipbookr-outside-object.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-10-20-flipbookr-outside-object/flipbookr-outside-object.Rmd)**
-102. [2024-10-15-function-factory/function-factory.html](https://evamaerey.github.io/mytidytuesday/2024-10-15-function-factory/function-factory.html)
+104. [2024-10-15-function-factory/function-factory.html](https://evamaerey.github.io/mytidytuesday/2024-10-15-function-factory/function-factory.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-10-15-function-factory/function-factory.Rmd)**
-103. [2024-10-11-global-options-for-ggsomewhere/global-options-for-ggsomewhere.html](https://evamaerey.github.io/mytidytuesday/2024-10-11-global-options-for-ggsomewhere/global-options-for-ggsomewhere.html)
+105. [2024-10-11-global-options-for-ggsomewhere/global-options-for-ggsomewhere.html](https://evamaerey.github.io/mytidytuesday/2024-10-11-global-options-for-ggsomewhere/global-options-for-ggsomewhere.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-10-11-global-options-for-ggsomewhere/global-options-for-ggsomewhere.Rmd)**
-104. [2024-10-11-aes-color-after-fill/aes-color-after-fill.html](https://evamaerey.github.io/mytidytuesday/2024-10-11-aes-color-after-fill/aes-color-after-fill.html)
+106. [2024-10-11-aes-color-after-fill/aes-color-after-fill.html](https://evamaerey.github.io/mytidytuesday/2024-10-11-aes-color-after-fill/aes-color-after-fill.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-10-11-aes-color-after-fill/aes-color-after-fill.Rmd)**
-105. [2024-10-07-bricks/bricks.html](https://evamaerey.github.io/mytidytuesday/2024-10-07-bricks/bricks.html)
+107. [2024-10-07-bricks/bricks.html](https://evamaerey.github.io/mytidytuesday/2024-10-07-bricks/bricks.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-10-07-bricks/bricks.Rmd)**
-106. [2024-10-03-qgeom_mod/qgeom_mod.html](https://evamaerey.github.io/mytidytuesday/2024-10-03-qgeom_mod/qgeom_mod.html)
+108. [2024-10-03-qgeom_mod/qgeom_mod.html](https://evamaerey.github.io/mytidytuesday/2024-10-03-qgeom_mod/qgeom_mod.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-10-03-qgeom_mod/qgeom_mod.Rmd)**
-107. [2024-09-26-stats101-w-qstat/stats101-w-qstat.html](https://evamaerey.github.io/mytidytuesday/2024-09-26-stats101-w-qstat/stats101-w-qstat.html)
+109. [2024-09-26-stats101-w-qstat/stats101-w-qstat.html](https://evamaerey.github.io/mytidytuesday/2024-09-26-stats101-w-qstat/stats101-w-qstat.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-09-26-stats101-w-qstat/stats101-w-qstat.Rmd)**
-108. [2024-09-26-debug-ggbuild/debug-ggbuild.html](https://evamaerey.github.io/mytidytuesday/2024-09-26-debug-ggbuild/debug-ggbuild.html)
+110. [2024-09-26-debug-ggbuild/debug-ggbuild.html](https://evamaerey.github.io/mytidytuesday/2024-09-26-debug-ggbuild/debug-ggbuild.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-09-26-debug-ggbuild/debug-ggbuild.Rmd)**
-109. [2024-09-26-debug-ggbuild/debug-ggbuild-slideshow.html](https://evamaerey.github.io/mytidytuesday/2024-09-26-debug-ggbuild/debug-ggbuild-slideshow.html)
+111. [2024-09-26-debug-ggbuild/debug-ggbuild-slideshow.html](https://evamaerey.github.io/mytidytuesday/2024-09-26-debug-ggbuild/debug-ggbuild-slideshow.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-09-26-debug-ggbuild/debug-ggbuild-slideshow.Rmd)**
-110. [2024-09-20-corr-w-qstat-qlayer/corr-w-qstat-qlayer.html](https://evamaerey.github.io/mytidytuesday/2024-09-20-corr-w-qstat-qlayer/corr-w-qstat-qlayer.html)
+112. [2024-09-20-corr-w-qstat-qlayer/corr-w-qstat-qlayer.html](https://evamaerey.github.io/mytidytuesday/2024-09-20-corr-w-qstat-qlayer/corr-w-qstat-qlayer.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-09-20-corr-w-qstat-qlayer/corr-w-qstat-qlayer.Rmd)**
-111. [2024-09-19-temp-stat/temp-stat.html](https://evamaerey.github.io/mytidytuesday/2024-09-19-temp-stat/temp-stat.html)
+113. [2024-09-19-temp-stat/temp-stat.html](https://evamaerey.github.io/mytidytuesday/2024-09-19-temp-stat/temp-stat.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-09-19-temp-stat/temp-stat.Rmd)**
-112. [2024-09-11-ggdensity-highlight/ggdensity-highlight.html](https://evamaerey.github.io/mytidytuesday/2024-09-11-ggdensity-highlight/ggdensity-highlight.html)
+114. [2024-09-11-ggdensity-highlight/ggdensity-highlight.html](https://evamaerey.github.io/mytidytuesday/2024-09-11-ggdensity-highlight/ggdensity-highlight.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-09-11-ggdensity-highlight/ggdensity-highlight.Rmd)**
-113. [2024-09-09-local-micro-package-lm/lm/local-micro-package-lm.html](https://evamaerey.github.io/mytidytuesday/2024-09-09-local-micro-package-lm/lm/local-micro-package-lm.html)
+115. [2024-09-09-local-micro-package-lm/lm/local-micro-package-lm.html](https://evamaerey.github.io/mytidytuesday/2024-09-09-local-micro-package-lm/lm/local-micro-package-lm.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-09-09-local-micro-package-lm/lm/local-micro-package-lm.Rmd)**
-114. [2024-09-09-junes-gg-cascade/junes-gg-cascade.html](https://evamaerey.github.io/mytidytuesday/2024-09-09-junes-gg-cascade/junes-gg-cascade.html)
+116. [2024-09-09-junes-gg-cascade/junes-gg-cascade.html](https://evamaerey.github.io/mytidytuesday/2024-09-09-junes-gg-cascade/junes-gg-cascade.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-09-09-junes-gg-cascade/junes-gg-cascade.Rmd)**
-115. [2024-09-09-junes-gg-cascade/cascade_chunk_flipbook.html](https://evamaerey.github.io/mytidytuesday/2024-09-09-junes-gg-cascade/cascade_chunk_flipbook.html)
+117. [2024-09-09-junes-gg-cascade/cascade_chunk_flipbook.html](https://evamaerey.github.io/mytidytuesday/2024-09-09-junes-gg-cascade/cascade_chunk_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-09-09-junes-gg-cascade/cascade_chunk_flipbook.Rmd)**
-116. [2024-09-09-geom-likert-stack-overflow-survey/geom-likert-stack-overflow-survey.html](https://evamaerey.github.io/mytidytuesday/2024-09-09-geom-likert-stack-overflow-survey/geom-likert-stack-overflow-survey.html)
+118. [2024-09-09-geom-likert-stack-overflow-survey/geom-likert-stack-overflow-survey.html](https://evamaerey.github.io/mytidytuesday/2024-09-09-geom-likert-stack-overflow-survey/geom-likert-stack-overflow-survey.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-09-09-geom-likert-stack-overflow-survey/geom-likert-stack-overflow-survey.Rmd)**
-117. [2024-09-05-stat-pairs/stat-pairs.html](https://evamaerey.github.io/mytidytuesday/2024-09-05-stat-pairs/stat-pairs.html)
+119. [2024-09-05-stat-pairs/stat-pairs.html](https://evamaerey.github.io/mytidytuesday/2024-09-05-stat-pairs/stat-pairs.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-09-05-stat-pairs/stat-pairs.Rmd)**
-118. [2024-09-03-linear-model-multi-predictors/penguinseval_chunk_flipbook.html](https://evamaerey.github.io/mytidytuesday/2024-09-03-linear-model-multi-predictors/penguinseval_chunk_flipbook.html)
+120. [2024-09-03-linear-model-multi-predictors/penguinseval_chunk_flipbook.html](https://evamaerey.github.io/mytidytuesday/2024-09-03-linear-model-multi-predictors/penguinseval_chunk_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-09-03-linear-model-multi-predictors/penguinseval_chunk_flipbook.Rmd)**
-119. [2024-09-03-linear-model-multi-predictors/linear-model-multi-predictors.html](https://evamaerey.github.io/mytidytuesday/2024-09-03-linear-model-multi-predictors/linear-model-multi-predictors.html)
+121. [2024-09-03-linear-model-multi-predictors/linear-model-multi-predictors.html](https://evamaerey.github.io/mytidytuesday/2024-09-03-linear-model-multi-predictors/linear-model-multi-predictors.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-09-03-linear-model-multi-predictors/linear-model-multi-predictors.Rmd)**
-120. [2024-09-03-linear-model-multi-predictors/linear-model-arbitrary-aes.html](https://evamaerey.github.io/mytidytuesday/2024-09-03-linear-model-multi-predictors/linear-model-arbitrary-aes.html)
+122. [2024-09-03-linear-model-multi-predictors/linear-model-arbitrary-aes.html](https://evamaerey.github.io/mytidytuesday/2024-09-03-linear-model-multi-predictors/linear-model-arbitrary-aes.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-09-03-linear-model-multi-predictors/linear-model-arbitrary-aes.Rmd)**
-121. [2024-09-03-linear-model-multi-predictors/linear-model-arbitrary-aes-mini.html](https://evamaerey.github.io/mytidytuesday/2024-09-03-linear-model-multi-predictors/linear-model-arbitrary-aes-mini.html)
+123. [2024-09-03-linear-model-multi-predictors/linear-model-arbitrary-aes-mini.html](https://evamaerey.github.io/mytidytuesday/2024-09-03-linear-model-multi-predictors/linear-model-arbitrary-aes-mini.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-09-03-linear-model-multi-predictors/linear-model-arbitrary-aes-mini.Rmd)**
-122. [2024-09-03-linear-model-multi-predictors/flipper_estimation_chunk_flipbook.html](https://evamaerey.github.io/mytidytuesday/2024-09-03-linear-model-multi-predictors/flipper_estimation_chunk_flipbook.html)
+124. [2024-09-03-linear-model-multi-predictors/flipper_estimation_chunk_flipbook.html](https://evamaerey.github.io/mytidytuesday/2024-09-03-linear-model-multi-predictors/flipper_estimation_chunk_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-09-03-linear-model-multi-predictors/flipper_estimation_chunk_flipbook.Rmd)**
-123. [2024-09-03-linear-model-multi-predictors/bikes-box_chunk_flipbook.html](https://evamaerey.github.io/mytidytuesday/2024-09-03-linear-model-multi-predictors/bikes-box_chunk_flipbook.html)
+125. [2024-09-03-linear-model-multi-predictors/bikes-box_chunk_flipbook.html](https://evamaerey.github.io/mytidytuesday/2024-09-03-linear-model-multi-predictors/bikes-box_chunk_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-09-03-linear-model-multi-predictors/bikes-box_chunk_flipbook.Rmd)**
-124. [2024-08-26-argentina-map/geography-specific-stats.pdf](https://evamaerey.github.io/mytidytuesday/2024-08-26-argentina-map/geography-specific-stats.pdf)
+126. [2024-08-26-argentina-map/geography-specific-stats.pdf](https://evamaerey.github.io/mytidytuesday/2024-08-26-argentina-map/geography-specific-stats.pdf)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-08-26-argentina-map/geography-specific-stats.Rmd)**
-125. [2024-08-26-argentina-map/geography-specific-stats.html](https://evamaerey.github.io/mytidytuesday/2024-08-26-argentina-map/geography-specific-stats.html)
+127. [2024-08-26-argentina-map/geography-specific-stats.html](https://evamaerey.github.io/mytidytuesday/2024-08-26-argentina-map/geography-specific-stats.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-08-26-argentina-map/geography-specific-stats.Rmd)**
-126. [2024-08-26-argentina-map/geography-specific-stats-2pg.pdf](https://evamaerey.github.io/mytidytuesday/2024-08-26-argentina-map/geography-specific-stats-2pg.pdf)
+128. [2024-08-26-argentina-map/geography-specific-stats-2pg.pdf](https://evamaerey.github.io/mytidytuesday/2024-08-26-argentina-map/geography-specific-stats-2pg.pdf)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-08-26-argentina-map/geography-specific-stats-2pg.Rmd)**
-127. [2024-08-26-argentina-map/geography-specific-stats-2pg.html](https://evamaerey.github.io/mytidytuesday/2024-08-26-argentina-map/geography-specific-stats-2pg.html)
+129. [2024-08-26-argentina-map/geography-specific-stats-2pg.html](https://evamaerey.github.io/mytidytuesday/2024-08-26-argentina-map/geography-specific-stats-2pg.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-08-26-argentina-map/geography-specific-stats-2pg.Rmd)**
-128. [2024-08-26-argentina-map/argentina-map.pdf](https://evamaerey.github.io/mytidytuesday/2024-08-26-argentina-map/argentina-map.pdf)
+130. [2024-08-26-argentina-map/argentina-map.pdf](https://evamaerey.github.io/mytidytuesday/2024-08-26-argentina-map/argentina-map.pdf)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-08-26-argentina-map/argentina-map.Rmd)**
-129. [2024-08-26-argentina-map/argentina-map.html](https://evamaerey.github.io/mytidytuesday/2024-08-26-argentina-map/argentina-map.html)
+131. [2024-08-26-argentina-map/argentina-map.html](https://evamaerey.github.io/mytidytuesday/2024-08-26-argentina-map/argentina-map.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-08-26-argentina-map/argentina-map.Rmd)**
-130. [2024-08-07-likert/likert.html](https://evamaerey.github.io/mytidytuesday/2024-08-07-likert/likert.html)
+132. [2024-08-07-likert/likert.html](https://evamaerey.github.io/mytidytuesday/2024-08-07-likert/likert.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-08-07-likert/likert.Rmd)**
-131. [2024-08-07-likert/likert-ggstats.html](https://evamaerey.github.io/mytidytuesday/2024-08-07-likert/likert-ggstats.html)
+133. [2024-08-07-likert/likert-ggstats.html](https://evamaerey.github.io/mytidytuesday/2024-08-07-likert/likert-ggstats.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-08-07-likert/likert-ggstats.Rmd)**
-132. [2024-08-06-swimmer/swimmer.html](https://evamaerey.github.io/mytidytuesday/2024-08-06-swimmer/swimmer.html)
+134. [2024-08-06-swimmer/swimmer.html](https://evamaerey.github.io/mytidytuesday/2024-08-06-swimmer/swimmer.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-08-06-swimmer/swimmer.Rmd)**
-133. [2024-08-06-swimmer/swim_chunk_flipbook.html](https://evamaerey.github.io/mytidytuesday/2024-08-06-swimmer/swim_chunk_flipbook.html)
+135. [2024-08-06-swimmer/swim_chunk_flipbook.html](https://evamaerey.github.io/mytidytuesday/2024-08-06-swimmer/swim_chunk_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-08-06-swimmer/swim_chunk_flipbook.Rmd)**
-134. [2024-08-05-wedge/wedge.html](https://evamaerey.github.io/mytidytuesday/2024-08-05-wedge/wedge.html)
+136. [2024-08-05-wedge/wedge.html](https://evamaerey.github.io/mytidytuesday/2024-08-05-wedge/wedge.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-08-05-wedge/wedge.Rmd)**
-135. [2024-08-04-ggweekly/ggweekly.html](https://evamaerey.github.io/mytidytuesday/2024-08-04-ggweekly/ggweekly.html)
+137. [2024-08-04-ggweekly/ggweekly.html](https://evamaerey.github.io/mytidytuesday/2024-08-04-ggweekly/ggweekly.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-08-04-ggweekly/ggweekly.Rmd)**
-136. [2024-08-03-ggcircumscribe/ggcircumscribe.html](https://evamaerey.github.io/mytidytuesday/2024-08-03-ggcircumscribe/ggcircumscribe.html)
+138. [2024-08-03-ggcircumscribe/ggcircumscribe.html](https://evamaerey.github.io/mytidytuesday/2024-08-03-ggcircumscribe/ggcircumscribe.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-08-03-ggcircumscribe/ggcircumscribe.Rmd)**
-137. [2024-08-02-pca-multi-predict/pca-multi-predict.html](https://evamaerey.github.io/mytidytuesday/2024-08-02-pca-multi-predict/pca-multi-predict.html)
+139. [2024-08-02-pca-multi-predict/pca-multi-predict.html](https://evamaerey.github.io/mytidytuesday/2024-08-02-pca-multi-predict/pca-multi-predict.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-08-02-pca-multi-predict/pca-multi-predict.Rmd)**
-138. [2024-08-02-circle-text/circle-text.html](https://evamaerey.github.io/mytidytuesday/2024-08-02-circle-text/circle-text.html)
+140. [2024-08-02-circle-text/circle-text.html](https://evamaerey.github.io/mytidytuesday/2024-08-02-circle-text/circle-text.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-08-02-circle-text/circle-text.Rmd)**
-139. [2024-08-01-pca-Stat-geom/pca-Stat-geom.html](https://evamaerey.github.io/mytidytuesday/2024-08-01-pca-Stat-geom/pca-Stat-geom.html)
+141. [2024-08-01-pca-Stat-geom/pca-Stat-geom.html](https://evamaerey.github.io/mytidytuesday/2024-08-01-pca-Stat-geom/pca-Stat-geom.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-08-01-pca-Stat-geom/pca-Stat-geom.Rmd)**
-140. [2024-07-30-tt-multicat-summer-movies/tt-multicat-summer-movies.html](https://evamaerey.github.io/mytidytuesday/2024-07-30-tt-multicat-summer-movies/tt-multicat-summer-movies.html)
+142. [2024-07-30-tt-multicat-summer-movies/tt-multicat-summer-movies.html](https://evamaerey.github.io/mytidytuesday/2024-07-30-tt-multicat-summer-movies/tt-multicat-summer-movies.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-07-30-tt-multicat-summer-movies/tt-multicat-summer-movies.Rmd)**
-141. [2024-07-23-tt-american-idol/tt-american-idol.html](https://evamaerey.github.io/mytidytuesday/2024-07-23-tt-american-idol/tt-american-idol.html)
+143. [2024-07-23-tt-american-idol/tt-american-idol.html](https://evamaerey.github.io/mytidytuesday/2024-07-23-tt-american-idol/tt-american-idol.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-07-23-tt-american-idol/tt-american-idol.Rmd)**
-142. [2024-07-23-tt-american-idol/american-idol_chunk_flipbook.html](https://evamaerey.github.io/mytidytuesday/2024-07-23-tt-american-idol/american-idol_chunk_flipbook.html)
+144. [2024-07-23-tt-american-idol/american-idol_chunk_flipbook.html](https://evamaerey.github.io/mytidytuesday/2024-07-23-tt-american-idol/american-idol_chunk_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-07-23-tt-american-idol/american-idol_chunk_flipbook.Rmd)**
-143. [2024-07-22-chunk-reveal-location-mod/hi_flipbook.html](https://evamaerey.github.io/mytidytuesday/2024-07-22-chunk-reveal-location-mod/hi_flipbook.html)
+145. [2024-07-22-chunk-reveal-location-mod/hi_flipbook.html](https://evamaerey.github.io/mytidytuesday/2024-07-22-chunk-reveal-location-mod/hi_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-07-22-chunk-reveal-location-mod/hi_flipbook.Rmd)**
-144. [2024-07-22-chunk-reveal-location-mod/hi_chunk_flipbook.html](https://evamaerey.github.io/mytidytuesday/2024-07-22-chunk-reveal-location-mod/hi_chunk_flipbook.html)
+146. [2024-07-22-chunk-reveal-location-mod/hi_chunk_flipbook.html](https://evamaerey.github.io/mytidytuesday/2024-07-22-chunk-reveal-location-mod/hi_chunk_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-07-22-chunk-reveal-location-mod/hi_chunk_flipbook.Rmd)**
-145. [2024-07-22-chunk-reveal-location-mod/embedded_flipbooks/hi_embed.html](https://evamaerey.github.io/mytidytuesday/2024-07-22-chunk-reveal-location-mod/embedded_flipbooks/hi_embed.html)
+147. [2024-07-22-chunk-reveal-location-mod/embedded_flipbooks/hi_embed.html](https://evamaerey.github.io/mytidytuesday/2024-07-22-chunk-reveal-location-mod/embedded_flipbooks/hi_embed.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-07-22-chunk-reveal-location-mod/embedded_flipbooks/hi_embed.Rmd)**
-146. [2024-07-22-chunk-reveal-location-mod/chunk-reveal-location-mod.html](https://evamaerey.github.io/mytidytuesday/2024-07-22-chunk-reveal-location-mod/chunk-reveal-location-mod.html)
+148. [2024-07-22-chunk-reveal-location-mod/chunk-reveal-location-mod.html](https://evamaerey.github.io/mytidytuesday/2024-07-22-chunk-reveal-location-mod/chunk-reveal-location-mod.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-07-22-chunk-reveal-location-mod/chunk-reveal-location-mod.Rmd)**
-147. [2024-07-21-upper-case-geom-w-user-stat/upper-case-geom-w-user-stat.html](https://evamaerey.github.io/mytidytuesday/2024-07-21-upper-case-geom-w-user-stat/upper-case-geom-w-user-stat.html)
+149. [2024-07-21-upper-case-geom-w-user-stat/upper-case-geom-w-user-stat.html](https://evamaerey.github.io/mytidytuesday/2024-07-21-upper-case-geom-w-user-stat/upper-case-geom-w-user-stat.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-07-21-upper-case-geom-w-user-stat/upper-case-geom-w-user-stat.Rmd)**
-148. [2024-07-19-straight-on-curved/straight-on-curved.html](https://evamaerey.github.io/mytidytuesday/2024-07-19-straight-on-curved/straight-on-curved.html)
+150. [2024-07-19-straight-on-curved/straight-on-curved.html](https://evamaerey.github.io/mytidytuesday/2024-07-19-straight-on-curved/straight-on-curved.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-07-19-straight-on-curved/straight-on-curved.Rmd)**
-149. [2024-07-16-pyramid/pyramid.html](https://evamaerey.github.io/mytidytuesday/2024-07-16-pyramid/pyramid.html)
+151. [2024-07-16-pyramid/pyramid.html](https://evamaerey.github.io/mytidytuesday/2024-07-16-pyramid/pyramid.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-07-16-pyramid/pyramid.Rmd)**
-150. [2024-07-16-pyramid/or_pyramid_chunk_flipbook.html](https://evamaerey.github.io/mytidytuesday/2024-07-16-pyramid/or_pyramid_chunk_flipbook.html)
+152. [2024-07-16-pyramid/or_pyramid_chunk_flipbook.html](https://evamaerey.github.io/mytidytuesday/2024-07-16-pyramid/or_pyramid_chunk_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-07-16-pyramid/or_pyramid_chunk_flipbook.Rmd)**
-151. [2024-07-12-xmean-on-the-fly/xmean-on-the-fly.html](https://evamaerey.github.io/mytidytuesday/2024-07-12-xmean-on-the-fly/xmean-on-the-fly.html)
+153. [2024-07-12-xmean-on-the-fly/xmean-on-the-fly.html](https://evamaerey.github.io/mytidytuesday/2024-07-12-xmean-on-the-fly/xmean-on-the-fly.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-07-12-xmean-on-the-fly/xmean-on-the-fly.Rmd)**
-152. [2024-07-12-sf-experiment-fastStat/sf-experiment-fastStat.html](https://evamaerey.github.io/mytidytuesday/2024-07-12-sf-experiment-fastStat/sf-experiment-fastStat.html)
+154. [2024-07-12-sf-experiment-fastStat/sf-experiment-fastStat.html](https://evamaerey.github.io/mytidytuesday/2024-07-12-sf-experiment-fastStat/sf-experiment-fastStat.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-07-12-sf-experiment-fastStat/sf-experiment-fastStat.Rmd)**
-153. [2024-07-10-ggnewdata/ggnewdata.html](https://evamaerey.github.io/mytidytuesday/2024-07-10-ggnewdata/ggnewdata.html)
+155. [2024-07-10-ggnewdata/ggnewdata.html](https://evamaerey.github.io/mytidytuesday/2024-07-10-ggnewdata/ggnewdata.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-07-10-ggnewdata/ggnewdata.Rmd)**
-154. [2024-07-08-gtsummary/gtsummary.html](https://evamaerey.github.io/mytidytuesday/2024-07-08-gtsummary/gtsummary.html)
+156. [2024-07-08-gtsummary/gtsummary.html](https://evamaerey.github.io/mytidytuesday/2024-07-08-gtsummary/gtsummary.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-07-08-gtsummary/gtsummary.Rmd)**
-155. [2024-07-05-tinypivot/tinypivot.html](https://evamaerey.github.io/mytidytuesday/2024-07-05-tinypivot/tinypivot.html)
+157. [2024-07-05-tinypivot/tinypivot.html](https://evamaerey.github.io/mytidytuesday/2024-07-05-tinypivot/tinypivot.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-07-05-tinypivot/tinypivot.Rmd)**
-156. [2024-07-02-s3-tables/s3-tables.html](https://evamaerey.github.io/mytidytuesday/2024-07-02-s3-tables/s3-tables.html)
+158. [2024-07-02-s3-tables/s3-tables.html](https://evamaerey.github.io/mytidytuesday/2024-07-02-s3-tables/s3-tables.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-07-02-s3-tables/s3-tables.Rmd)**
-157. [2024-07-02-s3-tables/s3-tables-tidypivot.html](https://evamaerey.github.io/mytidytuesday/2024-07-02-s3-tables/s3-tables-tidypivot.html)
+159. [2024-07-02-s3-tables/s3-tables-tidypivot.html](https://evamaerey.github.io/mytidytuesday/2024-07-02-s3-tables/s3-tables-tidypivot.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-07-02-s3-tables/s3-tables-tidypivot.Rmd)**
-158. [2024-07-01-just-use-a-list-tp/just-use-a-list-tp.html](https://evamaerey.github.io/mytidytuesday/2024-07-01-just-use-a-list-tp/just-use-a-list-tp.html)
+160. [2024-07-01-just-use-a-list-tp/just-use-a-list-tp.html](https://evamaerey.github.io/mytidytuesday/2024-07-01-just-use-a-list-tp/just-use-a-list-tp.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-07-01-just-use-a-list-tp/just-use-a-list-tp.Rmd)**
-159. [2024-06-26-webr/webr2.html](https://evamaerey.github.io/mytidytuesday/2024-06-26-webr/webr2.html)
+161. [2024-06-26-webr/webr2.html](https://evamaerey.github.io/mytidytuesday/2024-06-26-webr/webr2.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-06-26-webr/webr2.Rmd)**
-160. [2024-06-26-webr/\_extensions/coatless/webr/qwebr-monaco-editor-init.html](https://evamaerey.github.io/mytidytuesday/2024-06-26-webr/_extensions/coatless/webr/qwebr-monaco-editor-init.html)
+162. [2024-06-26-webr/\_extensions/coatless/webr/qwebr-monaco-editor-init.html](https://evamaerey.github.io/mytidytuesday/2024-06-26-webr/_extensions/coatless/webr/qwebr-monaco-editor-init.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-06-26-webr/_extensions/coatless/webr/qwebr-monaco-editor-init.Rmd)**
-161. [2024-06-26-webr/Untitled.html](https://evamaerey.github.io/mytidytuesday/2024-06-26-webr/Untitled.html)
+163. [2024-06-26-webr/Untitled.html](https://evamaerey.github.io/mytidytuesday/2024-06-26-webr/Untitled.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-06-26-webr/Untitled.Rmd)**
-162. [2024-06-25-just-use-ggproto/just-use-ggproto.html](https://evamaerey.github.io/mytidytuesday/2024-06-25-just-use-ggproto/just-use-ggproto.html)
+164. [2024-06-25-just-use-ggproto/just-use-ggproto.html](https://evamaerey.github.io/mytidytuesday/2024-06-25-just-use-ggproto/just-use-ggproto.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-06-25-just-use-ggproto/just-use-ggproto.Rmd)**
-163. [2024-06-25-ggwaterfall_balances/ggwaterfall_balances.html](https://evamaerey.github.io/mytidytuesday/2024-06-25-ggwaterfall_balances/ggwaterfall_balances.html)
+165. [2024-06-25-ggwaterfall_balances/ggwaterfall_balances.html](https://evamaerey.github.io/mytidytuesday/2024-06-25-ggwaterfall_balances/ggwaterfall_balances.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-06-25-ggwaterfall_balances/ggwaterfall_balances.Rmd)**
-164. [2024-06-21-facet-annotation/facet-annotation.html](https://evamaerey.github.io/mytidytuesday/2024-06-21-facet-annotation/facet-annotation.html)
+166. [2024-06-21-facet-annotation/facet-annotation.html](https://evamaerey.github.io/mytidytuesday/2024-06-21-facet-annotation/facet-annotation.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-06-21-facet-annotation/facet-annotation.Rmd)**
-165. [2024-06-18-litedown/testcookbookreadme.html](https://evamaerey.github.io/mytidytuesday/2024-06-18-litedown/testcookbookreadme.html)
+167. [2024-06-18-litedown/testcookbookreadme.html](https://evamaerey.github.io/mytidytuesday/2024-06-18-litedown/testcookbookreadme.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-06-18-litedown/testcookbookreadme.Rmd)**
-166. [2024-06-18-litedown/litedown.html](https://evamaerey.github.io/mytidytuesday/2024-06-18-litedown/litedown.html)
+168. [2024-06-18-litedown/litedown.html](https://evamaerey.github.io/mytidytuesday/2024-06-18-litedown/litedown.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-06-18-litedown/litedown.Rmd)**
-167. [2024-06-18-calendar-rennie/calendar-rennie.html](https://evamaerey.github.io/mytidytuesday/2024-06-18-calendar-rennie/calendar-rennie.html)
+169. [2024-06-18-calendar-rennie/calendar-rennie.html](https://evamaerey.github.io/mytidytuesday/2024-06-18-calendar-rennie/calendar-rennie.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-06-18-calendar-rennie/calendar-rennie.Rmd)**
-168. [2024-06-16-circlepack-karamanis/circlepack-karamanis.html](https://evamaerey.github.io/mytidytuesday/2024-06-16-circlepack-karamanis/circlepack-karamanis.html)
+170. [2024-06-16-circlepack-karamanis/circlepack-karamanis.html](https://evamaerey.github.io/mytidytuesday/2024-06-16-circlepack-karamanis/circlepack-karamanis.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-06-16-circlepack-karamanis/circlepack-karamanis.Rmd)**
-169. [2024-06-13-usmaps-ggusa/usmaps-ggusa.html](https://evamaerey.github.io/mytidytuesday/2024-06-13-usmaps-ggusa/usmaps-ggusa.html)
+171. [2024-06-13-usmaps-ggusa/usmaps-ggusa.html](https://evamaerey.github.io/mytidytuesday/2024-06-13-usmaps-ggusa/usmaps-ggusa.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-06-13-usmaps-ggusa/usmaps-ggusa.Rmd)**
-170. [2024-06-13-usmaps-ggusa/usmaps-ggusa-Stat-and-geom-sf.html](https://evamaerey.github.io/mytidytuesday/2024-06-13-usmaps-ggusa/usmaps-ggusa-Stat-and-geom-sf.html)
+172. [2024-06-13-usmaps-ggusa/usmaps-ggusa-Stat-and-geom-sf.html](https://evamaerey.github.io/mytidytuesday/2024-06-13-usmaps-ggusa/usmaps-ggusa-Stat-and-geom-sf.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-06-13-usmaps-ggusa/usmaps-ggusa-Stat-and-geom-sf.Rmd)**
-171. [2024-06-12-layer-theming-aes-identity/layer-theming-aes-identity.html](https://evamaerey.github.io/mytidytuesday/2024-06-12-layer-theming-aes-identity/layer-theming-aes-identity.html)
+173. [2024-06-12-layer-theming-aes-identity/layer-theming-aes-identity.html](https://evamaerey.github.io/mytidytuesday/2024-06-12-layer-theming-aes-identity/layer-theming-aes-identity.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-06-12-layer-theming-aes-identity/layer-theming-aes-identity.Rmd)**
-172. [2024-06-11-pca-via-stat/pca-via-stat.html](https://evamaerey.github.io/mytidytuesday/2024-06-11-pca-via-stat/pca-via-stat.html)
+174. [2024-06-11-pca-via-stat/pca-via-stat.html](https://evamaerey.github.io/mytidytuesday/2024-06-11-pca-via-stat/pca-via-stat.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-06-11-pca-via-stat/pca-via-stat.Rmd)**
-173. [2024-06-06-lisas-garden/lisas-garden.html](https://evamaerey.github.io/mytidytuesday/2024-06-06-lisas-garden/lisas-garden.html)
+175. [2024-06-06-lisas-garden/lisas-garden.html](https://evamaerey.github.io/mytidytuesday/2024-06-06-lisas-garden/lisas-garden.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-06-06-lisas-garden/lisas-garden.Rmd)**
-174. [2024-06-06-lisas-garden/flipbook/garden_flipbook.html](https://evamaerey.github.io/mytidytuesday/2024-06-06-lisas-garden/flipbook/garden_flipbook.html)
+176. [2024-06-06-lisas-garden/flipbook/garden_flipbook.html](https://evamaerey.github.io/mytidytuesday/2024-06-06-lisas-garden/flipbook/garden_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-06-06-lisas-garden/flipbook/garden_flipbook.Rmd)**
-175. [2024-06-05-webr/webr.html](https://evamaerey.github.io/mytidytuesday/2024-06-05-webr/webr.html)
+177. [2024-06-05-webr/webr.html](https://evamaerey.github.io/mytidytuesday/2024-06-05-webr/webr.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-06-05-webr/webr.Rmd)**
-176. [2024-06-05-ggproto-pivot/ggproto-pivot.html](https://evamaerey.github.io/mytidytuesday/2024-06-05-ggproto-pivot/ggproto-pivot.html)
+178. [2024-06-05-ggproto-pivot/ggproto-pivot.html](https://evamaerey.github.io/mytidytuesday/2024-06-05-ggproto-pivot/ggproto-pivot.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-06-05-ggproto-pivot/ggproto-pivot.Rmd)**
-177. [2024-06-05-ggmultivar/ggmultivar.html](https://evamaerey.github.io/mytidytuesday/2024-06-05-ggmultivar/ggmultivar.html)
+179. [2024-06-05-ggmultivar/ggmultivar.html](https://evamaerey.github.io/mytidytuesday/2024-06-05-ggmultivar/ggmultivar.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-06-05-ggmultivar/ggmultivar.Rmd)**
-178. [2024-06-03-table-stat-layer/table-stat-layer.html](https://evamaerey.github.io/mytidytuesday/2024-06-03-table-stat-layer/table-stat-layer.html)
+180. [2024-06-03-table-stat-layer/table-stat-layer.html](https://evamaerey.github.io/mytidytuesday/2024-06-03-table-stat-layer/table-stat-layer.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-06-03-table-stat-layer/table-stat-layer.Rmd)**
-179. [2024-06-03-table-stat-layer/embedded_flipbooks/demo_embed.html](https://evamaerey.github.io/mytidytuesday/2024-06-03-table-stat-layer/embedded_flipbooks/demo_embed.html)
+181. [2024-06-03-table-stat-layer/embedded_flipbooks/demo_embed.html](https://evamaerey.github.io/mytidytuesday/2024-06-03-table-stat-layer/embedded_flipbooks/demo_embed.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-06-03-table-stat-layer/embedded_flipbooks/demo_embed.Rmd)**
-180. [2024-06-03-table-stat-layer/embedded_flipbooks/demo2_embed.html](https://evamaerey.github.io/mytidytuesday/2024-06-03-table-stat-layer/embedded_flipbooks/demo2_embed.html)
+182. [2024-06-03-table-stat-layer/embedded_flipbooks/demo2_embed.html](https://evamaerey.github.io/mytidytuesday/2024-06-03-table-stat-layer/embedded_flipbooks/demo2_embed.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-06-03-table-stat-layer/embedded_flipbooks/demo2_embed.Rmd)**
-181. [2024-06-03-table-stat-layer/demo_embed.html](https://evamaerey.github.io/mytidytuesday/2024-06-03-table-stat-layer/demo_embed.html)
+183. [2024-06-03-table-stat-layer/demo_embed.html](https://evamaerey.github.io/mytidytuesday/2024-06-03-table-stat-layer/demo_embed.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-06-03-table-stat-layer/demo_embed.Rmd)**
-182. [2024-06-03-table-stat-layer/compute_layer_recipe.html](https://evamaerey.github.io/mytidytuesday/2024-06-03-table-stat-layer/compute_layer_recipe.html)
+184. [2024-06-03-table-stat-layer/compute_layer_recipe.html](https://evamaerey.github.io/mytidytuesday/2024-06-03-table-stat-layer/compute_layer_recipe.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-06-03-table-stat-layer/compute_layer_recipe.Rmd)**
-183. [2024-05-30-story-board/story-board.html](https://evamaerey.github.io/mytidytuesday/2024-05-30-story-board/story-board.html)
+185. [2024-05-30-story-board/story-board.html](https://evamaerey.github.io/mytidytuesday/2024-05-30-story-board/story-board.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-05-30-story-board/story-board.Rmd)**
-184. [2024-05-30-compute-layer/compute-layer.html](https://evamaerey.github.io/mytidytuesday/2024-05-30-compute-layer/compute-layer.html)
+186. [2024-05-30-compute-layer/compute-layer.html](https://evamaerey.github.io/mytidytuesday/2024-05-30-compute-layer/compute-layer.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-05-30-compute-layer/compute-layer.Rmd)**
-185. [2024-05-28-circular-drm/circular-drm.html](https://evamaerey.github.io/mytidytuesday/2024-05-28-circular-drm/circular-drm.html)
+187. [2024-05-28-circular-drm/circular-drm.html](https://evamaerey.github.io/mytidytuesday/2024-05-28-circular-drm/circular-drm.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-05-28-circular-drm/circular-drm.Rmd)**
-186. [2024-05-27-r6/r6.html](https://evamaerey.github.io/mytidytuesday/2024-05-27-r6/r6.html)
+188. [2024-05-27-r6/r6.html](https://evamaerey.github.io/mytidytuesday/2024-05-27-r6/r6.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-05-27-r6/r6.Rmd)**
-187. [2024-05-27-r6/flipbooks/tablebuildup.html](https://evamaerey.github.io/mytidytuesday/2024-05-27-r6/flipbooks/tablebuildup.html)
+189. [2024-05-27-r6/flipbooks/tablebuildup.html](https://evamaerey.github.io/mytidytuesday/2024-05-27-r6/flipbooks/tablebuildup.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-05-27-r6/flipbooks/tablebuildup.Rmd)**
-188. [2024-05-20-carbon-emissions/carbon-emissions.html](https://evamaerey.github.io/mytidytuesday/2024-05-20-carbon-emissions/carbon-emissions.html)
+190. [2024-05-20-carbon-emissions/carbon-emissions.html](https://evamaerey.github.io/mytidytuesday/2024-05-20-carbon-emissions/carbon-emissions.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-05-20-carbon-emissions/carbon-emissions.Rmd)**
-189. [2024-05-13-knock-out-boxing/knock-out-boxing.html](https://evamaerey.github.io/mytidytuesday/2024-05-13-knock-out-boxing/knock-out-boxing.html)
+191. [2024-05-13-knock-out-boxing/knock-out-boxing.html](https://evamaerey.github.io/mytidytuesday/2024-05-13-knock-out-boxing/knock-out-boxing.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-05-13-knock-out-boxing/knock-out-boxing.Rmd)**
-190. [2024-05-13-bars-ggwipe/bars-ggwipe.html](https://evamaerey.github.io/mytidytuesday/2024-05-13-bars-ggwipe/bars-ggwipe.html)
+192. [2024-05-13-bars-ggwipe/bars-ggwipe.html](https://evamaerey.github.io/mytidytuesday/2024-05-13-bars-ggwipe/bars-ggwipe.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-05-13-bars-ggwipe/bars-ggwipe.Rmd)**
-191. [2024-05-06-gghighlightline/gghighlightline3.html](https://evamaerey.github.io/mytidytuesday/2024-05-06-gghighlightline/gghighlightline3.html)
+193. [2024-05-06-gghighlightline/gghighlightline3.html](https://evamaerey.github.io/mytidytuesday/2024-05-06-gghighlightline/gghighlightline3.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-05-06-gghighlightline/gghighlightline3.Rmd)**
-192. [2024-05-06-gghighlightline/gghighlightline2.html](https://evamaerey.github.io/mytidytuesday/2024-05-06-gghighlightline/gghighlightline2.html)
+194. [2024-05-06-gghighlightline/gghighlightline2.html](https://evamaerey.github.io/mytidytuesday/2024-05-06-gghighlightline/gghighlightline2.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-05-06-gghighlightline/gghighlightline2.Rmd)**
-193. [2024-05-06-gghighlightline/gghighlightline.html](https://evamaerey.github.io/mytidytuesday/2024-05-06-gghighlightline/gghighlightline.html)
+195. [2024-05-06-gghighlightline/gghighlightline.html](https://evamaerey.github.io/mytidytuesday/2024-05-06-gghighlightline/gghighlightline.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-05-06-gghighlightline/gghighlightline.Rmd)**
-194. [2024-05-02-ggpoetry/ggpoetry.html](https://evamaerey.github.io/mytidytuesday/2024-05-02-ggpoetry/ggpoetry.html)
+196. [2024-05-02-ggpoetry/ggpoetry.html](https://evamaerey.github.io/mytidytuesday/2024-05-02-ggpoetry/ggpoetry.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-05-02-ggpoetry/ggpoetry.Rmd)**
-195. [2024-05-01-margins-w-ggwipe/margins-w-ggwipe.html](https://evamaerey.github.io/mytidytuesday/2024-05-01-margins-w-ggwipe/margins-w-ggwipe.html)
+197. [2024-05-01-margins-w-ggwipe/margins-w-ggwipe.html](https://evamaerey.github.io/mytidytuesday/2024-05-01-margins-w-ggwipe/margins-w-ggwipe.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-05-01-margins-w-ggwipe/margins-w-ggwipe.Rmd)**
-196. [2024-05-01-ggrepel-nudge-ggpp/ggrepel-nudge-ggpp.html](https://evamaerey.github.io/mytidytuesday/2024-05-01-ggrepel-nudge-ggpp/ggrepel-nudge-ggpp.html)
+198. [2024-05-01-ggrepel-nudge-ggpp/ggrepel-nudge-ggpp.html](https://evamaerey.github.io/mytidytuesday/2024-05-01-ggrepel-nudge-ggpp/ggrepel-nudge-ggpp.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-05-01-ggrepel-nudge-ggpp/ggrepel-nudge-ggpp.Rmd)**
-197. [2024-04-30-stat-rasa/stat-rasa.html](https://evamaerey.github.io/mytidytuesday/2024-04-30-stat-rasa/stat-rasa.html)
+199. [2024-04-30-stat-rasa/stat-rasa.html](https://evamaerey.github.io/mytidytuesday/2024-04-30-stat-rasa/stat-rasa.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-04-30-stat-rasa/stat-rasa.Rmd)**
-198. [2024-04-30-stat-rasa/stat-rasa-group-and-panel.html](https://evamaerey.github.io/mytidytuesday/2024-04-30-stat-rasa/stat-rasa-group-and-panel.html)
+200. [2024-04-30-stat-rasa/stat-rasa-group-and-panel.html](https://evamaerey.github.io/mytidytuesday/2024-04-30-stat-rasa/stat-rasa-group-and-panel.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-04-30-stat-rasa/stat-rasa-group-and-panel.Rmd)**
-199. [2024-04-30-stat-rasa/stat-rasa-Stat.html](https://evamaerey.github.io/mytidytuesday/2024-04-30-stat-rasa/stat-rasa-Stat.html)
+201. [2024-04-30-stat-rasa/stat-rasa-Stat.html](https://evamaerey.github.io/mytidytuesday/2024-04-30-stat-rasa/stat-rasa-Stat.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-04-30-stat-rasa/stat-rasa-Stat.Rmd)**
-200. [2024-04-24-try-lightparser/try-lightparser.html](https://evamaerey.github.io/mytidytuesday/2024-04-24-try-lightparser/try-lightparser.html)
+202. [2024-04-24-try-lightparser/try-lightparser.html](https://evamaerey.github.io/mytidytuesday/2024-04-24-try-lightparser/try-lightparser.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-04-24-try-lightparser/try-lightparser.Rmd)**
-201. [2024-04-22-ggtext-replace/ggtext-replace.html](https://evamaerey.github.io/mytidytuesday/2024-04-22-ggtext-replace/ggtext-replace.html)
+203. [2024-04-22-ggtext-replace/ggtext-replace.html](https://evamaerey.github.io/mytidytuesday/2024-04-22-ggtext-replace/ggtext-replace.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-04-22-ggtext-replace/ggtext-replace.Rmd)**
-202. [2024-04-22-ggtext-replace/ggtext-replace-points.html](https://evamaerey.github.io/mytidytuesday/2024-04-22-ggtext-replace/ggtext-replace-points.html)
+204. [2024-04-22-ggtext-replace/ggtext-replace-points.html](https://evamaerey.github.io/mytidytuesday/2024-04-22-ggtext-replace/ggtext-replace-points.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-04-22-ggtext-replace/ggtext-replace-points.Rmd)**
-203. [2024-04-22-filter-nudge/filter-nudge.html](https://evamaerey.github.io/mytidytuesday/2024-04-22-filter-nudge/filter-nudge.html)
+205. [2024-04-22-filter-nudge/filter-nudge.html](https://evamaerey.github.io/mytidytuesday/2024-04-22-filter-nudge/filter-nudge.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-04-22-filter-nudge/filter-nudge.Rmd)**
-204. [2024-04-17-geom-line-end/geom-line-end.html](https://evamaerey.github.io/mytidytuesday/2024-04-17-geom-line-end/geom-line-end.html)
+206. [2024-04-17-geom-line-end/geom-line-end.html](https://evamaerey.github.io/mytidytuesday/2024-04-17-geom-line-end/geom-line-end.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-04-17-geom-line-end/geom-line-end.Rmd)**
-205. [2024-04-16-advanced-r/advanced-r.html](https://evamaerey.github.io/mytidytuesday/2024-04-16-advanced-r/advanced-r.html)
+207. [2024-04-16-advanced-r/advanced-r.html](https://evamaerey.github.io/mytidytuesday/2024-04-16-advanced-r/advanced-r.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-04-16-advanced-r/advanced-r.Rmd)**
-206. [2024-04-15-stat-timeline/stat-timeline.html](https://evamaerey.github.io/mytidytuesday/2024-04-15-stat-timeline/stat-timeline.html)
+208. [2024-04-15-stat-timeline/stat-timeline.html](https://evamaerey.github.io/mytidytuesday/2024-04-15-stat-timeline/stat-timeline.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-04-15-stat-timeline/stat-timeline.Rmd)**
-207. [2024-04-15-shiny-depends/shiny-depends.html](https://evamaerey.github.io/mytidytuesday/2024-04-15-shiny-depends/shiny-depends.html)
+209. [2024-04-15-shiny-depends/shiny-depends.html](https://evamaerey.github.io/mytidytuesday/2024-04-15-shiny-depends/shiny-depends.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-04-15-shiny-depends/shiny-depends.Rmd)**
-208. [2024-04-09-pie-triple-bang/pie-triple-bang.html](https://evamaerey.github.io/mytidytuesday/2024-04-09-pie-triple-bang/pie-triple-bang.html)
+210. [2024-04-09-pie-triple-bang/pie-triple-bang.html](https://evamaerey.github.io/mytidytuesday/2024-04-09-pie-triple-bang/pie-triple-bang.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-04-09-pie-triple-bang/pie-triple-bang.Rmd)**
-209. [2024-04-08-textcurve/textcurve.html](https://evamaerey.github.io/mytidytuesday/2024-04-08-textcurve/textcurve.html)
+211. [2024-04-08-textcurve/textcurve.html](https://evamaerey.github.io/mytidytuesday/2024-04-08-textcurve/textcurve.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-04-08-textcurve/textcurve.Rmd)**
-210. [2024-04-08-statsf_errors/statsf_errors.html](https://evamaerey.github.io/mytidytuesday/2024-04-08-statsf_errors/statsf_errors.html)
+212. [2024-04-08-statsf_errors/statsf_errors.html](https://evamaerey.github.io/mytidytuesday/2024-04-08-statsf_errors/statsf_errors.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-04-08-statsf_errors/statsf_errors.Rmd)**
-211. [2024-04-08-label_w_no_background/label_w_no_background.html](https://evamaerey.github.io/mytidytuesday/2024-04-08-label_w_no_background/label_w_no_background.html)
+213. [2024-04-08-label_w_no_background/label_w_no_background.html](https://evamaerey.github.io/mytidytuesday/2024-04-08-label_w_no_background/label_w_no_background.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-04-08-label_w_no_background/label_w_no_background.Rmd)**
-212. [2024-04-08-fun-arguments/fun-arguments.html](https://evamaerey.github.io/mytidytuesday/2024-04-08-fun-arguments/fun-arguments.html)
+214. [2024-04-08-fun-arguments/fun-arguments.html](https://evamaerey.github.io/mytidytuesday/2024-04-08-fun-arguments/fun-arguments.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-04-08-fun-arguments/fun-arguments.Rmd)**
-213. [2024-04-08-cuter_errorbar/cuter_errorbar.html](https://evamaerey.github.io/mytidytuesday/2024-04-08-cuter_errorbar/cuter_errorbar.html)
+215. [2024-04-08-cuter_errorbar/cuter_errorbar.html](https://evamaerey.github.io/mytidytuesday/2024-04-08-cuter_errorbar/cuter_errorbar.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-04-08-cuter_errorbar/cuter_errorbar.Rmd)**
-214. [2024-04-05-nudgex/nudgex.html](https://evamaerey.github.io/mytidytuesday/2024-04-05-nudgex/nudgex.html)
+216. [2024-04-05-nudgex/nudgex.html](https://evamaerey.github.io/mytidytuesday/2024-04-05-nudgex/nudgex.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-04-05-nudgex/nudgex.Rmd)**
-215. [2024-04-05-ggcorr/ggcorr.html](https://evamaerey.github.io/mytidytuesday/2024-04-05-ggcorr/ggcorr.html)
+217. [2024-04-05-ggcorr/ggcorr.html](https://evamaerey.github.io/mytidytuesday/2024-04-05-ggcorr/ggcorr.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-04-05-ggcorr/ggcorr.Rmd)**
-216. [2024-04-05-geomxline_justification/geomxline_justification.html](https://evamaerey.github.io/mytidytuesday/2024-04-05-geomxline_justification/geomxline_justification.html)
+218. [2024-04-05-geomxline_justification/geomxline_justification.html](https://evamaerey.github.io/mytidytuesday/2024-04-05-geomxline_justification/geomxline_justification.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-04-05-geomxline_justification/geomxline_justification.Rmd)**
-217. [2024-04-02-anova/anova.html](https://evamaerey.github.io/mytidytuesday/2024-04-02-anova/anova.html)
+219. [2024-04-02-anova/anova.html](https://evamaerey.github.io/mytidytuesday/2024-04-02-anova/anova.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-04-02-anova/anova.Rmd)**
-218. [2024-04-01-ggtimebox/ggtimebox.html](https://evamaerey.github.io/mytidytuesday/2024-04-01-ggtimebox/ggtimebox.html)
+220. [2024-04-01-ggtimebox/ggtimebox.html](https://evamaerey.github.io/mytidytuesday/2024-04-01-ggtimebox/ggtimebox.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-04-01-ggtimebox/ggtimebox.Rmd)**
-219. [2024-03-21-ggexpress-via-template/ggexpress-via-template.html](https://evamaerey.github.io/mytidytuesday/2024-03-21-ggexpress-via-template/ggexpress-via-template.html)
+221. [2024-03-21-ggexpress-via-template/ggexpress-via-template.html](https://evamaerey.github.io/mytidytuesday/2024-03-21-ggexpress-via-template/ggexpress-via-template.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-03-21-ggexpress-via-template/ggexpress-via-template.Rmd)**
-220. [2024-03-20-rladies-readme2pkg/rladies-readme2pkg.html](https://evamaerey.github.io/mytidytuesday/2024-03-20-rladies-readme2pkg/rladies-readme2pkg.html)
+222. [2024-03-20-rladies-readme2pkg/rladies-readme2pkg.html](https://evamaerey.github.io/mytidytuesday/2024-03-20-rladies-readme2pkg/rladies-readme2pkg.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-03-20-rladies-readme2pkg/rladies-readme2pkg.Rmd)**
-221. [2024-03-20-rladies-readme2pkg/rladies-readme2pkg-slides.html](https://evamaerey.github.io/mytidytuesday/2024-03-20-rladies-readme2pkg/rladies-readme2pkg-slides.html)
+223. [2024-03-20-rladies-readme2pkg/rladies-readme2pkg-slides.html](https://evamaerey.github.io/mytidytuesday/2024-03-20-rladies-readme2pkg/rladies-readme2pkg-slides.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-03-20-rladies-readme2pkg/rladies-readme2pkg-slides.Rmd)**
-222. [2024-03-04-dorling-cartogram-extend/dorling-cartogram-extend.html](https://evamaerey.github.io/mytidytuesday/2024-03-04-dorling-cartogram-extend/dorling-cartogram-extend.html)
+224. [2024-03-04-dorling-cartogram-extend/dorling-cartogram-extend.html](https://evamaerey.github.io/mytidytuesday/2024-03-04-dorling-cartogram-extend/dorling-cartogram-extend.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-03-04-dorling-cartogram-extend/dorling-cartogram-extend.Rmd)**
-223. [2024-03-01-prop-as-numeric/prop-as-numeric.html](https://evamaerey.github.io/mytidytuesday/2024-03-01-prop-as-numeric/prop-as-numeric.html)
+225. [2024-03-01-prop-as-numeric/prop-as-numeric.html](https://evamaerey.github.io/mytidytuesday/2024-03-01-prop-as-numeric/prop-as-numeric.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-03-01-prop-as-numeric/prop-as-numeric.Rmd)**
-224. [2024-02-26-feb-29/feb-29.html](https://evamaerey.github.io/mytidytuesday/2024-02-26-feb-29/feb-29.html)
+226. [2024-02-26-feb-29/feb-29.html](https://evamaerey.github.io/mytidytuesday/2024-02-26-feb-29/feb-29.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-02-26-feb-29/feb-29.Rmd)**
-225. [2024-02-26-feb-29/feb-29-statexpress.html](https://evamaerey.github.io/mytidytuesday/2024-02-26-feb-29/feb-29-statexpress.html)
+227. [2024-02-26-feb-29/feb-29-statexpress.html](https://evamaerey.github.io/mytidytuesday/2024-02-26-feb-29/feb-29-statexpress.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-02-26-feb-29/feb-29-statexpress.Rmd)**
-226. [2024-02-26-feb-29/feb-29-Stat-no-depends.html](https://evamaerey.github.io/mytidytuesday/2024-02-26-feb-29/feb-29-Stat-no-depends.html)
+228. [2024-02-26-feb-29/feb-29-Stat-no-depends.html](https://evamaerey.github.io/mytidytuesday/2024-02-26-feb-29/feb-29-Stat-no-depends.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-02-26-feb-29/feb-29-Stat-no-depends.Rmd)**
-227. [2024-02-21-feb/feb.html](https://evamaerey.github.io/mytidytuesday/2024-02-21-feb/feb.html)
+229. [2024-02-21-feb/feb.html](https://evamaerey.github.io/mytidytuesday/2024-02-21-feb/feb.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-02-21-feb/feb.Rmd)**
-228. [2024-02-20-tt-rconsortium/tt-rconsortium.html](https://evamaerey.github.io/mytidytuesday/2024-02-20-tt-rconsortium/tt-rconsortium.html)
+230. [2024-02-20-tt-rconsortium/tt-rconsortium.html](https://evamaerey.github.io/mytidytuesday/2024-02-20-tt-rconsortium/tt-rconsortium.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-02-20-tt-rconsortium/tt-rconsortium.Rmd)**
-229. [2024-02-20-factor-within-stat/factor-within-stat.html](https://evamaerey.github.io/mytidytuesday/2024-02-20-factor-within-stat/factor-within-stat.html)
+231. [2024-02-20-factor-within-stat/factor-within-stat.html](https://evamaerey.github.io/mytidytuesday/2024-02-20-factor-within-stat/factor-within-stat.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-02-20-factor-within-stat/factor-within-stat.Rmd)**
-230. [2024-02-14-more-pie-from-bar/more-pie-from-bar.html](https://evamaerey.github.io/mytidytuesday/2024-02-14-more-pie-from-bar/more-pie-from-bar.html)
+232. [2024-02-14-more-pie-from-bar/more-pie-from-bar.html](https://evamaerey.github.io/mytidytuesday/2024-02-14-more-pie-from-bar/more-pie-from-bar.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-02-14-more-pie-from-bar/more-pie-from-bar.Rmd)**
-231. [2024-02-14-easy-redefault-geom-point/easy-redefault-geom-point.html](https://evamaerey.github.io/mytidytuesday/2024-02-14-easy-redefault-geom-point/easy-redefault-geom-point.html)
+233. [2024-02-14-easy-redefault-geom-point/easy-redefault-geom-point.html](https://evamaerey.github.io/mytidytuesday/2024-02-14-easy-redefault-geom-point/easy-redefault-geom-point.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-02-14-easy-redefault-geom-point/easy-redefault-geom-point.Rmd)**
-232. [2024-02-12-ggproto-absence/ggproto-absence.html](https://evamaerey.github.io/mytidytuesday/2024-02-12-ggproto-absence/ggproto-absence.html)
+234. [2024-02-12-ggproto-absence/ggproto-absence.html](https://evamaerey.github.io/mytidytuesday/2024-02-12-ggproto-absence/ggproto-absence.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-02-12-ggproto-absence/ggproto-absence.Rmd)**
-233. [2024-02-05-ggexpress-follow-up/ggexpress-follow-up.html](https://evamaerey.github.io/mytidytuesday/2024-02-05-ggexpress-follow-up/ggexpress-follow-up.html)
+235. [2024-02-05-ggexpress-follow-up/ggexpress-follow-up.html](https://evamaerey.github.io/mytidytuesday/2024-02-05-ggexpress-follow-up/ggexpress-follow-up.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-02-05-ggexpress-follow-up/ggexpress-follow-up.Rmd)**
-234. [2024-01-29-geom_waterfall_temp/geom_waterfall_temp.html](https://evamaerey.github.io/mytidytuesday/2024-01-29-geom_waterfall_temp/geom_waterfall_temp.html)
+236. [2024-01-29-geom_waterfall_temp/geom_waterfall_temp.html](https://evamaerey.github.io/mytidytuesday/2024-01-29-geom_waterfall_temp/geom_waterfall_temp.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-01-29-geom_waterfall_temp/geom_waterfall_temp.Rmd)**
-235. [2024-01-23-bar_to_pie_try_again/bar_to_pie_try_again.html](https://evamaerey.github.io/mytidytuesday/2024-01-23-bar_to_pie_try_again/bar_to_pie_try_again.html)
+237. [2024-01-23-bar_to_pie_try_again/bar_to_pie_try_again.html](https://evamaerey.github.io/mytidytuesday/2024-01-23-bar_to_pie_try_again/bar_to_pie_try_again.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-01-23-bar_to_pie_try_again/bar_to_pie_try_again.Rmd)**
-236. [2024-01-22-insta-geom/insta-geom.html](https://evamaerey.github.io/mytidytuesday/2024-01-22-insta-geom/insta-geom.html)
+238. [2024-01-22-insta-geom/insta-geom.html](https://evamaerey.github.io/mytidytuesday/2024-01-22-insta-geom/insta-geom.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-01-22-insta-geom/insta-geom.Rmd)**
-237. [2024-01-08-stat_calendar_wo_facets/stat_calendar_wo_facets.html](https://evamaerey.github.io/mytidytuesday/2024-01-08-stat_calendar_wo_facets/stat_calendar_wo_facets.html)
+239. [2024-01-08-stat_calendar_wo_facets/stat_calendar_wo_facets.html](https://evamaerey.github.io/mytidytuesday/2024-01-08-stat_calendar_wo_facets/stat_calendar_wo_facets.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-01-08-stat_calendar_wo_facets/stat_calendar_wo_facets.Rmd)**
-238. [2024-01-05-jump/jump.html](https://evamaerey.github.io/mytidytuesday/2024-01-05-jump/jump.html)
+240. [2024-01-05-jump/jump.html](https://evamaerey.github.io/mytidytuesday/2024-01-05-jump/jump.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-01-05-jump/jump.Rmd)**
-239. [2024-01-03-waterfall_factor_x/waterfall_factor_x.html](https://evamaerey.github.io/mytidytuesday/2024-01-03-waterfall_factor_x/waterfall_factor_x.html)
+241. [2024-01-03-waterfall_factor_x/waterfall_factor_x.html](https://evamaerey.github.io/mytidytuesday/2024-01-03-waterfall_factor_x/waterfall_factor_x.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-01-03-waterfall_factor_x/waterfall_factor_x.Rmd)**
-240. [2024-01-03-waterfall/waterfall.html](https://evamaerey.github.io/mytidytuesday/2024-01-03-waterfall/waterfall.html)
+242. [2024-01-03-waterfall/waterfall.html](https://evamaerey.github.io/mytidytuesday/2024-01-03-waterfall/waterfall.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2024-01-03-waterfall/waterfall.Rmd)**
-241. [2023-12-27-geom_circle_via_join/geom_circle_via_join.html](https://evamaerey.github.io/mytidytuesday/2023-12-27-geom_circle_via_join/geom_circle_via_join.html)
+243. [2023-12-27-geom_circle_via_join/geom_circle_via_join.html](https://evamaerey.github.io/mytidytuesday/2023-12-27-geom_circle_via_join/geom_circle_via_join.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-12-27-geom_circle_via_join/geom_circle_via_join.Rmd)**
-242. [2023-12-12-bonus-aes-in-defaults/bonus-aes-in-defaults.html](https://evamaerey.github.io/mytidytuesday/2023-12-12-bonus-aes-in-defaults/bonus-aes-in-defaults.html)
+244. [2023-12-12-bonus-aes-in-defaults/bonus-aes-in-defaults.html](https://evamaerey.github.io/mytidytuesday/2023-12-12-bonus-aes-in-defaults/bonus-aes-in-defaults.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-12-12-bonus-aes-in-defaults/bonus-aes-in-defaults.Rmd)**
-243. [2023-12-08-radial/radial.html](https://evamaerey.github.io/mytidytuesday/2023-12-08-radial/radial.html)
+245. [2023-12-08-radial/radial.html](https://evamaerey.github.io/mytidytuesday/2023-12-08-radial/radial.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-12-08-radial/radial.Rmd)**
-244. [2023-12-08-bayes-pies/bayes-pies.html](https://evamaerey.github.io/mytidytuesday/2023-12-08-bayes-pies/bayes-pies.html)
+246. [2023-12-08-bayes-pies/bayes-pies.html](https://evamaerey.github.io/mytidytuesday/2023-12-08-bayes-pies/bayes-pies.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-12-08-bayes-pies/bayes-pies.Rmd)**
-245. [2023-12-07-redefault_aes/redefault_aes.html](https://evamaerey.github.io/mytidytuesday/2023-12-07-redefault_aes/redefault_aes.html)
+247. [2023-12-07-redefault_aes/redefault_aes.html](https://evamaerey.github.io/mytidytuesday/2023-12-07-redefault_aes/redefault_aes.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-12-07-redefault_aes/redefault_aes.Rmd)**
-246. [2023-12-07-ggtrace_stages/ggtrace_stages.html](https://evamaerey.github.io/mytidytuesday/2023-12-07-ggtrace_stages/ggtrace_stages.html)
+248. [2023-12-07-ggtrace_stages/ggtrace_stages.html](https://evamaerey.github.io/mytidytuesday/2023-12-07-ggtrace_stages/ggtrace_stages.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-12-07-ggtrace_stages/ggtrace_stages.Rmd)**
-247. [2023-11-20-geom_bar_to_pie/geom_bar1.html](https://evamaerey.github.io/mytidytuesday/2023-11-20-geom_bar_to_pie/geom_bar1.html)
+249. [2023-11-20-geom_bar_to_pie/geom_bar1.html](https://evamaerey.github.io/mytidytuesday/2023-11-20-geom_bar_to_pie/geom_bar1.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-11-20-geom_bar_to_pie/geom_bar1.Rmd)**
-248. [2023-11-20-geom_bar_to_pie/geom_bar0.html](https://evamaerey.github.io/mytidytuesday/2023-11-20-geom_bar_to_pie/geom_bar0.html)
+250. [2023-11-20-geom_bar_to_pie/geom_bar0.html](https://evamaerey.github.io/mytidytuesday/2023-11-20-geom_bar_to_pie/geom_bar0.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-11-20-geom_bar_to_pie/geom_bar0.Rmd)**
-249. [2023-11-14-flipbooks-lawrence-livermore/flipbooks-lawrence-livermore_double_crochet.html](https://evamaerey.github.io/mytidytuesday/2023-11-14-flipbooks-lawrence-livermore/flipbooks-lawrence-livermore_double_crochet.html)
+251. [2023-11-14-flipbooks-lawrence-livermore/flipbooks-lawrence-livermore_double_crochet.html](https://evamaerey.github.io/mytidytuesday/2023-11-14-flipbooks-lawrence-livermore/flipbooks-lawrence-livermore_double_crochet.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-11-14-flipbooks-lawrence-livermore/flipbooks-lawrence-livermore_double_crochet.Rmd)**
-250. [2023-11-14-flipbooks-lawrence-livermore/flipbooks-lawrence-livermore.html](https://evamaerey.github.io/mytidytuesday/2023-11-14-flipbooks-lawrence-livermore/flipbooks-lawrence-livermore.html)
+252. [2023-11-14-flipbooks-lawrence-livermore/flipbooks-lawrence-livermore.html](https://evamaerey.github.io/mytidytuesday/2023-11-14-flipbooks-lawrence-livermore/flipbooks-lawrence-livermore.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-11-14-flipbooks-lawrence-livermore/flipbooks-lawrence-livermore.Rmd)**
-251. [2023-11-13-extension-as-an-analytic-care-task/extension-as-an-analytic-care-task.html](https://evamaerey.github.io/mytidytuesday/2023-11-13-extension-as-an-analytic-care-task/extension-as-an-analytic-care-task.html)
+253. [2023-11-13-extension-as-an-analytic-care-task/extension-as-an-analytic-care-task.html](https://evamaerey.github.io/mytidytuesday/2023-11-13-extension-as-an-analytic-care-task/extension-as-an-analytic-care-task.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-11-13-extension-as-an-analytic-care-task/extension-as-an-analytic-care-task.Rmd)**
-252. [2023-11-12-step0-pie-geom/step0-pie-geom.html](https://evamaerey.github.io/mytidytuesday/2023-11-12-step0-pie-geom/step0-pie-geom.html)
+254. [2023-11-12-step0-pie-geom/step0-pie-geom.html](https://evamaerey.github.io/mytidytuesday/2023-11-12-step0-pie-geom/step0-pie-geom.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-11-12-step0-pie-geom/step0-pie-geom.Rmd)**
-253. [2023-11-10-least-bad-ggplot-redefault/least-bad-ggplot-redefault.html](https://evamaerey.github.io/mytidytuesday/2023-11-10-least-bad-ggplot-redefault/least-bad-ggplot-redefault.html)
+255. [2023-11-10-least-bad-ggplot-redefault/least-bad-ggplot-redefault.html](https://evamaerey.github.io/mytidytuesday/2023-11-10-least-bad-ggplot-redefault/least-bad-ggplot-redefault.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-11-10-least-bad-ggplot-redefault/least-bad-ggplot-redefault.Rmd)**
-254. [2023-11-08-ggforce-pies/ggforce-pies.html](https://evamaerey.github.io/mytidytuesday/2023-11-08-ggforce-pies/ggforce-pies.html)
+256. [2023-11-08-ggforce-pies/ggforce-pies.html](https://evamaerey.github.io/mytidytuesday/2023-11-08-ggforce-pies/ggforce-pies.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-11-08-ggforce-pies/ggforce-pies.Rmd)**
-255. [2023-11-08-ggforce-pies/ggforce-pies-reawakens.html](https://evamaerey.github.io/mytidytuesday/2023-11-08-ggforce-pies/ggforce-pies-reawakens.html)
+257. [2023-11-08-ggforce-pies/ggforce-pies-reawakens.html](https://evamaerey.github.io/mytidytuesday/2023-11-08-ggforce-pies/ggforce-pies-reawakens.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-11-08-ggforce-pies/ggforce-pies-reawakens.Rmd)**
-256. [2023-11-07-sec-axis-sd-hack/sec-axis-sd-hack.html](https://evamaerey.github.io/mytidytuesday/2023-11-07-sec-axis-sd-hack/sec-axis-sd-hack.html)
+258. [2023-11-07-sec-axis-sd-hack/sec-axis-sd-hack.html](https://evamaerey.github.io/mytidytuesday/2023-11-07-sec-axis-sd-hack/sec-axis-sd-hack.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-11-07-sec-axis-sd-hack/sec-axis-sd-hack.Rmd)**
-257. [2023-10-09-viz_first_lm/viz_first_lm.html](https://evamaerey.github.io/mytidytuesday/2023-10-09-viz_first_lm/viz_first_lm.html)
+259. [2023-10-09-viz_first_lm/viz_first_lm.html](https://evamaerey.github.io/mytidytuesday/2023-10-09-viz_first_lm/viz_first_lm.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-10-09-viz_first_lm/viz_first_lm.Rmd)**
-258. [2023-10-06-xseq_rise_over_run/xseq_rise_over_run.html](https://evamaerey.github.io/mytidytuesday/2023-10-06-xseq_rise_over_run/xseq_rise_over_run.html)
+260. [2023-10-06-xseq_rise_over_run/xseq_rise_over_run.html](https://evamaerey.github.io/mytidytuesday/2023-10-06-xseq_rise_over_run/xseq_rise_over_run.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-10-06-xseq_rise_over_run/xseq_rise_over_run.Rmd)**
-259. [2023-10-05-statbar_plus/statbar_plus.html](https://evamaerey.github.io/mytidytuesday/2023-10-05-statbar_plus/statbar_plus.html)
+261. [2023-10-05-statbar_plus/statbar_plus.html](https://evamaerey.github.io/mytidytuesday/2023-10-05-statbar_plus/statbar_plus.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-10-05-statbar_plus/statbar_plus.Rmd)**
-260. [2023-10-03-highjack-return/highjack-return.html](https://evamaerey.github.io/mytidytuesday/2023-10-03-highjack-return/highjack-return.html)
+262. [2023-10-03-highjack-return/highjack-return.html](https://evamaerey.github.io/mytidytuesday/2023-10-03-highjack-return/highjack-return.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-10-03-highjack-return/highjack-return.Rmd)**
-261. [2023-09-28-bias-demo/bias-demo.html](https://evamaerey.github.io/mytidytuesday/2023-09-28-bias-demo/bias-demo.html)
+263. [2023-09-28-bias-demo/bias-demo.html](https://evamaerey.github.io/mytidytuesday/2023-09-28-bias-demo/bias-demo.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-09-28-bias-demo/bias-demo.Rmd)**
-262. [2023-09-26-x-mean-hacks/x-mean-hacks.html](https://evamaerey.github.io/mytidytuesday/2023-09-26-x-mean-hacks/x-mean-hacks.html)
+264. [2023-09-26-x-mean-hacks/x-mean-hacks.html](https://evamaerey.github.io/mytidytuesday/2023-09-26-x-mean-hacks/x-mean-hacks.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-09-26-x-mean-hacks/x-mean-hacks.Rmd)**
-263. [2023-09-26-cowy-outline/images/mitch-jsm-panel.html](https://evamaerey.github.io/mytidytuesday/2023-09-26-cowy-outline/images/mitch-jsm-panel.html)
+265. [2023-09-26-cowy-outline/images/mitch-jsm-panel.html](https://evamaerey.github.io/mytidytuesday/2023-09-26-cowy-outline/images/mitch-jsm-panel.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-09-26-cowy-outline/images/mitch-jsm-panel.Rmd)**
-264. [2023-09-26-cowy-outline/extenders-posit-conf-articulation2.html](https://evamaerey.github.io/mytidytuesday/2023-09-26-cowy-outline/extenders-posit-conf-articulation2.html)
+266. [2023-09-26-cowy-outline/extenders-posit-conf-articulation2.html](https://evamaerey.github.io/mytidytuesday/2023-09-26-cowy-outline/extenders-posit-conf-articulation2.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-09-26-cowy-outline/extenders-posit-conf-articulation2.Rmd)**
-265. [2023-09-26-cowy-outline/extenders-posit-conf-articulation.html](https://evamaerey.github.io/mytidytuesday/2023-09-26-cowy-outline/extenders-posit-conf-articulation.html)
+267. [2023-09-26-cowy-outline/extenders-posit-conf-articulation.html](https://evamaerey.github.io/mytidytuesday/2023-09-26-cowy-outline/extenders-posit-conf-articulation.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-09-26-cowy-outline/extenders-posit-conf-articulation.Rmd)**
-266. [2023-09-26-cowy-outline/extenders-jsm.html](https://evamaerey.github.io/mytidytuesday/2023-09-26-cowy-outline/extenders-jsm.html)
+268. [2023-09-26-cowy-outline/extenders-jsm.html](https://evamaerey.github.io/mytidytuesday/2023-09-26-cowy-outline/extenders-jsm.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-09-26-cowy-outline/extenders-jsm.Rmd)**
-267. [2023-09-26-cowy-outline/extenders-2025-recipes.html](https://evamaerey.github.io/mytidytuesday/2023-09-26-cowy-outline/extenders-2025-recipes.html)
+269. [2023-09-26-cowy-outline/extenders-2025-recipes.html](https://evamaerey.github.io/mytidytuesday/2023-09-26-cowy-outline/extenders-2025-recipes.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-09-26-cowy-outline/extenders-2025-recipes.Rmd)**
-268. [2023-09-26-cowy-outline/cowy-slides.html](https://evamaerey.github.io/mytidytuesday/2023-09-26-cowy-outline/cowy-slides.html)
+270. [2023-09-26-cowy-outline/cowy-slides.html](https://evamaerey.github.io/mytidytuesday/2023-09-26-cowy-outline/cowy-slides.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-09-26-cowy-outline/cowy-slides.Rmd)**
-269. [2023-09-26-cowy-outline/cowy-outline.html](https://evamaerey.github.io/mytidytuesday/2023-09-26-cowy-outline/cowy-outline.html)
+271. [2023-09-26-cowy-outline/cowy-outline.html](https://evamaerey.github.io/mytidytuesday/2023-09-26-cowy-outline/cowy-outline.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-09-26-cowy-outline/cowy-outline.Rmd)**
-270. [2023-09-22-pooh_and_friends/pooh_and_friends.html](https://evamaerey.github.io/mytidytuesday/2023-09-22-pooh_and_friends/pooh_and_friends.html)
+272. [2023-09-22-pooh_and_friends/pooh_and_friends.html](https://evamaerey.github.io/mytidytuesday/2023-09-22-pooh_and_friends/pooh_and_friends.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-09-22-pooh_and_friends/pooh_and_friends.Rmd)**
-271. [2023-09-22-after_stat_etc/after_stat_etc.html](https://evamaerey.github.io/mytidytuesday/2023-09-22-after_stat_etc/after_stat_etc.html)
+273. [2023-09-22-after_stat_etc/after_stat_etc.html](https://evamaerey.github.io/mytidytuesday/2023-09-22-after_stat_etc/after_stat_etc.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-09-22-after_stat_etc/after_stat_etc.Rmd)**
-272. [2023-09-20-ggedgelist/ggedgelist.html](https://evamaerey.github.io/mytidytuesday/2023-09-20-ggedgelist/ggedgelist.html)
+274. [2023-09-20-ggedgelist/ggedgelist.html](https://evamaerey.github.io/mytidytuesday/2023-09-20-ggedgelist/ggedgelist.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-09-20-ggedgelist/ggedgelist.Rmd)**
-273. [2023-09-18-statistically-speaking-slopes/statistically_speaking_slopes.html](https://evamaerey.github.io/mytidytuesday/2023-09-18-statistically-speaking-slopes/statistically_speaking_slopes.html)
+275. [2023-09-18-statistically-speaking-slopes/statistically_speaking_slopes.html](https://evamaerey.github.io/mytidytuesday/2023-09-18-statistically-speaking-slopes/statistically_speaking_slopes.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-09-18-statistically-speaking-slopes/statistically_speaking_slopes.Rmd)**
-274. [2023-09-15-ggplot2-stat-cascades/ggplot2_stat_cascades.html](https://evamaerey.github.io/mytidytuesday/2023-09-15-ggplot2-stat-cascades/ggplot2_stat_cascades.html)
+276. [2023-09-15-ggplot2-stat-cascades/ggplot2_stat_cascades.html](https://evamaerey.github.io/mytidytuesday/2023-09-15-ggplot2-stat-cascades/ggplot2_stat_cascades.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-09-15-ggplot2-stat-cascades/ggplot2_stat_cascades.Rmd)**
-275. [2023-09-08-geom-smooth-stuff/geom_smooth_stuff.html](https://evamaerey.github.io/mytidytuesday/2023-09-08-geom-smooth-stuff/geom_smooth_stuff.html)
+277. [2023-09-08-geom-smooth-stuff/geom_smooth_stuff.html](https://evamaerey.github.io/mytidytuesday/2023-09-08-geom-smooth-stuff/geom_smooth_stuff.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-09-08-geom-smooth-stuff/geom_smooth_stuff.Rmd)**
-276. [2023-09-05-mean_squared_error/mean_squared_error.html](https://evamaerey.github.io/mytidytuesday/2023-09-05-mean_squared_error/mean_squared_error.html)
+278. [2023-09-05-mean_squared_error/mean_squared_error.html](https://evamaerey.github.io/mytidytuesday/2023-09-05-mean_squared_error/mean_squared_error.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-09-05-mean_squared_error/mean_squared_error.Rmd)**
-277. [2023-08-25-circle_chord_lyrics/circle_chord_lyrics.pdf](https://evamaerey.github.io/mytidytuesday/2023-08-25-circle_chord_lyrics/circle_chord_lyrics.pdf)
+279. [2023-08-25-circle_chord_lyrics/circle_chord_lyrics.pdf](https://evamaerey.github.io/mytidytuesday/2023-08-25-circle_chord_lyrics/circle_chord_lyrics.pdf)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-08-25-circle_chord_lyrics/circle_chord_lyrics.Rmd)**
-278. [2023-08-25-circle_chord_lyrics/circle_chord_lyrics.html](https://evamaerey.github.io/mytidytuesday/2023-08-25-circle_chord_lyrics/circle_chord_lyrics.html)
+280. [2023-08-25-circle_chord_lyrics/circle_chord_lyrics.html](https://evamaerey.github.io/mytidytuesday/2023-08-25-circle_chord_lyrics/circle_chord_lyrics.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-08-25-circle_chord_lyrics/circle_chord_lyrics.Rmd)**
-279. [2023-08-24-geom_smooth_extend/geom_smooth_fitted_refactor.html](https://evamaerey.github.io/mytidytuesday/2023-08-24-geom_smooth_extend/geom_smooth_fitted_refactor.html)
+281. [2023-08-24-geom_smooth_extend/geom_smooth_fitted_refactor.html](https://evamaerey.github.io/mytidytuesday/2023-08-24-geom_smooth_extend/geom_smooth_fitted_refactor.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-08-24-geom_smooth_extend/geom_smooth_fitted_refactor.Rmd)**
-280. [2023-08-24-geom_smooth_extend/geom_smooth_fitted.html](https://evamaerey.github.io/mytidytuesday/2023-08-24-geom_smooth_extend/geom_smooth_fitted.html)
+282. [2023-08-24-geom_smooth_extend/geom_smooth_fitted.html](https://evamaerey.github.io/mytidytuesday/2023-08-24-geom_smooth_extend/geom_smooth_fitted.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-08-24-geom_smooth_extend/geom_smooth_fitted.Rmd)**
-281. [2023-08-24-geom_smooth_extend/geom_smooth_cat.html](https://evamaerey.github.io/mytidytuesday/2023-08-24-geom_smooth_extend/geom_smooth_cat.html)
+283. [2023-08-24-geom_smooth_extend/geom_smooth_cat.html](https://evamaerey.github.io/mytidytuesday/2023-08-24-geom_smooth_extend/geom_smooth_cat.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-08-24-geom_smooth_extend/geom_smooth_cat.Rmd)**
-282. [2023-08-24-geom_smooth_extend/geom_smooth.html](https://evamaerey.github.io/mytidytuesday/2023-08-24-geom_smooth_extend/geom_smooth.html)
+284. [2023-08-24-geom_smooth_extend/geom_smooth.html](https://evamaerey.github.io/mytidytuesday/2023-08-24-geom_smooth_extend/geom_smooth.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-08-24-geom_smooth_extend/geom_smooth.Rmd)**
-283. [2023-08-23-last_plot_wipe/last_plot_wiped.html](https://evamaerey.github.io/mytidytuesday/2023-08-23-last_plot_wipe/last_plot_wiped.html)
+285. [2023-08-23-last_plot_wipe/last_plot_wiped.html](https://evamaerey.github.io/mytidytuesday/2023-08-23-last_plot_wipe/last_plot_wiped.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-08-23-last_plot_wipe/last_plot_wiped.Rmd)**
-284. [2023-08-23-ggjudge/ggjudge.html](https://evamaerey.github.io/mytidytuesday/2023-08-23-ggjudge/ggjudge.html)
+286. [2023-08-23-ggjudge/ggjudge.html](https://evamaerey.github.io/mytidytuesday/2023-08-23-ggjudge/ggjudge.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-08-23-ggjudge/ggjudge.Rmd)**
-285. [2023-07-20-ggz/ggz_flipbook.html](https://evamaerey.github.io/mytidytuesday/2023-07-20-ggz/ggz_flipbook.html)
+287. [2023-07-20-ggz/ggz_flipbook.html](https://evamaerey.github.io/mytidytuesday/2023-07-20-ggz/ggz_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-07-20-ggz/ggz_flipbook.Rmd)**
-286. [2023-07-18-ggcoords-notation/ggcoords_notation.html](https://evamaerey.github.io/mytidytuesday/2023-07-18-ggcoords-notation/ggcoords_notation.html)
+288. [2023-07-18-ggcoords-notation/ggcoords_notation.html](https://evamaerey.github.io/mytidytuesday/2023-07-18-ggcoords-notation/ggcoords_notation.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-07-18-ggcoords-notation/ggcoords_notation.Rmd)**
-287. [2023-07-06-advanced-pivoting/advanced_pivoting.html](https://evamaerey.github.io/mytidytuesday/2023-07-06-advanced-pivoting/advanced_pivoting.html)
+289. [2023-07-06-advanced-pivoting/advanced_pivoting.html](https://evamaerey.github.io/mytidytuesday/2023-07-06-advanced-pivoting/advanced_pivoting.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-07-06-advanced-pivoting/advanced_pivoting.Rmd)**
-288. [2023-05-23-indicator-recode/indicator_recode.html](https://evamaerey.github.io/mytidytuesday/2023-05-23-indicator-recode/indicator_recode.html)
+290. [2023-05-23-indicator-recode/indicator_recode.html](https://evamaerey.github.io/mytidytuesday/2023-05-23-indicator-recode/indicator_recode.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-05-23-indicator-recode/indicator_recode.Rmd)**
-289. [2023-05-19-case-when-strict/case_when_strict.html](https://evamaerey.github.io/mytidytuesday/2023-05-19-case-when-strict/case_when_strict.html)
+291. [2023-05-19-case-when-strict/case_when_strict.html](https://evamaerey.github.io/mytidytuesday/2023-05-19-case-when-strict/case_when_strict.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-05-19-case-when-strict/case_when_strict.Rmd)**
-290. [2023-04-13-ggcircle-pack-talk/circle_pack_and_beyond_talk.html](https://evamaerey.github.io/mytidytuesday/2023-04-13-ggcircle-pack-talk/circle_pack_and_beyond_talk.html)
+292. [2023-04-13-ggcircle-pack-talk/circle_pack_and_beyond_talk.html](https://evamaerey.github.io/mytidytuesday/2023-04-13-ggcircle-pack-talk/circle_pack_and_beyond_talk.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-04-13-ggcircle-pack-talk/circle_pack_and_beyond_talk.Rmd)**
-291. [2023-03-21-ggwhere/ggwhere-.html](https://evamaerey.github.io/mytidytuesday/2023-03-21-ggwhere/ggwhere-.html)
+293. [2023-03-21-ggwhere/ggwhere-.html](https://evamaerey.github.io/mytidytuesday/2023-03-21-ggwhere/ggwhere-.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-03-21-ggwhere/ggwhere-.Rmd)**
-292. [2023-03-16-compute-panel/compute-panel.html](https://evamaerey.github.io/mytidytuesday/2023-03-16-compute-panel/compute-panel.html)
+294. [2023-03-16-compute-panel/compute-panel.html](https://evamaerey.github.io/mytidytuesday/2023-03-16-compute-panel/compute-panel.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-03-16-compute-panel/compute-panel.Rmd)**
-293. [2023-03-12-ggbrain-seg-sf/ggbrain_seg_sf.html](https://evamaerey.github.io/mytidytuesday/2023-03-12-ggbrain-seg-sf/ggbrain_seg_sf.html)
+295. [2023-03-12-ggbrain-seg-sf/ggbrain_seg_sf.html](https://evamaerey.github.io/mytidytuesday/2023-03-12-ggbrain-seg-sf/ggbrain_seg_sf.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-03-12-ggbrain-seg-sf/ggbrain_seg_sf.Rmd)**
-294. [2023-03-12-ggbrain-seg-sf/ggbrain_seg_dk_sf.html](https://evamaerey.github.io/mytidytuesday/2023-03-12-ggbrain-seg-sf/ggbrain_seg_dk_sf.html)
+296. [2023-03-12-ggbrain-seg-sf/ggbrain_seg_dk_sf.html](https://evamaerey.github.io/mytidytuesday/2023-03-12-ggbrain-seg-sf/ggbrain_seg_dk_sf.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-03-12-ggbrain-seg-sf/ggbrain_seg_dk_sf.Rmd)**
-295. [2023-03-10-ggfips/ggfips_w_sf.html](https://evamaerey.github.io/mytidytuesday/2023-03-10-ggfips/ggfips_w_sf.html)
+297. [2023-03-10-ggfips/ggfips_w_sf.html](https://evamaerey.github.io/mytidytuesday/2023-03-10-ggfips/ggfips_w_sf.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-03-10-ggfips/ggfips_w_sf.Rmd)**
-296. [2023-03-10-ggfips/ggfips.html](https://evamaerey.github.io/mytidytuesday/2023-03-10-ggfips/ggfips.html)
+298. [2023-03-10-ggfips/ggfips.html](https://evamaerey.github.io/mytidytuesday/2023-03-10-ggfips/ggfips.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-03-10-ggfips/ggfips.Rmd)**
-297. [2023-03-10-brain2/brain2.html](https://evamaerey.github.io/mytidytuesday/2023-03-10-brain2/brain2.html)
+299. [2023-03-10-brain2/brain2.html](https://evamaerey.github.io/mytidytuesday/2023-03-10-brain2/brain2.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-03-10-brain2/brain2.Rmd)**
-298. [2023-03-09-nc-fips/nc-fips.html](https://evamaerey.github.io/mytidytuesday/2023-03-09-nc-fips/nc-fips.html)
+300. [2023-03-09-nc-fips/nc-fips.html](https://evamaerey.github.io/mytidytuesday/2023-03-09-nc-fips/nc-fips.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-03-09-nc-fips/nc-fips.Rmd)**
-299. [2023-03-07-extending-your-ability/extending_your_ability.html](https://evamaerey.github.io/mytidytuesday/2023-03-07-extending-your-ability/extending_your_ability.html)
+301. [2023-03-07-extending-your-ability/extending_your_ability.html](https://evamaerey.github.io/mytidytuesday/2023-03-07-extending-your-ability/extending_your_ability.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-03-07-extending-your-ability/extending_your_ability.Rmd)**
-300. [2023-03-06-us-states/us_states.html](https://evamaerey.github.io/mytidytuesday/2023-03-06-us-states/us_states.html)
+302. [2023-03-06-us-states/us_states.html](https://evamaerey.github.io/mytidytuesday/2023-03-06-us-states/us_states.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-03-06-us-states/us_states.Rmd)**
-301. [2023-03-06-fibonacci/fibonacci.html](https://evamaerey.github.io/mytidytuesday/2023-03-06-fibonacci/fibonacci.html)
+303. [2023-03-06-fibonacci/fibonacci.html](https://evamaerey.github.io/mytidytuesday/2023-03-06-fibonacci/fibonacci.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-03-06-fibonacci/fibonacci.Rmd)**
-302. [2023-02-27-classes/tidypivot_pipelines.html](https://evamaerey.github.io/mytidytuesday/2023-02-27-classes/tidypivot_pipelines.html)
+304. [2023-02-27-classes/tidypivot_pipelines.html](https://evamaerey.github.io/mytidytuesday/2023-02-27-classes/tidypivot_pipelines.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-02-27-classes/tidypivot_pipelines.Rmd)**
-303. [2023-02-27-classes/r6_flipbook.html](https://evamaerey.github.io/mytidytuesday/2023-02-27-classes/r6_flipbook.html)
+305. [2023-02-27-classes/r6_flipbook.html](https://evamaerey.github.io/mytidytuesday/2023-02-27-classes/r6_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-02-27-classes/r6_flipbook.Rmd)**
-304. [2023-02-27-classes/r6_fibonacci_flipbook.html](https://evamaerey.github.io/mytidytuesday/2023-02-27-classes/r6_fibonacci_flipbook.html)
+306. [2023-02-27-classes/r6_fibonacci_flipbook.html](https://evamaerey.github.io/mytidytuesday/2023-02-27-classes/r6_fibonacci_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-02-27-classes/r6_fibonacci_flipbook.Rmd)**
-305. [2023-02-27-classes/r6_fibonacci.html](https://evamaerey.github.io/mytidytuesday/2023-02-27-classes/r6_fibonacci.html)
+307. [2023-02-27-classes/r6_fibonacci.html](https://evamaerey.github.io/mytidytuesday/2023-02-27-classes/r6_fibonacci.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-02-27-classes/r6_fibonacci.Rmd)**
-306. [2023-02-27-classes/r6_add_trial_flipbook.html](https://evamaerey.github.io/mytidytuesday/2023-02-27-classes/r6_add_trial_flipbook.html)
+308. [2023-02-27-classes/r6_add_trial_flipbook.html](https://evamaerey.github.io/mytidytuesday/2023-02-27-classes/r6_add_trial_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-02-27-classes/r6_add_trial_flipbook.Rmd)**
-307. [2023-02-27-classes/r6_add_trial.html](https://evamaerey.github.io/mytidytuesday/2023-02-27-classes/r6_add_trial.html)
+309. [2023-02-27-classes/r6_add_trial.html](https://evamaerey.github.io/mytidytuesday/2023-02-27-classes/r6_add_trial.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-02-27-classes/r6_add_trial.Rmd)**
-308. [2023-02-27-classes/r6.html](https://evamaerey.github.io/mytidytuesday/2023-02-27-classes/r6.html)
+310. [2023-02-27-classes/r6.html](https://evamaerey.github.io/mytidytuesday/2023-02-27-classes/r6.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-02-27-classes/r6.Rmd)**
-309. [2023-02-27-classes/ma206dist_and_equa.html](https://evamaerey.github.io/mytidytuesday/2023-02-27-classes/ma206dist_and_equa.html)
+311. [2023-02-27-classes/ma206dist_and_equa.html](https://evamaerey.github.io/mytidytuesday/2023-02-27-classes/ma206dist_and_equa.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-02-27-classes/ma206dist_and_equa.Rmd)**
-310. [2023-02-21-tables-w-ggplot2/tables_with_ggplot2.html](https://evamaerey.github.io/mytidytuesday/2023-02-21-tables-w-ggplot2/tables_with_ggplot2.html)
+312. [2023-02-21-tables-w-ggplot2/tables_with_ggplot2.html](https://evamaerey.github.io/mytidytuesday/2023-02-21-tables-w-ggplot2/tables_with_ggplot2.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-02-21-tables-w-ggplot2/tables_with_ggplot2.Rmd)**
-311. [2023-02-21-python-flipbook/python-flipbook.html](https://evamaerey.github.io/mytidytuesday/2023-02-21-python-flipbook/python-flipbook.html)
+313. [2023-02-21-python-flipbook/python-flipbook.html](https://evamaerey.github.io/mytidytuesday/2023-02-21-python-flipbook/python-flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-02-21-python-flipbook/python-flipbook.Rmd)**
-312. [2023-02-16-likelihood/likelihood.html](https://evamaerey.github.io/mytidytuesday/2023-02-16-likelihood/likelihood.html)
+314. [2023-02-16-likelihood/likelihood.html](https://evamaerey.github.io/mytidytuesday/2023-02-16-likelihood/likelihood.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-02-16-likelihood/likelihood.Rmd)**
-313. [2023-02-14-sugar-cookies/sugar_cookies.html](https://evamaerey.github.io/mytidytuesday/2023-02-14-sugar-cookies/sugar_cookies.html)
+315. [2023-02-14-sugar-cookies/sugar_cookies.html](https://evamaerey.github.io/mytidytuesday/2023-02-14-sugar-cookies/sugar_cookies.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-02-14-sugar-cookies/sugar_cookies.Rmd)**
-314. [2023-02-14-logit/logit.html](https://evamaerey.github.io/mytidytuesday/2023-02-14-logit/logit.html)
+316. [2023-02-14-logit/logit.html](https://evamaerey.github.io/mytidytuesday/2023-02-14-logit/logit.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-02-14-logit/logit.Rmd)**
-315. [2023-02-13-broom-viz/broom_viz_flipbook.html](https://evamaerey.github.io/mytidytuesday/2023-02-13-broom-viz/broom_viz_flipbook.html)
+317. [2023-02-13-broom-viz/broom_viz_flipbook.html](https://evamaerey.github.io/mytidytuesday/2023-02-13-broom-viz/broom_viz_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-02-13-broom-viz/broom_viz_flipbook.Rmd)**
-316. [2023-02-13-broom-viz/broom_viz.html](https://evamaerey.github.io/mytidytuesday/2023-02-13-broom-viz/broom_viz.html)
+318. [2023-02-13-broom-viz/broom_viz.html](https://evamaerey.github.io/mytidytuesday/2023-02-13-broom-viz/broom_viz.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2023-02-13-broom-viz/broom_viz.Rmd)**
-317. [2022-11-14-discrete-probability/discrete_probability_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-11-14-discrete-probability/discrete_probability_flipbook.html)
+319. [2022-11-14-discrete-probability/discrete_probability_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-11-14-discrete-probability/discrete_probability_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-11-14-discrete-probability/discrete_probability_flipbook.Rmd)**
-318. [2022-11-13-ggdense/ggdense.html](https://evamaerey.github.io/mytidytuesday/2022-11-13-ggdense/ggdense.html)
+320. [2022-11-13-ggdense/ggdense.html](https://evamaerey.github.io/mytidytuesday/2022-11-13-ggdense/ggdense.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-11-13-ggdense/ggdense.Rmd)**
-319. [2022-11-05-penguins-presentation/penguins_presentation_ggols.html](https://evamaerey.github.io/mytidytuesday/2022-11-05-penguins-presentation/penguins_presentation_ggols.html)
+321. [2022-11-05-penguins-presentation/penguins_presentation_ggols.html](https://evamaerey.github.io/mytidytuesday/2022-11-05-penguins-presentation/penguins_presentation_ggols.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-11-05-penguins-presentation/penguins_presentation_ggols.Rmd)**
-320. [2022-11-05-penguins-presentation/penguins_presentation.html](https://evamaerey.github.io/mytidytuesday/2022-11-05-penguins-presentation/penguins_presentation.html)
+322. [2022-11-05-penguins-presentation/penguins_presentation.html](https://evamaerey.github.io/mytidytuesday/2022-11-05-penguins-presentation/penguins_presentation.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-11-05-penguins-presentation/penguins_presentation.Rmd)**
-321. [2022-11-04-brain/brain.html](https://evamaerey.github.io/mytidytuesday/2022-11-04-brain/brain.html)
+323. [2022-11-04-brain/brain.html](https://evamaerey.github.io/mytidytuesday/2022-11-04-brain/brain.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-11-04-brain/brain.Rmd)**
-322. [2022-10-11-ggsample-clt/ggsample_and_the_clt_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-10-11-ggsample-clt/ggsample_and_the_clt_flipbook.html)
+324. [2022-10-11-ggsample-clt/ggsample_and_the_clt_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-10-11-ggsample-clt/ggsample_and_the_clt_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-10-11-ggsample-clt/ggsample_and_the_clt_flipbook.Rmd)**
-323. [2022-09-04-prop-test-sd/prop-test-sd.html](https://evamaerey.github.io/mytidytuesday/2022-09-04-prop-test-sd/prop-test-sd.html)
+325. [2022-09-04-prop-test-sd/prop-test-sd.html](https://evamaerey.github.io/mytidytuesday/2022-09-04-prop-test-sd/prop-test-sd.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-09-04-prop-test-sd/prop-test-sd.Rmd)**
-324. [2022-08-27-extenders/extenders.html](https://evamaerey.github.io/mytidytuesday/2022-08-27-extenders/extenders.html)
+326. [2022-08-27-extenders/extenders.html](https://evamaerey.github.io/mytidytuesday/2022-08-27-extenders/extenders.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-08-27-extenders/extenders.Rmd)**
-325. [2022-08-20-ggtrace/ggtrace.html](https://evamaerey.github.io/mytidytuesday/2022-08-20-ggtrace/ggtrace.html)
+327. [2022-08-20-ggtrace/ggtrace.html](https://evamaerey.github.io/mytidytuesday/2022-08-20-ggtrace/ggtrace.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-08-20-ggtrace/ggtrace.Rmd)**
-326. [2022-08-16-lahman-baseball/lahman_baseball_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-08-16-lahman-baseball/lahman_baseball_flipbook.html)
+328. [2022-08-16-lahman-baseball/lahman_baseball_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-08-16-lahman-baseball/lahman_baseball_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-08-16-lahman-baseball/lahman_baseball_flipbook.Rmd)**
-327. [2022-08-16-lahman-baseball/lahman_baseball.html](https://evamaerey.github.io/mytidytuesday/2022-08-16-lahman-baseball/lahman_baseball.html)
+329. [2022-08-16-lahman-baseball/lahman_baseball.html](https://evamaerey.github.io/mytidytuesday/2022-08-16-lahman-baseball/lahman_baseball.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-08-16-lahman-baseball/lahman_baseball.Rmd)**
-328. [2022-08-15-ma206data-day1/ma206data_day1_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-08-15-ma206data-day1/ma206data_day1_flipbook.html)
+330. [2022-08-15-ma206data-day1/ma206data_day1_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-08-15-ma206data-day1/ma206data_day1_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-08-15-ma206data-day1/ma206data_day1_flipbook.Rmd)**
-329. [2022-08-15-ma206data-day1/ma206data_day1.html](https://evamaerey.github.io/mytidytuesday/2022-08-15-ma206data-day1/ma206data_day1.html)
+331. [2022-08-15-ma206data-day1/ma206data_day1.html](https://evamaerey.github.io/mytidytuesday/2022-08-15-ma206data-day1/ma206data_day1.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-08-15-ma206data-day1/ma206data_day1.Rmd)**
-330. [2022-08-15-ma206data-day1/Rlogo.pdf](https://evamaerey.github.io/mytidytuesday/2022-08-15-ma206data-day1/Rlogo.pdf)
+332. [2022-08-15-ma206data-day1/Rlogo.pdf](https://evamaerey.github.io/mytidytuesday/2022-08-15-ma206data-day1/Rlogo.pdf)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-08-15-ma206data-day1/Rlogo.Rmd)**
-331. [2022-08-06-ggseg/ggseg_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-08-06-ggseg/ggseg_flipbook.html)
+333. [2022-08-06-ggseg/ggseg_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-08-06-ggseg/ggseg_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-08-06-ggseg/ggseg_flipbook.Rmd)**
-332. [2022-08-06-ggseg/ggseg.html](https://evamaerey.github.io/mytidytuesday/2022-08-06-ggseg/ggseg.html)
+334. [2022-08-06-ggseg/ggseg.html](https://evamaerey.github.io/mytidytuesday/2022-08-06-ggseg/ggseg.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-08-06-ggseg/ggseg.Rmd)**
-333. [2022-08-01-dbinom-dgeom/dbinom_dgeom_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-08-01-dbinom-dgeom/dbinom_dgeom_flipbook.html)
+335. [2022-08-01-dbinom-dgeom/dbinom_dgeom_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-08-01-dbinom-dgeom/dbinom_dgeom_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-08-01-dbinom-dgeom/dbinom_dgeom_flipbook.Rmd)**
-334. [2022-08-01-dbinom-dgeom/dbinom_dgeom.html](https://evamaerey.github.io/mytidytuesday/2022-08-01-dbinom-dgeom/dbinom_dgeom.html)
+336. [2022-08-01-dbinom-dgeom/dbinom_dgeom.html](https://evamaerey.github.io/mytidytuesday/2022-08-01-dbinom-dgeom/dbinom_dgeom.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-08-01-dbinom-dgeom/dbinom_dgeom.Rmd)**
-335. [2022-07-22-ma206data-demo/ma206data_package_demo_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-07-22-ma206data-demo/ma206data_package_demo_flipbook.html)
+337. [2022-07-22-ma206data-demo/ma206data_package_demo_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-07-22-ma206data-demo/ma206data_package_demo_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-07-22-ma206data-demo/ma206data_package_demo_flipbook.Rmd)**
-336. [2022-07-22-ma206data-demo/ma206data_package_demo.html](https://evamaerey.github.io/mytidytuesday/2022-07-22-ma206data-demo/ma206data_package_demo.html)
+338. [2022-07-22-ma206data-demo/ma206data_package_demo.html](https://evamaerey.github.io/mytidytuesday/2022-07-22-ma206data-demo/ma206data_package_demo.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-07-22-ma206data-demo/ma206data_package_demo.Rmd)**
-337. [2022-06-20-tabyl/2022-06-20-tabyl.pdf](https://evamaerey.github.io/mytidytuesday/2022-06-20-tabyl/2022-06-20-tabyl.pdf)
+339. [2022-06-20-tabyl/2022-06-20-tabyl.pdf](https://evamaerey.github.io/mytidytuesday/2022-06-20-tabyl/2022-06-20-tabyl.pdf)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-06-20-tabyl/2022-06-20-tabyl.Rmd)**
-338. [2022-06-20-tabyl/2022-06-20-tabyl.html](https://evamaerey.github.io/mytidytuesday/2022-06-20-tabyl/2022-06-20-tabyl.html)
+340. [2022-06-20-tabyl/2022-06-20-tabyl.html](https://evamaerey.github.io/mytidytuesday/2022-06-20-tabyl/2022-06-20-tabyl.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-06-20-tabyl/2022-06-20-tabyl.Rmd)**
-339. [2022-06-07-scale-x-sd/scale_x_sd.html](https://evamaerey.github.io/mytidytuesday/2022-06-07-scale-x-sd/scale_x_sd.html)
+341. [2022-06-07-scale-x-sd/scale_x_sd.html](https://evamaerey.github.io/mytidytuesday/2022-06-07-scale-x-sd/scale_x_sd.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-06-07-scale-x-sd/scale_x_sd.Rmd)**
-340. [2022-05-30-apply/apply.html](https://evamaerey.github.io/mytidytuesday/2022-05-30-apply/apply.html)
+342. [2022-05-30-apply/apply.html](https://evamaerey.github.io/mytidytuesday/2022-05-30-apply/apply.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-05-30-apply/apply.Rmd)**
-341. [2022-05-30-apply/Untitled/skeleton.html](https://evamaerey.github.io/mytidytuesday/2022-05-30-apply/Untitled/skeleton.html)
+343. [2022-05-30-apply/Untitled/skeleton.html](https://evamaerey.github.io/mytidytuesday/2022-05-30-apply/Untitled/skeleton.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-05-30-apply/Untitled/skeleton.Rmd)**
-342. [2022-05-30-apply/Untitled/Untitled.html](https://evamaerey.github.io/mytidytuesday/2022-05-30-apply/Untitled/Untitled.html)
+344. [2022-05-30-apply/Untitled/Untitled.html](https://evamaerey.github.io/mytidytuesday/2022-05-30-apply/Untitled/Untitled.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-05-30-apply/Untitled/Untitled.Rmd)**
-343. [2022-05-28-circle-pack/how_geom_treemap_works.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/how_geom_treemap_works.html)
+345. [2022-05-28-circle-pack/how_geom_treemap_works.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/how_geom_treemap_works.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-05-28-circle-pack/how_geom_treemap_works.Rmd)**
-344. [2022-05-28-circle-pack/geom_diamonds_recipe_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/geom_diamonds_recipe_flipbook.html)
+346. [2022-05-28-circle-pack/geom_diamonds_recipe_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/geom_diamonds_recipe_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-05-28-circle-pack/geom_diamonds_recipe_flipbook.Rmd)**
-345. [2022-05-28-circle-pack/geom_diamonds_recipe1.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/geom_diamonds_recipe1.html)
+347. [2022-05-28-circle-pack/geom_diamonds_recipe1.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/geom_diamonds_recipe1.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-05-28-circle-pack/geom_diamonds_recipe1.Rmd)**
-346. [2022-05-28-circle-pack/geom_diamonds_recipe.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/geom_diamonds_recipe.html)
+348. [2022-05-28-circle-pack/geom_diamonds_recipe.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/geom_diamonds_recipe.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-05-28-circle-pack/geom_diamonds_recipe.Rmd)**
-347. [2022-05-28-circle-pack/circle_pack_stipple.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/circle_pack_stipple.html)
+349. [2022-05-28-circle-pack/circle_pack_stipple.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/circle_pack_stipple.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-05-28-circle-pack/circle_pack_stipple.Rmd)**
-348. [2022-05-28-circle-pack/circle_pack.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/circle_pack.html)
+350. [2022-05-28-circle-pack/circle_pack.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/circle_pack.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-05-28-circle-pack/circle_pack.Rmd)**
-349. [2022-05-28-circle-pack/circle_geom_verbatim.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/circle_geom_verbatim.html)
+351. [2022-05-28-circle-pack/circle_geom_verbatim.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/circle_geom_verbatim.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-05-28-circle-pack/circle_geom_verbatim.Rmd)**
-350. [2022-05-28-circle-pack/circle_geom.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/circle_geom.html)
+352. [2022-05-28-circle-pack/circle_geom.html](https://evamaerey.github.io/mytidytuesday/2022-05-28-circle-pack/circle_geom.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-05-28-circle-pack/circle_geom.Rmd)**
-351. [2022-05-23-networks-presentation/networks_presentation.html](https://evamaerey.github.io/mytidytuesday/2022-05-23-networks-presentation/networks_presentation.html)
+353. [2022-05-23-networks-presentation/networks_presentation.html](https://evamaerey.github.io/mytidytuesday/2022-05-23-networks-presentation/networks_presentation.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-05-23-networks-presentation/networks_presentation.Rmd)**
-352. [2022-05-23-networks-presentation/images_for_lecture/federalist_widget
+354. [2022-05-23-networks-presentation/images_for_lecture/federalist_widget
      copy.html](https://evamaerey.github.io/mytidytuesday/2022-05-23-networks-presentation/images_for_lecture/federalist_widget%20copy.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-05-23-networks-presentation/images_for_lecture/federalist_widget%20copy.Rmd)**
-353. [2022-05-09-statistical-geometries/statistical_geometries.html](https://evamaerey.github.io/mytidytuesday/2022-05-09-statistical-geometries/statistical_geometries.html)
+355. [2022-05-09-statistical-geometries/statistical_geometries.html](https://evamaerey.github.io/mytidytuesday/2022-05-09-statistical-geometries/statistical_geometries.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-05-09-statistical-geometries/statistical_geometries.Rmd)**
-354. [2022-05-09-statistical-geometries/rstudio_ggxmean.html](https://evamaerey.github.io/mytidytuesday/2022-05-09-statistical-geometries/rstudio_ggxmean.html)
+356. [2022-05-09-statistical-geometries/rstudio_ggxmean.html](https://evamaerey.github.io/mytidytuesday/2022-05-09-statistical-geometries/rstudio_ggxmean.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-05-09-statistical-geometries/rstudio_ggxmean.Rmd)**
-355. [2022-05-09-statistical-geometries/rstudio_blog_post_draft.html](https://evamaerey.github.io/mytidytuesday/2022-05-09-statistical-geometries/rstudio_blog_post_draft.html)
+357. [2022-05-09-statistical-geometries/rstudio_blog_post_draft.html](https://evamaerey.github.io/mytidytuesday/2022-05-09-statistical-geometries/rstudio_blog_post_draft.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-05-09-statistical-geometries/rstudio_blog_post_draft.Rmd)**
-356. [2022-04-21-ggplot2-grammar-primer/grammar_guide_cheat_sheet
+358. [2022-04-21-ggplot2-grammar-primer/grammar_guide_cheat_sheet
      copy.pdf](https://evamaerey.github.io/mytidytuesday/2022-04-21-ggplot2-grammar-primer/grammar_guide_cheat_sheet%20copy.pdf)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-04-21-ggplot2-grammar-primer/grammar_guide_cheat_sheet%20copy.Rmd)**
-357. [2022-04-21-ggplot2-grammar-primer/ggplot2_grammar_primer_worksheet.html](https://evamaerey.github.io/mytidytuesday/2022-04-21-ggplot2-grammar-primer/ggplot2_grammar_primer_worksheet.html)
+359. [2022-04-21-ggplot2-grammar-primer/ggplot2_grammar_primer_worksheet.html](https://evamaerey.github.io/mytidytuesday/2022-04-21-ggplot2-grammar-primer/ggplot2_grammar_primer_worksheet.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-04-21-ggplot2-grammar-primer/ggplot2_grammar_primer_worksheet.Rmd)**
-358. [2022-04-21-ggplot2-grammar-primer/ggplot2_grammar_primer_double_crochet.html](https://evamaerey.github.io/mytidytuesday/2022-04-21-ggplot2-grammar-primer/ggplot2_grammar_primer_double_crochet.html)
+360. [2022-04-21-ggplot2-grammar-primer/ggplot2_grammar_primer_double_crochet.html](https://evamaerey.github.io/mytidytuesday/2022-04-21-ggplot2-grammar-primer/ggplot2_grammar_primer_double_crochet.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-04-21-ggplot2-grammar-primer/ggplot2_grammar_primer_double_crochet.Rmd)**
-359. [2022-04-21-ggplot2-grammar-primer/ggplot2_grammar_primer.html](https://evamaerey.github.io/mytidytuesday/2022-04-21-ggplot2-grammar-primer/ggplot2_grammar_primer.html)
+361. [2022-04-21-ggplot2-grammar-primer/ggplot2_grammar_primer.html](https://evamaerey.github.io/mytidytuesday/2022-04-21-ggplot2-grammar-primer/ggplot2_grammar_primer.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-04-21-ggplot2-grammar-primer/ggplot2_grammar_primer.Rmd)**
-360. [2022-04-01-isi-data/isi-data.html](https://evamaerey.github.io/mytidytuesday/2022-04-01-isi-data/isi-data.html)
+362. [2022-04-01-isi-data/isi-data.html](https://evamaerey.github.io/mytidytuesday/2022-04-01-isi-data/isi-data.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-04-01-isi-data/isi-data.Rmd)**
-361. [2022-03-25-hive/hive.html](https://evamaerey.github.io/mytidytuesday/2022-03-25-hive/hive.html)
+363. [2022-03-25-hive/hive.html](https://evamaerey.github.io/mytidytuesday/2022-03-25-hive/hive.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-03-25-hive/hive.Rmd)**
-362. [2022-02-14-tables/tables_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-02-14-tables/tables_flipbook.html)
+364. [2022-02-14-tables/tables_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-02-14-tables/tables_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-02-14-tables/tables_flipbook.Rmd)**
-363. [2022-02-14-tables/tables.html](https://evamaerey.github.io/mytidytuesday/2022-02-14-tables/tables.html)
+365. [2022-02-14-tables/tables.html](https://evamaerey.github.io/mytidytuesday/2022-02-14-tables/tables.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-02-14-tables/tables.Rmd)**
-364. [2022-01-28-quieting/quieting.html](https://evamaerey.github.io/mytidytuesday/2022-01-28-quieting/quieting.html)
+366. [2022-01-28-quieting/quieting.html](https://evamaerey.github.io/mytidytuesday/2022-01-28-quieting/quieting.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-01-28-quieting/quieting.Rmd)**
-365. [2022-01-17-rosling-style/rosling_style.html](https://evamaerey.github.io/mytidytuesday/2022-01-17-rosling-style/rosling_style.html)
+367. [2022-01-17-rosling-style/rosling_style.html](https://evamaerey.github.io/mytidytuesday/2022-01-17-rosling-style/rosling_style.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-01-17-rosling-style/rosling_style.Rmd)**
-366. [2022-01-16-ggxmean-hex/ggxmean_hex.html](https://evamaerey.github.io/mytidytuesday/2022-01-16-ggxmean-hex/ggxmean_hex.html)
+368. [2022-01-16-ggxmean-hex/ggxmean_hex.html](https://evamaerey.github.io/mytidytuesday/2022-01-16-ggxmean-hex/ggxmean_hex.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-01-16-ggxmean-hex/ggxmean_hex.Rmd)**
-367. [2022-01-13-ma206-data-hex/ma206_data_hex.html](https://evamaerey.github.io/mytidytuesday/2022-01-13-ma206-data-hex/ma206_data_hex.html)
+369. [2022-01-13-ma206-data-hex/ma206_data_hex.html](https://evamaerey.github.io/mytidytuesday/2022-01-13-ma206-data-hex/ma206_data_hex.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-01-13-ma206-data-hex/ma206_data_hex.Rmd)**
-368. [2022-01-13-ggdistributions-hex/ggdistributions_hex.html](https://evamaerey.github.io/mytidytuesday/2022-01-13-ggdistributions-hex/ggdistributions_hex.html)
+370. [2022-01-13-ggdistributions-hex/ggdistributions_hex.html](https://evamaerey.github.io/mytidytuesday/2022-01-13-ggdistributions-hex/ggdistributions_hex.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-01-13-ggdistributions-hex/ggdistributions_hex.Rmd)**
-369. [2022-01-03-easy-geom-recipes/easy_geom_recipes_flipbook_2024.html](https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/easy_geom_recipes_flipbook_2024.html)
+371. [2022-01-03-easy-geom-recipes/easy_geom_recipes_flipbook_2024.html](https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/easy_geom_recipes_flipbook_2024.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-01-03-easy-geom-recipes/easy_geom_recipes_flipbook_2024.Rmd)**
-370. [2022-01-03-easy-geom-recipes/easy_geom_recipes_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/easy_geom_recipes_flipbook.html)
+372. [2022-01-03-easy-geom-recipes/easy_geom_recipes_flipbook.html](https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/easy_geom_recipes_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-01-03-easy-geom-recipes/easy_geom_recipes_flipbook.Rmd)**
-371. [2022-01-03-easy-geom-recipes/easy_geom_recipes_2024.html](https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/easy_geom_recipes_2024.html)
+373. [2022-01-03-easy-geom-recipes/easy_geom_recipes_2024.html](https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/easy_geom_recipes_2024.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-01-03-easy-geom-recipes/easy_geom_recipes_2024.Rmd)**
-372. [2022-01-03-easy-geom-recipes/easy_geom_recipes.html](https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/easy_geom_recipes.html)
+374. [2022-01-03-easy-geom-recipes/easy_geom_recipes.html](https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/easy_geom_recipes.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-01-03-easy-geom-recipes/easy_geom_recipes.Rmd)**
-373. [2022-01-03-easy-geom-recipes/\_extensions/coatless/webr/qwebr-monaco-editor-init.html](https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/_extensions/coatless/webr/qwebr-monaco-editor-init.html)
+375. [2022-01-03-easy-geom-recipes/\_extensions/coatless/webr/qwebr-monaco-editor-init.html](https://evamaerey.github.io/mytidytuesday/2022-01-03-easy-geom-recipes/_extensions/coatless/webr/qwebr-monaco-editor-init.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-01-03-easy-geom-recipes/_extensions/coatless/webr/qwebr-monaco-editor-init.Rmd)**
-374. [2022-01-01-ggstamp/ggstamp.html](https://evamaerey.github.io/mytidytuesday/2022-01-01-ggstamp/ggstamp.html)
+376. [2022-01-01-ggstamp/ggstamp.html](https://evamaerey.github.io/mytidytuesday/2022-01-01-ggstamp/ggstamp.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2022-01-01-ggstamp/ggstamp.Rmd)**
-375. [2021-12-30-hex-transparency/hex_transparency_flipbook.html](https://evamaerey.github.io/mytidytuesday/2021-12-30-hex-transparency/hex_transparency_flipbook.html)
+377. [2021-12-30-hex-transparency/hex_transparency_flipbook.html](https://evamaerey.github.io/mytidytuesday/2021-12-30-hex-transparency/hex_transparency_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2021-12-30-hex-transparency/hex_transparency_flipbook.Rmd)**
-376. [2021-12-30-hex-transparency/hex_transparency.html](https://evamaerey.github.io/mytidytuesday/2021-12-30-hex-transparency/hex_transparency.html)
+378. [2021-12-30-hex-transparency/hex_transparency.html](https://evamaerey.github.io/mytidytuesday/2021-12-30-hex-transparency/hex_transparency.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2021-12-30-hex-transparency/hex_transparency.Rmd)**
-377. [2021-12-24-holiday-card/holiday_card_flipbook.html](https://evamaerey.github.io/mytidytuesday/2021-12-24-holiday-card/holiday_card_flipbook.html)
+379. [2021-12-24-holiday-card/holiday_card_flipbook.html](https://evamaerey.github.io/mytidytuesday/2021-12-24-holiday-card/holiday_card_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2021-12-24-holiday-card/holiday_card_flipbook.Rmd)**
-378. [2021-12-24-holiday-card/holiday_card.html](https://evamaerey.github.io/mytidytuesday/2021-12-24-holiday-card/holiday_card.html)
+380. [2021-12-24-holiday-card/holiday_card.html](https://evamaerey.github.io/mytidytuesday/2021-12-24-holiday-card/holiday_card.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2021-12-24-holiday-card/holiday_card.Rmd)**
-379. [2021-11-26-circle-of-fifths/circle_of_fifths_flipbook.html](https://evamaerey.github.io/mytidytuesday/2021-11-26-circle-of-fifths/circle_of_fifths_flipbook.html)
+381. [2021-11-26-circle-of-fifths/circle_of_fifths_flipbook.html](https://evamaerey.github.io/mytidytuesday/2021-11-26-circle-of-fifths/circle_of_fifths_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2021-11-26-circle-of-fifths/circle_of_fifths_flipbook.Rmd)**
-380. [2021-11-14-datasaurus/datasauRus_flipbook.html](https://evamaerey.github.io/mytidytuesday/2021-11-14-datasaurus/datasauRus_flipbook.html)
+382. [2021-11-14-datasaurus/datasauRus_flipbook.html](https://evamaerey.github.io/mytidytuesday/2021-11-14-datasaurus/datasauRus_flipbook.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2021-11-14-datasaurus/datasauRus_flipbook.Rmd)**
-381. [2021-11-14-datasaurus/datasauRus.html](https://evamaerey.github.io/mytidytuesday/2021-11-14-datasaurus/datasauRus.html)
+383. [2021-11-14-datasaurus/datasauRus.html](https://evamaerey.github.io/mytidytuesday/2021-11-14-datasaurus/datasauRus.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2021-11-14-datasaurus/datasauRus.Rmd)**
-382. [2021-11-04-stamp-capybara/stamp_potato.html](https://evamaerey.github.io/mytidytuesday/2021-11-04-stamp-capybara/stamp_potato.html)
+384. [2021-11-04-stamp-capybara/stamp_potato.html](https://evamaerey.github.io/mytidytuesday/2021-11-04-stamp-capybara/stamp_potato.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2021-11-04-stamp-capybara/stamp_potato.Rmd)**
-383. [2021-11-04-stamp-capybara/stamp_fishes.html](https://evamaerey.github.io/mytidytuesday/2021-11-04-stamp-capybara/stamp_fishes.html)
+385. [2021-11-04-stamp-capybara/stamp_fishes.html](https://evamaerey.github.io/mytidytuesday/2021-11-04-stamp-capybara/stamp_fishes.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2021-11-04-stamp-capybara/stamp_fishes.Rmd)**
-384. [2021-11-04-stamp-capybara/stamp_fish_seuss.html](https://evamaerey.github.io/mytidytuesday/2021-11-04-stamp-capybara/stamp_fish_seuss.html)
+386. [2021-11-04-stamp-capybara/stamp_fish_seuss.html](https://evamaerey.github.io/mytidytuesday/2021-11-04-stamp-capybara/stamp_fish_seuss.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2021-11-04-stamp-capybara/stamp_fish_seuss.Rmd)**
-385. [2021-11-04-stamp-capybara/stamp_fish.html](https://evamaerey.github.io/mytidytuesday/2021-11-04-stamp-capybara/stamp_fish.html)
+387. [2021-11-04-stamp-capybara/stamp_fish.html](https://evamaerey.github.io/mytidytuesday/2021-11-04-stamp-capybara/stamp_fish.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2021-11-04-stamp-capybara/stamp_fish.Rmd)**
-386. [2021-11-04-stamp-capybara/stamp_capybara.html](https://evamaerey.github.io/mytidytuesday/2021-11-04-stamp-capybara/stamp_capybara.html)
+388. [2021-11-04-stamp-capybara/stamp_capybara.html](https://evamaerey.github.io/mytidytuesday/2021-11-04-stamp-capybara/stamp_capybara.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2021-11-04-stamp-capybara/stamp_capybara.Rmd)**
-387. [2021-11-03-geom-text-lm-fitted/geom_text_lm_fitted_exploded.html](https://evamaerey.github.io/mytidytuesday/2021-11-03-geom-text-lm-fitted/geom_text_lm_fitted_exploded.html)
+389. [2021-11-03-geom-text-lm-fitted/geom_text_lm_fitted_exploded.html](https://evamaerey.github.io/mytidytuesday/2021-11-03-geom-text-lm-fitted/geom_text_lm_fitted_exploded.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2021-11-03-geom-text-lm-fitted/geom_text_lm_fitted_exploded.Rmd)**
-388. [2021-11-03-geom-text-lm-fitted/geom_text_lm_fitted.html](https://evamaerey.github.io/mytidytuesday/2021-11-03-geom-text-lm-fitted/geom_text_lm_fitted.html)
+390. [2021-11-03-geom-text-lm-fitted/geom_text_lm_fitted.html](https://evamaerey.github.io/mytidytuesday/2021-11-03-geom-text-lm-fitted/geom_text_lm_fitted.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2021-11-03-geom-text-lm-fitted/geom_text_lm_fitted.Rmd)**
-389. [2021-10-31-anscombes-quartet/anscombes_exploded.html](https://evamaerey.github.io/mytidytuesday/2021-10-31-anscombes-quartet/anscombes_exploded.html)
+391. [2021-10-31-anscombes-quartet/anscombes_exploded.html](https://evamaerey.github.io/mytidytuesday/2021-10-31-anscombes-quartet/anscombes_exploded.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2021-10-31-anscombes-quartet/anscombes_exploded.Rmd)**
-390. [2021-10-31-anscombes-quartet/anscombes.html](https://evamaerey.github.io/mytidytuesday/2021-10-31-anscombes-quartet/anscombes.html)
+392. [2021-10-31-anscombes-quartet/anscombes.html](https://evamaerey.github.io/mytidytuesday/2021-10-31-anscombes-quartet/anscombes.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2021-10-31-anscombes-quartet/anscombes.Rmd)**
-391. [2021-10-19-great-pumpkin/memory_input.html](https://evamaerey.github.io/mytidytuesday/2021-10-19-great-pumpkin/memory_input.html)
+393. [2021-10-19-great-pumpkin/memory_input.html](https://evamaerey.github.io/mytidytuesday/2021-10-19-great-pumpkin/memory_input.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2021-10-19-great-pumpkin/memory_input.Rmd)**
-392. [2021-10-19-great-pumpkin/memory.html](https://evamaerey.github.io/mytidytuesday/2021-10-19-great-pumpkin/memory.html)
+394. [2021-10-19-great-pumpkin/memory.html](https://evamaerey.github.io/mytidytuesday/2021-10-19-great-pumpkin/memory.html)
      **[source](https://github.com/evamaerey/mytidytuesday/blob/master/2021-10-19-great-pumpkin/memory.Rmd)**
 
 ``` r
@@ -816,7 +820,7 @@ new_experiment_rmd <- function(name){
 
 
   
-new_experiment_rmd(name = "gg-extension-introduction")
+new_experiment_rmd(name = "s-and-p-since-2015")
 
 
 # Aesthetic mapping: 
