@@ -1,0 +1,83 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r, results='hide'}
+library(tidyverse)
+library(ggincerta)
+
+nc_counties <- tigris::counties(state = "NC", cb = TRUE, class = "sf") |> 
+  select(county_name = NAME, geometry)
+```
+
+
+```{r}
+# 
+geom_county <- ggregions::write_geom_region_locale(ref_data = nc_counties)
+
+# from emily
+nc_midterms<- read_csv("https://raw.githubusercontent.com/EvaMaeRey/sf2stat/refs/heads/main/nc-midterms.csv")
+
+head(nc_midterms)
+
+nc_midterms |>
+  mutate(desc_county = str_to_title(desc_county)) |>
+  ggplot() +
+  aes(county_name = desc_county, 
+      fill = duo(n, 
+                 ind_vote)) + 
+  geom_county()
+
+last_plot() +
+  scale_fill_bivariate(colors = c("gold", "transparent")) + 
+  labs(title = "By population")
+
+last_plot() + 
+  scale_fill_bivariate(colors = c("transparent", "red4"))  + 
+  labs(title = "By turnout")
+
+last_plot() + 
+  scale_fill_bivariate() + 
+  labs(title = "By population and turnout")
+
+last_plot() + 
+  aes(fill = cd_party) + 
+  scale_fill_gradient2(midpoint = .5) + 
+  labs(title = "By party")
+  
+
+
+```
+
+## how does it work?
+
+```{r}
+duo(nc_midterms$n, nc_midterms$cd_party) |> head(2)
+
+scale_fill_bivariate
+
+ScaleBivariate$transform
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

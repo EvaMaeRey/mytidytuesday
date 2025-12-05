@@ -1,11 +1,14 @@
 ---
-title: "Conversational ggplot2: easily and elegantly recording and communicating visual trains-of-thought with your favorite graphing library"
+title: "Conversational ggplot2: easily and elegantly record and communicate visual trains-of-thought with your favorite graphing library"
 subtitle: "Replicating 'Visualizing-Why-Yesterdays-Stock-Market-reversal-was-so-weird-and-unnerving' by David Crowther"
 author: "Gina Reynolds"
 date: "`r Sys.Date()`"
 output: 
   html_document:
     toc: TRUE
+format:
+  html:
+    embed-resources: true
 ---
 
 ```{r setup, include=FALSE}
@@ -82,18 +85,23 @@ library(RColorBrewer)
 
 
 ```{r}
+library(tidyverse)
+library(ggcirclepack)
+(theme_gray() + 
+    theme(palette.fill.discrete = brewer.pal(8, "Dark2")[c(1:8, 1:3)],
+          palette.color.discrete = c("transparent", "magenta"),
+          palette.fill.continuous = "viridis")
+  ) |>
+  theme_set()
 sp_500_data_calcs |> head()
 
 sp_500_data_calcs |>
   ggplot() + 
-  aes(id = date) + 
-  aes(color = ind_yesterday) + 
-  aes(fill = year |> as_factor()) + 
-  aes(linewidth = I(.3)) +
+  aes(id = date, 
+      color = ind_yesterday, 
+      fill = factor(year)) +
   geom_circlepack() + 
-  coord_equal() + 
-  scale_fill_manual(values = brewer.pal(8, "Dark2")[c(1:8, 1:3)])  +
-  scale_color_manual(values = c("transparent", "magenta"))
+  coord_equal()
 ```
 
 
@@ -104,6 +112,7 @@ last_plot() +
   aes(fill = return) + 
   scale_fill_gradient2(mid = "lightgrey", low = "#410000", high = "darkblue")
 ```
+
 
 > **Reflection:** *Even from a glance, you can see the volatility ...*
 

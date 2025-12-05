@@ -18,6 +18,8 @@ options(tidyverse.quiet = TRUE)
 ## Intro Thoughts
 
 
+
+
 ## Status Quo
 
 ```{r}
@@ -104,9 +106,9 @@ data(shuttles) +
   geom_col(aes(y = gas), fill = "transparent", color = "black") + 
   geom_hline(yintercept = .75, linetype = "dashed")
 
-
-
 ```
+
+
 
 
 ```{r}
@@ -129,6 +131,7 @@ last_plot() +
   y(speed) + 
   geom_smooth(fill = "black")
 ```
+
 
 
 ```{r}
@@ -154,14 +157,14 @@ data(palmerpenguins::penguins) +
   size(body_mass_g) + 
   guides(size = "none")
 
-library(ggram)
-ggram::clearhistory()
-
-data(palmerpenguins::penguins) + 
-  viz(x = island, color = species) + 
-  layer_bar(position = "dodge2")
-
-ggram(widths = c(2,1))
+# library(ggram)
+# ggram::clearhistory()
+# 
+# data(palmerpenguins::penguins) + 
+#   viz(x = island, color = species) + 
+#   layer_bar(position = "dodge2")
+# 
+# ggram(widths = c(2,1))
 
 
 
@@ -171,15 +174,42 @@ data(palmerpenguins::penguins) +
   layer_point() + 
   color(species) + 
   wrap(sex)
+```
+
+
+## ggprereader
+
+```{r, eval = T}
+`↔` <- x
+`↕` <- y
+`🎨` <- color
+`🖼` <- data
+`📊` <- ggpro::geom_vbar
+
+palmerpenguins::penguins |>
+`🖼`() +
+  `↔`(species) +
+  `📊`() +
+  `🎨`(island)
+```
+
+
+```{r, eval = F}
+library(ggram)
+ggram::clearhistory()
+
+palmerpenguins::penguins |>
+`🖼`() +
+  `↔`(species) +
+  `📊`() +
+  `🎨`(species)
+
+ggram(widths = c(.7,1))
+
 
 
 ```
 
-## Experiment
-
-```{r}
-
-```
 
 
 

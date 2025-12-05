@@ -90,6 +90,7 @@ compute_panel_model <- function(data, scales, formula = y ~ .){
 
   data$y <- model$fitted.values
 
+  data$x %||%
   data |>
     mutate(x = row_number())
   
@@ -134,7 +135,7 @@ ggplot(mtcars) +
   # geom_lm_predictions
   geom_point(stat = qstat_panel(compute_panel_model), color = "blue") 
 
-layer_data(i = 2)
+layer_data(i = 2) |> head()
 
 library(statexpress)
 ggplot(mtcars) +
@@ -147,7 +148,7 @@ ggplot(mtcars) +
              color = "blue",
              formula = y ~ drat + cyl)
 
-layer_data(i = 2)
+layer_data(i = 2) |> head()
 ```
 
 
