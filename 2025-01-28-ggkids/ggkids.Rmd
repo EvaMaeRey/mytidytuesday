@@ -27,6 +27,7 @@ library(statexpress)
 library(tidyverse)
 x <- function(x){list(aes(x = {{x}}))}
 y <- function(y){list(aes(y = {{y}}))}
+encode <- aes
 weight <- function(weight){aes(weight = {{weight}})}
 area <- function(area){aes(weight = {{area}})}
 rows <- function(rows, cols, ...){facet_grid(rows = vars({{rows}}), cols = vars({{cols}}), ...)}
@@ -38,18 +39,18 @@ size <- function(size){aes(size = {{size}})}
 color <- function(color){aes(fill = {{color}})}
 set_color <- function(color){aes(fill = I(color))}
 color_line <- function(color){aes(color = {{color}})}
-layer_point <- function(...){qlayer(geom = qproto_update(GeomPoint, aes(shape = 21), 
+mark_point <- function(...){qlayer(geom = qproto_update(GeomPoint, aes(shape = 21), 
                                                          required_aes = c()),
                                     stat = qstat(function(data, scales){data$x <- data$x %||% 0 ; data$y <- data$y %||% 0; data}), ...)}
 
 theme_chart_bar <- function(){theme(panel.grid.minor = element_blank(), panel.grid.major.x = element_blank(),
                                     axis.ticks.x = element_blank())}
 
-layer_bar <- function(...){list(geom_bar(...), theme_chart_bar(), scale_y_continuous(expand = c(0, .3)))}
+mark_bar <- function(...){list(geom_bar(...), theme_chart_bar(), scale_y_continuous(expand = c(0, .3)))}
 data <- function(data){ggplot(data |> remove_missing()) + ggchalkboard:::theme_whiteboard()}
-layer_jitter <- geom_jitter
+mark_jitter <- geom_jitter
 
-layer_heat <- function(...){list(
+mark_heat <- function(...){list(
   qlayer(geom = GeomTile, 
          stat = qproto_update(StatSum, aes(fill = after_stat(n), size = NULL)), ...),
   scale_fill_gradientn(colors = c("blue", "white", "yellow", "orange", "red")),
@@ -69,7 +70,7 @@ caption <- function(caption){labs(caption = caption)}
 tag <- function(tag){labs(tag = tag)}
 
 
-layer_pie <- function(...){list(
+mark_pie <- function(...){list(
   
   geom_bar(position = "fill", ...),
   aes(y = "all"),
@@ -87,14 +88,14 @@ pets <- data.frame(pets = c("cats", "dogs", "peacocks", "fish", "bunnies"), freq
 
 
 data(pets) + 
-  color(pets) +
-  area(frequency) +
-  layer_pie() 
+  encode(color = pets,
+         area = frequency) +
+  mark_pie() 
 
 last_plot() + 
   color_line(pets) + 
   set_color("white")
-
+📊
 
 jungle <- data.frame(tree = paste("tree", 1:5), bunches = c(2, 5, 1, 2, 1))
 shuttles <- data.frame(shuttle = paste("shuttle", 1:6), gas = c(.3,.5,.3, .8,.7, .4))
@@ -124,7 +125,7 @@ crustacians <- cars |>
 
 data(crustacians) + 
   x(size) + 
-  layer_point() + 
+  mark_point() + 
   color(type)
 
 last_plot() + 
@@ -137,15 +138,15 @@ last_plot() +
 ```{r}
 data(jungle |> uncount(bunches)) + 
   x(tree) + 
-  layer_bar(aes(color = from_theme(ink)), fill = "transparent")
+  mark_bar(aes(color = from_theme(ink)), fill = "transparent")
 
 
 data(palmerpenguins::penguins) + 
   # ggchalkboard:::theme_whiteboard() +
   x(island) + 
   y(species) +
-  layer_jitter() + 
-  layer_heat(alpha = .7) # does not play nice with size yet
+  mark_jitter() + 
+  mark_heat(alpha = .7) # does not play nice with size yet
 
 last_plot() + 
   rows(sex)
@@ -153,7 +154,7 @@ last_plot() +
 data(palmerpenguins::penguins) + 
   x(island) + 
   y(species) +
-  layer_jitter() +
+  mark_jitter() +
   size(body_mass_g) + 
   guides(size = "none")
 
@@ -171,9 +172,9 @@ data(palmerpenguins::penguins) +
 data(palmerpenguins::penguins) + 
   x(body_mass_g) + 
   y(bill_length_mm) +
-  layer_point() + 
+  mark_point() + 
   color(species) + 
-  wrap(sex)
+  rows(sex)
 ```
 
 

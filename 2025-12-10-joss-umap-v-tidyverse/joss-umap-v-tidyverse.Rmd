@@ -1,0 +1,44 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+
+
+# UMAP & Tidyverse 
+
+```{r, dpi = 300, fig.height=10, fig.width=10}
+library(tidyverse)
+library(ggcirclepack)
+
+joss_as_of_2021 <- read.csv("https://raw.githubusercontent.com/front-matter/journal-notebooks/refs/heads/main/works_10.21105_2021-10-26.csv")
+  
+joss_as_of_2021 |> 
+  ggplot() + 
+  aes(id = title, 
+      area = is.referenced.by.count ,
+      label = title |> str_wrap(20),
+      fill = published.date.parts |> as_date()) + 
+  geom_circlepack() + 
+  geom_circlepack_text(color = "whitesmoke") +
+  coord_equal() + 
+  scale_size(range = c(0,4)) + 
+  labs(title = "JOSS citations as of 2021-10-26")
+```
