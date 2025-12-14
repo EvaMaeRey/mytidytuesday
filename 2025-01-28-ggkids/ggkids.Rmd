@@ -123,17 +123,31 @@ crustacians <- cars |>
     sample(types, 10, replace = T),
     rep("🦀", 20)))
 
-mark_picture <- geom_text
+mark_picture <- function(...){
+  qlayer(geom = qproto_update(GeomText, aes(), required_aes = c()),
+         stat = qstat(function(data, scales){
+           data$x <- data$x %||% 0 ; 
+           data$y <- data$y %||% 0; 
+           data}), 
+         ...)
+  }
+
+# mark_picture <- geom_text
+
 picture <- function(picture){aes(label = {{picture}})}
 
 plot(crustacians) + 
-  x(size) + 
-  y(speed) +
   picture(type) +
   mark_picture() 
 
+last_plot() +
+  x(size) 
+  
 last_plot() + 
-  y(speed) + 
+  y(speed)
+
+last_plot() +
+  y(speed) +
   geom_smooth(fill = "black")
 ```
 
