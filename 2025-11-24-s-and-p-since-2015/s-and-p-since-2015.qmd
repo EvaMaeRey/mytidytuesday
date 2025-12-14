@@ -80,8 +80,7 @@ library(RColorBrewer)
 ```
 
 
-> **Viz exploration move:** *Every dot here represents one day of the S&P 500 Index’s return.*  `aes(id = date) + 
-  geom_circlepack()`
+
 
 
 ```{r}
@@ -94,7 +93,14 @@ library(ggcirclepack)
   ) |>
   theme_set()
 sp_500_data_calcs |> head()
+```
 
+# Start narrative
+
+> **'Every dot here represents one day of the S&P 500 Index’s return.'** *Viz exploration move:* `aes(id = date) + 
+  geom_circlepack()`
+
+```{r}
 sp_500_data_calcs |>
   ggplot() + 
   aes(id = date, 
@@ -105,7 +111,7 @@ sp_500_data_calcs |>
 ```
 
 
-> **Viz exploration move:** *Here are those days, colored by the return on that day.* `aes(fill = return) `
+> **'Here are those days, colored by the return on that day.'** *Viz exploration move:*  `aes(fill = return) `
 
 ```{r}
 last_plot() + 
@@ -114,10 +120,10 @@ last_plot() +
 ```
 
 
-> **Reflection:** *Even from a glance, you can see the volatility ...*
+> **'Even from a glance, you can see the volatility ...'** *Reflection based on viz* 
 
 
-> **Viz exploration move:** *... of the pandemic era, as well as the bear market of 2022. * `facet_wrap(~ year)`
+> **'... of the pandemic era, as well as the bear market of 2022.' ** *Viz exploration move:* `facet_wrap(~ year)`
 
 
 ```{r}
@@ -125,7 +131,7 @@ last_plot() +
   facet_wrap(~ year)
 ```
 
-> **Reflection/viz move:** *Although there have been worse days,* (`facet_null()` to return to 10-year context)
+>  **'Although there have been worse days,'** *Reflection/viz move:* `facet_null()` to return to 10-year lumped together.
 
 
 ```{r}
@@ -134,10 +140,10 @@ last_plot() +
 ```
 
 
-> **Forshadowing:** *...what was remarkable about yesterday was how the good mood soured. *
+> **'...what was remarkable about yesterday was how the good mood soured. '** *Forshadowing:*
 
 
-> **Viz exploration move:** *Here are all of the days again, this time arranged by how much the S&P 500 opened up in its very first trade of the day.* `aes(x = open_pct) + geom_beeswarm()`
+> **'Here are all of the days again, this time arranged by how much the S&P 500 opened up in its very first trade of the day.'**  *Viz exploration move:* `aes(x = open_pct) + geom_beeswarm()`
 
 ```{r}
 last_plot_wipe_last() + # last plot - and remove geom_circlepack
@@ -146,7 +152,7 @@ last_plot_wipe_last() + # last plot - and remove geom_circlepack
   coord_cartesian()
 ```
 
-> **Viz exploration move:** *... but now let’s only show the days when the S&P 500 Index opened up more than 1%. * `data_filter(open_pct > 1)`
+> **'... but now let’s only show the days when the S&P 500 Index opened up more than 1%.'** *Viz exploration move:*  `data_filter(open_pct > 1)` 
 
 ```{r}
 last_plot() + 
@@ -154,9 +160,9 @@ last_plot() +
   scale_color_manual(values = c("whitesmoke", "magenta"))
 ```
 
-> **Reflection:** *Such a good mood at 9:30 a.m. ET is pretty rare — only on 61 occasions out of 2,739 days did the market open up >1%.*
+> **'Such a good mood at 9:30 a.m. ET is pretty rare — only on 61 occasions out of 2,739 days did the market open up >1%.'** *Reflection* 
 
-> *Most of the time, stocks held onto that strong start throughout the day to finish with a gain; hence why most of the dots here are blue — but there are two notable outliers.* `aes(x = return)`
+> **'Most of the time, stocks held onto that strong start throughout the day to finish with a gain; hence why most of the dots here are blue — but there are two notable outliers.'** `aes(x = return)`
 
 
 ```{r}
@@ -165,14 +171,14 @@ last_plot() +
 ```
 
 
-> **Viz exploration move/reflection:** *Both of those anomalies happened in 2025 (`facet_grid(year~.)` helps us look year-wise), and one of them was yesterday, when stocks opened up nearly 1.44%, only to slide nearly the entire session, closing down 1.56%.*
+> **'Both of those anomalies happened in 2025 (`facet_grid(year~.)` helps us look year-wise), and one of them was yesterday, when stocks opened up nearly 1.44%, only to slide nearly the entire session, closing down 1.56%.'** *Viz exploration move/reflection:*
 
 ```{r}
 last_plot() + 
   aes(y = year)
 ```
 
-> *All told, the SPX Index slid ~3% intraday.  That’s only happened a handful of times in the last decade after opening up more than 1% — one of the others being the market’s tariff-induced meltdown in April.*
+> **'All told, the SPX Index slid ~3% intraday.  That’s only happened a handful of times in the last decade after opening up more than 1% — one of the others being the market’s tariff-induced meltdown in April.'**
 
 
 ```{r}

@@ -27,6 +27,7 @@ library(statexpress)
 library(tidyverse)
 x <- function(x){list(aes(x = {{x}}))}
 y <- function(y){list(aes(y = {{y}}))}
+plot <- ggplot
 encode <- aes
 weight <- function(weight){aes(weight = {{weight}})}
 area <- function(area){aes(weight = {{area}})}
@@ -95,7 +96,7 @@ data(pets) +
 last_plot() + 
   color_line(pets) + 
   set_color("white")
-📊
+
 
 jungle <- data.frame(tree = paste("tree", 1:5), bunches = c(2, 5, 1, 2, 1))
 shuttles <- data.frame(shuttle = paste("shuttle", 1:6), gas = c(.3,.5,.3, .8,.7, .4))
@@ -113,20 +114,23 @@ data(shuttles) +
 
 
 ```{r}
-types <- c("shrimp", "crab")
+library(tidyverse)
+types <- c("🦐", "🦀")
 crustacians <- cars |> 
   rename(size = dist) |>
   mutate(type = c(
-    rep("shrimp", 20),
+    rep("🦐", 20),
     sample(types, 10, replace = T),
-    rep("crab", 20)))
+    rep("🦀", 20)))
 
+mark_picture <- geom_text
+picture <- function(picture){aes(label = {{picture}})}
 
-
-data(crustacians) + 
+plot(crustacians) + 
   x(size) + 
-  mark_point() + 
-  color(type)
+  y(speed) +
+  picture(type) +
+  mark_picture() 
 
 last_plot() + 
   y(speed) + 
