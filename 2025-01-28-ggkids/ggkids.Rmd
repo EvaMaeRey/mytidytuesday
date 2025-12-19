@@ -27,6 +27,8 @@ abcdefghijklmnopqrstuvwxyz
 
 now I know my ABC's, what's next?
 
+<details>
+
 ```{r}
 library(statexpress)
 library(tidyverse)
@@ -85,8 +87,11 @@ tag <- function(tag){labs(tag = tag)}
 
 ```
 
+</details>
 
 ## pie of pets
+
+<details>
 
 ```{r}
 chart_pie <- function(...){
@@ -114,32 +119,32 @@ theme_kids <- theme_classic(paper = "whitesmoke",
 theme_set(theme_kids)
 
 
+
+
+
 pets <- data.frame(pets = c("🐱", "🐶", "🦚", "🐠", "🐰"), 
                    number_of_pets = c(30, 25, 10, 15, 5)) |> 
   mutate(pets = fct_infreq(pets, number_of_pets) |> fct_rev())
 
-head(pets)
+```
 
+</details>
+
+```{r}
+pets
 
 plot_data(pets) +
   use_color(pets) +
   use_area(number_of_pets) +
   chart_pie()
-
-
-shuttles <- data.frame(shuttle = paste("🚀#", 1:6), gas = c(.3,.5,.3, .8,.7, .4))
-
-plot_data(shuttles) +
-  use_x(shuttle) +
-  use_y(1) +
-  geom_col(color = "black", fill = "transparent") + 
-  geom_col(aes(y = gas), fill = "transparent", color = "black") + 
-  geom_hline(yintercept = .75, linetype = "dashed")
-
 ```
 
 
+
 # A scatter of crustaceans
+
+<details>
+
 
 ```{r crustaceans}
 library(tidyverse)
@@ -151,7 +156,6 @@ crustaceans <- cars |>
     sample(types, 10, replace = T),
     rep("🦀", 20)))
 
-head(crustaceans)
 
 GeomPointFill <-qproto_update(GeomPoint, aes(shape = 21),
                               required_aes = c())
@@ -169,17 +173,32 @@ chart_point <- function(...){
   }
 
 use_picture <- function(picture){aes(shape = I({{picture}}))}
+```
+
+</details>
+
+
+```{r}
+head(crustaceans)
 
 plot_data(crustaceans) + 
-  use(y = speed, x = size,
-      picture = type, size = size) +
-  chart_point() +
+  use(y = speed, 
+      x = size,
+      picture = type, 
+      size = size) +
+  chart_point()
+```
+
+```{r}
+last_plot() +
   labs(x = "little                        big") +
-  labs(y = "slow           fast") + 
-  use_picture(type)
+  labs(y = "slow           fast")
 ```
 
 # A jungle bar chart... ?
+
+<details>
+
 
 ```{r}
 theme_chart_bar <- function(){
@@ -238,15 +257,6 @@ jungle |>
   compute_item_stack()
 
 
-jungle |> 
-  head()
-
-plot_data(jungle) + 
-  use(x = tree,
-      y = num_bunches, 
-      picture = banana) +
-  chart_item_stack()
-
 # last_plot() + 
 #   annotate(geom = GeomText,
 #            x = I(.75), y = I(.72),
@@ -254,6 +264,21 @@ plot_data(jungle) +
 #            angle = -10,
 #            size = 22,
 #             )  
+```
+
+</details>
+
+
+```{r}
+jungle
+
+plot_data(jungle) + 
+  use(x = tree,
+      y = num_bunches, 
+      picture = banana) + # you could also use "🍌"
+  chart_item_stack()
+
+
 ```
 
 ```{r}
@@ -268,7 +293,24 @@ plot_data(jungle) +
 
 
 
+```
+
+# Shuttles (future work)
+
+```{r}
+
+shuttles <- data.frame(shuttle = paste("🚀#", 1:6), gas = c(.3,.5,.3, .8,.7, .4))
+
+plot_data(shuttles) +
+  use_x(shuttle) +
+  use_y(1) +
+  geom_col(color = "black", fill = "transparent") + 
+  geom_col(aes(y = gas), fill = "transparent", color = "black") + 
+  geom_hline(yintercept = .75, linetype = "dashed")
+
+
 knitr::knit_exit()
+
 ```
 
 
