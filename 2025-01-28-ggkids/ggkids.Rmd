@@ -133,7 +133,7 @@ pets <- data.frame(pets = c("🐱", "🐶", "🦚", "🐠", "🐰"),
 ```{r}
 pets
 
-plot_data(pets) +
+ggplot(pets) +
   use_color(pets) +
   use_area(number_of_pets) +
   chart_pie()
@@ -181,7 +181,7 @@ use_picture <- function(picture){aes(shape = I({{picture}}))}
 ```{r}
 head(crustaceans)
 
-plot_data(crustaceans) + 
+ggplot(crustaceans) + 
   use(y = speed, 
       x = size,
       picture = type, 
@@ -272,7 +272,7 @@ jungle |>
 ```{r}
 jungle
 
-plot_data(jungle) + 
+ggplot(jungle) + 
   use(x = tree,
       y = num_bunches, 
       picture = banana) + # you could also use "🍌"
@@ -286,7 +286,7 @@ plot_data(jungle) +
 
 head(jungle)
 
-plot_data(jungle) + 
+ggplot(jungle) + 
   encode(x = tree,
          y = num_bunches) + 
   chart_bar()
@@ -301,7 +301,7 @@ plot_data(jungle) +
 
 shuttles <- data.frame(shuttle = paste("🚀#", 1:6), gas = c(.3,.5,.3, .8,.7, .4))
 
-plot_data(shuttles) +
+ggplot(shuttles) +
   use_x(shuttle) +
   use_y(1) +
   geom_col(color = "black", fill = "transparent") + 
