@@ -138,7 +138,9 @@ ggplot(mtcars) +
 layer_data(i = 2) |> head()
 
 library(statexpress)
-ggplot(mtcars) +
+mtcars |> 
+  
+ggplot() +
   aes(y = mpg, color = factor(cyl)) +
   # geom_outcome
   geom_point(stat = qstat_panel(compute_panel_outcome)) + 

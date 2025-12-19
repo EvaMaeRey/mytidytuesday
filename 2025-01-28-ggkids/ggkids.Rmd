@@ -10,59 +10,70 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 options(tidyverse.quiet = TRUE)
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%",
+  dev = "ragg_png", # <- This piece specifically
+  dpi = 400,
+  fig.width = 12, fig.height = 6
+)
 ```
 
+ABCDEFGHIJKLMNOPQRSTVWXYZ
+abcdefghijklmnopqrstuvwxyz
 
-
-
-## Intro Thoughts
-
-
-
-
-## Status Quo
+now I know my ABC's, what's next?
 
 ```{r}
 library(statexpress)
 library(tidyverse)
-x <- function(x){list(aes(x = {{x}}))}
-y <- function(y){list(aes(y = {{y}}))}
-plot <- ggplot
-encode <- aes
-weight <- function(weight){aes(weight = {{weight}})}
-area <- function(area){aes(weight = {{area}})}
-rows <- function(rows, cols, ...){facet_grid(rows = vars({{rows}}), cols = vars({{cols}}), ...)}
 
-columns <- function(cols, rows, ...){facet_grid(rows = vars({{rows}}), cols = vars({{cols}}), ...)}
-rows_columns <- function(rows, cols, ...){facet_grid(rows = vars({{rows}}), cols = vars({{cols}}), ...)}
-wrap <- function(wrap, ...){facet_wrap(facets = vars({{wrap}}), ...)}
-size <- function(size){aes(size = {{size}})}
-color <- function(color){aes(fill = {{color}})}
+update_geom_defaults(GeomPoint, aes(size = from_theme(pointsize * 3)))
+
+encode <- function(color, ...){
+  aes(color = {{color}}, fill = {{color}}, ...) 
+}
+
+use <- encode
+
+
+use_x <- function(x){list(aes(x = {{x}}))}
+use_y <- function(y){list(aes(y = {{y}}))}
+
+
+
+
+plot_data <- ggplot
+use_weight <- function(weight){aes(weight = {{weight}})}
+use_area <- function(area){aes(weight = {{area}})}
+use_rows <- function(rows, cols, ...){facet_grid(rows = vars({{rows}}), cols = vars({{cols}}), ...)}
+
+use_columns <- function(cols, rows, ...){facet_grid(rows = vars({{rows}}), cols = vars({{cols}}), ...)}
+use_rows_columns <- function(rows, cols, ...){facet_grid(rows = vars({{rows}}), cols = vars({{cols}}), ...)}
+use_wrap <- function(wrap, ...){facet_wrap(facets = vars({{wrap}}), ...)}
+use_size <- function(size){aes(size = {{size}})}
+use_shape <- function(shape){aes(shape = {{shape}})}
+use_color <- function(color){aes(fill = {{color}})}
 set_color <- function(color){aes(fill = I(color))}
-color_line <- function(color){aes(color = {{color}})}
-mark_point <- function(...){qlayer(geom = qproto_update(GeomPoint, aes(shape = 21), 
+use_color_line <- function(color){aes(color = {{color}})}
+use_chart_point <- function(...){qlayer(geom = qproto_update(GeomPoint, aes(shape = 21), 
                                                          required_aes = c()),
                                     stat = qstat(function(data, scales){data$x <- data$x %||% 0 ; data$y <- data$y %||% 0; data}), ...)}
 
-theme_chart_bar <- function(){theme(panel.grid.minor = element_blank(), panel.grid.major.x = element_blank(),
-                                    axis.ticks.x = element_blank())}
 
-mark_bar <- function(...){list(geom_bar(...), theme_chart_bar(), scale_y_continuous(expand = c(0, .3)))}
-data <- function(data){ggplot(data |> remove_missing()) + ggchalkboard:::theme_whiteboard()}
-mark_jitter <- geom_jitter
+data <- function(data){ggplot(data |> remove_missing()) + theme_classic(ink = "darkgrey", paper = "whitesmoke", base_size = 18)}
+chart_jitter <- geom_jitter
 
-mark_heat <- function(...){list(
+chart_heat <- function(...){list(
   qlayer(geom = GeomTile, 
          stat = qproto_update(StatSum, aes(fill = after_stat(n), size = NULL)), ...),
   scale_fill_gradientn(colors = c("blue", "white", "yellow", "orange", "red")),
   theme(panel.grid.minor = element_line(color = "darkgrey")))
 }
 
-viz <- function(color, ...){
-  aes(color = {{color}}, fill = {{color}}, ...) 
-}
-
-map <- viz
 
 
 title <- function(title){labs(title = title)}
@@ -71,39 +82,56 @@ caption <- function(caption){labs(caption = caption)}
 tag <- function(tag){labs(tag = tag)}
 
 
-mark_pie <- function(...){list(
+
+```
+
+
+## pie of pets
+
+```{r}
+chart_pie <- function(...){
+  
+  list(
   
   geom_bar(position = "fill", ...),
-  aes(y = "all"),
+  aes(y = "all", color = from_theme(paper)),
   coord_polar(),
   theme(axis.text = element_blank(),
         axis.ticks = element_blank(),
         axis.line = element_blank(),
-        axis.title = element_blank())
+        axis.title = element_blank()),
+  labs(fill = NULL)
   
-)
+  )
   
 }
 
-pets <- data.frame(pets = c("cats", "dogs", "peacocks", "fish", "bunnies"), frequency = c(30, 25, 10, 15, 5))
+theme_kids <- theme_classic(paper = "whitesmoke", 
+              ink = "darkgrey", 
+              base_size = 30) 
 
 
-data(pets) + 
-  encode(color = pets,
-         area = frequency) +
-  mark_pie() 
-
-last_plot() + 
-  color_line(pets) + 
-  set_color("white")
+theme_set(theme_kids)
 
 
-jungle <- data.frame(tree = paste("tree", 1:5), bunches = c(2, 5, 1, 2, 1))
-shuttles <- data.frame(shuttle = paste("shuttle", 1:6), gas = c(.3,.5,.3, .8,.7, .4))
+pets <- data.frame(pets = c("🐱", "🐶", "🦚", "🐠", "🐰"), 
+                   number_of_pets = c(30, 25, 10, 15, 5)) |> 
+  mutate(pets = fct_infreq(pets, number_of_pets) |> fct_rev())
 
-data(shuttles) +
-  x(shuttle) +
-  y(1) +
+head(pets)
+
+
+plot_data(pets) +
+  use_color(pets) +
+  use_area(number_of_pets) +
+  chart_pie()
+
+
+shuttles <- data.frame(shuttle = paste("🚀#", 1:6), gas = c(.3,.5,.3, .8,.7, .4))
+
+plot_data(shuttles) +
+  use_x(shuttle) +
+  use_y(1) +
   geom_col(color = "black", fill = "transparent") + 
   geom_col(aes(y = gas), fill = "transparent", color = "black") + 
   geom_hline(yintercept = .75, linetype = "dashed")
@@ -111,68 +139,157 @@ data(shuttles) +
 ```
 
 
+# A scatter of crustaceans
 
-
-```{r}
+```{r crustaceans}
 library(tidyverse)
 types <- c("🦐", "🦀")
-crustacians <- cars |> 
+crustaceans <- cars |> 
   rename(size = dist) |>
   mutate(type = c(
     rep("🦐", 20),
     sample(types, 10, replace = T),
     rep("🦀", 20)))
 
-mark_picture <- function(...){
-  qlayer(geom = qproto_update(GeomText, aes(), required_aes = c()),
+head(crustaceans)
+
+GeomPointFill <-qproto_update(GeomPoint, aes(shape = 21),
+                              required_aes = c())
+
+
+library(statexpress)
+chart_point <- function(...){
+  qlayer(geom = GeomPointFill,
          stat = qstat(function(data, scales){
+           data$shape <- data$shape %||% data$picture
            data$x <- data$x %||% 0 ; 
            data$y <- data$y %||% 0; 
            data}), 
          ...)
   }
 
-# mark_picture <- geom_text
+use_picture <- function(picture){aes(shape = I({{picture}}))}
 
-picture <- function(picture){aes(label = {{picture}})}
+plot_data(crustaceans) + 
+  use(y = speed, x = size,
+      picture = type, size = size) +
+  chart_point() +
+  labs(x = "little                        big") +
+  labs(y = "slow           fast") + 
+  use_picture(type)
+```
 
-plot(crustacians) + 
-  picture(type) +
-  mark_picture() 
+# A jungle bar chart... ?
 
-last_plot() +
-  x(size) 
+```{r}
+theme_chart_bar <- function(){
+  theme(panel.grid.minor = element_blank(), 
+        panel.grid.major.x = element_blank(),
+        axis.ticks.x = element_blank())
+  }
+
+chart_bar <- function(...){
+  list(geom_col(...), 
+       theme_chart_bar(),
+       scale_y_continuous(expand = expansion(c(0, .3))),
+       labs(x = NULL))
+}
+
+compute_item_stack <- function(data, scales, width = 0.2){
+               
+    data$shape <- data$shape %||% data$picture
+
+    data |> 
+      uncount(y) |>
+      dplyr::mutate(row = row_number()) |> 
+      dplyr::mutate(y = row - 
+        0.5) |>
+      dplyr::mutate(width = width)
+    
+  }
+
+chart_item_stack <- function(...){
   
-last_plot() + 
-  y(speed)
+  list(
+  qlayer(
+    geom = GeomPointFill, 
+    stat = qstat(compute_item_stack)
+  ),
+  qlayer(
+    geom = GeomTile, 
+    stat = qstat(compute_item_stack), 
+    alpha = 0
+  ),
+  scale_y_continuous(expand = expansion(c(0, .3))),
+  labs(x = NULL)
+  )
 
-last_plot() +
-  y(speed) +
-  geom_smooth(fill = "black")
+  
+}
+
+ggprop.test:::compute_group_bricks
+
+jungle <- data.frame(tree = paste0("🌴#", 1:5), 
+                     num_bunches = c(2, 5, 1, 2, 1), 
+                     banana = "🍌")
+
+jungle |> 
+  select(x = tree, y = num_bunches, picture = banana) |>
+  compute_item_stack()
+
+
+jungle |> 
+  head()
+
+plot_data(jungle) + 
+  use(x = tree,
+      y = num_bunches, 
+      picture = banana) +
+  chart_item_stack()
+
+# last_plot() + 
+#   annotate(geom = GeomText,
+#            x = I(.75), y = I(.72),
+#            label = "🎈🎀🙏",
+#            angle = -10,
+#            size = 22,
+#             )  
+```
+
+```{r}
+
+
+head(jungle)
+
+plot_data(jungle) + 
+  encode(x = tree,
+         y = num_bunches) + 
+  chart_bar()
+
+
+
+knitr::knit_exit()
 ```
 
 
 
+
+
 ```{r}
-data(jungle |> uncount(bunches)) + 
-  x(tree) + 
-  mark_bar(aes(color = from_theme(ink)), fill = "transparent")
-
-
 data(palmerpenguins::penguins) + 
   # ggchalkboard:::theme_whiteboard() +
-  x(island) + 
-  y(species) +
-  mark_jitter() + 
-  mark_heat(alpha = .7) # does not play nice with size yet
+  use_x(island) + 
+  use_y(species) +
+  chart_jitter() + 
+  chart_heat(alpha = .7) # does not play nice with size yet
 
 last_plot() + 
-  rows(sex)
+  use_rows(sex)
 
 data(palmerpenguins::penguins) + 
-  x(island) + 
-  y(species) +
-  mark_jitter() +
+  use_x(island) + 
+  use_y(species) +
+  chart_jitter() +
   size(body_mass_g) + 
   guides(size = "none")
 
@@ -190,7 +307,7 @@ data(palmerpenguins::penguins) +
 data(palmerpenguins::penguins) + 
   x(body_mass_g) + 
   y(bill_length_mm) +
-  mark_point() + 
+  chart_point() + 
   color(species) + 
   rows(sex)
 ```
@@ -203,12 +320,12 @@ data(palmerpenguins::penguins) +
 `↕` <- y
 `🎨` <- color
 `🖼` <- data
-`📊` <- ggpro::geom_vbar
+# `📊` <- ggpro::geom_vbar
 
 palmerpenguins::penguins |>
 `🖼`() +
   `↔`(species) +
-  `📊`() +
+  # `📊`() +
   `🎨`(island)
 ```
 
