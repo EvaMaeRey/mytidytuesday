@@ -18,7 +18,10 @@ knitr::opts_chunk$set(
   out.width = "100%",
   dev = "ragg_png", # <- This piece specifically
   dpi = 400,
-  fig.width = 12, fig.height = 6
+  fig.width = 12, 
+  fig.height = 6,
+  warning = F,
+  message = F
 )
 ```
 
@@ -98,8 +101,17 @@ chart_pie <- function(...){
   
   list(
   
-  geom_bar(position = "fill", ...),
-  aes(y = "all", color = from_theme(paper)),
+  geom_bar(position = "fill", width = 1, show.legend = F, ...),
+  aes(y = .5, color = from_theme(paper)),
+  stat_count(geom = GeomLabel, color = "transparent",
+             position = position_fill(vjust = .5),
+             aes(label = after_stat(fill), 
+                 y = .9, 
+                 # group = after_stat(fill)
+                 ), alpha = 0,
+             show.legend = F,
+             size = 30
+             ),
   coord_polar(),
   theme(axis.text = element_blank(),
         axis.ticks = element_blank(),
@@ -107,22 +119,22 @@ chart_pie <- function(...){
         axis.title = element_blank()),
   labs(fill = NULL)
   
+  
   )
   
 }
 
 theme_kids <- theme_classic(paper = "whitesmoke", 
               ink = "darkgrey", 
-              base_size = 30) 
-
+              base_size = 30,
+              base_family = "Comic Sans MS") 
 
 theme_set(theme_kids)
 
 
 
 
-
-pets <- data.frame(pets = c("🐱", "🐶", "🦚", "🐠", "🐰"), 
+pets_data <- data.frame(pets = c("🐱", "🐶", "🦚", "🐠", "🐰"), 
                    number_of_pets = c(30, 25, 10, 15, 5)) |> 
   mutate(pets = fct_infreq(pets, number_of_pets) |> fct_rev())
 
@@ -131,9 +143,9 @@ pets <- data.frame(pets = c("🐱", "🐶", "🦚", "🐠", "🐰"),
 </details>
 
 ```{r}
-pets
+pets_data
 
-ggplot(pets) +
+ggplot(pets_data) +
   use_color(pets) +
   use_area(number_of_pets) +
   chart_pie()
@@ -149,7 +161,7 @@ ggplot(pets) +
 ```{r crustaceans}
 library(tidyverse)
 types <- c("🦐", "🦀")
-crustaceans <- cars |> 
+ocean_data <- cars |> 
   rename(size = dist) |>
   mutate(type = c(
     rep("🦐", 20),
@@ -163,14 +175,27 @@ GeomPointFill <-qproto_update(GeomPoint, aes(shape = 21),
 
 library(statexpress)
 chart_point <- function(...){
+  list(
   qlayer(geom = GeomPointFill,
          stat = qstat(function(data, scales){
            data$shape <- data$shape %||% data$picture
            data$x <- data$x %||% 0 ; 
            data$y <- data$y %||% 0; 
            data}), 
-         ...)
+         ..., show.legend = F),
+  scale_size(range = c(2,10))
+  
+  )
   }
+
+
+# should replace with lm xy
+chart_fit_line <- function(...){
+  
+  geom_smooth(method = lm, ..., show.legend = F,
+              aes(shape = NULL, picture = NULL))
+  
+}
 
 use_picture <- function(picture){aes(shape = I({{picture}}))}
 ```
@@ -179,20 +204,22 @@ use_picture <- function(picture){aes(shape = I({{picture}}))}
 
 
 ```{r}
-head(crustaceans)
+head(ocean_data)
 
-ggplot(crustaceans) + 
+ggplot(ocean_data) + 
   use(y = speed, 
       x = size,
       picture = type, 
       size = size) +
-  chart_point()
+  chart_point() + 
+  chart_fit_line()
 ```
 
 ```{r}
 last_plot() +
   labs(x = "little                        big") +
-  labs(y = "slow           fast")
+  labs(y = "slow           fast") +
+  theme(panel.background = element_rect(fill = "skyblue"))
 ```
 
 # A jungle bar chart... ?
@@ -248,13 +275,19 @@ chart_item_stack <- function(...){
 
 ggprop.test:::compute_group_bricks
 
-jungle <- data.frame(tree = paste0("🌴#", 1:5), 
+jungle_data <- data.frame(tree = paste0("🌴#", 1:5), 
                      num_bunches = c(2, 5, 1, 2, 1), 
                      banana = "🍌")
 
-jungle |> 
+jungle_data |> 
   select(x = tree, y = num_bunches, picture = banana) |>
   compute_item_stack()
+
+stamp_picture <- function(picture = "🙂", x = I(.5), y = I(.5), ...){
+  
+  annotate(geom = GeomText, label = picture, x = x, y = y, ...)
+  
+}
 
 
 # last_plot() + 
@@ -270,26 +303,33 @@ jungle |>
 
 
 ```{r}
-jungle
+jungle_data
 
-ggplot(jungle) + 
+ggplot(jungle_data) + 
   use(x = tree,
       y = num_bunches, 
       picture = banana) + # you could also use "🍌"
   chart_item_stack()
 
 
+last_plot() + 
+  stamp_picture("🐒",
+                size = 40,
+                x = I(.95),
+                y = I(.15)) + 
+  coord_cartesian(clip = "off")
+
 ```
 
 ```{r}
 
 
-head(jungle)
+head(jungle_data)
 
-ggplot(jungle) + 
+ggplot(jungle_data) + 
   encode(x = tree,
          y = num_bunches) + 
-  chart_bar()
+  chart_bar(fill = "gold")
 
 
 
@@ -297,16 +337,47 @@ ggplot(jungle) +
 
 # Shuttles (future work)
 
+<details>
+
 ```{r}
 
-shuttles <- data.frame(shuttle = paste("🚀#", 1:6), gas = c(.3,.5,.3, .8,.7, .4))
+outer_space_data <- data.frame(shuttle = paste0("🚀 #", 1:6), fuel = c(.3,.5,.3, .8,.7, .4))
 
-ggplot(shuttles) +
-  use_x(shuttle) +
-  use_y(1) +
-  geom_col(color = "black", fill = "transparent") + 
-  geom_col(aes(y = gas), fill = "transparent", color = "black") + 
-  geom_hline(yintercept = .75, linetype = "dashed")
+chart_part_of_full <- function(...){
+  
+  list(
+       geom_col(color = "black", fill = "transparent", aes(y = 1)),
+       geom_col(color = "black", ... )
+       )
+  
+}
+
+stamp_hline <- function(y = .5, linetype = "dashed", ...){
+  
+  geom_hline(yintercept = y, linetype = linetype, ...)
+  
+}
+```
+
+</details>
+
+```{r}
+outer_space_data
+
+ggplot(outer_space_data) +
+  use(x = shuttle,
+      y = fuel) +
+  chart_part_of_full(fill = "lightgreen") +
+  stamp_hline(.75)
+
+
+last_plot() + 
+  stamp_picture("👽",
+                angle = 25,
+                size = 40,
+                x = I(.95),
+                y = I(.15)) + 
+  coord_cartesian(clip = "off")
 
 
 knitr::knit_exit()

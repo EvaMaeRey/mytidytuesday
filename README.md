@@ -4,6 +4,7 @@
 # The repo is just a bunch of experiments…
 
 <!-- badges: start -->
+
 <!-- badges: end -->
 
 The goal of mytidytuesday is to hold small projects. They are like blogs
@@ -828,7 +829,7 @@ new_experiment_rmd <- function(name){
 
 
   
-new_experiment_rmd(name = "joss-umap-v-tidyverse")
+new_experiment_rmd(name = "externally-conditionally-default-aes-w-add")
 
 
 # Aesthetic mapping: 
