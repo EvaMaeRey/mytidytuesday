@@ -1,0 +1,159 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+```
+
+
+
+
+## Experiment
+
+```{r, fig.width=10, fig.height=10 }
+library(tidyverse)
+
+talks <- read_csv("../../../ggplot-extension-club/meetings.csv") %>% 
+  filter(!(date |> str_detect("Tentative|TBD|maybe"))) %>% 
+  mutate(data = as_date(date)) |> 
+  filter(year(date == 2025))
+```
+
+
+
+```{r , fig.width=10, fig.height=10}
+pos_branching_x <- function(x0 = 0, n = 6, width = 2*sqrt(.75)){
+
+x_pos <- c()
+
+for (i in 1:n){
+
+
+x_pos <- c(x_pos,  1:i*width - i*width/2 - .5 * width)
+
+}
+
+x_pos[1:n]  + x0
+
+}
+
+pos_branching_y <- function(y0 = 0, n = 12, height = 2*sqrt(.75)){
+
+-(rep(1:n, 1:n)[1:n] - 1 ) * height + y0
+
+}
+
+
+
+pos_branching <- function(x0 = 0, y0 = 0, n = 5, ncol = 3, width = 2*sqrt(.75),
+                      height = width * .75/sqrt(.75)){
+
+  data.frame(x0 = pos_branching_x(x0 = x0, n = n, width = width),
+             y0 = pos_branching_y(y0 = y0, n = n, height = height))
+
+}
+
+x0y0tree <- pos_branching(n = 21, y0 = 5, height = 2, ncol = 6)
+
+talks <- read_csv("https://raw.githubusercontent.com/teunbrand/ggplot-extension-club/refs/heads/main/meetings.csv")[2:22, ]
+
+
+ggcanvas <- function(x = 0, y = 0){
+
+  ggplot2::ggplot(mapping = aes(x = x, y = y)) +
+    ggplot2::coord_equal(clip = "off")
+
+}
+
+
+stamp_polygon <- function(x0 = 0,
+                          y0 = 0,
+                          n_vertices = 6,
+                          radius = 1,
+                          size = 1.5,
+                          alpha = 1,
+                          rotation = -.5,
+                          linetype = "solid",
+                          fill = "grey35",
+                          color = "black",
+                          x0y0 = NULL){
+
+  if(!is.null(x0y0)){
+    x0 = x0y0[,1]
+    y0 = x0y0[,2]
+  }
+
+  groups <- max(c(length(x0), length(y0)))
+
+  tibble::tibble(x0, y0, group = 1:groups) %>%
+    tidyr::crossing(the_n = 1:n_vertices) %>%
+  dplyr::mutate(
+    x = x0 + radius * cos(-2*pi*0:(n_vertices-1)/n_vertices - rotation * pi),
+    y = y0 + radius * sin(-2*pi*0:(n_vertices-1)/n_vertices - rotation * pi)
+  ) ->
+  df
+
+
+  annotate(geom = "polygon",
+           x = df$x,
+           y = df$y,
+           size = size,
+           fill = fill,
+           alpha = alpha,
+           linetype = linetype,
+           color = color,
+           group = df$group
+           )
+
+}
+
+
+ggcanvas() +
+   stamp_polygon(x0y0 = x0y0tree,
+               alpha = .5, 
+               fill = "darkolivegreen",
+               color = "lavender") |>  
+    ggfx::with_outer_glow()  +
+  annotate("text", label = talks$package, 
+            xy = x0y0tree, 
+            size = case_when(nchar(talks$package)<=9 ~ 6,
+                             nchar(talks$package)<=12 ~ 5,
+                             TRUE ~ 3.5),
+            color = "lavender",
+            vjust = 0) |>
+      ggfx::with_outer_glow() + 
+   annotate("text", label = talks$date, 
+            xy = x0y0tree, 
+            size = 4,
+            color = "lavender", alpha = .3,
+            vjust = 2) |>
+      ggfx::with_outer_glow() + NULL +
+  annotate("text", label = "Thank you \n and happy holidays!", size = 18, x = I(.5), y = -8.5,
+             color = "violetred4",
+             vjust = 0) |>
+      ggfx::with_outer_glow() +
+  theme_void_fill("whitesmoke", color = alpha("violetred4", .7)) 
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
