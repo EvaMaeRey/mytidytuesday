@@ -1,0 +1,184 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = T)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+library(gapminder)
+library(ggbraid)
+```
+
+## Braid new
+
+```{r}
+gapminder |> 
+  filter(country %in% c("Belgium", "Denmark")) |> 
+  ggplot() + 
+  aes(x = year, y = lifeExp, color = country) + 
+  geom_line()
+
+gapminder |> 
+  filter(country %in% c("Belgium", "Denmark")) ->
+df_long
+
+df_wide <- pivot_wider(df_long |> select(country, year, lifeExp), names_from = country, values_from = lifeExp)
+
+gapminder |> 
+  filter(country %in% c("Belgium", "Denmark")) |> 
+  ggplot() + 
+  aes(x = year) +
+  geom_line(aes(y = lifeExp, color = country)) +
+  geom_braid(data = df_wide, alpha = 0.6, 
+             aes(ymin = Belgium, ymax = Denmark, 
+                 fill = Belgium < Denmark)) 
+```
+
+# StatBraidNew
+
+## interpolate
+
+```{r}
+interpolate <- function(data, n = 80){
+  
+  interps <- data_frame(between = 0:n)
+  
+  data |>
+    mutate(diff_y = lead(y) - y,
+           diff_x = lead(x) - x) |>
+    remove_missing() |>
+    crossing(interps) |>
+    mutate(interp_y = y + between/n * diff_y,
+           interp_x = x + between/n * diff_x) 
+  
+}
+
+
+cars |> 
+  head(2) ->
+cars2
+
+cars2 |>
+  select(x = speed, y = dist) |>
+  interpolate(2)
+```
+
+## compute_panel_braid
+
+```{r}
+compute_panel_braid <- function(data, scales, n = 80){
+  
+  strands <- data |> 
+    # arrange(x) 
+    mutate(minmax = strand |> as.character() |> as.factor() |> as.numeric()) |>
+    pivot_wider(names_from = minmax, values_from = y, names_prefix = "strand_", id_cols = c(PANEL, group, x)) |>
+    mutate(ymin = strand_1,
+           ymax = strand_2)
+  
+  strands |> 
+    select(y = ymin, x, PANEL, group) |>
+    interpolate(n = n) |>
+    select(x = interp_x, ymin = interp_y, PANEL, group) ->
+  strands_min
+
+  strands |>
+    select(y = ymax, x) |>
+    interpolate(n = n) |>
+    mutate(ymax = interp_y) |>
+    select(ymax) ->
+  strands_max
+
+  bind_cols(strands_min, 
+            strands_max) |> 
+    mutate(xend = x,
+           yend = ymax,
+           y = ymin)
+  
+}
+
+gapminder |> 
+  filter(country %in% c("Belgium", "Denmark")) |> 
+  select(x = year, y = lifeExp, strand = country) |>
+  mutate(PANEL = 1, group = 1) |>
+  compute_panel_braid(n = 3) 
+
+gapminder |> 
+  filter(country %in% c("Belgium", "Denmark")) |> 
+  select(x = year, y = lifeExp, strand = country) |>
+  mutate(PANEL = 1, group = 1) |>
+  compute_panel_braid(n = 10) |>
+  ggplot() +
+  aes(x = x, ymin = ymin, 
+      ymax = ymax, 
+      color = ymin > ymax, 
+      fill = ymin > ymax, y = y, yend = yend, 
+      xend = xend) + 
+  geom_ribbon(alpha = .2) + 
+  geom_segment()
+
+last_plot() +
+  geom_point(data = df_long, aes(x = year, y = lifeExp), inherit.aes = F)
+```
+
+# StatBraid2
+
+```{r}
+StatBraid2 <- ggproto("StatBraid2", Stat,
+                      compute_panel = compute_panel_braid,
+                      default_aes = aes(fill = 
+                                          after_stat(ymin < ymax),
+                                        )
+)
+
+gapminder |> 
+  filter(country %in% c("Belgium", "Denmark")) |> 
+  ggplot() + 
+  aes(x = year, y = lifeExp, 
+      color = country, 
+      strand = country) +
+  geom_line() + 
+  geom_ribbon(stat = StatBraid2, alpha = .2, n = 5) + 
+  geom_segment()
+
+layer_data(i = 2) |> head()
+
+last_plot() + 
+  ggplyr::data_filter(year > 1970) + 
+  ggplyr::data_filter(year < 1993)
+
+layer_data(i = 2) 
+
+GeomRibbon$setup_data
+GeomRibbon$setup_param
+
+
+data.frame(x = 0:1 |> rep(2),
+           type = c("A", "A", "B", "B"),
+           y = c(0:1, 1:0)) |>
+  ggplot() + 
+  aes(x = x, y = y, color = type, strand = type) + 
+  geom_line() + 
+  geom_ribbon(stat = StatBraid2, alpha = .5, n = 80)
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

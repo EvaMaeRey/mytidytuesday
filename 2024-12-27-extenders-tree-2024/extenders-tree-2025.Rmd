@@ -7,9 +7,20 @@ output:
     toc: TRUE
 ---
 
-```{r setup, include=FALSE}
+```{r, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 options(tidyverse.quiet = TRUE)
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%",
+  dev = "ragg_png", # <- This piece specifically
+  dpi = 400,
+  fig.width = 12, fig.height = 6,
+  cache = T
+)
 ```
 
 
@@ -20,7 +31,7 @@ options(tidyverse.quiet = TRUE)
 
 ## Status Quo
 
-```{r}
+```{r setup}
 library(tidyverse)
 ```
 
@@ -29,14 +40,6 @@ library(tidyverse)
 
 ## Experiment
 
-```{r, fig.width=10, fig.height=10 }
-library(tidyverse)
-
-talks <- read_csv("../../../ggplot-extension-club/meetings.csv") %>% 
-  filter(!(date |> str_detect("Tentative|TBD|maybe"))) %>% 
-  mutate(data = as_date(date)) |> 
-  filter(year(date == 2025))
-```
 
 
 
@@ -74,7 +77,7 @@ pos_branching <- function(x0 = 0, y0 = 0, n = 5, ncol = 3, width = 2*sqrt(.75),
 
 x0y0tree <- pos_branching(n = 21, y0 = 5, height = 2, ncol = 6)
 
-talks <- read_csv("https://raw.githubusercontent.com/teunbrand/ggplot-extension-club/refs/heads/main/meetings.csv")[2:22, ]
+# talks <- read_csv("https://raw.githubusercontent.com/teunbrand/ggplot-extension-club/refs/heads/main/meetings.csv")[2:22, ]
 
 
 ggcanvas <- function(x = 0, y = 0){
@@ -126,32 +129,202 @@ stamp_polygon <- function(x0 = 0,
 
 }
 
+event <- c("Teun van den Brand - {legendry} - January",
+"Mitch O'Hara-Wild - {ggtime} - February & August",
+"Winston Chang - Cookbook, ggproto - March",
+"Jan Broder Engler - {tidyplots} - April",
+"Spring ASA-COWY - {ggprop.test} - November",
+"Hassan Kibirige - {plotnine} - May",
+"June Choe - shiny internals explorer - May",
+"Thomas Lin Pedersen - {marquee} - June",
+"Matthew Kay - {ggdist} - June & August",
+"Gina Reynolds - updating 'Recipes' for v4.0 - July",
+"ASA-JSM - Who are the ggplot2 extenders - JSM August",
+"Cory Brunson - {ggalluvial} - August",
+"June Choe - {ggtrace} - August",
+"Joyce Robbins - Extension history and typology - September",
+"Posit PBC/Conf - Who are the extenders - Sept",
+"Teun van den Brand - 4.0.0 release party - Oct",
+"David Gohels - {ggiraph} - Oct",
+"Kyle Walker* - AIxR - October",
+"Barret Schloerke - {GGally} - November",
+"Fall ASA-COWY - {ggdims} - November",
+"Frank Hull - {ggpal2} - December")
 
-ggcanvas() +
+df_events <- data_frame(event) |>
+  separate(event, into = c("name", "topic", "month"), sep = " - ")
+```
+
+
+```{r}
+library(ggcirclepack)
+ggplot(df_events) + 
+  aes(id = event |> str_wrap(15)) + 
+  geom_circlepack() + 
+  geom_circlepack_text() 
+
+#' Stamp some text
+#'
+#' This function adds a text annotation layer
+#'
+#' @inheritParams stamp_label
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' # stamping text on a plot
+#' library(ggplot2)
+#' ggcanvas() +
+#'  stamp_text_parse()
+#'
+stamp_text <- function(x = 0,
+                       y = 0,
+                       label = 'bold(italic(p)*"-value"<"0.01")',
+
+                       text_wrap = FALSE,
+                       char_width = 40,
+
+                       alpha = 1,
+                       angle = 0,
+                       color = "black",
+                       family = "Times",
+                       fontface = "bold",
+                       hjust = .5,
+                       lineheight = .85,
+                       size = 8,
+                       vjust = .5,
+
+                       xy = NULL,
+
+                       parse = FALSE,
+                       nudge_x = 0,
+                       nudge_y = 0){
+
+  if(!is.null(xy)){
+    x = xy[,1]
+    y = xy[,2]
+  }
+
+  if(text_wrap){
+
+label <- stringr::str_wrap(label, width = char_width)
+
+}
+
+
+annotate(geom = "text",
+         x = x + nudge_x,
+         y = y + nudge_y,
+         label = label,
+
+         alpha = alpha,
+         angle = angle,
+         lineheight = lineheight,
+         size = size,
+         color = color,
+         family = family,
+         fontface = fontface,
+         vjust = vjust,
+         hjust = hjust,
+         parse = parse)
+
+}
+
+
+
+
+
+
+
+
+```
+
+
+```{r, fig.height = 6, fig.width= 4.5}
+star_out_y <- sin(2*pi * 1:5/5 + pi/2) * rep(c(1, .45), 5)
+star_out_x <- cos(2*pi * 1:5/5 + pi/2) * rep(c(1, .45), 5)
+
+star_out_x |> data.frame(star_out_y)
+ggcanvas() + 
+  annotate(geom = "polygon", 
+           x = star_out_x, 
+           y = star_out_y)
+
+
+```
+
+
+```{r , fig.height = 6.5, fig.width= 5}
+
+ggcanvas() + 
    stamp_polygon(x0y0 = x0y0tree,
                alpha = .5, 
-               fill = "darkolivegreen",
-               color = "lavender") |>  
-    ggfx::with_outer_glow()  +
-  annotate("text", label = talks$package, 
+               fill = "darkolivegreen" |> alpha(.4),
+               color = "goldenrod3",
+               size = .75) |>
+  ggfx::with_outer_glow()  +
+  #topic
+  stamp_text(label = df_events$topic |> str_wrap(12),
+           xy = x0y0tree,
+           size = case_when(nchar(df_events$topic)<= 9 ~ 3,
+                            nchar(df_events$topic)<= 12 ~ 2.5,
+                           TRUE ~ 2),
+         color = "lavender", nudge_y = .07,
+        vjust = 0, alpha = .8) |>
+  ggfx::with_outer_glow() +
+  # Names
+   stamp_text(label = df_events$name |> str_wrap(width = 8), 
             xy = x0y0tree, 
-            size = case_when(nchar(talks$package)<=9 ~ 6,
-                             nchar(talks$package)<=12 ~ 5,
-                             TRUE ~ 3.5),
-            color = "lavender",
-            vjust = 0) |>
-      ggfx::with_outer_glow() + 
-   annotate("text", label = talks$date, 
-            xy = x0y0tree, 
-            size = 4,
-            color = "lavender", alpha = .3,
-            vjust = 2) |>
-      ggfx::with_outer_glow() + NULL +
-  annotate("text", label = "Thank you \n and happy holidays!", size = 18, x = I(.5), y = -8.5,
+            size = case_when(nchar(df_events$name)<= 9 ~ 2.5,
+                            nchar(df_events$name)<= 15 ~ 2.25,
+                          
+                           TRUE ~ 2),
+            color = "lavender", 
+            alpha = .7, lineheight = .7, nudge_y = -.02,
+            vjust = 1)  |>
+  ggfx::with_outer_glow() +
+  annotate("text", label = "Thank You \n and Happy Holidays!", 
+  size = 7, x = I(.5), y = -8.5,
              color = "violetred4",
-             vjust = 0) |>
-      ggfx::with_outer_glow() +
-  theme_void_fill("whitesmoke", color = alpha("violetred4", .7)) 
+             vjust = 0, 
+             family = "Zapfino"
+             ) |>
+      ggfx::with_outer_glow("white",sigma = 20) + 
+    annotate("text", label = "For the past year of\nextenders meetups...", 
+  size = 5, x = I(.5), y = 8.7,
+             color = "violetred4",
+             vjust = 1,
+             family = "Zapfino"
+             ) |>
+      ggfx::with_outer_glow("white") + 
+  # stamp_polygon(y = 6.5 + 1:5) +
+  annotate(geom = "polygon", 
+           x = star_out_x * .5, 
+           y = star_out_y * .5 + 6.5,
+           color = "goldenrod1",
+           fill = "goldenrod1") +
+  # stamp_text(label = "🌟", y = 6.5, color = "goldenrod3") |>
+  # ggfx::with_outer_glow(colour = "goldenrod1") + 
+  theme(axis.ticks = element_blank()) + 
+  theme(axis.text = element_blank()) + 
+  # stamp_text(label = "❅", color = "white", 
+  #            x = runif(n = 200, max = 11) -  5.5,
+  #            y = runif(n = 200, max = 14) - 7.5,
+  #            size = runif(n = 200, min = 2, max = 12),
+  #            alpha = .15) |>
+  # ggfx::with_outer_glow(colour = "white") + 
+  # geom_hline(yintercept = 7, linewidth = 10, alpha = .2,
+             # color = "violetred4") +
+  coord_cartesian(clip = "off", ratio = 1) + 
+  theme(plot.background = 
+          element_rect(color = "violetred4", linewidth = 4) #,
+        # panel.background = element_rect(fill = "grey" |>
+                                          # alpha(.6))
+        )# + 
+  # annotate(geom = "rect", xmin = -6.5 , xmax = 6.5, 
+           # ymin = -9, ymax = 7, fill = "transparent",
+           # color = "violetred4")
 ```
 
 

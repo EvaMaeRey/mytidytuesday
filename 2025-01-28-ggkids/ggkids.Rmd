@@ -186,9 +186,9 @@ pets_data <- data.frame(pets = c("🐱", "🐶", "🦚", "🐠", "🐰"),
 pets_data
 
 ggplot(pets_data) +
-  chart_pie() + 
   use_color(pets) + 
-  use_area(number_of_pets)
+  use_area(number_of_pets) +
+  chart_pie()
 ```
 
 
@@ -395,7 +395,9 @@ chart_bar_plunging <- function(...){
        scale_y_reverse(expand = expansion(c(.3, 0))),
        scale_x_discrete(position = "top"),
        labs(x = NULL),
-       geom_label(vjust = 1, aes(label = after_stat(y))))
+       geom_label(vjust = 1, aes(label = after_stat(y)),
+                  linewidth = 0)
+       )
 }
 
 bears <- paste0("🐻‍❄️ #", 1:5)
@@ -403,10 +405,24 @@ depth <- c(3,5,4,6,5)
 
 polar_bear_table <- data_frame(bears, depth)
 
-ggplot(polar_bear_table) +
-  use_x(bears) + 
-  use_y(depth) +
-  chart_bar_plunging(fill = "skyblue")
+polar_bear_table
+
+# clearhistory()
+
+bear_table <- tribble(~id_bear, ~depth,
+            "🐻‍❄️#1",    3,
+            "🐻‍❄️#2",    5,
+            "🐻‍❄️#3",    4,
+            "🐻‍❄️#4",    6,
+            "🐻‍❄️#5",    5) 
+#'
+ggplot(bear_table) +
+  use(x = bears, y = depth) +
+  chart_bar_plunging(
+    fill = "lightblue1"
+    ) 
+
+# ggram(title = "Daphne's North Pole plot")
 
 ```
 
@@ -414,7 +430,7 @@ ggplot(polar_bear_table) +
 
 
 ```{r}
-time <- paste0(c(0, 15, 30, 45, 60), "⏱️")
+time <- c(0, 15, 30, 45, 60)
 num_tunnels <- c(0, 4, 5, 5.5, 5.9)
 fork_and_spoon_table <- data_frame(time, num_tunnels, type = "🍴")
 
@@ -422,17 +438,19 @@ shovel_and_bucket_table <- data_frame(time, num_tunnels = num_tunnels * 2, type 
 
 paws_table <- data_frame(time, num_tunnels = num_tunnels * 3, type = "🐾")
 
+chart_line <- geom_line
 
-
-fork_and_spoon_table |>
+digging_table <- fork_and_spoon_table |>
   bind_rows(shovel_and_bucket_table) |>
-  bind_rows(paws_table) |>
-ggplot() +
+  bind_rows(paws_table)
+
+ggplot(digging_table) +
   use_x(time) + 
   use_y(num_tunnels) + 
   use(picture = type) +
-  geom_line(aes(group = type)) +
-  chart_point()
+  chart_line() +
+  chart_point() + 
+  labs(x = "⏱️")
 
 
 ```
@@ -442,15 +460,16 @@ ggplot() +
 
 <details>
 
-```{r}
+```{r shuttles}
 
 outer_space_data <- data.frame(shuttle = paste0("🚀 #", 1:6), fuel = c(.3,.5,.3, .8,.7, .4))
 
 chart_part_of_full <- function(...){
   
   list(
-       geom_col(color = "black", fill = "transparent", aes(y = 1)),
-       geom_col(color = "black", ... )
+       geom_col(fill = "transparent", aes(y = 1)),
+       geom_col( ... ),
+       aes_default(aes(color = from_theme(ink)))
        )
   
 }
@@ -481,6 +500,67 @@ last_plot() +
                 x = I(.95),
                 y = I(.15)) + 
   coord_cartesian(clip = "off")
+```
+
+# scooter repair
+
+
+```{r}
+weeks <- c(0,1,2)
+num_coins <- c(1,2,3)
+coin <- c("🪙", "🪙🪙", "🪙🪙🪙")
+
+scooter_table <- tibble(weeks, num_coins, coin)
+
+compute_panel_count <- function(data, scales){
+            data |> 
+             uncount(y, .remove = F)
+           }
+
+scooter_table |> 
+  select(x = weeks, y = num_coins) |> 
+  compute_panel_count()
+
+chart_point_count <- function(...){
+  list(
+  qlayer(geom = GeomPointFill,
+         stat = qstat(compute_panel = compute_panel_count), 
+         position = position_jitter(width = .12, height = .12),
+         ..., show.legend = F),
+  aes_default(aes(x = 0)),
+  aes_default(aes(y = 0)),
+  aes_default(aes(shape = I(after_stat(picture)))),
+  scale_size(range = c(2,10))
+  
+  )
+  }
+
+
+scooter_table
+
+set.seed(12345)
+ggplot(scooter_table) +
+  use_x(weeks) + 
+  use_y(num_coins) + 
+  use_picture("🪙") +
+  chart_line() +
+  chart_point_count() + 
+  stamp_hline(2.25)
+  
+
+last_plot() + 
+  stamp_picture("🛴",
+                y = 2.45,
+                x = 1.9,
+                size = 45,
+                angle = 10)
+
+```
+
+
+
+
+```{r}
 
 
 knitr::knit_exit()
@@ -516,7 +596,7 @@ data(palmerpenguins::penguins) +
 #   viz(x = island, color = species) + 
 #   layer_bar(position = "dodge2")
 # 
-# ggram(widths = c(2,1))
+ggram(widths = c(2,1) )
 
 
 
