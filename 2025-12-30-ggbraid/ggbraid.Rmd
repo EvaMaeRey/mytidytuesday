@@ -8,7 +8,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, error = T)
+knitr::opts_chunk$set(echo = TRUE, error = T, cache = F)
 options(tidyverse.quiet = TRUE)
 ```
 
@@ -53,12 +53,12 @@ gapminder |>
 
 # StatBraidNew
 
-## interpolate
+### interpolate
 
 ```{r}
 interpolate <- function(data, n = 80){
   
-  interps <- data_frame(between = 0:n)
+  interps <- data_frame(between = 1:n)
   
   data |>
     mutate(diff_y = lead(y) - y,
@@ -80,10 +80,10 @@ cars2 |>
   interpolate(2)
 ```
 
-## compute_panel_braid
+### compute_panel_braid
 
 ```{r}
-compute_panel_braid <- function(data, scales, n = 80){
+compute_panel_braid <- function(data, scales, n = 5){
   
   strands <- data |> 
     # arrange(x) 
@@ -109,7 +109,8 @@ compute_panel_braid <- function(data, scales, n = 80){
             strands_max) |> 
     mutate(xend = x,
            yend = ymax,
-           y = ymin)
+           y = ymin) |>
+    mutate(row_number = row_number())
   
 }
 
@@ -144,6 +145,7 @@ StatBraid2 <- ggproto("StatBraid2", Stat,
                       compute_panel = compute_panel_braid,
                       default_aes = aes(fill = 
                                           after_stat(ymin < ymax),
+                                        label = after_stat(row_number)
                                         )
 )
 
@@ -154,8 +156,9 @@ gapminder |>
       color = country, 
       strand = country) +
   geom_line() + 
-  geom_ribbon(stat = StatBraid2, alpha = .2, n = 5) + 
-  geom_segment()
+  geom_ribbon(stat = StatBraid2, alpha = .2, n = 1) + 
+  geom_text(stat = StatBraid2) + 
+  geom_segment(stat = StatBraid2)
 
 layer_data(i = 2) |> head()
 
