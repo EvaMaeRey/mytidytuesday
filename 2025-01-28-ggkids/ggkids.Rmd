@@ -31,11 +31,15 @@ abcdefghijklmnopqrstuvwxyz
 
 now I know my ABC's, what's next?
 
+---
+
 ggkids is about bringing the grammar of graphics and ggplot2 to young learners.
 
-ggplot2 is already quite logical and accessible, but may present some challenges for young learners given more limited vocabulary and tolerance for frustration.
+ggplot2 is quite logical and accessible, but may present some challenges for young learners given more limited vocabulary and having less practice tolerating frustration.  
 
-1. `ggkids()` is an alias for `ggplot()`.  Either can be used to initialized the plot and set global data. `ggkids` might be prefered if you want to more strongly signal 'we made this just for you, kiddos!'.
+
+0. the package contains data that let young learners replicate plots from the new 'Daphne Draws Data' book by Storytelling with Data Founder Cole Nussbaumer-Knaflic and illustrator John Skewes.  
+1. `ggkids()` is an alias for `ggplot()`.  Either can be used to initialized the plot and set global data. `ggkids` might be preferred if you want to more strongly signal 'we made this just for you, kiddos!'.
 2. `use` is an alias for `aes`, since 'aesthetic' is unlikely to be already in the vocabulary of young learners.  We think that 'use color' (to as the aesthetic channel to communicate about 'var1') or 'use size' might be a natural way to talk about aesthetic mapping with children.
 3. A series of `use_*()` functions are also available and facilitate more step-wise plot construction, e.g. `use_x()`, `use_y()`, `use_size()`, `use_linewidth()`  🚧 *One thing people struggle with including me is the color aesthetic.  It sometimes feels like fill might better be called color, and color something (outline_color?); If this is done using open point (shape = 21), would probably be the way to go too.*
 4. More aesthetic defaults are provided, rather than required for layer rendering.  e.g. to add a point layer, `x` and `y` are not required, but instead default to zero. We think inspecting a plot with a zero default might be more useful than reading an error message for very young learners.  🚧 *This is done using the helper function, `aes_default`. *
@@ -279,7 +283,7 @@ ggplot(ocean_table) +
 last_plot() +
   labs(x = "little                        big") +
   labs(y = "slow           fast") +
-  theme(panel.background = element_rect(fill = "skyblue")) + 
+  theme(panel.background = element_rect(fill = "skyblue" |> alpha(.3))) + 
   stamp_picture("🐉", 
                 size = 40, 
                 x = 100,

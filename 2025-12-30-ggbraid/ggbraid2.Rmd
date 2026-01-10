@@ -1,0 +1,287 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = T, cache = F)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+library(gapminder)
+library(ggbraid)
+```
+
+## Braid new
+
+```{r}
+gapminder |> 
+  filter(country %in% c("Belgium", "Denmark")) |> 
+  ggplot() + 
+  aes(x = year, y = lifeExp, color = country) + 
+  geom_line()
+
+gapminder |> 
+  filter(country %in% c("Belgium", "Denmark")) ->
+df_long
+
+df_wide <- pivot_wider(df_long |> select(country, year, lifeExp), names_from = country, values_from = lifeExp)
+
+gapminder |> 
+  filter(country %in% c("Belgium", "Denmark")) |> 
+  ggplot() + 
+  aes(x = year) +
+  geom_line(aes(y = lifeExp, color = country, x = year), inherit.aes = F) +
+  geom_braid(data = df_wide, alpha = 0.6, 
+             aes(ymin = Belgium, ymax = Denmark, 
+                 fill = Belgium < Denmark)) 
+
+# better than geom_ribbon (but not by much w/ group = 1)
+gapminder |> 
+  filter(country %in% c("Belgium", "Denmark")) |> 
+  ggplot() + 
+  aes(x = year) +
+  geom_line(aes(y = lifeExp, color = country, x = year), inherit.aes = F) +
+  geom_ribbon(data = df_wide, alpha = 0.6, 
+             aes(ymin = Belgium, ymax = Denmark, 
+                 fill = Belgium < Denmark, group = 1)) 
+
+
+```
+
+# StatBraidNew2
+
+we had done interpolation between each point, but now a new approach
+
+1. divide x space up.
+2. cross for each group.
+3. delete original data
+4. go wide
+5. use with ribbon
+
+### interpolate
+
+
+### compute_panel_braid
+
+```{r}
+
+
+interpolate <- function(data, n = 9){
+  
+  x_minimum <- min(data$x, na.rm = T)
+  x_maximum <- max(data$x, na.rm = T)
+  
+  x_divided <- seq(x_minimum, x_maximum, length.out = n)
+  df_x_seq <- data.frame(x = x_divided, original = F)
+  
+  data |>
+    mutate(original = T) |>
+    full_join(df_x_seq, by = c("x", "original")) |>
+    arrange(x) |>
+    # mutate(x_seq = !is.na(x_seq)) |>
+    # mutate(original = !x_seq) |> 
+    mutate(strech = cumsum(original)) |>
+    group_by(strech) |> 
+    # mutate(row = 0:(n()-1)) >
+    mutate(prop_advance = (0:(n()-1))/n()) |>
+    ungroup() |> 
+    mutate(yoriginal = y) |>
+    mutate(ystart = y) |> 
+    fill(ystart, .direction = "down") |>
+    # fill(ystart, .direction = "up") |>
+    mutate(yending = y) |> 
+    fill(yending, .direction = "up") |>
+    # fill(yending, .direction = "down") |>
+    mutate(ydiff = yending - ystart) |>
+    mutate(y = ystart + prop_advance * ydiff) |> 
+    # fill(PANEL) |> 
+    # fill(group) |> 
+    filter(!original)
+}
+
+data.frame(x = 1:3, y = c(1,0,1)) |> 
+  interpolate() |>
+  ggplot() + 
+  aes(x, y) + 
+  geom_point()
+
+```
+
+
+```{r}
+compute_panel_braid <- function(data = df_long, scales, n = 30){
+  
+  # data$x = data$lifeExp
+  
+  x_minimum <- min(data$x, na.rm = T)
+  x_maximum <- max(data$x, na.rm = T)
+  
+  x_divided <- seq(x_minimum, x_maximum, length.out = n)
+  df_x_seq <- data.frame(x = x_divided, x_seq = T)
+
+  # data$strand <- data$country
+  # data$y <- data$lifeExp
+  # data$PANEL <- 1
+  # data$group <- 1
+
+  strands <- data |> 
+    # arrange(x) 
+    mutate(minmax = strand |> as.character() |> as.factor() |> as.numeric()) |>
+    pivot_wider(names_from = minmax, values_from = y, names_prefix = "strand_", id_cols = c(PANEL, group, x)) |>
+    mutate(ymin = strand_1,
+           ymax = strand_2)
+  
+  strands |> 
+    select(y = ymin, x, PANEL, group) |>
+    full_join(df_x_seq) |>
+    arrange(x) |>
+    mutate(x_seq = !is.na(x_seq)) |>
+    mutate(original = !x_seq) |> 
+    mutate(strech = cumsum(original)) |>
+    group_by(strech) |> 
+    mutate(prop_advance = 0:(n()-1)/n()) |>
+    ungroup() |> 
+    mutate(ystart = y) |> 
+    fill(ystart, .direction = "down") |>
+    # fill(ystart, .direction = "up") |>
+    mutate(yending = y) |> 
+    fill(yending, .direction = "up") |>
+    # fill(yending, .direction = "down") |>
+    mutate(ydiff = yending - ystart) |>
+    mutate(y = ystart + prop_advance*ydiff) |> 
+    fill(PANEL) |> 
+    fill(group) |> 
+    filter(x_seq) |>
+    select(x, ymin = y, PANEL, group) ->
+  strands_min
+
+  strands |> 
+    select(y = ymax, x, PANEL, group) |>
+    full_join(df_x_seq) |>
+    arrange(x) |>
+    mutate(x_seq = !is.na(x_seq)) |>
+    mutate(original = !x_seq) |> 
+    mutate(strech = cumsum(original)) |>
+    group_by(strech) |> 
+    mutate(prop_advance = 0:(n()-1)/n()) |>
+    ungroup() |> 
+    mutate(ystart = y) |> 
+    fill(ystart, .direction = "down") |>
+    # fill(ystart, .direction = "up") |>
+    mutate(yending = y) |> 
+    fill(yending, .direction = "up") |>    
+    # fill(yending, .direction = "down") |>
+    mutate(ydiff = yending - ystart) |>
+    mutate(y = ystart + prop_advance*ydiff) |> 
+    fill(PANEL) |> 
+    fill(group) |> 
+    filter(x_seq) |>
+    select(ymax = y) ->
+  strands_max
+
+  bind_cols(strands_min, 
+            strands_max) |> 
+    mutate(xend = x,
+           yend = ymax,
+           y = ymin) |>
+    mutate(row_number = row_number())
+  
+}
+```
+
+
+```{r}
+gapminder |> 
+  filter(country %in% c("Belgium", "Denmark")) |> 
+  select(x = year, y = lifeExp, strand = country) |>
+  mutate(PANEL = 1, group = 1) |>
+  compute_panel_braid(n = 3) 
+```
+
+
+```{r}
+gapminder |> 
+  filter(country %in% c("Belgium", "Denmark")) |> 
+  select(x = year, y = lifeExp, strand = country) |>
+  mutate(PANEL = 1, group = 1) |>
+  compute_panel_braid(n = 30) |>
+  ggplot() +
+  aes(x = x, ymin = ymin, 
+      ymax = ymax, 
+      color = ymin > ymax, 
+      fill = ymin > ymax, y = y, yend = yend, 
+      xend = xend) + 
+  geom_ribbon(alpha = .2) + 
+  geom_segment() +
+  aes(label = row_number) +
+  geom_text()
+
+last_plot() +
+  geom_point(data = df_long, aes(x = year, y = lifeExp), inherit.aes = F)
+```
+
+# StatBraid2
+
+```{r}
+StatBraid2 <- ggproto("StatBraid2", Stat,
+                      compute_panel = compute_panel_braid,
+                      default_aes = aes(fill = 
+                                          after_stat(ymin < ymax),
+                                        label = after_stat(row_number)
+                                        )
+)
+
+gapminder |> 
+  filter(country %in% c("Belgium", "Denmark")) |> 
+  ggplot() + 
+  aes(x = year, y = lifeExp, 
+      color = country, 
+      strand = country) +
+  geom_line() + 
+  geom_ribbon(stat = StatBraid2, alpha = .2, n = 30) + 
+  geom_text(stat = StatBraid2) + 
+  geom_segment(stat = StatBraid2)
+
+layer_data(i = 2) |> head()
+
+last_plot() + 
+  ggplyr::data_filter(year > 1970) + 
+  ggplyr::data_filter(year < 1993)
+
+layer_data(i = 2) 
+
+GeomRibbon$setup_data
+GeomRibbon$setup_param
+
+
+data.frame(x = 0:1 |> rep(2),
+           type = c("A", "A", "B", "B"),
+           y = c(0:1, 1:0)) |>
+  ggplot() + 
+  aes(x = x, y = y, color = type, strand = type) + 
+  geom_line() + 
+  geom_ribbon(stat = StatBraid2, alpha = .5, n = 20) + 
+  geom_segment(stat = StatBraid2)
+
+```
+
+
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

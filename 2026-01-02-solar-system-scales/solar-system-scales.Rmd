@@ -1,0 +1,103 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+library(ggforce)
+tribble(~orb, ~diameter, ~distance, ~color,
+"Sun", 1391400, 0, "goldenrod2",
+"Mercury", 4879, 57900000, "darkred",
+"Venus", 12104, 108200000, "purple",
+"Earth", 12756, 149600000, "blue",
+"Mars", 6792, 227900000, "firebrick",
+"Jupiter", 142984, 778600000, "orange",
+"Saturn", 120536, 1433500000, "salmon",
+"Uranus", 51118, 2872500000, "orange",
+"Neptune", 49528, 4495100000, "pink") |>
+  ggplot() +
+  aes(x0 = distance + 1391400/2, y0 = 0) + 
+  aes(r = diameter/2) + 
+  geom_circle() + 
+  aes(fill = color) + 
+  scale_fill_identity() + 
+  coord_fixed(ratio = 1) +
+  aes(r = 10 * diameter/2) + 
+  aes(r = 100 * diameter/2) + 
+  ggplyr::data_filter(distance <= 227900000 + 1391400/2 & distance > 0) +
+  aes(r = diameter/2) + 
+  aes(r = 1000 * diameter/2) + 
+  annotate(geom = 'point', 
+           x = 0, y = 0, 
+           color = "goldenrod",
+           shape = "X",
+           size = 7)
+
+
+library(ggplot2)
+
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point() +
+  geom_point(
+    data = ~ subset(.x, drv == 'f'),
+    colour = 'red'
+  ) + 
+  aes(filter =  drv == 'f')
+
+
+library(tidyverse)
+library(ggforce)
+
+tribble(~orb, ~diameter, ~distance, ~color,
+"Sun",    1391400,         0, "goldenrod2",
+"Mercury",   4879,  57900000, "darkred",
+"Venus",    12104, 108200000, "purple",
+"Earth",    12756, 149600000, "blue",
+"Mars",      6792, 227900000, "firebrick",
+"Jupiter", 142984, 778600000, "orange",
+"Saturn",  120536, 1433500000, "salmon",
+"Uranus",   51118, 2872500000, "orange",
+"Neptune",  49528, 4495100000, "pink") |>
+  ggplot() +
+  aes(x = orb |> fct_inorder(),
+      x0 = orb,
+      y0 = 0,
+      r = diameter/2/(max(diameter)),
+      fill = I(color)) + 
+  geom_circle() +
+  coord_equal()
+
+last_plot() +
+  ggplyr::data_filter(orb != "Sun")  # aes(filter = orb != "Sun")??
+
+last_plot() + 
+  ggplyr:::data_filter(orb %in% c("Mercury", "Venus", "Earth", "Mars"))
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
