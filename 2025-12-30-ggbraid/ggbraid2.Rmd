@@ -219,7 +219,7 @@ gapminder |>
   filter(country %in% c("Belgium", "Denmark")) |> 
   select(x = year, y = lifeExp, strand = country) |>
   mutate(PANEL = 1, group = 1) |>
-  compute_panel_braid(n = 30) |>
+  compute_panel_braid(n = 300) |>
   ggplot() +
   aes(x = x, ymin = ymin, 
       ymax = ymax, 
@@ -242,6 +242,8 @@ StatBraid2 <- ggproto("StatBraid2", Stat,
                       compute_panel = compute_panel_braid,
                       default_aes = aes(fill = 
                                           after_stat(ymin < ymax),
+                                        color = 
+                                          after_stat(ymin < ymax),
                                         label = after_stat(row_number)
                                         )
 )
@@ -253,9 +255,9 @@ gapminder |>
       color = country, 
       strand = country) +
   geom_line() + 
-  geom_ribbon(stat = StatBraid2, alpha = .2, n = 30) + 
-  geom_text(stat = StatBraid2) + 
-  geom_segment(stat = StatBraid2)
+  geom_ribbon(stat = StatBraid2, alpha = .2, n = 300) #+ 
+  # geom_text(stat = StatBraid2) + 
+  # geom_segment(stat = StatBraid2)
 
 layer_data(i = 2) |> head()
 
@@ -273,10 +275,13 @@ data.frame(x = 0:1 |> rep(2),
            type = c("A", "A", "B", "B"),
            y = c(0:1, 1:0)) |>
   ggplot() + 
-  aes(x = x, y = y, color = type, strand = type) + 
+  aes(x = x, 
+      y = y, 
+      color = type, 
+      strand = type) + 
   geom_line() + 
-  geom_ribbon(stat = StatBraid2, alpha = .5, n = 20) + 
-  geom_segment(stat = StatBraid2)
+  geom_ribbon(stat = StatBraid2, alpha = .5, n = 500) + 
+  geom_segment(stat = StatBraid2, n = 500)
 
 ```
 
