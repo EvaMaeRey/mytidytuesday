@@ -23,19 +23,65 @@ options(tidyverse.quiet = TRUE)
 ```{r}
 library(tidyverse)
 
-
 levels <- c("very unlikely"  ,      "somewhat unlikely" ,       
             "neither likely nor unlikely",  "somewhat likely",  "very likely")
+
 levels <- levels |> factor(levels)
 
 sample(levels, 20, replace = T)
 
-stress_synthetic_wide <- data.frame(v1 = sample(levels, 500, replace = T),
-                                    v2 = sample(levels, 500, replace = T),
-                                    v3 = sample(levels, 500, replace = T),
-                                    v4 = sample(levels, 500, replace = T),
-                                    v5 = sample(levels, 500, replace = T))
+
+set.seed(12345)
+stress_synthetic_wide <- data.frame(v1 = sample(levels, 7, replace = T),
+                                    v2 = sample(levels, 7, replace = T),
+                                    v3 = sample(levels, 7, replace = T),
+                                    v4 = sample(levels, 7, replace = T),
+                                    v5 = sample(levels, 7, replace = T))
                                     
+
+library(patchwork)
+stress_synthetic_wide |> 
+  sjPlot::plot_likert(cat.neutral = 3, 
+                      values = "sum.outside", 
+                      wrap.labels = 20, 
+                      show.prc.sign = TRUE, 
+                      reverse.scale = TRUE, 
+                      geom.colors = c("darkred", "firebrick1", "lightgreen", "darkgreen" ), 
+                      cat.neutral.color = "gray", sort.frq="pos.asc", show.legend = T) & 
+  theme(legend.position = 'bottom')
+
+p <- last_plot()
+
+p$layers
+
+layer5 <- p$layers$annotate...5
+layer6 <- p$layers$annotate...6
+
+p$layers$annotate...5 <- NULL
+p$layers$annotate...6 <- NULL
+
+# annotations of interest removed...
+p
+
+layer5$data$y
+layer6$data$y
+layer5$aes_params$hjust
+
+ind_flip_hjust <- abs(layer5$data$y - layer6$data$y) < .5
+layer5$aes_params$hjust <- ifelse(ind_flip_hjust, 1.15, -.15) 
+
+
+p + 
+  layer5 + 
+  layer6
+
+
+# what about conditional color...
+
+```
+
+
+```{r}
 
 head(stress_synthetic_wide)
 

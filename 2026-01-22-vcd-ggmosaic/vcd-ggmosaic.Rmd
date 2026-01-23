@@ -1,0 +1,106 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+library(vcd)
+
+
+compute_panel_mosaic <- function(data, scales, independent = F){  
+
+  data$h <- data$h %||% "All"
+  data$v <- data$v %||% "All"
+  data$wt <- data$wt %||% 1
+
+
+data |> 
+  count(wt = wt, .by = h) |> 
+  mutate(prop = n/sum(n)) |>
+  rename(h = .by) |>
+  mutate(xmax = cumsum(prop)) |>
+  mutate(xmin = lag(xmax)) |>
+  mutate(xmin = replace_na(xmin, 0)) ->
+horizontal
+
+data |>
+  group_by(h, v) |> 
+  count(wt = wt) |> 
+  ungroup() |> 
+  group_by(h) |> 
+  mutate(prop = n/sum(n)) |>
+  arrange(v) |>
+  group_by(h) |>
+  mutate(ymax = cumsum(prop)) |>
+  mutate(ymin = lag(ymax)) |>
+  mutate(ymin = replace_na(ymin, 0)) ->
+vertical
+
+
+horizontal |>
+  select(-n, -prop) |>
+  left_join(vertical)
+
+}
+
+```
+
+```{r}
+margin.table(HairEyeColor, c(1, 3)) |>
+  as_data_frame() |> 
+  rename(h = Sex, v = Hair, wt = n) |>
+  compute_panel_mosaic() |>
+  ggplot() + 
+  aes(xmin = xmin, xmax = xmax, 
+      ymin = ymin, ymax = ymax) + 
+  geom_rect(color = "white")
+
+StatMosaic2 <- ggproto("StatMosaic2", 
+                       Stat, 
+                       compute_panel = compute_panel_mosaic,
+                       default_aes = aes(fill = after_stat(v)))
+
+GeomMosaic <- ggproto("GeomMosaic", GeomRect, default_aes = modifyList(GeomRect$default_aes, aes(color = from_theme(paper))))
+geom_mosaic2 <- make_constructor(GeomMosaic, stat = StatMosaic2)
+
+ggmosaic::titanic |>
+  ggplot() + 
+  aes(h = Sex) + 
+  geom_mosaic2()
+
+last_plot() + 
+  aes(v = Survived, h = NULL)
+
+last_plot() + 
+  aes(h = Sex)
+
+
+
+ggmosaic::titanic |>
+  ggplot() + 
+  aes(h = Class, v = Survived) + 
+  geom_mosaic2()
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
