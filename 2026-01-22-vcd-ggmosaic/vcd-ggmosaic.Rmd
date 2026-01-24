@@ -31,7 +31,6 @@ compute_panel_mosaic <- function(data, scales, independent = F){
   data$v <- data$v %||% "All"
   data$wt <- data$wt %||% 1
 
-
 data |> 
   count(wt = wt, .by = h) |> 
   mutate(prop = n/sum(n)) |>

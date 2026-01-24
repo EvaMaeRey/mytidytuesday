@@ -24,43 +24,69 @@ options(tidyverse.quiet = TRUE)
 library(tidyverse)
 library(gganatogram)
 
-mylist <- list()
 
-for (i in 1:length(gganatogram::mmFemale_list)){
-
-mylist[[i]] <- gganatogram::mmFemale_list[[i]] |>
+gganatogram::mmFemale_list |> 
+  bind_rows() |>
   remove_missing() |>
-  sf::st_as_sf(coords = c("x", "y")) |>
-  sample_frac() |>
-  summarize(.by = id) |> 
-  mutate(geometry = sf::st_cast(geometry, "POLYGON") |> 
-           sf::st_cast("MULTIPOLYGON")) 
-  
-}  
+  ggplot() + 
+  aes(x, -y, group = group, fill = id) + 
+  geom_polygon(show.legend = F)
 
 ```
 
 
-```{r}
-mylist |>
-  bind_rows() ->
-ref_data_mouse_f
 
-head(ref_data_mouse_f)
+
+
+
+```{r}
+to_sf_routine <- function(data){
+  
+  data |>
+  mutate(y = -y) |>
+  sf::st_as_sf(coords = c("x", "y"), agr = "constant") |>
+  group_by(group, id) |>
+  summarize(do_union = F) |> 
+  ungroup() |> 
+  group_by(id, group) |> 
+  summarise() |>
+  mutate(geometry = geometry |> sf::st_cast("POLYGON")) |> 
+  mutate(geometry = geometry |> sf::st_cast("MULTIPOLYGON")) |> 
+  ungroup() 
+  
+}
+
+mm_female_sf <- gganatogram::mmFemale_list |> 
+  bind_rows() |>
+  # filter(x != 0, y != 0, y < -2) |>
+  remove_missing() |>
+  to_sf_routine() |> 
+  rename(organ = id)
+
+
+mm_female_sf |> 
+  ggplot()  + 
+  geom_sf(aes(geometry = geometry)) + 
+  coord_sf()
+
+```
+
+```{r}
+
 
 # compare
-head(ggseg::aseg)
 ggseg::aseg$data$geometry
 
-geom_organ <- ggregions::write_geom_region_locale(ref_data_mouse_f)
-stamp_organ <- ggregions::write_stamp_region_locale(ref_data_mouse_f)
+geom_organ <- ggregions::write_geom_region_locale(mm_female_sf)
+stamp_organ <- ggregions::write_stamp_region_locale(mm_female_sf)
 
-ref_data_mouse_f$id 
+mm_female_sf$organ |> sample(20)
 
 ggplot() + 
   stamp_organ() + 
-  stamp_organ(keep = "aorta", color = "red") +
-  stamp_organ(keep = "brain", color = "green")
+  stamp_organ(keep = "aorta", fill = "darkred") +
+  stamp_organ(keep = "brain", fill = "darkseagreen") + 
+  stamp_organ(keep = "blood_vessel", fill = "orange")
 ```
 
 ## Experiment
