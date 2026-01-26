@@ -9,6 +9,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, error = T, cache = F)
+knitr::opts_chunk$set(dev = "ragg_png")
 options(tidyverse.quiet = TRUE)
 ```
 
@@ -242,8 +243,6 @@ StatBraid2 <- ggproto("StatBraid2", Stat,
                       compute_panel = compute_panel_braid,
                       default_aes = aes(fill = 
                                           after_stat(ymin < ymax),
-                                        color = 
-                                          after_stat(ymin < ymax),
                                         label = after_stat(row_number)
                                         )
 )
@@ -258,7 +257,110 @@ gapminder |>
   geom_ribbon(stat = StatBraid2, alpha = .2, n = 300) #+ 
   # geom_text(stat = StatBraid2) + 
   # geom_segment(stat = StatBraid2)
+```
 
+# Sea and mountain
+
+```{r}
+df <- gapminder |> 
+  filter(country %in% c("Belgium")) 
+
+df |>
+  bind_rows(df |> 
+              mutate(lifeExp = mean(df$lifeExp), country = "constant")) |>
+  ggplot() + 
+  aes(x = year, y = lifeExp, 
+      color = country,
+      strand = country) +
+  geom_line() + 
+  geom_ribbon(stat = StatBraid2, alpha = .2, n = 300)
+```
+
+
+# mist plot
+
+```{r}
+my_gradiant <- c("coral" |> alpha(.2),   #<<
+                 "transparent", 
+                 "transparent") |> #<<
+  grid::linearGradient(x1 = 0, x2 = 0,
+                       y1 = 1, y2 = 0)  #<<
+
+df <- gapminder |> 
+  filter(country %in% c("Belgium")) 
+
+continuous_ribbon_df <- df |>
+  bind_rows(df |> 
+              mutate(lifeExp = lifeExp - 5, country = "below")) |>
+  rename(x = year, 
+      y = lifeExp, 
+      color = country,
+      strand = country) |> 
+  mutate(PANEL = 1, group = 1) |>
+  compute_panel_braid(n = 300)
+
+  
+continuous_ribbon_df |> 
+  mutate(row_number = lag(row_number)) |> 
+  bind_rows(continuous_ribbon_df) |> 
+  mutate(group = row_number) |>
+  ggplot() + 
+  aes(x = x, y = y,
+      ymin = ymin, ymax = ymax,
+      # color = country,
+      # strand = country
+      ) +
+  geom_line(color = "coral") + 
+  geom_ribbon(#stat = StatBraid2, 
+              , #n = 300, 
+              fill = my_gradiant) + 
+  aes(group = group)
+
+
+# something unexpected...
+last_plot() +
+  aes(alpha = .2 |> I())
+
+"transparent" |> alpha(.2)
+
+"#FFFFFF33"
+# cars |> 
+#   rename(x = speed, y = dist) |>
+#   mutate(group = 1) |>
+#   ggforce:::interpolateDataFrame()
+
+# gganimate::ease_aes()
+```
+
+
+```{r}
+library(ggplot2)
+
+my_gradiant <- c("pink",   #<<
+                 "lightblue") |> #<<
+  grid::linearGradient()  #<<
+
+cars |>
+  ggplot() + 
+  aes(x = speed, y = dist) +
+  geom_point(
+    shape = "🎈", #<<
+    size = 7
+    ) + 
+  theme(panel.background = 
+          element_rect(
+            fill = my_gradiant #<<
+            )
+        )
+
+
+ggram::ggram("ggram:: Sky's the limit... ",
+             subtitle = "Changes to the grid package introduced in R 4.1.0 opens the door for gradient fill in ggplot2\nAnd setting up ggplot2 to work w/ {ragg} (agg -> anti-grain geometry), gives direct access to \nsystem font -- like emoji 🎈🚀📊!")
+
+```
+
+
+```{r}
 layer_data(i = 2) |> head()
 
 last_plot() + 
@@ -283,10 +385,98 @@ data.frame(x = 0:1 |> rep(2),
   geom_ribbon(stat = StatBraid2, alpha = .5, n = 500) + 
   geom_segment(stat = StatBraid2, n = 500)
 
+
+knitr::knit_exit()
 ```
 
 
 
+```{r, eval = f}
+compute_panel_pool <- function(data = df_long, scales, n = 30, constant = NULL){
+  
+  # data$x = data$lifeExp
+  
+  constant <- constant %||% mean(data$y, na.rm)
+  
+  x_minimum <- min(data$x, na.rm = T)
+  x_maximum <- max(data$x, na.rm = T)
+  
+  x_divided <- seq(x_minimum, x_maximum, length.out = n)
+  df_x_seq <- data.frame(x = x_divided, x_seq = T)
+
+  # data$strand <- data$country
+  # data$y <- data$lifeExp
+  # data$PANEL <- 1
+  # data$group <- 1
+
+  strands <- data |> bind_rows(data |> mutate(y = constant)) |> 
+    # arrange(x) 
+    mutate(minmax = strand |> as.character() |> as.factor() |> as.numeric()) |>
+    pivot_wider(names_from = minmax, values_from = y, names_prefix = "strand_", id_cols = c(PANEL, group, x)) |>
+    mutate(ymin = strand_1,
+           ymax = strand_2)
+  
+  strands |> 
+    select(y = ymin, x, PANEL, group) |>
+    full_join(df_x_seq) |>
+    arrange(x) |>
+    mutate(x_seq = !is.na(x_seq)) |>
+    mutate(original = !x_seq) |> 
+    mutate(strech = cumsum(original)) |>
+    group_by(strech) |> 
+    mutate(prop_advance = 0:(n()-1)/n()) |>
+    ungroup() |> 
+    mutate(ystart = y) |> 
+    fill(ystart, .direction = "down") |>
+    # fill(ystart, .direction = "up") |>
+    mutate(yending = y) |> 
+    fill(yending, .direction = "up") |>
+    # fill(yending, .direction = "down") |>
+    mutate(ydiff = yending - ystart) |>
+    mutate(y = ystart + prop_advance*ydiff) |> 
+    fill(PANEL) |> 
+    fill(group) |> 
+    filter(x_seq) |>
+    select(x, ymin = y, PANEL, group) ->
+  strands_min
+
+  strands |> 
+    select(y = ymax, x, PANEL, group) |>
+    full_join(df_x_seq) |>
+    arrange(x) |>
+    mutate(x_seq = !is.na(x_seq)) |>
+    mutate(original = !x_seq) |> 
+    mutate(strech = cumsum(original)) |>
+    group_by(strech) |> 
+    mutate(prop_advance = 0:(n()-1)/n()) |>
+    ungroup() |> 
+    mutate(ystart = y) |> 
+    fill(ystart, .direction = "down") |>
+    # fill(ystart, .direction = "up") |>
+    mutate(yending = y) |> 
+    fill(yending, .direction = "up") |>    
+    # fill(yending, .direction = "down") |>
+    mutate(ydiff = yending - ystart) |>
+    mutate(y = ystart + prop_advance*ydiff) |> 
+    fill(PANEL) |> 
+    fill(group) |> 
+    filter(x_seq) |>
+    select(ymax = y) ->
+  strands_max
+
+  bind_cols(strands_min, 
+            strands_max) |> 
+    mutate(xend = x,
+           yend = ymax,
+           y = ymin) |>
+    mutate(row_number = row_number())
+  
+}
+
+
+
+
+```
 
 
 ## Closing remarks, Other Relevant Work, Caveats
