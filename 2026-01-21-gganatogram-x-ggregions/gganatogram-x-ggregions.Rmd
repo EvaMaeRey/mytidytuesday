@@ -15,7 +15,9 @@ options(tidyverse.quiet = TRUE)
 
 
 
-# gganatogram data experiment
+# gganatogram's data experiment
+
+https://github.com/jespermaag/gganatogram
 
 The data isn't stored w/ sf format which the ggregions process requires.. Can't seem to figure how it works in the original api, but not well when translated...
 
@@ -43,10 +45,10 @@ to_sf_routine <- function(data){
   data |>
   mutate(y = -y) |>
   sf::st_as_sf(coords = c("x", "y"), agr = "constant") |>
-  group_by(group, id) |>
+  group_by(id, group) |>
   summarize(do_union = F) |> 
   ungroup() |> 
-  group_by(id, group) |> 
+  group_by(id, group) |>
   summarise() |>
   mutate(geometry = geometry |> sf::st_cast("POLYGON")) |> 
   mutate(geometry = geometry |> sf::st_cast("MULTIPOLYGON")) |> 
@@ -68,6 +70,27 @@ mm_female_sf |>
   coord_sf()
 
 ```
+
+
+# Trying human anatomy with same routing (list to sf) fails... 🥲
+
+```{r, error = T}
+gganatogram::hgFemale_list |>  #human female instead of mouse
+  bind_rows() |>
+  # filter(x != 0, y != 0, y < -2) |>
+  remove_missing() |>
+  to_sf_routine() 
+  
+
+gganatogram::hgMale_list |>  #human female instead of mouse
+  bind_rows() |>
+  # filter(x != 0, y != 0, y < -2) |>
+  remove_missing() |>
+  to_sf_routine() 
+  
+
+```
+
 
 ```{r}
 # compare
@@ -103,7 +126,9 @@ gganatogram(data = mmFemale_key,
 ```
 
 
-## teethr  experiment
+## teethr's data experiment
+
+https://github.com/bbartholdy/teethr
 
 ```{r}
 library(teethr)
