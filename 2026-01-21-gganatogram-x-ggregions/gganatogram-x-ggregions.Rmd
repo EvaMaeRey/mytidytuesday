@@ -10,9 +10,13 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, dev = "ragg_png", message = F, warning = F)
 options(tidyverse.quiet = TRUE)
+
 ```
 
+<details>
+
 ```{r}
+library(tidyverse)
 state_ref <- usmapdata::us_map() |> 
   select(state = full, 
          state_fips = fips, 
@@ -23,10 +27,20 @@ head(state_ref)
 
 geom_state <- ggregions::write_geom_region_locale(state_ref)
 stamp_state <- ggregions::write_stamp_region_locale(state_ref)
+```
+
+</details>
+
+### us states target api
+
+```{r}
+USArrests |>
+  rownames_to_column(var = "state") |> 
+  head()
 
 
 USArrests |>
-  rownames_to_column(var = "state") |> 
+  rownames_to_column(var = "state") |>
   ggplot() + 
   aes(state = state,
       fill = Assault) + 
@@ -34,11 +48,95 @@ USArrests |>
 ```
 
 
+## teethr's data experiment
+
+https://github.com/bbartholdy/teethr
+
+<details>
+
+```{r}
+library(tidyverse)
+library(teethr)
+teeth_ref_data <- dental_arcade_mapping |> 
+  as_tibble() |> 
+  left_join(tooth_notation |> 
+  select(tooth = text, fdi = FDI, standard = standards) 
+  )
+
+caries_ratios <- mb11_caries %>% 
+  dental_longer(-id) %>%
+  dental_join() %>% 
+  count_caries(caries = score, no_lesion = "none") %>% # convert location to lesion count
+  group_by(tooth) %>% 
+  dental_ratio(count = caries_count) %>%
+  dental_recode(tooth, "FDI", "text") 
+```
+
+```{r}  
+head(teeth_ref_data)  # are there other ids?  like just number of tooth?
+
+library(ggregions)
+geom_tooth <- ggregions::write_geom_region_locale(teeth_ref_data)
+geom_tooth_text <- write_geom_region_text_locale(teeth_ref_data)
+stamp_tooth <- write_stamp_region_locale(teeth_ref_data)
+stamp_tooth_text <- write_stamp_region_text_locale(teeth_ref_data)
+```
+
+</details>
+
+### teethrXggregions resultant API
+
+
+```{r}
+ggplot() + 
+  stamp_tooth() + 
+  stamp_tooth_text(size = 2)
+
+```
+
+
+
+```{r}
+
+
+head(caries_ratios)
+
+caries_ratios |> 
+  ggplot() + 
+  stamp_tooth() + 
+  aes(tooth = tooth, 
+      fill = ratio) + 
+  geom_tooth()
+
+last_plot() + 
+  geom_tooth(keep = c("LLM1", "URM3")) |> 
+    ggfx::with_outer_glow("red") + 
+  geom_tooth_text(keep = c("LLM1", "URM3"),
+                  label = "😬",
+                  hjust = -0.5) 
+
+```
+
+
+### more ids are joined under the hood
+
+```{r}
+ggplot() + 
+  stamp_tooth() + 
+  stamp_tooth_text(size = 2,
+                   aes(label = after_stat(fdi)))
+
+ggplot() + 
+  stamp_tooth() + 
+  stamp_tooth_text(size = 2,
+                   aes(label = after_stat(standard)))
+```
+
 # gganatogram's data experiment
 
 https://github.com/jespermaag/gganatogram
 
-The data isn't stored w/ sf format which the ggregions process requires.. Can't seem to figure how it works in the original api, but not well when translated...
+<details>
 
 ```{r, warning=F}
 library(tidyverse)
@@ -100,14 +198,17 @@ mm_female_sf |>
 
 
 ```{r}
-# compare
-ggseg::aseg$data$geometry
 
 geom_organ <- ggregions::write_geom_region_locale(mm_female_sf)
 stamp_organ <- ggregions::write_stamp_region_locale(mm_female_sf)
 
 mm_female_sf$organ |> sample(20)
+```
 
+</details>
+
+
+```{r}
 ggplot() + 
   stamp_organ() + 
   stamp_organ(keep = "aorta", fill = "darkred") +
@@ -117,7 +218,8 @@ ggplot() +
 
 # original mouse gganatogram api
 
-It looks great, but maybe the hard-ish thing is navigating it?
+<details>
+
 
 ```{r}
 # original api
@@ -131,6 +233,8 @@ gganatogram(data = mmFemale_key,
   scale_fill_viridis_c() +
   coord_equal()
 ```
+
+
 
 ```{r}
 cell_sf <- gganatogram::cell_list[[1]] |> 
@@ -153,7 +257,11 @@ geom_organelle <- ggregions::write_geom_region_locale(cell_sf)
 stamp_organelle <- ggregions::write_stamp_region_locale(cell_sf)
 
 cell_sf
+```
 
+</details>
+
+```{r}
 ggplot() + 
   stamp_organelle(alpha = .2) + 
   stamp_organelle(keep = "actin_filaments", fill = "orange", alpha = .1) +
@@ -163,7 +271,9 @@ ggplot() +
 ```
 
 
-# Trying human anatomy with same routing 
+# Trying female human anatomy with same routine 
+
+<details>
 
 ```{r, error = T}
 
@@ -178,6 +288,28 @@ female_sf <- gganatogram::hgFemale_list[c(1:156, 180:195)] |> # return to this!!
   
 stamp_organ <- ggregions::write_stamp_region_locale(female_sf)
 
+ggplot(female_sf) + 
+  aes(geometry = geometry) +
+  geom_sf(alpha = .2)
+
+male_sf <- gganatogram::hgMale_list[2:155] |>  
+  bind_rows() |>
+  # filter(x != 0, y != 0, y < -2) |>
+  remove_missing() |>
+  to_sf_routine() 
+
+
+
+ggplot(male_sf) + 
+  aes(geometry = geometry) +
+  geom_sf(alpha = .2)
+```
+
+</details>
+
+### target api...
+
+```{r}
 ggplot() + 
   stamp_organ(alpha = .2) + 
   stamp_organ(keep = "lung", 
@@ -188,89 +320,6 @@ ggplot() +
               fill = "coral") + 
   stamp_organ(keep = "brain", 
               fill = "pink3")
-
-
-male_sf <- gganatogram::hgMale_list[2:155] |>  
-  bind_rows() |>
-  # filter(x != 0, y != 0, y < -2) |>
-  remove_missing() |>
-  to_sf_routine() 
-
-ggplot(female_sf) + 
-  aes(geometry = geometry) +
-  geom_sf(alpha = .2)
-
-ggplot(male_sf) + 
-  aes(geometry = geometry) +
-  geom_sf(alpha = .2)
-```
-
-## teethr's data experiment
-
-https://github.com/bbartholdy/teethr
-
-```{r}
-library(tidyverse)
-library(teethr)
-teeth_ref_data <- dental_arcade_mapping |> 
-  as_tibble() |> 
-  left_join(tooth_notation |> 
-  select(tooth = text, fdi = FDI, standard = standards) 
-  )
-```
-
-```{r}  
-head(teeth_ref_data)  # are there other ids?  like just number of tooth?
-
-library(ggregions)
-geom_tooth <- ggregions::write_geom_region_locale(teeth_ref_data)
-geom_tooth_text <- write_geom_region_text_locale(teeth_ref_data)
-stamp_tooth <- write_stamp_region_locale(teeth_ref_data)
-stamp_tooth_text <- write_stamp_region_text_locale(teeth_ref_data)
-
-
-
-ggplot() + 
-  stamp_tooth()
-
-last_plot() + 
-  stamp_tooth_text(size = 2)
-
-
-ggplot() + 
-  stamp_tooth() + 
-  stamp_tooth_text(size = 2,
-                   aes(label = after_stat(fdi)))
-
-ggplot() + 
-  stamp_tooth() + 
-  stamp_tooth_text(size = 2,
-                   aes(label = after_stat(standard)))
-
-
-caries_ratios <- mb11_caries %>% 
-  dental_longer(-id) %>%
-  dental_join() %>% 
-  count_caries(caries = score, no_lesion = "none") %>% # convert location to lesion count
-  group_by(tooth) %>% 
-  dental_ratio(count = caries_count) %>%
-  dental_recode(tooth, "FDI", "text") 
-
-head(caries_ratios)
-
-caries_ratios |> 
-  ggplot() + 
-  stamp_tooth() + 
-  aes(tooth = tooth, 
-      fill = ratio) + 
-  geom_tooth()
-
-last_plot() + 
-  geom_tooth(keep = c("LLM1", "URM3")) |> 
-    ggfx::with_outer_glow("red") + 
-  geom_tooth_text(keep = c("LLM1", "URM3"),
-                  label = "😬",
-                  hjust = -0.5) 
 
 ```
 
