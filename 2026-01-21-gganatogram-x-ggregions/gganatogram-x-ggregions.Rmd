@@ -131,9 +131,16 @@ gganatogram(data = mmFemale_key,
 https://github.com/bbartholdy/teethr
 
 ```{r}
+library(tidyverse)
 library(teethr)
-teeth_ref_data <- dental_arcade_mapping |> as_tibble()
+teeth_ref_data <- dental_arcade_mapping |> 
+  as_tibble() |> 
+  left_join(tooth_notation |> 
+  select(tooth = text, fdi = FDI, standard = standards) 
+  )
+```
 
+```{r}  
 head(teeth_ref_data)  # are there other ids?  like just number of tooth?
 
 library(ggregions)
@@ -149,6 +156,17 @@ ggplot() +
 
 last_plot() + 
   stamp_tooth_text(size = 2)
+
+
+ggplot() + 
+  stamp_tooth() + 
+  stamp_tooth_text(size = 2,
+                   aes(label = after_stat(fdi)))
+
+ggplot() + 
+  stamp_tooth() + 
+  stamp_tooth_text(size = 2,
+                   aes(label = after_stat(standard)))
 
 
 caries_ratios <- mb11_caries %>% 
@@ -177,6 +195,3 @@ last_plot() +
 
 ```
 
-
-
-## Closing remarks, Other Relevant Work, Caveats

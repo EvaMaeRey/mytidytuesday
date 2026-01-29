@@ -22,15 +22,96 @@ options(tidyverse.quiet = TRUE)
 
 ```{r}
 library(tidyverse)
+library(tidyverse)
+
+
+ggplot() + 
+theme(panel.background = element_rect(fill = "green"))
+
+theme(panel.background = element_rect(fill = "green"))
+
+general_rect_spec <- theme(general_rect = element_rect())
+names(general_rect) <- "plot.background"
+
+ggplot() + 
+  general_rect
+```  
+
+
+```{r}
+reset_rect_component <- function(){
+
+    general_rect_spec <- theme(general_rect = element_rect())
+    names(general_rect) <- "plot.background" 
+    
+    component_settings$fill <- fill
+    component_settings$colour <- colour
+    component_settings$linewidth <- linewidth
+    component_settings$linetype <- linetype
+    component_settings$linejoin <- linejoin
+
+    component_settings
+}
+
+
+
+
+```
+
+
+
+```{r, eval = F}
+reset_rect_component <- function(){
+
+    theme_grey_settings <- theme_gray()
+    component_settings <- theme_grey_settings[[component]]
+    component_settings <- element_rect() 
+    
+    component_settings$fill <- fill
+    component_settings$colour <- colour
+    component_settings$linewidth <- linewidth
+    component_settings$linetype <- linetype
+    component_settings$linejoin <- linejoin
+
+    component_settings
+}
+
+args_rect <- formals(element_rect)
+args_rect$... <- NULL
+args_rect$size <- NULL
+
+formals(reset_rect_component) <- args_rect |>  modifyList(list(component = "panel.background"))
+
+ggplot() + 
+  reset_rect_component(fill = "green")
+```
+
+
+```{r, eval = F}
+theme_panel_background <- function(){
+  
+  args <- list(fill = fill, colour = colour, 
+               linewidth = linewidth, linetype = linetype, 
+               linejoin = linejoin, component = component)
+  
+  do.call(reset_rect_component, args)
+  
+}
+
+formals(theme_panel_background) <- args_rect |> modifyList(list(component = "panel.background"))
+
+
+ggplot() + 
+  reset_rect_component("green")
 
 ```
 
 ## Experiment
 
-```{r}
+```{r, eval = F}
 
 ggplot() #+
-theme(panel.background = element_rect(fill = "grey4")) |> str()
+theme(genaric = element_rect(fill = "grey4")) |> str()
 
 element_rect_formals <- formals(element_rect)
 element_rect_formals$... <- NULL
