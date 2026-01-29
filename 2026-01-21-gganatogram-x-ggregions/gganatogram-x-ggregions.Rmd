@@ -12,7 +12,26 @@ knitr::opts_chunk$set(echo = TRUE, dev = "ragg_png", message = F, warning = F)
 options(tidyverse.quiet = TRUE)
 ```
 
+```{r}
+state_ref <- usmapdata::us_map() |> 
+  select(state = full, 
+         state_fips = fips, 
+         state_abb = abbr, 
+         geometry = geom)
 
+head(state_ref)
+
+geom_state <- ggregions::write_geom_region_locale(state_ref)
+stamp_state <- ggregions::write_stamp_region_locale(state_ref)
+
+
+USArrests |>
+  rownames_to_column(var = "state") |> 
+  ggplot() + 
+  aes(state = state,
+      fill = Assault) + 
+  geom_state()
+```
 
 
 # gganatogram's data experiment
@@ -24,6 +43,8 @@ The data isn't stored w/ sf format which the ggregions process requires.. Can't 
 ```{r, warning=F}
 library(tidyverse)
 library(gganatogram)
+
+
 
 gganatogram::mmFemale_list |> 
   bind_rows() |>
@@ -64,6 +85,8 @@ mm_female_sf <- gganatogram::mmFemale_list |>
   rename(organ = id)
 
 
+
+
 mm_female_sf |> 
   ggplot()  + 
   geom_sf(aes(geometry = geometry)) + 
@@ -72,24 +95,8 @@ mm_female_sf |>
 ```
 
 
-# Trying human anatomy with same routing (list to sf) fails... 🥲
 
-```{r, error = T}
-gganatogram::hgFemale_list |>  #human female instead of mouse
-  bind_rows() |>
-  # filter(x != 0, y != 0, y < -2) |>
-  remove_missing() |>
-  to_sf_routine() 
-  
 
-gganatogram::hgMale_list |>  #human female instead of mouse
-  bind_rows() |>
-  # filter(x != 0, y != 0, y < -2) |>
-  remove_missing() |>
-  to_sf_routine() 
-  
-
-```
 
 
 ```{r}
@@ -125,6 +132,78 @@ gganatogram(data = mmFemale_key,
   coord_equal()
 ```
 
+```{r}
+cell_sf <- gganatogram::cell_list[[1]] |> 
+  bind_rows() |>
+  # filter(x != 0, y != 0, y < -2) |>
+  remove_missing() |>
+  to_sf_routine() |> 
+  rename(organelle = id)
+
+
+cell_sf |> 
+  ggplot()  + 
+  geom_sf(aes(geometry = geometry), alpha = .2) + 
+  coord_sf()
+```
+
+
+```{r}
+geom_organelle <- ggregions::write_geom_region_locale(cell_sf)
+stamp_organelle <- ggregions::write_stamp_region_locale(cell_sf)
+
+cell_sf
+
+ggplot() + 
+  stamp_organelle(alpha = .2) + 
+  stamp_organelle(keep = "actin_filaments", fill = "orange", alpha = .1) +
+  stamp_organelle(keep = "endoplasmic_reticulum", fill = "darkred") 
+
+
+```
+
+
+# Trying human anatomy with same routing 
+
+```{r, error = T}
+
+length(gganatogram::hgFemale_list)
+
+# fix so that all data frames can be combined with bind_rows
+# the groups are numeric and character so using bind_rows fails
+female_sf <- gganatogram::hgFemale_list[c(1:156, 180:195)] |> # return to this!!
+  bind_rows() |>
+  remove_missing() |>
+  to_sf_routine() 
+  
+stamp_organ <- ggregions::write_stamp_region_locale(female_sf)
+
+ggplot() + 
+  stamp_organ(alpha = .2) + 
+  stamp_organ(keep = "lung", 
+              fill = "plum3") + 
+  stamp_organ(keep = "stomach",
+              fill = "cornsilk") + 
+  stamp_organ(keep = "heart", 
+              fill = "coral") + 
+  stamp_organ(keep = "brain", 
+              fill = "pink3")
+
+
+male_sf <- gganatogram::hgMale_list[2:155] |>  
+  bind_rows() |>
+  # filter(x != 0, y != 0, y < -2) |>
+  remove_missing() |>
+  to_sf_routine() 
+
+ggplot(female_sf) + 
+  aes(geometry = geometry) +
+  geom_sf(alpha = .2)
+
+ggplot(male_sf) + 
+  aes(geometry = geometry) +
+  geom_sf(alpha = .2)
+```
 
 ## teethr's data experiment
 
@@ -192,6 +271,49 @@ last_plot() +
   geom_tooth_text(keep = c("LLM1", "URM3"),
                   label = "😬",
                   hjust = -0.5) 
+
+```
+
+
+# aseg X data
+
+```{r}
+library(ggseg)
+
+coronal_ref_data <- ggseg::aseg$data |> 
+  filter(side == "coronal") |>     # just look at coronal for the nuttiness.
+  group_by(region) |> 
+  summarise(geometry = sf::st_combine(geometry)) |> 
+  select(region = region, everything())
+  
+coronal_ref_data |> pull(region)
+
+library(ggregions)
+geom_region <- write_geom_region_locale(ref_data = coronal_ref_data)
+stamp_region <- write_stamp_region_locale(ref_data = coronal_ref_data)
+geom_region_text <- write_geom_region_text_locale(ref_data = coronal_ref_data)
+stamp_region_text <- write_stamp_region_text_locale(ref_data = coronal_ref_data)
+
+
+ggplot() + 
+  stamp_region() + 
+  stamp_region(keep = "hippocampus", fill = "blue")
+
+
+ggplot() + 
+  stamp_region() + 
+  stamp_region_text(check_overlap = T)
+
+
+tribble(~activity, ~segment,
+       .2, "hippocampus",
+       .5, "amygdala",
+       .7, "thalamus proper") |>
+ggplot() + 
+  stamp_region() + 
+  aes(region = segment,
+      fill = activity) + 
+  geom_region() 
 
 ```
 
