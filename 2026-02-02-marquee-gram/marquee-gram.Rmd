@@ -1,0 +1,62 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+
+(theme_bw() + 
+  theme(text = marquee::element_marquee())) |> 
+  theme_set()
+
+library(marquee)
+
+ggplot(cars) + 
+  annotate("marquee", 
+           label = "Cars are so great because",
+           width = .2,
+           style = classic_style(),
+           x = I(.25),
+           y = I(.75)) 
+
+
+fancy_font <- classic_style(
+  weight = "semibold",
+  features = systemfonts::font_feature(
+    ligatures = c("standard", "discretionary"),
+    letters = c("stylistic", "swash", "historical")
+  )
+)
+
+ggplot(mtcars, aes(disp, mpg, label = rownames(mtcars))) +
+  geom_marquee(style = fancy_font, size = 2.5, family = "spectral")
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

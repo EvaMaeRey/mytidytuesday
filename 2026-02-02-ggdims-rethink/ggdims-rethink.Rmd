@@ -1,0 +1,158 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = T)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+library(ggdims) # Feb 2, 2026
+
+ggplot(iris) + 
+  aes(dims = dims(Sepal.Length:Petal.Width))
+
+p <- last_plot()
+
+p$mapping
+
+last_plot() + 
+  geom_pca()
+
+p1 <- last_plot() 
+
+p1$mapping
+
+
+ggplot(iris) + 
+  aes(dims = dims_listed("Sepal.Length", "Petal.Width")) + 
+  geom_pca0()
+
+
+ggplot(iris) + 
+  aes(dims = dims_listed(Sepal.Length, Petal.Width)) + 
+  geom_pca()
+
+p <- last_plot()
+
+p$mapping
+
+last_plot() + 
+  geom_pca()
+
+
+varnames <- c("hi", "by",  "go")
+
+for(i in 1:length(varnames)){
+  
+  p1$mapping <- modifyList(p1$mapping, aes_string(temp = varnames[i]))
+  names(p1$mapping)[which(names(p1$mapping) == "temp")] <- paste0(".v", i)
+  
+}
+
+p1$mapping
+
+
+varnames <- c("hi", "by",  "go")
+
+for(i in 1:length(varnames)){
+  
+  p1$mapping <- modifyList(p1$mapping, aes_string(temp = varnames[i]))
+  names(p1$mapping)[which(names(p1$mapping) == "temp")] <- paste0(".v", i)
+  
+}
+
+tribble(~go, ~`for`, ~hi, 1,1,1,2,2,3) |>  
+ggplot() + 
+  aes(x = `for`, 
+      y = hi) 
+
+make_list_with_data_frame_in_first_spot <- function(){
+  
+  
+  
+  
+  
+}
+
+cars$dims <- vector("list", nrow(cars))
+
+cars$dims[[1]] <- mtcars
+
+cars$dims[[1]]
+
+dims <- function(...){
+  
+  plot_data <- plot$data
+  
+  my_list <- vector("list", nrow(plot_data))
+  my_list[[1]] <- plot_data |> select(...)
+  
+}
+
+
+dims_expand2 <- function(select) {
+
+  structure(
+    list(select_specification = rlang::enquo(select)), 
+    class = "dims_expand2"
+    )
+
+}
+
+
+#' @import ggplot2
+#' @importFrom ggplot2 ggplot_add
+#' @export
+ggplot_add.dims_expand2 <- function(object, plot, object_name) {
+  
+  select_specs <- plot$mapping$dims[[2]] |> 
+    as.character() |> 
+    _[-1] |> 
+    paste(collapse = ", ")
+  
+  features_data <- paste0("select(plot$data,",  select_specs, ")") |> 
+    rlang::parse_expr() |> 
+    eval()
+
+  dims_stasher <- vector("list", nrow(plot$data))
+
+  dims_stasher[[1]] <- features_data
+  
+  plot$data$dims_stasher <- dims_stasher
+   
+  plot$mapping <- modifyList(plot$mapping, aes(dims = dims_stasher))
+  
+  plot
+  
+}
+
+dims <- function(){}
+
+ggplot(mtcars) + 
+  aes(dims = dims(mpg:drat, qsec), x = 1, y = 1) + 
+  geom_point() + 
+  dims_expand2()
+
+p <- last_plot()
+
+p$mapping
+
+p$data$dims_stasher[[1]]
+```
+
