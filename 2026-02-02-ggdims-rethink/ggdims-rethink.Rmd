@@ -194,6 +194,89 @@ ggplot(iris) +
                qstat_panel(default_aes = 
                              aes(x = after_stat(PC1), 
                                  y = after_stat(PC2))))
+```
+
+```{r, eval = F}
+download.file("https://github.com/patperry/r-corpus/raw/refs/heads/master/data/federalist.rda", destfile = "federalist.rda")
+```
+
+```{r}
+library(tidyverse)
+
+load("federalist.rda")
+
+federalist |> tibble()
+```
+
+```{r}
+
+federalist %>%
+  mutate(author = replace_na(author, 
+                             "Disputed")) %>% 
+  mutate(name = paste(author, 
+                      str_remove(name, "eralist"), 
+                      sep = "-")) -> 
+federalist
+
+
+federalist %>%
+  mutate(author = replace_na(author, "disputed")) |>
+  select(doc_name = name, author, text, title) %>% 
+  tidytext::unnest_tokens(output = word, input = text) %>% 
+  # stop word are good for stylometry - keep them only
+  inner_join(tidytext::stop_words) %>%
+  group_by(doc_name, word, author) %>% 
+  count() %>% 
+  ungroup() %>% 
+  arrange(-n) %>% 
+  pivot_wider(values_from = n, names_from = word, values_fill = 0) ->
+doc_token_freq
+
+names(doc_token_freq) |> tail()
+
+doc_token_freq |> 
+  ggplot() + 
+  aes(dims = dims(the:lest, -group),
+      color = author) + 
+  dims_expand2() +
+  geom_point(stat = compute_pca_rows |> 
+               qstat_panel(default_aes = 
+                             aes(x = after_stat(PC1), 
+                                 y = after_stat(PC2))))
 
 ```
 
+
+```{r}
+unvotes::un_votes |> 
+  arrange(rcid) |>
+  # mutate(rcid = paste0("rc",rcid) |> fct_inorder()) |>
+  mutate(num_vote = case_when(vote == "yes" ~ 1,
+                              vote == "abstain" ~ .5,
+                              vote == "no" ~ 0,
+                              TRUE ~ .5 )) |>
+  # filter(rcid %in% 1:30) |>
+  pivot_wider(id_cols = c(country, country_code),
+    names_from = rcid, 
+              values_from = num_vote,
+              values_fill = .5
+            ) |>
+  mutate(continent = country_code |> 
+           countrycode::countrycode(origin = "iso2c", destination = "continent")) |>
+  mutate(continent = continent |> is.na() |> ifelse("unknown", continent)) ->
+unga_rcid_wide
+
+names(unga_rcid_wide) |> head()
+names(unga_rcid_wide) |> tail()
+
+
+ggplot(unga_rcid_wide) + 
+  aes(dims = dims(`3`:`9147`),
+      color = continent) + 
+  dims_expand2() +
+  geom_point(stat = compute_pca_rows |> 
+               qstat_panel(default_aes = 
+                             aes(x = after_stat(PC1), 
+                                 y = after_stat(PC2))))
+
+```
