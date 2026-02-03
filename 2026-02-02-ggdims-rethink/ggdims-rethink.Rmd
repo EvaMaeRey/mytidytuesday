@@ -134,9 +134,9 @@ ggplot_add.dims_expand2 <- function(object, plot, object_name) {
 
   dims_stasher[[1]] <- features_data
   
-  plot$data$dims_stasher <- dims_stasher
+  plot$data$.dims_stasher <- dims_stasher
    
-  plot$mapping <- modifyList(plot$mapping, aes(dims = dims_stasher))
+  plot$mapping <- modifyList(plot$mapping, aes(dims = .dims_stasher))
   
   plot
   
@@ -153,6 +153,47 @@ p <- last_plot()
 
 p$mapping
 
-p$data$dims_stasher[[1]]
+p$data$.dims_stasher[[1]]
+
+p$data$.dims_stasher[[1]] |>
+  ggdims:::pca_layout()
+
+
+compute_pca_rows <- function (data, scales){
+  
+    data_for_reduction <- data$dims[[1]]
+
+    clean_data <- remove_missing(bind_cols(data_for_reduction,
+        data |> select(-"dims")))
+    
+    # set.seed(1345)
+    
+    clean_data[names(data_for_reduction)] |>
+      ggdims:::pca_layout() |>
+      bind_cols(clean_data)
+    
+}
+
+library(statexpress)
+
+ggplot(mtcars) +
+  aes(dims = dims(mpg:drat, qsec)) +
+  dims_expand2() +
+  geom_point(stat = compute_pca_rows |> 
+               qstat_panel(default_aes = 
+                             aes(x = after_stat(PC1), 
+                                 y = after_stat(PC2))))
+
+layer_data()
+
+ggplot(iris) +
+  aes(dims = dims(Sepal.Length:Petal.Width),
+      color = Species) +
+  dims_expand2() +
+  geom_point(stat = compute_pca_rows |> 
+               qstat_panel(default_aes = 
+                             aes(x = after_stat(PC1), 
+                                 y = after_stat(PC2))))
+
 ```
 
