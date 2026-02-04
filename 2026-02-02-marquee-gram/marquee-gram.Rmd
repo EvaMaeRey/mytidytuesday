@@ -13,6 +13,33 @@ options(tidyverse.quiet = TRUE)
 ```
 
 
+```{r}
+fancy_font <- classic_style(
+  weight = "semibold",
+  features = systemfonts::font_feature(
+    ligatures = c("standard", "discretionary"),
+    letters = c("stylistic", "swash", "historical")
+  )
+)
+
+ggplot(mtcars, aes(disp, mpg, label = rownames(mtcars))) +
+  geom_marquee(style = fancy_font, size = 2.5, family = "spectral") 
+
+md_text <-
+"# Lorem Ipsum
+Lorem ipsum dolor sit amet, *consectetur* adipiscing elit, sed do eiusmod tempor incididunt ut
+labore et dolore magna **aliqua**. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+laboris nisi ut aliquip ex ea commodo _consequat_. Duis aute irure dolor in reprehenderit in
+voluptate velit esse cillum dolore eu fugiat nulla ~pariatur~. Excepteur sint occaecat
+cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+
+grob <- marquee_grob(md_text, classic_style())
+
+grid.draw(grob)
+
+```
+
+
 
 
 ## Intro Thoughts
@@ -29,20 +56,36 @@ library(tidyverse)
 
 ```{r}
 
+md_text <-
+"# Lorem Ipsum
+Lorem ipsum dolor sit amet, *consectetur* adipiscing elit, sed do eiusmod tempor incididunt ut
+labore et dolore magna **aliqua**. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+laboris nisi ut aliquip ex ea commodo _consequat_. Duis aute irure dolor in reprehenderit in
+voluptate velit esse cillum dolore eu fugiat nulla ~pariatur~. Excepteur sint occaecat
+cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+
+grob <- marquee_grob(md_text, classic_style())
+
+grid.draw(grob)
+
 (theme_bw() + 
   theme(text = marquee::element_marquee())) |> 
   theme_set()
 
 library(marquee)
 
-ggplot(cars) + 
-  annotate("marquee", 
-           label = "Cars are so great because",
-           width = .2,
-           style = classic_style(),
-           x = I(.25),
-           y = I(.75)) 
+# ggplot(cars) + 
+#   annotate("marquee", 
+#            label = "Cars are so great because",
+#            width = .2,
+#            style = classic_style(),
+#            x = I(.25),
+#            y = I(.75)) 
 
+
+library(marquee)
+library(grid)
+library(ggplot2)
 
 fancy_font <- classic_style(
   weight = "semibold",
@@ -52,8 +95,36 @@ fancy_font <- classic_style(
   )
 )
 
+new_style <- classic_style(body_font = "serif", header_font = "mono", hanging = em(1))
+
+new_style <- modify_style(
+  new_style,
+  "str",
+  background = "lightgrey",
+  border_radius = 3,
+  padding = trbl(em(0.2))
+)
+
+grid.draw(
+  marquee_grob(md_text, new_style)
+)
+
 ggplot(mtcars, aes(disp, mpg, label = rownames(mtcars))) +
   geom_marquee(style = fancy_font, size = 2.5, family = "spectral")
+
+new_style <- classic_style(body_font = "serif", header_font = "mono", hanging = em(1))
+
+new_style <- modify_style(
+  new_style,
+  "str",
+  background = "lightgrey",
+  border_radius = 3,
+  padding = trbl(em(0.2))
+)
+
+grid.draw(
+  marquee_grob(md_text, new_style)
+)
 
 ```
 

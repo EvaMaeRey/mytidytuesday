@@ -15,86 +15,10 @@ options(tidyverse.quiet = TRUE)
 
 
 
-## Intro Thoughts
-
-
-## Status Quo
+## A slightly different approach to what's currently in ggdims. 
 
 ```{r}
 library(tidyverse)
-library(ggdims) # Feb 2, 2026
-
-ggplot(iris) + 
-  aes(dims = dims(Sepal.Length:Petal.Width))
-
-p <- last_plot()
-
-p$mapping
-
-last_plot() + 
-  geom_pca()
-
-p1 <- last_plot() 
-
-p1$mapping
-
-
-ggplot(iris) + 
-  aes(dims = dims_listed("Sepal.Length", "Petal.Width")) + 
-  geom_pca0()
-
-
-ggplot(iris) + 
-  aes(dims = dims_listed(Sepal.Length, Petal.Width)) + 
-  geom_pca()
-
-p <- last_plot()
-
-p$mapping
-
-last_plot() + 
-  geom_pca()
-
-
-varnames <- c("hi", "by",  "go")
-
-for(i in 1:length(varnames)){
-  
-  p1$mapping <- modifyList(p1$mapping, aes_string(temp = varnames[i]))
-  names(p1$mapping)[which(names(p1$mapping) == "temp")] <- paste0(".v", i)
-  
-}
-
-p1$mapping
-
-
-varnames <- c("hi", "by",  "go")
-
-for(i in 1:length(varnames)){
-  
-  p1$mapping <- modifyList(p1$mapping, aes_string(temp = varnames[i]))
-  names(p1$mapping)[which(names(p1$mapping) == "temp")] <- paste0(".v", i)
-  
-}
-
-tribble(~go, ~`for`, ~hi, 1,1,1,2,2,3) |>  
-ggplot() + 
-  aes(x = `for`, 
-      y = hi) 
-
-make_list_with_data_frame_in_first_spot <- function(){
-  
-  
-  
-  
-  
-}
-
-cars$dims <- vector("list", nrow(cars))
-
-cars$dims[[1]] <- mtcars
-
-cars$dims[[1]]
 
 dims <- function(...){}
 
@@ -102,7 +26,7 @@ dims <- function(...){}
 dims_expand2 <- function(select) {
 
   structure(
-    list(select_specification = rlang::enquo(select)), 
+    list(), 
     class = "dims_expand2"
     )
 
@@ -128,11 +52,11 @@ ggplot_add.dims_expand2 <- function(object, plot, object_name) {
     eval()
 
   # create a vector added to the plot data
-  .dims_stasher <- vector("list", nrow(plot$data))
+  plot$data$.dims_stasher <- vector("list", nrow(plot$data))
 
   for (i in 1:nrow(features_df)){
-  # store the features data in row 1 of the vector
-  .dims_stasher[[i]] <- features_df[i,]
+  # store the features data as a 1 row data frame in vector .dims_stasher...
+  plot$data$.dims_stasher[[i]] <- features_df[i,]
   }
   
   # overwrite dims mapping to point to new vector that contains features_df
@@ -160,13 +84,7 @@ p$data$.dims_stasher |>
   ggdims:::pca_layout()
 ```
 
-
-
-```{r}
-# knitr::knit_exit()
-
-
-```
+# then a new compute...
 
 ```{r}
 compute_pca_rows <- function (data, scales){
@@ -184,27 +102,36 @@ compute_pca_rows <- function (data, scales){
     
 }
 
-library(statexpress)
+
+
+StatPca <- ggproto("StatPca", Stat, compute_panel = compute_pca_rows,
+                   default_aes = 
+                             aes(x = after_stat(PC1), 
+                                 y = after_stat(PC2)))
 
 ggplot(mtcars) +
   aes(dims = dims(mpg:drat, qsec)) +
   dims_expand2() +
-  geom_point(stat = compute_pca_rows |> 
-               qstat_panel(default_aes = 
-                             aes(x = after_stat(PC1), 
-                                 y = after_stat(PC2))))
+  geom_point(stat = StatPca)
 
 layer_data()
 
 ggplot(iris) +
   aes(dims = dims(Sepal.Length:Petal.Width),
       color = Species) +
+  # --------- the following gets wrapped up to geom_pca ------------
   dims_expand2() +
-  geom_point(stat = compute_pca_rows |> 
-               qstat_panel(default_aes = 
-                             aes(x = after_stat(PC1), 
-                                 y = after_stat(PC2))))
+  geom_point(stat = StatPca)
 ```
+
+```{r}
+knitr::knit_exit()
+
+
+```
+
+
+# More examples...
 
 ```{r, eval = F}
 download.file("https://github.com/patperry/r-corpus/raw/refs/heads/master/data/federalist.rda", destfile = "federalist.rda")
@@ -333,12 +260,6 @@ federalist_stopwords_freq |>
 
 ```
 
-```{r}
-unvotes::un_roll_calls
-
-
-```
-
 
 ```{r}
 
@@ -377,9 +298,86 @@ ggplot(unga_rcid_wide) +
 ```
 
 
+
+
+
+
+## Just noodling, what I started with, but moving it out of the way.
+
 ```{r}
-tribble(~good, ~`for`, ~hi, 
-        1,2,1,2,1, 1) |>
-  select(good:hi) |> names()
+library(tidyverse)
+library(ggdims) # Feb 2, 2026
+
+ggplot(iris) + 
+  aes(dims = dims(Sepal.Length:Petal.Width))
+
+p <- last_plot()
+
+p$mapping
+
+last_plot() + 
+  geom_pca()
+
+p1 <- last_plot() 
+
+p1$mapping
+
+
+ggplot(iris) + 
+  aes(dims = dims_listed("Sepal.Length", "Petal.Width")) + 
+  geom_pca0()
+
+
+ggplot(iris) + 
+  aes(dims = dims_listed(Sepal.Length, Petal.Width)) + 
+  geom_pca()
+
+p <- last_plot()
+
+p$mapping
+
+last_plot() + 
+  geom_pca()
+
+
+varnames <- c("hi", "by",  "go")
+
+for(i in 1:length(varnames)){
+  
+  p1$mapping <- modifyList(p1$mapping, aes_string(temp = varnames[i]))
+  names(p1$mapping)[which(names(p1$mapping) == "temp")] <- paste0(".v", i)
+  
+}
+
+p1$mapping
+
+
+varnames <- c("hi", "by",  "go")
+
+for(i in 1:length(varnames)){
+  
+  p1$mapping <- modifyList(p1$mapping, aes_string(temp = varnames[i]))
+  names(p1$mapping)[which(names(p1$mapping) == "temp")] <- paste0(".v", i)
+  
+}
+
+tribble(~go, ~`for`, ~hi, 1,1,1,2,2,3) |>  
+ggplot() + 
+  aes(x = `for`, 
+      y = hi) 
+
+make_list_with_data_frame_in_first_spot <- function(){
+  
+  
+  
+  
+  
+}
+
+cars$dims <- vector("list", nrow(cars))
+
+cars$dims[[1]] <- mtcars
+
+cars$dims[[1]]
 
 ```
