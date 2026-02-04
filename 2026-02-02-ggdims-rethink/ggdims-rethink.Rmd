@@ -96,14 +96,7 @@ cars$dims[[1]] <- mtcars
 
 cars$dims[[1]]
 
-dims <- function(...){
-  
-  plot_data <- plot$data
-  
-  my_list <- vector("list", nrow(plot_data))
-  my_list[[1]] <- plot_data |> select(...)
-  
-}
+dims <- function(...){}
 
 
 dims_expand2 <- function(select) {
@@ -121,21 +114,28 @@ dims_expand2 <- function(select) {
 #' @export
 ggplot_add.dims_expand2 <- function(object, plot, object_name) {
   
+  # get expression inside of dims parentheses in `aes(dims = dims(var1:var10))`
+  # would return "var1:var10"
   select_specs <- plot$mapping$dims[[2]] |> 
     as.character() |> 
     _[-1] |> 
     paste(collapse = ", ")
   
-  features_data <- paste0("select(plot$data,",  select_specs, ")") |> 
+  # from plot data point to the select_specs variables that are specified 
+  # and save a data frame, in features_df
+  features_df <- paste0("select(plot$data,",  select_specs, ")") |> 
     rlang::parse_expr() |> 
     eval()
 
-  dims_stasher <- vector("list", nrow(plot$data))
+  # create a vector added to the plot data
+  .dims_stasher <- vector("list", nrow(plot$data))
 
-  dims_stasher[[1]] <- features_data
+  for (i in 1:nrow(features_df)){
+  # store the features data in row 1 of the vector
+  .dims_stasher[[i]] <- features_df[i,]
+  }
   
-  plot$data$.dims_stasher <- dims_stasher
-   
+  # overwrite dims mapping to point to new vector that contains features_df
   plot$mapping <- modifyList(plot$mapping, aes(dims = .dims_stasher))
   
   plot
@@ -155,13 +155,23 @@ p$mapping
 
 p$data$.dims_stasher[[1]]
 
-p$data$.dims_stasher[[1]] |>
+p$data$.dims_stasher |>
+  bind_rows() |>
   ggdims:::pca_layout()
+```
 
 
+
+```{r}
+# knitr::knit_exit()
+
+
+```
+
+```{r}
 compute_pca_rows <- function (data, scales){
   
-    data_for_reduction <- data$dims[[1]]
+    data_for_reduction <- data$dims |> bind_rows()
 
     clean_data <- remove_missing(bind_cols(data_for_reduction,
         data |> select(-"dims")))
@@ -227,28 +237,113 @@ federalist %>%
   inner_join(tidytext::stop_words) %>%
   group_by(doc_name, word, author) %>% 
   count() %>% 
-  ungroup() %>% 
+  ungroup() %>%
   arrange(-n) %>% 
-  pivot_wider(values_from = n, names_from = word, values_fill = 0) ->
-doc_token_freq
+  # group_by(word) |> 
+  # mutate(n = n/sum(n)) |>
+  # ungroup() |> 
+  pivot_wider(values_from = n, names_from = word, values_fill = 0) |>
+  select(-group) ->
+federalist_stopwords_freq
 
 names(doc_token_freq) |> tail()
 
-doc_token_freq |> 
+federalist_stopwords_freq |> 
   ggplot() + 
-  aes(dims = dims(the:lest, -group),
+  aes(dims = dims(the:lest),
       color = author) + 
   dims_expand2() +
   geom_point(stat = compute_pca_rows |> 
                qstat_panel(default_aes = 
                              aes(x = after_stat(PC1), 
-                                 y = after_stat(PC2))))
+                                 y = after_stat(PC2))))# + 
+  # facet_wrap(~author)
+
+
+compute_umap <- function (data, scales){
+  
+    data_for_reduction <- data$dims |> bind_rows()
+
+    clean_data <- remove_missing(bind_cols(data_for_reduction,
+        data |> select(-"dims")))
+    
+    # set.seed(1345)
+    
+    clean_data[names(data_for_reduction)] |>
+      ggdims:::umap_layout_2d() |>
+      bind_cols(clean_data)
+    
+}
+
+StatUmap <- ggproto("StatUmap", Stat,
+                    compute_panel = compute_umap)
+
+geom_umap0 <- make_constructor(ggdims::GeomPointFill, stat = StatUmap)
+
+geom_umap <- function(...){
+  
+  list(geom_umap0(...),
+       dims_expand2())
+  
+  
+}
+
+federalist_stopwords_freq |>
+  ggplot() + 
+  aes(dims = dims(the:lest),
+      fill = author) + 
+  geom_umap()
+
+
+
+compute_tsne <- function (data, scales, perplexity = 30){
+  
+    data_for_reduction <- data$dims |> bind_rows()
+
+    clean_data <- remove_missing(bind_cols(data_for_reduction,
+        data |> select(-"dims")))
+    
+    # set.seed(1345)
+    
+    clean_data[names(data_for_reduction)] |>
+      ggdims:::tsne_layout_2d(perplexity = perplexity) |>
+      bind_cols(clean_data)
+    
+}
+
+StatTsne <- ggproto("StatTsne", Stat,
+                    compute_panel = compute_tsne)
+
+geom_tsne0 <- make_constructor(ggdims::GeomPointFill, stat = StatTsne)
+
+geom_tsne <- function(...){
+  
+  list(geom_tsne0(...),
+       dims_expand2())
+  
+  
+}
+
+
+federalist_stopwords_freq |>
+  ggplot() + 
+  aes(dims = dims(the:lest),
+      fill = author) + 
+  geom_tsne(perplexity = 20)
+
+```
+
+```{r}
+unvotes::un_roll_calls
+
 
 ```
 
 
 ```{r}
+
 unvotes::un_votes |> 
+  filter(rcid >= 679) |> 
   arrange(rcid) |>
   # mutate(rcid = paste0("rc",rcid) |> fct_inorder()) |>
   mutate(num_vote = case_when(vote == "yes" ~ 1,
@@ -271,12 +366,20 @@ names(unga_rcid_wide) |> tail()
 
 
 ggplot(unga_rcid_wide) + 
-  aes(dims = dims(`3`:`9147`),
+  aes(dims = dims(`679`:`9147`),
       color = continent) + 
   dims_expand2() +
   geom_point(stat = compute_pca_rows |> 
                qstat_panel(default_aes = 
                              aes(x = after_stat(PC1), 
                                  y = after_stat(PC2))))
+
+```
+
+
+```{r}
+tribble(~good, ~`for`, ~hi, 
+        1,2,1,2,1, 1) |>
+  select(good:hi) |> names()
 
 ```

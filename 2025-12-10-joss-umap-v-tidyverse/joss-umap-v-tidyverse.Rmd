@@ -31,14 +31,27 @@ library(ggcirclepack)
 joss_as_of_2021 <- read.csv("https://raw.githubusercontent.com/front-matter/journal-notebooks/refs/heads/main/works_10.21105_2021-10-26.csv")
   
 joss_as_of_2021 |> 
+  filter(is.referenced.by.count > 0) |>
   ggplot() + 
   aes(id = title, 
-      area = is.referenced.by.count ,
-      label = title |> str_wrap(20),
-      fill = published.date.parts |> as_date()) + 
+      area = is.referenced.by.count,
+      fill = published.date.parts |> 
+        as_date()) + 
   geom_circlepack() + 
+  aes(label = title |> str_wrap(20) |> 
+        paste0("\n\nCited ", is.referenced.by.count, "X")) +
   geom_circlepack_text(color = "whitesmoke") +
   coord_equal() + 
   scale_size(range = c(0,4)) + 
-  labs(title = "JOSS citations as of 2021-10-26")
+  labs(title = "Journal of Open Source Software citations as of 2021-10-26",
+       fill = "Publication\nyear") 
+  
+
+diamonds |> 
+  ggplot() + 
+  aes(id = cut, area = 1) + 
+  geom_circlepack() + 
+  geom_circlepack_text() + 
+  coord_equal()
+
 ```
