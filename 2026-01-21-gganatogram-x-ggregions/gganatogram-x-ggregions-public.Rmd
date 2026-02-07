@@ -1,0 +1,236 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, dev = "ragg_png", message = F, warning = F)
+options(tidyverse.quiet = TRUE)
+
+```
+
+
+```{r, echo  = F, message=F, warning=F}
+library(tidyverse)
+state_ref <- usmapdata::us_map() |> 
+  select(state = full, 
+         state_fips = fips, 
+         state_abb = abbr, 
+         geometry = geom)
+
+# head(state_ref)
+
+geom_state <- ggregions::write_geom_region_locale(state_ref)
+stamp_state <- ggregions::write_stamp_region_locale(state_ref)
+```
+
+
+
+
+
+### ggregions with teethr::dental_arcade_mapping
+
+https://github.com/bbartholdy/teethr
+
+<details>
+
+```{r}
+library(tidyverse)
+library(teethr)
+teeth_ref_data <- dental_arcade_mapping |> 
+  as_tibble() |> 
+  left_join(tooth_notation |> 
+  select(tooth = text, fdi = FDI, standard = standards) 
+  )
+
+caries_ratios <- mb11_caries %>% 
+  dental_longer(-id) %>%
+  dental_join() %>% 
+  count_caries(caries = score, no_lesion = "none") %>% # convert location to lesion count
+  group_by(tooth) %>% 
+  dental_ratio(count = caries_count) %>%
+  dental_recode(tooth, "FDI", "text") 
+```
+
+```{r}  
+head(teeth_ref_data)  # are there other ids?  like just number of tooth?
+
+library(ggregions)
+geom_tooth <- ggregions::write_geom_region_locale(teeth_ref_data)
+geom_tooth_text <- write_geom_region_text_locale(teeth_ref_data)
+stamp_tooth <- write_stamp_region_locale(teeth_ref_data)
+stamp_tooth_text <- write_stamp_region_text_locale(teeth_ref_data)
+```
+
+</details>
+
+### yields user-friendly API
+
+```{r}
+head(caries_ratios)
+
+caries_ratios |> 
+  ggplot() + 
+  aes(tooth = tooth, 
+      fill = ratio) + 
+  geom_tooth(alpha = .2) + 
+  stamp_tooth_text(size = 2)
+```
+
+
+
+### ggregions with gganatogram::cell_list
+
+<details>
+
+```{r}
+to_sf_routine <- function(data){
+  
+  data |>
+  mutate(y = -y) |>
+  sf::st_as_sf(coords = c("x", "y"), agr = "constant") |>
+  group_by(id, group) |>
+  summarize(do_union = F) |> 
+  ungroup() |> 
+  group_by(id, group) |>
+  summarise() |>
+  mutate(geometry = geometry |> sf::st_cast("POLYGON")) |> 
+  mutate(geometry = geometry |> sf::st_cast("MULTIPOLYGON")) |> 
+  ungroup() 
+  
+}
+
+
+```
+
+
+```{r}
+cell_sf <- gganatogram::cell_list[[1]] |> 
+  bind_rows() |>
+  remove_missing() |>
+  to_sf_routine() |> 
+  rename(organelle = id)
+```
+
+
+```{r}
+geom_organelle <- ggregions::write_geom_region_locale(cell_sf)
+stamp_organelle <- ggregions::write_stamp_region_locale(cell_sf)
+
+cell_sf
+```
+
+</details>
+
+
+#### yields user-friendly API
+
+```{r}
+ggplot() + 
+  stamp_organelle(alpha = .2) + 
+  stamp_organelle(keep = "actin_filaments", 
+                  fill = "orange" |> alpha(.1)) +
+  stamp_organelle(keep = "endoplasmic_reticulum", 
+                  fill = "darkred") 
+
+
+```
+
+
+### ggregions and gganatogram::hgFemale_list
+
+<details>
+
+```{r, error = T}
+length(gganatogram::hgFemale_list)
+
+# fix so that all data frames can be combined with bind_rows
+# the groups are numeric and character so using bind_rows fails
+female_sf <- gganatogram::hgFemale_list[c(1:156, 180:195)] |> # return to this!!
+  bind_rows() |>
+  remove_missing() |>
+  to_sf_routine() |> 
+  rename(organ = id)
+  
+stamp_organ <- ggregions::write_stamp_region_locale(female_sf)
+
+ggplot(female_sf) + 
+  aes(geometry = geometry) +
+  geom_sf(alpha = .2)
+
+male_sf <- gganatogram::hgMale_list[2:155] |>  
+  bind_rows() |>
+  # filter(x != 0, y != 0, y < -2) |>
+  remove_missing() |>
+  to_sf_routine() 
+
+
+
+ggplot(male_sf) + 
+  aes(geometry = geometry) +
+  geom_sf(alpha = .2)
+```
+
+</details>
+
+#### yields user-friendly API
+
+```{r}
+ggplot() + 
+  stamp_organ(alpha = .2) + 
+  stamp_organ(
+    keep = c("lung", "stomach", 
+             "heart", "brain", "trachea"),
+    aes(fill = after_stat(organ))
+    )
+
+```
+
+
+### ggregions and ggseg::aseg$data
+
+<details developer facing>
+
+
+```{r}
+library(ggseg)
+
+coronal_ref_data <- ggseg::aseg$data |> 
+  filter(side == "coronal") |>     # just look at coronal for the nuttiness.
+  group_by(region) |> 
+  summarise(geometry = sf::st_combine(geometry)) |> 
+  select(region = region, everything())
+  
+coronal_ref_data |> pull(region)
+
+library(ggregions)
+geom_region <- write_geom_region_locale(ref_data = coronal_ref_data)
+stamp_region <- write_stamp_region_locale(ref_data = coronal_ref_data)
+geom_region_text <- write_geom_region_text_locale(ref_data = coronal_ref_data)
+stamp_region_text <- write_stamp_region_text_locale(ref_data = coronal_ref_data)
+```
+
+
+</details>
+
+
+#### yields user-friendly API
+
+```{r}
+tribble(~activity, ~segment,
+        .2,        "hippocampus",
+        .5,        "amygdala",
+        .7,        "thalamus proper",
+        .5,        "caudate") |>
+ggplot() + 
+  stamp_region() + 
+  aes(region = segment,
+      fill = activity) + 
+  geom_region() + 
+  scale_fill_viridis_c(option = "magma")
+```
+

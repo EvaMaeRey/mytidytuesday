@@ -1,0 +1,52 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+library(ggiraph)
+```
+
+## Experiment
+
+```{r}
+usmapdata::us_map() |> 
+  ggplot() + 
+  aes(fill = as.numeric(fips), 
+      tooltip = full ) + 
+  geom_sf_interactive()
+
+girafe(ggobj = last_plot())
+
+
+usmapdata::us_map() |> 
+  ggplot() + 
+  aes(fill = as.numeric(fips), 
+      tooltip = full ) + 
+  geom_sf_interactive()
+
+girafe(ggobj = last_plot())
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
