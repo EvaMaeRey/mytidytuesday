@@ -1,0 +1,53 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+scale_fill_viridis_c
+
+library(scales)
+
+my_viridis <- pal_gradient_n(pal_viridis(alpha = .9, 
+        begin = 0, end = .95, direction = 1, option = "D")(6) |> scales::col_mix("lightyellow", .4), values = NULL, space = "Lab")
+
+
+ggplot(cars) + 
+  aes(speed, dist) + 
+  geom_point(shape = "X") +
+  aes(color = speed) + 
+  ggchalkboard::theme_chalkboard() +
+  # scale_color_viridis_c()
+  theme(palette.colour.continuous = my_viridis)
+
+
+ggchalkboard::theme_chalkboard
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
