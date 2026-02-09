@@ -1,0 +1,52 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                        dev = "ragg_png" # <- This piece specifically
+)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+library(tidyverse)
+library(ggram)
+
+'ggplot(cars) + 
+  aes(speed, dist) + 
+  geom_point() + 
+  annotate(geom = "text",
+           x = I(.2), #<<
+           y = I(.9), #<<
+           label = "🤗",
+           size = 15)' |>
+ggram("New in ggplot2 v 3.5, using I() with x,y can be helpful for some plot annotations", 
+      subtitle = "In the plotting panel, the hugging face '🤗' annotation lies 2/10 of the way over\nand 9/10 of the way up! 📊🚀", code = _)
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
