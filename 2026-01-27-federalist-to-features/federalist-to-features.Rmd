@@ -61,8 +61,7 @@ federalist %>%
                              "Disputed")) %>% 
   mutate(name = paste(author, 
                       str_remove(name, "eralist"), 
-                      sep = "-")) %>% 
-  -> 
+                      sep = "-"))  -> 
 federalist
 
 
@@ -109,18 +108,23 @@ fed |>
   geom_umap() + 
   aes(fill = author)
 
+
+
+
+
+
 ```
 
 
 
 ```{r}
-# federalist %>% 
-#   quanteda::corpus(text_field = "text", docid_field = "name") |>
-#   quanteda::tokens(remove_numbers = TRUE, remove_punct = TRUE) |>
-#   quanteda::dfm() |>
-#   quanteda::convert(to = "data.frame") |>
-#   select(-"in", -"for", -"or") ->
-# federalist_word_count
+federalist %>%
+  quanteda::corpus(text_field = "text", docid_field = "name") |>
+  quanteda::tokens(remove_numbers = TRUE, remove_punct = TRUE) |>
+  quanteda::dfm() |>
+  quanteda::convert(to = "data.frame") |>
+  select(-"in", -"for", -"or") ->
+federalist_word_count
 
 names(federalist_word_count) |> tail()
 
@@ -156,6 +160,37 @@ last_plot() +
 
 ```
 
-<sup>Created on 2026-01-27 with [reprex v2.1.1](https://reprex.tidyverse.org)</sup> \`\`\`
+
+
+```{r}
+
+ 
+library(embed)
+
+recipe(~., data = fed) %>%
+  update_role(author, doc_name, new_role = "id") %>%
+  step_normalize(all_predictors()) %>%
+  step_umap(all_predictors()) |> 
+  prep() |> 
+  juice() |> 
+  ggplot() + 
+  aes(x = UMAP1, y = UMAP2) + 
+  geom_point() + 
+  aes(color = author)
+
+recipe(~., data = fed) %>%
+  update_role(author, doc_name, new_role = "id") %>%
+  step_normalize(all_predictors()) %>%
+  step_pca(all_predictors()) |> 
+  prep() |> 
+  juice() |> 
+  ggplot() + 
+  aes(x = PC1, y = PC2) + 
+  geom_point() + 
+  aes(color = author)
+
+```
+
+
 
 ## Closing remarks, Other Relevant Work, Caveats

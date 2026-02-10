@@ -1,0 +1,76 @@
+---
+title: "copied"
+subtitle: ""
+author: ""
+output:
+  xaringan::moon_reader:
+    seal: FALSE
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r, include = F}
+options(knitr.duplicate.label = "allow")
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F)
+library(flipbookr)
+library(tidyverse)
+load("current_image.Rdata")
+```
+
+
+```{r, echo = F, eval = FALSE , message = F, warning = F}
+xaringanExtra::use_share_again()
+```
+
+
+```{r the_chunk, include = F}
+pca_prep |>
+  juice() %>%
+  ggplot() +
+  aes(PC1, PC2) +
+  geom_point(alpha = 0.6, 
+             size = 2) +
+  aes(color = category) +
+  aes(label = name) + 
+  geom_text(check_overlap = TRUE, 
+            hjust = "inward", 
+            color = "black") +
+  labs(color = NULL) + 
+  facet_wrap(facet = 
+               vars(category)) + 
+  aes(color = I("gray"))
+```
+
+`r chunk_reveal(chunk_name = "the_chunk", break_type = "auto")`
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 120%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+

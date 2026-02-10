@@ -1,0 +1,196 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+library(tidymodels)
+
+
+boston_cocktails <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-26/boston_cocktails.csv")
+
+boston_cocktails %>%
+  count(ingredient, sort = TRUE)
+
+cocktails_parsed <- boston_cocktails %>%
+  mutate(
+    ingredient = str_to_lower(ingredient),
+    ingredient = str_replace_all(ingredient, "-", " "),
+    ingredient = str_remove(ingredient, " liqueur$"),
+    ingredient = str_remove(ingredient, " (if desired)$"),
+    ingredient = case_when(
+      str_detect(ingredient, "bitters") ~ "bitters",
+      str_detect(ingredient, "lemon") ~ "lemon juice",
+      str_detect(ingredient, "lime") ~ "lime juice",
+      str_detect(ingredient, "grapefruit") ~ "grapefruit juice",
+      str_detect(ingredient, "orange") ~ "orange juice",
+      TRUE ~ ingredient
+    ),
+    measure = case_when(
+      str_detect(ingredient, "bitters") ~ str_replace(measure, "oz$", "dash"),
+      TRUE ~ measure
+    ),
+    measure = str_replace(measure, " ?1/2", ".5"),
+    measure = str_replace(measure, " ?3/4", ".75"),
+    measure = str_replace(measure, " ?1/4", ".25"),
+    measure_number = parse_number(measure),
+    measure_number = if_else(str_detect(measure, "dash$"),
+      measure_number / 50,
+      measure_number
+    )
+  ) %>%
+  add_count(ingredient) %>%
+  filter(n > 15) %>%
+  select(-n) %>%
+  distinct(row_id, ingredient, .keep_all = TRUE) %>%
+  na.omit()
+
+cocktails_parsed
+
+
+cocktails_df <- cocktails_parsed %>%
+  select(-ingredient_number, -row_id, -measure) %>%
+  pivot_wider(names_from = ingredient, values_from = measure_number, values_fill = 0) %>%
+  janitor::clean_names() %>%
+  na.omit()
+
+cocktails_df
+
+library(tidymodels)
+
+pca_rec <- recipe(~., data = cocktails_df) %>%
+  update_role(name, category, new_role = "id") %>%
+  step_normalize(all_predictors()) %>%
+  step_pca(all_predictors())
+
+pca_prep <- prep(pca_rec)
+
+pca_prep
+```
+
+
+```{r}
+tidied_pca <- tidy(pca_prep, 2)
+
+tidied_pca %>%
+  filter(component %in% paste0("PC", 1:5)) %>%
+  mutate(component = fct_inorder(component)) %>%
+  ggplot(aes(value, terms, fill = terms)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~component, nrow = 1) +
+  labs(y = NULL)
+
+
+library(tidytext)
+
+tidied_pca %>%
+  filter(component %in% paste0("PC", 1:4)) %>%
+  group_by(component) %>%
+  top_n(8, abs(value)) %>%
+  ungroup() %>%
+  mutate(terms = 
+           reorder_within(terms, 
+                          abs(value), 
+                          component)) %>%
+  ggplot() +
+  aes(x = value, y = terms) + 
+  labs(y = NULL) + 
+  geom_col() +
+  facet_wrap(~ component, scales = "free_y") +
+  scale_y_reordered() +
+  aes(x = abs(value), fill = value > 0) + 
+  labs(x = "Absolute value of contribution",
+      fill = "Positive?")
+
+```
+
+## Experiment
+
+```{r}
+pca_prep |>
+  juice() %>%
+  ggplot() +
+  aes(PC1, PC2) +
+  geom_point(alpha = 0.6, 
+             size = 2) +
+  aes(color = category) +
+  aes(label = name) + 
+  geom_text(check_overlap = TRUE, 
+            hjust = "inward", 
+            color = "black") +
+  labs(color = NULL) + 
+  facet_wrap(facet = 
+               vars(category)) + 
+  aes(color = I("gray"))
+```
+
+```{r}
+library(embed)
+
+library(embed)
+
+umap_rec <- recipe(~., data = cocktails_df) %>%
+  update_role(name, category, new_role = "id") %>%
+  step_normalize(all_predictors()) %>%
+  step_umap(all_predictors())
+
+umap_prep <- prep(umap_rec)
+
+umap_prep
+
+
+juice(umap_prep) %>%
+  ggplot(aes(umap_1, umap_2, label = name)) +
+  geom_point(aes(color = category), alpha = 0.7, size = 2) +
+  geom_text(check_overlap = TRUE, hjust = "inward", family = "IBMPlexSans") +
+  labs(color = NULL)
+```
+
+
+```{r}
+
+
+recipe(~., data = cocktails_df) %>%
+  update_role(name, category, new_role = "id") %>%
+  step_normalize(all_predictors()) %>%
+  step_umap(all_predictors()) |> 
+  prep() |> 
+  juice()
+
+umap_prep |>
+  juice() %>%
+  ggplot(aes(UMAP1, UMAP2, label = name)) +
+  geom_point(alpha = 0.7, size = 2) +
+  aes(color = category) +
+  geom_text(check_overlap = TRUE, hjust = "inward",
+            color = "grey") +
+  labs(color = NULL) + 
+  facet_wrap(facet = 
+               vars(category)) + 
+  guides(color = "none")
+
+
+
+```
+
+
+## Closing remarks, Other Relevant Work, Caveats
