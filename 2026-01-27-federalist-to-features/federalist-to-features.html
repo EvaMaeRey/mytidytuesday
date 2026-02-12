@@ -11,7 +11,7 @@
 
 <meta name="author" content="Evangeline Reynolds" />
 
-<meta name="date" content="2026-02-10" />
+<meta name="date" content="2026-02-11" />
 
 <title>another experiment</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">another experiment</h1>
 <h4 class="author">Evangeline Reynolds</h4>
-<h4 class="date">2026-02-10</h4>
+<h4 class="date">2026-02-11</h4>
 
 </div>
 
@@ -779,6 +779,21 @@ federalist_word_count |&gt;
 <pre><code>## The following object is masked from &#39;package:stats&#39;:
 ## 
 ##     step</code></pre>
+<pre class="r"><code>library(tidymodels)</code></pre>
+<pre><code>## ── Attaching packages ────────────────────────────────────── tidymodels 1.4.1 ──</code></pre>
+<pre><code>## ✔ broom        1.0.11     ✔ tailor       0.1.0 
+## ✔ dials        1.4.2      ✔ tune         2.0.1 
+## ✔ infer        1.1.0      ✔ workflows    1.3.0 
+## ✔ modeldata    1.5.1      ✔ workflowsets 1.1.1 
+## ✔ parsnip      1.4.1      ✔ yardstick    1.3.2 
+## ✔ rsample      1.3.2</code></pre>
+<pre><code>## ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
+## ✖ scales::discard() masks purrr::discard()
+## ✖ dplyr::filter()   masks stats::filter()
+## ✖ recipes::fixed()  masks stringr::fixed()
+## ✖ dplyr::lag()      masks stats::lag()
+## ✖ yardstick::spec() masks readr::spec()
+## ✖ recipes::step()   masks stats::step()</code></pre>
 <pre class="r"><code>recipe(~., data = fed) %&gt;%
   update_role(author, doc_name, new_role = &quot;id&quot;) %&gt;%
   step_normalize(all_predictors()) %&gt;%

@@ -32,22 +32,59 @@ library(tidyverse)
 library(Seurat)
 library(BPCells)
 
-options(future.globals.maxSize = 1e9)
+# Load and clean penguins data
+penguins_clean <- na.omit(penguins) |> 
+  mutate(bill_length_mm = bill_length_mm/max(bill_length_mm),
+         bill_depth_mm = bill_depth_mm/max(bill_depth_mm),
+         flipper_length_mm = flipper_length_mm/max(flipper_length_mm),
+         body_mass_g = body_mass_g/max(body_mass_g)) 
 
-obj <- readRDS("vignette_data/1p3_million_mouse_brain.rds")
+# Convert to numerical matrix for features (transpose so features are rows)
+# Using specific numeric columns as expression features
+penguins_mat <- penguins_clean %>%
+  select(bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g) %>%
+  t()
 
-penguins |> 
-  select(bill_len:body_mass) |>
-  remove_missing() |>
+colnames(penguins_mat) <- paste0("Penguin_", 1:ncol(penguins_mat))
+
+# Create the object
+p_seurat <- CreateSeuratObject(counts = penguins_mat, project = "Penguins")
+
+# Add metadata
+metadata <- penguins_clean %>%
+  select(species, island, sex)
+
+p_seurat <- AddMetaData(p_seurat, metadata)
+
+p_seurat |> 
   NormalizeData() |> 
   FindVariableFeatures() |> 
   ScaleData() |> 
   RunPCA() |> 
-  FindNeighbors(dims = 1:30) |> 
+  FindNeighbors(dims = 1:3) |> 
   FindClusters() |> 
-  RunUMAP(dims = 1:30)
-```
+  RunUMAP(dims = 1:2) |> 
+  DimPlot(reduction = "umap")
 
+```
+```{r}
+# Load the PBMC dataset
+pbmc.data <- Read10X(data.dir = "../../../../Downloads/filtered_gene_bc_matrices/hg19/")
+# Initialize the Seurat object with the raw (non-normalized data).
+
+pbmc <- CreateSeuratObject(counts = pbmc.data, project = "pbmc3k", min.cells = 3, min.features = 200)
+
+pbmc <- NormalizeData(pbmc)
+pbmc <- FindVariableFeatures(pbmc, selection.method = "vst", nfeatures = 2000)
+all.genes <- rownames(pbmc)
+pbmc <- ScaleData(pbmc, features = all.genes)
+pbmc <- RunPCA(pbmc, features = VariableFeatures(object = pbmc))
+DimPlot(pbmc, reduction = "pca" )
+pbmc <- FindNeighbors(pbmc, dims = 1:10)
+pbmc <- FindClusters(pbmc, resolution = 0.5)
+pbmc <- RunUMAP(pbmc, dims = 1:10)
+DimPlot(pbmc, reduction = "umap")
+```
 
 
 ## Closing remarks, Other Relevant Work, Caveats

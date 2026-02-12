@@ -80,4 +80,26 @@ ScaleBivariate$transform
 
 
 
+```{r}
+
+
+'library(tigris) 
+library(ggincerta) 
+
+counties(
+     state = "TX", 
+     cb = TRUE, 
+     class = "sf"
+  ) |> 
+  ggplot() + 
+  aes(fill = duo(ALAND, AWATER)) + #<<
+  geom_sf() + 
+  theme_void() +
+  theme(legend.position = c(.25, .18))' |>
+ggram::ggram(code = _, "ggram:: ggincerta::duo() for bivariate color filling! ")
+
+
+```
+
+
 ## Closing remarks, Other Relevant Work, Caveats

@@ -166,6 +166,7 @@ last_plot() +
 
  
 library(embed)
+library(tidymodels)
 
 recipe(~., data = fed) %>%
   update_role(author, doc_name, new_role = "id") %>%
@@ -188,7 +189,6 @@ recipe(~., data = fed) %>%
   aes(x = PC1, y = PC2) + 
   geom_point() + 
   aes(color = author)
-
 ```
 
 

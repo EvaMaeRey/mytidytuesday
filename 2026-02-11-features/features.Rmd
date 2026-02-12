@@ -1,0 +1,183 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+
+dims_expand <- function(select) {
+
+  structure(
+    list(), 
+    class = "expand"
+    )
+
+}
+
+
+
+ggplot_add.expand <- function(object, plot, object_name) {
+  
+  # get expression inside of dims parentheses in `aes(dims = dims(var1:var10))`
+  # would return "var1:var10"
+  select_specs <- plot$mapping$dims[[2]] |> 
+    as.character() |> 
+    _[-1] |> 
+    paste(collapse = ", ")
+  
+  # from plot data point to the select_specs variables that are specified 
+  # and save a data frame, in features_df
+  features_df <- paste0("select(plot$data,",  select_specs, ")") |> 
+    rlang::parse_expr() |> 
+    eval()
+
+  # create a vector added to the plot data
+  plot$data$.dims_stasher <- vector("list", nrow(plot$data))
+
+  for (i in 1:nrow(features_df)){
+  # store the features data as a 1 row data frame in vector .dims_stasher...
+  plot$data$.dims_stasher[[i]] <- features_df[i,]
+  }
+  
+  # overwrite dims mapping to point to new vector that contains features_df
+  plot$mapping <- modifyList(plot$mapping, aes(dims = .dims_stasher))
+  
+  plot
+  
+}
+
+```
+
+```{r}
+## Experiment
+
+dims <- function(){}
+
+ggplot(mtcars) + 
+  aes(dims = dims(mpg:drat, qsec), x = 1, y = 1) + 
+  geom_point() + 
+  dims_expand()
+
+p <- last_plot()
+
+p$mapping
+
+p$data$.dims_stasher[[1]]
+
+p$data$.dims_stasher |>
+  bind_rows() |>
+  ggdims:::pca_layout()
+```
+
+# then a new compute...
+
+```{r}
+compute_pca_rows <- function (data, scales){
+  
+    data_for_reduction <- data$dims |> bind_rows()
+
+    clean_data <- remove_missing(bind_cols(data_for_reduction,
+        data |> select(-"dims")))
+    
+    # set.seed(1345)
+    
+    clean_data[names(data_for_reduction)] |>
+      ggdims:::pca_layout() |>
+      bind_cols(clean_data)
+    
+}
+
+
+
+StatPca <- ggproto("StatPca", Stat, compute_panel = compute_pca_rows,
+                   default_aes = 
+                             aes(x = after_stat(PC1), 
+                                 y = after_stat(PC2)))
+
+ggplot(mtcars) +
+  aes(dims = dims(mpg:drat, qsec)) +
+  dims_expand() +
+  geom_point(stat = StatPca)
+
+layer_data() |> head()
+
+iris |> 
+  mutate(type = sample(1:2, 150, replace = T)) |>
+  ggplot() +
+  aes(dims = dims(Sepal.Length:Petal.Width),
+      color = Species) +
+  # --------- the following gets wrapped up to geom_pca ------------
+  dims_expand() +
+  geom_point(stat = StatPca)
+
+last_plot() + 
+  facet_wrap(~type)
+
+
+iris |> 
+  mutate(type = sample(1:2, 150, replace = T)) |>
+  ggplot() +
+  aes(dims = dims(Sepal.Length:Petal.Width),
+      color = Species) +
+  # --------- the following gets wrapped up to geom_pca ------------
+  dims_expand() +
+  geom_point(stat = StatPca)
+
+
+
+```
+
+---
+
+```{r}
+library(ggdims)
+iris |> 
+  mutate(type = sample(1:2, 150, replace = T)) |>
+  ggplot() +
+  aes(dims = dims(Sepal.Length:Petal.Width),
+      color = Species) +
+  # --------- the following gets wrapped up to geom_pca ------------
+  ggdims:::dims_expand() +
+  ggdims:::geom_umap0()
+
+last_plot() + 
+  facet_wrap(facet = vars(Species))
+```
+
+
+```{r, eval = F}
+library(ggdims)
+penguins |> 
+  mutate(type = sample(1:2, 344, replace = T)) |>
+  ggplot() +
+  aes(dims = dims(bill_length_mm:body_mass_g),
+      color = species) +
+  # --------- the following gets wrapped up to geom_pca ------------
+  ggdims:::dims_expand() +
+  ggdims:::geom_umap0()
+
+last_plot() + 
+  facet_wrap(facet = vars(species))
+
+```
+
+## Closing remarks, Other Relevant Work, Caveats
