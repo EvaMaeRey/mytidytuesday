@@ -180,4 +180,23 @@ last_plot() +
 
 ```
 
-## Closing remarks, Other Relevant Work, Caveats
+```{r, eval = T}
+rm(list = ls())
+library(tidyverse)
+
+penguins |> 
+  ggplot() +
+  facet_wrap(facet = vars(species)) +
+  aes(x = bill_length_mm) + 
+  aes(y = body_mass_g) + 
+  geom_point(data = . %>% 
+               select(-species)) +
+  aes(shape = 21 |> I()) +
+  aes(fill = "grey" |> I()) +
+  geom_point(fill = "midnightblue") +
+  aes(color = "lightgrey" |> I()) +
+  aes(size = 3 |> I()) +
+  aes(alpha = 1 |> I())
+
+
+```

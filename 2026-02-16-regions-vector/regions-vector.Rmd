@@ -1,0 +1,52 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r, eval=F}
+ggplot() + 
+  aes(geometry = state_name |> name_to_borders()) + 
+  geom_sf()
+```
+
+
+```{r}
+ggplot() + 
+  aes(geometry = state_name) + 
+  geom_region()
+
+last_plot() + 
+  aes(geometry = state_name |> name_to_borders()) 
+```
+
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

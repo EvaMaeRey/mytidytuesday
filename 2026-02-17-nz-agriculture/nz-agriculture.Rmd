@@ -1,0 +1,61 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+
+dataset <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-02-17/dataset.csv')
+
+```
+
+## Experiment
+
+```{r}
+
+
+dataset |> 
+  ggplot() + 
+  facet_wrap(
+    facet = vars(measure), 
+    scales = "free_y") + 
+  theme_gray(base_size = 4) + 
+  aes(x = year_ended_june, 
+      y = value) + 
+  geom_line()
+
+
+# dual axis.
+```
+
+# sec axis???
+
+```{r}
+ggplot(nz_sheep_people) + 
+  aes(x = year,
+      y = num_sheep) + 
+  geom_line() + 
+  geom_line_sec_axis(aes(y2 = num_people)) # GeomLineBlue, scale_y which has a second axis, stat that rescales y2 to be on y, theme that makes second axis match color...
+```
+
+
+## Closing remarks, Other Relevant Work, Caveats

@@ -1,0 +1,192 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+library(ggiraph)
+library(ggplot2)
+
+plot <- ggplot(cars) + 
+  aes(speed, dist) + 
+  geom_point_interactive() + 
+  aes(tooltip = speed)
+
+ggiraph::girafe(plot)
+
+make_interactive <- function(data = NULL) {
+
+  structure(
+    list(), 
+    class = "gg_interactive"
+    )
+
+}
+
+ggplot_add.gg_interactive <- function(object, plot, object_name) {
+  
+  ggiraph::girafe(plot)
+
+}
+
+ggplot(cars) + 
+  aes(speed, dist) + 
+  ggiraph::geom_point_interactive() + 
+  aes(tooltip = speed) +
+  make_interactive()
+
+```
+
+
+
+
+```{r}
+ggplot(cars) + 
+  aes(speed, dist) + 
+  geom_point_interactive()
+
+p <- last_plot()
+
+
+ggplot(cars) + 
+  aes(speed, dist) + 
+  geom_point()
+
+p$layers
+last_plot()$layers
+
+```
+
+
+```{r}
+
+library(tidyverse)
+tooltip <- function(tooltip) {
+
+  structure(
+    list(tooltip_specs = rlang::enquo(tooltip)), 
+    class = "tt"
+    )
+
+}
+
+ggplot_add.tt <- function(object, plot, object_name) {
+  
+  plot <- plot + aes(tooltip = !!object$tooltip_specs)
+  
+  # return(plot) # and for all plots thereafter???
+  
+  ggiraph::girafe(plot)
+
+}
+
+
+mtcars |>
+  rownames_to_column("car") |>
+  ggplot() + 
+  aes(mpg, disp, color = cyl) + 
+  geom_point_interactive() + 
+  tooltip(car) +
+  aes(size = cyl) + 
+  tooltip(car)
+
+
+
+
+
+```
+
+### via ggplot2 extenders, https://github.com/ggplot2-extenders/ggplot-extension-club/discussions/138#discussioncomment-15838354 @teunbrand
+
+```{r}
+library(ggiraph)
+library(ggplot2)
+library(S7)
+
+make_interactive <- function(data = NULL) {
+  structure(
+    list(), 
+    class = "make_interactive"
+  )
+}
+
+method(update_ggplot, list(new_S3_class("make_interactive"), class_ggplot)) <- 
+  function(object, plot, ...) {
+    girafe(plot)
+  }
+
+ggplot(cars) + 
+  aes(speed, dist) + 
+  ggiraph::geom_point_interactive() + 
+  aes(tooltip = speed) +
+  make_interactive()
+```
+
+```{r}
+
+data_replace <- function(data = NULL) {
+  structure(
+    list(data_spec = data), 
+    class = "df_replace"
+  )
+}
+
+method(update_ggplot, 
+       list(new_S3_class("df_replace"), 
+                    class_ggplot)) <- function(object, plot, ...) {
+      
+    plot$data <- object$data_spec
+    plot
+    
+  }
+
+p <- ggplot(mtcars) + 
+  aes(cyl) + 
+  geom_bar()
+
+p + data_replace(mpg)
+
+ggplot(mtcars) + 
+  aes(cyl) + 
+  geom_bar() + 
+  mpg |> filter(year > 2000) + 
+  geom_point(aes(y = displ))
+
+```
+
+
+
+
+## ToDo S7
+
+```{r}
+S7::method(update_ggplot, list(element_text, class_ggplot)) <-
+  function(object, plot, ...) {
+    plot + theme(text = object)
+  }
+
+# we can now use `+` to add our object to a plot
+ggplot(mpg, aes(displ, cty)) +
+  geom_point() +
+  element_text(colour = "red")
+```
+
+
+## Closing remarks, Other Relevant Work, Caveats
