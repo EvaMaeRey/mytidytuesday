@@ -1,0 +1,86 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+knitr::opts_chunk$set(dev = "ragg_png")
+```
+
+## Experiment
+
+```{r}
+# lookup <- tribble(~code, ~label,
+#                   1, "disagree",
+#                   2, "neutral",
+#                   3, "agree") 
+
+
+library(tidyverse)
+  
+'tibble::tribble(~ year,
+                2002,
+                2000,
+                NA, 
+                2007) |>
+  dplyr::filter_out(year > 2005)' |>
+  ggram::ggram_df_output(code = _,
+                         title = "")
+
+'
+library(tidyverse)
+
+tribble(~ year,
+          2002,
+          2000,
+          NA, 
+          2007) |>
+  filter_out(year > 2005)' |>
+  ggram::ggram_df_output(code = _,
+                         title = "")
+
+last_plot() &
+  annotate(geom = "text", 
+           x = I(.8), y = I(.8), 
+           label = " 🎉 👋", 
+           size = 12)
+
+
+library(tidyverse)
+library(patchwork)
+
+ggplot() + 
+  annotate(GeomText,
+           label = 'tibble::tribble(~ year,
+                2002,
+                2000,
+                NA, 
+                2007) |>
+  dplyr::filter_out(year > 2005)') + 
+  gt::gt(tibble::tribble(~ year, 2002)) & 
+  annotate("text", label = "Hello World!",
+           x = I(.5), y = I(.5) )
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

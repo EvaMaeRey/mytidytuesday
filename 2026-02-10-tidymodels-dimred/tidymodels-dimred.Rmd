@@ -146,8 +146,6 @@ pca_prep |>
 ```{r}
 library(embed)
 
-library(embed)
-
 umap_rec <- recipe(~., data = cocktails_df) %>%
   update_role(name, category, new_role = "id") %>%
   step_normalize(all_predictors()) %>%
@@ -159,7 +157,7 @@ umap_prep
 
 
 juice(umap_prep) %>%
-  ggplot(aes(umap_1, umap_2, label = name)) +
+  ggplot(aes(UMAP1, UMAP2, label = name)) +
   geom_point(aes(color = category), alpha = 0.7, size = 2) +
   geom_text(check_overlap = TRUE, hjust = "inward", family = "IBMPlexSans") +
   labs(color = NULL)
@@ -167,10 +165,12 @@ juice(umap_prep) %>%
 
 
 ```{r}
+?update_role
 
-
-recipe(~., data = cocktails_df) %>%
-  update_role(name, category, new_role = "id") %>%
+cocktails_df |> 
+  select(-name, - category) |>
+  recipe(~ ., data = _) %>%
+  # update_role(name, category, new_role = "id") %>%
   step_normalize(all_predictors()) %>%
   step_umap(all_predictors()) |> 
   prep() |> 
@@ -180,7 +180,7 @@ umap_prep |>
   juice() %>%
   ggplot(aes(UMAP1, UMAP2, label = name)) +
   geom_point(alpha = 0.7, size = 2) +
-  aes(color = category) +
+  # aes(color = category) +
   geom_text(check_overlap = TRUE, hjust = "inward",
             color = "grey") +
   labs(color = NULL) + 

@@ -1,0 +1,3 @@
+x |>
+  map(triple) |>
+  str()

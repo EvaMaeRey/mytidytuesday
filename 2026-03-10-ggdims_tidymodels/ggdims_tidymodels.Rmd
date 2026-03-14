@@ -1,0 +1,164 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+library(tidymodels)
+library(embed)
+library(ggdims)
+```
+
+## Experiment
+
+```{r}
+dimred_recipes_layout <- function(data = data, step_dimred = step_pca){
+
+  recipe(~ ., data = data) %>%
+    step_normalize(all_predictors()) %>%
+    step_dimred(all_predictors()) |> 
+    prep() |> 
+    juice() 
+  
+}
+
+iris |> select(Sepal.Length:Petal.Width) |> 
+  dimred_recipes_layout()
+
+iris |> select(Sepal.Length:Petal.Width) |> 
+  dimred_recipes_layout(step_dimred = step_umap)
+
+step_umap_1d <- function(recipe, ...){step_umap(recipe, ..., num_comp = 1)}
+
+iris |> select(Sepal.Length:Petal.Width) |> 
+  dimred_recipes_layout(step_dimred = step_umap_1d)
+
+```
+
+
+```{r}
+compute_tidy_dimred <- function(data, scales, step_dimred = step_pca){
+  
+    data_for_reduction <- data_vars_unpack(data)
+    clean_data <- remove_missing(bind_cols(data_for_reduction, 
+        data))
+    set.seed(1345)
+    bind_cols(dimred_recipes_layout(clean_data[names(data_for_reduction)],
+                                    step_dimred), 
+        clean_data)
+  
+}
+
+
+compute_pca <- function (data, scales) {
+
+  compute_tidy_dimred(data, scales)
+  
+}
+
+compute_umap <- function (data, scales) {
+
+  compute_tidy_dimred(data, scales, step_dimred = step_umap)
+  
+}
+
+
+compute_umap_1d <- function (data, scales) {
+
+  compute_tidy_dimred(data, scales, step_dimred = step_umap_1d)
+  
+}
+
+```
+
+
+```{r}
+StatUmap <- ggproto("StatUmap", Stat, 
+                    compute_panel = compute_umap, 
+                    default_aes = aes(x = after_stat(UMAP1), 
+                                      y = after_stat(UMAP2)))
+
+StatUmap1d <- ggproto("StatUmap1d", Stat, 
+                    compute_panel = compute_umap_1d, 
+                    default_aes = aes(x = after_stat(UMAP1)))
+
+StatPca <- ggproto("StatPca", Stat, 
+                    compute_panel = compute_pca, 
+                    default_aes = aes(x = after_stat(PC1), 
+                                      y = after_stat(PC2)))
+```
+
+
+```{r}
+geom_pca0 <- make_constructor(GeomPoint, stat = StatPca)
+geom_umap0 <- make_constructor(GeomPoint, stat = StatUmap)
+geom_umap_1d_0 <- make_constructor(GeomRug, stat = StatUmap1d)
+
+
+
+geom_pca <- function (..., 
+                      update_spec = dims_expand(), 
+                      layer_spec = geom_pca0(...)) {
+    list(update_spec, layer_spec)
+}
+
+geom_umap <- function (..., 
+                      update_spec = dims_expand(), 
+                      layer_spec = geom_umap0(...)) {
+    list(update_spec, layer_spec)
+}
+
+geom_umap_1d <- function (..., 
+                      update_spec = dims_expand(), 
+                      layer_spec = geom_umap_1d_0(...)) {
+    list(update_spec, layer_spec)
+}
+
+ggplot(iris) + 
+  aes(dims = dims(Sepal.Length:Petal.Width)) + 
+  geom_pca() + 
+  aes(color = Species)
+
+ggplot(iris) +
+  aes(dims = dims(Sepal.Length:Petal.Width)) +
+  geom_umap(color = "black")
+
+ggplot(penguins) +
+  aes(dims = dims(bill_length_mm:body_mass_g)) +
+  geom_umap() +
+  aes(color = species)
+
+ggplot(iris)  + 
+  aes(x = Sepal.Length, y = Sepal.Width) + 
+  geom_point() + 
+  aes(color = Species) 
+
+ggplot(iris)  + 
+  aes(dims = dims(Sepal.Length, Sepal.Width)) +
+  geom_umap_1d() + 
+  aes(color = Species) 
+
+ggplyr:::last_plot_wipe_last() +
+  geom_umap()
+```
+
+
+

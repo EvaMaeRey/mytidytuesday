@@ -26,7 +26,21 @@ Within ggplot2 itself, a large swath of common chart types can be easily produce
 In an effort to provide a foothold into the ecosystem, meta-resources like the [ggplot2 extension gallery](https://exts.ggplot2.tidyverse.org/gallery/) and [awesome ggplot2](https://github.com/erikgahner/awesome-ggplot2) have been created.  Additionally, the [ggplot2 extenders club](https://github.com/ggplot2-extenders/ggplot-extension-club/discussions) has held virtual meetings since 2022, and boasts a lively discussion forum.  The group exists for exchanging resources and experiences and to expose common extension patterns, pitfalls, and pathways.
 
 
+Complete plots:
 
+
+In addition to using the grammatical extension points to create more grammatical components, ggplot2 is also used for providing interfaces that fully specify plots.  
+
+One pathway for doing this is using the autoplot() extension point.  Using autoplot(), extenders can specify the for plot take outputs based on the class of the input object, contrasting with the typical data frame or tibble input for standard ggplots.  Notable examples include tsibble's autoplot method, and (I'll make sure we have one more example)
+
+Another popular direction for extension is to offer complete plot functions, where preserving the grammar is not a main consideration.  In these cases, the grammatical components will hidden from the user, and the arguments exposed in the plotting function will be according to the preferences and priorities of the package author and their audience.  Packages taking this approach with many function offerings include ggcharts, ggpubr and ??.  These packages do tend to maintain consistency in argument offerings across functions, helping users orient themselves within the frameworks.  
+
+It is also common for packages that aim to serve specific domains to offer complete plot functions including ???
+
+
+'Everything else' section
+
+A final category for extension are plots that make grammar moves beyond what is on offer within base ggplot2. For example, gganimate offers families of function like the transition\_\*() and ease\_\*(), components which complement the core ggplot2 grammar.  Also, patchwork's powerful plot composition operators feel grammatical in their predictability and exists beyond the scope of ggplot2 itself.  Other packages that sit in this space - which at one prize consistency and composibility, and which also take on capabilities beyond core ggplot2 functionality are ggiraph (offering interactivity), ggraph (a framework for network visualization), and ??  (looking for one more!)
 
 
 

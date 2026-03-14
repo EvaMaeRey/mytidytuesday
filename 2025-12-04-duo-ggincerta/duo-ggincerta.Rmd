@@ -8,7 +8,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F, dev = "")
 options(tidyverse.quiet = TRUE)
 ```
 
@@ -104,6 +104,24 @@ tigris_fetched_tx_counties |>
   theme_void() +
   theme(legend.position = c(.32, .2))' |>
 ggram::ggram(code = _, "🚨🚨🚨Newcomer ggincerta tackles bivariate choropleth maps 👀🗺️", 
+# subtitle = "  ",
+             caption = "Join to hear from the author on duo(), scale_fill_bivariate() and more. \nTuesday Feb 24, 4pm ET; bit.ly/join-gg-extenders ; https:// 🚀️📊 github.com/maggiexma/ggincerta")
+
+
+
+'library(ggincerta)
+  
+tigris_fetched_tx_counties |>
+  ggplot() +
+  aes(fill = duo(ALAND, AWATER) +
+  geom_sf() +
+  scale_fill_bivariate( 
+    colors = c("transparent", #<<
+               "blue") 
+    ) + 
+  theme_void() +
+  theme(legend.position = c(.32, .2))' |>
+ggram::ggram(code = _,  "Not confident that audiences will be able to disentangle colors in your gorgous bivariate choropleth ", subtitle =  "Re-specify one of your bivariate scale colors to 'transparent' to highlight the individual contribution of a scale", 
 # subtitle = "  ",
              caption = "Join to hear from the author on duo(), scale_fill_bivariate() and more. \nTuesday Feb 24, 4pm ET; bit.ly/join-gg-extenders ; https:// 🚀️📊 github.com/maggiexma/ggincerta")
 

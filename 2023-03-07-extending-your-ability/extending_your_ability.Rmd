@@ -90,21 +90,25 @@ ggplot(circles) +
 ```
 
 
+
+
 ```{r}
-ggplot(cars |> mutate(row = row_number())) + 
-  
-  aes(x0 = speed, y0 = dist, r = 5) + 
-  geom_polygon(stat = StatCircle) + 
-  aes(fill = speed > 15) + 
-  facet_wrap(~ speed > 15)
+penguins |> 
+  slice(1:7, .by = species) |>
+  mutate(id_penguin = row_number()) |>
+  ggplot() + 
+  aes(x0 = bill_len, y0 = bill_dep, r = .2) + 
+  geom_polygon(stat = StatCircle)
+
+last_plot() + 
+  aes(fill = species)
+
+last_plot() + 
+  aes(group = id_penguin)
 ```
 
 
-```{r, warning=F}
-last_plot() +
-  aes(group = row) + 
-  geom_point(aes(x = speed, y = dist))
-```
+
 
 
 ---
@@ -295,20 +299,19 @@ create_circle <- function(data, n){
 
 
 ```{r}
-StatCircle <- ggproto(`_class` = "StatCircle", 
-                      `_inherit` = Stat, 
-                      setup_data = function(data, params) {
-  
-    if (data$group[1] == -1) {
-      nrows <- nrow(data)
-      data$group <- seq_len(nrows)
-    }
-  
-    data  # return data with a group variable
-
-},
-                      compute_group = function(data, scales, n = 5){create_circle(data, n = n)},
-                      required_aes = c("x0", "y0", "r")
+StatCircle <- 
+  ggproto("StatCircle", 
+          Stat, 
+          setup_data = function(data, params) {
+            if (data$group[1] == -1) {
+              nrows <- nrow(data)
+              data$group <- seq_len(nrows)
+              }
+            data  # return data with a group variable
+            },
+          compute_group = function(data, scales, n = 5){
+            create_circle(data, n = n)},
+          required_aes = c("x0", "y0", "r")
                       )
 
 
@@ -331,7 +334,7 @@ ggplot(circles) +
 
 ```
 
-![usingfacet](faceting.png)
+![using facetting](faceting.png)
 
 
 ```{r}
@@ -341,6 +344,9 @@ ggplot(circles) +
                    r = r, fill = class)) + 
   facet_wrap(~ class)
 ```
+
+
+
 
 
 ```{r}

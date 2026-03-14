@@ -182,6 +182,16 @@ data.frame(x = 0:1 |> rep(2),
 
 ```
 
+```{r}
 
+
+ggplot(cars) + 
+  aes(speed, dist) + 
+  geom_line() |> 
+  ggfx::with_shadow(x_offset = 0, y_offset = -5,
+                    sigma = 10, stack = T)
+
+
+```
 
 ## Closing remarks, Other Relevant Work, Caveats

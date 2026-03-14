@@ -11,7 +11,7 @@
 
 <meta name="author" content="Evangeline Reynolds" />
 
-<meta name="date" content="2026-01-20" />
+<meta name="date" content="2026-03-03" />
 
 <title>ggplot2 extension ecosystem paper intro</title>
 
@@ -353,7 +353,7 @@ display: none;
 <h1 class="title toc-ignore">ggplot2 extension ecosystem paper
 intro</h1>
 <h4 class="author">Evangeline Reynolds</h4>
-<h4 class="date">2026-01-20</h4>
+<h4 class="date">2026-03-03</h4>
 
 </div>
 
@@ -388,6 +388,38 @@ extenders club</a> has held virtual meetings since 2022, and boasts a
 lively discussion forum. The group exists for exchanging resources and
 experiences and to expose common extension patterns, pitfalls, and
 pathways.</p>
+<p>Complete plots:</p>
+<p>In addition to using the grammatical extension points to create more
+grammatical components, ggplot2 is also used for providing interfaces
+that fully specify plots.</p>
+<p>One pathway for doing this is using the autoplot() extension point.
+Using autoplot(), extenders can specify the for plot take outputs based
+on the class of the input object, contrasting with the typical data
+frame or tibble input for standard ggplots. Notable examples include
+tsibble’s autoplot method, and (I’ll make sure we have one more
+example)</p>
+<p>Another popular direction for extension is to offer complete plot
+functions, where preserving the grammar is not a main consideration. In
+these cases, the grammatical components will hidden from the user, and
+the arguments exposed in the plotting function will be according to the
+preferences and priorities of the package author and their audience.
+Packages taking this approach with many function offerings include
+ggcharts, ggpubr and ??. These packages do tend to maintain consistency
+in argument offerings across functions, helping users orient themselves
+within the frameworks.</p>
+<p>It is also common for packages that aim to serve specific domains to
+offer complete plot functions including ???</p>
+<p>‘Everything else’ section</p>
+<p>A final category for extension are plots that make grammar moves
+beyond what is on offer within base ggplot2. For example, gganimate
+offers families of function like the transition_*() and ease_*(),
+components which complement the core ggplot2 grammar. Also, patchwork’s
+powerful plot composition operators feel grammatical in their
+predictability and exists beyond the scope of ggplot2 itself. Other
+packages that sit in this space - which at one prize consistency and
+composibility, and which also take on capabilities beyond core ggplot2
+functionality are ggiraph (offering interactivity), ggraph (a framework
+for network visualization), and ?? (looking for one more!)</p>
 
 
 

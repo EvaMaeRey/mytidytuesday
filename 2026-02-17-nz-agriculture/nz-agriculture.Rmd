@@ -23,38 +23,206 @@ options(tidyverse.quiet = TRUE)
 ```{r}
 library(tidyverse)
 
-
 dataset <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-02-17/dataset.csv')
 
 ```
 
-## Experiment
-
-```{r}
-
-
-dataset |> 
-  ggplot() + 
-  facet_wrap(
-    facet = vars(measure), 
-    scales = "free_y") + 
-  theme_gray(base_size = 4) + 
-  aes(x = year_ended_june, 
-      y = value) + 
-  geom_line()
-
-
-# dual axis.
-```
 
 # sec axis???
 
-```{r}
+```{r, eval = F}
 ggplot(nz_sheep_people) + 
   aes(x = year,
       y = num_sheep) + 
   geom_line() + 
   geom_line_sec_axis(aes(y2 = num_people)) # GeomLineBlue, scale_y which has a second axis, stat that rescales y2 to be on y, theme that makes second axis match color...
+```
+
+
+
+```{r}
+gapminder::gapminder |> 
+  filter(country %in% c("Afghanistan") ) |> 
+  ggplot() + 
+  aes(x = year,
+      y = lifeExp) + 
+  geom_line() + 
+  geom_line(aes(y = gdpPercap/20), color = "blue") +
+  scale_y_continuous(sec.axis = 
+                       sec_axis(transform = function(x) 20*x))
+  
+
+
+gapminder::gapminder |> 
+  filter(country %in% c("France") ) |> 
+  ggplot() + 
+  aes(x = year,
+      y = lifeExp, 
+      y2 = gdpPercap) + 
+  geom_line() + 
+  geom_line(aes(y = gdpPercap/200, color = from_theme(accent))) +
+  scale_y_continuous(sec.axis = 
+                       sec_axis(transform = function(x) 200*x, name = "gdpPercap")) + 
+  theme(axis.ticks.y.right = element_line(color = theme_get()$geom$accent),
+        axis.line.y.right = element_line(color = theme_get()$geom$accent),
+        axis.text.y.right = element_text(color = theme_get()$geom$accent),
+        axis.title.y.right = element_text(color = theme_get()$geom$accent))
+```
+
+
+```{r}
+gapminder::gapminder |> 
+  filter(country %in% c("France") ) |> 
+  ggplot() + 
+  aes(x = year,
+      y = lifeExp, 
+      y2 = gdpPercap) + 
+  geom_line() 
+
+y1_name <- last_plot()$mapping$y |> _[2] |> as.character()
+y2_name <- last_plot()$mapping$y2 |> _[2] |> as.character()
+
+last_plot()$data[ ,y1_name] |> range() -> y1_range
+last_plot()$data[ ,y2_name] |> range() -> y2_range
+
+y1_range[2] - y1_range[1] -> span_1
+y2_range[2] - y2_range[1] -> span_2
+
+span_scale <- span_2/span_1
+
+function(x) x * span_1 / span_2 + y1_range[1]
+
+last_plot() +
+  # geom_line(aes(y = gdpPercap/200, color = from_theme(accent))) +
+  scale_y_continuous(sec.axis = 
+                       sec_axis(~ (. - y1_range[1]) * span_2/span_1 + y2_range[1], 
+                                name = y2_name)) + 
+  theme(axis.ticks.y.right = element_line(color = theme_get()$geom$accent),
+        axis.line.y.right = element_line(color = theme_get()$geom$accent),
+        axis.text.y.right = element_text(color = theme_get()$geom$accent),
+        axis.title.y.right = element_text(color = theme_get()$geom$accent))
+```
+
+
+# enough familiarization/experiments, let's go!!!
+
+
+```{r}
+#' @export
+scale_sec_y_axis <- function(data = NULL) {
+
+  structure(
+    list(), 
+    class = "scale_sec_y_axis"
+    )
+
+}
+
+
+#' @import ggplot2
+#' @importFrom ggplot2 ggplot_add
+#' @export
+ggplot_add.scale_sec_y_axis <- function(object, plot, object_name) {
+  
+y1_name <- last_plot()$mapping$y |> _[2] |> as.character()
+y2_name <- last_plot()$mapping$y2 |> _[2] |> as.character()
+
+y1 <- last_plot()$data[ ,y1_name]
+y2 <- last_plot()$data[ ,y2_name]
+
+max(y1) - min(y1) -> span_1
+max(y2) - min(y2) -> span_2
+
+plot + 
+scale_y_continuous(sec.axis = 
+                       sec_axis(~ (. - y1_range[1]) * span_2/span_1 + y2_range[1], 
+                                name = y2_name))
+
+}
+```
+
+```{r compute_group_y2_to_y1}
+compute_group_y2_to_y1 <- function(data, scales, y1_min = NULL, y1_max = NULL){
+  
+  y1_min <- y1_min %||% min(data$y, na.rm = T)
+  y1_max <- y1_max %||% max(data$y, na.rm = T)
+
+  y2_min <- min(data$y2, na.rm = T)
+  y2_max <- max(data$y2, na.rm = T)
+  
+  y1_max - y1_min -> span_1
+  y2_max - y2_min -> span_2
+
+  data$y <- (data$y2 - y1_min) * span_1/span_2 + y1_min
+ 
+  data 
+}
+
+StatY2 <- ggproto("StatY2", Stat,
+                  compute_group = compute_group_y2_to_y1)
+
+GeomLineAccent <- ggproto("GeomLineAccent", GeomLine,
+                          default_aes = GeomLine$default_aes |> 
+                            modifyList(aes(colour = 
+                                             from_theme(colour %||% accent))))
+```
+
+```{r}
+last_plot() + 
+  statexpress::qlayer(stat = StatY2, 
+            geom = GeomLineAccent)
+
+geom_line_sec_axis0 <- make_constructor(GeomLineAccent, stat = StatY2)
+
+
+theme_sec_axis <- function(color = theme_get()$geom$accent){
+  
+  theme(axis.ticks.y.right = element_line(color = color),
+        axis.line.y.right = element_line(color = color),
+        axis.text.y.right = element_text(color = color),
+        axis.title.y.right = element_text(color = color))
+  
+}
+
+geom_line_sec_axis <- function(..., 
+                               # y1_min = NULL, # to add?
+                               # y1_max = NULL, # to add?
+                               color = theme_get()$geom$accent,
+                               layer_spec = geom_line_sec_axis0(..., color = color),
+                               scale_spec = scale_sec_y_axis(), # a 'chaotic' update_ggplot function...
+                               theme_spec = theme_sec_axis(color = color)
+                               ){
+  
+  list(layer_spec, scale_spec, theme_spec)
+  
+}
+```
+
+```{r}
+
+gapminder::gapminder  |> 
+  filter(country %in% c("France") ) |> 
+  ggplot() + 
+  aes(x = year,
+      y = lifeExp) + 
+  geom_line() + 
+  aes(y2 = gdpPercap) +
+  geom_line_sec_axis() 
+
+last_plot() + 
+  geom_line_sec_axis(color = "darkred", 
+                     linetype = "dashed", 
+                     linewidth = 4)
+```
+
+
+
+```{r}
+
+
+
+
+
 ```
 
 

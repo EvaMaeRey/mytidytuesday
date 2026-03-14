@@ -81,42 +81,38 @@ we had done interpolation between each point, but now a new approach
 
 ```{r}
 
+library(tidyverse)
 
-interpolate <- function(data, n = 9){
+df_interpolate <- function(data, n = 80) {
   
-  x_minimum <- min(data$x, na.rm = T)
-  x_maximum <- max(data$x, na.rm = T)
+  data_sorted <- data |> arrange(x)
   
-  x_divided <- seq(x_minimum, x_maximum, length.out = n)
-  df_x_seq <- data.frame(x = x_divided, original = F)
+  x_seq <- seq(min(data_sorted$x), max(data_sorted$x), length.out = n)
   
-  data |>
-    mutate(original = T) |>
-    full_join(df_x_seq, by = c("x", "original")) |>
-    arrange(x) |>
-    # mutate(x_seq = !is.na(x_seq)) |>
-    # mutate(original = !x_seq) |> 
-    mutate(strech = cumsum(original)) |>
-    group_by(strech) |> 
-    # mutate(row = 0:(n()-1)) >
-    mutate(prop_advance = (0:(n()-1))/n()) |>
-    ungroup() |> 
-    mutate(yoriginal = y) |>
-    mutate(ystart = y) |> 
-    fill(ystart, .direction = "down") |>
-    # fill(ystart, .direction = "up") |>
-    mutate(yending = y) |> 
-    fill(yending, .direction = "up") |>
-    # fill(yending, .direction = "down") |>
-    mutate(ydiff = yending - ystart) |>
-    mutate(y = ystart + prop_advance * ydiff) |> 
-    # fill(PANEL) |> 
-    # fill(group) |> 
-    filter(!original)
+  data_expanded <- tibble(x = x_seq) |>
+    # Union the evenly spaced x values with the original x0 values,
+    # keeping all unique x points from both sets
+    bind_rows(data_sorted |> select(x)) |>
+    distinct(x) |>
+    arrange(x)
+  
+  inter_y <- approx(
+    x = data_sorted$x,   
+    y = data_sorted$y,   
+    xout = data_expanded$x, 
+    method = "linear"
+  )
+  
+  data_expanded %>%
+    mutate(
+      y = inter_y$y,
+      is_original = x %in% data_sorted$x
+    )
+  
 }
 
-data.frame(x = 1:3, y = c(1,0,1)) |> 
-  interpolate() |>
+data.frame(x = c(1, 2, 8), y = c(1,0,5)) |> 
+  df_interpolate() |>
   ggplot() + 
   aes(x, y) + 
   geom_point()
@@ -280,11 +276,17 @@ df |>
 # mist plot
 
 ```{r}
-my_gradiant <- c("coral" |> alpha(.2),   #<<
+set_mist_gradient <- function(colour = "coral"){
+  
+  c(colour |> alpha(.2),   #<<
                  "transparent", 
                  "transparent") |> #<<
-  grid::linearGradient(x1 = 0, x2 = 0,
-                       y1 = 1, y2 = 0)  #<<
+  grid::linearGradient(x1 = 0, 
+                       x2 = 0,
+                       y1 = 1, 
+                       y2 = 0)  #<<
+  
+}
 
 df <- gapminder |> 
   filter(country %in% c("Belgium")) 
@@ -300,6 +302,7 @@ continuous_ribbon_df <- df |>
   compute_panel_braid(n = 300)
 
   
+
 continuous_ribbon_df |> 
   mutate(row_number = lag(row_number)) |> 
   bind_rows(continuous_ribbon_df) |> 
@@ -311,9 +314,7 @@ continuous_ribbon_df |>
       # strand = country
       ) +
   geom_line(color = "coral") + 
-  geom_ribbon(#stat = StatBraid2, 
-              , #n = 300, 
-              fill = my_gradiant) + 
+  geom_ribbon(fill = set_mist_gradient()) + 
   aes(group = group)
 
 
@@ -321,15 +322,15 @@ continuous_ribbon_df |>
 last_plot() +
   aes(alpha = .2 |> I())
 
-"transparent" |> alpha(.2)
 
-"#FFFFFF33"
-# cars |> 
-#   rename(x = speed, y = dist) |>
-#   mutate(group = 1) |>
-#   ggforce:::interpolateDataFrame()
+compute_group_mist <- function(){
+  
+  
+  
+  
+}
 
-# gganimate::ease_aes()
+
 ```
 
 

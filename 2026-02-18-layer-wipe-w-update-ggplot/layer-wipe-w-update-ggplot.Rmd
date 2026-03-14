@@ -67,6 +67,13 @@ last_plot() +
 ## Experiment
 
 ```{r}
+layers_remove <- layers_wipe
+
+
+(theme_bw() + 
+  theme(geom = element_geom(pointshape = 21))) |>
+  theme_set()
+
 gapminder::gapminder |> 
   filter(year == 2002) |>
   ggplot() +
@@ -74,9 +81,29 @@ gapminder::gapminder |>
   geom_point() + 
   facet_wrap(facet = vars(continent)) + 
   layers_wipe() + 
-  geom_point(data = . %>% select(-continent)) + 
-  aes(color = I("grey")) + # set color - globally
-  geom_point(color = "magenta")
+  # drop shadow
+  geom_point(data = . %>% select(-continent), 
+             fill = "grey" |> alpha(.5)) + 
+  # faceted
+  geom_point() + 
+  # styling
+  aes(fill = I("plum4")) + 
+  aes(color = I("white")) +
+  aes(size = I(4))
+
+
+gapminder::gapminder |> 
+  filter(year == 2002) |>
+  ggplot() +
+  aes(gdpPercap, lifeExp) + 
+  geom_point(color = "lightgrey",
+    layout = "fixed") +
+  geom_point() + 
+  facet_wrap(facet = vars(continent)) +
+  # styling
+  aes(color = I("white")) +
+  aes(size = I(4))
+
 ```
 
 

@@ -1,0 +1,119 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+genes <- paste("gene", 1:1000, sep="")
+
+
+x <- list(A=sample(genes,300),
+          B=sample(genes,525),
+          C=sample(genes,440),
+          D = sample(genes, 50))
+
+ggVennDiagram::ggVennDiagram(x = x)
+
+layer_data(i = 1) |> 
+  ggplot() +
+  aes(x,y, group = group, fill = fill) + 
+  geom_polygon()
+
+
+
+x <- list(A=sample(genes,300),
+          B=sample(genes,525),
+          C=sample(genes,440),
+          D=sample(genes,350),
+          E=sample(genes,200),
+          F=sample(genes,150),
+          G=sample(genes,100))
+
+
+library(ggVennDiagram)
+
+# two dimension Venn plot
+ggVennDiagram(x[1:2]) 
+
+library(tidyverse)
+layer_data(i = 1) |> 
+  # filter(fill == "#132B43") |> 
+  ggplot() + 
+  aes(x, y, label = group,
+      fill = group, group = group) + 
+  geom_text() + 
+  coord_equal() + 
+  geom_polygon() 
+```
+
+
+```{r}
+# three dimension Venn plot
+ggVennDiagram(x[1:3],label = "none")
+
+layer_data(i = 1) |> 
+  # filter(fill == "#132B43") |> 
+  ggplot() + 
+  aes(x,y, label = group,
+      fill = group, group = group) + 
+  geom_text() + 
+  coord_equal() + 
+  geom_polygon()
+
+# four dimension Venn plot
+ggVennDiagram(x[1:4],label = "none")
+
+layer_data(i = 1) |> 
+  # filter(fill == "#132B43") |> 
+  ggplot() + 
+  aes(x,y, label = group,
+      fill = group, group = group) + 
+  geom_text() + 
+  coord_equal() + 
+  geom_polygon()
+
+# five dimension Venn plot
+ggVennDiagram(x[1:5],label = "none")
+
+layer_data(i = 1) |> 
+  # filter(fill == "#132B43") |> 
+  ggplot() + 
+  aes(x,y, label = group,
+      fill = group, group = group) + 
+  geom_text() + 
+  coord_equal() + 
+  geom_polygon()
+
+# six dimension Venn plot
+ggVennDiagram(x[1:6],label = "none")
+
+```
+
+## Experiment
+
+```{r}
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
