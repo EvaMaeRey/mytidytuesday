@@ -1,0 +1,67 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r, fig.width=15, fig.height=15}
+library(tidyverse)
+library(ggraph)
+
+as_tibble(tools::CRAN_package_db()) |>
+  select(Package, Author) |>
+  filter(Package %in% c("dplyr", "ggplot2", "ellmer",
+                        "tidyr", "tidymodels", "recipes",
+                        "readr", "tibble", "stringr", "forcats",
+                        "purrr", "lubridate", "embed")) |>
+  mutate(Author = map(Author, ~ str_split_1(.x,"\n"))) |>
+  unnest() |> 
+  mutate(Author = str_remove(Author, " \\[.+" ) |> str_trim()) |>
+  filter_out(Author |> str_detect("orcid.org")) |>
+  filter_out(Author == "Posit Software, PBC") |>
+  ggraph(layout = "kk") +
+  geom_edge_link() +
+  geom_node_point() +
+  geom_node_label(aes(label = name)) 
+  
+
+as_tibble(tools::CRAN_package_db()) |>
+  select(Package, Author) |>
+  filter(Package %in% c("dplyr", "ggplot2", "ellmer",
+                        "tidyr", "tidymodels", "recipes",
+                        "readr", "tibble", "stringr", "forcats",
+                        "purrr", "lubridate", "embed")) |>
+  mutate(Author = map(Author, ~ str_split_1(.x,"\n"))) |>
+  unnest() |> 
+  mutate(Author = str_remove(Author, " \\[.+" ) |> str_trim()) |>
+  filter_out(Author |> str_detect("orcid.org")) |>
+  filter_out(Author == "Posit Software, PBC") ->
+author_package
+
+
+
+
+```
+
+## Experiment
+
+
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

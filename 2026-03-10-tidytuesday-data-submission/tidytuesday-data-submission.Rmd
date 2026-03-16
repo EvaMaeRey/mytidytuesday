@@ -8,7 +8,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, dev = "ragg_png", dpi = 300)
 options(tidyverse.quiet = TRUE)
 ```
 
@@ -27,11 +27,43 @@ library(tidytuesdayR)
 
 ## Experiment
 
-```{r}
-tt_clean(path = "../2026-03-10-tidytuesday-data-submission/")
-tt_
+```{r, eval = F}
+path <- "./2026-03-10-tidytuesday-data-submission/tt_submission"
+tt_clean(path = path)
+tt_intro(path = path)
 ```
 
+
+
+```{r}
+library(ggridges)
+
+
+
+
+'
+tt <- tt_load("2026-03-10") #<<
+
+wrangled <- 
+  tt$absolute_judgements |> #<<
+  mutate(term_ord = term |> 
+           fct_reorder(probability)
+         ) 
+           
+ggplot(data = wrangled) + 
+  aes(x = probability,
+      y = term_ord,
+      fill = term_ord,
+      color = term_ord,
+      alpha = I(.3)) + 
+  geom_density_ridges() + #<<
+  labs(x = NULL, y = NULL) +
+  theme(legend.position = "none")' |>
+  ggram::ggram(code = _, widths = c(1.5,1),
+               title = "🧹🧺🫧 TidyTuesday's March 10 data, with tidytuesdayR, ggplot2, and ggridges 📊🙂",
+               caption = "This week's datasets, 'tt', retrieval:   tt <- tidytuesdayR::tt_load('2026-03-10')\n'tt$absolute_judgements' is one of the dataframes")
+
+```
 
 
 ## Closing remarks, Other Relevant Work, Caveats

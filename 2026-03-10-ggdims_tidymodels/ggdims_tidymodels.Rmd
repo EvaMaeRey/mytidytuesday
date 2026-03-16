@@ -40,16 +40,26 @@ dimred_recipes_layout <- function(data = data, step_dimred = step_pca){
   
 }
 
-iris |> select(Sepal.Length:Petal.Width) |> 
+iris |> 
+  select(Sepal.Length:Petal.Width) |> 
   dimred_recipes_layout()
 
-iris |> select(Sepal.Length:Petal.Width) |> 
+iris |> 
+  select(Sepal.Length:Petal.Width) |> 
   dimred_recipes_layout(step_dimred = step_umap)
 
 step_umap_1d <- function(recipe, ...){step_umap(recipe, ..., num_comp = 1)}
 
 iris |> select(Sepal.Length:Petal.Width) |> 
   dimred_recipes_layout(step_dimred = step_umap_1d)
+
+iris |> select(Sepal.Length:Petal.Width) |> 
+  dimred_recipes_layout(step_dimred = step_isomap)
+
+iris |> select(Sepal.Length:Petal.Width) |> 
+  dimred_recipes_layout(step_dimred = step_isomap)
+
+
 
 ```
 
@@ -74,16 +84,26 @@ compute_pca <- function (data, scales) {
   
 }
 
-compute_umap <- function (data, scales) {
+compute_umap <- function (data, scales, num_comp = 2, neighbors = 15, epochs = NULL) {
 
-  compute_tidy_dimred(data, scales, step_dimred = step_umap)
+  step_umap_spec <- function(recipe, ...){
+    step_umap(recipe, ..., num_comp = num_comp, neighbors = neighbors, epochs = epochs)
+    }
+
+  compute_tidy_dimred(data, scales, step_dimred = step_umap_spec)
   
 }
 
 
-compute_umap_1d <- function (data, scales) {
+compute_umap_1d <- function (data, scales, neighbors = 15, epochs = NULL) {
 
-  compute_tidy_dimred(data, scales, step_dimred = step_umap_1d)
+  compute_umap(data, scales, num_comp = 1, neighbors = neighbors, epochs = epochs)
+  
+}
+
+compute_isomap <- function (data, scales) {
+
+  compute_tidy_dimred(data, scales, step_dimred = step_isomap)
   
 }
 
@@ -104,6 +124,12 @@ StatPca <- ggproto("StatPca", Stat,
                     compute_panel = compute_pca, 
                     default_aes = aes(x = after_stat(PC1), 
                                       y = after_stat(PC2)))
+
+
+StatIsomap <- ggproto("StatPca", Stat, 
+                    compute_panel = compute_isomap, 
+                    default_aes = aes(x = after_stat(Isomap1), 
+                                      y = after_stat(Isomap2)))
 ```
 
 
@@ -111,7 +137,14 @@ StatPca <- ggproto("StatPca", Stat,
 geom_pca0 <- make_constructor(GeomPoint, stat = StatPca)
 geom_umap0 <- make_constructor(GeomPoint, stat = StatUmap)
 geom_umap_1d_0 <- make_constructor(GeomRug, stat = StatUmap1d)
+geom_isomap0 <- make_constructor(GeomPoint, stat = StatIsomap)
 
+
+geom_isomap <- function (..., 
+                      update_spec = dims_expand(), 
+                      layer_spec = geom_isomap0(...)) {
+    list(update_spec, layer_spec)
+}
 
 
 geom_pca <- function (..., 
@@ -143,7 +176,17 @@ ggplot(iris) +
 
 ggplot(penguins) +
   aes(dims = dims(bill_length_mm:body_mass_g)) +
-  geom_umap() +
+  geom_umap(epochs = 5) +
+  aes(color = species)
+
+ggplot(penguins) +
+  aes(dims = dims(bill_length_mm:body_mass_g)) +
+  geom_umap(epochs = 15) +
+  aes(color = species)
+
+ggplot(penguins) +
+  aes(dims = dims(bill_length_mm:body_mass_g)) +
+  geom_umap(epochs = 100) +
   aes(color = species)
 
 ggplot(iris)  + 
@@ -156,8 +199,43 @@ ggplot(iris)  +
   geom_umap_1d() + 
   aes(color = Species) 
 
+ggplot(iris)  + 
+  aes(dims = dims(Sepal.Length, Sepal.Width)) +
+  geom_isomap() + 
+  aes(color = Species) 
+
+
+ggplot(iris)  + 
+  aes(dims = dims(Sepal.Length, Sepal.Width)) +
+  geom_umap() + 
+  aes(color = Species) 
+
 ggplyr:::last_plot_wipe_last() +
-  geom_umap()
+  geom_umap(neighbors = 12)
+
+
+ggplyr:::last_plot_wipe_last() +
+  geom_umap(neighbors = 5)
+```
+
+
+
+```{r}
+ggplot(penguins) +
+  aes(dims = dims(bill_length_mm:body_mass_g)) +
+  aes(color = species) ->
+p0
+
+p0 + geom_umap(epochs = 1) ->
+p; p0 + geom_umap(epochs = 2) ->
+p; p0 + geom_umap(epochs = 3)  ->
+p; p0 + geom_umap(epochs = 5)  ->
+p; p0 + geom_umap(epochs = 8)  ->
+p; p0 + geom_umap(epochs = 13)  ->
+p; p0 + geom_umap(epochs = 21)  ->
+p; p0 + geom_umap(epochs = 34)  ->
+p; p0 + geom_umap(epochs = 55)  ->
+p; p0 + geom_umap(epochs = 89)
 ```
 
 
