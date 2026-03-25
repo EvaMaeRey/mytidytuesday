@@ -77,8 +77,28 @@ caries_ratios |>
   ggplot() + 
   aes(tooth = tooth, 
       fill = ratio) + 
-  geom_tooth(alpha = .2) + 
+  geom_tooth(alpha = .5) + 
   stamp_tooth_text(size = 2)
+```
+
+
+```{r}
+
+"
+library(teethr)
+
+caries_ratios |> 
+  ggplot() + 
+  aes(tooth = tooth, #<<
+      fill = ratio) + 
+  geom_tooth(alpha = .5) + #<<
+  stamp_tooth_text(size = 1.5) + #<<
+  scale_fill_viridis()" |>
+  ggram::ggram(code = _,
+               # title = "🚧🧫🚧🔬🚧🧪🚧🧫🚧🔬🚧🧪🚧🧫🚧🔬🚧🧪🚧🧫🚧🔬🚧🧪🚧🧫🚧🔬🚧🧪🚧🧫🚧🔬🚧🧪🚧",
+               subtitle =  "🚧🧫🚧🔬🚧🧪 Checking out caries ratios in this amazing {teethr} tooth arcade... Uh-oh LLM1!",
+               caption =   "A {teethr} X {ggregions} experiment: ggregions helps build region-specific geom_*()s")
+
 ```
 
 

@@ -20,7 +20,9 @@ options(tidyverse.quiet = TRUE)
 
 ## Status Quo
 
-```{r}
+ggplot_add
+
+```{r, eval = F}
 library(tidyverse)
 
 layers_wipe <- function(i = NULL) {
@@ -59,52 +61,92 @@ last_plot() +
 
 last_plot() + 
   layers_wipe()
-
-
-
 ```
 
-## Experiment
+
+# reference example
 
 ```{r}
-layers_remove <- layers_wipe
+library(ggiraph)
+library(ggplot2)
+library(S7)
 
+make_interactive <- function(data = NULL) {
+  structure(
+    list(), 
+    class = "make_interactive"
+  )
+}
 
-(theme_bw() + 
-  theme(geom = element_geom(pointshape = 21))) |>
-  theme_set()
+method(update_ggplot, list(new_S3_class("make_interactive"), class_ggplot)) <- 
+  function(object, plot, ...) {
+    girafe(plot)
+  }
 
-gapminder::gapminder |> 
-  filter(year == 2002) |>
-  ggplot() +
-  aes(gdpPercap, lifeExp) + 
-  geom_point() + 
-  facet_wrap(facet = vars(continent)) + 
-  layers_wipe() + 
-  # drop shadow
-  geom_point(data = . %>% select(-continent), 
-             fill = "grey" |> alpha(.5)) + 
-  # faceted
-  geom_point() + 
-  # styling
-  aes(fill = I("plum4")) + 
-  aes(color = I("white")) +
-  aes(size = I(4))
-
-
-gapminder::gapminder |> 
-  filter(year == 2002) |>
-  ggplot() +
-  aes(gdpPercap, lifeExp) + 
-  geom_point(color = "lightgrey",
-    layout = "fixed") +
-  geom_point() + 
-  facet_wrap(facet = vars(continent)) +
-  # styling
-  aes(color = I("white")) +
-  aes(size = I(4))
+ggplot(cars) + 
+  aes(speed, dist) + 
+  ggiraph::geom_point_interactive() + 
+  aes(tooltip = speed) +
+  make_interactive()
 
 ```
+
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(S7)
+
+layers_remove <- function(i = NULL) {
+
+  structure(
+    list(index_wipe = i), 
+    class = "layers_remove"
+    )
+
+}
+
+
+method(update_ggplot, list(new_S3_class("layers_remove"), class_ggplot)) <- 
+  function(object, plot, ...) {
+    
+  if(is.null(object$index_wipe)){
+   
+    plot$layers <- list()
+     
+  }else{
+    
+    plot$layers[object$index_wipe] <- NULL
+
+  }
+  
+  plot
+    
+  }
+
+
+ggplot(cars) + 
+  aes(speed, dist) + 
+  geom_point() + 
+  geom_tile()
+
+last_plot() + 
+  layers_remove(i = 2)
+
+last_plot() + 
+  layers_remove()
+
+
+ggplot(cars) + 
+  aes(speed, dist) 
+
+
+last_plot() + 
+  layers_remove()
+
+last_plot()@layers
+```
+
 
 
 

@@ -239,4 +239,55 @@ p; p0 + geom_umap(epochs = 89)
 ```
 
 
+```{r}
+mammoth_3d_url <- "https://raw.githubusercontent.com/PAIR-code/understanding-umap/refs/heads/master/raw_data/mammoth_3d.json"
+
+library(ggdims)
+
+mammoth_df <- jsonlite::fromJSON(mammoth_3d_url) |>
+  as.data.frame() 
+
+
+colors_random <- colors() |> 
+        sample(
+          nrow(mammoth_df), 
+          replace = T
+          )
+
+mammoth_df |>  
+  ggplot() + 
+  aes(V1, V2) + 
+  geom_point(
+    alpha = .5,
+    fill = colors_random #<< 
+  )
+
+
+p1 <- mammoth_df |> 
+  ggplot() + 
+  aes(dims = dims(V1:V3),
+      fill = I(colors_random)) + 
+  geom_pca() + 
+  labs(title = "PCA")
+
+p2 <- mammoth_df |> 
+  ggplot() + 
+  aes(dims = dims(V1:V3),
+      fill = I(colors_random)) + 
+  ggdims::geom_tsne() + 
+  labs(title = "t-SNE")
+
+p3 <- mammoth_df |> 
+  ggplot() + 
+  aes(dims = dims(V1:V3),
+      fill = I(colors_random)) + 
+  geom_umap() + 
+  labs(title = "UMAP")
+
+
+library(patchwork)
+p1  + p2 + p3
+
+
+```
 

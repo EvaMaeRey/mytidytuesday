@@ -895,7 +895,5 @@ new_experiment_rmd <- function(name){
 
 }   
 
-
-  
-new_experiment_rmd(name = "tidyverse-network")
+new_experiment_rmd(name = "update_ggplot_x_layer_wipe")
 ```

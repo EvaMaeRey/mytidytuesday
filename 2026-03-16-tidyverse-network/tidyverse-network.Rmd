@@ -53,6 +53,17 @@ as_tibble(tools::CRAN_package_db()) |>
   filter_out(Author == "Posit Software, PBC") ->
 author_package
 
+author_package |> 
+  distinct(Package) %>%
+  crossing(., ., .name_repair = "universal") |>
+  rename(Package = Package...1,
+         Author = Package...2) |> 
+  bind_rows(author_package) |>
+  filter_out(Author == "Hadley Wickham") |>
+  ggraph(layout = "kk") +
+  geom_edge_link() +
+  geom_node_point() +
+  geom_node_label(aes(label = name)) 
 
 
 

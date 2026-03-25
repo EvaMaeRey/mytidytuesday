@@ -1,0 +1,73 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+tt_2026_03_17 <- tidytuesdayR::tt_load("2026-03-17")
+
+tt_2026_03_17$monthly_losses_data 
+  
+library(marimekko)
+
+
+titanic <- as.data.frame(Titanic)
+
+ggplot(titanic) +
+  aes(weight = Freq, fill = "All") +
+  geom_marimekko(
+    formula = ~ Survived | Class
+  ) +
+  labs(title = "Titanic survival by class", y = "Proportion") +
+  theme_marimekko()
+
+ggplot(titanic) +
+  geom_marimekko(
+    aes(#fill = Survived, 
+        weight = Freq),
+    formula = ~ Class | Survived
+  ) +
+  labs(title = "Titanic survival by class", y = "Proportion") +
+  theme_marimekko()
+
+
+geom_marimekko
+
+
+ggplot(titanic) +
+  geom_marimekko(
+    aes(fill = Survived, weight = Freq),
+    formula = ~ Class | Survived,
+    show_percentages = TRUE
+  ) +
+  theme_marimekko()
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

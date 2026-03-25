@@ -107,7 +107,46 @@ last_plot() +
   aes(group = id_penguin)
 ```
 
+---
 
+# From Cory
+
+> What worked for me was to remove the conditional `data$group[1] == -1` from `StatCircle` and just replacing any existing `group` value with row indices.
+
+> This might be inadvisable, since in general it's bad to overwrite the user's `group` assignment; but i think it would be a rare situation for something that behaves like `StatIdentity` with `GeomPoint` to fail because of a bad `group` assignment. My understanding is that `group` only really matters to the statistical transformation, e.g. grouping points before computing an ellipse or convex hull; so here it's safe to "appropriate" it for another purpose since there'll be no conflict.
+
+> An alternative would (i think) be for the stat to define a new, custom `group`-like column (a computed variable) that would be recognized by a companion geom. This violates the "pairability principle" one might call it—that new stats and geoms should be designed to pair with existing geoms and stats—but that's a principle i personally like that i think most extenders don't follow closely. (We've talked about it in discussions.) But it might be more appropriate because it acknowledges that the structure of the graphical element—differently-sized circles around points that may also be grouped by color and opacity—is different from the simpler structure of a collection of paths that would be passed to `GeomPolygon`.
+
+
+
+```{r}
+StatCircle <- ggproto(`_class` = "StatCircle", 
+                      `_inherit` = Stat, 
+                      setup_data = function(data, params) {
+  
+    # if (data$group[1] == -1) {
+      nrows <- nrow(data)
+      data$group <- seq_len(nrows)
+    # }
+  
+    data  # return data with a group variable
+
+},
+                      compute_group = function(data, scales, n = 5){create_circle(data, n = n)},
+                      required_aes = c("x0", "y0", "r")
+                      )
+
+
+penguins |> 
+  slice(1:7, .by = species) |>
+  mutate(id_penguin = row_number()) |>
+  ggplot() + 
+  aes(x0 = bill_len, y0 = bill_dep, r = .2) + 
+  geom_polygon(stat = StatCircle) + 
+  aes(color = species)
+
+
+```
 
 
 
@@ -336,6 +375,7 @@ ggplot(circles) +
 
 ![using facetting](faceting.png)
 
+hat worked for me was to remove the conditional `data$group[1] == -1` from `StatCircle` and just replacing any existing `group` value with row indices.
 
 ```{r}
 ggplot(circles) + 

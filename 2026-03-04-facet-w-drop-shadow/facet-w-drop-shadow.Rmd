@@ -25,6 +25,10 @@ library(tidyverse)
 gapminder_2002 <- gapminder::gapminder |> 
   filter(year == 2002)
 
+theme(geom = element_geom(pointshape = 21, 
+                          pointsize = 3)) |>
+  theme_set()
+
 update_geom_defaults("point",  aes(shape = 21, size = 3,  color = "white", fill = "grey"))
 
 '
@@ -47,6 +51,12 @@ ggram::ggram(title = "Fond of reference shadows in facets?  A snap with ggplot2 
 ## Experiment
 
 ```{r}
+theme(geom = element_geom(pointshape = 21, 
+                          pointsize = 3)) |>
+  theme_set()
+
+ggplot() + 
+  aes() 
 
 ```
 
