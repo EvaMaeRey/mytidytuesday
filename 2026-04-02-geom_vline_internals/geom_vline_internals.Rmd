@@ -1,0 +1,111 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+
+library(ggplot2)
+
+geom_vline <- function(mapping = NULL, 
+                       data = NULL,
+                       ...,
+                       xintercept,
+                       na.rm = FALSE,
+                       show.legend = NA,
+                       stat = "identity",  # new exposed argument
+                       inherit.aes = NULL){   # I like this better than current implementation...         
+
+  inherit.aes <- inherit.aes %||% missing(xintercept) # or similar to address nullness
+  
+  # Act like an annotation
+  if (!missing(xintercept)) {
+    # Warn if supplied mapping and/or data is going to be overwritten
+    if (!is.null(mapping)) {
+      cli::cli_warn("{.fn geom_vline}: Ignoring {.arg mapping} because {.arg xintercept} was provided.")
+    }
+    if (!is.null(data)) {
+      cli::cli_warn("{.fn geom_vline}: Ignoring {.arg data} because {.arg xintercept} was provided.")
+
+  # add a warning about stat being ignored if xintercept is provided ?
+  
+    }
+
+    data <- ggplot2:::data_frame0(xintercept = xintercept)
+    if(is.null(mapping)){
+          mapping <- aes(xintercept = xintercept)} else{
+            mapping <- modifyList(mapping, aes(xintercept = xintercept), keep.null = T)
+    }
+    show.legend <- FALSE
+  }
+
+  layer(
+    data = data,
+    mapping = mapping,
+    stat = stat,                   # not fixed
+    geom = GeomVline,
+    position = PositionIdentity,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,       # This change or similar
+    params = rlang::list2(
+      na.rm = na.rm,
+      ...
+    )
+  )
+}
+
+library(ggplot2)
+
+
+ggplot() + 
+  geom_vline(aes(colour = from_theme(accent)), xintercept = 0)
+
+ggplot(cars) + 
+  geom_vline(aes(colour = from_theme(accent), 
+                 linetype = I("dashed")), 
+             xintercept = 0)
+
+ggplot(cars) +
+  aes(colour = from_theme(accent), 
+      linetype = I("dashed")) +
+  geom_vline(xintercept = 0) 
+
+
+
+ggplot(cars) + annotate(geom = "point", 
+                        color = theme_get()$geom$accent, 
+                        x = 0, y = 0)
+
+
+mine <- theme_get()
+
+mine
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

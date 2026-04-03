@@ -85,7 +85,34 @@ mammoth_df |> #<<
   ggplot() + 
   aes(x = V1, y = V2) + 
   geom_confetti() ' |>
-  ggram::ggram(code = _, widths = c(1,1.3), "First two dimensions of the 3D Smithsonian Mammoth dataset, 10000 observations 🦣", subtitle = "The now-canonical mammoth dataset can be a fun first-taste when exploring dimension reduction techniques,\nfor going from still-familiar and friendly 3 dimentional data to the lower-dim representations.",
+  ggram::ggram(code = _, widths = c(1,1.3), "First two dimensions of the 3D Smithsonian Mammoth dataset from Pair code, 10000 observations 🦣", subtitle = "The now-canonical mammoth dataset can be a fun and intuitive first-taste when exploring dimension reduction techniques,\nfor going from still-familiar 3 dimentional data to the lower-dim representations.",
+               caption = "geom_confetti is a variant of geom_point, whose colors randomly sampled from R colors() which 'returns the built-in color names'")# 
+```
+
+```{r, fig.width=14}
+
+
+'
+mammoth_df <-  #<<
+  PAIR_code_umap_mammoth_url |> #<<
+  jsonlite::fromJSON() |> #<<
+  as.data.frame() #<<
+
+high_dim <- mammoth_df |> 
+  ggplot() + 
+  aes(x = V1, y = V2) + 
+  geom_confetti() 
+
+library(ggdims) #<<
+low_dim <- mammoth_df |>
+  ggplot() + 
+  aes(dims = dims(V1:V3)) + #<<
+  geom_pca(fill = "cadetblue2") #<<
+
+high_dim + low_dim # w/ patchwork
+
+' |>
+  ggram::ggram(code = _, widths = c(.8,2), "First two dimensions of the 3D Smithsonian Mammoth dataset from Pair code, 10000 observations 🦣", subtitle = "The now-canonical mammoth dataset can be a fun and intuitive first-taste when exploring dimension reduction techniques,\nfor going from still-familiar 3 dimentional data to the lower-dim representations.",
                caption = "geom_confetti is a variant of geom_point, whose colors randomly sampled from R colors() which 'returns the built-in color names'")# 
 
 ```

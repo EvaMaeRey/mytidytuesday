@@ -1,0 +1,61 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+
+library(tidyverse)
+tibble(ab = c('a', 'b')) |> 
+
+library(tidyverse)
+tibble(ab = c('a', 'b')) |> 
+ggplot() +
+  geom_bar(aes(ab, fill = ab)) +
+  scale_discrete_manual('x', values = c("a", "b"), breaks = 2:1, palette = scales::pal_manual(2:1))
+
+tibble(ab = c('a', 'b')) |> 
+  ggplot() +
+  geom_bar(aes(ab, fill = ab)) +
+  scale_x_discrete(palette = scales::pal_manual(2:1)) 
+
+
+tibble(ab = c('a', 'b')) |> 
+  ggplot() +
+  geom_bar(aes(ab, fill = ab)) +
+  scale_discrete_manual(aesthetics = "x", values = c("a", "b")) 
+
+
+scale_discrete_manual
+ggplot2:::manual_scale
+```
+
+
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

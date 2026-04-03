@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Spring 2026 Slides</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Evangeline ‘Gina’ Reynolds" />
+    <script src="libs/header-attrs-2.30/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+class: inverse, bottom
+background-image: url(https://images.unsplash.com/photo-1588591795084-1770cb3be374?q=80&amp;w=2070&amp;auto=format&amp;fit=crop&amp;ixlib=rb-4.1.0&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)
+background-size: cover
+
+## .large[R Medicine 2026: ggregions for building intuitive coding interfaces for anatomical visualizations]
+## .small[]
+#### .tiny[Dr. Evangeline Reynolds | 2026-04-03 | DU, Image credit: Ross Sneddon, Upsplash]
+
+
+???
+
+Title slide
+
+
+
+---
+class: inverse
+
+# Motivations for ggregions
+
+&gt; ### I am told there are people who do not care for maps, and I find it hard to believe. - Robert Louis Stevenson
+
+
+--
+
+&gt; ### I hate when I work with spatial data that so much of my mindshare goes to thinking about 'how do I wrangle this this map and what on earth is going on' versus the actual meaning behind what I'm trying to map. - Emily Riederer
+
+--
+
+&gt; ### 'My teacher, Mr. Jayson, says a map is a picture of someplace from above.  It's like flying over that spot in an airplane.' - 'Lisa' in Loreen Leedy's in 'Mappying Penny's World'
+
+
+---
+class: inverse
+
+
+## Maps are some of the most compelling and intuitive data visualizations, 
+--
+and they are some of the first visualizations people will come across in their lives.  
+
+
+--
+
+## And there is great support for mapping in R and in the data visualization library {ggplot2} which supports many R packages.  
+
+--
+
+## But, producing a simple map, like a choropleth, can feel much harder than producing other plots, like a scatterplot for example in ggplot2. 
+
+---
+
+count: false
+## A scatter plot is produced by:
+
+``` r
+*ggplot(cars)   # data
+```
+
+---
+count: false
+## A scatter plot is produced by:
+
+``` r
+ggplot(cars) +  # data
+*  aes(x = speed, y = dist)   # position and other visual channel mapping
+```
+
+---
+count: false
+## A scatter plot is produced by:
+
+``` r
+ggplot(cars) +  # data
+   aes(x = speed, y = dist) +  # position and other visual channel mapping
+*  geom_point()  # layer
+```
+
+&lt;style&gt;
+.panel1-scatter-auto {
+  color: black;
+  width: 99%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-scatter-auto {
+  color: black;
+  width: NA%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-scatter-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+???
+
+## In other words, you might say, 'used this data, and points, and the positions are defined by x and y'
+
+---
+
+&lt;!-- #### ggregions posits that by investing in methods to easily create new geo-specific ggplot2 layer extensions (geom_*s), producing maps with ggplot2 can become as intuitive as creating other plots. About specifying a map, you might say, 'use this data, draw regions, position and color fill according to var1 and var2.' --&gt;
+
+&lt;!-- The proposed regions mapping might look something like this: --&gt;
+
+## ggregions proposed API
+
+
+``` r
+ggplot(mapping_data) +             # data
+*  aes(region_id = var1_region_id,  # position mapping
+       fill = var2) +               # and other visual channel mapping
+*  geom_region()                    # layer
+```
+
+--
+
+&gt; ## [ggregions-generated] APIs feels like they actually puts the "question" at the center. - Emily Riederer
+
+
+---
+
+# What {ggregions} delivers
+
+--
+
+## Effortlessly write new region-specific geom_* functions.
+
+&lt;!-- The {ggregions} allows API creators to quickly create easy-to-use ggplot2 layer extensions (e.g. geom_*()s) that adhere to the ggplot2 'grammar'. --&gt;
+
+
+---
+
+## Example with geographic regions: US states
+
+### Step 1. prepare data
+
+
+``` r
+library(dplyr)
+
+# Step 1. prep some of their geo reference data
+us_states_ref &lt;- usmapdata::us_map() |&gt;
+  select( state_name = full, # state_name will positional aes like x or y 
+          state_abbr = abbr, 
+          fips,
+          geometry = geom,  # one column with geometry is required
+         )  # state_abbr will also be optional positional aes like x or y
+```
+
+
+---
+
+### Step 2. write user-facing functions with ggregion 'write' utilities
+
+&lt;!-- Then, authors will be able use `write_geom_region_locale()` to create a regions-specific ggplot2 layer, for example `geom_us_state()` below, which can be made available in their geo packages. --&gt;
+
+
+``` r
+# Step 2. use `write_geom_region_locale`
+library(ggregions)
+geom_us_state &lt;- write_geom_region_locale(us_states_ref)
+stamp_us_state &lt;- write_stamp_region_locale(us_states_ref)
+geom_us_state_text &lt;- write_geom_region_text_locale(us_states_ref)
+stamp_us_state_text &lt;- write_stamp_region_text_locale(us_states_ref)
+```
+
+---
+
+### Step 2b. (optional) Inspect user-facing function
+
+
+``` r
+geom_us_state
+```
+
+```
+function (mapping = aes(), data = NULL, stat = StatRegion, position = "identity", 
+    na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ref_data = us_states_ref, 
+    ...) 
+{
+    c(layer_sf(geom = GeomSf, data = data, mapping = mapping, 
+        stat = stat, position = position, show.legend = show.legend, 
+        inherit.aes = inherit.aes, params = rlang::list2(na.rm = na.rm, 
+            ref_data = ref_data, ...)), coord_sf(crs = st_crs_mod(ref_data)))
+}
+&lt;environment: namespace:ggregions&gt;
+```
+
+
+&lt;!-- ## Deliver intuitive, newcomer-welcoming spatial viz experience --&gt;
+
+&lt;!-- By including the newly specified `geom_` function in their geo data package (perhaps instead or in addition to a convenience wrapper that are typical of geo packages) the package *users* will be able to use the` data + aes + geom` formulation for defining their plots.  Instead of positional aesthetics like x, y or geometry, a region identifier like `state_name` or `fips` can be used.  Internally, the regions `geom_*` will translate between place name or other identifier to the necessary borders (`sfc`s). --&gt;
+
+&lt;!-- Below is some tabular data with geographic region identifiers, but no boundaries: --&gt;
+
+&lt;!-- Even though there is no boundary information, analysts can map this data with the familiar  data + aesthetic mapping + layer syntax that makes ggplot2 easy to read, write, and reason about. --&gt;
+
+
+
+
+---
+
+
+
+
+count: false
+ 
+
+.panel1-usmapdata-auto[
+
+``` r
+*library(ggplot2)
+```
+]
+ 
+.panel2-usmapdata-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-usmapdata-auto[
+
+``` r
+library(ggplot2)
+*library(usmapdata)
+```
+]
+ 
+.panel2-usmapdata-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-usmapdata-auto[
+
+``` r
+library(ggplot2)
+library(usmapdata)
+
+*us_income
+```
+]
+ 
+.panel2-usmapdata-auto[
+
+```
+# A tibble: 52 × 5
+   GEOID NAME                 variable income   moe
+   &lt;chr&gt; &lt;chr&gt;                &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;
+ 1 01    Alabama              income    24476   136
+ 2 02    Alaska               income    32940   508
+ 3 04    Arizona              income    27517   148
+ 4 05    Arkansas             income    23789   165
+ 5 06    California           income    29454   109
+ 6 08    Colorado             income    32401   109
+ 7 09    Connecticut          income    35326   195
+ 8 10    Delaware             income    31560   247
+ 9 11    District of Columbia income    43198   681
+10 12    Florida              income    25952    70
+# ℹ 42 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-usmapdata-auto[
+
+``` r
+library(ggplot2)
+library(usmapdata)
+
+us_income |&gt;
+* ggplot()
+```
+]
+ 
+.panel2-usmapdata-auto[
+![](r-medicine-ggregions_files/figure-html/usmapdata_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-usmapdata-auto[
+
+``` r
+library(ggplot2)
+library(usmapdata)
+
+us_income |&gt;
+  ggplot() +
+* aes(state_name = NAME)
+```
+]
+ 
+.panel2-usmapdata-auto[
+![](r-medicine-ggregions_files/figure-html/usmapdata_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-usmapdata-auto[
+
+``` r
+library(ggplot2)
+library(usmapdata)
+
+us_income |&gt;
+  ggplot() +
+  aes(state_name = NAME) +
+* geom_us_state()
+```
+]
+ 
+.panel2-usmapdata-auto[
+![](r-medicine-ggregions_files/figure-html/usmapdata_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-usmapdata-auto[
+
+``` r
+library(ggplot2)
+library(usmapdata)
+
+us_income |&gt;
+  ggplot() +
+  aes(state_name = NAME) +
+  geom_us_state() +
+* aes(fill = income)
+```
+]
+ 
+.panel2-usmapdata-auto[
+![](r-medicine-ggregions_files/figure-html/usmapdata_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-usmapdata-auto[
+
+``` r
+library(ggplot2)
+library(usmapdata)
+
+us_income |&gt;
+  ggplot() +
+  aes(state_name = NAME) +
+  geom_us_state() +
+  aes(fill = income) +
+* scale_fill_viridis_c(option = "magma")
+```
+]
+ 
+.panel2-usmapdata-auto[
+![](r-medicine-ggregions_files/figure-html/usmapdata_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-usmapdata-auto[
+
+``` r
+library(ggplot2)
+library(usmapdata)
+
+us_income |&gt;
+  ggplot() +
+  aes(state_name = NAME) +
+  geom_us_state() +
+  aes(fill = income) +
+  scale_fill_viridis_c(option = "magma") +
+* geom_us_state_text(color = "white")
+```
+]
+ 
+.panel2-usmapdata-auto[
+![](r-medicine-ggregions_files/figure-html/usmapdata_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-usmapdata-auto[
+
+``` r
+library(ggplot2)
+library(usmapdata)
+
+us_income |&gt;
+  ggplot() +
+  aes(state_name = NAME) +
+  geom_us_state() +
+  aes(fill = income) +
+  scale_fill_viridis_c(option = "magma") +
+  geom_us_state_text(color = "white") +
+* aes(label = after_stat(state_abbr))
+```
+]
+ 
+.panel2-usmapdata-auto[
+![](r-medicine-ggregions_files/figure-html/usmapdata_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-usmapdata-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-usmapdata-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-usmapdata-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+&lt;!-- Packages that might take avantage of ggregion's functionality include --&gt;
+&lt;!-- [afrimapr](https://afrimapr.github.io/afrimapr.website/), [geobr](https://ipeagit.github.io/geobr/), [cancensus](https://mountainmath.github.io/cancensus/index.html), [chilemapas](https://pacha.dev/chilemapas/), [RCzechia](https://github.com/jlacko/RCzechia), [geofi](https://ropengov.github.io/geofi/) --&gt;
+&lt;!-- , [geokz](https://github.com/arodionoff/geokz), [mapsPERU](https://github.com/musajajorge/mapsPERU) and [geoidep](https://geografo.pe/geoidep/index.html), [mapSpain](https://github.com/rOpenSpain/mapSpain/), [geographr](https://github.com/britishredcrosssociety/geographr), [geouy](https://github.com/RichDeto/geouy), [tigris](https://github.com/walkerke/tigris), --&gt;
+&lt;!-- and [rgeoboundaries](https://github.com/wmgeolab/rgeoboundaries). --&gt;
+&lt;!--  Since these geo packages have many users, the impacts of `{ggregions}` could be significant. --&gt;
+
+
+
+
+
+
+---
+class: inverse, center, middle
+
+# Anatomical regions
+
+
+
+---
+
+### ggregions with teethr::dental_arcade_mapping
+
+https://github.com/bbartholdy/teethr
+
+---
+
+### data preparation
+
+
+``` r
+library(tidyverse)
+library(teethr)
+teeth_ref_data &lt;- dental_arcade_mapping |&gt; 
+  as_tibble() |&gt; 
+  left_join(tooth_notation |&gt; 
+* select(tooth = text, fdi = FDI, standard = standards)
+  )
+```
+
+--
+
+
+### ggplot2 'layer' preparation
+
+
+``` r
+library(ggregions)
+geom_tooth &lt;- ggregions::write_geom_region_locale(teeth_ref_data)
+geom_tooth_text &lt;- write_geom_region_text_locale(teeth_ref_data)
+stamp_tooth &lt;- write_stamp_region_locale(teeth_ref_data)
+stamp_tooth_text &lt;- write_stamp_region_text_locale(teeth_ref_data)
+```
+
+
+
+
+
+---
+
+count: false
+ 
+### yields user-friendly API
+.panel1-arcade-auto[
+
+``` r
+*caries_ratios
+```
+]
+ 
+.panel2-arcade-auto[
+
+```
+# A tibble: 32 × 4
+   tooth     n count  ratio
+   &lt;chr&gt; &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;
+ 1 URI1     35     4 0.114 
+ 2 URI2     31     4 0.129 
+ 3 URC1     35     7 0.2   
+ 4 URP1     34     3 0.0882
+ 5 URP2     23     5 0.217 
+ 6 URM1     32     7 0.219 
+ 7 URM2     25     7 0.28  
+ 8 URM3     22     9 0.409 
+ 9 ULI1     28     2 0.0714
+10 ULI2     26     2 0.0769
+# ℹ 22 more rows
+```
+]
+
+---
+count: false
+ 
+### yields user-friendly API
+.panel1-arcade-auto[
+
+``` r
+caries_ratios |&gt;
+* ggplot()
+```
+]
+ 
+.panel2-arcade-auto[
+![](r-medicine-ggregions_files/figure-html/arcade_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+### yields user-friendly API
+.panel1-arcade-auto[
+
+``` r
+caries_ratios |&gt;
+  ggplot() +
+* aes(tooth = tooth,
+*     fill = ratio)
+```
+]
+ 
+.panel2-arcade-auto[
+![](r-medicine-ggregions_files/figure-html/arcade_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+### yields user-friendly API
+.panel1-arcade-auto[
+
+``` r
+caries_ratios |&gt;
+  ggplot() +
+  aes(tooth = tooth,
+      fill = ratio) +
+* geom_tooth(alpha = .5)
+```
+]
+ 
+.panel2-arcade-auto[
+![](r-medicine-ggregions_files/figure-html/arcade_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+### yields user-friendly API
+.panel1-arcade-auto[
+
+``` r
+caries_ratios |&gt;
+  ggplot() +
+  aes(tooth = tooth,
+      fill = ratio) +
+  geom_tooth(alpha = .5) +
+* stamp_tooth_text(size = 2)
+```
+]
+ 
+.panel2-arcade-auto[
+![](r-medicine-ggregions_files/figure-html/arcade_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+### yields user-friendly API
+.panel1-arcade-auto[
+
+``` r
+caries_ratios |&gt;
+  ggplot() +
+  aes(tooth = tooth,
+      fill = ratio) +
+  geom_tooth(alpha = .5) +
+  stamp_tooth_text(size = 2) +
+* scale_fill_viridis_c()
+```
+]
+ 
+.panel2-arcade-auto[
+![](r-medicine-ggregions_files/figure-html/arcade_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-arcade-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-arcade-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-arcade-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+``` r
+caries_ratios |&gt; 
+  ggplot() + 
+  aes(tooth = tooth, 
+      fill = ratio) + 
+  geom_tooth(alpha = .5) + 
+  stamp_tooth_text(size = 2) + 
+  scale_fill_viridis_c()
+```
+
+![](r-medicine-ggregions_files/figure-html/arcade-1.png)&lt;!-- --&gt;
+
+---
+
+
+![](r-medicine-ggregions_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+
+---
+
+## ggregions X gganatogram::hgFemale_list
+
+
+
+
+### Step 1: Data preparation
+
+
+
+``` r
+female_sf &lt;- gganatogram::hgFemale_list[c(1:156, 180:195)] |&gt; # return to this!!
+  bind_rows() |&gt;
+  remove_missing() |&gt;
+  to_sf_routine() |&gt; 
+  rename(organ = id) |&gt;
+  select(-group)
+```
+
+--
+
+### Step 2: User-facing function preparation
+
+
+``` r
+stamp_organ &lt;- ggregions::write_stamp_region_locale(female_sf)
+geom_organ &lt;- ggregions::write_geom_region_locale(female_sf)
+stamp_organ_text &lt;- ggregions::write_stamp_region_text_locale(female_sf)
+geom_organ_text &lt;- ggregions::write_geom_region_text_locale(female_sf)
+```
+
+---
+
+count: false
+ 
+Enjoy!
+.panel1-gganatogram-auto[
+
+``` r
+*tribble(~my_organ, ~color,
+*       "stomach", "cadetblue",
+*       "brain",   "pink3",
+*       "colon",   "darkseagreen4",
+*       "lung",    "plum",
+*       "heart",    "coral")
+```
+]
+ 
+.panel2-gganatogram-auto[
+
+```
+# A tibble: 5 × 2
+  my_organ color        
+  &lt;chr&gt;    &lt;chr&gt;        
+1 stomach  cadetblue    
+2 brain    pink3        
+3 colon    darkseagreen4
+4 lung     plum         
+5 heart    coral        
+```
+]
+
+---
+count: false
+ 
+Enjoy!
+.panel1-gganatogram-auto[
+
+``` r
+tribble(~my_organ, ~color,
+        "stomach", "cadetblue",
+        "brain",   "pink3",
+        "colon",   "darkseagreen4",
+        "lung",    "plum",
+        "heart",    "coral") |&gt;
+*ggplot()
+```
+]
+ 
+.panel2-gganatogram-auto[
+![](r-medicine-ggregions_files/figure-html/gganatogram_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+Enjoy!
+.panel1-gganatogram-auto[
+
+``` r
+tribble(~my_organ, ~color,
+        "stomach", "cadetblue",
+        "brain",   "pink3",
+        "colon",   "darkseagreen4",
+        "lung",    "plum",
+        "heart",    "coral") |&gt;
+ggplot() +
+* stamp_organ(alpha = .2)
+```
+]
+ 
+.panel2-gganatogram-auto[
+![](r-medicine-ggregions_files/figure-html/gganatogram_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+Enjoy!
+.panel1-gganatogram-auto[
+
+``` r
+tribble(~my_organ, ~color,
+        "stomach", "cadetblue",
+        "brain",   "pink3",
+        "colon",   "darkseagreen4",
+        "lung",    "plum",
+        "heart",    "coral") |&gt;
+ggplot() +
+  stamp_organ(alpha = .2) +
+* aes(organ = my_organ)
+```
+]
+ 
+.panel2-gganatogram-auto[
+![](r-medicine-ggregions_files/figure-html/gganatogram_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+Enjoy!
+.panel1-gganatogram-auto[
+
+``` r
+tribble(~my_organ, ~color,
+        "stomach", "cadetblue",
+        "brain",   "pink3",
+        "colon",   "darkseagreen4",
+        "lung",    "plum",
+        "heart",    "coral") |&gt;
+ggplot() +
+  stamp_organ(alpha = .2) +
+  aes(organ = my_organ) +
+* geom_organ()
+```
+]
+ 
+.panel2-gganatogram-auto[
+![](r-medicine-ggregions_files/figure-html/gganatogram_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+Enjoy!
+.panel1-gganatogram-auto[
+
+``` r
+tribble(~my_organ, ~color,
+        "stomach", "cadetblue",
+        "brain",   "pink3",
+        "colon",   "darkseagreen4",
+        "lung",    "plum",
+        "heart",    "coral") |&gt;
+ggplot() +
+  stamp_organ(alpha = .2) +
+  aes(organ = my_organ) +
+  geom_organ() +
+* aes(fill = I(color))
+```
+]
+ 
+.panel2-gganatogram-auto[
+![](r-medicine-ggregions_files/figure-html/gganatogram_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+Enjoy!
+.panel1-gganatogram-auto[
+
+``` r
+tribble(~my_organ, ~color,
+        "stomach", "cadetblue",
+        "brain",   "pink3",
+        "colon",   "darkseagreen4",
+        "lung",    "plum",
+        "heart",    "coral") |&gt;
+ggplot() +
+  stamp_organ(alpha = .2) +
+  aes(organ = my_organ) +
+  geom_organ() +
+  aes(fill = I(color)) +
+* geom_organ_text()
+```
+]
+ 
+.panel2-gganatogram-auto[
+![](r-medicine-ggregions_files/figure-html/gganatogram_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+Enjoy!
+.panel1-gganatogram-auto[
+
+``` r
+tribble(~my_organ, ~color,
+        "stomach", "cadetblue",
+        "brain",   "pink3",
+        "colon",   "darkseagreen4",
+        "lung",    "plum",
+        "heart",    "coral") |&gt;
+ggplot() +
+  stamp_organ(alpha = .2) +
+  aes(organ = my_organ) +
+  geom_organ() +
+  aes(fill = I(color)) +
+  geom_organ_text() +
+* ggplyr:::data_slice(5)
+```
+]
+ 
+.panel2-gganatogram-auto[
+![](r-medicine-ggregions_files/figure-html/gganatogram_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-gganatogram-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-gganatogram-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-gganatogram-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+
+class: inverse, bottom
+background-image: url(https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcTSNaV2hzHW71ovNcoPji1OZMZBz_EJQxwCRClzMeX-QmKTiP5OpNcMvuIVE7fmgObCuOsrcRLUMUxKG2P2kZSIkrSf8Puhpg)
+background-size: contain
+
+# Thank you!
+
+
+&lt;!-- adjust font size in this css code chunk, currently 80 --&gt;
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 80%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+&lt;/style&gt;
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+  "ratio": "16:9",
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

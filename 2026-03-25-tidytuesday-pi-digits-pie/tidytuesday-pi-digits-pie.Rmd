@@ -1,0 +1,113 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r, fig.height=12, fig.width=12}
+library(tidyverse)
+
+tt_pi_object <- tidytuesdayR::tt_load("2026-03-24")
+
+pi_df_16 <- tt_pi_object$pi_digits[1:33,]
+
+digit_vec <- tt_pi_object$pi_digits$digit[1:33]
+
+# The result is a list where each element is a vector prefix
+list_of_prefixes <- lapply(1:33, function(i) digit_vec[1:i])
+
+# Print the result
+print(list_of_prefixes)
+
+pi_df_16$digit_history <- list_of_prefixes
+
+library(RColorBrewer)
+
+geom_pie <- make_constructor(GeomBar, stat = StatCount, position = "fill")
+geom_pie_label <- make_constructor(GeomLabel, stat = StatCount, 
+                                   position = position_fill(vjust = .5)) 
+
+pi_df_16 |> 
+  unnest(digit_history) |> 
+  mutate(digit_position = paste0("Through ",
+           scales::label_ordinal()(digit_position), " digit") |> 
+           fct_inorder()
+         ) |>
+  ggplot() + 
+  aes(y = "all", 
+      group = digit_history |>  
+        factor() |> 
+        fct_inorder() |> 
+        fct_rev(),
+      fill = digit_history |>  
+        as_factor() ) + 
+  geom_bar(position = "fill") +
+  coord_polar() +
+  facet_wrap(~ digit_position) + 
+  scale_fill_discrete(breaks = unique(pi_df_16$digit),
+                      palette = c(brewer.pal(9, "Blues"), scales:::col_mix("black", "midnightblue", .7)),
+                        #colorRampPalette(c("white", "midnightblue"))(10)
+                      ) + 
+  scale_color_manual(values = c("grey90", "midnightblue")) + 
+  geom_label(stat = "count", 
+             position = position_fill(vjust = .5),
+             size = 2.5,
+             aes(label = digit_history, 
+                 y = 1.25, 
+                 color = digit_history < 5),
+             show.legend = F,
+             linewidth = 0, fill = NA) +
+  labs(fill = "Digits in order\nof first\nappearance",
+       title = "From three ... to zero",
+       subtitle = "We're 33 digits in before we see all base-ten digits in pi... \n
+3.14159265358979323846264338327950",
+       caption = "3.14159265358979323846264338327950") +
+  theme_void(paper = "oldlace", ink = scales:::col_mix("black", "midnightblue", .7), 
+             base_size = 12) +
+  theme(plot.margin = margin(70,80,70,80),
+        plot.title.position = "plot",
+        legend.position = "none", #c(-.1,.8)
+        )
+
+digit_vec |> paste(collapse = "")
+
+```
+
+## Experiment
+
+```{r}
+tt_pi_object$pi_digits |>
+  ggplot() + 
+  aes(x = digit |> as.character()) + 
+  geom_bar()
+
+
+library(scales)
+demo_continuous(c(1, 10))
+demo_continuous(c(1, 10), labels = label_ordinal())
+demo_continuous(c(1, 10),
+  labels = label_ordinal(),
+  breaks = breaks_width(2))
+
+label_ordinal(1:10)
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

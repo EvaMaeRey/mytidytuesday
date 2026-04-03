@@ -70,11 +70,11 @@ last_plot() +
 ## how does it work?
 
 ```{r}
-duo(nc_midterms$n, nc_midterms$cd_party) |> head(2)
+# duo(nc_midterms$n, nc_midterms$cd_party) |> head(2)
 
-scale_fill_bivariate
+# scale_fill_bivariate
 
-ScaleBivariate$transform
+# ScaleBivariate$transform
 
 ```
 
@@ -109,21 +109,21 @@ ggram::ggram(code = _, "🚨🚨🚨Newcomer ggincerta tackles bivariate choropl
 
 
 
-'library(ggincerta)
-  
-tigris_fetched_tx_counties |>
-  ggplot() +
-  aes(fill = duo(ALAND, AWATER) +
-  geom_sf() +
-  scale_fill_bivariate( 
-    colors = c("transparent", #<<
-               "blue") 
-    ) + 
-  theme_void() +
-  theme(legend.position = c(.32, .2))' |>
-ggram::ggram(code = _,  "Not confident that audiences will be able to disentangle colors in your gorgous bivariate choropleth ", subtitle =  "Re-specify one of your bivariate scale colors to 'transparent' to highlight the individual contribution of a scale", 
-# subtitle = "  ",
-             caption = "Join to hear from the author on duo(), scale_fill_bivariate() and more. \nTuesday Feb 24, 4pm ET; bit.ly/join-gg-extenders ; https:// 🚀️📊 github.com/maggiexma/ggincerta")
+# 'library(ggincerta)
+#   
+# tigris_fetched_tx_counties |>
+#   ggplot() +
+#   aes(fill = duo(ALAND, AWATER) +
+#   geom_sf() +
+#   scale_fill_bivariate( 
+#     colors = c("transparent", #<<
+#                "blue") 
+#     ) + 
+#   theme_void() +
+#   theme(legend.position = c(.32, .2))' |>
+# ggram::ggram(code = _,  "Not confident that audiences will be able to disentangle colors in your gorgous bivariate choropleth ", subtitle =  "Re-specify one of your bivariate scale colors to 'transparent' to highlight the individual contribution of a scale", 
+# # subtitle = "  ",
+#              caption = "Join to hear from the author on duo(), scale_fill_bivariate() and more. \nTuesday Feb 24, 4pm ET; bit.ly/join-gg-extenders ; https:// 🚀️📊 github.com/maggiexma/ggincerta")
 
 
 
@@ -131,11 +131,32 @@ ggram::ggram(code = _,  "Not confident that audiences will be able to disentangl
 ```
 
 
-```{r}
+```{r, fig.width=18, fig.height=6}
+library(ggincerta)
+  
+'bivar <- tigris_fetched_tx_counties |>
+  ggplot() +
+  aes(fill = duo(ALAND, AWATER)) +
+  geom_sf() +
+  theme(legend.position = c(.32, .2))
+
+uni_1 <- bivar + 
+  scale_fill_bivariate( 
+    colors = c("gold", 
+               "transparent") #<<
+    ) 
+    
+uni_2 <- bivar + 
+  scale_fill_bivariate( 
+    colors = c("transparent", #<<
+               "red4") 
+    ) 
+    
+bivar + uni_1 + uni_2 # w/ patchwork' |> 
+   ggram::ggram(code = _, widths = c(1,4))
 
 
-
-
+scale_fill_bivariate()
 
 
 
