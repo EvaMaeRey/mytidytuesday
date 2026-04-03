@@ -17,7 +17,7 @@ output:
 ```{r setup, include = F}
 # This is the recommended set up for flipbooks
 # you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
-knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = T)
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F)
 library(flipbookr)
 library(tidyverse)
 options(tidyverse.quiet = TRUE)
@@ -170,6 +170,19 @@ geom_us_state
 ```
 
 
+---
+
+#### Steb 2bb (for the truely curious) Inspect StatRegions compute
+
+```{r}
+
+ggregions:::StatRegion$compute_panel
+
+```
+
+
+
+
 <!-- ## Deliver intuitive, newcomer-welcoming spatial viz experience -->
 
 <!-- By including the newly specified `geom_` function in their geo data package (perhaps instead or in addition to a convenience wrapper that are typical of geo packages) the package *users* will be able to use the` data + aes + geom` formulation for defining their plots.  Instead of positional aesthetics like x, y or geometry, a region identifier like `state_name` or `fips` can be used.  Internally, the regions `geom_*` will translate between place name or other identifier to the necessary borders (`sfc`s). -->
@@ -283,7 +296,7 @@ caries_ratios <- mb11_caries %>%
 `r chunk_reveal("arcade", title = "### yields user-friendly API" )`
 
 
-```{r arcade}
+```{r arcade, include = F}
 caries_ratios |> 
   ggplot() + 
   aes(tooth = tooth, 
@@ -296,7 +309,7 @@ caries_ratios |>
 ---
 
 
-```{r, echo = F, fig.width= 11}
+```{r, echo = F, fig.width= 9, fig.height=5, out.width="65%"}
 
 "
 library(teethr)
@@ -389,12 +402,14 @@ background-image: url(https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcTS
 background-size: contain
 
 # Thank you!
+github:
 
+## EvaMaeRey/ggregions
 
 <!-- adjust font size in this css code chunk, currently 80 -->
 
 ```{css, eval = TRUE, echo = FALSE}
-.remark-code{line-height: 1.5; font-size: 80%}
+.remark-code{line-height: 1.5; font-size: 70%}
 
 @media print {
   .has-continuation {

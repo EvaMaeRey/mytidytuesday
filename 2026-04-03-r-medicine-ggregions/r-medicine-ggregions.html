@@ -222,6 +222,45 @@ function (mapping = aes(), data = NULL, stat = StatRegion, position = "identity"
 ```
 
 
+---
+
+#### Steb 2bb (for the truely curious) Inspect StatRegions compute
+
+
+``` r
+ggregions:::StatRegion$compute_panel
+```
+
+```
+&lt;ggproto method&gt;
+  &lt;Wrapper function&gt;
+    function (...) 
+compute_panel(...)
+
+  &lt;Inner function (f)&gt;
+    function (data, scales, ref_data, keep = NULL, drop = NULL, stamp = F) 
+{
+    ref_data$id &lt;- ref_data[1][[1]]
+    if (!is.null(keep)) {
+        ref_data &lt;- dplyr::filter(ref_data, id %in% keep)
+    }
+    if (!is.null(drop)) {
+        ref_data &lt;- dplyr::filter(ref_data, !(id %in% drop))
+    }
+    ref_data &lt;- ggplot2::StatSfCoordinates$compute_group(ggplot2::StatSf$compute_panel(ref_data, 
+        coord = ggplot2::CoordSf), coord = ggplot2::CoordSf)
+    if (!stamp) {
+        dplyr::inner_join(ref_data, data)
+    }
+    else {
+        ref_data
+    }
+}
+```
+
+
+
+
 &lt;!-- ## Deliver intuitive, newcomer-welcoming spatial viz experience --&gt;
 
 &lt;!-- By including the newly specified `geom_` function in their geo data package (perhaps instead or in addition to a convenience wrapper that are typical of geo packages) the package *users* will be able to use the` data + aes + geom` formulation for defining their plots.  Instead of positional aesthetics like x, y or geometry, a region identifier like `state_name` or `fips` can be used.  Internally, the regions `geom_*` will translate between place name or other identifier to the necessary borders (`sfc`s). --&gt;
@@ -701,22 +740,11 @@ caries_ratios |&gt;
 
 
 
-``` r
-caries_ratios |&gt; 
-  ggplot() + 
-  aes(tooth = tooth, 
-      fill = ratio) + 
-  geom_tooth(alpha = .5) + 
-  stamp_tooth_text(size = 2) + 
-  scale_fill_viridis_c()
-```
-
-![](r-medicine-ggregions_files/figure-html/arcade-1.png)&lt;!-- --&gt;
 
 ---
 
 
-![](r-medicine-ggregions_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+&lt;img src="r-medicine-ggregions_files/figure-html/unnamed-chunk-10-1.png" width="65%" /&gt;
 
 ---
 
@@ -989,12 +1017,14 @@ background-image: url(https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcTS
 background-size: contain
 
 # Thank you!
+github:
 
+## EvaMaeRey/ggregions
 
 &lt;!-- adjust font size in this css code chunk, currently 80 --&gt;
 
 &lt;style type="text/css"&gt;
-.remark-code{line-height: 1.5; font-size: 80%}
+.remark-code{line-height: 1.5; font-size: 70%}
 
 @media print {
   .has-continuation {
