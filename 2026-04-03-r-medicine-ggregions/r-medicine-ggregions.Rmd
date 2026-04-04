@@ -17,7 +17,7 @@ output:
 ```{r setup, include = F}
 # This is the recommended set up for flipbooks
 # you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
-knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F)
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F, dpi = 300, dev = "ragg_png")
 library(flipbookr)
 library(tidyverse)
 options(tidyverse.quiet = TRUE)
@@ -410,16 +410,30 @@ github:
 ---
 
 
-## Questions for reviewers:
+## Unresolved questions for this project:
 
 
-#### Perhaps an *alternative to sf* would make sense for anatomical regions - we don't really anticipate *'crs'* to be specified.  Would another preparation/Stat make sense?
+#### 1. Perhaps an *alternative to sf* would make sense for anatomical regions - we don't really anticipate *'crs'* to be specified.  Would allowing another preparation/Stat make sense - polygon-based?  Or just more attention to converting polygons to sf (relates to #3).
 
-#### The gganatogram objects bring up the fact that regions *overplot* - the heart is covered by the lungs.  So should there be a way to control the ordering (And Even if there is no regional overlap, overplotting can happen if we have the region more than once in the dataset)
+--
 
-#### ggregions' focus is on gg-type, friendly API, *but how much focus should be on preparing reference data.*  The teethr and colon case might help here. 
+#### 2. The gganatogram objects bring up the fact that regions *overplot* - the heart is covered by the lungs.  So should there be a way to control the ordering (And Even if there is no regional overlap, overplotting can happen if we have the region more than once in the dataset)
 
-#### ggregions allows you to 'try-on' the ggregions framework (positional aesthetics that are symantic, 'texas' can be the answer to 'where'?).  But, *what if you don't want to take the ggregions dependency?*  Should there be more instruction regarding this?  Licensing considerations? 
+--
+
+#### 3. ggregions' focus is on gg-type, friendly API, *but how much focus should be on preparing reference data.*  The teethr and colon case might help here. 
+
+--
+
+#### 4. ggregions allows you to 'try-on' the ggregions framework (positional aesthetics that are symantic, 'texas' can be the answer to 'where'?).  But, *what if you don't want to take the ggregions dependency?*  Should there be more instruction regarding this?  Licensing considerations? 
+
+--
+
+#### 5. More relevant to the geographic case, it might be useful to allow different resolution of the regions reference data.  How important is addressing this a this point? 
+
+--
+
+#### 6. Can this project strengthen the R ecosystem? Motivation to get into packaging?  How do we make that clearer, and the pathway easier? 
 
 
 <!-- adjust font size in this css code chunk, currently 80 -->
