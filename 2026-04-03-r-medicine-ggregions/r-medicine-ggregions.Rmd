@@ -82,14 +82,17 @@ and they are some of the first visualizations people will come across in their l
 
 ---
 
-`r chunk_reveal("scatter", display_type = "code", title = "## A scatter plot is produced by:")`
+`r chunk_reveal("scatter", title = "### A scatter plot: data + positional mapping + 'mark'")`
 
 
 
 ```{r scatter, include = F} 
-ggplot(cars) + # data
-   aes(x = speed, y = dist) + # position and other visual channel mapping
-   geom_point()        # layer 
+mtcars |> 
+  ggplot() + 
+  aes(x = wt, 
+      y = mpg,
+      color = factor(am)) + 
+  geom_point()   
 ```
 
 ???
@@ -98,20 +101,87 @@ ggplot(cars) + # data
 
 ---
 
+
+`r chunk_reveal("ggregionsscatter", display_type = "code", title = "## ggregions proposed API")`
+
+
+```{r, eval = T, echo = F}
+us_income <- tidyr::us_rent_income |> 
+  filter(variable == "income") |>
+  rename(income = estimate)
+
+# head(us_income)
+
+library(ggplot2)
+(theme_gray() + 
+  theme(palette.colour.continuous = "magma")) |> 
+  set_theme()
+```
+
+
+```{r ggregionsscatter, eval = F, echo = F} 
+us_income |>
+  ggplot() +             
+   aes(region_id = var1_region_id,       
+       fill = var2) +               
+   geom_region()                    
+```
+
+
 <!-- #### ggregions posits that by investing in methods to easily create new geo-specific ggplot2 layer extensions (geom_*s), producing maps with ggplot2 can become as intuitive as creating other plots. About specifying a map, you might say, 'use this data, draw regions, position and color fill according to var1 and var2.' -->
 
 <!-- The proposed regions mapping might look something like this: -->
 
-## ggregions proposed API
+```{r, include = F}
+library(dplyr)
 
-```{r ggregionsscatter, include = T, eval = F} 
-ggplot(mapping_data) +             # data
-   aes(region_id = var1_region_id,  # position mapping #<<
-       fill = var2) +               # and other visual channel mapping
-   geom_region()                    # layer  #<<
+# Step 1. prep some of their geo reference data
+usmapdata::us_map() |>
+  select(state_name = full, 
+         state_abbr = abbr,
+         fips,
+         geometry = geom) ->
+us_states_ref
 ```
 
---
+
+```{r geom_us_state, echo = F}
+# Step 2. use `write_geom_region_locale`
+
+#' @export
+geom_us_state <- ggregions::write_geom_region_locale(us_states_ref)
+
+#' @export
+stamp_us_state <- ggregions::write_stamp_region_locale(us_states_ref)
+
+#' @export
+geom_us_state_text <- ggregions::write_geom_region_text_locale(us_states_ref)
+
+#' @export
+stamp_us_state_text <- ggregions::write_stamp_region_text_locale(us_states_ref)
+```
+
+
+---
+
+
+
+
+`r chunk_reveal("usmapdata0")`
+
+```{r usmapdata0, include = F}
+library(ggplot2)
+
+us_income |> 
+  ggplot() + 
+  aes(state_name = NAME) + 
+  geom_us_state() + 
+  aes(fill = income) +
+  scale_fill_viridis_c(option = "magma")
+```
+
+---
+
 
 > ## [ggregions-generated] APIs feels like they actually puts the "question" at the center. - Emily Riederer
 
@@ -129,21 +199,31 @@ ggplot(mapping_data) +             # data
 
 ---
 
-## Example with geographic regions: US states
+```{r, eval = F, echo = F}
+usethis::create_package(".", check_name = F)
+```
 
-### Step 1. prepare data
+---
 
-```{r, eval = T}
+
+`r chunk_reveal("us_states_ref", title = "## Example with geographic regions: US states\n\n### Step 1. prepare data")`
+
+
+```{r us_states_ref, include = F}
 library(dplyr)
 
 # Step 1. prep some of their geo reference data
-us_states_ref <- usmapdata::us_map() |>
-  select( state_name = full, # state_name will positional aes like x or y 
-          state_abbr = abbr, 
-          fips,
-          geometry = geom,  # one column with geometry is required
-         )  # state_abbr will also be optional positional aes like x or y
+usmapdata::us_map() |>
+  select(state_name = full, 
+         state_abbr = abbr,
+         fips,
+         geometry = geom) ->
+us_states_ref
 ```
+
+
+
+
 
 
 ---
@@ -153,13 +233,18 @@ us_states_ref <- usmapdata::us_map() |>
 <!-- Then, authors will be able use `write_geom_region_locale()` to create a regions-specific ggplot2 layer, for example `geom_us_state()` below, which can be made available in their geo packages. -->
 
 ```{r}
-# Step 2. use `write_geom_region_locale`
 library(ggregions)
+
 geom_us_state <- write_geom_region_locale(us_states_ref)
+
 stamp_us_state <- write_stamp_region_locale(us_states_ref)
+
 geom_us_state_text <- write_geom_region_text_locale(us_states_ref)
+
 stamp_us_state_text <- write_stamp_region_text_locale(us_states_ref)
+
 ```
+
 
 ---
 
@@ -180,6 +265,20 @@ ggregions:::StatRegion$compute_panel
 
 ```
 
+---
+
+### What does `ggregions::write_geom_region_locale` do?
+
+
+```{r}
+ggregions::write_geom_region_locale
+```
+
+--
+
+```{r}
+ggregions:::geom_region
+```
 
 
 
@@ -191,18 +290,7 @@ ggregions:::StatRegion$compute_panel
 
 <!-- Even though there is no boundary information, analysts can map this data with the familiar  data + aesthetic mapping + layer syntax that makes ggplot2 easy to read, write, and reason about. -->
 
-```{r, eval = T, echo = F}
-us_income <- tidyr::us_rent_income |> 
-  filter(variable == "income") |>
-  rename(income = estimate)
 
-# head(us_income)
-
-library(ggplot2)
-(theme_gray() + 
-  theme(palette.colour.continuous = "magma")) |> 
-  set_theme()
-```
 
 
 ---
@@ -408,6 +496,8 @@ github:
 
 
 ---
+
+
 
 
 ## Unresolved questions for this project:
