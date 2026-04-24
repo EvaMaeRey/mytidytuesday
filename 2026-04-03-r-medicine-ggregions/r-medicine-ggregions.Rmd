@@ -343,13 +343,11 @@ https://github.com/bbartholdy/teethr
 ### data preparation
 
 ```{r}
-library(tidyverse)
-library(teethr)
-teeth_ref_data <- dental_arcade_mapping |> 
+teethr::dental_arcade_mapping |> 
   as_tibble() |> 
-  left_join(tooth_notation |> 
-  select(tooth = text, fdi = FDI, standard = standards) #<<
-  )
+  left_join(teethr::tooth_notation |> rename(tooth = text)) |>
+  select(tooth_id = tooth, fdi = FDI, standard = standards, geometry) ->
+teeth_ref_data
 ```
 
 --
@@ -367,6 +365,7 @@ stamp_tooth_text <- write_stamp_region_text_locale(teeth_ref_data)
 
 
 ```{r, echo = F}
+library(teethr)
 
 caries_ratios <- mb11_caries %>% 
   dental_longer(-id) %>%
@@ -387,7 +386,7 @@ caries_ratios <- mb11_caries %>%
 ```{r arcade, include = F}
 caries_ratios |> 
   ggplot() + 
-  aes(tooth = tooth, 
+  aes(tooth_id = tooth, 
       fill = ratio) + 
   geom_tooth(alpha = .5) + 
   stamp_tooth_text(size = 2) + 
