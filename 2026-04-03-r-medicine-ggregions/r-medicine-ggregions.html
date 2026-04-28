@@ -23,7 +23,7 @@ background-size: cover
 
 ## .large[R Medicine 2026: ggregions for building intuitive coding interfaces for anatomical visualizations]
 ## .small[]
-#### .tiny[Dr. Evangeline Reynolds | 2026-04-24 | DU, Image credit: Ross Sneddon, Upsplash]
+#### .tiny[Dr. Evangeline Reynolds | 2026-04-27 | DU, Image credit: Ross Sneddon, Upsplash]
 
 
 ???
@@ -39,141 +39,146 @@ class: inverse
 
 &gt; ### I am told there are people who do not care for maps, and I find it hard to believe. - Robert Louis Stevenson
 
-
---
-
-&gt; ### I hate when I work with spatial data that so much of my mindshare goes to thinking about 'how do I wrangle this this map and what on earth is going on' versus the actual meaning behind what I'm trying to map. - Emily Riederer
-
 --
 
 &gt; ### 'My teacher, Mr. Jayson, says a map is a picture of someplace from above.  It's like flying over that spot in an airplane.' - 'Lisa' in Loreen Leedy's in 'Mappying Penny's World'
+
+---
+
+# But ...
+
+&gt; ### I hate when I work with spatial data that so much of my mindshare goes to thinking about 'how do I wrangle this map and what on earth is going on' versus the actual meaning behind what I'm trying to map. - Emily Riederer
 
 
 ---
 class: inverse
 
 
-## Maps are some of the most compelling and intuitive data visualizations, 
---
-and they are some of the first visualizations people will come across in their lives.  
-
-
 --
 
-## And there is great support for mapping in R and in the data visualization library {ggplot2} which supports many R packages.  
+## There is great support for mapping in R and in the data visualization library {ggplot2} which supports many R packages.  
 
 --
 
 ## But, producing a simple map, like a choropleth, can feel much harder than producing other plots, like a scatterplot for example in ggplot2. 
 
+
+
+
+
+
+
+
+
+
 ---
 
 count: false
  
-### A scatter plot: data + positional mapping + 'mark'
-.panel1-scatter-auto[
+
+.panel1-classic_v_semantic-auto[
 
 ``` r
-*mtcars
+*tribble(~var1, ~var2, ~var3,
+*           1,     4,   T,
+*           2,     3,   F)
 ```
 ]
  
-.panel2-scatter-auto[
+.panel2-classic_v_semantic-auto[
 
 ```
-                     mpg cyl  disp  hp drat    wt  qsec vs am gear carb
-Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
-Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
-Datsun 710          22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
-Hornet 4 Drive      21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
-Hornet Sportabout   18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
-Valiant             18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
-Duster 360          14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
-Merc 240D           24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
-Merc 230            22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
-Merc 280            19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
-Merc 280C           17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
-Merc 450SE          16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3
-Merc 450SL          17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3
-Merc 450SLC         15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
-Cadillac Fleetwood  10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
-Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
-Chrysler Imperial   14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
-Fiat 128            32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
-Honda Civic         30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
-Toyota Corolla      33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
-Toyota Corona       21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
-Dodge Challenger    15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2
-AMC Javelin         15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2
-Camaro Z28          13.3   8 350.0 245 3.73 3.840 15.41  0  0    3    4
-Pontiac Firebird    19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2
-Fiat X1-9           27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
-Porsche 914-2       26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
-Lotus Europa        30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
-Ford Pantera L      15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4
-Ferrari Dino        19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
-Maserati Bora       15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
-Volvo 142E          21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2
+# A tibble: 2 × 3
+   var1  var2 var3 
+  &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;
+1     1     4 TRUE 
+2     2     3 FALSE
 ```
 ]
 
 ---
 count: false
  
-### A scatter plot: data + positional mapping + 'mark'
-.panel1-scatter-auto[
+
+.panel1-classic_v_semantic-auto[
 
 ``` r
-mtcars |&gt;
+tribble(~var1, ~var2, ~var3,
+            1,     4,   T,
+            2,     3,   F) |&gt;
 * ggplot()
 ```
 ]
  
-.panel2-scatter-auto[
-![](r-medicine-ggregions_files/figure-html/scatter_auto_02_output-1.png)&lt;!-- --&gt;
+.panel2-classic_v_semantic-auto[
+![](r-medicine-ggregions_files/figure-html/classic_v_semantic_auto_02_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
 count: false
  
-### A scatter plot: data + positional mapping + 'mark'
-.panel1-scatter-auto[
+
+.panel1-classic_v_semantic-auto[
 
 ``` r
-mtcars |&gt;
+tribble(~var1, ~var2, ~var3,
+            1,     4,   T,
+            2,     3,   F) |&gt;
   ggplot() +
-* aes(x = wt,
-*     y = mpg,
-*     color = factor(am))
+* aes(x = var1,
+*     y = var2)
 ```
 ]
  
-.panel2-scatter-auto[
-![](r-medicine-ggregions_files/figure-html/scatter_auto_03_output-1.png)&lt;!-- --&gt;
+.panel2-classic_v_semantic-auto[
+![](r-medicine-ggregions_files/figure-html/classic_v_semantic_auto_03_output-1.png)&lt;!-- --&gt;
 ]
 
 ---
 count: false
  
-### A scatter plot: data + positional mapping + 'mark'
-.panel1-scatter-auto[
+
+.panel1-classic_v_semantic-auto[
 
 ``` r
-mtcars |&gt;
+tribble(~var1, ~var2, ~var3,
+            1,     4,   T,
+            2,     3,   F) |&gt;
   ggplot() +
-  aes(x = wt,
-      y = mpg,
-      color = factor(am)) +
-* geom_point()
+  aes(x = var1,
+      y = var2) +
+* geom_point(size = 4)
 ```
 ]
  
-.panel2-scatter-auto[
-![](r-medicine-ggregions_files/figure-html/scatter_auto_04_output-1.png)&lt;!-- --&gt;
+.panel2-classic_v_semantic-auto[
+![](r-medicine-ggregions_files/figure-html/classic_v_semantic_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-classic_v_semantic-auto[
+
+``` r
+tribble(~var1, ~var2, ~var3,
+            1,     4,   T,
+            2,     3,   F) |&gt;
+  ggplot() +
+  aes(x = var1,
+      y = var2) +
+  geom_point(size = 4) +
+* aes(color = var3)
+```
+]
+ 
+.panel2-classic_v_semantic-auto[
+![](r-medicine-ggregions_files/figure-html/classic_v_semantic_auto_05_output-1.png)&lt;!-- --&gt;
 ]
 
 &lt;style&gt;
-.panel1-scatter-auto {
+.panel1-classic_v_semantic-auto {
   color: black;
   width: 38.6060606060606%;
   hight: 32%;
@@ -181,7 +186,7 @@ mtcars |&gt;
   padding-left: 1%;
   font-size: 80%
 }
-.panel2-scatter-auto {
+.panel2-classic_v_semantic-auto {
   color: black;
   width: 59.3939393939394%;
   hight: 32%;
@@ -189,7 +194,7 @@ mtcars |&gt;
   padding-left: 1%;
   font-size: 80%
 }
-.panel3-scatter-auto {
+.panel3-classic_v_semantic-auto {
   color: black;
   width: NA%;
   hight: 33%;
@@ -203,72 +208,127 @@ mtcars |&gt;
 
 
 
-
-
-???
-
-## In other words, you might say, 'used this data, and points, and the positions are defined by x and y'
-
 ---
 
-
 count: false
-## ggregions proposed API
+ 
+
+.panel1-semantic-auto[
 
 ``` r
-*us_income
+*tribble(~place, ~var2,
+*      "Texas",     T,
+*    "Indiana",     F)
 ```
+]
+ 
+.panel2-semantic-auto[
 
----
-count: false
-## ggregions proposed API
-
-``` r
-us_income |&gt;
-* ggplot()
 ```
-
----
-count: false
-## ggregions proposed API
-
-``` r
-us_income |&gt;
-  ggplot() +
-*  aes(region_id = var1_region_id,
-*      fill = var2)
+# A tibble: 2 × 2
+  place   var2 
+  &lt;chr&gt;   &lt;lgl&gt;
+1 Texas   TRUE 
+2 Indiana FALSE
 ```
+]
 
 ---
 count: false
-## ggregions proposed API
+ 
+
+.panel1-semantic-auto[
 
 ``` r
-us_income |&gt;
-  ggplot() +
-   aes(region_id = var1_region_id,
-       fill = var2) +
-*  geom_region()
+tribble(~place, ~var2,
+       "Texas",     T,
+     "Indiana",     F) |&gt;
+*ggplot()
 ```
+]
+ 
+.panel2-semantic-auto[
+![](r-medicine-ggregions_files/figure-html/semantic_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-semantic-auto[
+
+``` r
+tribble(~place, ~var2,
+       "Texas",     T,
+     "Indiana",     F) |&gt;
+ggplot() +
+* aes(state_name = place)
+```
+]
+ 
+.panel2-semantic-auto[
+![](r-medicine-ggregions_files/figure-html/semantic_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-semantic-auto[
+
+``` r
+tribble(~place, ~var2,
+       "Texas",     T,
+     "Indiana",     F) |&gt;
+ggplot() +
+  aes(state_name = place) +
+* geom_state()
+```
+]
+ 
+.panel2-semantic-auto[
+![](r-medicine-ggregions_files/figure-html/semantic_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-semantic-auto[
+
+``` r
+tribble(~place, ~var2,
+       "Texas",     T,
+     "Indiana",     F) |&gt;
+ggplot() +
+  aes(state_name = place) +
+  geom_state() +
+* aes(fill = var2)
+```
+]
+ 
+.panel2-semantic-auto[
+![](r-medicine-ggregions_files/figure-html/semantic_auto_05_output-1.png)&lt;!-- --&gt;
+]
 
 &lt;style&gt;
-.panel1-ggregionsscatter-auto {
+.panel1-semantic-auto {
   color: black;
-  width: 99%;
+  width: 38.6060606060606%;
   hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel2-ggregionsscatter-auto {
+.panel2-semantic-auto {
   color: black;
-  width: NA%;
+  width: 59.3939393939394%;
   hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel3-ggregionsscatter-auto {
+.panel3-semantic-auto {
   color: black;
   width: NA%;
   hight: 33%;
@@ -284,7 +344,50 @@ us_income |&gt;
 
 
 
+---
+class: inverse
 
+## Semantic 
+
+--
+
+## Positional 
+
+--
+
+## Encoding 
+
+
+
+---
+class: inverse
+
+## Semantic (*meaning* of words or symbols)
+
+
+
+## Positional 
+
+
+
+## Encoding 
+
+--
+
+
+### 'normal' ggplot2 positional encoding
+
+--
+
+### `aes(x = c(1, 2), y = c(4, 2))`
+
+--
+
+### S.P.E.
+
+--
+
+### `aes(state_name = c("Texas", "Indiana"))`
 
 
 &lt;!-- #### ggregions posits that by investing in methods to easily create new geo-specific ggplot2 layer extensions (geom_*s), producing maps with ggplot2 can become as intuitive as creating other plots. About specifying a map, you might say, 'use this data, draw regions, position and color fill according to var1 and var2.' --&gt;
@@ -296,10 +399,19 @@ us_income |&gt;
 
 
 
+---
+class: inverse, center, middle
+
+# Does {ggregions} deliver?
+
+
+
+
+
+
+
 
 ---
-
-
 
 
 count: false
@@ -398,7 +510,7 @@ library(ggplot2)
 us_income |&gt;
   ggplot() +
   aes(state_name = NAME) +
-* geom_us_state()
+* geom_state()
 ```
 ]
  
@@ -418,35 +530,13 @@ library(ggplot2)
 us_income |&gt;
   ggplot() +
   aes(state_name = NAME) +
-  geom_us_state() +
+  geom_state() +
 * aes(fill = income)
 ```
 ]
  
 .panel2-usmapdata0-auto[
 ![](r-medicine-ggregions_files/figure-html/usmapdata0_auto_06_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-usmapdata0-auto[
-
-``` r
-library(ggplot2)
-
-us_income |&gt;
-  ggplot() +
-  aes(state_name = NAME) +
-  geom_us_state() +
-  aes(fill = income) +
-* scale_fill_viridis_c(option = "magma")
-```
-]
- 
-.panel2-usmapdata0-auto[
-![](r-medicine-ggregions_files/figure-html/usmapdata0_auto_07_output-1.png)&lt;!-- --&gt;
 ]
 
 &lt;style&gt;
@@ -480,17 +570,19 @@ us_income |&gt;
 
 
 
+
 ---
 
 
 &gt; ## [ggregions-generated] APIs feels like they actually puts the "question" at the center. - Emily Riederer
 
+---
+class: inverse, center, middle
+
+
+# How does it work?
 
 ---
-
-# What {ggregions} delivers
-
---
 
 ## Effortlessly write new region-specific geom_* functions.
 
@@ -574,7 +666,7 @@ library(dplyr)
 usmapdata::us_map() |&gt;
 * select(state_name = full,
 *        state_abbr = abbr,
-*        fips,
+*        state_fips = fips,
 *        geometry = geom)
 ```
 ]
@@ -588,17 +680,17 @@ Dimension:     XY
 Bounding box:  xmin: -2584074 ymin: -2602555 xmax: 2516258 ymax: 731628.1
 Projected CRS: NAD27 / US National Atlas Equal Area
 First 10 features:
-             state_name state_abbr fips                       geometry
-1                Alaska         AK   02 MULTIPOLYGON (((-2390688 -2...
-2               Alabama         AL   01 MULTIPOLYGON (((1091785 -13...
-3              Arkansas         AR   05 MULTIPOLYGON (((482022.2 -9...
-4               Arizona         AZ   04 MULTIPOLYGON (((-1386064 -1...
-5            California         CA   06 MULTIPOLYGON (((-1716581 -1...
-6              Colorado         CO   08 MULTIPOLYGON (((-787705.6 -...
-7           Connecticut         CT   09 MULTIPOLYGON (((2156162 -83...
-8  District of Columbia         DC   11 MULTIPOLYGON (((1950799 -40...
-9              Delaware         DE   10 MULTIPOLYGON (((2037480 -28...
-10              Florida         FL   12 MULTIPOLYGON (((1853163 -20...
+             state_name state_abbr state_fips                       geometry
+1                Alaska         AK         02 MULTIPOLYGON (((-2390688 -2...
+2               Alabama         AL         01 MULTIPOLYGON (((1091785 -13...
+3              Arkansas         AR         05 MULTIPOLYGON (((482022.2 -9...
+4               Arizona         AZ         04 MULTIPOLYGON (((-1386064 -1...
+5            California         CA         06 MULTIPOLYGON (((-1716581 -1...
+6              Colorado         CO         08 MULTIPOLYGON (((-787705.6 -...
+7           Connecticut         CT         09 MULTIPOLYGON (((2156162 -83...
+8  District of Columbia         DC         11 MULTIPOLYGON (((1950799 -40...
+9              Delaware         DE         10 MULTIPOLYGON (((2037480 -28...
+10              Florida         FL         12 MULTIPOLYGON (((1853163 -20...
 ```
 ]
 
@@ -617,7 +709,7 @@ library(dplyr)
 usmapdata::us_map() |&gt;
   select(state_name = full,
          state_abbr = abbr,
-         fips,
+         state_fips = fips,
          geometry = geom) -&gt;
 *us_states_ref
 ```
@@ -668,19 +760,23 @@ usmapdata::us_map() |&gt;
 
 ### Step 2. write user-facing functions with ggregion 'write' utilities
 
-&lt;!-- Then, authors will be able use `write_geom_region_locale()` to create a regions-specific ggplot2 layer, for example `geom_us_state()` below, which can be made available in their geo packages. --&gt;
+&lt;!-- Then, authors will be able use `write_geom_region()` to create a regions-specific ggplot2 layer, for example `geom_state()` below, which can be made available in their geo packages. --&gt;
 
 
 ``` r
 library(ggregions)
 
-geom_us_state &lt;- write_geom_region_locale(us_states_ref)
+geom_state &lt;- 
+  write_geom_region(us_states_ref, required_aes = "state_name|state_abbr|state_fips")
 
-stamp_us_state &lt;- write_stamp_region_locale(us_states_ref)
+stamp_state &lt;- 
+  write_stamp_region(us_states_ref, required_aes = "state_name|state_abbr|state_fips")
 
-geom_us_state_text &lt;- write_geom_region_text_locale(us_states_ref)
+geom_state_text &lt;- 
+  write_geom_region_text(us_states_ref, required_aes = "state_name|state_abbr|state_fips")
 
-stamp_us_state_text &lt;- write_stamp_region_text_locale(us_states_ref)
+stamp_state_text &lt;- 
+  write_stamp_region_text(us_states_ref, required_aes = "state_name|state_abbr|state_fips")
 ```
 
 
@@ -690,7 +786,7 @@ stamp_us_state_text &lt;- write_stamp_region_text_locale(us_states_ref)
 
 
 ``` r
-geom_us_state
+geom_state
 ```
 
 ```
@@ -745,22 +841,22 @@ compute_panel(...)
 
 ---
 
-### What does `ggregions::write_geom_region_locale` do?
+### What does `ggregions::write_geom_region()` do?
 
 
 
 ``` r
-ggregions::write_geom_region_locale
+ggregions::write_geom_region
 ```
 
 ```
-function (ref_data = australia_state_ref) 
+function (ref_data = australia_state_ref, required_aes = NULL) 
 {
     modified_fun &lt;- geom_region
     formals(modified_fun)$ref_data &lt;- substitute(ref_data)
     return(modified_fun)
 }
-&lt;bytecode: 0x123738258&gt;
+&lt;bytecode: 0x10b4698a8&gt;
 &lt;environment: namespace:ggregions&gt;
 ```
 
@@ -781,7 +877,7 @@ function (mapping = aes(), data = NULL, stat = StatRegion, position = "identity"
         inherit.aes = inherit.aes, params = rlang::list2(na.rm = na.rm, 
             ref_data = ref_data, ...)), coord_sf(crs = st_crs_mod(ref_data)))
 }
-&lt;bytecode: 0x123729b58&gt;
+&lt;bytecode: 0x10b46c4b0&gt;
 &lt;environment: namespace:ggregions&gt;
 ```
 
@@ -919,7 +1015,7 @@ library(usmapdata)
 us_income |&gt;
   ggplot() +
   aes(state_name = NAME) +
-* geom_us_state()
+* geom_state()
 ```
 ]
  
@@ -940,7 +1036,7 @@ library(usmapdata)
 us_income |&gt;
   ggplot() +
   aes(state_name = NAME) +
-  geom_us_state() +
+  geom_state() +
 * aes(fill = income)
 ```
 ]
@@ -962,7 +1058,7 @@ library(usmapdata)
 us_income |&gt;
   ggplot() +
   aes(state_name = NAME) +
-  geom_us_state() +
+  geom_state() +
   aes(fill = income) +
 * scale_fill_viridis_c(option = "magma")
 ```
@@ -985,10 +1081,10 @@ library(usmapdata)
 us_income |&gt;
   ggplot() +
   aes(state_name = NAME) +
-  geom_us_state() +
+  geom_state() +
   aes(fill = income) +
   scale_fill_viridis_c(option = "magma") +
-* geom_us_state_text(color = "white")
+* geom_state_text(color = "white")
 ```
 ]
  
@@ -1009,10 +1105,10 @@ library(usmapdata)
 us_income |&gt;
   ggplot() +
   aes(state_name = NAME) +
-  geom_us_state() +
+  geom_state() +
   aes(fill = income) +
   scale_fill_viridis_c(option = "magma") +
-  geom_us_state_text(color = "white") +
+  geom_state_text(color = "white") +
 * aes(label = after_stat(state_abbr))
 ```
 ]
@@ -1082,13 +1178,11 @@ https://github.com/bbartholdy/teethr
 
 
 ``` r
-library(tidyverse)
-library(teethr)
-teeth_ref_data &lt;- dental_arcade_mapping |&gt; 
+teethr::dental_arcade_mapping |&gt; 
   as_tibble() |&gt; 
-  left_join(tooth_notation |&gt; 
-* select(tooth = text, fdi = FDI, standard = standards)
-  )
+  left_join(teethr::tooth_notation |&gt; rename(tooth = text)) |&gt;
+  select(tooth_id = tooth, fdi = FDI, standard = standards, geometry) -&gt;
+teeth_ref_data
 ```
 
 --
@@ -1099,10 +1193,10 @@ teeth_ref_data &lt;- dental_arcade_mapping |&gt;
 
 ``` r
 library(ggregions)
-geom_tooth &lt;- ggregions::write_geom_region_locale(teeth_ref_data)
-geom_tooth_text &lt;- write_geom_region_text_locale(teeth_ref_data)
-stamp_tooth &lt;- write_stamp_region_locale(teeth_ref_data)
-stamp_tooth_text &lt;- write_stamp_region_text_locale(teeth_ref_data)
+geom_tooth &lt;- write_geom_region(teeth_ref_data, required_aes = "tooth_id|fdi|standard")
+geom_tooth_text &lt;- write_geom_region_text(teeth_ref_data, required_aes = "tooth_id|fdi|standard")
+stamp_tooth &lt;- write_stamp_region(teeth_ref_data, required_aes = "tooth_id|fdi|standard")
+stamp_tooth_text &lt;- write_stamp_region_text(teeth_ref_data, required_aes = "tooth_id|fdi|standard")
 ```
 
 
@@ -1166,7 +1260,7 @@ count: false
 ``` r
 caries_ratios |&gt;
   ggplot() +
-* aes(tooth = tooth,
+* aes(tooth_id = tooth,
 *     fill = ratio)
 ```
 ]
@@ -1184,7 +1278,7 @@ count: false
 ``` r
 caries_ratios |&gt;
   ggplot() +
-  aes(tooth = tooth,
+  aes(tooth_id = tooth,
       fill = ratio) +
 * geom_tooth(alpha = .5)
 ```
@@ -1203,7 +1297,7 @@ count: false
 ``` r
 caries_ratios |&gt;
   ggplot() +
-  aes(tooth = tooth,
+  aes(tooth_id = tooth,
       fill = ratio) +
   geom_tooth(alpha = .5) +
 * stamp_tooth_text(size = 2)
@@ -1223,7 +1317,7 @@ count: false
 ``` r
 caries_ratios |&gt;
   ggplot() +
-  aes(tooth = tooth,
+  aes(tooth_id = tooth,
       fill = ratio) +
   geom_tooth(alpha = .5) +
   stamp_tooth_text(size = 2) +
@@ -1287,9 +1381,10 @@ caries_ratios |&gt;
 female_sf &lt;- gganatogram::hgFemale_list[c(1:156, 180:195)] |&gt; # return to this!!
   bind_rows() |&gt;
   remove_missing() |&gt;
-  to_sf_routine() |&gt; 
-  rename(organ = id) |&gt;
-  select(-group)
+  to_sf_routine()
+
+ref_female_sf &lt;- female_sf |&gt; 
+  select(organ = id, geometry)
 ```
 
 --
@@ -1298,10 +1393,11 @@ female_sf &lt;- gganatogram::hgFemale_list[c(1:156, 180:195)] |&gt; # return to 
 
 
 ``` r
-stamp_organ &lt;- ggregions::write_stamp_region_locale(female_sf)
-geom_organ &lt;- ggregions::write_geom_region_locale(female_sf)
-stamp_organ_text &lt;- ggregions::write_stamp_region_text_locale(female_sf)
-geom_organ_text &lt;- ggregions::write_geom_region_text_locale(female_sf)
+library(ggregions)
+stamp_organ &lt;- write_stamp_region(ref_female_sf, required_aes = "organ")
+geom_organ &lt;- write_geom_region(ref_female_sf, required_aes = "organ")
+stamp_organ_text &lt;- write_stamp_region_text(ref_female_sf, required_aes = "organ")
+geom_organ_text &lt;- write_geom_region_text(ref_female_sf, required_aes = "organ")
 ```
 
 ---
@@ -1590,19 +1686,20 @@ github:
   }
 }
 
-code.r.hljs.remark-code{
-  position: relative;
-  overflow-x: hidden;
-}
 
-
-code.r.hljs.remark-code:hover{
-  overflow-x:visible;
-  width: 500px;
-  border-style: solid;
-}
 &lt;/style&gt;
 
+&lt;!-- code.r.hljs.remark-code{ --&gt;
+&lt;!--   position: relative; --&gt;
+&lt;!--   overflow-x: hidden; --&gt;
+&lt;!-- } --&gt;
+
+
+&lt;!-- code.r.hljs.remark-code:hover{ --&gt;
+&lt;!--   overflow-x:visible; --&gt;
+&lt;!--   width: 500px; --&gt;
+&lt;!--   border-style: solid; --&gt;
+&lt;!-- } --&gt;
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

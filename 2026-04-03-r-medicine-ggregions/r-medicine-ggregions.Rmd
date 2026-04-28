@@ -53,57 +53,152 @@ class: inverse
 
 > ### I am told there are people who do not care for maps, and I find it hard to believe. - Robert Louis Stevenson
 
-
---
-
-> ### I hate when I work with spatial data that so much of my mindshare goes to thinking about 'how do I wrangle this this map and what on earth is going on' versus the actual meaning behind what I'm trying to map. - Emily Riederer
-
 --
 
 > ### 'My teacher, Mr. Jayson, says a map is a picture of someplace from above.  It's like flying over that spot in an airplane.' - 'Lisa' in Loreen Leedy's in 'Mappying Penny's World'
+
+---
+
+# But ...
+
+> ### I hate when I work with spatial data that so much of my mindshare goes to thinking about 'how do I wrangle this map and what on earth is going on' versus the actual meaning behind what I'm trying to map. - Emily Riederer
 
 
 ---
 class: inverse
 
 
-## Maps are some of the most compelling and intuitive data visualizations, 
---
-and they are some of the first visualizations people will come across in their lives.  
-
-
 --
 
-## And there is great support for mapping in R and in the data visualization library {ggplot2} which supports many R packages.  
+## There is great support for mapping in R and in the data visualization library {ggplot2} which supports many R packages.  
 
 --
 
 ## But, producing a simple map, like a choropleth, can feel much harder than producing other plots, like a scatterplot for example in ggplot2. 
 
----
-
-`r chunk_reveal("scatter", title = "### A scatter plot: data + positional mapping + 'mark'")`
 
 
+```{r, include = F}
+library(dplyr)
 
-```{r scatter, include = F} 
-mtcars |> 
-  ggplot() + 
-  aes(x = wt, 
-      y = mpg,
-      color = factor(am)) + 
-  geom_point()   
+# Step 1. prep some of their geo reference data
+usmapdata::us_map() |>
+  select(state_name = full, 
+         state_abbr = abbr,
+         state_fips = fips,
+         geometry = geom) ->
+us_states_ref
 ```
 
-???
 
-## In other words, you might say, 'used this data, and points, and the positions are defined by x and y'
+```{r geom_state, echo = F}
+# Step 2. use `write_geom_region`
+
+#' @export
+geom_state <- write_geom_region(us_states_ref)
+
+#' @export
+stamp_state <- write_stamp_region(us_states_ref)
+
+#' @export
+geom_state_text <- write_geom_region_text(us_states_ref)
+
+#' @export
+stamp_state_text <- write_stamp_region_text(us_states_ref)
+```
+
+
 
 ---
 
+`r chunk_reveal("classic_v_semantic")`
 
-`r chunk_reveal("ggregionsscatter", display_type = "code", title = "## ggregions proposed API")`
+```{r classic_v_semantic, include=F}
+tribble(~var1, ~var2, ~var3,
+            1,     4,   T,
+            2,     3,   F) |> 
+  ggplot() + 
+  aes(x = var1,
+      y = var2) + 
+  geom_point(size = 4) +
+  aes(color = var3)
+```
 
+---
+
+`r chunk_reveal("semantic")`
+
+```{r semantic, include=F}
+tribble(~place, ~var2,
+       "Texas",     T,
+     "Indiana",     F) |> 
+ggplot() + 
+  aes(state_name = place) + 
+  geom_state() + 
+  aes(fill = var2)
+```
+
+
+
+---
+class: inverse
+
+## Semantic 
+
+--
+
+## Positional 
+
+--
+
+## Encoding 
+
+
+
+---
+class: inverse
+
+## Semantic (*meaning* of words or symbols)
+
+
+
+## Positional 
+
+
+
+## Encoding 
+
+--
+
+
+### 'normal' ggplot2 positional encoding
+
+--
+
+### `aes(x = c(1, 2), y = c(4, 2))`
+
+--
+
+### S.P.E.
+
+--
+
+### `aes(state_name = c("Texas", "Indiana"))`
+
+
+<!-- #### ggregions posits that by investing in methods to easily create new geo-specific ggplot2 layer extensions (geom_*s), producing maps with ggplot2 can become as intuitive as creating other plots. About specifying a map, you might say, 'use this data, draw regions, position and color fill according to var1 and var2.' -->
+
+<!-- The proposed regions mapping might look something like this: -->
+
+
+
+
+
+
+---
+class: inverse, center, middle
+
+# Does {ggregions} deliver?
 
 ```{r, eval = T, echo = F}
 us_income <- tidyr::us_rent_income |> 
@@ -119,52 +214,11 @@ library(ggplot2)
 ```
 
 
-```{r ggregionsscatter, eval = F, echo = F} 
-us_income |>
-  ggplot() +             
-   aes(region_id = var1_region_id,       
-       fill = var2) +               
-   geom_region()                    
-```
 
 
-<!-- #### ggregions posits that by investing in methods to easily create new geo-specific ggplot2 layer extensions (geom_*s), producing maps with ggplot2 can become as intuitive as creating other plots. About specifying a map, you might say, 'use this data, draw regions, position and color fill according to var1 and var2.' -->
-
-<!-- The proposed regions mapping might look something like this: -->
-
-```{r, include = F}
-library(dplyr)
-
-# Step 1. prep some of their geo reference data
-usmapdata::us_map() |>
-  select(state_name = full, 
-         state_abbr = abbr,
-         fips,
-         geometry = geom) ->
-us_states_ref
-```
-
-
-```{r geom_us_state, echo = F}
-# Step 2. use `write_geom_region_locale`
-
-#' @export
-geom_us_state <- ggregions::write_geom_region_locale(us_states_ref)
-
-#' @export
-stamp_us_state <- ggregions::write_stamp_region_locale(us_states_ref)
-
-#' @export
-geom_us_state_text <- ggregions::write_geom_region_text_locale(us_states_ref)
-
-#' @export
-stamp_us_state_text <- ggregions::write_stamp_region_text_locale(us_states_ref)
-```
 
 
 ---
-
-
 
 
 `r chunk_reveal("usmapdata0")`
@@ -175,22 +229,23 @@ library(ggplot2)
 us_income |> 
   ggplot() + 
   aes(state_name = NAME) + 
-  geom_us_state() + 
-  aes(fill = income) +
-  scale_fill_viridis_c(option = "magma")
+  geom_state() + 
+  aes(fill = income)
 ```
+
 
 ---
 
 
 > ## [ggregions-generated] APIs feels like they actually puts the "question" at the center. - Emily Riederer
 
+---
+class: inverse, center, middle
+
+
+# How does it work?
 
 ---
-
-# What {ggregions} delivers
-
---
 
 ## Effortlessly write new region-specific geom_* functions.
 
@@ -216,7 +271,7 @@ library(dplyr)
 usmapdata::us_map() |>
   select(state_name = full, 
          state_abbr = abbr,
-         fips,
+         state_fips = fips,
          geometry = geom) ->
 us_states_ref
 ```
@@ -230,18 +285,22 @@ us_states_ref
 
 ### Step 2. write user-facing functions with ggregion 'write' utilities
 
-<!-- Then, authors will be able use `write_geom_region_locale()` to create a regions-specific ggplot2 layer, for example `geom_us_state()` below, which can be made available in their geo packages. -->
+<!-- Then, authors will be able use `write_geom_region()` to create a regions-specific ggplot2 layer, for example `geom_state()` below, which can be made available in their geo packages. -->
 
 ```{r}
 library(ggregions)
 
-geom_us_state <- write_geom_region_locale(us_states_ref)
+geom_state <- 
+  write_geom_region(us_states_ref, required_aes = "state_name|state_abbr|state_fips")
 
-stamp_us_state <- write_stamp_region_locale(us_states_ref)
+stamp_state <- 
+  write_stamp_region(us_states_ref, required_aes = "state_name|state_abbr|state_fips")
 
-geom_us_state_text <- write_geom_region_text_locale(us_states_ref)
+geom_state_text <- 
+  write_geom_region_text(us_states_ref, required_aes = "state_name|state_abbr|state_fips")
 
-stamp_us_state_text <- write_stamp_region_text_locale(us_states_ref)
+stamp_state_text <- 
+  write_stamp_region_text(us_states_ref, required_aes = "state_name|state_abbr|state_fips")
 
 ```
 
@@ -251,7 +310,7 @@ stamp_us_state_text <- write_stamp_region_text_locale(us_states_ref)
 ### Step 2b. (optional) Inspect user-facing function
 
 ```{r}
-geom_us_state
+geom_state
 ```
 
 
@@ -267,11 +326,11 @@ ggregions:::StatRegion$compute_panel
 
 ---
 
-### What does `ggregions::write_geom_region_locale` do?
+### What does `ggregions::write_geom_region()` do?
 
 
 ```{r}
-ggregions::write_geom_region_locale
+ggregions::write_geom_region
 ```
 
 --
@@ -307,10 +366,10 @@ library(usmapdata)
 us_income |> 
   ggplot() + 
   aes(state_name = NAME) + 
-  geom_us_state() + 
+  geom_state() + 
   aes(fill = income) +
   scale_fill_viridis_c(option = "magma") + 
-  geom_us_state_text(color = "white") + 
+  geom_state_text(color = "white") + 
   aes(label = after_stat(state_abbr))
 ```
 
@@ -357,10 +416,10 @@ teeth_ref_data
 
 ```{r}  
 library(ggregions)
-geom_tooth <- ggregions::write_geom_region_locale(teeth_ref_data)
-geom_tooth_text <- write_geom_region_text_locale(teeth_ref_data)
-stamp_tooth <- write_stamp_region_locale(teeth_ref_data)
-stamp_tooth_text <- write_stamp_region_text_locale(teeth_ref_data)
+geom_tooth <- write_geom_region(teeth_ref_data, required_aes = "tooth_id|fdi|standard")
+geom_tooth_text <- write_geom_region_text(teeth_ref_data, required_aes = "tooth_id|fdi|standard")
+stamp_tooth <- write_stamp_region(teeth_ref_data, required_aes = "tooth_id|fdi|standard")
+stamp_tooth_text <- write_stamp_region_text(teeth_ref_data, required_aes = "tooth_id|fdi|standard")
 ```
 
 
@@ -403,7 +462,7 @@ library(teethr)
 
 caries_ratios |> 
   ggplot() + 
-  aes(tooth = tooth, #<<
+  aes(tooth_id = tooth, #<<
       fill = ratio) + 
   geom_tooth(alpha = .5) + #<<
   stamp_tooth_text(size = 1.5) + #<<
@@ -444,9 +503,10 @@ to_sf_routine <- function(data){
 female_sf <- gganatogram::hgFemale_list[c(1:156, 180:195)] |> # return to this!!
   bind_rows() |>
   remove_missing() |>
-  to_sf_routine() |> 
-  rename(organ = id) |>
-  select(-group)
+  to_sf_routine()
+
+ref_female_sf <- female_sf |> 
+  select(organ = id, geometry)
 ```
 
 --
@@ -454,10 +514,11 @@ female_sf <- gganatogram::hgFemale_list[c(1:156, 180:195)] |> # return to this!!
 ### Step 2: User-facing function preparation
 
 ```{r, }  
-stamp_organ <- ggregions::write_stamp_region_locale(female_sf)
-geom_organ <- ggregions::write_geom_region_locale(female_sf)
-stamp_organ_text <- ggregions::write_stamp_region_text_locale(female_sf)
-geom_organ_text <- ggregions::write_geom_region_text_locale(female_sf)
+library(ggregions)
+stamp_organ <- write_stamp_region(ref_female_sf, required_aes = "organ")
+geom_organ <- write_geom_region(ref_female_sf, required_aes = "organ")
+stamp_organ_text <- write_stamp_region_text(ref_female_sf, required_aes = "organ")
+geom_organ_text <- write_geom_region_text(ref_female_sf, required_aes = "organ")
 ```
 
 ---
@@ -536,17 +597,18 @@ github:
   }
 }
 
-code.r.hljs.remark-code{
-  position: relative;
-  overflow-x: hidden;
-}
 
-
-code.r.hljs.remark-code:hover{
-  overflow-x:visible;
-  width: 500px;
-  border-style: solid;
-}
 ```
 
+<!-- code.r.hljs.remark-code{ -->
+<!--   position: relative; -->
+<!--   overflow-x: hidden; -->
+<!-- } -->
+
+
+<!-- code.r.hljs.remark-code:hover{ -->
+<!--   overflow-x:visible; -->
+<!--   width: 500px; -->
+<!--   border-style: solid; -->
+<!-- } -->
 

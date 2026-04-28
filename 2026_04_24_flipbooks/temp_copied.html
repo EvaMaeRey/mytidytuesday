@@ -1,0 +1,3282 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="temp_copied_files/libs/clipboard/clipboard.min.js"></script>
+<script src="temp_copied_files/libs/quarto-html/tabby.min.js"></script>
+<script src="temp_copied_files/libs/quarto-html/popper.min.js"></script>
+<script src="temp_copied_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="temp_copied_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="temp_copied_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="temp_copied_files/libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.8.27">
+
+  <title>temp_copied</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="temp_copied_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="temp_copied_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="temp_copied_files/libs/revealjs/dist/theme/quarto-534cd8e3a96973385dffff3f4709048d.css">
+  <link href="temp_copied_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="temp_copied_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="temp_copied_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="temp_copied_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+
+<section id="section" class="slide level2">
+<h2></h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">library</span>(tidyverse)  <span class="co">#&lt;&lt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div><div class="column" style="width:40%;">
+
+</div></div>
+</section>
+<section id="section-1" class="slide level2">
+<h2></h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-2"><a href=""></a><span class="fu">library</span>(plotROC)  <span class="co">#&lt;&lt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div><div class="column" style="width:40%;">
+
+</div></div>
+</section>
+<section id="section-2" class="slide level2">
+<h2></h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb3-2"><a href=""></a><span class="fu">library</span>(plotROC)</span>
+<span id="cb3-3"><a href=""></a></span>
+<span id="cb3-4"><a href=""></a>D.ex <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="dv">50</span>, <span class="dv">1</span>, .<span class="dv">5</span>)  <span class="co">#&lt;&lt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div><div class="column" style="width:40%;">
+
+</div></div>
+</section>
+<section id="section-3" class="slide level2">
+<h2></h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb4-2"><a href=""></a><span class="fu">library</span>(plotROC)</span>
+<span id="cb4-3"><a href=""></a></span>
+<span id="cb4-4"><a href=""></a>D.ex <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="dv">50</span>, <span class="dv">1</span>, .<span class="dv">5</span>)</span>
+<span id="cb4-5"><a href=""></a></span>
+<span id="cb4-6"><a href=""></a>roc_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">D =</span> <span class="fu">c</span>(D.ex, D.ex),  <span class="co">#&lt;&lt;</span></span>
+<span id="cb4-7"><a href=""></a>           <span class="at">M =</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="at">mean =</span> D.ex, <span class="at">sd =</span> .<span class="dv">4</span>),  <span class="co">#&lt;&lt;</span></span>
+<span id="cb4-8"><a href=""></a>                 <span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="at">mean =</span> D.ex, <span class="at">sd =</span> <span class="dv">1</span>)),  <span class="co">#&lt;&lt;</span></span>
+<span id="cb4-9"><a href=""></a>           <span class="at">Z =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"A"</span>, <span class="dv">50</span>), <span class="fu">rep</span>(<span class="st">"B"</span>, <span class="dv">50</span>)))  <span class="co">#&lt;&lt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div><div class="column" style="width:40%;">
+
+</div></div>
+</section>
+<section id="section-4" class="slide level2">
+<h2></h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb5-2"><a href=""></a><span class="fu">library</span>(plotROC)</span>
+<span id="cb5-3"><a href=""></a></span>
+<span id="cb5-4"><a href=""></a>D.ex <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="dv">50</span>, <span class="dv">1</span>, .<span class="dv">5</span>)</span>
+<span id="cb5-5"><a href=""></a></span>
+<span id="cb5-6"><a href=""></a>roc_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">D =</span> <span class="fu">c</span>(D.ex, D.ex),</span>
+<span id="cb5-7"><a href=""></a>           <span class="at">M =</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="at">mean =</span> D.ex, <span class="at">sd =</span> .<span class="dv">4</span>),</span>
+<span id="cb5-8"><a href=""></a>                 <span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="at">mean =</span> D.ex, <span class="at">sd =</span> <span class="dv">1</span>)),</span>
+<span id="cb5-9"><a href=""></a>           <span class="at">Z =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"A"</span>, <span class="dv">50</span>), <span class="fu">rep</span>(<span class="st">"B"</span>, <span class="dv">50</span>)))</span>
+<span id="cb5-10"><a href=""></a></span>
+<span id="cb5-11"><a href=""></a>roc_data   <span class="co">#&lt;&lt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div><div class="column" style="width:40%;">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>    D           M Z
+1   1  0.95070668 A
+2   0  0.15062051 A
+3   0 -0.21036549 A
+4   1  0.97379260 A
+5   1  1.11770134 A
+6   0 -0.50439026 A
+7   1  0.95911655 A
+8   1  0.72827377 A
+9   1  0.99236274 A
+10  0 -0.20658315 A
+11  1  0.76609891 A
+12  0 -0.14535078 A
+13  1  1.19158440 A
+14  1  1.21773334 A
+15  0 -0.61426082 A
+16  0 -0.19714297 A
+17  1  1.06503258 A
+18  1  0.75278562 A
+19  0  0.08293179 A
+20  0 -0.36450007 A
+21  0 -0.56089725 A
+22  0 -0.39099473 A
+23  0 -0.03052537 A
+24  0 -0.13737933 A
+25  1  1.23701765 A
+26  0  0.34018623 A
+27  1  1.80741932 A
+28  0  0.15971015 A
+29  1  0.79940714 A
+30  0  0.53762655 A
+31  0  1.24483956 A
+32  0 -0.60951893 A
+33  1  1.10358586 A
+34  0 -0.65995618 A
+35  0 -0.11498174 A
+36  0 -0.22590421 A
+37  1  0.84395828 A
+38  0 -0.15267029 A
+39  1  0.77537543 A
+40  0  0.32926322 A
+41  1  1.04370388 A
+42  0 -0.52168239 A
+43  0  0.52263974 A
+44  0 -0.18992225 A
+45  1  0.67211848 A
+46  0  0.22212169 A
+47  1  1.19994612 A
+48  0 -0.07778469 A
+49  1  1.38519678 A
+50  0  0.28693861 A
+51  1  0.55842016 B
+52  0  1.57694791 B
+53  0  1.92722912 B
+54  1  0.36472956 B
+55  1  1.66554292 B
+56  0 -0.38068525 B
+57  1  1.18521053 B
+58  1  0.18624657 B
+59  1  0.60254251 B
+60  0  0.98100900 B
+61  1  0.89802928 B
+62  0  1.58515755 B
+63  1  1.75234347 B
+64  1  1.18914940 B
+65  0 -1.25356981 B
+66  0 -1.30618378 B
+67  1  1.13948909 B
+68  1  0.44634003 B
+69  0 -0.46176139 B
+70  0 -1.14454532 B
+71  0 -0.66067365 B
+72  0 -1.97331634 B
+73  0 -0.22735916 B
+74  0 -2.22775025 B
+75  1 -0.18478785 B
+76  0  3.04801983 B
+77  1  0.73859141 B
+78  0 -0.74017905 B
+79  1  0.23758103 B
+80  0 -2.56888021 B
+81  0 -0.70283275 B
+82  0 -1.63385323 B
+83  1  1.81701139 B
+84  0  0.30096904 B
+85  0  1.97738272 B
+86  0 -2.13749642 B
+87  1 -0.26554075 B
+88  0 -0.33370000 B
+89  1  2.46089563 B
+90  0  1.58699445 B
+91  1  0.75024047 B
+92  0 -0.40269190 B
+93  0  1.31643871 B
+94  0  0.18224312 B
+95  1  0.60005407 B
+96  0 -0.02425508 B
+97  1  1.76322535 B
+98  0 -1.26644049 B
+99  1  2.44660293 B
+100 0 -0.50951268 B</code></pre>
+</div>
+</div>
+</div></div>
+</section>
+<section id="section-5" class="slide level2">
+<h2></h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb7-2"><a href=""></a><span class="fu">library</span>(plotROC)</span>
+<span id="cb7-3"><a href=""></a></span>
+<span id="cb7-4"><a href=""></a>D.ex <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="dv">50</span>, <span class="dv">1</span>, .<span class="dv">5</span>)</span>
+<span id="cb7-5"><a href=""></a></span>
+<span id="cb7-6"><a href=""></a>roc_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">D =</span> <span class="fu">c</span>(D.ex, D.ex),</span>
+<span id="cb7-7"><a href=""></a>           <span class="at">M =</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="at">mean =</span> D.ex, <span class="at">sd =</span> .<span class="dv">4</span>),</span>
+<span id="cb7-8"><a href=""></a>                 <span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="at">mean =</span> D.ex, <span class="at">sd =</span> <span class="dv">1</span>)),</span>
+<span id="cb7-9"><a href=""></a>           <span class="at">Z =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"A"</span>, <span class="dv">50</span>), <span class="fu">rep</span>(<span class="st">"B"</span>, <span class="dv">50</span>)))</span>
+<span id="cb7-10"><a href=""></a></span>
+<span id="cb7-11"><a href=""></a>roc_data <span class="sc">|&gt;</span></span>
+<span id="cb7-12"><a href=""></a>  <span class="fu">ggplot</span>()   <span class="co">#&lt;&lt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div><div class="column" style="width:40%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="temp_copied_files/figure-revealjs/the_chunk_auto_06_output-1.png" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="section-6" class="slide level2">
+<h2></h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb8-2"><a href=""></a><span class="fu">library</span>(plotROC)</span>
+<span id="cb8-3"><a href=""></a></span>
+<span id="cb8-4"><a href=""></a>D.ex <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="dv">50</span>, <span class="dv">1</span>, .<span class="dv">5</span>)</span>
+<span id="cb8-5"><a href=""></a></span>
+<span id="cb8-6"><a href=""></a>roc_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">D =</span> <span class="fu">c</span>(D.ex, D.ex),</span>
+<span id="cb8-7"><a href=""></a>           <span class="at">M =</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="at">mean =</span> D.ex, <span class="at">sd =</span> .<span class="dv">4</span>),</span>
+<span id="cb8-8"><a href=""></a>                 <span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="at">mean =</span> D.ex, <span class="at">sd =</span> <span class="dv">1</span>)),</span>
+<span id="cb8-9"><a href=""></a>           <span class="at">Z =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"A"</span>, <span class="dv">50</span>), <span class="fu">rep</span>(<span class="st">"B"</span>, <span class="dv">50</span>)))</span>
+<span id="cb8-10"><a href=""></a></span>
+<span id="cb8-11"><a href=""></a>roc_data <span class="sc">|&gt;</span></span>
+<span id="cb8-12"><a href=""></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb8-13"><a href=""></a>  <span class="fu">aes</span>(<span class="at">m =</span> M, <span class="at">d =</span> D)   <span class="co">#&lt;&lt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div><div class="column" style="width:40%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="temp_copied_files/figure-revealjs/the_chunk_auto_07_output-1.png" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="section-7" class="slide level2">
+<h2></h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb9-2"><a href=""></a><span class="fu">library</span>(plotROC)</span>
+<span id="cb9-3"><a href=""></a></span>
+<span id="cb9-4"><a href=""></a>D.ex <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="dv">50</span>, <span class="dv">1</span>, .<span class="dv">5</span>)</span>
+<span id="cb9-5"><a href=""></a></span>
+<span id="cb9-6"><a href=""></a>roc_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">D =</span> <span class="fu">c</span>(D.ex, D.ex),</span>
+<span id="cb9-7"><a href=""></a>           <span class="at">M =</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="at">mean =</span> D.ex, <span class="at">sd =</span> .<span class="dv">4</span>),</span>
+<span id="cb9-8"><a href=""></a>                 <span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="at">mean =</span> D.ex, <span class="at">sd =</span> <span class="dv">1</span>)),</span>
+<span id="cb9-9"><a href=""></a>           <span class="at">Z =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"A"</span>, <span class="dv">50</span>), <span class="fu">rep</span>(<span class="st">"B"</span>, <span class="dv">50</span>)))</span>
+<span id="cb9-10"><a href=""></a></span>
+<span id="cb9-11"><a href=""></a>roc_data <span class="sc">|&gt;</span></span>
+<span id="cb9-12"><a href=""></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb9-13"><a href=""></a>  <span class="fu">aes</span>(<span class="at">m =</span> M, <span class="at">d =</span> D) <span class="sc">+</span></span>
+<span id="cb9-14"><a href=""></a>  <span class="fu">geom_roc</span>()   <span class="co">#&lt;&lt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div><div class="column" style="width:40%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="temp_copied_files/figure-revealjs/the_chunk_auto_08_output-1.png" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="section-8" class="slide level2">
+<h2></h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb10-2"><a href=""></a><span class="fu">library</span>(plotROC)</span>
+<span id="cb10-3"><a href=""></a></span>
+<span id="cb10-4"><a href=""></a>D.ex <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="dv">50</span>, <span class="dv">1</span>, .<span class="dv">5</span>)</span>
+<span id="cb10-5"><a href=""></a></span>
+<span id="cb10-6"><a href=""></a>roc_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">D =</span> <span class="fu">c</span>(D.ex, D.ex),</span>
+<span id="cb10-7"><a href=""></a>           <span class="at">M =</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="at">mean =</span> D.ex, <span class="at">sd =</span> .<span class="dv">4</span>),</span>
+<span id="cb10-8"><a href=""></a>                 <span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="at">mean =</span> D.ex, <span class="at">sd =</span> <span class="dv">1</span>)),</span>
+<span id="cb10-9"><a href=""></a>           <span class="at">Z =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"A"</span>, <span class="dv">50</span>), <span class="fu">rep</span>(<span class="st">"B"</span>, <span class="dv">50</span>)))</span>
+<span id="cb10-10"><a href=""></a></span>
+<span id="cb10-11"><a href=""></a>roc_data <span class="sc">|&gt;</span></span>
+<span id="cb10-12"><a href=""></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb10-13"><a href=""></a>  <span class="fu">aes</span>(<span class="at">m =</span> M, <span class="at">d =</span> D) <span class="sc">+</span></span>
+<span id="cb10-14"><a href=""></a>  <span class="fu">geom_roc</span>() <span class="ot">-&gt;</span></span>
+<span id="cb10-15"><a href=""></a>ggroc  <span class="co">#&lt;&lt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div><div class="column" style="width:40%;">
+
+</div></div>
+</section>
+<section id="section-9" class="slide level2">
+<h2></h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb11-2"><a href=""></a><span class="fu">library</span>(plotROC)</span>
+<span id="cb11-3"><a href=""></a></span>
+<span id="cb11-4"><a href=""></a>D.ex <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="dv">50</span>, <span class="dv">1</span>, .<span class="dv">5</span>)</span>
+<span id="cb11-5"><a href=""></a></span>
+<span id="cb11-6"><a href=""></a>roc_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">D =</span> <span class="fu">c</span>(D.ex, D.ex),</span>
+<span id="cb11-7"><a href=""></a>           <span class="at">M =</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="at">mean =</span> D.ex, <span class="at">sd =</span> .<span class="dv">4</span>),</span>
+<span id="cb11-8"><a href=""></a>                 <span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="at">mean =</span> D.ex, <span class="at">sd =</span> <span class="dv">1</span>)),</span>
+<span id="cb11-9"><a href=""></a>           <span class="at">Z =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"A"</span>, <span class="dv">50</span>), <span class="fu">rep</span>(<span class="st">"B"</span>, <span class="dv">50</span>)))</span>
+<span id="cb11-10"><a href=""></a></span>
+<span id="cb11-11"><a href=""></a>roc_data <span class="sc">|&gt;</span></span>
+<span id="cb11-12"><a href=""></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb11-13"><a href=""></a>  <span class="fu">aes</span>(<span class="at">m =</span> M, <span class="at">d =</span> D) <span class="sc">+</span></span>
+<span id="cb11-14"><a href=""></a>  <span class="fu">geom_roc</span>() <span class="ot">-&gt;</span></span>
+<span id="cb11-15"><a href=""></a>ggroc</span>
+<span id="cb11-16"><a href=""></a></span>
+<span id="cb11-17"><a href=""></a></span>
+<span id="cb11-18"><a href=""></a>roc_data   <span class="co">#&lt;&lt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div><div class="column" style="width:40%;">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>    D           M Z
+1   0 -0.54829384 A
+2   0 -0.58287744 A
+3   1  0.52982926 A
+4   0 -0.13163088 A
+5   1  0.95295074 A
+6   1  1.11721497 A
+7   0  0.71818489 A
+8   1  1.98190746 A
+9   0  0.12910622 A
+10  0 -0.08974745 A
+11  1  0.61868506 A
+12  1  1.64895881 A
+13  0  0.24059950 A
+14  1  0.78959812 A
+15  0 -0.85489617 A
+16  0 -0.01204143 A
+17  1  1.85980742 A
+18  1  1.20301752 A
+19  1  1.09136293 A
+20  1  1.38893567 A
+21  0 -0.65301628 A
+22  1  1.22736248 A
+23  0  0.36875433 A
+24  0  0.29628477 A
+25  1  1.19406507 A
+26  0  0.19520590 A
+27  0 -0.35020337 A
+28  0  0.06609391 A
+29  0 -0.23664375 A
+30  0 -0.90750693 A
+31  0  0.41360721 A
+32  0 -0.12666406 A
+33  1  0.31396209 A
+34  1  0.87272677 A
+35  1  0.01326701 A
+36  0  0.48112091 A
+37  1  0.86034801 A
+38  1  0.58080123 A
+39  0 -0.05901919 A
+40  1  0.59055343 A
+41  1  1.58478972 A
+42  1  0.52638703 A
+43  0 -0.04859002 A
+44  1  0.81137576 A
+45  0 -0.28265560 A
+46  1  1.33700011 A
+47  1  0.15142796 A
+48  1  0.21428532 A
+49  1  1.03152958 A
+50  1  0.73741232 A
+51  0  0.09935003 B
+52  0 -0.02911548 B
+53  1 -0.03522428 B
+54  0  0.40809121 B
+55  1  1.05035484 B
+56  1  0.15353327 B
+57  0  1.03916384 B
+58  1  0.49346071 B
+59  0  0.46250031 B
+60  0  1.16814065 B
+61  1  1.48583370 B
+62  1  2.28255571 B
+63  0 -0.98065476 B
+64  1  0.28678803 B
+65  0 -0.63974500 B
+66  0 -0.76853571 B
+67  1 -0.67877531 B
+68  1 -0.09272127 B
+69  1 -0.06591507 B
+70  1  0.28747028 B
+71  0  0.21903735 B
+72  1  0.31042299 B
+73  0 -0.56153602 B
+74  0  1.33487361 B
+75  1 -0.81089246 B
+76  0  0.16439810 B
+77  0 -0.22083383 B
+78  0  1.30295618 B
+79  0 -0.84225613 B
+80  0 -0.63074255 B
+81  0 -0.99965064 B
+82  0  1.10248959 B
+83  1  0.93395795 B
+84  1  2.65437782 B
+85  1  1.39883481 B
+86  0 -0.60067709 B
+87  1  1.52487554 B
+88  1  0.75131732 B
+89  0  0.81989092 B
+90  1  0.77780573 B
+91  1  1.15451168 B
+92  1 -0.73568384 B
+93  0 -2.15774170 B
+94  1  0.89928180 B
+95  0 -0.45577730 B
+96  1  0.39597169 B
+97  1  0.36770312 B
+98  1  0.75772388 B
+99  1  0.43852095 B
+100 1  0.01168710 B</code></pre>
+</div>
+</div>
+</div></div>
+</section>
+<section id="section-10" class="slide level2">
+<h2></h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb13-2"><a href=""></a><span class="fu">library</span>(plotROC)</span>
+<span id="cb13-3"><a href=""></a></span>
+<span id="cb13-4"><a href=""></a>D.ex <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="dv">50</span>, <span class="dv">1</span>, .<span class="dv">5</span>)</span>
+<span id="cb13-5"><a href=""></a></span>
+<span id="cb13-6"><a href=""></a>roc_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">D =</span> <span class="fu">c</span>(D.ex, D.ex),</span>
+<span id="cb13-7"><a href=""></a>           <span class="at">M =</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="at">mean =</span> D.ex, <span class="at">sd =</span> .<span class="dv">4</span>),</span>
+<span id="cb13-8"><a href=""></a>                 <span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="at">mean =</span> D.ex, <span class="at">sd =</span> <span class="dv">1</span>)),</span>
+<span id="cb13-9"><a href=""></a>           <span class="at">Z =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"A"</span>, <span class="dv">50</span>), <span class="fu">rep</span>(<span class="st">"B"</span>, <span class="dv">50</span>)))</span>
+<span id="cb13-10"><a href=""></a></span>
+<span id="cb13-11"><a href=""></a>roc_data <span class="sc">|&gt;</span></span>
+<span id="cb13-12"><a href=""></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb13-13"><a href=""></a>  <span class="fu">aes</span>(<span class="at">m =</span> M, <span class="at">d =</span> D) <span class="sc">+</span></span>
+<span id="cb13-14"><a href=""></a>  <span class="fu">geom_roc</span>() <span class="ot">-&gt;</span></span>
+<span id="cb13-15"><a href=""></a>ggroc</span>
+<span id="cb13-16"><a href=""></a></span>
+<span id="cb13-17"><a href=""></a></span>
+<span id="cb13-18"><a href=""></a>roc_data <span class="sc">|&gt;</span></span>
+<span id="cb13-19"><a href=""></a>  <span class="fu">rename</span>(<span class="at">m =</span> M, <span class="at">d =</span> D)   <span class="co">#&lt;&lt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div><div class="column" style="width:40%;">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>    d            m Z
+1   1  0.608933045 A
+2   0  0.470701474 A
+3   1  1.012169190 A
+4   0 -0.925712740 A
+5   0 -0.350758107 A
+6   0 -0.323763070 A
+7   1  1.498204828 A
+8   0  0.277206549 A
+9   1  0.836532697 A
+10  0 -0.439338037 A
+11  1  1.141488338 A
+12  0 -0.856736364 A
+13  0 -0.005229188 A
+14  0  0.903005299 A
+15  1  1.287418624 A
+16  0 -0.286873962 A
+17  0 -0.335745979 A
+18  1  0.621072616 A
+19  1  0.514413347 A
+20  1  0.929559704 A
+21  0 -0.101755302 A
+22  1  0.330322461 A
+23  0  0.049190757 A
+24  1  1.158553174 A
+25  0 -0.384432083 A
+26  1  1.360679866 A
+27  0 -0.485946245 A
+28  1  1.291724496 A
+29  0 -0.105494967 A
+30  0 -0.361782359 A
+31  1  1.021538206 A
+32  0 -0.710159097 A
+33  1  1.424523409 A
+34  1  0.790547159 A
+35  1  1.761923733 A
+36  1  1.168588535 A
+37  0  0.413425402 A
+38  0  0.075808095 A
+39  0 -0.046116812 A
+40  0 -0.463976234 A
+41  1  0.816991249 A
+42  0 -0.532819485 A
+43  1  0.836151370 A
+44  0 -0.302063578 A
+45  1  0.860330567 A
+46  1  0.967622217 A
+47  0 -0.080497188 A
+48  1  0.801197060 A
+49  0 -0.870989419 A
+50  0  0.235868299 A
+51  1 -1.069885560 B
+52  0 -1.553391692 B
+53  1  1.413143432 B
+54  0  0.987165028 B
+55  0  1.015658703 B
+56  0 -1.313759336 B
+57  1 -0.028970336 B
+58  0 -1.621853568 B
+59  1  0.450666466 B
+60  0 -1.643852025 B
+61  1  0.492153735 B
+62  0  0.621052608 B
+63  0  0.695084694 B
+64  0  0.761717288 B
+65  1 -0.088979288 B
+66  0  1.241995105 B
+67  0  0.310108148 B
+68  1  0.268393857 B
+69  1  1.355063965 B
+70  1 -0.003413278 B
+71  0  0.738401829 B
+72  1  0.997266344 B
+73  0 -0.173614324 B
+74  1  0.944286909 B
+75  0 -0.437637510 B
+76  1 -0.379800400 B
+77  0  0.599296475 B
+78  1 -0.205541719 B
+79  0  1.135354574 B
+80  0 -1.376275779 B
+81  1 -0.361433017 B
+82  0  0.318256596 B
+83  1  1.490995452 B
+84  1 -0.419093172 B
+85  1  1.910892600 B
+86  1  0.697325382 B
+87  0 -1.755246206 B
+88  0 -1.736939295 B
+89  0 -1.356702051 B
+90  0 -0.440050868 B
+91  1 -0.353766235 B
+92  0  1.404141607 B
+93  1  1.384471017 B
+94  0 -0.482770313 B
+95  1  0.515292221 B
+96  1  1.315708540 B
+97  0 -1.160738510 B
+98  1  0.950507769 B
+99  0 -0.113387932 B
+100 0  0.680831295 B</code></pre>
+</div>
+</div>
+</div></div>
+</section>
+<section id="section-11" class="slide level2">
+<h2></h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb15-2"><a href=""></a><span class="fu">library</span>(plotROC)</span>
+<span id="cb15-3"><a href=""></a></span>
+<span id="cb15-4"><a href=""></a>D.ex <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="dv">50</span>, <span class="dv">1</span>, .<span class="dv">5</span>)</span>
+<span id="cb15-5"><a href=""></a></span>
+<span id="cb15-6"><a href=""></a>roc_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">D =</span> <span class="fu">c</span>(D.ex, D.ex),</span>
+<span id="cb15-7"><a href=""></a>           <span class="at">M =</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="at">mean =</span> D.ex, <span class="at">sd =</span> .<span class="dv">4</span>),</span>
+<span id="cb15-8"><a href=""></a>                 <span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="at">mean =</span> D.ex, <span class="at">sd =</span> <span class="dv">1</span>)),</span>
+<span id="cb15-9"><a href=""></a>           <span class="at">Z =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"A"</span>, <span class="dv">50</span>), <span class="fu">rep</span>(<span class="st">"B"</span>, <span class="dv">50</span>)))</span>
+<span id="cb15-10"><a href=""></a></span>
+<span id="cb15-11"><a href=""></a>roc_data <span class="sc">|&gt;</span></span>
+<span id="cb15-12"><a href=""></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb15-13"><a href=""></a>  <span class="fu">aes</span>(<span class="at">m =</span> M, <span class="at">d =</span> D) <span class="sc">+</span></span>
+<span id="cb15-14"><a href=""></a>  <span class="fu">geom_roc</span>() <span class="ot">-&gt;</span></span>
+<span id="cb15-15"><a href=""></a>ggroc</span>
+<span id="cb15-16"><a href=""></a></span>
+<span id="cb15-17"><a href=""></a></span>
+<span id="cb15-18"><a href=""></a>roc_data <span class="sc">|&gt;</span></span>
+<span id="cb15-19"><a href=""></a>  <span class="fu">rename</span>(<span class="at">m =</span> M, <span class="at">d =</span> D) <span class="sc">|&gt;</span></span>
+<span id="cb15-20"><a href=""></a>StatRoc<span class="sc">$</span><span class="fu">compute_group</span>()  <span class="co">#&lt;&lt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div><div class="column" style="width:40%;">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>     false_positive_fraction true_positive_fraction     cutoffs
+1                 0.00000000             0.00000000         Inf
+2                 0.00000000             0.02083333  2.60040947
+3                 0.00000000             0.02083333  2.60040947
+4                 0.00000000             0.02083333  2.60040947
+5                 0.00000000             0.02083333  2.60040947
+6                 0.00000000             0.02083333  2.60040947
+7                 0.00000000             0.02083333  2.60040947
+8                 0.00000000             0.02083333  2.60040947
+9                 0.00000000             0.02083333  2.60040947
+10                0.00000000             0.02083333  2.60040947
+11                0.00000000             0.02083333  2.60040947
+12                0.00000000             0.02083333  2.60040947
+13                0.00000000             0.04166667  2.40289757
+14                0.00000000             0.04166667  2.40289757
+15                0.00000000             0.04166667  2.40289757
+16                0.00000000             0.04166667  2.40289757
+17                0.00000000             0.04166667  2.40289757
+18                0.00000000             0.04166667  2.40289757
+19                0.00000000             0.04166667  2.40289757
+20                0.00000000             0.04166667  2.40289757
+21                0.00000000             0.04166667  2.40289757
+22                0.00000000             0.04166667  2.40289757
+23                0.00000000             0.06250000  2.37263963
+24                0.00000000             0.06250000  2.37263963
+25                0.00000000             0.06250000  2.37263963
+26                0.00000000             0.06250000  2.37263963
+27                0.00000000             0.06250000  2.37263963
+28                0.00000000             0.06250000  2.37263963
+29                0.00000000             0.06250000  2.37263963
+30                0.00000000             0.06250000  2.37263963
+31                0.00000000             0.06250000  2.37263963
+32                0.00000000             0.06250000  2.37263963
+33                0.00000000             0.08333333  2.00366155
+34                0.00000000             0.08333333  2.00366155
+35                0.00000000             0.08333333  2.00366155
+36                0.00000000             0.08333333  2.00366155
+37                0.00000000             0.08333333  2.00366155
+38                0.00000000             0.08333333  2.00366155
+39                0.00000000             0.08333333  2.00366155
+40                0.00000000             0.08333333  2.00366155
+41                0.00000000             0.08333333  2.00366155
+42                0.00000000             0.08333333  2.00366155
+43                0.00000000             0.10416667  1.86318103
+44                0.00000000             0.10416667  1.86318103
+45                0.00000000             0.10416667  1.86318103
+46                0.00000000             0.10416667  1.86318103
+47                0.00000000             0.10416667  1.86318103
+48                0.00000000             0.10416667  1.86318103
+49                0.00000000             0.10416667  1.86318103
+50                0.00000000             0.10416667  1.86318103
+51                0.00000000             0.10416667  1.86318103
+52                0.00000000             0.10416667  1.86318103
+53                0.00000000             0.12500000  1.83543034
+54                0.00000000             0.12500000  1.83543034
+55                0.00000000             0.12500000  1.83543034
+56                0.00000000             0.12500000  1.83543034
+57                0.00000000             0.12500000  1.83543034
+58                0.00000000             0.12500000  1.83543034
+59                0.00000000             0.12500000  1.83543034
+60                0.00000000             0.12500000  1.83543034
+61                0.00000000             0.12500000  1.83543034
+62                0.00000000             0.12500000  1.83543034
+63                0.00000000             0.14583333  1.72436019
+64                0.00000000             0.14583333  1.72436019
+65                0.00000000             0.14583333  1.72436019
+66                0.00000000             0.14583333  1.72436019
+67                0.00000000             0.14583333  1.72436019
+68                0.00000000             0.14583333  1.72436019
+69                0.00000000             0.14583333  1.72436019
+70                0.00000000             0.14583333  1.72436019
+71                0.00000000             0.14583333  1.72436019
+72                0.00000000             0.14583333  1.72436019
+73                0.00000000             0.16666667  1.70214474
+74                0.00000000             0.16666667  1.70214474
+75                0.00000000             0.16666667  1.70214474
+76                0.00000000             0.16666667  1.70214474
+77                0.00000000             0.16666667  1.70214474
+78                0.00000000             0.16666667  1.70214474
+79                0.00000000             0.16666667  1.70214474
+80                0.00000000             0.16666667  1.70214474
+81                0.00000000             0.16666667  1.70214474
+82                0.00000000             0.16666667  1.70214474
+83                0.00000000             0.18750000  1.66700981
+84                0.00000000             0.18750000  1.66700981
+85                0.00000000             0.18750000  1.66700981
+86                0.00000000             0.18750000  1.66700981
+87                0.00000000             0.18750000  1.66700981
+88                0.00000000             0.18750000  1.66700981
+89                0.00000000             0.18750000  1.66700981
+90                0.00000000             0.18750000  1.66700981
+91                0.00000000             0.18750000  1.66700981
+92                0.00000000             0.18750000  1.66700981
+93                0.00000000             0.20833333  1.61073520
+94                0.00000000             0.20833333  1.61073520
+95                0.00000000             0.20833333  1.61073520
+96                0.00000000             0.20833333  1.61073520
+97                0.00000000             0.20833333  1.61073520
+98                0.00000000             0.20833333  1.61073520
+99                0.00000000             0.20833333  1.61073520
+100               0.00000000             0.20833333  1.61073520
+101               0.00000000             0.20833333  1.61073520
+102               0.00000000             0.20833333  1.61073520
+103               0.00000000             0.22916667  1.57045012
+104               0.00000000             0.22916667  1.57045012
+105               0.00000000             0.22916667  1.57045012
+106               0.00000000             0.22916667  1.57045012
+107               0.00000000             0.22916667  1.57045012
+108               0.00000000             0.22916667  1.57045012
+109               0.00000000             0.22916667  1.57045012
+110               0.00000000             0.22916667  1.57045012
+111               0.00000000             0.22916667  1.57045012
+112               0.00000000             0.22916667  1.57045012
+113               0.00000000             0.25000000  1.52747153
+114               0.00000000             0.25000000  1.52747153
+115               0.00000000             0.25000000  1.52747153
+116               0.00000000             0.25000000  1.52747153
+117               0.00000000             0.25000000  1.52747153
+118               0.00000000             0.25000000  1.52747153
+119               0.00000000             0.25000000  1.52747153
+120               0.00000000             0.25000000  1.52747153
+121               0.00000000             0.25000000  1.52747153
+122               0.00000000             0.25000000  1.52747153
+123               0.00000000             0.25000000  1.52747153
+124               0.00000000             0.27083333  1.48610489
+125               0.00000000             0.27083333  1.48610489
+126               0.00000000             0.27083333  1.48610489
+127               0.00000000             0.27083333  1.48610489
+128               0.00000000             0.27083333  1.48610489
+129               0.00000000             0.27083333  1.48610489
+130               0.00000000             0.27083333  1.48610489
+131               0.00000000             0.27083333  1.48610489
+132               0.00000000             0.27083333  1.48610489
+133               0.00000000             0.27083333  1.48610489
+134               0.00000000             0.29166667  1.38957305
+135               0.00000000             0.29166667  1.38957305
+136               0.00000000             0.29166667  1.38957305
+137               0.00000000             0.29166667  1.38957305
+138               0.00000000             0.29166667  1.38957305
+139               0.00000000             0.29166667  1.38957305
+140               0.00000000             0.29166667  1.38957305
+141               0.00000000             0.29166667  1.38957305
+142               0.00000000             0.29166667  1.38957305
+143               0.00000000             0.29166667  1.38957305
+144               0.00000000             0.31250000  1.36061130
+145               0.00000000             0.31250000  1.36061130
+146               0.00000000             0.31250000  1.36061130
+147               0.00000000             0.31250000  1.36061130
+148               0.00000000             0.31250000  1.36061130
+149               0.00000000             0.31250000  1.36061130
+150               0.00000000             0.31250000  1.36061130
+151               0.00000000             0.31250000  1.36061130
+152               0.00000000             0.31250000  1.36061130
+153               0.00000000             0.31250000  1.36061130
+154               0.00000000             0.33333333  1.35917628
+155               0.00000000             0.33333333  1.35917628
+156               0.00000000             0.33333333  1.35917628
+157               0.00000000             0.33333333  1.35917628
+158               0.00000000             0.33333333  1.35917628
+159               0.00000000             0.33333333  1.35917628
+160               0.00000000             0.33333333  1.35917628
+161               0.00000000             0.33333333  1.35917628
+162               0.00000000             0.33333333  1.35917628
+163               0.00000000             0.33333333  1.35917628
+164               0.00000000             0.35416667  1.34601696
+165               0.00000000             0.35416667  1.34601696
+166               0.00000000             0.35416667  1.34601696
+167               0.00000000             0.35416667  1.34601696
+168               0.00000000             0.35416667  1.34601696
+169               0.00000000             0.35416667  1.34601696
+170               0.00000000             0.35416667  1.34601696
+171               0.00000000             0.35416667  1.34601696
+172               0.00000000             0.35416667  1.34601696
+173               0.00000000             0.35416667  1.34601696
+174               0.00000000             0.37500000  1.28558541
+175               0.00000000             0.37500000  1.28558541
+176               0.00000000             0.37500000  1.28558541
+177               0.00000000             0.37500000  1.28558541
+178               0.00000000             0.37500000  1.28558541
+179               0.00000000             0.37500000  1.28558541
+180               0.00000000             0.37500000  1.28558541
+181               0.00000000             0.37500000  1.28558541
+182               0.00000000             0.37500000  1.28558541
+183               0.00000000             0.37500000  1.28558541
+184               0.01923077             0.37500000  1.27213696
+185               0.01923077             0.37500000  1.27213696
+186               0.01923077             0.37500000  1.27213696
+187               0.01923077             0.37500000  1.27213696
+188               0.01923077             0.37500000  1.27213696
+189               0.01923077             0.37500000  1.27213696
+190               0.01923077             0.37500000  1.27213696
+191               0.01923077             0.37500000  1.27213696
+192               0.01923077             0.37500000  1.27213696
+193               0.01923077             0.37500000  1.27213696
+194               0.01923077             0.39583333  1.21735787
+195               0.01923077             0.39583333  1.21735787
+196               0.01923077             0.39583333  1.21735787
+197               0.01923077             0.39583333  1.21735787
+198               0.01923077             0.39583333  1.21735787
+199               0.01923077             0.39583333  1.21735787
+200               0.01923077             0.39583333  1.21735787
+201               0.01923077             0.39583333  1.21735787
+202               0.01923077             0.39583333  1.21735787
+203               0.01923077             0.39583333  1.21735787
+204               0.01923077             0.41666667  1.21005415
+205               0.01923077             0.41666667  1.21005415
+206               0.01923077             0.41666667  1.21005415
+207               0.01923077             0.41666667  1.21005415
+208               0.01923077             0.41666667  1.21005415
+209               0.01923077             0.41666667  1.21005415
+210               0.01923077             0.41666667  1.21005415
+211               0.01923077             0.41666667  1.21005415
+212               0.01923077             0.41666667  1.21005415
+213               0.01923077             0.41666667  1.21005415
+214               0.01923077             0.43750000  1.20850666
+215               0.01923077             0.43750000  1.20850666
+216               0.01923077             0.43750000  1.20850666
+217               0.01923077             0.43750000  1.20850666
+218               0.01923077             0.43750000  1.20850666
+219               0.01923077             0.43750000  1.20850666
+220               0.01923077             0.43750000  1.20850666
+221               0.01923077             0.43750000  1.20850666
+222               0.01923077             0.43750000  1.20850666
+223               0.01923077             0.43750000  1.20850666
+224               0.01923077             0.45833333  1.20838662
+225               0.01923077             0.45833333  1.20838662
+226               0.01923077             0.45833333  1.20838662
+227               0.01923077             0.45833333  1.20838662
+228               0.01923077             0.45833333  1.20838662
+229               0.01923077             0.45833333  1.20838662
+230               0.01923077             0.45833333  1.20838662
+231               0.01923077             0.45833333  1.20838662
+232               0.01923077             0.45833333  1.20838662
+233               0.01923077             0.45833333  1.20838662
+234               0.01923077             0.45833333  1.20838662
+235               0.03846154             0.45833333  1.18451386
+236               0.03846154             0.45833333  1.18451386
+237               0.03846154             0.45833333  1.18451386
+238               0.03846154             0.45833333  1.18451386
+239               0.03846154             0.45833333  1.18451386
+240               0.03846154             0.45833333  1.18451386
+241               0.03846154             0.45833333  1.18451386
+242               0.03846154             0.45833333  1.18451386
+243               0.03846154             0.45833333  1.18451386
+244               0.03846154             0.45833333  1.18451386
+245               0.03846154             0.47916667  1.11742885
+246               0.03846154             0.47916667  1.11742885
+247               0.03846154             0.47916667  1.11742885
+248               0.03846154             0.47916667  1.11742885
+249               0.03846154             0.47916667  1.11742885
+250               0.03846154             0.47916667  1.11742885
+251               0.03846154             0.47916667  1.11742885
+252               0.03846154             0.47916667  1.11742885
+253               0.03846154             0.47916667  1.11742885
+254               0.03846154             0.47916667  1.11742885
+255               0.03846154             0.50000000  1.08245855
+256               0.03846154             0.50000000  1.08245855
+257               0.03846154             0.50000000  1.08245855
+258               0.03846154             0.50000000  1.08245855
+259               0.03846154             0.50000000  1.08245855
+260               0.03846154             0.50000000  1.08245855
+261               0.03846154             0.50000000  1.08245855
+262               0.03846154             0.50000000  1.08245855
+263               0.03846154             0.50000000  1.08245855
+264               0.03846154             0.50000000  1.08245855
+265               0.05769231             0.50000000  1.05598171
+266               0.05769231             0.50000000  1.05598171
+267               0.05769231             0.50000000  1.05598171
+268               0.05769231             0.50000000  1.05598171
+269               0.05769231             0.50000000  1.05598171
+270               0.05769231             0.50000000  1.05598171
+271               0.05769231             0.50000000  1.05598171
+272               0.05769231             0.50000000  1.05598171
+273               0.05769231             0.50000000  1.05598171
+274               0.05769231             0.50000000  1.05598171
+275               0.05769231             0.52083333  1.02473621
+276               0.05769231             0.52083333  1.02473621
+277               0.05769231             0.52083333  1.02473621
+278               0.05769231             0.52083333  1.02473621
+279               0.05769231             0.52083333  1.02473621
+280               0.05769231             0.52083333  1.02473621
+281               0.05769231             0.52083333  1.02473621
+282               0.05769231             0.52083333  1.02473621
+283               0.05769231             0.52083333  1.02473621
+284               0.05769231             0.52083333  1.02473621
+285               0.05769231             0.54166667  1.01602807
+286               0.05769231             0.54166667  1.01602807
+287               0.05769231             0.54166667  1.01602807
+288               0.05769231             0.54166667  1.01602807
+289               0.05769231             0.54166667  1.01602807
+290               0.05769231             0.54166667  1.01602807
+291               0.05769231             0.54166667  1.01602807
+292               0.05769231             0.54166667  1.01602807
+293               0.05769231             0.54166667  1.01602807
+294               0.05769231             0.54166667  1.01602807
+295               0.05769231             0.56250000  1.00941521
+296               0.05769231             0.56250000  1.00941521
+297               0.05769231             0.56250000  1.00941521
+298               0.05769231             0.56250000  1.00941521
+299               0.05769231             0.56250000  1.00941521
+300               0.05769231             0.56250000  1.00941521
+301               0.05769231             0.56250000  1.00941521
+302               0.05769231             0.56250000  1.00941521
+303               0.05769231             0.56250000  1.00941521
+304               0.05769231             0.56250000  1.00941521
+305               0.05769231             0.58333333  0.99830419
+306               0.05769231             0.58333333  0.99830419
+307               0.05769231             0.58333333  0.99830419
+308               0.05769231             0.58333333  0.99830419
+309               0.05769231             0.58333333  0.99830419
+310               0.05769231             0.58333333  0.99830419
+311               0.05769231             0.58333333  0.99830419
+312               0.05769231             0.58333333  0.99830419
+313               0.05769231             0.58333333  0.99830419
+314               0.05769231             0.58333333  0.99830419
+315               0.05769231             0.60416667  0.99020476
+316               0.05769231             0.60416667  0.99020476
+317               0.05769231             0.60416667  0.99020476
+318               0.05769231             0.60416667  0.99020476
+319               0.05769231             0.60416667  0.99020476
+320               0.05769231             0.60416667  0.99020476
+321               0.05769231             0.60416667  0.99020476
+322               0.05769231             0.60416667  0.99020476
+323               0.05769231             0.60416667  0.99020476
+324               0.05769231             0.60416667  0.99020476
+325               0.05769231             0.62500000  0.98959180
+326               0.05769231             0.62500000  0.98959180
+327               0.05769231             0.62500000  0.98959180
+328               0.05769231             0.62500000  0.98959180
+329               0.05769231             0.62500000  0.98959180
+330               0.05769231             0.62500000  0.98959180
+331               0.05769231             0.62500000  0.98959180
+332               0.05769231             0.62500000  0.98959180
+333               0.05769231             0.62500000  0.98959180
+334               0.05769231             0.62500000  0.98959180
+335               0.05769231             0.64583333  0.97186733
+336               0.05769231             0.64583333  0.97186733
+337               0.05769231             0.64583333  0.97186733
+338               0.05769231             0.64583333  0.97186733
+339               0.05769231             0.64583333  0.97186733
+340               0.05769231             0.64583333  0.97186733
+341               0.05769231             0.64583333  0.97186733
+342               0.05769231             0.64583333  0.97186733
+343               0.05769231             0.64583333  0.97186733
+344               0.05769231             0.64583333  0.97186733
+345               0.05769231             0.64583333  0.97186733
+346               0.07692308             0.64583333  0.96544356
+347               0.07692308             0.64583333  0.96544356
+348               0.07692308             0.64583333  0.96544356
+349               0.07692308             0.64583333  0.96544356
+350               0.07692308             0.64583333  0.96544356
+351               0.07692308             0.64583333  0.96544356
+352               0.07692308             0.64583333  0.96544356
+353               0.07692308             0.64583333  0.96544356
+354               0.07692308             0.64583333  0.96544356
+355               0.07692308             0.64583333  0.96544356
+356               0.07692308             0.66666667  0.89985532
+357               0.07692308             0.66666667  0.89985532
+358               0.07692308             0.66666667  0.89985532
+359               0.07692308             0.66666667  0.89985532
+360               0.07692308             0.66666667  0.89985532
+361               0.07692308             0.66666667  0.89985532
+362               0.07692308             0.66666667  0.89985532
+363               0.07692308             0.66666667  0.89985532
+364               0.07692308             0.66666667  0.89985532
+365               0.07692308             0.66666667  0.89985532
+366               0.09615385             0.66666667  0.87172638
+367               0.09615385             0.66666667  0.87172638
+368               0.09615385             0.66666667  0.87172638
+369               0.09615385             0.66666667  0.87172638
+370               0.09615385             0.66666667  0.87172638
+371               0.09615385             0.66666667  0.87172638
+372               0.09615385             0.66666667  0.87172638
+373               0.09615385             0.66666667  0.87172638
+374               0.09615385             0.66666667  0.87172638
+375               0.09615385             0.66666667  0.87172638
+376               0.09615385             0.68750000  0.86148421
+377               0.09615385             0.68750000  0.86148421
+378               0.09615385             0.68750000  0.86148421
+379               0.09615385             0.68750000  0.86148421
+380               0.09615385             0.68750000  0.86148421
+381               0.09615385             0.68750000  0.86148421
+382               0.09615385             0.68750000  0.86148421
+383               0.09615385             0.68750000  0.86148421
+384               0.09615385             0.68750000  0.86148421
+385               0.09615385             0.68750000  0.86148421
+386               0.11538462             0.68750000  0.85986003
+387               0.11538462             0.68750000  0.85986003
+388               0.11538462             0.68750000  0.85986003
+389               0.11538462             0.68750000  0.85986003
+390               0.11538462             0.68750000  0.85986003
+391               0.11538462             0.68750000  0.85986003
+392               0.11538462             0.68750000  0.85986003
+393               0.11538462             0.68750000  0.85986003
+394               0.11538462             0.68750000  0.85986003
+395               0.11538462             0.68750000  0.85986003
+396               0.13461538             0.68750000  0.84926680
+397               0.13461538             0.68750000  0.84926680
+398               0.13461538             0.68750000  0.84926680
+399               0.13461538             0.68750000  0.84926680
+400               0.13461538             0.68750000  0.84926680
+401               0.13461538             0.68750000  0.84926680
+402               0.13461538             0.68750000  0.84926680
+403               0.13461538             0.68750000  0.84926680
+404               0.13461538             0.68750000  0.84926680
+405               0.13461538             0.68750000  0.84926680
+406               0.13461538             0.70833333  0.80753034
+407               0.13461538             0.70833333  0.80753034
+408               0.13461538             0.70833333  0.80753034
+409               0.13461538             0.70833333  0.80753034
+410               0.13461538             0.70833333  0.80753034
+411               0.13461538             0.70833333  0.80753034
+412               0.13461538             0.70833333  0.80753034
+413               0.13461538             0.70833333  0.80753034
+414               0.13461538             0.70833333  0.80753034
+415               0.13461538             0.70833333  0.80753034
+416               0.13461538             0.72916667  0.74124378
+417               0.13461538             0.72916667  0.74124378
+418               0.13461538             0.72916667  0.74124378
+419               0.13461538             0.72916667  0.74124378
+420               0.13461538             0.72916667  0.74124378
+421               0.13461538             0.72916667  0.74124378
+422               0.13461538             0.72916667  0.74124378
+423               0.13461538             0.72916667  0.74124378
+424               0.13461538             0.72916667  0.74124378
+425               0.13461538             0.72916667  0.74124378
+426               0.13461538             0.75000000  0.71758414
+427               0.13461538             0.75000000  0.71758414
+428               0.13461538             0.75000000  0.71758414
+429               0.13461538             0.75000000  0.71758414
+430               0.13461538             0.75000000  0.71758414
+431               0.13461538             0.75000000  0.71758414
+432               0.13461538             0.75000000  0.71758414
+433               0.13461538             0.75000000  0.71758414
+434               0.13461538             0.75000000  0.71758414
+435               0.13461538             0.75000000  0.71758414
+436               0.13461538             0.77083333  0.70106831
+437               0.13461538             0.77083333  0.70106831
+438               0.13461538             0.77083333  0.70106831
+439               0.13461538             0.77083333  0.70106831
+440               0.13461538             0.77083333  0.70106831
+441               0.13461538             0.77083333  0.70106831
+442               0.13461538             0.77083333  0.70106831
+443               0.13461538             0.77083333  0.70106831
+444               0.13461538             0.77083333  0.70106831
+445               0.13461538             0.77083333  0.70106831
+446               0.13461538             0.79166667  0.68174043
+447               0.13461538             0.79166667  0.68174043
+448               0.13461538             0.79166667  0.68174043
+449               0.13461538             0.79166667  0.68174043
+450               0.13461538             0.79166667  0.68174043
+451               0.13461538             0.79166667  0.68174043
+452               0.13461538             0.79166667  0.68174043
+453               0.13461538             0.79166667  0.68174043
+454               0.13461538             0.79166667  0.68174043
+455               0.13461538             0.79166667  0.68174043
+456               0.13461538             0.79166667  0.68174043
+457               0.15384615             0.79166667  0.66262208
+458               0.15384615             0.79166667  0.66262208
+459               0.15384615             0.79166667  0.66262208
+460               0.15384615             0.79166667  0.66262208
+461               0.15384615             0.79166667  0.66262208
+462               0.15384615             0.79166667  0.66262208
+463               0.15384615             0.79166667  0.66262208
+464               0.15384615             0.79166667  0.66262208
+465               0.15384615             0.79166667  0.66262208
+466               0.15384615             0.79166667  0.66262208
+467               0.15384615             0.81250000  0.62827176
+468               0.15384615             0.81250000  0.62827176
+469               0.15384615             0.81250000  0.62827176
+470               0.15384615             0.81250000  0.62827176
+471               0.15384615             0.81250000  0.62827176
+472               0.15384615             0.81250000  0.62827176
+473               0.15384615             0.81250000  0.62827176
+474               0.15384615             0.81250000  0.62827176
+475               0.15384615             0.81250000  0.62827176
+476               0.15384615             0.81250000  0.62827176
+477               0.17307692             0.81250000  0.62054404
+478               0.17307692             0.81250000  0.62054404
+479               0.17307692             0.81250000  0.62054404
+480               0.17307692             0.81250000  0.62054404
+481               0.17307692             0.81250000  0.62054404
+482               0.17307692             0.81250000  0.62054404
+483               0.17307692             0.81250000  0.62054404
+484               0.17307692             0.81250000  0.62054404
+485               0.17307692             0.81250000  0.62054404
+486               0.17307692             0.81250000  0.62054404
+487               0.17307692             0.83333333  0.61789819
+488               0.17307692             0.83333333  0.61789819
+489               0.17307692             0.83333333  0.61789819
+490               0.17307692             0.83333333  0.61789819
+491               0.17307692             0.83333333  0.61789819
+492               0.17307692             0.83333333  0.61789819
+493               0.17307692             0.83333333  0.61789819
+494               0.17307692             0.83333333  0.61789819
+495               0.17307692             0.83333333  0.61789819
+496               0.17307692             0.83333333  0.61789819
+497               0.19230769             0.83333333  0.57804248
+498               0.19230769             0.83333333  0.57804248
+499               0.19230769             0.83333333  0.57804248
+500               0.19230769             0.83333333  0.57804248
+501               0.19230769             0.83333333  0.57804248
+502               0.19230769             0.83333333  0.57804248
+503               0.19230769             0.83333333  0.57804248
+504               0.19230769             0.83333333  0.57804248
+505               0.19230769             0.83333333  0.57804248
+506               0.19230769             0.83333333  0.57804248
+507               0.21153846             0.83333333  0.57546602
+508               0.21153846             0.83333333  0.57546602
+509               0.21153846             0.83333333  0.57546602
+510               0.21153846             0.83333333  0.57546602
+511               0.21153846             0.83333333  0.57546602
+512               0.21153846             0.83333333  0.57546602
+513               0.21153846             0.83333333  0.57546602
+514               0.21153846             0.83333333  0.57546602
+515               0.21153846             0.83333333  0.57546602
+516               0.21153846             0.83333333  0.57546602
+517               0.23076923             0.83333333  0.49503046
+518               0.23076923             0.83333333  0.49503046
+519               0.23076923             0.83333333  0.49503046
+520               0.23076923             0.83333333  0.49503046
+521               0.23076923             0.83333333  0.49503046
+522               0.23076923             0.83333333  0.49503046
+523               0.23076923             0.83333333  0.49503046
+524               0.23076923             0.83333333  0.49503046
+525               0.23076923             0.83333333  0.49503046
+526               0.23076923             0.83333333  0.49503046
+527               0.25000000             0.83333333  0.49404226
+528               0.25000000             0.83333333  0.49404226
+529               0.25000000             0.83333333  0.49404226
+530               0.25000000             0.83333333  0.49404226
+531               0.25000000             0.83333333  0.49404226
+532               0.25000000             0.83333333  0.49404226
+533               0.25000000             0.83333333  0.49404226
+534               0.25000000             0.83333333  0.49404226
+535               0.25000000             0.83333333  0.49404226
+536               0.25000000             0.83333333  0.49404226
+537               0.26923077             0.83333333  0.47751238
+538               0.26923077             0.83333333  0.47751238
+539               0.26923077             0.83333333  0.47751238
+540               0.26923077             0.83333333  0.47751238
+541               0.26923077             0.83333333  0.47751238
+542               0.26923077             0.83333333  0.47751238
+543               0.26923077             0.83333333  0.47751238
+544               0.26923077             0.83333333  0.47751238
+545               0.26923077             0.83333333  0.47751238
+546               0.26923077             0.83333333  0.47751238
+547               0.28846154             0.83333333  0.43403943
+548               0.28846154             0.83333333  0.43403943
+549               0.28846154             0.83333333  0.43403943
+550               0.28846154             0.83333333  0.43403943
+551               0.28846154             0.83333333  0.43403943
+552               0.28846154             0.83333333  0.43403943
+553               0.28846154             0.83333333  0.43403943
+554               0.28846154             0.83333333  0.43403943
+555               0.28846154             0.83333333  0.43403943
+556               0.28846154             0.83333333  0.43403943
+557               0.30769231             0.83333333  0.42960782
+558               0.30769231             0.83333333  0.42960782
+559               0.30769231             0.83333333  0.42960782
+560               0.30769231             0.83333333  0.42960782
+561               0.30769231             0.83333333  0.42960782
+562               0.30769231             0.83333333  0.42960782
+563               0.30769231             0.83333333  0.42960782
+564               0.30769231             0.83333333  0.42960782
+565               0.30769231             0.83333333  0.42960782
+566               0.30769231             0.83333333  0.42960782
+567               0.30769231             0.83333333  0.42960782
+568               0.30769231             0.85416667  0.42241306
+569               0.30769231             0.85416667  0.42241306
+570               0.30769231             0.85416667  0.42241306
+571               0.30769231             0.85416667  0.42241306
+572               0.30769231             0.85416667  0.42241306
+573               0.30769231             0.85416667  0.42241306
+574               0.30769231             0.85416667  0.42241306
+575               0.30769231             0.85416667  0.42241306
+576               0.30769231             0.85416667  0.42241306
+577               0.30769231             0.85416667  0.42241306
+578               0.30769231             0.87500000  0.41569525
+579               0.30769231             0.87500000  0.41569525
+580               0.30769231             0.87500000  0.41569525
+581               0.30769231             0.87500000  0.41569525
+582               0.30769231             0.87500000  0.41569525
+583               0.30769231             0.87500000  0.41569525
+584               0.30769231             0.87500000  0.41569525
+585               0.30769231             0.87500000  0.41569525
+586               0.30769231             0.87500000  0.41569525
+587               0.30769231             0.87500000  0.41569525
+588               0.32692308             0.87500000  0.38821353
+589               0.32692308             0.87500000  0.38821353
+590               0.32692308             0.87500000  0.38821353
+591               0.32692308             0.87500000  0.38821353
+592               0.32692308             0.87500000  0.38821353
+593               0.32692308             0.87500000  0.38821353
+594               0.32692308             0.87500000  0.38821353
+595               0.32692308             0.87500000  0.38821353
+596               0.32692308             0.87500000  0.38821353
+597               0.32692308             0.87500000  0.38821353
+598               0.32692308             0.89583333  0.35825360
+599               0.32692308             0.89583333  0.35825360
+600               0.32692308             0.89583333  0.35825360
+601               0.32692308             0.89583333  0.35825360
+602               0.32692308             0.89583333  0.35825360
+603               0.32692308             0.89583333  0.35825360
+604               0.32692308             0.89583333  0.35825360
+605               0.32692308             0.89583333  0.35825360
+606               0.32692308             0.89583333  0.35825360
+607               0.32692308             0.89583333  0.35825360
+608               0.34615385             0.89583333  0.32856859
+609               0.34615385             0.89583333  0.32856859
+610               0.34615385             0.89583333  0.32856859
+611               0.34615385             0.89583333  0.32856859
+612               0.34615385             0.89583333  0.32856859
+613               0.34615385             0.89583333  0.32856859
+614               0.34615385             0.89583333  0.32856859
+615               0.34615385             0.89583333  0.32856859
+616               0.34615385             0.89583333  0.32856859
+617               0.34615385             0.89583333  0.32856859
+618               0.36538462             0.89583333  0.31563370
+619               0.36538462             0.89583333  0.31563370
+620               0.36538462             0.89583333  0.31563370
+621               0.36538462             0.89583333  0.31563370
+622               0.36538462             0.89583333  0.31563370
+623               0.36538462             0.89583333  0.31563370
+624               0.36538462             0.89583333  0.31563370
+625               0.36538462             0.89583333  0.31563370
+626               0.36538462             0.89583333  0.31563370
+627               0.36538462             0.89583333  0.31563370
+628               0.38461538             0.89583333  0.29806123
+629               0.38461538             0.89583333  0.29806123
+630               0.38461538             0.89583333  0.29806123
+631               0.38461538             0.89583333  0.29806123
+632               0.38461538             0.89583333  0.29806123
+633               0.38461538             0.89583333  0.29806123
+634               0.38461538             0.89583333  0.29806123
+635               0.38461538             0.89583333  0.29806123
+636               0.38461538             0.89583333  0.29806123
+637               0.38461538             0.89583333  0.29806123
+638               0.40384615             0.89583333  0.27381039
+639               0.40384615             0.89583333  0.27381039
+640               0.40384615             0.89583333  0.27381039
+641               0.40384615             0.89583333  0.27381039
+642               0.40384615             0.89583333  0.27381039
+643               0.40384615             0.89583333  0.27381039
+644               0.40384615             0.89583333  0.27381039
+645               0.40384615             0.89583333  0.27381039
+646               0.40384615             0.89583333  0.27381039
+647               0.40384615             0.89583333  0.27381039
+648               0.42307692             0.89583333  0.20016573
+649               0.42307692             0.89583333  0.20016573
+650               0.42307692             0.89583333  0.20016573
+651               0.42307692             0.89583333  0.20016573
+652               0.42307692             0.89583333  0.20016573
+653               0.42307692             0.89583333  0.20016573
+654               0.42307692             0.89583333  0.20016573
+655               0.42307692             0.89583333  0.20016573
+656               0.42307692             0.89583333  0.20016573
+657               0.42307692             0.89583333  0.20016573
+658               0.42307692             0.91666667  0.14906527
+659               0.42307692             0.91666667  0.14906527
+660               0.42307692             0.91666667  0.14906527
+661               0.42307692             0.91666667  0.14906527
+662               0.42307692             0.91666667  0.14906527
+663               0.42307692             0.91666667  0.14906527
+664               0.42307692             0.91666667  0.14906527
+665               0.42307692             0.91666667  0.14906527
+666               0.42307692             0.91666667  0.14906527
+667               0.42307692             0.91666667  0.14906527
+668               0.44230769             0.91666667  0.14900440
+669               0.44230769             0.91666667  0.14900440
+670               0.44230769             0.91666667  0.14900440
+671               0.44230769             0.91666667  0.14900440
+672               0.44230769             0.91666667  0.14900440
+673               0.44230769             0.91666667  0.14900440
+674               0.44230769             0.91666667  0.14900440
+675               0.44230769             0.91666667  0.14900440
+676               0.44230769             0.91666667  0.14900440
+677               0.44230769             0.91666667  0.14900440
+678               0.44230769             0.91666667  0.14900440
+679               0.46153846             0.91666667  0.13379581
+680               0.46153846             0.91666667  0.13379581
+681               0.46153846             0.91666667  0.13379581
+682               0.46153846             0.91666667  0.13379581
+683               0.46153846             0.91666667  0.13379581
+684               0.46153846             0.91666667  0.13379581
+685               0.46153846             0.91666667  0.13379581
+686               0.46153846             0.91666667  0.13379581
+687               0.46153846             0.91666667  0.13379581
+688               0.46153846             0.91666667  0.13379581
+689               0.48076923             0.91666667  0.10288680
+690               0.48076923             0.91666667  0.10288680
+691               0.48076923             0.91666667  0.10288680
+692               0.48076923             0.91666667  0.10288680
+693               0.48076923             0.91666667  0.10288680
+694               0.48076923             0.91666667  0.10288680
+695               0.48076923             0.91666667  0.10288680
+696               0.48076923             0.91666667  0.10288680
+697               0.48076923             0.91666667  0.10288680
+698               0.48076923             0.91666667  0.10288680
+699               0.50000000             0.91666667  0.09577977
+700               0.50000000             0.91666667  0.09577977
+701               0.50000000             0.91666667  0.09577977
+702               0.50000000             0.91666667  0.09577977
+703               0.50000000             0.91666667  0.09577977
+704               0.50000000             0.91666667  0.09577977
+705               0.50000000             0.91666667  0.09577977
+706               0.50000000             0.91666667  0.09577977
+707               0.50000000             0.91666667  0.09577977
+708               0.50000000             0.91666667  0.09577977
+709               0.51923077             0.91666667  0.06218365
+710               0.51923077             0.91666667  0.06218365
+711               0.51923077             0.91666667  0.06218365
+712               0.51923077             0.91666667  0.06218365
+713               0.51923077             0.91666667  0.06218365
+714               0.51923077             0.91666667  0.06218365
+715               0.51923077             0.91666667  0.06218365
+716               0.51923077             0.91666667  0.06218365
+717               0.51923077             0.91666667  0.06218365
+718               0.51923077             0.91666667  0.06218365
+719               0.53846154             0.91666667 -0.01381007
+720               0.53846154             0.91666667 -0.01381007
+721               0.53846154             0.91666667 -0.01381007
+722               0.53846154             0.91666667 -0.01381007
+723               0.53846154             0.91666667 -0.01381007
+724               0.53846154             0.91666667 -0.01381007
+725               0.53846154             0.91666667 -0.01381007
+726               0.53846154             0.91666667 -0.01381007
+727               0.53846154             0.91666667 -0.01381007
+728               0.53846154             0.91666667 -0.01381007
+729               0.55769231             0.91666667 -0.02185431
+730               0.55769231             0.91666667 -0.02185431
+731               0.55769231             0.91666667 -0.02185431
+732               0.55769231             0.91666667 -0.02185431
+733               0.55769231             0.91666667 -0.02185431
+734               0.55769231             0.91666667 -0.02185431
+735               0.55769231             0.91666667 -0.02185431
+736               0.55769231             0.91666667 -0.02185431
+737               0.55769231             0.91666667 -0.02185431
+738               0.55769231             0.91666667 -0.02185431
+739               0.57692308             0.91666667 -0.03266259
+740               0.57692308             0.91666667 -0.03266259
+741               0.57692308             0.91666667 -0.03266259
+742               0.57692308             0.91666667 -0.03266259
+743               0.57692308             0.91666667 -0.03266259
+744               0.57692308             0.91666667 -0.03266259
+745               0.57692308             0.91666667 -0.03266259
+746               0.57692308             0.91666667 -0.03266259
+747               0.57692308             0.91666667 -0.03266259
+748               0.57692308             0.91666667 -0.03266259
+749               0.59615385             0.91666667 -0.03525965
+750               0.59615385             0.91666667 -0.03525965
+751               0.59615385             0.91666667 -0.03525965
+752               0.59615385             0.91666667 -0.03525965
+753               0.59615385             0.91666667 -0.03525965
+754               0.59615385             0.91666667 -0.03525965
+755               0.59615385             0.91666667 -0.03525965
+756               0.59615385             0.91666667 -0.03525965
+757               0.59615385             0.91666667 -0.03525965
+758               0.59615385             0.91666667 -0.03525965
+759               0.59615385             0.93750000 -0.04043750
+760               0.59615385             0.93750000 -0.04043750
+761               0.59615385             0.93750000 -0.04043750
+762               0.59615385             0.93750000 -0.04043750
+763               0.59615385             0.93750000 -0.04043750
+764               0.59615385             0.93750000 -0.04043750
+765               0.59615385             0.93750000 -0.04043750
+766               0.59615385             0.93750000 -0.04043750
+767               0.59615385             0.93750000 -0.04043750
+768               0.59615385             0.93750000 -0.04043750
+769               0.61538462             0.93750000 -0.09447812
+770               0.61538462             0.93750000 -0.09447812
+771               0.61538462             0.93750000 -0.09447812
+772               0.61538462             0.93750000 -0.09447812
+773               0.61538462             0.93750000 -0.09447812
+774               0.61538462             0.93750000 -0.09447812
+775               0.61538462             0.93750000 -0.09447812
+776               0.61538462             0.93750000 -0.09447812
+777               0.61538462             0.93750000 -0.09447812
+778               0.61538462             0.93750000 -0.09447812
+779               0.63461538             0.93750000 -0.13567767
+780               0.63461538             0.93750000 -0.13567767
+781               0.63461538             0.93750000 -0.13567767
+782               0.63461538             0.93750000 -0.13567767
+783               0.63461538             0.93750000 -0.13567767
+784               0.63461538             0.93750000 -0.13567767
+785               0.63461538             0.93750000 -0.13567767
+786               0.63461538             0.93750000 -0.13567767
+787               0.63461538             0.93750000 -0.13567767
+788               0.63461538             0.93750000 -0.13567767
+789               0.63461538             0.93750000 -0.13567767
+790               0.65384615             0.93750000 -0.13642970
+791               0.65384615             0.93750000 -0.13642970
+792               0.65384615             0.93750000 -0.13642970
+793               0.65384615             0.93750000 -0.13642970
+794               0.65384615             0.93750000 -0.13642970
+795               0.65384615             0.93750000 -0.13642970
+796               0.65384615             0.93750000 -0.13642970
+797               0.65384615             0.93750000 -0.13642970
+798               0.65384615             0.93750000 -0.13642970
+799               0.65384615             0.93750000 -0.13642970
+800               0.67307692             0.93750000 -0.15804465
+801               0.67307692             0.93750000 -0.15804465
+802               0.67307692             0.93750000 -0.15804465
+803               0.67307692             0.93750000 -0.15804465
+804               0.67307692             0.93750000 -0.15804465
+805               0.67307692             0.93750000 -0.15804465
+806               0.67307692             0.93750000 -0.15804465
+807               0.67307692             0.93750000 -0.15804465
+808               0.67307692             0.93750000 -0.15804465
+809               0.67307692             0.93750000 -0.15804465
+810               0.69230769             0.93750000 -0.31240774
+811               0.69230769             0.93750000 -0.31240774
+812               0.69230769             0.93750000 -0.31240774
+813               0.69230769             0.93750000 -0.31240774
+814               0.69230769             0.93750000 -0.31240774
+815               0.69230769             0.93750000 -0.31240774
+816               0.69230769             0.93750000 -0.31240774
+817               0.69230769             0.93750000 -0.31240774
+818               0.69230769             0.93750000 -0.31240774
+819               0.69230769             0.93750000 -0.31240774
+820               0.71153846             0.93750000 -0.32081391
+821               0.71153846             0.93750000 -0.32081391
+822               0.71153846             0.93750000 -0.32081391
+823               0.71153846             0.93750000 -0.32081391
+824               0.71153846             0.93750000 -0.32081391
+825               0.71153846             0.93750000 -0.32081391
+826               0.71153846             0.93750000 -0.32081391
+827               0.71153846             0.93750000 -0.32081391
+828               0.71153846             0.93750000 -0.32081391
+829               0.71153846             0.93750000 -0.32081391
+830               0.73076923             0.93750000 -0.36233542
+831               0.73076923             0.93750000 -0.36233542
+832               0.73076923             0.93750000 -0.36233542
+833               0.73076923             0.93750000 -0.36233542
+834               0.73076923             0.93750000 -0.36233542
+835               0.73076923             0.93750000 -0.36233542
+836               0.73076923             0.93750000 -0.36233542
+837               0.73076923             0.93750000 -0.36233542
+838               0.73076923             0.93750000 -0.36233542
+839               0.73076923             0.93750000 -0.36233542
+840               0.75000000             0.93750000 -0.38015469
+841               0.75000000             0.93750000 -0.38015469
+842               0.75000000             0.93750000 -0.38015469
+843               0.75000000             0.93750000 -0.38015469
+844               0.75000000             0.93750000 -0.38015469
+845               0.75000000             0.93750000 -0.38015469
+846               0.75000000             0.93750000 -0.38015469
+847               0.75000000             0.93750000 -0.38015469
+848               0.75000000             0.93750000 -0.38015469
+849               0.75000000             0.93750000 -0.38015469
+850               0.76923077             0.93750000 -0.39384442
+851               0.76923077             0.93750000 -0.39384442
+852               0.76923077             0.93750000 -0.39384442
+853               0.76923077             0.93750000 -0.39384442
+854               0.76923077             0.93750000 -0.39384442
+855               0.76923077             0.93750000 -0.39384442
+856               0.76923077             0.93750000 -0.39384442
+857               0.76923077             0.93750000 -0.39384442
+858               0.76923077             0.93750000 -0.39384442
+859               0.76923077             0.93750000 -0.39384442
+860               0.78846154             0.93750000 -0.45450666
+861               0.78846154             0.93750000 -0.45450666
+862               0.78846154             0.93750000 -0.45450666
+863               0.78846154             0.93750000 -0.45450666
+864               0.78846154             0.93750000 -0.45450666
+865               0.78846154             0.93750000 -0.45450666
+866               0.78846154             0.93750000 -0.45450666
+867               0.78846154             0.93750000 -0.45450666
+868               0.78846154             0.93750000 -0.45450666
+869               0.78846154             0.93750000 -0.45450666
+870               0.78846154             0.95833333 -0.45856422
+871               0.78846154             0.95833333 -0.45856422
+872               0.78846154             0.95833333 -0.45856422
+873               0.78846154             0.95833333 -0.45856422
+874               0.78846154             0.95833333 -0.45856422
+875               0.78846154             0.95833333 -0.45856422
+876               0.78846154             0.95833333 -0.45856422
+877               0.78846154             0.95833333 -0.45856422
+878               0.78846154             0.95833333 -0.45856422
+879               0.78846154             0.95833333 -0.45856422
+880               0.80769231             0.95833333 -0.52043761
+881               0.80769231             0.95833333 -0.52043761
+882               0.80769231             0.95833333 -0.52043761
+883               0.80769231             0.95833333 -0.52043761
+884               0.80769231             0.95833333 -0.52043761
+885               0.80769231             0.95833333 -0.52043761
+886               0.80769231             0.95833333 -0.52043761
+887               0.80769231             0.95833333 -0.52043761
+888               0.80769231             0.95833333 -0.52043761
+889               0.80769231             0.95833333 -0.52043761
+890               0.82692308             0.95833333 -0.53178908
+891               0.82692308             0.95833333 -0.53178908
+892               0.82692308             0.95833333 -0.53178908
+893               0.82692308             0.95833333 -0.53178908
+894               0.82692308             0.95833333 -0.53178908
+895               0.82692308             0.95833333 -0.53178908
+896               0.82692308             0.95833333 -0.53178908
+897               0.82692308             0.95833333 -0.53178908
+898               0.82692308             0.95833333 -0.53178908
+899               0.82692308             0.95833333 -0.53178908
+900               0.82692308             0.95833333 -0.53178908
+901               0.84615385             0.95833333 -0.57271483
+902               0.84615385             0.95833333 -0.57271483
+903               0.84615385             0.95833333 -0.57271483
+904               0.84615385             0.95833333 -0.57271483
+905               0.84615385             0.95833333 -0.57271483
+906               0.84615385             0.95833333 -0.57271483
+907               0.84615385             0.95833333 -0.57271483
+908               0.84615385             0.95833333 -0.57271483
+909               0.84615385             0.95833333 -0.57271483
+910               0.84615385             0.95833333 -0.57271483
+911               0.86538462             0.95833333 -0.62144143
+912               0.86538462             0.95833333 -0.62144143
+913               0.86538462             0.95833333 -0.62144143
+914               0.86538462             0.95833333 -0.62144143
+915               0.86538462             0.95833333 -0.62144143
+916               0.86538462             0.95833333 -0.62144143
+917               0.86538462             0.95833333 -0.62144143
+918               0.86538462             0.95833333 -0.62144143
+919               0.86538462             0.95833333 -0.62144143
+920               0.86538462             0.95833333 -0.62144143
+921               0.88461538             0.95833333 -0.78778955
+922               0.88461538             0.95833333 -0.78778955
+923               0.88461538             0.95833333 -0.78778955
+924               0.88461538             0.95833333 -0.78778955
+925               0.88461538             0.95833333 -0.78778955
+926               0.88461538             0.95833333 -0.78778955
+927               0.88461538             0.95833333 -0.78778955
+928               0.88461538             0.95833333 -0.78778955
+929               0.88461538             0.95833333 -0.78778955
+930               0.88461538             0.95833333 -0.78778955
+931               0.90384615             0.95833333 -0.80979547
+932               0.90384615             0.95833333 -0.80979547
+933               0.90384615             0.95833333 -0.80979547
+934               0.90384615             0.95833333 -0.80979547
+935               0.90384615             0.95833333 -0.80979547
+936               0.90384615             0.95833333 -0.80979547
+937               0.90384615             0.95833333 -0.80979547
+938               0.90384615             0.95833333 -0.80979547
+939               0.90384615             0.95833333 -0.80979547
+940               0.90384615             0.95833333 -0.80979547
+941               0.92307692             0.95833333 -0.84381827
+942               0.92307692             0.95833333 -0.84381827
+943               0.92307692             0.95833333 -0.84381827
+944               0.92307692             0.95833333 -0.84381827
+945               0.92307692             0.95833333 -0.84381827
+946               0.92307692             0.95833333 -0.84381827
+947               0.92307692             0.95833333 -0.84381827
+948               0.92307692             0.95833333 -0.84381827
+949               0.92307692             0.95833333 -0.84381827
+950               0.92307692             0.95833333 -0.84381827
+951               0.92307692             0.97916667 -0.85325090
+952               0.92307692             0.97916667 -0.85325090
+953               0.92307692             0.97916667 -0.85325090
+954               0.92307692             0.97916667 -0.85325090
+955               0.92307692             0.97916667 -0.85325090
+956               0.92307692             0.97916667 -0.85325090
+957               0.92307692             0.97916667 -0.85325090
+958               0.92307692             0.97916667 -0.85325090
+959               0.92307692             0.97916667 -0.85325090
+960               0.92307692             0.97916667 -0.85325090
+961               0.94230769             0.97916667 -0.87464445
+962               0.94230769             0.97916667 -0.87464445
+963               0.94230769             0.97916667 -0.87464445
+964               0.94230769             0.97916667 -0.87464445
+965               0.94230769             0.97916667 -0.87464445
+966               0.94230769             0.97916667 -0.87464445
+967               0.94230769             0.97916667 -0.87464445
+968               0.94230769             0.97916667 -0.87464445
+969               0.94230769             0.97916667 -0.87464445
+970               0.94230769             0.97916667 -0.87464445
+971               0.94230769             1.00000000 -0.89535311
+972               0.94230769             1.00000000 -0.89535311
+973               0.94230769             1.00000000 -0.89535311
+974               0.94230769             1.00000000 -0.89535311
+975               0.94230769             1.00000000 -0.89535311
+976               0.94230769             1.00000000 -0.89535311
+977               0.94230769             1.00000000 -0.89535311
+978               0.94230769             1.00000000 -0.89535311
+979               0.94230769             1.00000000 -0.89535311
+980               0.94230769             1.00000000 -0.89535311
+981               0.96153846             1.00000000 -0.97848577
+982               0.96153846             1.00000000 -0.97848577
+983               0.96153846             1.00000000 -0.97848577
+984               0.96153846             1.00000000 -0.97848577
+985               0.96153846             1.00000000 -0.97848577
+986               0.96153846             1.00000000 -0.97848577
+987               0.96153846             1.00000000 -0.97848577
+988               0.96153846             1.00000000 -0.97848577
+989               0.96153846             1.00000000 -0.97848577
+990               0.96153846             1.00000000 -0.97848577
+991               0.98076923             1.00000000 -1.16648784
+992               0.98076923             1.00000000 -1.16648784
+993               0.98076923             1.00000000 -1.16648784
+994               0.98076923             1.00000000 -1.16648784
+995               0.98076923             1.00000000 -1.16648784
+996               0.98076923             1.00000000 -1.16648784
+997               0.98076923             1.00000000 -1.16648784
+998               0.98076923             1.00000000 -1.16648784
+999               0.98076923             1.00000000 -1.16648784
+1000              0.98076923             1.00000000 -1.16648784
+1001              1.00000000             1.00000000 -1.32414976</code></pre>
+</div>
+</div>
+</div></div>
+</section>
+<section id="section-12" class="slide level2">
+<h2></h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb17-2"><a href=""></a><span class="fu">library</span>(plotROC)</span>
+<span id="cb17-3"><a href=""></a></span>
+<span id="cb17-4"><a href=""></a>D.ex <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="dv">50</span>, <span class="dv">1</span>, .<span class="dv">5</span>)</span>
+<span id="cb17-5"><a href=""></a></span>
+<span id="cb17-6"><a href=""></a>roc_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">D =</span> <span class="fu">c</span>(D.ex, D.ex),</span>
+<span id="cb17-7"><a href=""></a>           <span class="at">M =</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="at">mean =</span> D.ex, <span class="at">sd =</span> .<span class="dv">4</span>),</span>
+<span id="cb17-8"><a href=""></a>                 <span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="at">mean =</span> D.ex, <span class="at">sd =</span> <span class="dv">1</span>)),</span>
+<span id="cb17-9"><a href=""></a>           <span class="at">Z =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"A"</span>, <span class="dv">50</span>), <span class="fu">rep</span>(<span class="st">"B"</span>, <span class="dv">50</span>)))</span>
+<span id="cb17-10"><a href=""></a></span>
+<span id="cb17-11"><a href=""></a>roc_data <span class="sc">|&gt;</span></span>
+<span id="cb17-12"><a href=""></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb17-13"><a href=""></a>  <span class="fu">aes</span>(<span class="at">m =</span> M, <span class="at">d =</span> D) <span class="sc">+</span></span>
+<span id="cb17-14"><a href=""></a>  <span class="fu">geom_roc</span>() <span class="ot">-&gt;</span></span>
+<span id="cb17-15"><a href=""></a>ggroc</span>
+<span id="cb17-16"><a href=""></a></span>
+<span id="cb17-17"><a href=""></a></span>
+<span id="cb17-18"><a href=""></a>roc_data <span class="sc">|&gt;</span></span>
+<span id="cb17-19"><a href=""></a>  <span class="fu">rename</span>(<span class="at">m =</span> M, <span class="at">d =</span> D) <span class="sc">|&gt;</span></span>
+<span id="cb17-20"><a href=""></a>StatRoc<span class="sc">$</span><span class="fu">compute_group</span>()</span>
+<span id="cb17-21"><a href=""></a></span>
+<span id="cb17-22"><a href=""></a><span class="fu">calc_auc</span>(ggroc)  <span class="co">#&lt;&lt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div><div class="column" style="width:40%;">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>     false_positive_fraction true_positive_fraction      cutoffs
+1                 0.00000000             0.00000000          Inf
+2                 0.00000000             0.02083333  3.275411684
+3                 0.00000000             0.02083333  3.275411684
+4                 0.00000000             0.02083333  3.275411684
+5                 0.00000000             0.02083333  3.275411684
+6                 0.00000000             0.02083333  3.275411684
+7                 0.00000000             0.02083333  3.275411684
+8                 0.00000000             0.02083333  3.275411684
+9                 0.00000000             0.02083333  3.275411684
+10                0.00000000             0.02083333  3.275411684
+11                0.00000000             0.02083333  3.275411684
+12                0.00000000             0.02083333  3.275411684
+13                0.00000000             0.04166667  2.955291992
+14                0.00000000             0.04166667  2.955291992
+15                0.00000000             0.04166667  2.955291992
+16                0.00000000             0.04166667  2.955291992
+17                0.00000000             0.04166667  2.955291992
+18                0.00000000             0.04166667  2.955291992
+19                0.00000000             0.04166667  2.955291992
+20                0.00000000             0.04166667  2.955291992
+21                0.00000000             0.04166667  2.955291992
+22                0.00000000             0.04166667  2.955291992
+23                0.00000000             0.06250000  2.822983254
+24                0.00000000             0.06250000  2.822983254
+25                0.00000000             0.06250000  2.822983254
+26                0.00000000             0.06250000  2.822983254
+27                0.00000000             0.06250000  2.822983254
+28                0.00000000             0.06250000  2.822983254
+29                0.00000000             0.06250000  2.822983254
+30                0.00000000             0.06250000  2.822983254
+31                0.00000000             0.06250000  2.822983254
+32                0.00000000             0.06250000  2.822983254
+33                0.00000000             0.08333333  2.621260615
+34                0.00000000             0.08333333  2.621260615
+35                0.00000000             0.08333333  2.621260615
+36                0.00000000             0.08333333  2.621260615
+37                0.00000000             0.08333333  2.621260615
+38                0.00000000             0.08333333  2.621260615
+39                0.00000000             0.08333333  2.621260615
+40                0.00000000             0.08333333  2.621260615
+41                0.00000000             0.08333333  2.621260615
+42                0.00000000             0.08333333  2.621260615
+43                0.00000000             0.10416667  2.188286294
+44                0.00000000             0.10416667  2.188286294
+45                0.00000000             0.10416667  2.188286294
+46                0.00000000             0.10416667  2.188286294
+47                0.00000000             0.10416667  2.188286294
+48                0.00000000             0.10416667  2.188286294
+49                0.00000000             0.10416667  2.188286294
+50                0.00000000             0.10416667  2.188286294
+51                0.00000000             0.10416667  2.188286294
+52                0.00000000             0.10416667  2.188286294
+53                0.00000000             0.12500000  2.138123783
+54                0.00000000             0.12500000  2.138123783
+55                0.00000000             0.12500000  2.138123783
+56                0.00000000             0.12500000  2.138123783
+57                0.00000000             0.12500000  2.138123783
+58                0.00000000             0.12500000  2.138123783
+59                0.00000000             0.12500000  2.138123783
+60                0.00000000             0.12500000  2.138123783
+61                0.00000000             0.12500000  2.138123783
+62                0.00000000             0.12500000  2.138123783
+63                0.01923077             0.12500000  1.827146094
+64                0.01923077             0.12500000  1.827146094
+65                0.01923077             0.12500000  1.827146094
+66                0.01923077             0.12500000  1.827146094
+67                0.01923077             0.12500000  1.827146094
+68                0.01923077             0.12500000  1.827146094
+69                0.01923077             0.12500000  1.827146094
+70                0.01923077             0.12500000  1.827146094
+71                0.01923077             0.12500000  1.827146094
+72                0.01923077             0.12500000  1.827146094
+73                0.03846154             0.12500000  1.773389869
+74                0.03846154             0.12500000  1.773389869
+75                0.03846154             0.12500000  1.773389869
+76                0.03846154             0.12500000  1.773389869
+77                0.03846154             0.12500000  1.773389869
+78                0.03846154             0.12500000  1.773389869
+79                0.03846154             0.12500000  1.773389869
+80                0.03846154             0.12500000  1.773389869
+81                0.03846154             0.12500000  1.773389869
+82                0.03846154             0.12500000  1.773389869
+83                0.03846154             0.14583333  1.735820721
+84                0.03846154             0.14583333  1.735820721
+85                0.03846154             0.14583333  1.735820721
+86                0.03846154             0.14583333  1.735820721
+87                0.03846154             0.14583333  1.735820721
+88                0.03846154             0.14583333  1.735820721
+89                0.03846154             0.14583333  1.735820721
+90                0.03846154             0.14583333  1.735820721
+91                0.03846154             0.14583333  1.735820721
+92                0.03846154             0.14583333  1.735820721
+93                0.03846154             0.16666667  1.694102422
+94                0.03846154             0.16666667  1.694102422
+95                0.03846154             0.16666667  1.694102422
+96                0.03846154             0.16666667  1.694102422
+97                0.03846154             0.16666667  1.694102422
+98                0.03846154             0.16666667  1.694102422
+99                0.03846154             0.16666667  1.694102422
+100               0.03846154             0.16666667  1.694102422
+101               0.03846154             0.16666667  1.694102422
+102               0.03846154             0.16666667  1.694102422
+103               0.03846154             0.18750000  1.621513783
+104               0.03846154             0.18750000  1.621513783
+105               0.03846154             0.18750000  1.621513783
+106               0.03846154             0.18750000  1.621513783
+107               0.03846154             0.18750000  1.621513783
+108               0.03846154             0.18750000  1.621513783
+109               0.03846154             0.18750000  1.621513783
+110               0.03846154             0.18750000  1.621513783
+111               0.03846154             0.18750000  1.621513783
+112               0.03846154             0.18750000  1.621513783
+113               0.03846154             0.20833333  1.593788204
+114               0.03846154             0.20833333  1.593788204
+115               0.03846154             0.20833333  1.593788204
+116               0.03846154             0.20833333  1.593788204
+117               0.03846154             0.20833333  1.593788204
+118               0.03846154             0.20833333  1.593788204
+119               0.03846154             0.20833333  1.593788204
+120               0.03846154             0.20833333  1.593788204
+121               0.03846154             0.20833333  1.593788204
+122               0.03846154             0.20833333  1.593788204
+123               0.03846154             0.20833333  1.593788204
+124               0.03846154             0.22916667  1.546146804
+125               0.03846154             0.22916667  1.546146804
+126               0.03846154             0.22916667  1.546146804
+127               0.03846154             0.22916667  1.546146804
+128               0.03846154             0.22916667  1.546146804
+129               0.03846154             0.22916667  1.546146804
+130               0.03846154             0.22916667  1.546146804
+131               0.03846154             0.22916667  1.546146804
+132               0.03846154             0.22916667  1.546146804
+133               0.03846154             0.22916667  1.546146804
+134               0.05769231             0.22916667  1.490326952
+135               0.05769231             0.22916667  1.490326952
+136               0.05769231             0.22916667  1.490326952
+137               0.05769231             0.22916667  1.490326952
+138               0.05769231             0.22916667  1.490326952
+139               0.05769231             0.22916667  1.490326952
+140               0.05769231             0.22916667  1.490326952
+141               0.05769231             0.22916667  1.490326952
+142               0.05769231             0.22916667  1.490326952
+143               0.05769231             0.22916667  1.490326952
+144               0.05769231             0.25000000  1.479395146
+145               0.05769231             0.25000000  1.479395146
+146               0.05769231             0.25000000  1.479395146
+147               0.05769231             0.25000000  1.479395146
+148               0.05769231             0.25000000  1.479395146
+149               0.05769231             0.25000000  1.479395146
+150               0.05769231             0.25000000  1.479395146
+151               0.05769231             0.25000000  1.479395146
+152               0.05769231             0.25000000  1.479395146
+153               0.05769231             0.25000000  1.479395146
+154               0.05769231             0.27083333  1.430891769
+155               0.05769231             0.27083333  1.430891769
+156               0.05769231             0.27083333  1.430891769
+157               0.05769231             0.27083333  1.430891769
+158               0.05769231             0.27083333  1.430891769
+159               0.05769231             0.27083333  1.430891769
+160               0.05769231             0.27083333  1.430891769
+161               0.05769231             0.27083333  1.430891769
+162               0.05769231             0.27083333  1.430891769
+163               0.05769231             0.27083333  1.430891769
+164               0.05769231             0.29166667  1.405811079
+165               0.05769231             0.29166667  1.405811079
+166               0.05769231             0.29166667  1.405811079
+167               0.05769231             0.29166667  1.405811079
+168               0.05769231             0.29166667  1.405811079
+169               0.05769231             0.29166667  1.405811079
+170               0.05769231             0.29166667  1.405811079
+171               0.05769231             0.29166667  1.405811079
+172               0.05769231             0.29166667  1.405811079
+173               0.05769231             0.29166667  1.405811079
+174               0.05769231             0.31250000  1.347158611
+175               0.05769231             0.31250000  1.347158611
+176               0.05769231             0.31250000  1.347158611
+177               0.05769231             0.31250000  1.347158611
+178               0.05769231             0.31250000  1.347158611
+179               0.05769231             0.31250000  1.347158611
+180               0.05769231             0.31250000  1.347158611
+181               0.05769231             0.31250000  1.347158611
+182               0.05769231             0.31250000  1.347158611
+183               0.05769231             0.31250000  1.347158611
+184               0.05769231             0.33333333  1.335689455
+185               0.05769231             0.33333333  1.335689455
+186               0.05769231             0.33333333  1.335689455
+187               0.05769231             0.33333333  1.335689455
+188               0.05769231             0.33333333  1.335689455
+189               0.05769231             0.33333333  1.335689455
+190               0.05769231             0.33333333  1.335689455
+191               0.05769231             0.33333333  1.335689455
+192               0.05769231             0.33333333  1.335689455
+193               0.05769231             0.33333333  1.335689455
+194               0.05769231             0.35416667  1.286867875
+195               0.05769231             0.35416667  1.286867875
+196               0.05769231             0.35416667  1.286867875
+197               0.05769231             0.35416667  1.286867875
+198               0.05769231             0.35416667  1.286867875
+199               0.05769231             0.35416667  1.286867875
+200               0.05769231             0.35416667  1.286867875
+201               0.05769231             0.35416667  1.286867875
+202               0.05769231             0.35416667  1.286867875
+203               0.05769231             0.35416667  1.286867875
+204               0.05769231             0.37500000  1.249530520
+205               0.05769231             0.37500000  1.249530520
+206               0.05769231             0.37500000  1.249530520
+207               0.05769231             0.37500000  1.249530520
+208               0.05769231             0.37500000  1.249530520
+209               0.05769231             0.37500000  1.249530520
+210               0.05769231             0.37500000  1.249530520
+211               0.05769231             0.37500000  1.249530520
+212               0.05769231             0.37500000  1.249530520
+213               0.05769231             0.37500000  1.249530520
+214               0.05769231             0.39583333  1.232709705
+215               0.05769231             0.39583333  1.232709705
+216               0.05769231             0.39583333  1.232709705
+217               0.05769231             0.39583333  1.232709705
+218               0.05769231             0.39583333  1.232709705
+219               0.05769231             0.39583333  1.232709705
+220               0.05769231             0.39583333  1.232709705
+221               0.05769231             0.39583333  1.232709705
+222               0.05769231             0.39583333  1.232709705
+223               0.05769231             0.39583333  1.232709705
+224               0.05769231             0.41666667  1.125804165
+225               0.05769231             0.41666667  1.125804165
+226               0.05769231             0.41666667  1.125804165
+227               0.05769231             0.41666667  1.125804165
+228               0.05769231             0.41666667  1.125804165
+229               0.05769231             0.41666667  1.125804165
+230               0.05769231             0.41666667  1.125804165
+231               0.05769231             0.41666667  1.125804165
+232               0.05769231             0.41666667  1.125804165
+233               0.05769231             0.41666667  1.125804165
+234               0.05769231             0.41666667  1.125804165
+235               0.05769231             0.43750000  1.083120417
+236               0.05769231             0.43750000  1.083120417
+237               0.05769231             0.43750000  1.083120417
+238               0.05769231             0.43750000  1.083120417
+239               0.05769231             0.43750000  1.083120417
+240               0.05769231             0.43750000  1.083120417
+241               0.05769231             0.43750000  1.083120417
+242               0.05769231             0.43750000  1.083120417
+243               0.05769231             0.43750000  1.083120417
+244               0.05769231             0.43750000  1.083120417
+245               0.05769231             0.45833333  1.082980422
+246               0.05769231             0.45833333  1.082980422
+247               0.05769231             0.45833333  1.082980422
+248               0.05769231             0.45833333  1.082980422
+249               0.05769231             0.45833333  1.082980422
+250               0.05769231             0.45833333  1.082980422
+251               0.05769231             0.45833333  1.082980422
+252               0.05769231             0.45833333  1.082980422
+253               0.05769231             0.45833333  1.082980422
+254               0.05769231             0.45833333  1.082980422
+255               0.05769231             0.47916667  1.080119622
+256               0.05769231             0.47916667  1.080119622
+257               0.05769231             0.47916667  1.080119622
+258               0.05769231             0.47916667  1.080119622
+259               0.05769231             0.47916667  1.080119622
+260               0.05769231             0.47916667  1.080119622
+261               0.05769231             0.47916667  1.080119622
+262               0.05769231             0.47916667  1.080119622
+263               0.05769231             0.47916667  1.080119622
+264               0.05769231             0.47916667  1.080119622
+265               0.05769231             0.50000000  1.031929074
+266               0.05769231             0.50000000  1.031929074
+267               0.05769231             0.50000000  1.031929074
+268               0.05769231             0.50000000  1.031929074
+269               0.05769231             0.50000000  1.031929074
+270               0.05769231             0.50000000  1.031929074
+271               0.05769231             0.50000000  1.031929074
+272               0.05769231             0.50000000  1.031929074
+273               0.05769231             0.50000000  1.031929074
+274               0.05769231             0.50000000  1.031929074
+275               0.05769231             0.52083333  0.998090189
+276               0.05769231             0.52083333  0.998090189
+277               0.05769231             0.52083333  0.998090189
+278               0.05769231             0.52083333  0.998090189
+279               0.05769231             0.52083333  0.998090189
+280               0.05769231             0.52083333  0.998090189
+281               0.05769231             0.52083333  0.998090189
+282               0.05769231             0.52083333  0.998090189
+283               0.05769231             0.52083333  0.998090189
+284               0.05769231             0.52083333  0.998090189
+285               0.05769231             0.54166667  0.980567072
+286               0.05769231             0.54166667  0.980567072
+287               0.05769231             0.54166667  0.980567072
+288               0.05769231             0.54166667  0.980567072
+289               0.05769231             0.54166667  0.980567072
+290               0.05769231             0.54166667  0.980567072
+291               0.05769231             0.54166667  0.980567072
+292               0.05769231             0.54166667  0.980567072
+293               0.05769231             0.54166667  0.980567072
+294               0.05769231             0.54166667  0.980567072
+295               0.07692308             0.54166667  0.931753314
+296               0.07692308             0.54166667  0.931753314
+297               0.07692308             0.54166667  0.931753314
+298               0.07692308             0.54166667  0.931753314
+299               0.07692308             0.54166667  0.931753314
+300               0.07692308             0.54166667  0.931753314
+301               0.07692308             0.54166667  0.931753314
+302               0.07692308             0.54166667  0.931753314
+303               0.07692308             0.54166667  0.931753314
+304               0.07692308             0.54166667  0.931753314
+305               0.09615385             0.54166667  0.929658596
+306               0.09615385             0.54166667  0.929658596
+307               0.09615385             0.54166667  0.929658596
+308               0.09615385             0.54166667  0.929658596
+309               0.09615385             0.54166667  0.929658596
+310               0.09615385             0.54166667  0.929658596
+311               0.09615385             0.54166667  0.929658596
+312               0.09615385             0.54166667  0.929658596
+313               0.09615385             0.54166667  0.929658596
+314               0.09615385             0.54166667  0.929658596
+315               0.09615385             0.56250000  0.916579897
+316               0.09615385             0.56250000  0.916579897
+317               0.09615385             0.56250000  0.916579897
+318               0.09615385             0.56250000  0.916579897
+319               0.09615385             0.56250000  0.916579897
+320               0.09615385             0.56250000  0.916579897
+321               0.09615385             0.56250000  0.916579897
+322               0.09615385             0.56250000  0.916579897
+323               0.09615385             0.56250000  0.916579897
+324               0.09615385             0.56250000  0.916579897
+325               0.09615385             0.58333333  0.788359402
+326               0.09615385             0.58333333  0.788359402
+327               0.09615385             0.58333333  0.788359402
+328               0.09615385             0.58333333  0.788359402
+329               0.09615385             0.58333333  0.788359402
+330               0.09615385             0.58333333  0.788359402
+331               0.09615385             0.58333333  0.788359402
+332               0.09615385             0.58333333  0.788359402
+333               0.09615385             0.58333333  0.788359402
+334               0.09615385             0.58333333  0.788359402
+335               0.09615385             0.60416667  0.788200223
+336               0.09615385             0.60416667  0.788200223
+337               0.09615385             0.60416667  0.788200223
+338               0.09615385             0.60416667  0.788200223
+339               0.09615385             0.60416667  0.788200223
+340               0.09615385             0.60416667  0.788200223
+341               0.09615385             0.60416667  0.788200223
+342               0.09615385             0.60416667  0.788200223
+343               0.09615385             0.60416667  0.788200223
+344               0.09615385             0.60416667  0.788200223
+345               0.09615385             0.60416667  0.788200223
+346               0.11538462             0.60416667  0.769782176
+347               0.11538462             0.60416667  0.769782176
+348               0.11538462             0.60416667  0.769782176
+349               0.11538462             0.60416667  0.769782176
+350               0.11538462             0.60416667  0.769782176
+351               0.11538462             0.60416667  0.769782176
+352               0.11538462             0.60416667  0.769782176
+353               0.11538462             0.60416667  0.769782176
+354               0.11538462             0.60416667  0.769782176
+355               0.11538462             0.60416667  0.769782176
+356               0.13461538             0.60416667  0.768108314
+357               0.13461538             0.60416667  0.768108314
+358               0.13461538             0.60416667  0.768108314
+359               0.13461538             0.60416667  0.768108314
+360               0.13461538             0.60416667  0.768108314
+361               0.13461538             0.60416667  0.768108314
+362               0.13461538             0.60416667  0.768108314
+363               0.13461538             0.60416667  0.768108314
+364               0.13461538             0.60416667  0.768108314
+365               0.13461538             0.60416667  0.768108314
+366               0.15384615             0.60416667  0.761037904
+367               0.15384615             0.60416667  0.761037904
+368               0.15384615             0.60416667  0.761037904
+369               0.15384615             0.60416667  0.761037904
+370               0.15384615             0.60416667  0.761037904
+371               0.15384615             0.60416667  0.761037904
+372               0.15384615             0.60416667  0.761037904
+373               0.15384615             0.60416667  0.761037904
+374               0.15384615             0.60416667  0.761037904
+375               0.15384615             0.60416667  0.761037904
+376               0.15384615             0.62500000  0.729059223
+377               0.15384615             0.62500000  0.729059223
+378               0.15384615             0.62500000  0.729059223
+379               0.15384615             0.62500000  0.729059223
+380               0.15384615             0.62500000  0.729059223
+381               0.15384615             0.62500000  0.729059223
+382               0.15384615             0.62500000  0.729059223
+383               0.15384615             0.62500000  0.729059223
+384               0.15384615             0.62500000  0.729059223
+385               0.15384615             0.62500000  0.729059223
+386               0.15384615             0.64583333  0.726682906
+387               0.15384615             0.64583333  0.726682906
+388               0.15384615             0.64583333  0.726682906
+389               0.15384615             0.64583333  0.726682906
+390               0.15384615             0.64583333  0.726682906
+391               0.15384615             0.64583333  0.726682906
+392               0.15384615             0.64583333  0.726682906
+393               0.15384615             0.64583333  0.726682906
+394               0.15384615             0.64583333  0.726682906
+395               0.15384615             0.64583333  0.726682906
+396               0.15384615             0.66666667  0.712537719
+397               0.15384615             0.66666667  0.712537719
+398               0.15384615             0.66666667  0.712537719
+399               0.15384615             0.66666667  0.712537719
+400               0.15384615             0.66666667  0.712537719
+401               0.15384615             0.66666667  0.712537719
+402               0.15384615             0.66666667  0.712537719
+403               0.15384615             0.66666667  0.712537719
+404               0.15384615             0.66666667  0.712537719
+405               0.15384615             0.66666667  0.712537719
+406               0.15384615             0.68750000  0.709936268
+407               0.15384615             0.68750000  0.709936268
+408               0.15384615             0.68750000  0.709936268
+409               0.15384615             0.68750000  0.709936268
+410               0.15384615             0.68750000  0.709936268
+411               0.15384615             0.68750000  0.709936268
+412               0.15384615             0.68750000  0.709936268
+413               0.15384615             0.68750000  0.709936268
+414               0.15384615             0.68750000  0.709936268
+415               0.15384615             0.68750000  0.709936268
+416               0.15384615             0.70833333  0.704781666
+417               0.15384615             0.70833333  0.704781666
+418               0.15384615             0.70833333  0.704781666
+419               0.15384615             0.70833333  0.704781666
+420               0.15384615             0.70833333  0.704781666
+421               0.15384615             0.70833333  0.704781666
+422               0.15384615             0.70833333  0.704781666
+423               0.15384615             0.70833333  0.704781666
+424               0.15384615             0.70833333  0.704781666
+425               0.15384615             0.70833333  0.704781666
+426               0.15384615             0.72916667  0.655846247
+427               0.15384615             0.72916667  0.655846247
+428               0.15384615             0.72916667  0.655846247
+429               0.15384615             0.72916667  0.655846247
+430               0.15384615             0.72916667  0.655846247
+431               0.15384615             0.72916667  0.655846247
+432               0.15384615             0.72916667  0.655846247
+433               0.15384615             0.72916667  0.655846247
+434               0.15384615             0.72916667  0.655846247
+435               0.15384615             0.72916667  0.655846247
+436               0.17307692             0.72916667  0.633819566
+437               0.17307692             0.72916667  0.633819566
+438               0.17307692             0.72916667  0.633819566
+439               0.17307692             0.72916667  0.633819566
+440               0.17307692             0.72916667  0.633819566
+441               0.17307692             0.72916667  0.633819566
+442               0.17307692             0.72916667  0.633819566
+443               0.17307692             0.72916667  0.633819566
+444               0.17307692             0.72916667  0.633819566
+445               0.17307692             0.72916667  0.633819566
+446               0.17307692             0.75000000  0.626860021
+447               0.17307692             0.75000000  0.626860021
+448               0.17307692             0.75000000  0.626860021
+449               0.17307692             0.75000000  0.626860021
+450               0.17307692             0.75000000  0.626860021
+451               0.17307692             0.75000000  0.626860021
+452               0.17307692             0.75000000  0.626860021
+453               0.17307692             0.75000000  0.626860021
+454               0.17307692             0.75000000  0.626860021
+455               0.17307692             0.75000000  0.626860021
+456               0.17307692             0.75000000  0.626860021
+457               0.17307692             0.77083333  0.619983562
+458               0.17307692             0.77083333  0.619983562
+459               0.17307692             0.77083333  0.619983562
+460               0.17307692             0.77083333  0.619983562
+461               0.17307692             0.77083333  0.619983562
+462               0.17307692             0.77083333  0.619983562
+463               0.17307692             0.77083333  0.619983562
+464               0.17307692             0.77083333  0.619983562
+465               0.17307692             0.77083333  0.619983562
+466               0.17307692             0.77083333  0.619983562
+467               0.17307692             0.79166667  0.586380741
+468               0.17307692             0.79166667  0.586380741
+469               0.17307692             0.79166667  0.586380741
+470               0.17307692             0.79166667  0.586380741
+471               0.17307692             0.79166667  0.586380741
+472               0.17307692             0.79166667  0.586380741
+473               0.17307692             0.79166667  0.586380741
+474               0.17307692             0.79166667  0.586380741
+475               0.17307692             0.79166667  0.586380741
+476               0.17307692             0.79166667  0.586380741
+477               0.19230769             0.79166667  0.578148858
+478               0.19230769             0.79166667  0.578148858
+479               0.19230769             0.79166667  0.578148858
+480               0.19230769             0.79166667  0.578148858
+481               0.19230769             0.79166667  0.578148858
+482               0.19230769             0.79166667  0.578148858
+483               0.19230769             0.79166667  0.578148858
+484               0.19230769             0.79166667  0.578148858
+485               0.19230769             0.79166667  0.578148858
+486               0.19230769             0.79166667  0.578148858
+487               0.21153846             0.79166667  0.562155343
+488               0.21153846             0.79166667  0.562155343
+489               0.21153846             0.79166667  0.562155343
+490               0.21153846             0.79166667  0.562155343
+491               0.21153846             0.79166667  0.562155343
+492               0.21153846             0.79166667  0.562155343
+493               0.21153846             0.79166667  0.562155343
+494               0.21153846             0.79166667  0.562155343
+495               0.21153846             0.79166667  0.562155343
+496               0.21153846             0.79166667  0.562155343
+497               0.23076923             0.79166667  0.529470665
+498               0.23076923             0.79166667  0.529470665
+499               0.23076923             0.79166667  0.529470665
+500               0.23076923             0.79166667  0.529470665
+501               0.23076923             0.79166667  0.529470665
+502               0.23076923             0.79166667  0.529470665
+503               0.23076923             0.79166667  0.529470665
+504               0.23076923             0.79166667  0.529470665
+505               0.23076923             0.79166667  0.529470665
+506               0.23076923             0.79166667  0.529470665
+507               0.23076923             0.81250000  0.484428763
+508               0.23076923             0.81250000  0.484428763
+509               0.23076923             0.81250000  0.484428763
+510               0.23076923             0.81250000  0.484428763
+511               0.23076923             0.81250000  0.484428763
+512               0.23076923             0.81250000  0.484428763
+513               0.23076923             0.81250000  0.484428763
+514               0.23076923             0.81250000  0.484428763
+515               0.23076923             0.81250000  0.484428763
+516               0.23076923             0.81250000  0.484428763
+517               0.23076923             0.83333333  0.468854156
+518               0.23076923             0.83333333  0.468854156
+519               0.23076923             0.83333333  0.468854156
+520               0.23076923             0.83333333  0.468854156
+521               0.23076923             0.83333333  0.468854156
+522               0.23076923             0.83333333  0.468854156
+523               0.23076923             0.83333333  0.468854156
+524               0.23076923             0.83333333  0.468854156
+525               0.23076923             0.83333333  0.468854156
+526               0.23076923             0.83333333  0.468854156
+527               0.25000000             0.83333333  0.402114061
+528               0.25000000             0.83333333  0.402114061
+529               0.25000000             0.83333333  0.402114061
+530               0.25000000             0.83333333  0.402114061
+531               0.25000000             0.83333333  0.402114061
+532               0.25000000             0.83333333  0.402114061
+533               0.25000000             0.83333333  0.402114061
+534               0.25000000             0.83333333  0.402114061
+535               0.25000000             0.83333333  0.402114061
+536               0.25000000             0.83333333  0.402114061
+537               0.26923077             0.83333333  0.391357379
+538               0.26923077             0.83333333  0.391357379
+539               0.26923077             0.83333333  0.391357379
+540               0.26923077             0.83333333  0.391357379
+541               0.26923077             0.83333333  0.391357379
+542               0.26923077             0.83333333  0.391357379
+543               0.26923077             0.83333333  0.391357379
+544               0.26923077             0.83333333  0.391357379
+545               0.26923077             0.83333333  0.391357379
+546               0.26923077             0.83333333  0.391357379
+547               0.28846154             0.83333333  0.368574694
+548               0.28846154             0.83333333  0.368574694
+549               0.28846154             0.83333333  0.368574694
+550               0.28846154             0.83333333  0.368574694
+551               0.28846154             0.83333333  0.368574694
+552               0.28846154             0.83333333  0.368574694
+553               0.28846154             0.83333333  0.368574694
+554               0.28846154             0.83333333  0.368574694
+555               0.28846154             0.83333333  0.368574694
+556               0.28846154             0.83333333  0.368574694
+557               0.30769231             0.83333333  0.363969385
+558               0.30769231             0.83333333  0.363969385
+559               0.30769231             0.83333333  0.363969385
+560               0.30769231             0.83333333  0.363969385
+561               0.30769231             0.83333333  0.363969385
+562               0.30769231             0.83333333  0.363969385
+563               0.30769231             0.83333333  0.363969385
+564               0.30769231             0.83333333  0.363969385
+565               0.30769231             0.83333333  0.363969385
+566               0.30769231             0.83333333  0.363969385
+567               0.30769231             0.83333333  0.363969385
+568               0.32692308             0.83333333  0.347294905
+569               0.32692308             0.83333333  0.347294905
+570               0.32692308             0.83333333  0.347294905
+571               0.32692308             0.83333333  0.347294905
+572               0.32692308             0.83333333  0.347294905
+573               0.32692308             0.83333333  0.347294905
+574               0.32692308             0.83333333  0.347294905
+575               0.32692308             0.83333333  0.347294905
+576               0.32692308             0.83333333  0.347294905
+577               0.32692308             0.83333333  0.347294905
+578               0.32692308             0.85416667  0.339853945
+579               0.32692308             0.85416667  0.339853945
+580               0.32692308             0.85416667  0.339853945
+581               0.32692308             0.85416667  0.339853945
+582               0.32692308             0.85416667  0.339853945
+583               0.32692308             0.85416667  0.339853945
+584               0.32692308             0.85416667  0.339853945
+585               0.32692308             0.85416667  0.339853945
+586               0.32692308             0.85416667  0.339853945
+587               0.32692308             0.85416667  0.339853945
+588               0.34615385             0.85416667  0.244181576
+589               0.34615385             0.85416667  0.244181576
+590               0.34615385             0.85416667  0.244181576
+591               0.34615385             0.85416667  0.244181576
+592               0.34615385             0.85416667  0.244181576
+593               0.34615385             0.85416667  0.244181576
+594               0.34615385             0.85416667  0.244181576
+595               0.34615385             0.85416667  0.244181576
+596               0.34615385             0.85416667  0.244181576
+597               0.34615385             0.85416667  0.244181576
+598               0.34615385             0.87500000  0.238286053
+599               0.34615385             0.87500000  0.238286053
+600               0.34615385             0.87500000  0.238286053
+601               0.34615385             0.87500000  0.238286053
+602               0.34615385             0.87500000  0.238286053
+603               0.34615385             0.87500000  0.238286053
+604               0.34615385             0.87500000  0.238286053
+605               0.34615385             0.87500000  0.238286053
+606               0.34615385             0.87500000  0.238286053
+607               0.34615385             0.87500000  0.238286053
+608               0.34615385             0.89583333  0.216103692
+609               0.34615385             0.89583333  0.216103692
+610               0.34615385             0.89583333  0.216103692
+611               0.34615385             0.89583333  0.216103692
+612               0.34615385             0.89583333  0.216103692
+613               0.34615385             0.89583333  0.216103692
+614               0.34615385             0.89583333  0.216103692
+615               0.34615385             0.89583333  0.216103692
+616               0.34615385             0.89583333  0.216103692
+617               0.34615385             0.89583333  0.216103692
+618               0.36538462             0.89583333  0.206829043
+619               0.36538462             0.89583333  0.206829043
+620               0.36538462             0.89583333  0.206829043
+621               0.36538462             0.89583333  0.206829043
+622               0.36538462             0.89583333  0.206829043
+623               0.36538462             0.89583333  0.206829043
+624               0.36538462             0.89583333  0.206829043
+625               0.36538462             0.89583333  0.206829043
+626               0.36538462             0.89583333  0.206829043
+627               0.36538462             0.89583333  0.206829043
+628               0.38461538             0.89583333  0.197498929
+629               0.38461538             0.89583333  0.197498929
+630               0.38461538             0.89583333  0.197498929
+631               0.38461538             0.89583333  0.197498929
+632               0.38461538             0.89583333  0.197498929
+633               0.38461538             0.89583333  0.197498929
+634               0.38461538             0.89583333  0.197498929
+635               0.38461538             0.89583333  0.197498929
+636               0.38461538             0.89583333  0.197498929
+637               0.38461538             0.89583333  0.197498929
+638               0.40384615             0.89583333  0.197301918
+639               0.40384615             0.89583333  0.197301918
+640               0.40384615             0.89583333  0.197301918
+641               0.40384615             0.89583333  0.197301918
+642               0.40384615             0.89583333  0.197301918
+643               0.40384615             0.89583333  0.197301918
+644               0.40384615             0.89583333  0.197301918
+645               0.40384615             0.89583333  0.197301918
+646               0.40384615             0.89583333  0.197301918
+647               0.40384615             0.89583333  0.197301918
+648               0.40384615             0.91666667  0.197039502
+649               0.40384615             0.91666667  0.197039502
+650               0.40384615             0.91666667  0.197039502
+651               0.40384615             0.91666667  0.197039502
+652               0.40384615             0.91666667  0.197039502
+653               0.40384615             0.91666667  0.197039502
+654               0.40384615             0.91666667  0.197039502
+655               0.40384615             0.91666667  0.197039502
+656               0.40384615             0.91666667  0.197039502
+657               0.40384615             0.91666667  0.197039502
+658               0.42307692             0.91666667  0.181977786
+659               0.42307692             0.91666667  0.181977786
+660               0.42307692             0.91666667  0.181977786
+661               0.42307692             0.91666667  0.181977786
+662               0.42307692             0.91666667  0.181977786
+663               0.42307692             0.91666667  0.181977786
+664               0.42307692             0.91666667  0.181977786
+665               0.42307692             0.91666667  0.181977786
+666               0.42307692             0.91666667  0.181977786
+667               0.42307692             0.91666667  0.181977786
+668               0.42307692             0.93750000  0.163052284
+669               0.42307692             0.93750000  0.163052284
+670               0.42307692             0.93750000  0.163052284
+671               0.42307692             0.93750000  0.163052284
+672               0.42307692             0.93750000  0.163052284
+673               0.42307692             0.93750000  0.163052284
+674               0.42307692             0.93750000  0.163052284
+675               0.42307692             0.93750000  0.163052284
+676               0.42307692             0.93750000  0.163052284
+677               0.42307692             0.93750000  0.163052284
+678               0.42307692             0.93750000  0.163052284
+679               0.42307692             0.95833333  0.136683215
+680               0.42307692             0.95833333  0.136683215
+681               0.42307692             0.95833333  0.136683215
+682               0.42307692             0.95833333  0.136683215
+683               0.42307692             0.95833333  0.136683215
+684               0.42307692             0.95833333  0.136683215
+685               0.42307692             0.95833333  0.136683215
+686               0.42307692             0.95833333  0.136683215
+687               0.42307692             0.95833333  0.136683215
+688               0.42307692             0.95833333  0.136683215
+689               0.44230769             0.95833333  0.043693736
+690               0.44230769             0.95833333  0.043693736
+691               0.44230769             0.95833333  0.043693736
+692               0.44230769             0.95833333  0.043693736
+693               0.44230769             0.95833333  0.043693736
+694               0.44230769             0.95833333  0.043693736
+695               0.44230769             0.95833333  0.043693736
+696               0.44230769             0.95833333  0.043693736
+697               0.44230769             0.95833333  0.043693736
+698               0.44230769             0.95833333  0.043693736
+699               0.46153846             0.95833333  0.023361956
+700               0.46153846             0.95833333  0.023361956
+701               0.46153846             0.95833333  0.023361956
+702               0.46153846             0.95833333  0.023361956
+703               0.46153846             0.95833333  0.023361956
+704               0.46153846             0.95833333  0.023361956
+705               0.46153846             0.95833333  0.023361956
+706               0.46153846             0.95833333  0.023361956
+707               0.46153846             0.95833333  0.023361956
+708               0.46153846             0.95833333  0.023361956
+709               0.48076923             0.95833333 -0.004867827
+710               0.48076923             0.95833333 -0.004867827
+711               0.48076923             0.95833333 -0.004867827
+712               0.48076923             0.95833333 -0.004867827
+713               0.48076923             0.95833333 -0.004867827
+714               0.48076923             0.95833333 -0.004867827
+715               0.48076923             0.95833333 -0.004867827
+716               0.48076923             0.95833333 -0.004867827
+717               0.48076923             0.95833333 -0.004867827
+718               0.48076923             0.95833333 -0.004867827
+719               0.50000000             0.95833333 -0.007615651
+720               0.50000000             0.95833333 -0.007615651
+721               0.50000000             0.95833333 -0.007615651
+722               0.50000000             0.95833333 -0.007615651
+723               0.50000000             0.95833333 -0.007615651
+724               0.50000000             0.95833333 -0.007615651
+725               0.50000000             0.95833333 -0.007615651
+726               0.50000000             0.95833333 -0.007615651
+727               0.50000000             0.95833333 -0.007615651
+728               0.50000000             0.95833333 -0.007615651
+729               0.51923077             0.95833333 -0.054835004
+730               0.51923077             0.95833333 -0.054835004
+731               0.51923077             0.95833333 -0.054835004
+732               0.51923077             0.95833333 -0.054835004
+733               0.51923077             0.95833333 -0.054835004
+734               0.51923077             0.95833333 -0.054835004
+735               0.51923077             0.95833333 -0.054835004
+736               0.51923077             0.95833333 -0.054835004
+737               0.51923077             0.95833333 -0.054835004
+738               0.51923077             0.95833333 -0.054835004
+739               0.53846154             0.95833333 -0.098401084
+740               0.53846154             0.95833333 -0.098401084
+741               0.53846154             0.95833333 -0.098401084
+742               0.53846154             0.95833333 -0.098401084
+743               0.53846154             0.95833333 -0.098401084
+744               0.53846154             0.95833333 -0.098401084
+745               0.53846154             0.95833333 -0.098401084
+746               0.53846154             0.95833333 -0.098401084
+747               0.53846154             0.95833333 -0.098401084
+748               0.53846154             0.95833333 -0.098401084
+749               0.55769231             0.95833333 -0.111035982
+750               0.55769231             0.95833333 -0.111035982
+751               0.55769231             0.95833333 -0.111035982
+752               0.55769231             0.95833333 -0.111035982
+753               0.55769231             0.95833333 -0.111035982
+754               0.55769231             0.95833333 -0.111035982
+755               0.55769231             0.95833333 -0.111035982
+756               0.55769231             0.95833333 -0.111035982
+757               0.55769231             0.95833333 -0.111035982
+758               0.55769231             0.95833333 -0.111035982
+759               0.57692308             0.95833333 -0.121700037
+760               0.57692308             0.95833333 -0.121700037
+761               0.57692308             0.95833333 -0.121700037
+762               0.57692308             0.95833333 -0.121700037
+763               0.57692308             0.95833333 -0.121700037
+764               0.57692308             0.95833333 -0.121700037
+765               0.57692308             0.95833333 -0.121700037
+766               0.57692308             0.95833333 -0.121700037
+767               0.57692308             0.95833333 -0.121700037
+768               0.57692308             0.95833333 -0.121700037
+769               0.59615385             0.95833333 -0.129116453
+770               0.59615385             0.95833333 -0.129116453
+771               0.59615385             0.95833333 -0.129116453
+772               0.59615385             0.95833333 -0.129116453
+773               0.59615385             0.95833333 -0.129116453
+774               0.59615385             0.95833333 -0.129116453
+775               0.59615385             0.95833333 -0.129116453
+776               0.59615385             0.95833333 -0.129116453
+777               0.59615385             0.95833333 -0.129116453
+778               0.59615385             0.95833333 -0.129116453
+779               0.61538462             0.95833333 -0.152983753
+780               0.61538462             0.95833333 -0.152983753
+781               0.61538462             0.95833333 -0.152983753
+782               0.61538462             0.95833333 -0.152983753
+783               0.61538462             0.95833333 -0.152983753
+784               0.61538462             0.95833333 -0.152983753
+785               0.61538462             0.95833333 -0.152983753
+786               0.61538462             0.95833333 -0.152983753
+787               0.61538462             0.95833333 -0.152983753
+788               0.61538462             0.95833333 -0.152983753
+789               0.61538462             0.95833333 -0.152983753
+790               0.63461538             0.95833333 -0.177765430
+791               0.63461538             0.95833333 -0.177765430
+792               0.63461538             0.95833333 -0.177765430
+793               0.63461538             0.95833333 -0.177765430
+794               0.63461538             0.95833333 -0.177765430
+795               0.63461538             0.95833333 -0.177765430
+796               0.63461538             0.95833333 -0.177765430
+797               0.63461538             0.95833333 -0.177765430
+798               0.63461538             0.95833333 -0.177765430
+799               0.63461538             0.95833333 -0.177765430
+800               0.65384615             0.95833333 -0.181551081
+801               0.65384615             0.95833333 -0.181551081
+802               0.65384615             0.95833333 -0.181551081
+803               0.65384615             0.95833333 -0.181551081
+804               0.65384615             0.95833333 -0.181551081
+805               0.65384615             0.95833333 -0.181551081
+806               0.65384615             0.95833333 -0.181551081
+807               0.65384615             0.95833333 -0.181551081
+808               0.65384615             0.95833333 -0.181551081
+809               0.65384615             0.95833333 -0.181551081
+810               0.67307692             0.95833333 -0.230299336
+811               0.67307692             0.95833333 -0.230299336
+812               0.67307692             0.95833333 -0.230299336
+813               0.67307692             0.95833333 -0.230299336
+814               0.67307692             0.95833333 -0.230299336
+815               0.67307692             0.95833333 -0.230299336
+816               0.67307692             0.95833333 -0.230299336
+817               0.67307692             0.95833333 -0.230299336
+818               0.67307692             0.95833333 -0.230299336
+819               0.67307692             0.95833333 -0.230299336
+820               0.67307692             0.97916667 -0.238071806
+821               0.67307692             0.97916667 -0.238071806
+822               0.67307692             0.97916667 -0.238071806
+823               0.67307692             0.97916667 -0.238071806
+824               0.67307692             0.97916667 -0.238071806
+825               0.67307692             0.97916667 -0.238071806
+826               0.67307692             0.97916667 -0.238071806
+827               0.67307692             0.97916667 -0.238071806
+828               0.67307692             0.97916667 -0.238071806
+829               0.67307692             0.97916667 -0.238071806
+830               0.69230769             0.97916667 -0.248019373
+831               0.69230769             0.97916667 -0.248019373
+832               0.69230769             0.97916667 -0.248019373
+833               0.69230769             0.97916667 -0.248019373
+834               0.69230769             0.97916667 -0.248019373
+835               0.69230769             0.97916667 -0.248019373
+836               0.69230769             0.97916667 -0.248019373
+837               0.69230769             0.97916667 -0.248019373
+838               0.69230769             0.97916667 -0.248019373
+839               0.69230769             0.97916667 -0.248019373
+840               0.71153846             0.97916667 -0.256518911
+841               0.71153846             0.97916667 -0.256518911
+842               0.71153846             0.97916667 -0.256518911
+843               0.71153846             0.97916667 -0.256518911
+844               0.71153846             0.97916667 -0.256518911
+845               0.71153846             0.97916667 -0.256518911
+846               0.71153846             0.97916667 -0.256518911
+847               0.71153846             0.97916667 -0.256518911
+848               0.71153846             0.97916667 -0.256518911
+849               0.71153846             0.97916667 -0.256518911
+850               0.73076923             0.97916667 -0.257936899
+851               0.73076923             0.97916667 -0.257936899
+852               0.73076923             0.97916667 -0.257936899
+853               0.73076923             0.97916667 -0.257936899
+854               0.73076923             0.97916667 -0.257936899
+855               0.73076923             0.97916667 -0.257936899
+856               0.73076923             0.97916667 -0.257936899
+857               0.73076923             0.97916667 -0.257936899
+858               0.73076923             0.97916667 -0.257936899
+859               0.73076923             0.97916667 -0.257936899
+860               0.75000000             0.97916667 -0.294761157
+861               0.75000000             0.97916667 -0.294761157
+862               0.75000000             0.97916667 -0.294761157
+863               0.75000000             0.97916667 -0.294761157
+864               0.75000000             0.97916667 -0.294761157
+865               0.75000000             0.97916667 -0.294761157
+866               0.75000000             0.97916667 -0.294761157
+867               0.75000000             0.97916667 -0.294761157
+868               0.75000000             0.97916667 -0.294761157
+869               0.75000000             0.97916667 -0.294761157
+870               0.76923077             0.97916667 -0.326272600
+871               0.76923077             0.97916667 -0.326272600
+872               0.76923077             0.97916667 -0.326272600
+873               0.76923077             0.97916667 -0.326272600
+874               0.76923077             0.97916667 -0.326272600
+875               0.76923077             0.97916667 -0.326272600
+876               0.76923077             0.97916667 -0.326272600
+877               0.76923077             0.97916667 -0.326272600
+878               0.76923077             0.97916667 -0.326272600
+879               0.76923077             0.97916667 -0.326272600
+880               0.76923077             1.00000000 -0.338948150
+881               0.76923077             1.00000000 -0.338948150
+882               0.76923077             1.00000000 -0.338948150
+883               0.76923077             1.00000000 -0.338948150
+884               0.76923077             1.00000000 -0.338948150
+885               0.76923077             1.00000000 -0.338948150
+886               0.76923077             1.00000000 -0.338948150
+887               0.76923077             1.00000000 -0.338948150
+888               0.76923077             1.00000000 -0.338948150
+889               0.76923077             1.00000000 -0.338948150
+890               0.78846154             1.00000000 -0.374502748
+891               0.78846154             1.00000000 -0.374502748
+892               0.78846154             1.00000000 -0.374502748
+893               0.78846154             1.00000000 -0.374502748
+894               0.78846154             1.00000000 -0.374502748
+895               0.78846154             1.00000000 -0.374502748
+896               0.78846154             1.00000000 -0.374502748
+897               0.78846154             1.00000000 -0.374502748
+898               0.78846154             1.00000000 -0.374502748
+899               0.78846154             1.00000000 -0.374502748
+900               0.78846154             1.00000000 -0.374502748
+901               0.80769231             1.00000000 -0.541031137
+902               0.80769231             1.00000000 -0.541031137
+903               0.80769231             1.00000000 -0.541031137
+904               0.80769231             1.00000000 -0.541031137
+905               0.80769231             1.00000000 -0.541031137
+906               0.80769231             1.00000000 -0.541031137
+907               0.80769231             1.00000000 -0.541031137
+908               0.80769231             1.00000000 -0.541031137
+909               0.80769231             1.00000000 -0.541031137
+910               0.80769231             1.00000000 -0.541031137
+911               0.82692308             1.00000000 -0.579169371
+912               0.82692308             1.00000000 -0.579169371
+913               0.82692308             1.00000000 -0.579169371
+914               0.82692308             1.00000000 -0.579169371
+915               0.82692308             1.00000000 -0.579169371
+916               0.82692308             1.00000000 -0.579169371
+917               0.82692308             1.00000000 -0.579169371
+918               0.82692308             1.00000000 -0.579169371
+919               0.82692308             1.00000000 -0.579169371
+920               0.82692308             1.00000000 -0.579169371
+921               0.84615385             1.00000000 -0.663875135
+922               0.84615385             1.00000000 -0.663875135
+923               0.84615385             1.00000000 -0.663875135
+924               0.84615385             1.00000000 -0.663875135
+925               0.84615385             1.00000000 -0.663875135
+926               0.84615385             1.00000000 -0.663875135
+927               0.84615385             1.00000000 -0.663875135
+928               0.84615385             1.00000000 -0.663875135
+929               0.84615385             1.00000000 -0.663875135
+930               0.84615385             1.00000000 -0.663875135
+931               0.86538462             1.00000000 -0.692979919
+932               0.86538462             1.00000000 -0.692979919
+933               0.86538462             1.00000000 -0.692979919
+934               0.86538462             1.00000000 -0.692979919
+935               0.86538462             1.00000000 -0.692979919
+936               0.86538462             1.00000000 -0.692979919
+937               0.86538462             1.00000000 -0.692979919
+938               0.86538462             1.00000000 -0.692979919
+939               0.86538462             1.00000000 -0.692979919
+940               0.86538462             1.00000000 -0.692979919
+941               0.88461538             1.00000000 -0.705828762
+942               0.88461538             1.00000000 -0.705828762
+943               0.88461538             1.00000000 -0.705828762
+944               0.88461538             1.00000000 -0.705828762
+945               0.88461538             1.00000000 -0.705828762
+946               0.88461538             1.00000000 -0.705828762
+947               0.88461538             1.00000000 -0.705828762
+948               0.88461538             1.00000000 -0.705828762
+949               0.88461538             1.00000000 -0.705828762
+950               0.88461538             1.00000000 -0.705828762
+951               0.90384615             1.00000000 -1.118823373
+952               0.90384615             1.00000000 -1.118823373
+953               0.90384615             1.00000000 -1.118823373
+954               0.90384615             1.00000000 -1.118823373
+955               0.90384615             1.00000000 -1.118823373
+956               0.90384615             1.00000000 -1.118823373
+957               0.90384615             1.00000000 -1.118823373
+958               0.90384615             1.00000000 -1.118823373
+959               0.90384615             1.00000000 -1.118823373
+960               0.90384615             1.00000000 -1.118823373
+961               0.92307692             1.00000000 -1.161975015
+962               0.92307692             1.00000000 -1.161975015
+963               0.92307692             1.00000000 -1.161975015
+964               0.92307692             1.00000000 -1.161975015
+965               0.92307692             1.00000000 -1.161975015
+966               0.92307692             1.00000000 -1.161975015
+967               0.92307692             1.00000000 -1.161975015
+968               0.92307692             1.00000000 -1.161975015
+969               0.92307692             1.00000000 -1.161975015
+970               0.92307692             1.00000000 -1.161975015
+971               0.94230769             1.00000000 -1.207882222
+972               0.94230769             1.00000000 -1.207882222
+973               0.94230769             1.00000000 -1.207882222
+974               0.94230769             1.00000000 -1.207882222
+975               0.94230769             1.00000000 -1.207882222
+976               0.94230769             1.00000000 -1.207882222
+977               0.94230769             1.00000000 -1.207882222
+978               0.94230769             1.00000000 -1.207882222
+979               0.94230769             1.00000000 -1.207882222
+980               0.94230769             1.00000000 -1.207882222
+981               0.96153846             1.00000000 -1.596569499
+982               0.96153846             1.00000000 -1.596569499
+983               0.96153846             1.00000000 -1.596569499
+984               0.96153846             1.00000000 -1.596569499
+985               0.96153846             1.00000000 -1.596569499
+986               0.96153846             1.00000000 -1.596569499
+987               0.96153846             1.00000000 -1.596569499
+988               0.96153846             1.00000000 -1.596569499
+989               0.96153846             1.00000000 -1.596569499
+990               0.96153846             1.00000000 -1.596569499
+991               0.98076923             1.00000000 -1.792782235
+992               0.98076923             1.00000000 -1.792782235
+993               0.98076923             1.00000000 -1.792782235
+994               0.98076923             1.00000000 -1.792782235
+995               0.98076923             1.00000000 -1.792782235
+996               0.98076923             1.00000000 -1.792782235
+997               0.98076923             1.00000000 -1.792782235
+998               0.98076923             1.00000000 -1.792782235
+999               0.98076923             1.00000000 -1.792782235
+1000              0.98076923             1.00000000 -1.792782235
+1001              1.00000000             1.00000000 -1.854328964</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  PANEL COORD group       AUC
+1     1     1    -1 0.8549679</code></pre>
+</div>
+</div>
+</div></div>
+<div class="cell">
+<style type="text/css">
+.remark-code{line-height: 1.5; font-size: 120%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+</style>
+</div>
+
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="temp_copied_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="temp_copied_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="temp_copied_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="temp_copied_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="temp_copied_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="temp_copied_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="temp_copied_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="temp_copied_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="temp_copied_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="temp_copied_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: false,
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>

@@ -1,0 +1,336 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+library(tidymodels)
+
+set.seed(27)
+
+centers <- tibble(
+  cluster = factor(1:3), 
+  num_points = c(100, 150, 50),  # number points in each cluster
+  x1 = c(5, 0, -3),              # x1 coordinate of cluster center
+  x2 = c(-1, 1, -2)              # x2 coordinate of cluster center
+)
+
+labelled_points <- 
+  centers %>%
+  mutate(
+    x1 = map2(num_points, x1, rnorm),
+    x2 = map2(num_points, x2, rnorm)
+  ) %>% 
+  select(-num_points) %>% 
+  unnest(cols = c(x1, x2))
+
+ggplot(labelled_points, aes(x1, x2, color = cluster)) +
+  geom_point(alpha = 0.3)
+
+
+points <- 
+  labelled_points %>% 
+  select(-cluster)
+
+kclust <- kmeans(points, centers = 3)
+kclust
+
+augment(kclust, points)
+tidy(kclust)
+
+data_prep <- penguins |> 
+  select(bill_length_mm, bill_depth_mm) |> 
+  remove_missing() 
+
+data_prep |>
+  kmeans(centers = 3) |> 
+  augment(data_prep) |> 
+  ggplot() + 
+  aes(bill_length_mm, bill_depth_mm) + 
+  geom_point() + 
+  aes(color = .cluster)
+
+
+
+compute_panel_kmeans <- function(data, scales, centers = 3, seed = 1234){
+  
+  set.seed(seed)
+  
+  data_prep <- data |> 
+    mutate(row_id = row_number()) |>
+    select(x, y) |> 
+    remove_missing() 
+  
+  # unmodeled <- data |> # do this more carefully
+  #   select(-x, -y) |> 
+  #   slice(data_prep$row_id)
+
+  data_prep |>
+  kmeans(centers = centers) |> 
+  augment(data_prep) #|>
+  # bind_cols(unmodeled)
+  
+}
+
+penguins |> 
+  select(x = bill_length_mm, y = bill_depth_mm) |> 
+  compute_panel_kmeans()
+
+
+compute_panel_kmeans_tidy <- function(data, scales, centers = 3, seed = 1234){
+  
+  set.seed(seed)
+  
+  data_prep <- data |> 
+    mutate(row_id = row_number()) |>
+    select(x, y) |> 
+    remove_missing() 
+  
+  # unmodeled <- data |> # do this more carefully
+  #   select(-x, -y) |> 
+  #   slice(data_prep$row_id)
+
+  data_prep |>
+  kmeans(centers = centers) |> 
+  tidy() |> 
+  rename(.size = size) #|>
+  # bind_cols(unmodeled)
+  
+}
+```
+
+
+```{r}
+compute_panel_kmeans_lengths <- function(data, scales, centers = 3, seed = 1234){
+  
+  set.seed(seed)
+  
+  data_prep <- data |> 
+    mutate(row_id = row_number()) |>
+    select(x, y) |> 
+    remove_missing() 
+  
+  # unmodeled <- data |> # do this more carefully
+  #   select(-x, -y) |> 
+  #   slice(data_prep$row_id)
+
+  kmeaned <- data_prep |>
+    kmeans(centers = centers)
+  
+  points <- kmeaned |> 
+  augment(data_prep) #|>
+  # bind_cols(unmodeled)
+  
+  kmeaned |> 
+  tidy() |> 
+  rename(.size = size) |>
+  rename(.cluster = cluster) |>
+  rename(xend = x, yend = y) |>
+  right_join(points)
+  
+}
+
+
+StatKmeansSegments <- ggproto("StatKmeansSegments", Stat,
+                              compute_panel = compute_panel_kmeans_lengths,
+                              default_aes = aes(color = after_stat(.cluster)))
+
+geom_kmeans_lengths <- make_constructor(GeomSegment, stat = StatKmeansSegments)
+
+penguins |> 
+  remove_missing() |>
+  select(x = bill_length_mm, y = bill_depth_mm) |> 
+  compute_panel_kmeans_tidy()
+
+penguins_clean <- penguins |> 
+  remove_missing()
+
+penguins_clean |> 
+  ggplot() + 
+  aes(x = bill_length_mm, 
+      y = bill_depth_mm) + 
+  geom_kmeans_lengths() + 
+  geom_point()
+
+```
+
+
+```{r}
+
+StatKmeans <- ggproto("StatKmeans", Stat,
+                      compute_panel = compute_panel_kmeans,
+                      default_aes = aes(color = after_stat(.cluster)))
+
+geom_kmeans <- make_constructor(GeomPoint, stat = StatKmeans)
+
+StatKmeansCenters <- ggproto("StatKmeansCenters", Stat,
+                      compute_panel = compute_panel_kmeans_tidy)
+
+GeomPointX <- ggproto("GeomPointX", GeomPoint,
+                      default_aes = GeomPoint$default_aes |> 
+                        modifyList(aes(shape = 13, size = 7), 
+                                   keep.null = T)
+                      )
+
+geom_kmeans_center <- make_constructor(GeomPointX, stat = StatKmeansCenters)
+
+
+penguins_clean <- penguins |>
+  remove_missing() 
+
+penguins_clean |> 
+  ggplot() + 
+  aes(bill_length_mm, bill_depth_mm) + 
+  geom_point() 
+
+last_plot() + 
+  geom_kmeans()
+
+last_plot() +
+  geom_kmeans_center()
+```
+
+
+
+```{r}
+penguins_clean |> 
+  ggplot() + 
+  aes(bill_length_mm, bill_depth_mm) + 
+  geom_point() + 
+  aes(color = species)
+
+penguins_clean |> 
+  ggplot() + 
+  aes(bill_length_mm, bill_depth_mm) + 
+  geom_kmeans(centers = 2) +
+  geom_kmeans_center(centers = 2)
+
+penguins_clean |> 
+  ggplot() + 
+  aes(bill_length_mm, bill_depth_mm) + 
+  geom_kmeans(centers = 3) +
+  geom_kmeans_center(centers = 3)
+
+library(tictoc)
+tic()
+
+penguins_clean |> 
+  ggplot() + 
+  aes(bill_length_mm, bill_depth_mm) + 
+  geom_kmeans(centers = 4) +
+  geom_kmeans_center(centers = 4)
+
+toc()
+
+penguins_clean |> 
+  ggplot() + 
+  aes(bill_length_mm, bill_depth_mm) + 
+  geom_kmeans(centers = 5) +
+  geom_kmeans_center(centers = 5)
+
+```
+
+
+
+```{r}
+
+PAIR_code_umap_mammoth_url <- "https://raw.githubusercontent.com/PAIR-code/understanding-umap/refs/heads/master/raw_data/mammoth_3d.json"
+
+library(ggdims)
+library(tictoc)
+
+
+
+mammoth_df <- PAIR_code_umap_mammoth_url |>
+  jsonlite::fromJSON() |>
+  as.data.frame() 
+
+tic()
+
+ mammoth_df |> 
+  ggplot() + 
+  aes(V1, V2) + 
+  geom_kmeans(centers = 4) +
+  geom_kmeans_center(centers = 4)
+
+toc() 
+```
+
+
+```{r}
+mammoth_df |> 
+  ggplot() + 
+  aes(V1, V2) + 
+  geom_kmeans(centers = 4) +
+  geom_kmeans_lengths(centers = 4,
+    linewidth = .2, alpha = .2) + 
+  geom_kmeans_center(centers = 4)
+
+layer_three <- layer_data(i = 3)
+
+last_plot() +
+  ggforce::geom_voronoi_segment(data = layer_three,  # geom_kmeans_partitian
+                                aes(x = x, 
+                                    y = y)) +
+  ggforce::geom_voronoi_tile(data = layer_three |> rename(.cluster = cluster),
+                                aes(x = x, 
+                                    y = y,
+                                    fill = .cluster))
+
+
+library(ggplot2)
+library(ggforce)
+# Set a max radius
+ggplot(iris, 
+       aes(Sepal.Length, Sepal.Width, group = -1L)) +
+  geom_voronoi_tile(aes(fill = Species), 
+                    colour = 'black', max.radius = 0.25)
+
+
+```
+
+
+```{r, eval = F}
+library(tidyverse)
+
+ind_complete <- complete.cases(penguins)
+
+penguins |> 
+  select(bill_len, bill_dep) |> 
+  filter(ind_complete) |>
+  kmeans(centers = 4) |>
+  broom::tidy()
+
+penguins |> 
+  select(bill_len, bill_dep) |> 
+  filter(ind_complete) |>
+  kmeans(centers = 4) |>
+  broom::augment(
+    penguins |> 
+      filter(ind_complete)
+    )
+
+
+```
+
+
+## Closing remarks, Other Relevant Work, Caveats

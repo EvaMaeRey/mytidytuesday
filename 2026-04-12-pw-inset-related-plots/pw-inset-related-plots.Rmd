@@ -1,0 +1,108 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+library(patchwork)
+
+p0 <- ggplot()
+
+p <- ggplot(cars) + 
+  aes(x = speed)
+
+inset_center <- function(plot, x = .5, y = .5, width = .25, height = .25){
+  
+  inset_element(plot, 
+                left = x - .5*width, 
+                right = x + .5*width, 
+                top = y + .5*height,
+                bottom = y - .5*height, 
+                align_to = 'full')
+  
+}
+
+p0 + inset_center(p)
+
+
+inset_around <- function(plot, angle = 360, r = .35, x0 = .5, y0 = .5, width = .25, height = width){
+  
+  radians <- angle*pi/180
+  
+  inset_element(plot, 
+               left = x0 + cos(radians)*r - .5 * width,
+               right = x0 + cos(radians)*r + .5 * width,
+               top = y0 + sin(radians)*r + .5 * width,,
+               bottom = y0 + sin(radians)*r - .5 * width,
+               align_to = 'full')
+  
+}
+
+p <- ggplot(mtcars) + 
+  aes(x = mpg) + 
+  geom_rug()
+
+
+around <- 360/5*1:5
+
+ggplot() + 
+  inset_around(p, r = 0, width = .4) + labs(
+    subtitle = "Base plot: \np <- ggplot(mtcars)\n   + aes(x = mpg)\n   + geom_rug()\n") +
+  inset_around(p + geom_density()) + labs(subtitle = "p + geom_density()\n") +
+  inset_around(p + geom_area(stat = "count"), 90) + labs(subtitle = "p + geom_area(stat = 'count')\n") +
+  inset_around(p + geom_histogram(), 180) + labs(subtitle = "p + geom_histogram()\n") +
+  inset_around(p + geom_freqpoly(), 45, r = .4) + labs(subtitle = "p + geom_freqpoly()\n") +
+  inset_around(p + geom_dotplot(), 270) + labs(subtitle = "+ geom_dotplot()\n") +
+  plot_annotation(title = "Univariate Continuous\n") &
+  theme_void(ink = "steelblue", paper = "grey99") &
+  theme(panel.grid = element_line(linewidth = .05), 
+        plot.margin = margin(10,10,10,10,unit = "pt"),
+        plot.background = element_rect(color = "steelblue", linewidth = .1)) 
+  
+
+ggplot(cars) + 
+  aes(x = speed) + 
+  geom_rug() + 
+  aes(y = dist) +
+  geom_point() + 
+  aes(color = speed) + 
+  scale_color_viridis_c() +
+  theme_minimal(paper = "whitesmoke", ink = "steelblue4")
+
+
+
+
+
+
+
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

@@ -45,6 +45,48 @@ usmapdata::us_map() |>
 
 girafe(ggobj = last_plot())
 
+
+usa_ref <- usmapdata::us_map() |> 
+  select(state_name = full,
+         state_abb = abbr,
+         geometry = geom,
+         everything())
+
+geom_state <- ggregions::write_geom_region_locale(usa_ref)
+
+geom_state
+
+state.name |>
+  data.frame(state = _) |>
+  mutate(ind_vowel = str_detect(state, "^[AEIOU]")) |>
+  ggplot() + 
+  aes(state_name = state, 
+      fill = ind_vowel,
+      tooltip = state ) + 
+  ggiraph::geom_sf_interactive(stat = ggregions:::StatRegion, 
+                               ref_data = usa_ref)
+
+geom_state_interactive <- function(...){    
+  
+  list(ggiraph::geom_sf_interactive(stat = ggregions:::StatRegion, 
+                               ref_data = usa_ref),
+    coord_sf(crs = ggregions:::st_crs_mod(usa_ref)))
+  
+  }
+
+
+state.name |>
+  data.frame(state = _) |>
+  mutate(ind_vowel = str_detect(state, "^[AEIOU]")) |>
+  ggplot() + 
+  aes(state_name = state, 
+      fill = ind_vowel,
+      tooltip = state ) +
+  geom_state_interactive()
+
+
+girafe(ggobj = last_plot())
+
 ```
 
 

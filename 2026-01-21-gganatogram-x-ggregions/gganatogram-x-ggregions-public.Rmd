@@ -8,7 +8,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, dev = "ragg_png", message = F, warning = F)
+knitr::opts_chunk$set(echo = TRUE, dev = "ragg_png", message = F, warning = F, dpi = 300)
 options(tidyverse.quiet = TRUE)
 
 ```
@@ -78,11 +78,13 @@ caries_ratios |>
   aes(tooth = tooth, 
       fill = ratio) + 
   geom_tooth(alpha = .5) + 
-  stamp_tooth_text(size = 2)
+  stamp_tooth_text(size = 2) +
+  scale_fill_viridis_c()
 ```
 
 
 ```{r}
+library(ggplot2)
 
 "
 library(teethr)
@@ -93,7 +95,7 @@ caries_ratios |>
       fill = ratio) + 
   geom_tooth(alpha = .5) + #<<
   stamp_tooth_text(size = 1.5) + #<<
-  scale_fill_viridis()" |>
+  scale_fill_viridis_c()" |>
   ggram::ggram(code = _,
                # title = "🚧🧫🚧🔬🚧🧪🚧🧫🚧🔬🚧🧪🚧🧫🚧🔬🚧🧪🚧🧫🚧🔬🚧🧪🚧🧫🚧🔬🚧🧪🚧🧫🚧🔬🚧🧪🚧",
                subtitle =  "🚧🧫🚧🔬🚧🧪 Checking out caries ratios in this amazing {teethr} tooth arcade... Uh-oh LLM1!",

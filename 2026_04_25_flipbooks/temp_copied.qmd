@@ -1,0 +1,62 @@
+---
+format: revealjs
+editor: source
+---
+
+
+
+```{r, include = F}
+options(knitr.duplicate.label = "allow")
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F)
+library(flipbookr)
+library(tidyverse)
+load("current_image.Rdata")
+```
+
+
+
+```{r the_chunk, include = F}
+library(tidyverse)
+library(plotROC)
+
+D.ex <- rbinom(50, 1, .5)
+
+data.frame(D = c(D.ex, D.ex)) |> 
+  mutate(M = c(rnorm(50, mean = D.ex, sd = .4), 
+               rnorm(50, mean = D.ex, sd = 1)),
+         Z = c(rep("A", 50), rep("B", 50))) |> 
+  ggplot() + 
+  aes(m = M, d = D) +
+  geom_roc() + 
+  aes(color = Z) ->
+ggroc2
+
+calc_auc(ggroc2) |> tibble()
+```
+
+`r chunq_reveal(chunk_name = "the_chunk", break_type = "auto")`
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 120%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+

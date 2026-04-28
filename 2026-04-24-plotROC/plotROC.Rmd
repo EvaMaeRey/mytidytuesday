@@ -1,0 +1,57 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = T)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+library(plotROC)
+
+x <- rnorm(30000)
+
+D.ex <- rbinom(50, 1, .5)
+
+data.frame(D = c(D.ex, D.ex)) |> 
+  mutate(M = c(rnorm(50, mean = D.ex, sd = .4), 
+               rnorm(50, mean = D.ex, sd = 1)),
+         Z = c(rep("A", 50), rep("B", 50))) |> 
+  ggplot() + 
+  aes(m = M, d = D) +
+  geom_roc() + 
+  aes(color = Z)
+
+calc_auc(last_plot()) 
+
+last_plot() +
+  stat_roc(geom = GeomArea, 
+           aes(fill = after_scale(alpha(color, .2)))
+           )
+
+calc_auc(last_plot())
+
+last_plot() + 
+  facet_wrap(~ Z) 
+
+calc_auc(last_plot())
+
+```
+
+
+
