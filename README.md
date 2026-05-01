@@ -941,7 +941,7 @@ new_experiment_rmd <- function(name){
 
 }   
 
-new_experiment_rmd(name = "plotROC")
+new_experiment_rmd(name = "bivariate-for-class")
 ```
 
 ``` r

@@ -1,0 +1,333 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(ggregions)
+library(tidyverse)
+
+# ref data as usual
+ref_data_us <- usmapdata::us_map() |> 
+  select(state_name = full, state_abbr = abbr, state_fips = fips, geometry = geom)
+
+ref_data <- ref_data_us
+  
+data0 <- ref_data_us |> sf::st_drop_geometry() 
+data0$standard <- data0[,1]
+data0 |> pivot_longer(cols = -standard)
+
+
+
+compute_panel_regions <- function (data, scales, ref_data, keep = NULL, drop = NULL, stamp = F) {
+  
+    ref_data$id <- ref_data[1][[1]]
+    
+    if (!is.null(keep)) {
+        ref_data <- dplyr::filter(ref_data, id %in% keep)
+    }
+    
+    if (!is.null(drop)) {
+        ref_data <- dplyr::filter(ref_data, !(id %in% drop))
+    }
+    
+    if (!stamp) {
+    
+          ref_data_long <- ref_data |> pivot_longer(cols = -c(geometry, id), names_to = ".id_type", values_to = "region")
+
+          # check unique
+          length(ref_data_long$region) == length(unique(ref_data_long$region))
+    
+          ref_data_long <- ggplot2::StatSfCoordinates$compute_group(
+      
+          ggplot2::StatSf$compute_panel(ref_data_long, coord = ggplot2::CoordSf), coord = ggplot2::CoordSf)
+        
+          out <- dplyr::inner_join(ref_data_long, data, by = join_by(region)) #|> 
+          
+          ref_data |> sf::st_drop_geometry() |>
+            inner_join(out, by = join_by(id))
+          
+    }
+    
+    else {
+      
+        ref_data |> mutate(region = 1)
+      
+    }
+    
+}
+
+StatRegion <- ggproto("StatRegion", Stat,
+                      compute_panel = compute_panel_regions,
+                      default_aes = aes(label = after_stat(region)))
+
+data.frame(region = c("Texas", "IN", "CO", "Washington")) |> 
+  compute_panel_regions(ref_data = ref_data_us)
+
+
+ref_data_us |> 
+  sf::st_drop_geometry() |> 
+  sample_n(5) |>
+  ggplot() + 
+    aes(region = state_abbr) + 
+    geom_sf(stat = StatRegion, 
+            ref_data = ref_data_us)
+```
+
+
+
+
+
+
+```{r}
+geom_region <- function (mapping = aes(), data = NULL, stat = StatRegion, position = "identity", 
+    na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ref_data = getOption("ggregions.ref.data", ref_data_us), ...) 
+{
+    c(layer_sf(geom = GeomSf, data = data, mapping = mapping, 
+        stat = stat, position = position, show.legend = show.legend, 
+        inherit.aes = inherit.aes, params = rlang::list2(na.rm = na.rm, ref_data = ref_data,
+            ...)), coord_sf(default = TRUE, default_crs = sf::st_crs(ref_data))
+      )
+}
+
+
+
+stamp_region <- function (mapping = aes(), data = NULL, stat = StatRegion, position = "identity", 
+    na.rm = FALSE, show.legend = NA, inherit.aes = FALSE, ref_data = getOption("ggregions.ref.data", ref_data_us), stamp = TRUE, ...) 
+{
+    c(layer_sf(geom = GeomSf, data = data, mapping = mapping, 
+        stat = stat, position = position, show.legend = show.legend, 
+        inherit.aes = inherit.aes, params = rlang::list2(na.rm = na.rm, ref_data = ref_data, stamp = stamp,
+            ...)), coord_sf(default = TRUE, default_crs = sf::st_crs(ref_data))
+      )
+}
+
+
+GeomSfBorder <- ggproto("GeomSfBorder", GeomSf, 
+                        default_aes = GeomSf$default_aes |>
+                          modifyList(
+                          aes(fill = "transparent", 
+                              linewidth = from_theme(linewidth*1.5)), keep.null = T)) 
+
+geom_region_border <- function (mapping = aes(), data = NULL, stat = StatRegion, position = "identity", 
+    na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ref_data = getOption("ggregions.ref.data", ref_data_us), ...) 
+{
+    c(layer_sf(geom =  GeomSfBorder, data = data, mapping = mapping, 
+        stat = stat, position = position, show.legend = show.legend, 
+        inherit.aes = inherit.aes, params = rlang::list2(na.rm = na.rm, ref_data = ref_data,
+            ...)), coord_sf(default = TRUE, default_crs = sf::st_crs(ref_data))
+      )
+}
+
+
+geom_region_text <- function (mapping = aes(), data = NULL, stat = StatRegion, position = "identity", 
+    na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ref_data = getOption("ggregions.ref.data", ref_data_us), ...) 
+{
+    c(layer_sf(geom = GeomText, data = data, mapping = mapping, 
+        stat = stat, position = position, show.legend = show.legend, 
+        inherit.aes = inherit.aes, params = rlang::list2(na.rm = na.rm, ref_data = ref_data,
+            ...)), coord_sf(default = TRUE, default_crs = sf::st_crs(ref_data))
+      )
+}
+
+
+geom_region_label <- function (mapping = aes(), data = NULL, stat = StatRegion, position = "identity", 
+    na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ref_data = getOption("ggregions.ref.data", ref_data_us), ...) 
+{
+    c(layer_sf(geom = GeomLabel, data = data, mapping = mapping, 
+        stat = stat, position = position, show.legend = show.legend, 
+        inherit.aes = inherit.aes, params = rlang::list2(na.rm = na.rm, ref_data = ref_data,
+            ...)), coord_sf(default = TRUE, default_crs = sf::st_crs(ref_data))
+      )
+}
+  
+
+
+options(ggregions.ref.data = ref_data_us)
+
+
+tribble(~state_id, ~color,
+        "Texas", "green",
+        "IN", "pink",
+        "CO", "yellow",
+        "Washington", "plum") |>
+  ggplot() + 
+  aes(region = state_id) + 
+  geom_region() + 
+  aes(fill = I(color)) + 
+  geom_region_text()
+
+
+
+tribble(~state_id,    ~color,
+        "Texas",      "green",
+        "IN",         "pink",
+        "CO",         "yellow",
+        "Washington", "plum",
+        "NC",         "plum4") |>
+  ggplot() + 
+  aes(region = state_id) + 
+  geom_region() + 
+  aes(fill = I(color)) + 
+  geom_region_label(fill = "white") + 
+  geom_region_label(aes(label = color)) +
+  geom_region_label(aes(label = after_stat(state_abbr)))
+
+
+
+data.frame(state = state.abb) |> 
+  sample_n(5) |>
+  ggplot() + 
+  aes(region = state) + 
+  geom_region() + 
+  aes(fill = state) + 
+  geom_region_label(fill = "white")
+  
+last_plot() +
+  geom_region_label(aes(label = after_stat(state_name)))
+
+
+lubridate::wday
+
+
+getOption(x = "lubridate.week.start", 
+          default = 7)
+
+options(lubridate.week.start = 7)
+
+
+ref_countries <- rnaturalearth::ne_countries() |> select(sovereignt, iso_a2, iso_a3, iso_n3) 
+
+options(ggregions.ref.data = ref_countries)
+
+
+tribble(~country, ~vetoed,
+        "United Kingdom", F,
+        "United States of America", T,
+        "Russia", T,
+        "China", T,
+        "France", F) |> 
+  ggplot() + 
+  aes(region = country) + 
+  stamp_region(drop = "Antarctica") +
+  geom_region(aes(fill = vetoed) ) + 
+  coord_sf(crs = "+init=epsg:4326") +
+  geom_region_border(color = "goldenrod2")
+
+
+
+
+```
+
+```{r}
+
+library(WDI)
+df <- WDI(indicator = "NY.GDP.MKTP.CD", start = 2022, end = 2022, extra = T)
+
+df |>
+  filter(year == 2022) |>
+  ggplot() + 
+  aes(region = iso3c) + 
+  geom_region() + 
+  aes(fill = NY.GDP.MKTP.CD |> log10()) + 
+  scale_fill_viridis_c() 
+
+
+```
+
+## Experiment
+
+```{r}
+to_sf_routine <- function(data){
+  
+  data |>
+  mutate(y = -y) |>
+  sf::st_as_sf(coords = c("x", "y"), agr = "constant") |>
+  group_by(id, group) |>
+  summarize(do_union = F) |> 
+  ungroup() |> 
+  group_by(id, group) |>
+  summarise() |>
+  mutate(geometry = geometry |> sf::st_cast("POLYGON")) |> 
+  mutate(geometry = geometry |> sf::st_cast("MULTIPOLYGON")) |> 
+  ungroup() 
+  
+}
+
+female_sf <- gganatogram::hgFemale_list[c(1:156, 180:195)] |> # return to this!!
+  bind_rows() |>
+  remove_missing() |>
+  to_sf_routine() |> 
+  select(organ = id, geometry)
+
+options(ggregions.ref.data = female_sf)
+
+
+tribble(~my_organ, ~color,   
+        "stomach", "cadetblue",
+        "brain",   "pink3",
+        "colon",   "darkseagreen4",
+        "lung",    "plum",
+        "heart",    "coral") |> 
+ggplot() + 
+  stamp_region(alpha = .2) +
+  aes(region = my_organ) +
+  geom_region() +
+  aes(fill = I(color)) + 
+  geom_region_text()
+
+```
+
+
+
+```{r, eval = F}
+library(teethr)
+
+caries_ratios <- mb11_caries %>% 
+  dental_longer(-id) %>%
+  dental_join() %>% 
+  count_caries(caries = score, no_lesion = "none") %>% # convert location to lesion count
+  group_by(tooth) %>% 
+  dental_ratio(count = caries_count) %>%
+  dental_recode(tooth, "FDI", "text") 
+
+
+teethr::dental_arcade_mapping |> 
+  as_tibble() |> 
+  left_join(teethr::tooth_notation |> rename(tooth = text)) |>
+  select(tooth_id = tooth, fdi = FDI, standard = standards, geometry) ->
+teeth_ref_data
+
+options(ggregions.ref.data = teeth_ref_data)
+
+caries_ratios |>
+  ggplot() + 
+  aes(region = tooth) + 
+  geom_region() +
+  geom_region_text(size = 4) +
+  aes(fill = ratio) + 
+  scale_fill_viridis_c() + NULL
+  # geom_region_border(color = "hotpink")
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
