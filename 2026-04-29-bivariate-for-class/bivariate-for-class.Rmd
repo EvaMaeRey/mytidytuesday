@@ -40,8 +40,12 @@ data_hospital_nurse |>
 
 layer_data(i = 2) |> 
   pull(x) |> 
-  range()
+  range() 
   
+
+data_yawning <- read_delim("https://www.isi-stats.com/isi/data/chap5/Yawning.txt", skip = 1) |> 
+  rename(treatment = Seeded, observed = Yawn) |>
+  mutate(observed = ifelse(observed == "Yawn", "Yawn (1)", "No Yawn (0)"))
 
   
 "https://www.isi-stats.com/isi/data/chap5/Dolphin.txt"

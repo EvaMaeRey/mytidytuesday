@@ -175,6 +175,33 @@ tribble(~state_id, ~color,
   geom_region_text()
 
 
+tribble(~state,     ~ind_derby,
+        "Kentucky",       TRUE,
+        "Florida",       FALSE,
+        "Michigan",      FALSE,
+        "Rhode Island",  FALSE,
+        "Colorado",      FALSE,
+        "California",    FALSE) |> 
+  ggplot() + 
+  aes(region = state) + 
+  stamp_region() + 
+  geom_region() + 
+  aes(fill = ind_derby)
+
+
+tribble(~state,     ~ind_derby,
+        "Kentucky",       TRUE,
+        "Florida",       FALSE,
+        "Michigan",      FALSE,
+        "Rhode Island",  FALSE,
+        "Colorado",      FALSE,
+        "California",    FALSE) |> 
+  ggplot() + 
+  aes(x = state, y = ind_derby) + 
+  geom_col() + 
+  aes(fill = ind_derby)
+
+
 
 tribble(~state_id,    ~color,
         "Texas",      "green",

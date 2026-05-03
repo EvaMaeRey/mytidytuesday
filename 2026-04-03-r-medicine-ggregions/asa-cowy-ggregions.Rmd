@@ -1,0 +1,614 @@
+---
+title: "Spring 2026 Slides"
+author: "Evangeline 'Gina' Reynolds"
+output:
+  xaringan::moon_reader:
+    seal: FALSE
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r setup, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F, dpi = 300, dev = "ragg_png")
+library(flipbookr)
+library(tidyverse)
+options(tidyverse.quiet = TRUE)
+```
+
+
+class: inverse, bottom
+background-image: url(https://images.unsplash.com/photo-1588591795084-1770cb3be374?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)
+background-size: cover
+
+## .large[R Medicine 2026: ggregions for building intuitive coding interfaces for anatomical visualizations]
+## .small[]
+#### .tiny[Dr. Evangeline Reynolds | `r Sys.Date()` | DU, Image credit: Ross Sneddon, Upsplash]
+
+
+???
+
+Title slide
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, fig.height = 4.5, message = FALSE, warning = FALSE, comment = "", cache = T)
+library(flipbookr)
+library(ggplot2)
+library(ggregions)
+```
+
+
+---
+class: inverse
+
+# Motivations for ggregions
+
+> ### I am told there are people who do not care for maps, and I find it hard to believe. - Robert Louis Stevenson
+
+--
+
+> ### 'My teacher, Mr. Jayson, says a map is a picture of someplace from above.  It's like flying over that spot in an airplane.' - 'Lisa' in Loreen Leedy's in 'Mappying Penny's World'
+
+---
+
+# But ...
+
+> ### I hate when I work with spatial data that so much of my mindshare goes to thinking about 'how do I wrangle this map and what on earth is going on' versus the actual meaning behind what I'm trying to map. - Emily Riederer
+
+
+---
+class: inverse
+
+
+--
+
+## There is great support for mapping in R and in the data visualization library {ggplot2} which supports many R packages.  
+
+--
+
+## But, producing a simple map, like a choropleth, can feel much harder than producing other plots, like a scatterplot for example in ggplot2. 
+
+
+
+```{r, include = F}
+library(dplyr)
+
+# Step 1. prep some of their geo reference data
+usmapdata::us_map() |>
+  select(state_name = full, 
+         state_abbr = abbr,
+         state_fips = fips,
+         geometry = geom) ->
+us_states_ref
+```
+
+
+```{r geom_state, echo = F}
+# Step 2. use `write_geom_region`
+
+#' @export
+geom_state <- write_geom_region(us_states_ref)
+
+#' @export
+stamp_state <- write_stamp_region(us_states_ref)
+
+#' @export
+geom_state_text <- write_geom_region_text(us_states_ref)
+
+#' @export
+stamp_state_text <- write_stamp_region_text(us_states_ref)
+```
+
+
+
+---
+
+`r chunk_reveal("classic_v_semantic")`
+
+```{r classic_v_semantic, include=F}
+tribble(~var1, ~var2, ~var3,
+            1,     4,   T,
+            2,     3,   F) |> 
+  ggplot() + 
+  aes(x = var1,
+      y = var2) + 
+  geom_point(size = 4) +
+  aes(color = var3)
+```
+
+---
+
+`r chunk_reveal("semantic")`
+
+```{r semantic, include=F}
+tribble(~place, ~var2,
+       "Texas",     T,
+     "Indiana",     F) |> 
+ggplot() + 
+  aes(state_name = place) + 
+  geom_state() + 
+  aes(fill = var2)
+```
+
+
+
+---
+class: inverse
+
+## Semantic 
+
+--
+
+## Positional 
+
+--
+
+## Encoding 
+
+
+
+---
+class: inverse
+
+## Semantic (*meaning* of words or symbols)
+
+
+
+## Positional 
+
+
+
+## Encoding 
+
+--
+
+
+### 'normal' ggplot2 positional encoding
+
+--
+
+### `aes(x = c(1, 2), y = c(4, 2))`
+
+--
+
+### S.P.E.
+
+--
+
+### `aes(state_name = c("Texas", "Indiana"))`
+
+
+<!-- #### ggregions posits that by investing in methods to easily create new geo-specific ggplot2 layer extensions (geom_*s), producing maps with ggplot2 can become as intuitive as creating other plots. About specifying a map, you might say, 'use this data, draw regions, position and color fill according to var1 and var2.' -->
+
+<!-- The proposed regions mapping might look something like this: -->
+
+
+
+
+
+
+---
+class: inverse, center, middle
+
+# Does {ggregions} deliver?
+
+```{r, eval = T, echo = F}
+us_income <- tidyr::us_rent_income |> 
+  filter(variable == "income") |>
+  rename(income = estimate)
+
+# head(us_income)
+
+library(ggplot2)
+(theme_gray() + 
+  theme(palette.colour.continuous = "magma")) |> 
+  set_theme()
+```
+
+
+
+
+
+
+---
+
+
+`r chunk_reveal("usmapdata0")`
+
+```{r usmapdata0, include = F}
+library(ggplot2)
+
+us_income |> 
+  ggplot() + 
+  aes(state_name = NAME) + 
+  geom_state() + 
+  aes(fill = income)
+```
+
+
+---
+
+
+> ## [ggregions-generated] APIs feels like they actually puts the "question" at the center. - Emily Riederer
+
+---
+class: inverse, center, middle
+
+
+# How does it work?
+
+---
+
+## Effortlessly write new region-specific geom_* functions.
+
+<!-- The {ggregions} allows API creators to quickly create easy-to-use ggplot2 layer extensions (e.g. geom_*()s) that adhere to the ggplot2 'grammar'. -->
+
+
+---
+
+```{r, eval = F, echo = F}
+usethis::create_package(".", check_name = F)
+```
+
+---
+
+
+`r chunk_reveal("us_states_ref", title = "## Example with geographic regions: US states\n\n### Step 1. prepare data")`
+
+
+```{r us_states_ref, include = F}
+library(dplyr)
+
+# Step 1. prep some of their geo reference data
+usmapdata::us_map() |>
+  select(state_name = full, 
+         state_abbr = abbr,
+         state_fips = fips,
+         geometry = geom) ->
+us_states_ref
+```
+
+
+
+
+
+
+---
+
+### Step 2. write user-facing functions with ggregion 'write' utilities
+
+<!-- Then, authors will be able use `write_geom_region()` to create a regions-specific ggplot2 layer, for example `geom_state()` below, which can be made available in their geo packages. -->
+
+```{r}
+library(ggregions)
+
+geom_state <- 
+  write_geom_region(us_states_ref, required_aes = "state_name|state_abbr|state_fips")
+
+stamp_state <- 
+  write_stamp_region(us_states_ref, required_aes = "state_name|state_abbr|state_fips")
+
+geom_state_text <- 
+  write_geom_region_text(us_states_ref, required_aes = "state_name|state_abbr|state_fips")
+
+stamp_state_text <- 
+  write_stamp_region_text(us_states_ref, required_aes = "state_name|state_abbr|state_fips")
+
+```
+
+
+---
+
+### Step 2b. (optional) Inspect user-facing function
+
+```{r}
+geom_state
+```
+
+
+---
+
+#### Steb 2bb (for the truely curious) Inspect StatRegions compute
+
+```{r}
+
+ggregions:::StatRegion$compute_panel
+
+```
+
+---
+
+### What does `ggregions::write_geom_region()` do?
+
+
+```{r}
+ggregions::write_geom_region
+```
+
+--
+
+```{r}
+ggregions:::geom_region
+```
+
+
+
+<!-- ## Deliver intuitive, newcomer-welcoming spatial viz experience -->
+
+<!-- By including the newly specified `geom_` function in their geo data package (perhaps instead or in addition to a convenience wrapper that are typical of geo packages) the package *users* will be able to use the` data + aes + geom` formulation for defining their plots.  Instead of positional aesthetics like x, y or geometry, a region identifier like `state_name` or `fips` can be used.  Internally, the regions `geom_*` will translate between place name or other identifier to the necessary borders (`sfc`s). -->
+
+<!-- Below is some tabular data with geographic region identifiers, but no boundaries: -->
+
+<!-- Even though there is no boundary information, analysts can map this data with the familiar  data + aesthetic mapping + layer syntax that makes ggplot2 easy to read, write, and reason about. -->
+
+
+
+
+---
+
+
+
+
+`r chunk_reveal("usmapdata")`
+
+```{r usmapdata, include = F}
+library(ggplot2)
+library(usmapdata) 
+
+us_income |> 
+  ggplot() + 
+  aes(state_name = NAME) + 
+  geom_state() + 
+  aes(fill = income) +
+  scale_fill_viridis_c(option = "magma") + 
+  geom_state_text(color = "white") + 
+  aes(label = after_stat(state_abbr))
+```
+
+<!-- Packages that might take avantage of ggregion's functionality include -->
+<!-- [afrimapr](https://afrimapr.github.io/afrimapr.website/), [geobr](https://ipeagit.github.io/geobr/), [cancensus](https://mountainmath.github.io/cancensus/index.html), [chilemapas](https://pacha.dev/chilemapas/), [RCzechia](https://github.com/jlacko/RCzechia), [geofi](https://ropengov.github.io/geofi/) -->
+<!-- , [geokz](https://github.com/arodionoff/geokz), [mapsPERU](https://github.com/musajajorge/mapsPERU) and [geoidep](https://geografo.pe/geoidep/index.html), [mapSpain](https://github.com/rOpenSpain/mapSpain/), [geographr](https://github.com/britishredcrosssociety/geographr), [geouy](https://github.com/RichDeto/geouy), [tigris](https://github.com/walkerke/tigris), -->
+<!-- and [rgeoboundaries](https://github.com/wmgeolab/rgeoboundaries). -->
+<!--  Since these geo packages have many users, the impacts of `{ggregions}` could be significant. -->
+
+
+
+
+
+
+---
+class: inverse, center, middle
+
+# Anatomical regions
+
+
+
+---
+
+### ggregions with teethr::dental_arcade_mapping
+
+https://github.com/bbartholdy/teethr
+
+---
+
+### data preparation
+
+```{r}
+teethr::dental_arcade_mapping |> 
+  as_tibble() |> 
+  left_join(teethr::tooth_notation |> rename(tooth = text)) |>
+  select(tooth_id = tooth, fdi = FDI, standard = standards, geometry) ->
+teeth_ref_data
+```
+
+--
+
+
+### ggplot2 'layer' preparation
+
+```{r}  
+library(ggregions)
+geom_tooth <- write_geom_region(teeth_ref_data, required_aes = "tooth_id|fdi|standard")
+geom_tooth_text <- write_geom_region_text(teeth_ref_data, required_aes = "tooth_id|fdi|standard")
+stamp_tooth <- write_stamp_region(teeth_ref_data, required_aes = "tooth_id|fdi|standard")
+stamp_tooth_text <- write_stamp_region_text(teeth_ref_data, required_aes = "tooth_id|fdi|standard")
+```
+
+
+```{r, echo = F}
+library(teethr)
+
+caries_ratios <- mb11_caries %>% 
+  dental_longer(-id) %>%
+  dental_join() %>% 
+  count_caries(caries = score, no_lesion = "none") %>% # convert location to lesion count
+  group_by(tooth) %>% 
+  dental_ratio(count = caries_count) %>%
+  dental_recode(tooth, "FDI", "text") 
+
+```
+
+
+---
+
+`r chunk_reveal("arcade", title = "### yields user-friendly API" )`
+
+
+```{r arcade, include = F}
+caries_ratios |> 
+  ggplot() + 
+  aes(tooth_id = tooth, 
+      fill = ratio) + 
+  geom_tooth(alpha = .5) + 
+  stamp_tooth_text(size = 2) + 
+  scale_fill_viridis_c()
+```
+
+---
+
+
+```{r, echo = F, fig.width= 9, fig.height=5, out.width="65%"}
+
+"
+library(teethr)
+
+caries_ratios |> 
+  ggplot() + 
+  aes(tooth_id = tooth, #<<
+      fill = ratio) + 
+  geom_tooth(alpha = .5) + #<<
+  stamp_tooth_text(size = 1.5) + #<<
+  scale_fill_viridis_c()" |>
+  ggram::ggram(code = _,
+               subtitle =  "🚧🧫🚧🔬🚧🧪 Checking out caries ratios in this amazing {teethr} tooth arcade... Uh-oh LLM1!",
+               caption =   "A {teethr} X {ggregions} experiment: ggregions helps build region-specific geom_*()s")
+
+```
+
+---
+
+## ggregions X gganatogram::hgFemale_list
+
+
+```{r echo = F}
+to_sf_routine <- function(data){
+  
+  data |>
+  mutate(y = -y) |>
+  sf::st_as_sf(coords = c("x", "y"), agr = "constant") |>
+  group_by(id, group) |>
+  summarize(do_union = F) |> 
+  ungroup() |> 
+  group_by(id, group) |>
+  summarise() |>
+  mutate(geometry = geometry |> sf::st_cast("POLYGON")) |> 
+  mutate(geometry = geometry |> sf::st_cast("MULTIPOLYGON")) |> 
+  ungroup() 
+  
+}
+```
+
+### Step 1: Data preparation
+
+
+```{r, error = T, echo = T}
+female_sf <- gganatogram::hgFemale_list[c(1:156, 180:195)] |> # return to this!!
+  bind_rows() |>
+  remove_missing() |>
+  to_sf_routine()
+
+ref_female_sf <- female_sf |> 
+  select(organ = id, geometry)
+```
+
+--
+
+### Step 2: User-facing function preparation
+
+```{r, }  
+library(ggregions)
+stamp_organ <- write_stamp_region(ref_female_sf, required_aes = "organ")
+geom_organ <- write_geom_region(ref_female_sf, required_aes = "organ")
+stamp_organ_text <- write_stamp_region_text(ref_female_sf, required_aes = "organ")
+geom_organ_text <- write_geom_region_text(ref_female_sf, required_aes = "organ")
+```
+
+---
+
+`r chunk_reveal("gganatogram", title = "Enjoy!")`
+
+```{r gganatogram, include = F}
+tribble(~my_organ, ~color,   
+        "stomach", "cadetblue",
+        "brain",   "pink3",
+        "colon",   "darkseagreen4",
+        "lung",    "plum",
+        "heart",    "coral") |> 
+ggplot() + 
+  stamp_organ(alpha = .2) +
+  aes(organ = my_organ) +
+  geom_organ() +
+  aes(fill = I(color)) + 
+  geom_organ_text() + 
+  ggplyr:::data_slice(5)
+```
+
+
+---
+
+
+class: inverse, bottom
+background-image: url(https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcTSNaV2hzHW71ovNcoPji1OZMZBz_EJQxwCRClzMeX-QmKTiP5OpNcMvuIVE7fmgObCuOsrcRLUMUxKG2P2kZSIkrSf8Puhpg)
+background-size: contain
+
+# Thank you!
+github:
+
+## EvaMaeRey/ggregions
+
+
+---
+
+
+
+
+## Unresolved questions for this project:
+
+
+#### 1. Perhaps an *alternative to sf* would make sense for anatomical regions - we don't really anticipate *'crs'* to be specified.  Would allowing another preparation/Stat make sense - polygon-based?  Or just more attention to converting polygons to sf (relates to #3).
+
+--
+
+#### 2. The gganatogram objects bring up the fact that regions *overplot* - the heart is covered by the lungs.  So should there be a way to control the ordering (And Even if there is no regional overlap, overplotting can happen if we have the region more than once in the dataset)
+
+--
+
+#### 3. ggregions' focus is on gg-type, friendly API, *but how much focus should be on preparing reference data.*  The teethr and colon case might help here. 
+
+--
+
+#### 4. ggregions allows you to 'try-on' the ggregions framework (positional aesthetics that are symantic, 'texas' can be the answer to 'where'?).  But, *what if you don't want to take the ggregions dependency?*  Should there be more instruction regarding this?  Licensing considerations? 
+
+--
+
+#### 5. More relevant to the geographic case, it might be useful to allow different resolution of the regions reference data.  How important is addressing this a this point? 
+
+--
+
+#### 6. Can this project strengthen the R ecosystem? Motivation to get into packaging?  How do we make that clearer, and the pathway easier? 
+
+
+<!-- adjust font size in this css code chunk, currently 80 -->
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 70%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+
+```
+
+<!-- code.r.hljs.remark-code{ -->
+<!--   position: relative; -->
+<!--   overflow-x: hidden; -->
+<!-- } -->
+
+
+<!-- code.r.hljs.remark-code:hover{ -->
+<!--   overflow-x:visible; -->
+<!--   width: 500px; -->
+<!--   border-style: solid; -->
+<!-- } -->
+

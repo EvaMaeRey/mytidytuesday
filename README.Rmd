@@ -65,9 +65,12 @@ new_experiment_rmd <- function(name){
   readLines("experiment-template.Rmd") |> 
     writeLines(filepath)
 
+    rstudioapi::documentOpen(filepath)
+
+  
 }   
 
-new_experiment_rmd(name = "bivariate-for-class")
+new_experiment_rmd(name = "general-semantic-positional-aesthetics")
 
 ```
 
