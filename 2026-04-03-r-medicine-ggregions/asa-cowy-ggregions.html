@@ -21,14 +21,21 @@ class: inverse, bottom
 background-image: url(https://images.unsplash.com/photo-1588591795084-1770cb3be374?q=80&amp;w=2070&amp;auto=format&amp;fit=crop&amp;ixlib=rb-4.1.0&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)
 background-size: cover
 
-## .large[R Medicine 2026: ggregions for building intuitive coding interfaces for anatomical visualizations]
-## .small[]
-#### .tiny[Dr. Evangeline Reynolds | 2026-05-07 | DU, Image credit: Ross Sneddon, Upsplash]
+## .large[ASA COWY: General deterministic semantic positional encoding]
+## .small[Reprising and Reflecting on R Medicine talk :-)]
+#### .tiny[Dr. Evangeline Reynolds | 2026-05-08 | DU, Image credit: Ross Sneddon, Upsplash]
 
 
 ???
 
 Title slide
+
+
+
+---
+class: inverse
+
+# R medicine title: 'ggregions for building intuitive coding interfaces for anatomical visualizations'
 
 
 
@@ -214,9 +221,7 @@ count: false
 
 
 ``` r
-*tribble(~place, ~var2,
-*      "Texas",     500,
-*    "Indiana",     204)
+*library(ggregions)
 ```
 
 ---
@@ -224,9 +229,23 @@ count: false
 
 
 ``` r
+library(ggregions)
+
+*tribble(~place, ~var2,
+*      "Texas",     500,
+*     "North Carolina",     204)
+```
+
+---
+count: false
+
+
+``` r
+library(ggregions)
+
 tribble(~place, ~var2,
        "Texas",     500,
-     "Indiana",     204) |&gt;
+      "North Carolina",     204) |&gt;
 *ggplot()
 ```
 
@@ -235,9 +254,11 @@ count: false
 
 
 ``` r
+library(ggregions)
+
 tribble(~place, ~var2,
        "Texas",     500,
-     "Indiana",     204) |&gt;
+      "North Carolina",     204) |&gt;
 ggplot() +
 * aes(state_name = place)
 ```
@@ -247,9 +268,11 @@ count: false
 
 
 ``` r
+library(ggregions)
+
 tribble(~place, ~var2,
        "Texas",     500,
-     "Indiana",     204) |&gt;
+      "North Carolina",     204) |&gt;
 ggplot() +
   aes(state_name = place) +
 * geom_state()
@@ -260,9 +283,11 @@ count: false
 
 
 ``` r
+library(ggregions)
+
 tribble(~place, ~var2,
        "Texas",     500,
-     "Indiana",     204) |&gt;
+      "North Carolina",     204) |&gt;
 ggplot() +
   aes(state_name = place) +
   geom_state() +
@@ -347,10 +372,66 @@ class: inverse
 
 ### `aes(state_name = c("Texas", "Indiana"))`
 
+--
 
-&lt;!-- #### ggregions posits that by investing in methods to easily create new geo-specific ggplot2 layer extensions (geom_*s), producing maps with ggplot2 can become as intuitive as creating other plots. About specifying a map, you might say, 'use this data, draw regions, position and color fill according to var1 and var2.' --&gt;
 
-&lt;!-- The proposed regions mapping might look something like this: --&gt;
+---
+
+class: inverse
+
+
+#  Determinitic  (contrast w/ LLM color selection)
+
+--
+
+#  General (will accept "Texas" or "TX" or 05)
+
+--
+
+# Semantic 
+
+--
+
+# Positional 
+
+--
+
+# Encoding
+
+
+
+
+---
+class: inverse
+
+## Semantic (*meaning* of words or symbols)
+
+
+
+## Positional 
+
+
+
+## Encoding 
+
+--
+
+
+### 'normal' ggplot2 positional encoding
+
+--
+
+### `aes(x = c(1, 2), y = c(4, 2))`
+
+--
+
+### S.P.E.
+
+--
+
+### `aes(state_name = c("Texas", "Indiana"))`
+
+
 
 ---
 class: inverse
@@ -397,30 +478,61 @@ class: inverse, center, middle
 
 
 
-
 ---
 
 
 count: false
+ 
 
+.panel1-usmapdata2-auto[
 
 ``` r
 *library(ggplot2)
 ```
+]
+ 
+.panel2-usmapdata2-auto[
+
+]
 
 ---
 count: false
+ 
 
+.panel1-usmapdata2-auto[
 
 ``` r
 library(ggplot2)
 
 *us_income
 ```
+]
+ 
+.panel2-usmapdata2-auto[
+
+```
+# A tibble: 52 × 5
+   GEOID NAME                 variable income   moe
+   &lt;chr&gt; &lt;chr&gt;                &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;
+ 1 01    Alabama              income    24476   136
+ 2 02    Alaska               income    32940   508
+ 3 04    Arizona              income    27517   148
+ 4 05    Arkansas             income    23789   165
+ 5 06    California           income    29454   109
+ 6 08    Colorado             income    32401   109
+ 7 09    Connecticut          income    35326   195
+ 8 10    Delaware             income    31560   247
+ 9 11    District of Columbia income    43198   681
+10 12    Florida              income    25952    70
+# ℹ 42 more rows
+```
+]
 
 ---
 count: false
+ 
 
+.panel1-usmapdata2-auto[
 
 ``` r
 library(ggplot2)
@@ -428,114 +540,17 @@ library(ggplot2)
 us_income |&gt;
 * ggplot()
 ```
+]
+ 
+.panel2-usmapdata2-auto[
+![](asa-cowy-ggregions_files/figure-html/usmapdata2_auto_03_output-1.png)&lt;!-- --&gt;
+]
 
 ---
 count: false
+ 
 
-
-``` r
-library(ggplot2)
-
-us_income |&gt;
-  ggplot() +
-* aes(state_name = NAME)
-```
-
----
-count: false
-
-
-``` r
-library(ggplot2)
-
-us_income |&gt;
-  ggplot() +
-  aes(state_name = NAME) +
-* geom_state()
-```
-
----
-count: false
-
-
-``` r
-library(ggplot2)
-
-us_income |&gt;
-  ggplot() +
-  aes(state_name = NAME) +
-  geom_state() +
-* aes(fill = income)
-```
-
-&lt;style&gt;
-.panel1-usmapdata0-auto {
-  color: black;
-  width: 99%;
-  hight: 32%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-.panel2-usmapdata0-auto {
-  color: black;
-  width: NA%;
-  hight: 32%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-.panel3-usmapdata0-auto {
-  color: black;
-  width: NA%;
-  hight: 33%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-&lt;/style&gt;
-
-
-
-
-
-
----
-
-
-
-
-count: false
-
-
-``` r
-*library(ggplot2)
-```
-
----
-count: false
-
-
-``` r
-library(ggplot2)
-
-*us_income
-```
-
----
-count: false
-
-
-``` r
-library(ggplot2)
-
-us_income |&gt;
-* ggplot()
-```
-
----
-count: false
-
+.panel1-usmapdata2-auto[
 
 ``` r
 library(ggplot2)
@@ -544,10 +559,17 @@ us_income |&gt;
   ggplot() +
 * aes(region = NAME)
 ```
+]
+ 
+.panel2-usmapdata2-auto[
+![](asa-cowy-ggregions_files/figure-html/usmapdata2_auto_04_output-1.png)&lt;!-- --&gt;
+]
 
 ---
 count: false
+ 
 
+.panel1-usmapdata2-auto[
 
 ``` r
 library(ggplot2)
@@ -557,10 +579,17 @@ us_income |&gt;
   aes(region = NAME) +
 * geom_region()
 ```
+]
+ 
+.panel2-usmapdata2-auto[
+![](asa-cowy-ggregions_files/figure-html/usmapdata2_auto_05_output-1.png)&lt;!-- --&gt;
+]
 
 ---
 count: false
+ 
 
+.panel1-usmapdata2-auto[
 
 ``` r
 library(ggplot2)
@@ -571,11 +600,16 @@ us_income |&gt;
   geom_region() +
 * aes(fill = income)
 ```
+]
+ 
+.panel2-usmapdata2-auto[
+![](asa-cowy-ggregions_files/figure-html/usmapdata2_auto_06_output-1.png)&lt;!-- --&gt;
+]
 
 &lt;style&gt;
 .panel1-usmapdata2-auto {
   color: black;
-  width: 99%;
+  width: 38.6060606060606%;
   hight: 32%;
   float: left;
   padding-left: 1%;
@@ -583,7 +617,7 @@ us_income |&gt;
 }
 .panel2-usmapdata2-auto {
   color: black;
-  width: NA%;
+  width: 59.3939393939394%;
   hight: 32%;
   float: left;
   padding-left: 1%;
@@ -598,6 +632,168 @@ us_income |&gt;
   font-size: 80%
 }
 &lt;/style&gt;
+
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-usmapdata3-auto[
+
+``` r
+*library(ggregions)
+```
+]
+ 
+.panel2-usmapdata3-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-usmapdata3-auto[
+
+``` r
+library(ggregions)
+
+*tribble(    ~place, ~var2,
+*            "Texas",     500,
+*   "North Carolina",     204)
+```
+]
+ 
+.panel2-usmapdata3-auto[
+
+```
+# A tibble: 2 × 2
+  place           var2
+  &lt;chr&gt;          &lt;dbl&gt;
+1 Texas            500
+2 North Carolina   204
+```
+]
+
+---
+count: false
+ 
+
+.panel1-usmapdata3-auto[
+
+``` r
+library(ggregions)
+
+tribble(    ~place, ~var2,
+             "Texas",     500,
+    "North Carolina",     204) |&gt;
+*ggplot()
+```
+]
+ 
+.panel2-usmapdata3-auto[
+![](asa-cowy-ggregions_files/figure-html/usmapdata3_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-usmapdata3-auto[
+
+``` r
+library(ggregions)
+
+tribble(    ~place, ~var2,
+             "Texas",     500,
+    "North Carolina",     204) |&gt;
+ggplot() +
+* aes(region = place)
+```
+]
+ 
+.panel2-usmapdata3-auto[
+![](asa-cowy-ggregions_files/figure-html/usmapdata3_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-usmapdata3-auto[
+
+``` r
+library(ggregions)
+
+tribble(    ~place, ~var2,
+             "Texas",     500,
+    "North Carolina",     204) |&gt;
+ggplot() +
+  aes(region = place) +
+* geom_state()
+```
+]
+ 
+.panel2-usmapdata3-auto[
+![](asa-cowy-ggregions_files/figure-html/usmapdata3_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-usmapdata3-auto[
+
+``` r
+library(ggregions)
+
+tribble(    ~place, ~var2,
+             "Texas",     500,
+    "North Carolina",     204) |&gt;
+ggplot() +
+  aes(region = place) +
+  geom_state() +
+* aes(fill = var2)
+```
+]
+ 
+.panel2-usmapdata3-auto[
+![](asa-cowy-ggregions_files/figure-html/usmapdata3_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-usmapdata3-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-usmapdata3-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-usmapdata3-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
 
 
 
@@ -795,17 +991,29 @@ options(ggregions.ref.regions = us_states_ref)
 ```
 
 
+---
+
+### Step 2. Plot w/ aes(region = my_var) + geom_region()
+
+
+``` r
+ggplot(data = us_income) + 
+  aes(region = NAME) + 
+  geom_region() + 
+  aes(fill = income)
+```
+
+![](asa-cowy-ggregions_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+
+
+
+
 
 ---
 
+### Option 2. Step 1b. write user-facing functions with ggregion 'write' utilities
 
-
-
-
-
----
-
-### Option 2. write user-facing functions with ggregion 'write' utilities
+When you anticipate multiple regional types
 
 &lt;!-- Then, authors will be able use `write_geom_region()` to create a regions-specific ggplot2 layer, for example `geom_state()` below, which can be made available in their geo packages. --&gt;
 
@@ -813,18 +1021,34 @@ options(ggregions.ref.regions = us_states_ref)
 ``` r
 library(ggregions)
 
-geom_state &lt;- 
-  write_geom_region(us_states_ref)
-
-stamp_state &lt;- 
-  write_stamp_region(us_states_ref)
-
-geom_state_text &lt;- 
-  write_geom_region_text(us_states_ref)
-
-stamp_state_text &lt;- 
-  write_stamp_region_text(us_states_ref)
+geom_state &lt;- write_geom_region(us_states_ref)
+stamp_state &lt;- write_stamp_region(us_states_ref)
+geom_state_text &lt;- write_geom_region_text(us_states_ref)
+stamp_state_text &lt;- write_stamp_region_text(us_states_ref)
 ```
+
+
+
+``` r
+geom_county &lt;- write_geom_region(us_county_ref)
+stamp_county &lt;- write_stamp_region(us_county_ref)
+geom_county_text &lt;- write_geom_region_text(us_county_ref)
+stamp_county_text &lt;- write_stamp_region_text(us_county_ref)
+```
+
+---
+
+## Option 2. Step 2. Plot!
+
+
+``` r
+ggplot(data = us_income) + 
+  aes(region = NAME) + 
+* geom_state() +  # scope is locked-in
+  aes(fill = income)
+```
+
+![](asa-cowy-ggregions_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
 
 
 ---
@@ -909,7 +1133,7 @@ function (ref_data)
     formals(modified_fun)$ref_data &lt;- substitute(ref_data)
     return(modified_fun)
 }
-&lt;bytecode: 0x12f543e58&gt;
+&lt;bytecode: 0x117758710&gt;
 &lt;environment: namespace:ggregions&gt;
 ```
 
@@ -930,7 +1154,7 @@ function (mapping = aes(), data = NULL, stat = StatRegion, position = "identity"
         inherit.aes = inherit.aes, params = rlang::list2(na.rm = na.rm, 
             ref_data = ref_data, ...)), coord_sf(crs = st_crs_mod(ref_data)))
 }
-&lt;bytecode: 0x12f53f2f8&gt;
+&lt;bytecode: 0x117757440&gt;
 &lt;environment: namespace:ggregions&gt;
 ```
 
@@ -1407,7 +1631,7 @@ caries_ratios |&gt;
 ---
 
 
-&lt;img src="asa-cowy-ggregions_files/figure-html/unnamed-chunk-13-1.png" width="65%" /&gt;
+&lt;img src="asa-cowy-ggregions_files/figure-html/unnamed-chunk-16-1.png" width="65%" /&gt;
 
 ---
 
@@ -1706,7 +1930,7 @@ github:
 &lt;!-- adjust font size in this css code chunk, currently 80 --&gt;
 
 &lt;style type="text/css"&gt;
-.remark-code{line-height: 1.5; font-size: 70%}
+.remark-code{line-height: 1.5; font-size: 100%}
 
 @media print {
   .has-continuation {

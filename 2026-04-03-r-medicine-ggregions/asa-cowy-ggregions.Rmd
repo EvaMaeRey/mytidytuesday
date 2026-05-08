@@ -28,8 +28,8 @@ class: inverse, bottom
 background-image: url(https://images.unsplash.com/photo-1588591795084-1770cb3be374?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)
 background-size: cover
 
-## .large[R Medicine 2026: ggregions for building intuitive coding interfaces for anatomical visualizations]
-## .small[]
+## .large[ASA COWY: General deterministic semantic positional encoding]
+## .small[Reprising and Reflecting on R Medicine talk :-)]
 #### .tiny[Dr. Evangeline Reynolds | `r Sys.Date()` | DU, Image credit: Ross Sneddon, Upsplash]
 
 
@@ -44,6 +44,13 @@ library(flipbookr)
 library(ggplot2)
 library(ggregions)
 ```
+
+
+---
+class: inverse
+
+# R medicine title: 'ggregions for building intuitive coding interfaces for anatomical visualizations'
+
 
 
 ---
@@ -129,9 +136,11 @@ tribble(~var1, ~var2, ~var3,
 `r chunk_reveal("semantic", display_type = "code")`
 
 ```{r semantic, include=F, eval = F}
+library(ggregions)
+
 tribble(~place, ~var2,
        "Texas",     500,
-     "Indiana",     204) |> 
+      "North Carolina",     204) |> 
 ggplot() + 
   aes(state_name = place) + 
   geom_state() + 
@@ -185,10 +194,66 @@ class: inverse
 
 ### `aes(state_name = c("Texas", "Indiana"))`
 
+--
 
-<!-- #### ggregions posits that by investing in methods to easily create new geo-specific ggplot2 layer extensions (geom_*s), producing maps with ggplot2 can become as intuitive as creating other plots. About specifying a map, you might say, 'use this data, draw regions, position and color fill according to var1 and var2.' -->
 
-<!-- The proposed regions mapping might look something like this: -->
+---
+
+class: inverse
+
+
+#  Determinitic  (contrast w/ LLM color selection)
+
+--
+
+#  General (will accept "Texas" or "TX" or 05)
+
+--
+
+# Semantic 
+
+--
+
+# Positional 
+
+--
+
+# Encoding
+
+
+
+
+---
+class: inverse
+
+## Semantic (*meaning* of words or symbols)
+
+
+
+## Positional 
+
+
+
+## Encoding 
+
+--
+
+
+### 'normal' ggplot2 positional encoding
+
+--
+
+### `aes(x = c(1, 2), y = c(4, 2))`
+
+--
+
+### S.P.E.
+
+--
+
+### `aes(state_name = c("Texas", "Indiana"))`
+
+
 
 ---
 class: inverse
@@ -246,29 +311,10 @@ library(ggplot2)
 
 
 
-
 ---
 
 
-`r chunk_reveal("usmapdata0", display_type = "code")`
-
-```{r usmapdata0, include = F, eval = F}
-library(ggplot2)
-
-us_income |> 
-  ggplot() + 
-  aes(state_name = NAME) + 
-  geom_state() + 
-  aes(fill = income)
-```
-
-
----
-
-
-
-
-`r chunk_reveal("usmapdata2", display_type = "code")`
+`r chunk_reveal("usmapdata2")`
 
 ```{r usmapdata2, include = F, eval = F}
 library(ggplot2)
@@ -279,6 +325,25 @@ us_income |>
   geom_region() + 
   aes(fill = income)
 ```
+
+
+---
+
+`r chunk_reveal("usmapdata3")`
+
+```{r usmapdata3, include = F}
+library(ggregions)
+
+tribble(    ~place, ~var2,
+             "Texas",     500,
+    "North Carolina",     204) |> 
+ggplot() + 
+  aes(region = place) + 
+  geom_state() + 
+  aes(fill = var2)
+```
+
+
 
 
 ---
@@ -333,34 +398,59 @@ options(ggregions.ref.regions = us_states_ref)
 ```
 
 
+---
+
+### Step 2. Plot w/ aes(region = my_var) + geom_region()
+
+```{r}
+ggplot(data = us_income) + 
+  aes(region = NAME) + 
+  geom_region() + 
+  aes(fill = income)
+```
+
+
+
+
 
 ---
 
+### Option 2. Step 1b. write user-facing functions with ggregion 'write' utilities
 
-
-
-
-
----
-
-### Option 2. write user-facing functions with ggregion 'write' utilities
+When you anticipate multiple regional types
 
 <!-- Then, authors will be able use `write_geom_region()` to create a regions-specific ggplot2 layer, for example `geom_state()` below, which can be made available in their geo packages. -->
 
 ```{r}
 library(ggregions)
 
-geom_state <- 
-  write_geom_region(us_states_ref)
+geom_state <- write_geom_region(us_states_ref)
+stamp_state <- write_stamp_region(us_states_ref)
+geom_state_text <- write_geom_region_text(us_states_ref)
+stamp_state_text <- write_stamp_region_text(us_states_ref)
+```
 
-stamp_state <- 
-  write_stamp_region(us_states_ref)
 
-geom_state_text <- 
-  write_geom_region_text(us_states_ref)
+```{r, eval = F}
+geom_county <- write_geom_region(us_county_ref)
+stamp_county <- write_stamp_region(us_county_ref)
+geom_county_text <- write_geom_region_text(us_county_ref)
+stamp_county_text <- write_stamp_region_text(us_county_ref)
 
-stamp_state_text <- 
-  write_stamp_region_text(us_states_ref)
+
+
+```
+
+---
+
+## Option 2. Step 2. Plot!
+
+```{r}
+ggplot(data = us_income) + 
+  aes(region = NAME) + 
+  geom_state() +  # scope is locked-in #<<
+  aes(fill = income)
+
 
 ```
 
@@ -631,7 +721,7 @@ github:
 <!-- adjust font size in this css code chunk, currently 80 -->
 
 ```{css, eval = TRUE, echo = FALSE}
-.remark-code{line-height: 1.5; font-size: 70%}
+.remark-code{line-height: 1.5; font-size: 100%}
 
 @media print {
   .has-continuation {
