@@ -1,0 +1,108 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, dpi = 300, dev = "ragg_png", fig.width = 8, warning = F, message = F)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+
+
+# EvaMaeRey/ggt.test
+library(ggt.test)
+
+'data_grit_undergrad |> 
+  ggplot() + 
+  aes(x = score) +
+  geom_stacks() +
+  geom_rug() + 
+  geom_mean() + 
+  geom_mean_label() +
+  stamp_mean(3.75) + 
+  stamp_mean_label(3.75) + 
+  geom_tdist_null(value = 3.75)' |>
+ggram::ggram(code = _, title = "As gritty as a West Point cadet? 🗡️🪖🥵💪🧗")
+```
+
+
+
+```{r}
+"library(ggprop.test)
+
+dolphin_data |> 
+  ggplot() + 
+  aes(x = observed) + 
+  geom_stack() + 
+  geom_stack_label() + 
+  geom_support() +
+  geom_prop() + 
+  geom_prop_label() + 
+  stamp_prop(.5) + 
+  stamp_prop_label(.5) + 
+  geom_binomial_null(.5) " |>
+ggram::ggram(code = _, title = "Are Dolphins Doris and Buzz cooperating?🐬🐬🐟🪣")
+
+
+"library(ggprop.test)
+
+donor_data |> 
+  ggplot() + 
+  aes(x = decision) + 
+  geom_stack() + 
+  geom_stack_label() + 
+  geom_support() +
+  geom_prop() + 
+  geom_prop_label() + 
+  stamp_prop(.5) + 
+  stamp_prop_label(.5) + 
+  geom_normal_prop_null() + 
+  geom_normal_prop_null_sds() +
+  stamp_eq_norm_prop()" |>
+ggram::ggram(code = _, title = "Organ donation, is the sample consistent with a 50-50 split in the population\nbetween people who check 'donate' vs. 'no thanks'? 🫁🫀")
+  
+# hello
+```
+
+
+```{r}
+"data_haircuts |>
+  ggplot() + 
+  aes(x = price) + 
+  geom_support() + 
+  geom_rug() + 
+  geom_stacks()+
+  geom_mean() + 
+  geom_mean_label() + 
+  facet_align(sex) + 
+  geom_mean_diff() + 
+  geom_mean_diff_label()
+" |>
+ggram::ggram(code = _, title = "Is there a statistical difference between male and female haircut prices? ✂💈💇💇‍♀️")
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

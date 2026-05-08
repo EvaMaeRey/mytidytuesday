@@ -115,8 +115,8 @@ stamp_state_text <- write_stamp_region_text(us_states_ref)
 
 ```{r classic_v_semantic, include=F}
 tribble(~var1, ~var2, ~var3,
-            1,     4,   T,
-            2,     3,   F) |> 
+            1,     4,   500,
+            2,     3,   302) |> 
   ggplot() + 
   aes(x = var1,
       y = var2) + 
@@ -126,12 +126,12 @@ tribble(~var1, ~var2, ~var3,
 
 ---
 
-`r chunk_reveal("semantic")`
+`r chunk_reveal("semantic", display_type = "code")`
 
-```{r semantic, include=F}
+```{r semantic, include=F, eval = F}
 tribble(~place, ~var2,
-       "Texas",     T,
-     "Indiana",     F) |> 
+       "Texas",     500,
+     "Indiana",     204) |> 
 ggplot() + 
   aes(state_name = place) + 
   geom_state() + 
@@ -190,6 +190,35 @@ class: inverse
 
 <!-- The proposed regions mapping might look something like this: -->
 
+---
+class: inverse
+
+## Semantic (*meaning* of words or symbols)
+
+
+
+## Positional 
+
+
+
+## Encoding 
+
+
+
+
+### 'normal' ggplot2 positional encoding
+
+
+
+### `aes(x = c(1, 2), y = c(4, 2))`
+
+
+
+### S.P.E.
+
+
+
+### `aes(region = c("Texas", "Indiana"))`
 
 
 
@@ -221,9 +250,9 @@ library(ggplot2)
 ---
 
 
-`r chunk_reveal("usmapdata0")`
+`r chunk_reveal("usmapdata0", display_type = "code")`
 
-```{r usmapdata0, include = F}
+```{r usmapdata0, include = F, eval = F}
 library(ggplot2)
 
 us_income |> 
@@ -235,6 +264,25 @@ us_income |>
 
 
 ---
+
+
+
+
+`r chunk_reveal("usmapdata2", display_type = "code")`
+
+```{r usmapdata2, include = F, eval = F}
+library(ggplot2)
+
+us_income |> 
+  ggplot() + 
+  aes(region = NAME) + 
+  geom_region() + 
+  aes(fill = income)
+```
+
+
+---
+
 
 
 > ## [ggregions-generated] APIs feels like they actually puts the "question" at the center. - Emily Riederer
@@ -269,12 +317,24 @@ library(dplyr)
 
 # Step 1. prep some of their geo reference data
 usmapdata::us_map() |>
-  select(state_name = full, 
+  select(state_name = full, # id col
          state_abbr = abbr,
          state_fips = fips,
          geometry = geom) ->
 us_states_ref
 ```
+
+---
+
+### Step 1b
+
+```{r}
+options(ggregions.ref.regions = us_states_ref)
+```
+
+
+
+---
 
 
 
@@ -283,7 +343,7 @@ us_states_ref
 
 ---
 
-### Step 2. write user-facing functions with ggregion 'write' utilities
+### Option 2. write user-facing functions with ggregion 'write' utilities
 
 <!-- Then, authors will be able use `write_geom_region()` to create a regions-specific ggplot2 layer, for example `geom_state()` below, which can be made available in their geo packages. -->
 
@@ -291,16 +351,16 @@ us_states_ref
 library(ggregions)
 
 geom_state <- 
-  write_geom_region(us_states_ref, required_aes = "state_name|state_abbr|state_fips")
+  write_geom_region(us_states_ref)
 
 stamp_state <- 
-  write_stamp_region(us_states_ref, required_aes = "state_name|state_abbr|state_fips")
+  write_stamp_region(us_states_ref)
 
 geom_state_text <- 
-  write_geom_region_text(us_states_ref, required_aes = "state_name|state_abbr|state_fips")
+  write_geom_region_text(us_states_ref)
 
 stamp_state_text <- 
-  write_stamp_region_text(us_states_ref, required_aes = "state_name|state_abbr|state_fips")
+  write_stamp_region_text(us_states_ref)
 
 ```
 
@@ -365,7 +425,7 @@ library(usmapdata)
 
 us_income |> 
   ggplot() + 
-  aes(state_name = NAME) + 
+  aes(region = NAME) + 
   geom_state() + 
   aes(fill = income) +
   scale_fill_viridis_c(option = "magma") + 
@@ -407,20 +467,11 @@ teethr::dental_arcade_mapping |>
   left_join(teethr::tooth_notation |> rename(tooth = text)) |>
   select(tooth_id = tooth, fdi = FDI, standard = standards, geometry) ->
 teeth_ref_data
+
+options(ggregions.ref.regions = teeth_ref_data)
 ```
 
---
 
-
-### ggplot2 'layer' preparation
-
-```{r}  
-library(ggregions)
-geom_tooth <- write_geom_region(teeth_ref_data, required_aes = "tooth_id|fdi|standard")
-geom_tooth_text <- write_geom_region_text(teeth_ref_data, required_aes = "tooth_id|fdi|standard")
-stamp_tooth <- write_stamp_region(teeth_ref_data, required_aes = "tooth_id|fdi|standard")
-stamp_tooth_text <- write_stamp_region_text(teeth_ref_data, required_aes = "tooth_id|fdi|standard")
-```
 
 
 ```{r, echo = F}
@@ -442,13 +493,13 @@ caries_ratios <- mb11_caries %>%
 `r chunk_reveal("arcade", title = "### yields user-friendly API" )`
 
 
-```{r arcade, include = F}
+```{r arcade, include = F, eval = F}
 caries_ratios |> 
   ggplot() + 
-  aes(tooth_id = tooth, 
+  aes(region = tooth, 
       fill = ratio) + 
-  geom_tooth(alpha = .5) + 
-  stamp_tooth_text(size = 2) + 
+  geom_region(alpha = .5) + 
+  geom_region_text(size = 2) + 
   scale_fill_viridis_c()
 ```
 
@@ -462,10 +513,10 @@ library(teethr)
 
 caries_ratios |> 
   ggplot() + 
-  aes(tooth_id = tooth, #<<
+  aes(region = tooth, #<<
       fill = ratio) + 
-  geom_tooth(alpha = .5) + #<<
-  stamp_tooth_text(size = 1.5) + #<<
+  geom_region(alpha = .5) + #<<
+  geom_region_text(size = 1.5) + #<<
   scale_fill_viridis_c()" |>
   ggram::ggram(code = _,
                subtitle =  "🚧🧫🚧🔬🚧🧪 Checking out caries ratios in this amazing {teethr} tooth arcade... Uh-oh LLM1!",
@@ -494,32 +545,23 @@ to_sf_routine <- function(data){
   ungroup() 
   
 }
+
+female_sf <- gganatogram::hgFemale_list[c(1:156, 180:195)] |> # return to this!!
+  bind_rows() |>
+  remove_missing() |>
+  to_sf_routine()
 ```
 
 ### Step 1: Data preparation
 
 
 ```{r, error = T, echo = T}
-female_sf <- gganatogram::hgFemale_list[c(1:156, 180:195)] |> # return to this!!
-  bind_rows() |>
-  remove_missing() |>
-  to_sf_routine()
-
 ref_female_sf <- female_sf |> 
   select(organ = id, geometry)
+
+options(ggregions.ref.regions = ref_female_sf)
 ```
 
---
-
-### Step 2: User-facing function preparation
-
-```{r, }  
-library(ggregions)
-stamp_organ <- write_stamp_region(ref_female_sf, required_aes = "organ")
-geom_organ <- write_geom_region(ref_female_sf, required_aes = "organ")
-stamp_organ_text <- write_stamp_region_text(ref_female_sf, required_aes = "organ")
-geom_organ_text <- write_geom_region_text(ref_female_sf, required_aes = "organ")
-```
 
 ---
 
@@ -533,11 +575,11 @@ tribble(~my_organ, ~color,
         "lung",    "plum",
         "heart",    "coral") |> 
 ggplot() + 
-  stamp_organ(alpha = .2) +
-  aes(organ = my_organ) +
-  geom_organ() +
+  stamp_region(alpha = .2) +
+  aes(region = my_organ) +
+  geom_region() +
   aes(fill = I(color)) + 
-  geom_organ_text() + 
+  geom_region_text() + 
   ggplyr:::data_slice(5)
 ```
 

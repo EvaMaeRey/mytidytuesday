@@ -23,7 +23,7 @@ background-size: cover
 
 ## .large[R Medicine 2026: ggregions for building intuitive coding interfaces for anatomical visualizations]
 ## .small[]
-#### .tiny[Dr. Evangeline Reynolds | 2026-05-01 | DU, Image credit: Ross Sneddon, Upsplash]
+#### .tiny[Dr. Evangeline Reynolds | 2026-05-07 | DU, Image credit: Ross Sneddon, Upsplash]
 
 
 ???
@@ -80,8 +80,8 @@ count: false
 
 ``` r
 *tribble(~var1, ~var2, ~var3,
-*           1,     4,   T,
-*           2,     3,   F)
+*           1,     4,   500,
+*           2,     3,   302)
 ```
 ]
  
@@ -89,10 +89,10 @@ count: false
 
 ```
 # A tibble: 2 × 3
-   var1  var2 var3 
-  &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;
-1     1     4 TRUE 
-2     2     3 FALSE
+   var1  var2  var3
+  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     1     4   500
+2     2     3   302
 ```
 ]
 
@@ -104,8 +104,8 @@ count: false
 
 ``` r
 tribble(~var1, ~var2, ~var3,
-            1,     4,   T,
-            2,     3,   F) |&gt;
+            1,     4,   500,
+            2,     3,   302) |&gt;
 * ggplot()
 ```
 ]
@@ -122,8 +122,8 @@ count: false
 
 ``` r
 tribble(~var1, ~var2, ~var3,
-            1,     4,   T,
-            2,     3,   F) |&gt;
+            1,     4,   500,
+            2,     3,   302) |&gt;
   ggplot() +
 * aes(x = var1,
 *     y = var2)
@@ -142,8 +142,8 @@ count: false
 
 ``` r
 tribble(~var1, ~var2, ~var3,
-            1,     4,   T,
-            2,     3,   F) |&gt;
+            1,     4,   500,
+            2,     3,   302) |&gt;
   ggplot() +
   aes(x = var1,
       y = var2) +
@@ -163,8 +163,8 @@ count: false
 
 ``` r
 tribble(~var1, ~var2, ~var3,
-            1,     4,   T,
-            2,     3,   F) |&gt;
+            1,     4,   500,
+            2,     3,   302) |&gt;
   ggplot() +
   aes(x = var1,
       y = var2) +
@@ -211,110 +211,68 @@ tribble(~var1, ~var2, ~var3,
 ---
 
 count: false
- 
 
-.panel1-semantic-auto[
 
 ``` r
 *tribble(~place, ~var2,
-*      "Texas",     T,
-*    "Indiana",     F)
+*      "Texas",     500,
+*    "Indiana",     204)
 ```
-]
- 
-.panel2-semantic-auto[
-
-```
-# A tibble: 2 × 2
-  place   var2 
-  &lt;chr&gt;   &lt;lgl&gt;
-1 Texas   TRUE 
-2 Indiana FALSE
-```
-]
 
 ---
 count: false
- 
 
-.panel1-semantic-auto[
 
 ``` r
 tribble(~place, ~var2,
-       "Texas",     T,
-     "Indiana",     F) |&gt;
+       "Texas",     500,
+     "Indiana",     204) |&gt;
 *ggplot()
 ```
-]
- 
-.panel2-semantic-auto[
-![](asa-cowy-ggregions_files/figure-html/semantic_auto_02_output-1.png)&lt;!-- --&gt;
-]
 
 ---
 count: false
- 
 
-.panel1-semantic-auto[
 
 ``` r
 tribble(~place, ~var2,
-       "Texas",     T,
-     "Indiana",     F) |&gt;
+       "Texas",     500,
+     "Indiana",     204) |&gt;
 ggplot() +
 * aes(state_name = place)
 ```
-]
- 
-.panel2-semantic-auto[
-![](asa-cowy-ggregions_files/figure-html/semantic_auto_03_output-1.png)&lt;!-- --&gt;
-]
 
 ---
 count: false
- 
 
-.panel1-semantic-auto[
 
 ``` r
 tribble(~place, ~var2,
-       "Texas",     T,
-     "Indiana",     F) |&gt;
+       "Texas",     500,
+     "Indiana",     204) |&gt;
 ggplot() +
   aes(state_name = place) +
 * geom_state()
 ```
-]
- 
-.panel2-semantic-auto[
-![](asa-cowy-ggregions_files/figure-html/semantic_auto_04_output-1.png)&lt;!-- --&gt;
-]
 
 ---
 count: false
- 
 
-.panel1-semantic-auto[
 
 ``` r
 tribble(~place, ~var2,
-       "Texas",     T,
-     "Indiana",     F) |&gt;
+       "Texas",     500,
+     "Indiana",     204) |&gt;
 ggplot() +
   aes(state_name = place) +
   geom_state() +
 * aes(fill = var2)
 ```
-]
- 
-.panel2-semantic-auto[
-![](asa-cowy-ggregions_files/figure-html/semantic_auto_05_output-1.png)&lt;!-- --&gt;
-]
 
 &lt;style&gt;
 .panel1-semantic-auto {
   color: black;
-  width: 38.6060606060606%;
+  width: 99%;
   hight: 32%;
   float: left;
   padding-left: 1%;
@@ -322,7 +280,7 @@ ggplot() +
 }
 .panel2-semantic-auto {
   color: black;
-  width: 59.3939393939394%;
+  width: NA%;
   hight: 32%;
   float: left;
   padding-left: 1%;
@@ -394,6 +352,35 @@ class: inverse
 
 &lt;!-- The proposed regions mapping might look something like this: --&gt;
 
+---
+class: inverse
+
+## Semantic (*meaning* of words or symbols)
+
+
+
+## Positional 
+
+
+
+## Encoding 
+
+
+
+
+### 'normal' ggplot2 positional encoding
+
+
+
+### `aes(x = c(1, 2), y = c(4, 2))`
+
+
+
+### S.P.E.
+
+
+
+### `aes(region = c("Texas", "Indiana"))`
 
 
 
@@ -415,57 +402,25 @@ class: inverse, center, middle
 
 
 count: false
- 
 
-.panel1-usmapdata0-auto[
 
 ``` r
 *library(ggplot2)
 ```
-]
- 
-.panel2-usmapdata0-auto[
-
-]
 
 ---
 count: false
- 
 
-.panel1-usmapdata0-auto[
 
 ``` r
 library(ggplot2)
 
 *us_income
 ```
-]
- 
-.panel2-usmapdata0-auto[
-
-```
-# A tibble: 52 × 5
-   GEOID NAME                 variable income   moe
-   &lt;chr&gt; &lt;chr&gt;                &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;
- 1 01    Alabama              income    24476   136
- 2 02    Alaska               income    32940   508
- 3 04    Arizona              income    27517   148
- 4 05    Arkansas             income    23789   165
- 5 06    California           income    29454   109
- 6 08    Colorado             income    32401   109
- 7 09    Connecticut          income    35326   195
- 8 10    Delaware             income    31560   247
- 9 11    District of Columbia income    43198   681
-10 12    Florida              income    25952    70
-# ℹ 42 more rows
-```
-]
 
 ---
 count: false
- 
 
-.panel1-usmapdata0-auto[
 
 ``` r
 library(ggplot2)
@@ -473,17 +428,10 @@ library(ggplot2)
 us_income |&gt;
 * ggplot()
 ```
-]
- 
-.panel2-usmapdata0-auto[
-![](asa-cowy-ggregions_files/figure-html/usmapdata0_auto_03_output-1.png)&lt;!-- --&gt;
-]
 
 ---
 count: false
- 
 
-.panel1-usmapdata0-auto[
 
 ``` r
 library(ggplot2)
@@ -492,17 +440,10 @@ us_income |&gt;
   ggplot() +
 * aes(state_name = NAME)
 ```
-]
- 
-.panel2-usmapdata0-auto[
-![](asa-cowy-ggregions_files/figure-html/usmapdata0_auto_04_output-1.png)&lt;!-- --&gt;
-]
 
 ---
 count: false
- 
 
-.panel1-usmapdata0-auto[
 
 ``` r
 library(ggplot2)
@@ -512,17 +453,10 @@ us_income |&gt;
   aes(state_name = NAME) +
 * geom_state()
 ```
-]
- 
-.panel2-usmapdata0-auto[
-![](asa-cowy-ggregions_files/figure-html/usmapdata0_auto_05_output-1.png)&lt;!-- --&gt;
-]
 
 ---
 count: false
- 
 
-.panel1-usmapdata0-auto[
 
 ``` r
 library(ggplot2)
@@ -533,16 +467,11 @@ us_income |&gt;
   geom_state() +
 * aes(fill = income)
 ```
-]
- 
-.panel2-usmapdata0-auto[
-![](asa-cowy-ggregions_files/figure-html/usmapdata0_auto_06_output-1.png)&lt;!-- --&gt;
-]
 
 &lt;style&gt;
 .panel1-usmapdata0-auto {
   color: black;
-  width: 38.6060606060606%;
+  width: 99%;
   hight: 32%;
   float: left;
   padding-left: 1%;
@@ -550,7 +479,7 @@ us_income |&gt;
 }
 .panel2-usmapdata0-auto {
   color: black;
-  width: 59.3939393939394%;
+  width: NA%;
   hight: 32%;
   float: left;
   padding-left: 1%;
@@ -572,6 +501,111 @@ us_income |&gt;
 
 
 ---
+
+
+
+
+count: false
+
+
+``` r
+*library(ggplot2)
+```
+
+---
+count: false
+
+
+``` r
+library(ggplot2)
+
+*us_income
+```
+
+---
+count: false
+
+
+``` r
+library(ggplot2)
+
+us_income |&gt;
+* ggplot()
+```
+
+---
+count: false
+
+
+``` r
+library(ggplot2)
+
+us_income |&gt;
+  ggplot() +
+* aes(region = NAME)
+```
+
+---
+count: false
+
+
+``` r
+library(ggplot2)
+
+us_income |&gt;
+  ggplot() +
+  aes(region = NAME) +
+* geom_region()
+```
+
+---
+count: false
+
+
+``` r
+library(ggplot2)
+
+us_income |&gt;
+  ggplot() +
+  aes(region = NAME) +
+  geom_region() +
+* aes(fill = income)
+```
+
+&lt;style&gt;
+.panel1-usmapdata2-auto {
+  color: black;
+  width: 99%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-usmapdata2-auto {
+  color: black;
+  width: NA%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-usmapdata2-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
 
 
 &gt; ## [ggregions-generated] APIs feels like they actually puts the "question" at the center. - Emily Riederer
@@ -664,7 +698,7 @@ library(dplyr)
 
 # Step 1. prep some of their geo reference data
 usmapdata::us_map() |&gt;
-* select(state_name = full,
+* select(state_name = full,  # id col
 *        state_abbr = abbr,
 *        state_fips = fips,
 *        geometry = geom)
@@ -707,7 +741,7 @@ library(dplyr)
 
 # Step 1. prep some of their geo reference data
 usmapdata::us_map() |&gt;
-  select(state_name = full,
+  select(state_name = full,  # id col
          state_abbr = abbr,
          state_fips = fips,
          geometry = geom) -&gt;
@@ -751,6 +785,19 @@ usmapdata::us_map() |&gt;
 
 
 
+---
+
+### Step 1b
+
+
+``` r
+options(ggregions.ref.regions = us_states_ref)
+```
+
+
+
+---
+
 
 
 
@@ -758,7 +805,7 @@ usmapdata::us_map() |&gt;
 
 ---
 
-### Step 2. write user-facing functions with ggregion 'write' utilities
+### Option 2. write user-facing functions with ggregion 'write' utilities
 
 &lt;!-- Then, authors will be able use `write_geom_region()` to create a regions-specific ggplot2 layer, for example `geom_state()` below, which can be made available in their geo packages. --&gt;
 
@@ -767,16 +814,16 @@ usmapdata::us_map() |&gt;
 library(ggregions)
 
 geom_state &lt;- 
-  write_geom_region(us_states_ref, required_aes = "state_name|state_abbr|state_fips")
+  write_geom_region(us_states_ref)
 
 stamp_state &lt;- 
-  write_stamp_region(us_states_ref, required_aes = "state_name|state_abbr|state_fips")
+  write_stamp_region(us_states_ref)
 
 geom_state_text &lt;- 
-  write_geom_region_text(us_states_ref, required_aes = "state_name|state_abbr|state_fips")
+  write_geom_region_text(us_states_ref)
 
 stamp_state_text &lt;- 
-  write_stamp_region_text(us_states_ref, required_aes = "state_name|state_abbr|state_fips")
+  write_stamp_region_text(us_states_ref)
 ```
 
 
@@ -828,13 +875,19 @@ compute_panel(...)
     if (!is.null(drop)) {
         ref_data &lt;- dplyr::filter(ref_data, !(id %in% drop))
     }
-    ref_data &lt;- ggplot2::StatSfCoordinates$compute_group(ggplot2::StatSf$compute_panel(ref_data, 
-        coord = ggplot2::CoordSf), coord = ggplot2::CoordSf)
     if (!stamp) {
-        dplyr::inner_join(ref_data, data)
+        ref_data_long &lt;- pivot_longer(mutate(ref_data, across(-geometry, 
+            as.character)), cols = -c(geometry, id), names_to = ".id_type", 
+            values_to = "region")
+        length(ref_data_long$region) == length(unique(ref_data_long$region))
+        ref_data_long &lt;- ggplot2::StatSfCoordinates$compute_group(ggplot2::StatSf$compute_panel(ref_data_long, 
+            coord = ggplot2::CoordSf), coord = ggplot2::CoordSf)
+        out &lt;- dplyr::inner_join(ref_data_long, data, by = join_by(region))
+        inner_join(sf::st_drop_geometry(ref_data), out, by = join_by(id))
     }
     else {
-        ref_data
+        ggplot2::StatSfCoordinates$compute_group(ggplot2::StatSf$compute_panel(ref_data, 
+            coord = ggplot2::CoordSf), coord = ggplot2::CoordSf)
     }
 }
 ```
@@ -850,13 +903,13 @@ ggregions::write_geom_region
 ```
 
 ```
-function (ref_data = australia_state_ref, required_aes = NULL) 
+function (ref_data) 
 {
     modified_fun &lt;- geom_region
     formals(modified_fun)$ref_data &lt;- substitute(ref_data)
     return(modified_fun)
 }
-&lt;bytecode: 0x113a08950&gt;
+&lt;bytecode: 0x12f543e58&gt;
 &lt;environment: namespace:ggregions&gt;
 ```
 
@@ -869,15 +922,15 @@ ggregions:::geom_region
 
 ```
 function (mapping = aes(), data = NULL, stat = StatRegion, position = "identity", 
-    na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ref_data, 
-    ...) 
+    na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ref_data = getOption("ggregions.ref.regions", 
+        ref_data_us), ...) 
 {
     c(layer_sf(geom = GeomSf, data = data, mapping = mapping, 
         stat = stat, position = position, show.legend = show.legend, 
         inherit.aes = inherit.aes, params = rlang::list2(na.rm = na.rm, 
             ref_data = ref_data, ...)), coord_sf(crs = st_crs_mod(ref_data)))
 }
-&lt;bytecode: 0x113a05cd8&gt;
+&lt;bytecode: 0x12f53f2f8&gt;
 &lt;environment: namespace:ggregions&gt;
 ```
 
@@ -994,7 +1047,7 @@ library(usmapdata)
 
 us_income |&gt;
   ggplot() +
-* aes(state_name = NAME)
+* aes(region = NAME)
 ```
 ]
  
@@ -1014,7 +1067,7 @@ library(usmapdata)
 
 us_income |&gt;
   ggplot() +
-  aes(state_name = NAME) +
+  aes(region = NAME) +
 * geom_state()
 ```
 ]
@@ -1035,7 +1088,7 @@ library(usmapdata)
 
 us_income |&gt;
   ggplot() +
-  aes(state_name = NAME) +
+  aes(region = NAME) +
   geom_state() +
 * aes(fill = income)
 ```
@@ -1057,7 +1110,7 @@ library(usmapdata)
 
 us_income |&gt;
   ggplot() +
-  aes(state_name = NAME) +
+  aes(region = NAME) +
   geom_state() +
   aes(fill = income) +
 * scale_fill_viridis_c(option = "magma")
@@ -1080,7 +1133,7 @@ library(usmapdata)
 
 us_income |&gt;
   ggplot() +
-  aes(state_name = NAME) +
+  aes(region = NAME) +
   geom_state() +
   aes(fill = income) +
   scale_fill_viridis_c(option = "magma") +
@@ -1104,7 +1157,7 @@ library(usmapdata)
 
 us_income |&gt;
   ggplot() +
-  aes(state_name = NAME) +
+  aes(region = NAME) +
   geom_state() +
   aes(fill = income) +
   scale_fill_viridis_c(option = "magma") +
@@ -1183,21 +1236,11 @@ teethr::dental_arcade_mapping |&gt;
   left_join(teethr::tooth_notation |&gt; rename(tooth = text)) |&gt;
   select(tooth_id = tooth, fdi = FDI, standard = standards, geometry) -&gt;
 teeth_ref_data
+
+options(ggregions.ref.regions = teeth_ref_data)
 ```
 
---
 
-
-### ggplot2 'layer' preparation
-
-
-``` r
-library(ggregions)
-geom_tooth &lt;- write_geom_region(teeth_ref_data, required_aes = "tooth_id|fdi|standard")
-geom_tooth_text &lt;- write_geom_region_text(teeth_ref_data, required_aes = "tooth_id|fdi|standard")
-stamp_tooth &lt;- write_stamp_region(teeth_ref_data, required_aes = "tooth_id|fdi|standard")
-stamp_tooth_text &lt;- write_stamp_region_text(teeth_ref_data, required_aes = "tooth_id|fdi|standard")
-```
 
 
 
@@ -1260,7 +1303,7 @@ count: false
 ``` r
 caries_ratios |&gt;
   ggplot() +
-* aes(tooth_id = tooth,
+* aes(region = tooth,
 *     fill = ratio)
 ```
 ]
@@ -1278,9 +1321,9 @@ count: false
 ``` r
 caries_ratios |&gt;
   ggplot() +
-  aes(tooth_id = tooth,
+  aes(region = tooth,
       fill = ratio) +
-* geom_tooth(alpha = .5)
+* geom_region(alpha = .5)
 ```
 ]
  
@@ -1297,10 +1340,10 @@ count: false
 ``` r
 caries_ratios |&gt;
   ggplot() +
-  aes(tooth_id = tooth,
+  aes(region = tooth,
       fill = ratio) +
-  geom_tooth(alpha = .5) +
-* stamp_tooth_text(size = 2)
+  geom_region(alpha = .5) +
+* geom_region_text(size = 2)
 ```
 ]
  
@@ -1317,10 +1360,10 @@ count: false
 ``` r
 caries_ratios |&gt;
   ggplot() +
-  aes(tooth_id = tooth,
+  aes(region = tooth,
       fill = ratio) +
-  geom_tooth(alpha = .5) +
-  stamp_tooth_text(size = 2) +
+  geom_region(alpha = .5) +
+  geom_region_text(size = 2) +
 * scale_fill_viridis_c()
 ```
 ]
@@ -1378,27 +1421,12 @@ caries_ratios |&gt;
 
 
 ``` r
-female_sf &lt;- gganatogram::hgFemale_list[c(1:156, 180:195)] |&gt; # return to this!!
-  bind_rows() |&gt;
-  remove_missing() |&gt;
-  to_sf_routine()
-
 ref_female_sf &lt;- female_sf |&gt; 
   select(organ = id, geometry)
+
+options(ggregions.ref.regions = ref_female_sf)
 ```
 
---
-
-### Step 2: User-facing function preparation
-
-
-``` r
-library(ggregions)
-stamp_organ &lt;- write_stamp_region(ref_female_sf, required_aes = "organ")
-geom_organ &lt;- write_geom_region(ref_female_sf, required_aes = "organ")
-stamp_organ_text &lt;- write_stamp_region_text(ref_female_sf, required_aes = "organ")
-geom_organ_text &lt;- write_geom_region_text(ref_female_sf, required_aes = "organ")
-```
 
 ---
 
@@ -1466,7 +1494,7 @@ tribble(~my_organ, ~color,
         "lung",    "plum",
         "heart",    "coral") |&gt;
 ggplot() +
-* stamp_organ(alpha = .2)
+* stamp_region(alpha = .2)
 ```
 ]
  
@@ -1488,8 +1516,8 @@ tribble(~my_organ, ~color,
         "lung",    "plum",
         "heart",    "coral") |&gt;
 ggplot() +
-  stamp_organ(alpha = .2) +
-* aes(organ = my_organ)
+  stamp_region(alpha = .2) +
+* aes(region = my_organ)
 ```
 ]
  
@@ -1511,9 +1539,9 @@ tribble(~my_organ, ~color,
         "lung",    "plum",
         "heart",    "coral") |&gt;
 ggplot() +
-  stamp_organ(alpha = .2) +
-  aes(organ = my_organ) +
-* geom_organ()
+  stamp_region(alpha = .2) +
+  aes(region = my_organ) +
+* geom_region()
 ```
 ]
  
@@ -1535,9 +1563,9 @@ tribble(~my_organ, ~color,
         "lung",    "plum",
         "heart",    "coral") |&gt;
 ggplot() +
-  stamp_organ(alpha = .2) +
-  aes(organ = my_organ) +
-  geom_organ() +
+  stamp_region(alpha = .2) +
+  aes(region = my_organ) +
+  geom_region() +
 * aes(fill = I(color))
 ```
 ]
@@ -1560,11 +1588,11 @@ tribble(~my_organ, ~color,
         "lung",    "plum",
         "heart",    "coral") |&gt;
 ggplot() +
-  stamp_organ(alpha = .2) +
-  aes(organ = my_organ) +
-  geom_organ() +
+  stamp_region(alpha = .2) +
+  aes(region = my_organ) +
+  geom_region() +
   aes(fill = I(color)) +
-* geom_organ_text()
+* geom_region_text()
 ```
 ]
  
@@ -1586,11 +1614,11 @@ tribble(~my_organ, ~color,
         "lung",    "plum",
         "heart",    "coral") |&gt;
 ggplot() +
-  stamp_organ(alpha = .2) +
-  aes(organ = my_organ) +
-  geom_organ() +
+  stamp_region(alpha = .2) +
+  aes(region = my_organ) +
+  geom_region() +
   aes(fill = I(color)) +
-  geom_organ_text() +
+  geom_region_text() +
 * ggplyr:::data_slice(5)
 ```
 ]

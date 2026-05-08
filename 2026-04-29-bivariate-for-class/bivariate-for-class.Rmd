@@ -56,14 +56,85 @@ data_yawning <- read_delim("https://www.isi-stats.com/isi/data/chap5/Yawning.txt
 "https://www.isi-stats.com/isi/data/chap6/OldFaithful.txt"
 "https://www.isi-stats.com/isi/data/chap6/Haircuts.txt"
 
+
+"https://www.isi-stats.com/isi/data/chap6/BreastFeedIntell.txt"
+
+"https://www.isi-stats.com/isi/data/chap6/CloseFriends.txt"
+
+
+
+first_base <- read_delim("https://www.isi-stats.com/isi/data/chap7/FirstBase.txt")
+
+cars |>
+  ggplot() + 
+  aes(dist, speed) + 
+  geom_point() + 
+  # geom_text(label = "^", vjust = 1) +
+  geom_hline(aes(yintercept = speed), ) + 
+  geom_smooth(method = lm, orientation = "y") + 
+  coord_flip() + 
+  geom_text(label = ">", hjust = 1, vjust = .35)
+
+
+
+facet_align_cut <- function(var, n = 2){
+  
+  facet_align({{var}} |> cut_interval(n = n) |> 
+                fct_rev(), 
+              scales = "free_y") 
+  
+}
+
+
+
+
+cars |> 
+  ggplot() + 
+  aes(x = dist) + 
+  geom_rug() + 
+  ggxmean::geom_x_mean() +
+  aes(y = speed) +
+  geom_point()
+
+last_plot() + 
+  facet_align_cut(speed) + 
+  ggxmean::geom_x_mean()
+
+last_plot() + 
+  facet_align_cut(speed, 3)
+  
+last_plot() + 
+  facet_align_cut(speed, 4)
+
+last_plot() + 
+  facet_align_cut(speed, 5)
+
+
+data_cats_jumping <- read_delim("https://www.isi-stats.com/isi/data/chap10/CatJumping.txt") |> 
+  janitor::clean_names()
+
+facet_cut_horizontal <- function(var, n = 2){
+  
+  facet_wrap(facets =vars({{var}}|> cut_interval(n = n)), nrow = 1,
+              scales = "free_x") 
+  
+}
+
+
+data_cats_jumping |> 
+  ggplot() +
+  aes(x = mass, y = velocity) + 
+  geom_rug() + 
+  ggxmean::geom_y_mean(linetype = "dashed") +
+  geom_point() + 
+  facet_cut_horizontal(velocity)
+
+last_plot() + 
+  facet_cut_horizontal(velocity, n = 3)
+
+last_plot() + 
+  facet_cut_horizontal(velocity, n = 5)
+
 ```
 
-## Experiment
 
-```{r}
-
-```
-
-
-
-## Closing remarks, Other Relevant Work, Caveats
