@@ -1,0 +1,99 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+library(ggprop.test)
+
+data_hospital_nurse |> 
+  ggplot() + 
+  aes(x = outcome) + 
+  geom_stack() + 
+  geom_prop() + 
+  ggprop.test:::facet_align(gilbert_worked) + 
+  ggprop.test:::geom_prop_diff() + 
+  ggprop.test:::geom_prop_diff_label()
+
+# last_plot() + 
+#   facet_collapse(gilbert_worked)
+
+ggplyr::last_plot_wipe(index = 4)
+
+
+compute_diff <- function(data, scales){
+  
+  data |> 
+    summarise(prop = outcome |> as.factor() |> 
+             as.numeric() |> mean(), 
+           .by = group) |> 
+    summarise(diff_prop = max(prop)- min(prop)) |> 
+    mutate(group = 1, PANEL = 1) |> 
+    mutate(x = diff_prop) |> 
+    mutate(label = x |> round(2))
+  
+}
+
+
+data_hospital_nurse |> 
+  rename(outcome = outcome, group = gilbert_worked) |>
+  compute_diff() 
+
+
+data_hospital_nurse |> 
+  ggplot() + 
+  aes(outcome = outcome, group = gilbert_worked) + 
+  scale_x_continuous(limits = c(-1, 1), 
+                     name = "possible differences in proportions", 
+                     breaks = c(-1, -.5, 0, .5, 1),
+                     labels = c(-1, -.5, "no\ndifference", .5, 1)
+                     ) + 
+  annotate(geom = "segment", x = 1, xend = -1, y = I(0.05), yend = I(0.05) ) + 
+  geom_text(y = I(0.05), 
+            stat = statexpress::qstat_panel(compute_diff),
+            label = "^",
+            vjust = 1, size = 6,
+            color = "blue") +  
+  geom_label(y = I(0.05), 
+            stat = statexpress::qstat_panel(compute_diff),
+            vjust = 0, size = 4,
+            color = "blue")  + 
+  annotate("text", y = I(0.05), 
+            label = "^", x = 0,
+            vjust = 1, size = 6) +  
+  annotate("label", y = I(0.05), 
+            x = 0, label = 0,
+            vjust = 0, size = 4) 
+  
+
+ggprop.test:::scale_x_prop
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

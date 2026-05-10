@@ -1,0 +1,85 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, dpi = 400, dev = "ragg_png")
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r, fig.width = 8}
+
+library(mall)
+options(.mall_chat = ellmer::chat_google_gemini())
+
+
+library(tidyverse)
+my_palette <- c("grey9", "violet", "darkgreen", "midnightblue", 
+                     "turquoise", "darkorange", "grey", "brown", 
+                     "darkred", "burlywood", "goldenrod2", "slateblue") 
+
+my_palette |> 
+  tibble(pal_colors = _) |> 
+  ggplot() + 
+  aes(x = pal_colors, y = "all",
+      fill = I(pal_colors)) + 
+  geom_tile() 
+
+'my_palette <- 
+     c("coral", "darkgreen", "orange", 
+     "turquoise", "dimgrey",  "brown", 
+     "beige", "chartreuse", "slateblue") 
+
+
+data <- 
+ tribble(  ~animal,  ~count, 
+         "dolphin",      22,
+        "goldfish",      25,
+            "frog",      30) |> 
+ mutate(color = animal |> 
+         llm_vec_classify(my_palette)) #<<
+         
+         
+ggplot(data = data) + 
+  aes(x = animal, y = count,
+      fill = color |> I()) + #<<
+  geom_col()' |> 
+ggram::ggram(code = _, title = "LLM-assisted semantic color encoding with {mall}!🎨🎉", subtitle = "Colors selected with mall::llm_vec_classify() which translated \n from an animal to a specific color among 12 options in a pallet 👀🤯")
+
+
+c("plum", "coral", "darkgreen", 
+     "orange", "turquoise", "black", 
+     "dimgrey", "sienna", "maroon", 
+     "beige", "chartreuse", "slateblue") 
+
+colors()
+
+
+"chartreuse"
+
+# "azure"  "bisque" "burlywood"  "coral"   "dimgrey" "maroon" "sienna" "gainsboro"
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
