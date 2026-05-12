@@ -21,7 +21,21 @@ options(tidyverse.quiet = TRUE)
 ## Status Quo
 
 ```{r}
-library(tidyverse)
+"library(ggprop.test)
+
+dolphin_data |> 
+  ggplot() + 
+  aes(x = observed) + 
+  geom_stack() + 
+  geom_stack_label() + 
+  geom_support() +
+  geom_prop() + 
+  geom_prop_label() + 
+  stamp_prop(.5) + 
+  stamp_prop_label(.5) + 
+  geom_binomial_null(.5) " |>
+ggram::ggram(code = _, title = "Are Dolphins Doris and Buzz cooperating?🐬🐬🐟🪣", subtitle = "Example and data from 'Introduction to Statistical Investigations' curriculum")
+
 
 ```
 
@@ -49,20 +63,6 @@ ggram::ggram(code = _, title = "As gritty as a West Point cadet? 🗡️🪖🥵
 
 
 ```{r}
-"library(ggprop.test)
-
-dolphin_data |> 
-  ggplot() + 
-  aes(x = observed) + 
-  geom_stack() + 
-  geom_stack_label() + 
-  geom_support() +
-  geom_prop() + 
-  geom_prop_label() + 
-  stamp_prop(.5) + 
-  stamp_prop_label(.5) + 
-  geom_binomial_null(.5) " |>
-ggram::ggram(code = _, title = "Are Dolphins Doris and Buzz cooperating?🐬🐬🐟🪣")
 
 
 "library(ggprop.test)

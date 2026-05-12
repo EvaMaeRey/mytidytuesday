@@ -1,0 +1,102 @@
+---
+title: "two-sample t test"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F, out.width = "100%", dpi = 500)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+
+## Step 1. Visualize the difference in means
+
+```{r}
+library(tidyverse)
+library(ggt.test)
+
+data_old_faithful
+
+```
+
+
+```{r, fig.width=9, echo = F}
+"data_old_faithful |> 
+  ggplot() + 
+  aes(x = time) + 
+  geom_stacks() + 
+  geom_mean() + 
+  facet_align(year) + # two samples
+  geom_mean_diff() + 
+  geom_mean_diff_label()" |>
+  ggram::ggram(code = _)
+```
+
+
+## 'Interlude' - What if there was no relationship between vars - shuffling?  Is difference consistent with no relationship?
+
+
+In 10 shuffles, how many times is the difference under than observed diff 32.21...
+
+```{r, out.width="33%", fig.show='hold'}
+data_old_faithful |> 
+  data_shuffle_var(var = time) |>  # shuffle - no association between vars
+  ggplot() + 
+  aes(x = shuffled) + #<< shuffled values 
+  geom_stacks() +
+  geom_mean() + 
+  geom_mean_diff() +
+  facet_align(year) + 
+  geom_mean_diff() +
+  geom_mean_diff_label()
+
+
+# last_plot() + (data_haircuts |> data_shuffle_var(var = price))
+# 
+# last_plot() + (data_haircuts |> data_shuffle_var(var = price))
+# 
+# last_plot() + (data_haircuts |> data_shuffle_var(var = price))
+# 
+# last_plot() + (data_haircuts |> data_shuffle_var(var = price))
+# 
+# last_plot() + (data_haircuts |> data_shuffle_var(var = price))
+
+```
+
+
+## Step 2. Visualize distribution for null (and standard error)
+
+
+```{r}
+data_old_faithful |> 
+  count(year)
+
+data_old_faithful |> 
+  group_by(year) |>
+  summarise(sd = sd(time))
+```
+
+
+```{r, fig.width=9, echo = F}
+'data_old_faithful |> 
+  ggplot() + 
+  aes(outcome = time, 
+      sample = year) + 
+  geom_sd_span() +
+  stamp_no_diff() +
+  stamp_no_diff_label() +
+  geom_mean_diff_normalized() +
+  geom_mean_diff_normalized_label() +
+  stamp_equation() + 
+  geom_tdist_null_two_sample()' |>
+  ggram::ggram(code = _)
+```
+
+
+
+
