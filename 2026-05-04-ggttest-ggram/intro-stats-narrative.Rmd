@@ -1,0 +1,351 @@
+---
+title: "The Doris and Buzz Scenario"
+subtitle: "Proportions of successes, binomials, and the null train-of-thought"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, dpi = 300, dev = "ragg_png", fig.width = 8, warning = F, message = F, echo = T)
+options(tidyverse.quiet = TRUE)
+library(tidyverse)
+
+
+replace_vowels_in_bold <- function(text) {
+  # Find all **bold** matches and their positions
+  pattern <- "\\*\\*.*?\\*\\*"
+  matches <- gregexpr(pattern, text, perl = TRUE)
+  matched_strings <- regmatches(text, matches)[[1]]
+  
+  # For each match, replace vowels inside the ** **
+  replacements <- sapply(matched_strings, function(m) {
+    inner <- substr(m, 3, nchar(m) - 2)  # strip leading and trailing **
+    inner_replaced <- gsub("[aeiou]", "\\\\_", inner)
+    paste0(inner_replaced)
+  })
+  
+  # Substitute back into the original string
+  result <- text
+  for (i in seq_along(matched_strings)) {
+    result <- sub(matched_strings[i], replacements[i], result, fixed = TRUE)
+  }
+  
+  result
+}
+```
+
+```{r, results = "asis"}
+"hello and how **are** you" |> 
+  paste(
+collapse = "
+
+") |> 
+  replace_vowels_in_bold() |> cat()
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+We started thinking about formal **statistical** tests ('**hypothesis testing**') first with case of the friendly **dolphins** Doris and Buzz.  Trainers run an experiment with the two dolphins in a large tank.  Buzz is facing one side where the trainer indicates which way Doris will needs to go (right or left) to get a **fish** prize from another trainer.  Buzz and Doris are separated by a large, curtain so we know that Doris cannot see what Buzz's trainer has indicated (but the trainers *are* able to **communicate** and settle on a fish-treat direction).  
+
+The experiment is run because the trainers are curious if Doris and Buzz could communicate about something like direction. They repeat the experiment 16 times.  Out of these times, Doris goes to the correct side, and earns a fish 15 times!  That seems pretty good!  But, could Doris just have been guessing.  More statistically speaking, we might ask, is what we **observe** different from a '**chance model**'?  Is Doris' outcomes **consistent** with a 50-50 guess, just like flipping a coin.  
+
+
+```{r}
+library(tidyverse)
+library(ggprop.test)
+
+dolphin_data |> 
+  ggplot() + 
+  aes(x = observed) + 
+  geom_stack() + 
+  geom_stack_label() + 
+  annotate(geom = "text",  # using a text layer, but not looking at the data ...
+           x = I(.2),
+           y = I(.75),
+           label = "🐬🐬🐟🪣",
+           angle = 25,
+           size = 18) + 
+  labs(title = "Wow Doris!! You sure got a lot of fish.")
+```
+To look how consistent the outcome 15/16 fish with a chance model, we'll use the logic of the 'Prop test', or one-sample proportion test.  
+
+The very first step to tackling this problem is just to calculate the **observed statistic**, in this case, the **proportion** $\hat{p}$ of successes.  
+
+$$\hat{p} = \frac{n_{successes}}{n_{total}} $$
+This is `r 15/16`.  Also is the same result as taking the *mean* of the values of the outcomes encoded as *zeros* and ones:  `c(0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1, 1, 1, 1, 1, 1)`!   The proportion (and mean) is the **balancing point** of the data.  So let's **position** our mean along a beam that extends from zero to one to 'balance' our stacked observations.  
+
+```{r}
+last_plot() +
+  geom_support() +
+  geom_prop() + 
+  geom_prop_label() + 
+  labs(title = "We're impressed with Doris's 15/16 correct \n... but could this have happened by chance?")
+```
+
+And by chance, we mean guessing, a 50-50 propensity to go to either side, no matter what Buzz and his trainer have going on.  Let's place the asserted proportion of .5 as a contrast in our figure:
+
+```{r}
+last_plot() +
+  stamp_prop(.5) +
+  stamp_prop_label(.5) + 
+  labs(subtitle = "Adding asserted population prop of .5 - like tossing a fair coin coin toss")
+```
+
+And let's 'toss some coins'.  If we do 16 coin tosses, we can see a real one-time outcome of what happens just by chance (say heads is a 'success'), and associated proportion for 16 50-50 chance trials!
+
+
+```{r}
+dolphin_data |>
+  mutate(synthetic = 
+           to_synthetic(observed, prob = .5)) 
+
+dolphin_data |>
+  mutate(synth = 
+           to_synthetic(observed, prob = .5)) |>
+  ggplot() + 
+  aes(x = synth) + 
+  geom_stack() + 
+  geom_stack_label() +
+  geom_prop() + 
+  geom_prop_label()
+```
+
+
+Let's do 16 more tosses, and again calculate the proportion.
+
+```{r}
+last_plot() + dolphin_data |> mutate(synth = to_synthetic(observed, prob = .5)) 
+```
+
+
+<details>
+
+Let's do 16 more tosses, and calculate the proportion.
+
+
+```{r, out.width="50%"}
+last_plot() + dolphin_data |> mutate(synth = to_synthetic(observed, prob = .5)) 
+```
+
+Let's do 16 more tosses, and calculate the proportion.
+
+
+```{r, out.width="50%"}
+last_plot() + dolphin_data |> mutate(synth = to_synthetic(observed, prob = .5)) 
+```
+
+Let's do 16 more tosses, and calculate the proportion.
+
+
+```{r, out.width="50%"}
+last_plot() + dolphin_data |> mutate(synth = to_synthetic(observed, prob = .5)) 
+```
+
+
+</details>
+
+Alright, from these chance experiments, we might feel like we start to have footing to say that this Doris and Buzz's experience isn't consistent with chance.  
+
+> But... simulation is kind of a hassle - is there a more **analytic**, math-based approach, where I can just think about the proportion outcomes of a lot of 16 trial experiments?!!?
+
+Yes!  Since we are just looking at coin flips with precise **probabilistic** outcomes, we can use the a **binomial** distribution.  
+
+Let's first look at the distribution associated with a single coin flip below.  We'll see that the proportion of successes can either by 1 or 0 - and there's a 50-50 chance of either.  It's head or tails.
+
+```{r}
+tidy_dbinom(num_trials = 1, single_trial_prob = .5) |> 
+  mutate(prop = num_successes/num_trials)
+```
+
+
+For two coin flips, we start to see branching...  We see that for proportions of successes, we can get TT tails-tails, both TH or HT (half successes), or HH (100% successes).  
+
+```{r}
+tidy_dbinom(num_trials = 2, single_trial_prob = .5)
+```
+
+For three coin flips, we start see further branching ...
+
+
+```{r}
+tidy_dbinom(num_trials = 3, single_trial_prob = .5)
+
+tidy_dbinom(num_trials = 4, single_trial_prob = .5)
+```
+
+Our cases is 16 trials...  So there are 17 possible outcomes 0/16 to 16/16, and in this family of outcomes, the one that occurring most is 8/16 (50-50).
+
+
+```{r}
+tidy_dbinom(num_trials = 16, single_trial_prob = .5)
+```
+
+Let's pop this on to our 'balance' picture!  The heights of the distribution are proportional to the probability of occurence. 
+
+```{r}
+dolphin_data |> 
+  ggplot() + 
+  aes(x = observed) + 
+  geom_stack() + 
+  geom_stack_label() + 
+  geom_support() +
+  geom_prop() + 
+  geom_prop_label() + 
+  stamp_prop(.5) + 
+  stamp_prop_label(.5) + 
+  geom_binomial_null(.5) 
+```
+
+How often is something so extreme or more extreme as .94 to occur just by chance? We'll go back to our full set of probability associated with different proportions...
+
+```{r}
+tidy_dbinom(num_trials = 16, 
+            single_trial_prob = .5) |> 
+  filter(num_successes >= 15 |  # we'll look at as extreme as 15 successes
+         num_successes <= 1)  # and on the other side 1 is as extreme
+
+
+2*(.0002441406 + .00001525879)  # 4 in 10000 times!! not often!
+```
+
+
+`r 2*(.0002441406 + .00001525879)` is my p-value. Its the proportion of times we'd see something as or more extreme than the null if the null is true.  
+
+Since we have a very small p-value (4/10000) -- that the chance of observing something like this is very small if the null is true -- then we can reject the null hypothese of a chance model, and favor the alternative hypothesis.
+
+
+$$H_0: \pi = .5$$
+
+$$H_a: \pi  .5$$
+
+
+> Hey, but I've heard of the "1 proportion Z test".  Isn't z something in the normal distribution?  But we are using the binomial distribution here.  
+
+Your are right that a normal distribution can be used -- but in certain circumstances, and not in this case actually.  The 'validity condition' that many agree upon is that there is the expectation of 10 successes and 10 failures under the null (see ISI curriculum).  In this case we're just shy of that at 8 and 8.  
+
+But let's look at another case where we do have enough data to use a trusty, well-behaived normal distribution and can speak of z-scores!  
+
+
+## End... 
+
+```{r}
+"library(ggprop.test)
+
+dolphin_data |> 
+  ggplot() + 
+  aes(x = observed) + 
+  geom_stack() + 
+  geom_stack_label() + 
+  geom_support() +
+  geom_prop() + 
+  geom_prop_label() + 
+  stamp_prop(.5) + 
+  stamp_prop_label(.5) + 
+  geom_binomial_null(.5) " |>
+ggram::ggram(code = _, 
+             title = "Are Dolphins Doris and Buzz cooperating?🐬🐬🐟🪣", 
+             subtitle = "Example and data from 'Introduction to Statistical Investigations' curriculum")
+```
+
+
+
+
+```{r}
+"library(ggprop.test)
+
+dolphin_data |> 
+  ggplot() + 
+  aes(x = observed) + 
+  geom_stack() + 
+  geom_stack_label() + 
+  geom_support() +
+  geom_prop() + 
+  geom_prop_label() + 
+  stamp_prop(.5) + 
+  stamp_prop_label(.5) + 
+  geom_binomial_null(.5) " |>
+ggram::ggram(code = _, 
+             title = "Are Dolphins Doris and Buzz cooperating?🐬🐬🐟🪣", 
+             subtitle = "Example and data from 'Introduction to Statistical Investigations' curriculum")
+
+
+
+```
+
+
+## Experiment
+
+```{r}
+
+
+# EvaMaeRey/ggt.test
+library(ggt.test)
+
+'data_grit_undergrad |> 
+  ggplot() + 
+  aes(x = score) +
+  geom_stacks() +
+  geom_rug() + 
+  geom_mean() + 
+  geom_mean_label() +
+  stamp_mean(3.75) + 
+  stamp_mean_label(3.75) + 
+  geom_tdist_null(value = 3.75)' |>
+ggram::ggram(code = _, title = "As gritty as a West Point cadet? 🗡️🪖🥵💪🧗")
+```
+
+
+
+```{r}
+
+
+"library(ggprop.test)
+
+donor_data |> 
+  ggplot() + 
+  aes(x = decision) + 
+  geom_stack() + 
+  geom_stack_label() + 
+  geom_support() +
+  geom_prop() + 
+  geom_prop_label() + 
+  stamp_prop(.5) + 
+  stamp_prop_label(.5) + 
+  geom_normal_prop_null() + 
+  geom_normal_prop_null_sds() +
+  stamp_eq_norm_prop()" |>
+ggram::ggram(code = _, title = "Organ donation, is the sample consistent with a 50-50 split in the population\nbetween people who check 'donate' vs. 'no thanks'? 🫁🫀")
+  
+# hello
+```
+
+
+```{r}
+"data_haircuts |>
+  ggplot() + 
+  aes(x = price) + 
+  geom_support() + 
+  geom_rug() + 
+  geom_stacks()+
+  geom_mean() + 
+  geom_mean_label() + 
+  facet_align(sex) + 
+  geom_mean_diff() + 
+  geom_mean_diff_label()
+" |>
+ggram::ggram(code = _, title = "Is there a statistical difference between male and female haircut prices? ✂💈💇💇‍♀️")
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

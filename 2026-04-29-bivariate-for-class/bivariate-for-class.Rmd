@@ -79,7 +79,7 @@ cars |>
 
 facet_align_cut <- function(var, n = 2){
   
-  facet_align({{var}} |> cut_interval(n = n) |> 
+  ggt.test::facet_align({{var}} |> cut_interval(n = n) |> 
                 fct_rev(), 
               scales = "free_y") 
   
