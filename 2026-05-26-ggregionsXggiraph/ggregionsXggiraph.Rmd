@@ -1,0 +1,90 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+library(ggregions)
+
+data_co <- tigris::counties("Colorado", resolution = '20m')
+
+data_co |> 
+  ggplot() + 
+  aes(geometry = geometry,
+      fill = ALAND,
+      tooltip = NAME) +
+  geom_sf() + 
+  ggiraph::geom_sf_interactive()
+
+
+
+ggplot() + 
+  aes(geometry = data_co$geometry,
+      fill = data_co$ALAND) +
+  geom_sf() +
+  coord_sf(crs = sf::st_crs(data_co))
+
+ggiraph::girafe(last_plot())
+
+ggiraph::girafe(ggobj = last_plot(),
+  # code = print(p),
+  options = 
+    # Brightens the hovered element and increases its size
+    list(
+    # Highlighted (hovered) element gets a bright fill
+    ggiraph::opts_hover(css = "fill: #00BFFF;"),
+    
+    # All OTHER elements get dimmed
+    ggiraph::opts_hover_inv(css = "opacity: 0.3;") 
+  )
+)
+
+
+
+library(ggplot2)
+library(ggiraph)
+
+dataset <- mtcars
+dataset$carname = row.names(mtcars)
+
+gg <- ggplot(
+  data = dataset,
+  mapping = aes(x = wt, y = qsec, color = disp,
+                tooltip = carname, data_id = carname) ) +
+  geom_point_interactive() + 
+  theme_minimal()
+
+x <- girafe(ggobj = gg)
+x <- girafe_options(x,
+  opts_hover(css = "fill:wheat;stroke:orange;r:5pt;") )
+if( interactive() ) print(x)
+
+```
+
+## Experiment
+
+```{r}
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

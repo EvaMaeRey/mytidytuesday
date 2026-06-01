@@ -69,4 +69,41 @@ ggplot(data = wrangled) +
 ```
 
 
+
+```{r}
+library(mall)
+library(tidyverse)
+
+options(.mall_chat = ellmer::chat_google_gemini())
+
+tt <- tidytuesdayR::tt_load("2026-03-10") #<<
+
+labels = 100*0:20/20
+labels = 100
+
+malled <- 
+  tt$absolute_judgements |> 
+  group_by(term) |>
+  slice(1) |> 
+  rename(humans = probability) |>
+  slice_sample(n = 100) |> 
+  llm_classify(term,
+               labels = labels |> as.character(),
+               "gemini")
+
+           
+ggplot(data = wrangled) + 
+  aes(x = probability,
+      y = term_ord,
+      fill = term_ord,
+      color = term_ord,
+      alpha = I(.3)) + 
+  geom_density_ridges() + #<<
+  labs(x = NULL, y = NULL) +
+  theme(legend.position = "none")
+
+
+```
+
+
 ## Closing remarks, Other Relevant Work, Caveats

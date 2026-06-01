@@ -12,15 +12,23 @@ knitr::opts_chunk$set(echo = TRUE)
 options(tidyverse.quiet = TRUE)
 ```
 
+> The data given by x are clustered by the k-means method, which aims to partition the points into k groups such that the sum of squares from points to the assigned cluster centres is minimized. At the minimum, all cluster centres are at the mean of their Voronoi sets (the set of data points which are nearest to the cluster centre).
+
+> The algorithm of Hartigan and Wong (1979) is used by default. Note that some authors use k-means to refer to a specific algorithm rather than the general method: most commonly the algorithm given by MacQueen (1967) but sometimes that given by Lloyd (1957) and Forgy (1965). The Hartigan–Wong algorithm generally does a better job than either of those, but trying several random starts (nstart \> 1) is often recommended. In rare cases, when some of the points (rows of x) are extremely close, the algorithm may not converge in the “Quick-Transfer” stage, signalling a warning (and returning ifault = 4). Slight rounding of the data may be advisable in that case.
+
+> For ease of programmatic exploration, k=1 is allowed, notably returning the center and withinss.
+
+> Except for the Lloyd–Forgy method, k clusters will always be returned if a number is specified. If an initial matrix of centres is supplied, it is possible that no point will be closest to one or more centres, which is currently an error for the Hartigan–Wong method.
 
 
 
-## Intro Thoughts
+![](https://www.tidymodels.org/learn/statistics/k-means/kmeans.gif)
 
+## Status Quo, without ggkmeans
 
-## Status Quo
+> <https://www.tidymodels.org/learn/statistics/k-means/index.html#exploratory-clustering>
 
-```{r}
+```{r, message=F, warning=F}
 library(tidyverse)
 
 library(tidymodels)
@@ -43,9 +51,11 @@ labelled_points <-
   select(-num_points) %>% 
   unnest(cols = c(x1, x2))
 
-ggplot(labelled_points, aes(x1, x2, color = cluster)) +
-  geom_point(alpha = 0.3)
-
+ggplot(labelled_points) +
+  aes(x1, 
+      x2, 
+      color = cluster) +
+  geom_point()
 
 points <- 
   labelled_points %>% 
@@ -68,10 +78,17 @@ data_prep |>
   aes(bill_length_mm, bill_depth_mm) + 
   geom_point() + 
   aes(color = .cluster)
+```
+
+```{r}
+set_num_centers <- function(num_centers = 3){
+  
+  options(ggkmeans.num_centers = num_centers)
+  
+}
 
 
-
-compute_panel_kmeans <- function(data, scales, centers = 3, seed = 1234){
+compute_panel_kmeans <- function(data, scales, centers = getOption("ggkmeans.num_centers", 3), seed = 1234){
   
   set.seed(seed)
   
@@ -79,48 +96,35 @@ compute_panel_kmeans <- function(data, scales, centers = 3, seed = 1234){
     mutate(row_id = row_number()) |>
     select(x, y) |> 
     remove_missing() 
-  
-  # unmodeled <- data |> # do this more carefully
-  #   select(-x, -y) |> 
-  #   slice(data_prep$row_id)
 
   data_prep |>
   kmeans(centers = centers) |> 
-  augment(data_prep) #|>
-  # bind_cols(unmodeled)
+  augment(data_prep)
   
 }
 
+
+StatKmeans <- ggproto("StatKmeans", Stat,
+                      compute_panel = compute_panel_kmeans,
+                      default_aes = aes(color = after_stat(.cluster)))
+
+#' @export
+geom_kmeans <- make_constructor(GeomPoint, stat = StatKmeans)
+```
+
+```{r}
 penguins |> 
-  select(x = bill_length_mm, y = bill_depth_mm) |> 
-  compute_panel_kmeans()
+  ggplot() + 
+  aes(bill_length_mm, bill_depth_mm) + 
+  geom_point() 
 
-
-compute_panel_kmeans_tidy <- function(data, scales, centers = 3, seed = 1234){
-  
-  set.seed(seed)
-  
-  data_prep <- data |> 
-    mutate(row_id = row_number()) |>
-    select(x, y) |> 
-    remove_missing() 
-  
-  # unmodeled <- data |> # do this more carefully
-  #   select(-x, -y) |> 
-  #   slice(data_prep$row_id)
-
-  data_prep |>
-  kmeans(centers = centers) |> 
-  tidy() |> 
-  rename(.size = size) #|>
-  # bind_cols(unmodeled)
-  
-}
+last_plot() + 
+  geom_kmeans()
 ```
 
 
 ```{r}
-compute_panel_kmeans_lengths <- function(data, scales, centers = 3, seed = 1234){
+compute_panel_kmeans_tidy <- function(data, scales, centers = getOption("ggkmeans.num_centers", 3), seed = 1234){
   
   set.seed(seed)
   
@@ -129,16 +133,50 @@ compute_panel_kmeans_lengths <- function(data, scales, centers = 3, seed = 1234)
     select(x, y) |> 
     remove_missing() 
   
-  # unmodeled <- data |> # do this more carefully
-  #   select(-x, -y) |> 
-  #   slice(data_prep$row_id)
+  data_prep |>
+  kmeans(centers = centers) |> 
+  tidy() |> 
+  rename(.size = size)
+  
+}
 
+
+StatKmeansCenters <- ggproto("StatKmeansCenters", Stat,
+                      compute_panel = compute_panel_kmeans_tidy)
+
+GeomPointX <- ggproto("GeomPointX", GeomPoint,
+                      default_aes = GeomPoint$default_aes |> 
+                        modifyList(aes(shape = 13, size = 7), 
+                                   keep.null = T)
+                      )
+
+#' @export
+geom_kmeans_center <- make_constructor(GeomPointX, stat = StatKmeansCenters)
+
+```
+
+
+```{r}
+last_plot() +
+  geom_kmeans_center()
+```
+
+```{r}
+compute_panel_kmeans_lengths <- function(data, scales, 
+                                         centers = getOption("ggkmeans.num_centers", 3), seed = 1234){
+  
+  set.seed(seed)
+  
+  data_prep <- data |> 
+    mutate(row_id = row_number()) |>
+    select(x, y) |> 
+    remove_missing() 
+  
   kmeaned <- data_prep |>
     kmeans(centers = centers)
   
   points <- kmeaned |> 
-  augment(data_prep) #|>
-  # bind_cols(unmodeled)
+  augment(data_prep) 
   
   kmeaned |> 
   tidy() |> 
@@ -154,109 +192,53 @@ StatKmeansSegments <- ggproto("StatKmeansSegments", Stat,
                               compute_panel = compute_panel_kmeans_lengths,
                               default_aes = aes(color = after_stat(.cluster)))
 
-geom_kmeans_lengths <- make_constructor(GeomSegment, stat = StatKmeansSegments)
+GeomSegmentThin <- ggproto("GeomSegmentThin", GeomSegment,
+                           default_aes = GeomSegment$default_aes |> 
+                             modifyList(aes(linewidth = .2, alpha = .5)))
 
-penguins |> 
-  remove_missing() |>
-  select(x = bill_length_mm, y = bill_depth_mm) |> 
-  compute_panel_kmeans_tidy()
 
-penguins_clean <- penguins |> 
-  remove_missing()
-
-penguins_clean |> 
-  ggplot() + 
-  aes(x = bill_length_mm, 
-      y = bill_depth_mm) + 
-  geom_kmeans_lengths() + 
-  geom_point()
-
+#' @export
+geom_kmeans_lengths <- make_constructor(GeomSegmentThin, stat = StatKmeansSegments)
 ```
 
 
 ```{r}
-
-StatKmeans <- ggproto("StatKmeans", Stat,
-                      compute_panel = compute_panel_kmeans,
-                      default_aes = aes(color = after_stat(.cluster)))
-
-geom_kmeans <- make_constructor(GeomPoint, stat = StatKmeans)
-
-StatKmeansCenters <- ggproto("StatKmeansCenters", Stat,
-                      compute_panel = compute_panel_kmeans_tidy)
-
-GeomPointX <- ggproto("GeomPointX", GeomPoint,
-                      default_aes = GeomPoint$default_aes |> 
-                        modifyList(aes(shape = 13, size = 7), 
-                                   keep.null = T)
-                      )
-
-geom_kmeans_center <- make_constructor(GeomPointX, stat = StatKmeansCenters)
-
-
-penguins_clean <- penguins |>
-  remove_missing() 
-
-penguins_clean |> 
-  ggplot() + 
-  aes(bill_length_mm, bill_depth_mm) + 
-  geom_point() 
-
-last_plot() + 
-  geom_kmeans()
-
 last_plot() +
-  geom_kmeans_center()
+  geom_kmeans_lengths()
 ```
 
+# Specifying different numbers of centers
 
 
 ```{r}
-penguins_clean |> 
+penguins |> 
   ggplot() + 
   aes(bill_length_mm, bill_depth_mm) + 
   geom_point() + 
   aes(color = species)
 
-penguins_clean |> 
+set_num_centers(2)
+penguins |> 
   ggplot() + 
   aes(bill_length_mm, bill_depth_mm) + 
-  geom_kmeans(centers = 2) +
-  geom_kmeans_center(centers = 2)
+  geom_kmeans() +
+  geom_kmeans_center()
 
-penguins_clean |> 
-  ggplot() + 
-  aes(bill_length_mm, bill_depth_mm) + 
-  geom_kmeans(centers = 3) +
-  geom_kmeans_center(centers = 3)
+set_num_centers(3)
+last_plot() 
 
-library(tictoc)
-tic()
+set_num_centers(4)
+last_plot() 
 
-penguins_clean |> 
-  ggplot() + 
-  aes(bill_length_mm, bill_depth_mm) + 
-  geom_kmeans(centers = 4) +
-  geom_kmeans_center(centers = 4)
-
-toc()
-
-penguins_clean |> 
-  ggplot() + 
-  aes(bill_length_mm, bill_depth_mm) + 
-  geom_kmeans(centers = 5) +
-  geom_kmeans_center(centers = 5)
-
+set_num_centers(5)
+last_plot() 
 ```
-
-
 
 ```{r}
 
 PAIR_code_umap_mammoth_url <- "https://raw.githubusercontent.com/PAIR-code/understanding-umap/refs/heads/master/raw_data/mammoth_3d.json"
 
 library(ggdims)
-library(tictoc)
 
 
 
@@ -264,26 +246,24 @@ mammoth_df <- PAIR_code_umap_mammoth_url |>
   jsonlite::fromJSON() |>
   as.data.frame() 
 
-tic()
+
+set_num_centers(4)
 
  mammoth_df |> 
   ggplot() + 
   aes(V1, V2) + 
-  geom_kmeans(centers = 4) +
-  geom_kmeans_center(centers = 4)
+  geom_kmeans() +
+  geom_kmeans_center()
 
-toc() 
 ```
-
 
 ```{r}
 mammoth_df |> 
   ggplot() + 
   aes(V1, V2) + 
-  geom_kmeans(centers = 4) +
-  geom_kmeans_lengths(centers = 4,
-    linewidth = .2, alpha = .2) + 
-  geom_kmeans_center(centers = 4)
+  geom_kmeans() +
+  geom_kmeans_lengths(linewidth = .2, alpha = .2) + 
+  geom_kmeans_center()
 
 layer_three <- layer_data(i = 3)
 
@@ -297,17 +277,7 @@ last_plot() +
                                     fill = .cluster))
 
 
-library(ggplot2)
-library(ggforce)
-# Set a max radius
-ggplot(iris, 
-       aes(Sepal.Length, Sepal.Width, group = -1L)) +
-  geom_voronoi_tile(aes(fill = Species), 
-                    colour = 'black', max.radius = 0.25)
-
-
 ```
-
 
 ```{r, eval = F}
 library(tidyverse)
@@ -322,7 +292,7 @@ penguins |>
 
 penguins |> 
   select(bill_len, bill_dep) |> 
-  filter(ind_complete) |>
+  # filter(ind_complete) |>
   kmeans(centers = 4) |>
   broom::augment(
     penguins |> 
@@ -331,6 +301,5 @@ penguins |>
 
 
 ```
-
 
 ## Closing remarks, Other Relevant Work, Caveats

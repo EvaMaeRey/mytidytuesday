@@ -1,0 +1,117 @@
+---
+title: "Viz-only {codehover} template"
+author: "Your Name"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      message = F, 
+                      warning = F, 
+                      dpi = 300,
+                      cache = T)
+library(codehover)
+library(tidyverse)
+library(ggcube)
+```
+
+`r chunk_code_hover(chunk_name = "my_cars")`
+
+
+```{r my_cars, eval=FALSE, echo=FALSE}
+ggplot(mountain) +
+  aes(x = x) + 
+  aes(y = y) + 
+  coord_3d() +
+  aes(z = z) +
+  geom_surface_3d() + 
+  scale_fill_viridis_c() + 
+  coord_3d(ratio = c(1.5, 2, 1),
+           expand = FALSE,
+           panels = c("zmax", "xmin", "ymin"),
+           light = light(direction = c(1, 0, 0))) +
+  guides(fill = guide_colorbar_3d()) +
+  theme_light()
+```
+
+
+
+
+```{css, echo = F}
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  background-color:white;
+}
+```
+
+
+```{css, echo = F}
+table {
+  cursor: pointer; 
+  cursor: hand;
+  border: none;
+  margin-left: auto;
+  margin-right: auto;
+  width:"80%";
+  border:"0"; 
+  cellspacing:"0"; 
+  cellpadding:"0";
+  font-family: "Lucida Console";
+}
+
+.hover {
+  background-color: #F1D95A92;
+}
+
+.image-crop {
+  height: 600px;;
+}
+
+tab1 { padding-left: 4em; }
+tab2 { padding-left: 8em; }
+tab3 { padding-left: 12em; }
+tab4 { padding-left: 16em; }
+tab5 { padding-left: 20em; }
+tab6 { padding-left: 24em; }
+tab7 { padding-left: 28em; }
+tab8 { padding-left: 32em; }
+tab9 { padding-left: 36em; }
+tab10 { padding-left: 40em; }
+tab11 { padding-left: 44em; }
+tab12 { padding-left: 48em; }
+tab13 { padding-left: 52em; }
+tab14 { padding-left: 56em; }
+tab15 { padding-left: 60em; }
+tab16 { padding-left: 64em; }
+
+
+
+```
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+
+$('.pipehover_incremental tr').hover(function() {
+  $(this).removeClass()
+  $(this).prevAll().removeClass()
+  $(this).nextAll().removeClass()
+  $(this).addClass('hover');
+  $(this).prevAll().addClass('hover');
+  $(this).closest('div').next().find('img').attr("src", $(this).attr("link"));
+});
+
+
+$('.pipehover_select_one_row tr').hover(function() {
+  $(this).removeClass()
+  $(this).prevAll().removeClass()
+  $(this).nextAll().removeClass()
+  $(this).addClass('hover');
+  $(this).closest('div').next().find('img').attr("src", $(this).attr("link"));
+});
+
+</script>
