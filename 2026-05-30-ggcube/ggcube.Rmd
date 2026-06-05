@@ -1,6 +1,5 @@
 ---
-title: "Viz-only {codehover} template"
-author: "Your Name"
+title: "{codehover} x {ggcube}"
 output: html_document
 ---
 
@@ -13,6 +12,8 @@ knitr::opts_chunk$set(echo = TRUE,
 library(codehover)
 library(tidyverse)
 library(ggcube)
+
+
 ```
 
 `r chunk_code_hover(chunk_name = "my_cars")`
@@ -23,13 +24,11 @@ ggplot(mountain) +
   aes(x = x) + 
   aes(y = y) + 
   coord_3d() +
-  aes(z = z) +
+  aes(z = 0) +
   geom_surface_3d() + 
+  aes(fill = z) +
   scale_fill_viridis_c() + 
-  coord_3d(ratio = c(1.5, 2, 1),
-           expand = FALSE,
-           panels = c("zmax", "xmin", "ymin"),
-           light = light(direction = c(1, 0, 0))) +
+  aes(z = z) +
   guides(fill = guide_colorbar_3d()) +
   theme_light()
 ```

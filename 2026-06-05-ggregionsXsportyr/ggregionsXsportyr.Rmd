@@ -1,0 +1,120 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r, warning=F, message=F}
+library(tidyverse)
+library(sportyR)
+
+sportyR::geom_baseball("mlb", display_range = "full")
+
+```
+
+From plot 
+
+1. grab layers
+2. pull out data from layer
+3. convert to sf (simple features) 
+4. add a name to each 'region' (or line)
+
+Having done this, use ggregions framework
+
+1. declare the dataset to be the region of interest
+2. Use aes(regions = my_region_id) and geom_region() and friends.
+
+```{r}
+get_layer_data <- function(layer){
+
+    layer$data
+  
+}
+
+to_sf_routine <- function(data){
+  
+  data |>
+  mutate(y = -y) |>
+  sf::st_as_sf(coords = c("x", "y"), agr = "constant") |>
+  group_by(id, group) |>
+  summarize(do_union = F) |> 
+  ungroup() |> 
+  group_by(id, group) |>
+  summarise() |>
+  mutate(geometry = geometry |> sf::st_cast("POLYGON")) |> 
+  mutate(geometry = geometry |> sf::st_cast("MULTIPOLYGON")) |> 
+  ungroup() 
+  
+}
+
+
+
+out <- geom_baseball("mlb", display_range = "full")
+
+
+out@layers |> 
+  tibble(layers = _) |> 
+  mutate(name = names(layers)) |>
+  mutate(data = purrr::map(layers, .f = get_layer_data)) |> 
+  unnest(data) |> 
+  mutate(id = name, group = name) |>
+  to_sf_routine() |> 
+  mutate(name = c("infeild", 
+                  "batting right",
+                  "catcher's box",
+                  "left foul line",
+                  "right foul line",
+                  "dugout",
+                  "diamond",
+                  "pitcher's mound",
+                  "batter's mound",
+                  "first base",
+                  "second base",
+                  "third base",
+                  "pitcher's line",
+                  "batting left")) |> 
+  select(name, geometry) ->
+baseball_reference
+
+library(ggregions)
+
+set_regions(baseball_reference)
+
+head(baseball_reference)
+```
+
+
+```{r, warning=F, message=F}
+tribble(~zone, ~info,
+        "right foul line", "good",
+        "infeild", "bad",
+        "diamond", "ugly",
+        "pitcher's mound", "fine") |>
+  ggplot() +
+  aes(region = zone,
+      color = zone) + 
+  stamp_region() + 
+  geom_region_border() + 
+  stamp_region_label(keep = "left foul line")
+```
+
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
