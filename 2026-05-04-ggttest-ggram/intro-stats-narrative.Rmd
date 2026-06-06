@@ -37,22 +37,9 @@ replace_vowels_in_bold <- function(text) {
 }
 ```
 
-```{r, results = "asis"}
-"hello and how **are** you" |> 
-  paste(
-collapse = "
-
-") |> 
-  replace_vowels_in_bold() |> cat()
-```
 
 
 
-
-## Intro Thoughts
-
-
-## Status Quo
 
 We started thinking about formal **statistical** tests ('**hypothesis testing**') first with case of the friendly **dolphins** Doris and Buzz.  Trainers run an experiment with the two dolphins in a large tank.  Buzz is facing one side where the trainer indicates which way Doris will needs to go (right or left) to get a **fish** prize from another trainer.  Buzz and Doris are separated by a large, curtain so we know that Doris cannot see what Buzz's trainer has indicated (but the trainers *are* able to **communicate** and settle on a fish-treat direction).  
 
@@ -62,21 +49,33 @@ The experiment is run because the trainers are curious if Doris and Buzz could c
 ```{r}
 library(tidyverse)
 library(ggprop.test)
+library(ggchalkboard)
+set_theme(theme_chalkboard(base_size = 14))
 
 dolphin_data |> 
   ggplot() + 
   aes(x = observed) + 
   geom_stack() + 
   geom_stack_label() + 
+  labs(title = "Wow Doris!! You sure got a lot of fish.")
+```
+
+
+And to make this more fun, let's add some dolphin emoji...
+
+```{r}
+last_plot() + 
   annotate(geom = "text",  # using a text layer, but not looking at the data ...
            x = I(.2),
            y = I(.75),
            label = "🐬🐬🐟🪣",
            angle = 25,
-           size = 18) + 
-  labs(title = "Wow Doris!! You sure got a lot of fish.")
+           size = 18)
 ```
+
 To look how consistent the outcome 15/16 fish with a chance model, we'll use the logic of the 'Prop test', or one-sample proportion test.  
+
+### Proportion as balancing point...
 
 The very first step to tackling this problem is just to calculate the **observed statistic**, in this case, the **proportion** $\hat{p}$ of successes.  
 
@@ -87,11 +86,16 @@ This is `r 15/16`.  Also is the same result as taking the *mean* of the values o
 last_plot() +
   geom_support() +
   geom_prop() + 
-  geom_prop_label() + 
+  geom_prop_label() 
+```
+
+
+```{r}
+last_plot() + 
   labs(title = "We're impressed with Doris's 15/16 correct \n... but could this have happened by chance?")
 ```
 
-And by chance, we mean guessing, a 50-50 propensity to go to either side, no matter what Buzz and his trainer have going on.  Let's place the asserted proportion of .5 as a contrast in our figure:
+And by 'chance' we mean guessing, a 50-50 propensity to go to either side, no matter what Buzz and his trainer have going on.  Let's place the asserted proportion of .5 as a contrast in our figure:
 
 ```{r}
 last_plot() +
@@ -99,6 +103,8 @@ last_plot() +
   stamp_prop_label(.5) + 
   labs(subtitle = "Adding asserted population prop of .5 - like tossing a fair coin coin toss")
 ```
+
+### Simulating outcomes
 
 And let's 'toss some coins'.  If we do 16 coin tosses, we can see a real one-time outcome of what happens just by chance (say heads is a 'success'), and associated proportion for 16 50-50 chance trials!
 
@@ -113,6 +119,7 @@ dolphin_data |>
            to_synthetic(observed, prob = .5)) |>
   ggplot() + 
   aes(x = synth) + 
+  geom_support() +
   geom_stack() + 
   geom_stack_label() +
   geom_prop() + 
@@ -129,21 +136,21 @@ last_plot() + dolphin_data |> mutate(synth = to_synthetic(observed, prob = .5))
 
 <details>
 
-Let's do 16 more tosses, and calculate the proportion.
+Let's do 16 more tosses, and calculate the proportion heads.
 
 
 ```{r, out.width="50%"}
 last_plot() + dolphin_data |> mutate(synth = to_synthetic(observed, prob = .5)) 
 ```
 
-Let's do 16 more tosses, and calculate the proportion.
+Let's do 16 more tosses, and calculate the proportion heads.
 
 
 ```{r, out.width="50%"}
 last_plot() + dolphin_data |> mutate(synth = to_synthetic(observed, prob = .5)) 
 ```
 
-Let's do 16 more tosses, and calculate the proportion.
+Let's do 16 more tosses, and calculate the proportion heads.
 
 
 ```{r, out.width="50%"}
@@ -152,6 +159,8 @@ last_plot() + dolphin_data |> mutate(synth = to_synthetic(observed, prob = .5))
 
 
 </details>
+
+### Analytic approach, chance model expectations via binomial dist
 
 Alright, from these chance experiments, we might feel like we start to have footing to say that this Doris and Buzz's experience isn't consistent with chance.  
 
@@ -205,6 +214,8 @@ dolphin_data |>
   geom_binomial_null(.5) 
 ```
 
+### p-value
+
 How often is something so extreme or more extreme as .94 to occur just by chance? We'll go back to our full set of probability associated with different proportions...
 
 ```{r}
@@ -225,72 +236,35 @@ Since we have a very small p-value (4/10000) -- that the chance of observing som
 
 $$H_0: \pi = .5$$
 
-$$H_a: \pi  .5$$
+$$H_a: \pi ≠ .5$$
 
+You may be thinking
 
-> Hey, but I've heard of the "1 proportion Z test".  Isn't z something in the normal distribution?  But we are using the binomial distribution here.  
+> Hey, but I've heard of the "1 proportion Z test".  Isn't z something in the normal distribution?  And here we are using the binomial distribution.  
 
 Your are right that a normal distribution can be used -- but in certain circumstances, and not in this case actually.  The 'validity condition' that many agree upon is that there is the expectation of 10 successes and 10 failures under the null (see ISI curriculum).  In this case we're just shy of that at 8 and 8.  
 
-But let's look at another case where we do have enough data to use a trusty, well-behaived normal distribution and can speak of z-scores!  
+But let's look at another case where we do have enough data to use a trusty, well-behaved normal distribution and can speak of z-scores!  
 
 
-## End... 
-
-```{r}
-"library(ggprop.test)
-
-dolphin_data |> 
-  ggplot() + 
-  aes(x = observed) + 
-  geom_stack() + 
-  geom_stack_label() + 
-  geom_support() +
-  geom_prop() + 
-  geom_prop_label() + 
-  stamp_prop(.5) + 
-  stamp_prop_label(.5) + 
-  geom_binomial_null(.5) " |>
-ggram::ggram(code = _, 
-             title = "Are Dolphins Doris and Buzz cooperating?🐬🐬🐟🪣", 
-             subtitle = "Example and data from 'Introduction to Statistical Investigations' curriculum")
-```
+## End of prop test discussion... Some more gg extension-supported intro statistics 'poems'.
 
 
 
 
-```{r}
-"library(ggprop.test)
-
-dolphin_data |> 
-  ggplot() + 
-  aes(x = observed) + 
-  geom_stack() + 
-  geom_stack_label() + 
-  geom_support() +
-  geom_prop() + 
-  geom_prop_label() + 
-  stamp_prop(.5) + 
-  stamp_prop_label(.5) + 
-  geom_binomial_null(.5) " |>
-ggram::ggram(code = _, 
-             title = "Are Dolphins Doris and Buzz cooperating?🐬🐬🐟🪣", 
-             subtitle = "Example and data from 'Introduction to Statistical Investigations' curriculum")
 
 
 
-```
-
-
-## Experiment
-
-```{r}
-
+```{r, echo = F}
+theme_gray() |> 
+  set_theme()
 
 # EvaMaeRey/ggt.test
-library(ggt.test)
 
-'data_grit_undergrad |> 
+
+'library(ggt.test)
+
+data_grit_undergrad |> 
   ggplot() + 
   aes(x = score) +
   geom_stacks() +
@@ -305,7 +279,7 @@ ggram::ggram(code = _, title = "As gritty as a West Point cadet? 🗡️🪖🥵
 
 
 
-```{r}
+```{r, echo = F}
 
 
 "library(ggprop.test)
@@ -329,7 +303,7 @@ ggram::ggram(code = _, title = "Organ donation, is the sample consistent with a 
 ```
 
 
-```{r}
+```{r, echo = F}
 "data_haircuts |>
   ggplot() + 
   aes(x = price) + 
@@ -346,6 +320,25 @@ ggram::ggram(code = _, title = "Is there a statistical difference between male a
 
 ```
 
+```{r, echo = F}
+
+  
+"library(ggprop.test)
+
+dolphin_data |> 
+  ggplot() + 
+  aes(x = observed) + 
+  geom_stack() + 
+  geom_stack_label() + 
+  geom_support() +
+  geom_prop() + 
+  geom_prop_label() + 
+  stamp_prop(.5) + 
+  stamp_prop_label(.5) + 
+  geom_binomial_null(.5) " |>
+ggram::ggram(code = _, 
+             title = "Are Dolphins Doris and Buzz cooperating?🐬🐬🐟🪣", 
+             subtitle = "Example and data from 'Introduction to Statistical Investigations' curriculum")
+```
 
 
-## Closing remarks, Other Relevant Work, Caveats
