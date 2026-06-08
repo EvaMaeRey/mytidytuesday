@@ -70,7 +70,7 @@ ggplot(data = wrangled) +
 
 
 
-```{r}
+```{r, cache = T}
 library(mall)
 library(tidyverse)
 
@@ -78,8 +78,6 @@ options(.mall_chat = ellmer::chat_google_gemini())
 
 tt <- tidytuesdayR::tt_load("2026-03-10") #<<
 
-labels = 100*0:20/20
-labels = 100
 
 malled <- 
   tt$absolute_judgements |> 
@@ -87,12 +85,20 @@ malled <-
   slice(1) |> 
   rename(humans = probability) |>
   slice_sample(n = 100) |> 
-  llm_classify(term,
-               labels = labels |> as.character(),
-               "gemini")
+  mutate(gemini = term |> 
+           llm_vec_classify(as.character(0:100)))
+```
 
-           
-ggplot(data = wrangled) + 
+
+```{r}
+wrangled <- 
+  tt$absolute_judgements |> #<<
+  mutate(term_ord = term |> 
+           fct_reorder(probability)
+         ) 
+
+wrangled |> 
+  ggplot(data = _) + 
   aes(x = probability,
       y = term_ord,
       fill = term_ord,
@@ -100,9 +106,13 @@ ggplot(data = wrangled) +
       alpha = I(.3)) + 
   geom_density_ridges() + #<<
   labs(x = NULL, y = NULL) +
-  theme(legend.position = "none")
-
-
+  theme(legend.position = "none") + 
+  # geom_point(data = malled, 
+  #            aes(x = gemini, 
+  #                y = term,
+  #                color = "blue",
+  #                fill = NULL)) + 
+  NULL
 ```
 
 

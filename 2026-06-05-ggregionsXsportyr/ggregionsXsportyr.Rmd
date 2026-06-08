@@ -28,17 +28,17 @@ sportyR::geom_baseball("mlb", display_range = "full")
 
 ```
 
-From plot 
+From sportyR field plot:
+ 
+- grab plot layers 
+- pull out x,y data from alll layer
+- convert to sf (simple features)
+- add a name to each ‘region’ (or line) - somewhat ad hoc, and I select baseball example because it feels relatively familiar and there are fewer elements.
 
-1. grab layers
-2. pull out data from layer
-3. convert to sf (simple features) 
-4. add a name to each 'region' (or line)
+Having done this, use ggregions framework:
 
-Having done this, use ggregions framework
-
-1. declare the dataset to be the region of interest
-2. Use aes(regions = my_region_id) and geom_region() and friends.
+- declare the dataset to be the region of interest with set_regions()
+- Use aes(regions = my_region_id) and geom_region() and friends (e.g. stamp_region, stamp_region_label) to plot data and context.
 
 ```{r}
 get_layer_data <- function(layer){
@@ -112,6 +112,52 @@ tribble(~zone, ~info,
   stamp_region_label(keep = "left foul line")
 ```
 
+
+```{r}
+
+library(gganatogram)
+gganatogram(data=other_key[["bos_taurus"]], outline = T, fillOutline='white', organism="bos_taurus", sex='female', fill="colour")  +
+        theme_void() +
+        ggtitle("bos_taurus") + 
+        theme(plot.title = element_text(hjust=0.5)) + 
+        coord_fixed()
+
+organs <- other_key[["bos_taurus"]]$organ
+
+out <- last_plot()
+
+
+out@layers |> 
+  tibble(layers = _) |> 
+  mutate(name = names(layers)) |>
+  mutate(data = purrr::map(layers, .f = get_layer_data)) |> 
+  slice(-1) |>
+  unnest(data) |> 
+  mutate(id = name, group = group) |>
+  to_sf_routine() |> 
+  mutate(organ = c("hide", "head", "liver",
+                  "semicircle", "foot",
+                  NA, "foot2", "underbelly",
+                  "sliver", "arc","u-shape",
+                  "below", "13", 14:64 )) ->
+cow_sf
+
+
+set_regions(cow_sf)
+
+cow_sf |>
+  head() |> 
+  sf::st_drop_geometry() |>
+  ggplot() + 
+  aes(region = organ,
+      fill = organ) +
+  stamp_region() +
+  geom_region()
+
+
+
+
+```
 
 
 
