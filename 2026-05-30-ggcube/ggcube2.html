@@ -15,6 +15,23 @@
 
 
 
+
+``` r
+library(tidyverse)
+PAIR_code_umap_mammoth_url &lt;- "https://raw.githubusercontent.com/PAIR-code/understanding-umap/refs/heads/master/raw_data/mammoth_3d.json"
+
+library(jsonlite)
+mammoth_df &lt;- PAIR_code_umap_mammoth_url |&gt;
+  fromJSON() |&gt;
+  as_tibble() 
+
+confetti &lt;- sample(colors(), 
+                     nrow(mammoth_df),
+                     replace = T) |&gt; alpha(.5)
+```
+
+---
+
 count: false
  
 
@@ -262,8 +279,7 @@ ggplot(data = mammoth_df) +
   aes(color = I("white")) +
   aes(stroke = .2) +
   aes(z = V3) +
-* coord_3d(expand = FALSE,
-*          ratio = c(2,1.4,1),
+* coord_3d(ratio = c(2,1.4,1),
 *          yaw = 0,
 *          roll = 10,
 *          pitch = 5)
@@ -293,8 +309,7 @@ ggplot(data = mammoth_df) +
   aes(color = I("white")) +
   aes(stroke = .2) +
   aes(z = V3) +
-  coord_3d(expand = FALSE,
-           ratio = c(2,1.4,1),
+  coord_3d(ratio = c(2,1.4,1),
            yaw = 0,
            roll = 10,
            pitch = 5) +
@@ -325,8 +340,7 @@ ggplot(data = mammoth_df) +
   aes(color = I("white")) +
   aes(stroke = .2) +
   aes(z = V3) +
-  coord_3d(expand = FALSE,
-           ratio = c(2,1.4,1),
+  coord_3d(ratio = c(2,1.4,1),
            yaw = 0,
            roll = 10,
            pitch = 5) +
@@ -358,16 +372,16 @@ ggplot(data = mammoth_df) +
   aes(color = I("white")) +
   aes(stroke = .2) +
   aes(z = V3) +
-  coord_3d(expand = FALSE,
-           ratio = c(2,1.4,1),
+  coord_3d(ratio = c(2,1.4,1),
            yaw = 0,
            roll = 10,
            pitch = 5) +
   geom_point_3d() +
   theme_void() +
-* labs(title = "A Muse of ML and dim-red: Max Noichl's Mammoth!",
-*      subtitle = "Visualized with {ggplot2} x {ggcube}",
-*      caption = "Data from github.com/PAIR-code/understanding-umap")
+* labs(title = "Muse of ML, Max's Mammoth! 🦣🦣",
+*      subtitle = "Max Noichl popularized a 3D scan of a Smithsonian Mammoth, an example in UMAP explorations like 'Understanding UMAP'\n
+*      Visualized with {ggplot2} x {ggcube}",
+*      caption = "Data as prepared in github.com/PAIR-code/understanding-umap")
 ```
 ]
  
@@ -394,16 +408,16 @@ ggplot(data = mammoth_df) +
   aes(color = I("white")) +
   aes(stroke = .2) +
   aes(z = V3) +
-  coord_3d(expand = FALSE,
-           ratio = c(2,1.4,1),
+  coord_3d(ratio = c(2,1.4,1),
            yaw = 0,
            roll = 10,
            pitch = 5) +
   geom_point_3d() +
   theme_void() +
-  labs(title = "A Muse of ML and dim-red: Max Noichl's Mammoth!",
-       subtitle = "Visualized with {ggplot2} x {ggcube}",
-       caption = "Data from github.com/PAIR-code/understanding-umap") -&gt;
+  labs(title = "Muse of ML, Max's Mammoth! 🦣🦣",
+       subtitle = "Max Noichl popularized a 3D scan of a Smithsonian Mammoth, an example in UMAP explorations like 'Understanding UMAP'\n
+       Visualized with {ggplot2} x {ggcube}",
+       caption = "Data as prepared in github.com/PAIR-code/understanding-umap") -&gt;
 *ggcubed_mammoth
 ```
 ]
@@ -431,16 +445,16 @@ ggplot(data = mammoth_df) +
   aes(color = I("white")) +
   aes(stroke = .2) +
   aes(z = V3) +
-  coord_3d(expand = FALSE,
-           ratio = c(2,1.4,1),
+  coord_3d(ratio = c(2,1.4,1),
            yaw = 0,
            roll = 10,
            pitch = 5) +
   geom_point_3d() +
   theme_void() +
-  labs(title = "A Muse of ML and dim-red: Max Noichl's Mammoth!",
-       subtitle = "Visualized with {ggplot2} x {ggcube}",
-       caption = "Data from github.com/PAIR-code/understanding-umap") -&gt;
+  labs(title = "Muse of ML, Max's Mammoth! 🦣🦣",
+       subtitle = "Max Noichl popularized a 3D scan of a Smithsonian Mammoth, an example in UMAP explorations like 'Understanding UMAP'\n
+       Visualized with {ggplot2} x {ggcube}",
+       caption = "Data as prepared in github.com/PAIR-code/understanding-umap") -&gt;
 ggcubed_mammoth
 
 
@@ -471,16 +485,16 @@ ggplot(data = mammoth_df) +
   aes(color = I("white")) +
   aes(stroke = .2) +
   aes(z = V3) +
-  coord_3d(expand = FALSE,
-           ratio = c(2,1.4,1),
+  coord_3d(ratio = c(2,1.4,1),
            yaw = 0,
            roll = 10,
            pitch = 5) +
   geom_point_3d() +
   theme_void() +
-  labs(title = "A Muse of ML and dim-red: Max Noichl's Mammoth!",
-       subtitle = "Visualized with {ggplot2} x {ggcube}",
-       caption = "Data from github.com/PAIR-code/understanding-umap") -&gt;
+  labs(title = "Muse of ML, Max's Mammoth! 🦣🦣",
+       subtitle = "Max Noichl popularized a 3D scan of a Smithsonian Mammoth, an example in UMAP explorations like 'Understanding UMAP'\n
+       Visualized with {ggplot2} x {ggcube}",
+       caption = "Data as prepared in github.com/PAIR-code/understanding-umap") -&gt;
 ggcubed_mammoth
 
 

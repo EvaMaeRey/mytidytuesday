@@ -19,12 +19,11 @@ knitr::opts_chunk$set(echo = TRUE,
                       message = F, 
                       warning = F, 
                       dpi = 300,
-                      cache = F)
-library(codehover)
-library(tidyverse)
-library(ggcube)
+                      cache = F, 
+                      dev = "ragg_png")
+```
 
-
+```{r}
 library(tidyverse)
 PAIR_code_umap_mammoth_url <- "https://raw.githubusercontent.com/PAIR-code/understanding-umap/refs/heads/master/raw_data/mammoth_3d.json"
 
@@ -38,6 +37,8 @@ confetti <- sample(colors(),
                      replace = T) |> alpha(.5)
 
 ```
+
+---
 
 `r flipbookr::chunk_reveal(chunk_name = "my_cars")`
 
@@ -55,15 +56,15 @@ ggplot(data = mammoth_df) +
   aes(color = I("white")) +
   aes(stroke = .2) +
   aes(z = V3) +
-  coord_3d(expand = FALSE,
-           ratio = c(2,1.4,1),
+  coord_3d(ratio = c(2,1.4,1),
            yaw = 0, 
            roll = 10, 
            pitch = 5) +
   geom_point_3d() + 
   theme_void() +
-  labs(title = "A Muse of ML and dim-red: Max Noichl's Mammoth!",
-       subtitle = "Visualized with {ggplot2} x {ggcube}",
+  labs(title = "Muse of ML, Max's Mammoth!",
+       subtitle = "Max Noichl popularized a 3D scan of a Smithsonian Mammoth, an example in UMAP explorations like 'Understanding UMAP'\n
+       Visualized with {ggplot2} x {ggcube}",
        caption = "Data from github.com/PAIR-code/understanding-umap") ->
 ggcubed_mammoth
 
