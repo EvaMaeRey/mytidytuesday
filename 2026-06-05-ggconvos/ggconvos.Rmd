@@ -20,7 +20,7 @@ options(tidyverse.quiet = TRUE)
 
 - how powerful is conversation, how improbable is it. Encoding meaning into grunts, utterances, and phrases, prose...? Why does a large contingent of the world's population agree that 'balance' looks like ...
 
-"horizontal bars colored steel blue and sorted from high to low, with commas for numbers higher than 1,000 on the axis."
+"1. horizontal bars 2. colored steel blue and 3. sorted from high to low, 4. with commas for numbers higher than 1,000 on the axis."
 
 ```{r}
 diamonds |> 
@@ -28,9 +28,8 @@ diamonds |>
   aes(y = cut) + 
   geom_bar() +
   aes(fill = I("steelblue")) + 
-  aes(y = cut |> fct_infreq())
-
-
+  aes(y = cut |> fct_infreq() |> fct_rev()) + 
+  scale_x_continuous(labels = scales::label_comma())
 ```
 
 - ggplot2 2017.. This is it... last_plot()

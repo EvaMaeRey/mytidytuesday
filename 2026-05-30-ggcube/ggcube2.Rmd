@@ -1,6 +1,17 @@
 ---
-title: "{codehover} x {ggcube}"
-output: html_document
+title: "legendry"
+subtitle: ""
+author: ""
+output:
+  xaringan::moon_reader:
+    seal: FALSE
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
 ---
 
 ```{r setup, include=FALSE}
@@ -8,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE,
                       message = F, 
                       warning = F, 
                       dpi = 300,
-                      cache = T)
+                      cache = F)
 library(codehover)
 library(tidyverse)
 library(ggcube)
@@ -28,34 +39,42 @@ confetti <- sample(colors(),
 
 ```
 
-`r chunk_code_hover(chunk_name = "my_cars")`
+`r flipbookr::chunk_reveal(chunk_name = "my_cars")`
 
 
 ```{r my_cars, eval=FALSE, echo=FALSE}
+library(tidyverse)
+library(ggcube)
+
 ggplot(data = mammoth_df) +
   aes(x = V1) + 
-  aes(y = V3) + 
-  aes(z = V2) + 
-  coord_3d() + 
-  geom_point_3d() +
+  aes(y = V2) + 
+  geom_point() +
   aes(shape = I(21)) + 
-  aes(fill = I(confetti) ) +
+  aes(fill = I(confetti)) +
   aes(color = I("white")) +
   aes(stroke = .2) +
+  aes(z = V3) +
   coord_3d(expand = FALSE,
-           ratio = c(1.2,1,1.3),
-          
-           yaw = -10,
-           light = light(direction = c(1, 0, 0))) + 
-  theme_void()
+           ratio = c(2,1.4,1),
+           yaw = 0, 
+           roll = 10, 
+           pitch = 5) +
+  geom_point_3d() + 
+  theme_void() +
+  labs(title = "A Muse of ML and dim-red: Max Noichl's Mammoth!",
+       subtitle = "Visualized with {ggplot2} x {ggcube}",
+       caption = "Data from github.com/PAIR-code/understanding-umap") ->
+ggcubed_mammoth
+
+
+ggcubed_mammoth |> 
+  animate_3d(pitch = c(0, 360))
 ```
 
 
 
 
-```{r, eval = F}
-animate_3d(last_plot(), yaw = c(0, 360))
-```
 
 
 
@@ -70,7 +89,7 @@ animate_3d(last_plot(), yaw = c(0, 360))
 ```
 
 
-```{css, echo = F}
+```{css, echo = F, eval = F}
 table {
   cursor: pointer; 
   cursor: hand;
@@ -115,26 +134,3 @@ tab16 { padding-left: 64em; }
 
 
 
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-
-$('.pipehover_incremental tr').hover(function() {
-  $(this).removeClass()
-  $(this).prevAll().removeClass()
-  $(this).nextAll().removeClass()
-  $(this).addClass('hover');
-  $(this).prevAll().addClass('hover');
-  $(this).closest('div').next().find('img').attr("src", $(this).attr("link"));
-});
-
-
-$('.pipehover_select_one_row tr').hover(function() {
-  $(this).removeClass()
-  $(this).prevAll().removeClass()
-  $(this).nextAll().removeClass()
-  $(this).addClass('hover');
-  $(this).closest('div').next().find('img').attr("src", $(this).attr("link"));
-});
-
-</script>

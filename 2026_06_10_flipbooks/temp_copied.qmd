@@ -1,0 +1,62 @@
+---
+format: revealjs
+editor: source
+---
+
+
+
+```{r, include = F}
+options(knitr.duplicate.label = "allow")
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F)
+library(flipbookr)
+library(tidyverse)
+load("current_image.Rdata")
+```
+
+
+
+```{r the_chunk, include = F}
+library(tidyverse)
+library(ggcube)
+ggplot(data = mammoth_df) +
+  coord_3d(expand = FALSE,
+           ratio = c(1.5,1,1.4),
+           yaw = -10,
+           light = light(direction = c(1, 0, 0))) +
+  aes(x = V1) + 
+  aes(y = V3) + 
+  aes(z = V2) + 
+  coord_3d() + 
+  geom_point_3d() +
+  aes(shape = I(21)) + 
+  aes(fill = I(confetti) ) +
+  aes(color = I("white")) +
+  aes(stroke = .2)
+```
+
+`r chunq_reveal(chunk_name = "the_chunk", break_type = "auto")`
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 120%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+```
+
