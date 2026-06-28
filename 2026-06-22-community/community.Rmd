@@ -1,0 +1,236 @@
+---
+title: "Data Science Lab - Introduction"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+Intro to Data Science Lab - practice for Intro to Data Science Lab - JSM talk - Posit Conf talk...
+
+
+
+Why am I here?
+
+------------------------------------------------------------------------
+
+2020: Stats instructor teaching "Introduction to Statistical Investigations"
+
+![](images/clipboard-1158971453.png)
+
+loved,
+
+--
+
+but... missed coded workflow (there was some, but less that I'd have liked)
+
+There's something really grounding (and powerful?) about going back to a code narrative, being able to review the steps of what you did.
+
+(quotes from Winston, Paul)
+
+------------------------------------------------------------------------
+
+> Some instructors may train students in using a specific software
+> package, but mastery of advanced programming skills should not be
+> allowed to crowd out data analysis skills or statistical thinking.
+
+------------------------------------------------------------------------
+
+Could we have the best of both worlds? 
+
+------------------------------------------------------------------------
+
+Could we do what we were doing on *chalkboards* (love a chalk board!! analogue gold standard), but also do that w/ code, consistent w/ the touch of ggplot2 students were learning anyway, and code that would serve the concepts being learned instead of shoehorning functions around the statistical narrative.
+
+---
+
+Chalkboard (applet) version went like this... 
+
+```{r}
+library(tidyverse)
+library(ggprop.test)
+
+donor_data |> 
+  ggplot() + 
+  labs(title = "Do Donor decision ")
+  aes(x = decision) + 
+  geom_stack() + 
+  geom_stack_label() +
+  geom_support() + 
+  geom_prop() + 
+  geom_prop_label() + 
+  stamp_prop(.5) + 
+  geom_binomial_null() + 
+  geom_normal_prop_null(fill = "blue") + 
+  geom_normal_prop_null_sds() +
+  stamp_eq_norm_prop()
+
+```
+
+Coded version might go like this...
+
+
+```{r}
+donor_data |> 
+  ggplot() + 
+  aes(x = decision) + 
+  geom_stack() + 
+  geom_stack_label() +
+  geom_support() + 
+  geom_prop() + 
+  geom_prop_label() + 
+  stamp_prop(.5) + 
+  geom_binomial_null() + 
+  geom_normal_prop_null(fill = "blue") + 
+  geom_normal_prop_null_sds() +
+  stamp_eq_norm_prop()
+```
+
+
+
+---
+
+And you guessed it, code now exists for you to write this narrative down!!
+
+{ggprop.test}
+
+---
+
+So the motivation today, is to show you some ggplot2 extension moves - but also to think about how we can create new vocabulary to *write down* the statistical narratives that we are telling all the time - be it in the classroom or elsewhere - with greater precision and using new bespoke vocabulary (functions) if needed. 
+
+
+---
+
+Isn't this like a lot of effort to be able to 'write down a statistical poem' something down? 
+
+Why don't we just have students use base ggplot2, and do the wrangling/calculations by hand?  
+
+> Some instructors may train students in using a specific software
+> package, but mastery of advanced programming skills should not be
+> allowed to crowd out data analysis skills or statistical thinking.
+
+---
+
+> Mastry of the minutia of ggplot2 and data manipulation and should not be allowed to crowd out statistical thinking.  
+
+---
+
+
+Leland McInnes' (UMAP dimentionality reduction technique) red star...
+
+> necessarily particular details of how any given technique works so that means I'm going to introduce a little bit of
+extra notation which is gonna be really useful repeatedly and that's the red star. So sometimes technical details
+
+really really matter but they're not worth getting into because by the time you've explained all the technical
+details you have lost the point of what you are trying to explain in the first place so if I just want the big picture idea
+1:22
+and there are some technical details that make that statement not technically true but morally it's the right thing
+
+
+---
+
+Huge audiences: 
+
+1000 cadets every year...
+
+EAPOST
+
+100000 AP stats high school students per year
+
+--
+
+deserve bespoke vocab that allows us to write down statistical narrative elegantly!  
+
+---
+
+
+Easy geom recipes
+
+
+---
+
+
+
+
+
+---
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------
+
+# 6 years later..
+
+------------------------------------------------------------------------
+
+Initiative type \* Select the option that best describes your
+organizational structure. "Recurring meetup" refers to groups that meet
+consistently throughout the year, whereas "One-time event" is for
+conferences or workshops.
+
+Community initiative name *ggplot2 extenders meetup Brief community
+initiative summary* Please include any relevant details about your
+community initiative. supporting grammar of graphics open source
+developers Community initiative website
+<https://ggplot2-extenders.github.io/ggplot-extension-club/>
+<https://github.com/ggplot2-extenders/ggplot-extension-club/discussions>
+Community initiative location *City, State/Country. If the event is
+virtual, please enter "Virtual". Virtual Current number of members* 250
+Average attendance per meeting *15-30 Frequency of meetings* Once or
+twice a month
+
+Support request Support type request *Select the items you need to make
+your initiative successful. Please note that physical swag support
+outside of North America may be limited due to shipping constraints.
+Monetary support Materials and/or swag Social media promotion Volunteers
+Other: Monetary support request If you are requesting monetary support,
+please provide an amount in USD. Feel free to specify a range. ??
+Benefits of sponsorship* List the specific ways you can recognize
+Posit's contribution. Examples include logo placement on your website,
+social media shout-outs, post-event photos, or mentions in promotional
+emails. Happy to do all of this Posit employee contact If you have been
+coordinating with someone at Posit, let us know so we can sync with them
+internally. Hadley Has Posit previously sponsored your event or
+initiative? *Knowing your history with Posit helps us understand the
+long-term impact of our community partnerships. Yes No I don't know Will
+there be a recording?* Yes No I don't know
+
+Alignment Does your event/community initiative focus on R and/or Python?
+*Does your event or initiative involve Posit software?* How is your
+group’s knowledge shared? \* Successful applications often contribute
+back to the community. Detail how you will share resources, such as
+hosting code on public GitHub repositories or sharing recorded sessions.
+We know a form can't capture everything. If there is anything else you'd
+like us to know, please share it here.
+
+## Intro Thoughts
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+
+```
+
+## Closing remarks, Other Relevant Work, Caveats

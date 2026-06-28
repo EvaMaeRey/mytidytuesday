@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>legendry</title>
+    <title>ML mammoth</title>
     <meta charset="utf-8" />
     <meta name="author" content="" />
     <script src="libs/header-attrs-2.30/header-attrs.js"></script>
@@ -345,7 +345,11 @@ ggplot(data = mammoth_df) +
            roll = 10,
            pitch = 5) +
   geom_point_3d() +
-* theme_void()
+* labs(
+*   title = "A Muse of ML, Max's Mammoth...",
+*   subtitle = "Max Noichl popularized mammoth data, a 3D scan of a Smithsonian \nMammoth.  ML and AI researchers have turned to it in explorations like \n'Understanding UMAP' and beyond.",
+*   caption = "Visualized with {ggplot2} and {ggcube} - new on CRAN!\nData as curated by Coenen and Pearce at github.com/PAIR-code/understanding-umap"
+*   )
 ```
 ]
  
@@ -377,134 +381,20 @@ ggplot(data = mammoth_df) +
            roll = 10,
            pitch = 5) +
   geom_point_3d() +
-  theme_void() +
-* labs(title = "Muse of ML, Max's Mammoth! 🦣🦣",
-*      subtitle = "Max Noichl popularized a 3D scan of a Smithsonian Mammoth, an example in UMAP explorations like 'Understanding UMAP'\n
-*      Visualized with {ggplot2} x {ggcube}",
-*      caption = "Data as prepared in github.com/PAIR-code/understanding-umap")
+  labs(
+    title = "A Muse of ML, Max's Mammoth...",
+    subtitle = "Max Noichl popularized mammoth data, a 3D scan of a Smithsonian \nMammoth.  ML and AI researchers have turned to it in explorations like \n'Understanding UMAP' and beyond.",
+    caption = "Visualized with {ggplot2} and {ggcube} - new on CRAN!\nData as curated by Coenen and Pearce at github.com/PAIR-code/understanding-umap"
+    ) -&gt;
+* plot; animate_3d(
+*   plot + theme_void(),
+*   pitch = c(0, 360)
+*   )
 ```
 ]
  
 .panel2-my_cars-auto[
-![](ggcube2_files/figure-html/my_cars_auto_15_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-my_cars-auto[
-
-``` r
-library(tidyverse)
-library(ggcube)
-
-ggplot(data = mammoth_df) +
-  aes(x = V1) +
-  aes(y = V2) +
-  geom_point() +
-  aes(shape = I(21)) +
-  aes(fill = I(confetti)) +
-  aes(color = I("white")) +
-  aes(stroke = .2) +
-  aes(z = V3) +
-  coord_3d(ratio = c(2,1.4,1),
-           yaw = 0,
-           roll = 10,
-           pitch = 5) +
-  geom_point_3d() +
-  theme_void() +
-  labs(title = "Muse of ML, Max's Mammoth! 🦣🦣",
-       subtitle = "Max Noichl popularized a 3D scan of a Smithsonian Mammoth, an example in UMAP explorations like 'Understanding UMAP'\n
-       Visualized with {ggplot2} x {ggcube}",
-       caption = "Data as prepared in github.com/PAIR-code/understanding-umap") -&gt;
-*ggcubed_mammoth
-```
-]
- 
-.panel2-my_cars-auto[
-
-]
-
----
-count: false
- 
-
-.panel1-my_cars-auto[
-
-``` r
-library(tidyverse)
-library(ggcube)
-
-ggplot(data = mammoth_df) +
-  aes(x = V1) +
-  aes(y = V2) +
-  geom_point() +
-  aes(shape = I(21)) +
-  aes(fill = I(confetti)) +
-  aes(color = I("white")) +
-  aes(stroke = .2) +
-  aes(z = V3) +
-  coord_3d(ratio = c(2,1.4,1),
-           yaw = 0,
-           roll = 10,
-           pitch = 5) +
-  geom_point_3d() +
-  theme_void() +
-  labs(title = "Muse of ML, Max's Mammoth! 🦣🦣",
-       subtitle = "Max Noichl popularized a 3D scan of a Smithsonian Mammoth, an example in UMAP explorations like 'Understanding UMAP'\n
-       Visualized with {ggplot2} x {ggcube}",
-       caption = "Data as prepared in github.com/PAIR-code/understanding-umap") -&gt;
-ggcubed_mammoth
-
-
-*ggcubed_mammoth
-```
-]
- 
-.panel2-my_cars-auto[
-![](ggcube2_files/figure-html/my_cars_auto_17_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-my_cars-auto[
-
-``` r
-library(tidyverse)
-library(ggcube)
-
-ggplot(data = mammoth_df) +
-  aes(x = V1) +
-  aes(y = V2) +
-  geom_point() +
-  aes(shape = I(21)) +
-  aes(fill = I(confetti)) +
-  aes(color = I("white")) +
-  aes(stroke = .2) +
-  aes(z = V3) +
-  coord_3d(ratio = c(2,1.4,1),
-           yaw = 0,
-           roll = 10,
-           pitch = 5) +
-  geom_point_3d() +
-  theme_void() +
-  labs(title = "Muse of ML, Max's Mammoth! 🦣🦣",
-       subtitle = "Max Noichl popularized a 3D scan of a Smithsonian Mammoth, an example in UMAP explorations like 'Understanding UMAP'\n
-       Visualized with {ggplot2} x {ggcube}",
-       caption = "Data as prepared in github.com/PAIR-code/understanding-umap") -&gt;
-ggcubed_mammoth
-
-
-ggcubed_mammoth |&gt;
-* animate_3d(pitch = c(0, 360))
-```
-]
- 
-.panel2-my_cars-auto[
-![](ggcube2_files/figure-html/my_cars_auto_18_output-1.gif)&lt;!-- --&gt;
+![](ggcube2_files/figure-html/my_cars_auto_15_output-1.gif)&lt;!-- --&gt;
 ]
 
 &lt;style&gt;
@@ -543,23 +433,27 @@ ggcubed_mammoth |&gt;
 
 
 
-
-
-
 &lt;style type="text/css"&gt;
-.column {
-  float: left;
-  width: 50%;
-  padding: 10px;
-  background-color:white;
+.remark-code{line-height: 1.5; font-size: 80%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
 }
 &lt;/style&gt;
-
-
-
-
-
-
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

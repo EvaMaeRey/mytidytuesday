@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>legendry</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="" />
+    <script src="libs/header-attrs-2.30/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+``` r
+library(tidyverse)
+places &lt;- tribble(~where, ~hour, 
+        "Melbourne/\nSydney", 6,
+        "Auckland", 8,
+        "San\nFrancisco", 13,
+        "Denver/\nSalt Lake",   14,
+        "Chicago/\nDallas", 15,
+        "New York/\nAtlanta", 16,
+        "Sao Paolo", 17,
+        "London/\nEdinburgh", 21,
+        "Amsterdam/\nBerlin", 22,
+        "Kampala", 23,)
+```
+
+
+---
+
+
+
+count: false
+ 
+
+.panel1-wheel-auto[
+
+``` r
+*library(tidyverse)
+```
+]
+ 
+.panel2-wheel-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-wheel-auto[
+
+``` r
+library(tidyverse)
+
+*tibble(hour = 1:24,
+*      hour_pretty = rep(1:12, 2) |&gt;
+*        paste(c(rep("AM", 11), "noon",
+*              c(rep("PM", 11), "midnight"))) |&gt;
+*        str_remove("12 "))
+```
+]
+ 
+.panel2-wheel-auto[
+
+```
+## # A tibble: 24 × 2
+##     hour hour_pretty
+##    &lt;int&gt; &lt;chr&gt;      
+##  1     1 1 AM       
+##  2     2 2 AM       
+##  3     3 3 AM       
+##  4     4 4 AM       
+##  5     5 5 AM       
+##  6     6 6 AM       
+##  7     7 7 AM       
+##  8     8 8 AM       
+##  9     9 9 AM       
+## 10    10 10 AM      
+## # ℹ 14 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-wheel-auto[
+
+``` r
+library(tidyverse)
+
+tibble(hour = 1:24,
+       hour_pretty = rep(1:12, 2) |&gt;
+         paste(c(rep("AM", 11), "noon",
+               c(rep("PM", 11), "midnight"))) |&gt;
+         str_remove("12 ")) |&gt;
+* ggplot()
+```
+]
+ 
+.panel2-wheel-auto[
+![](meeting_time_wheel_files/figure-html/wheel_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-wheel-auto[
+
+``` r
+library(tidyverse)
+
+tibble(hour = 1:24,
+       hour_pretty = rep(1:12, 2) |&gt;
+         paste(c(rep("AM", 11), "noon",
+               c(rep("PM", 11), "midnight"))) |&gt;
+         str_remove("12 ")) |&gt;
+  ggplot() +
+* aes(x = hour_pretty |&gt; fct_inorder())
+```
+]
+ 
+.panel2-wheel-auto[
+![](meeting_time_wheel_files/figure-html/wheel_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-wheel-auto[
+
+``` r
+library(tidyverse)
+
+tibble(hour = 1:24,
+       hour_pretty = rep(1:12, 2) |&gt;
+         paste(c(rep("AM", 11), "noon",
+               c(rep("PM", 11), "midnight"))) |&gt;
+         str_remove("12 ")) |&gt;
+  ggplot() +
+  aes(x = hour_pretty |&gt; fct_inorder()) +
+* aes(y = 1.15)
+```
+]
+ 
+.panel2-wheel-auto[
+![](meeting_time_wheel_files/figure-html/wheel_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-wheel-auto[
+
+``` r
+library(tidyverse)
+
+tibble(hour = 1:24,
+       hour_pretty = rep(1:12, 2) |&gt;
+         paste(c(rep("AM", 11), "noon",
+               c(rep("PM", 11), "midnight"))) |&gt;
+         str_remove("12 ")) |&gt;
+  ggplot() +
+  aes(x = hour_pretty |&gt; fct_inorder()) +
+  aes(y = 1.15) +
+* coord_polar(start = 0, clip = F)
+```
+]
+ 
+.panel2-wheel-auto[
+![](meeting_time_wheel_files/figure-html/wheel_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-wheel-auto[
+
+``` r
+library(tidyverse)
+
+tibble(hour = 1:24,
+       hour_pretty = rep(1:12, 2) |&gt;
+         paste(c(rep("AM", 11), "noon",
+               c(rep("PM", 11), "midnight"))) |&gt;
+         str_remove("12 ")) |&gt;
+  ggplot() +
+  aes(x = hour_pretty |&gt; fct_inorder()) +
+  aes(y = 1.15) +
+  coord_polar(start = 0, clip = F) +
+* theme_void(ink = "darkgrey")
+```
+]
+ 
+.panel2-wheel-auto[
+![](meeting_time_wheel_files/figure-html/wheel_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-wheel-auto[
+
+``` r
+library(tidyverse)
+
+tibble(hour = 1:24,
+       hour_pretty = rep(1:12, 2) |&gt;
+         paste(c(rep("AM", 11), "noon",
+               c(rep("PM", 11), "midnight"))) |&gt;
+         str_remove("12 ")) |&gt;
+  ggplot() +
+  aes(x = hour_pretty |&gt; fct_inorder()) +
+  aes(y = 1.15) +
+  coord_polar(start = 0, clip = F) +
+  theme_void(ink = "darkgrey") +
+* aes(label = hour_pretty)
+```
+]
+ 
+.panel2-wheel-auto[
+![](meeting_time_wheel_files/figure-html/wheel_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-wheel-auto[
+
+``` r
+library(tidyverse)
+
+tibble(hour = 1:24,
+       hour_pretty = rep(1:12, 2) |&gt;
+         paste(c(rep("AM", 11), "noon",
+               c(rep("PM", 11), "midnight"))) |&gt;
+         str_remove("12 ")) |&gt;
+  ggplot() +
+  aes(x = hour_pretty |&gt; fct_inorder()) +
+  aes(y = 1.15) +
+  coord_polar(start = 0, clip = F) +
+  theme_void(ink = "darkgrey") +
+  aes(label = hour_pretty) +
+* geom_label(linewidth = 0)
+```
+]
+ 
+.panel2-wheel-auto[
+![](meeting_time_wheel_files/figure-html/wheel_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-wheel-auto[
+
+``` r
+library(tidyverse)
+
+tibble(hour = 1:24,
+       hour_pretty = rep(1:12, 2) |&gt;
+         paste(c(rep("AM", 11), "noon",
+               c(rep("PM", 11), "midnight"))) |&gt;
+         str_remove("12 ")) |&gt;
+  ggplot() +
+  aes(x = hour_pretty |&gt; fct_inorder()) +
+  aes(y = 1.15) +
+  coord_polar(start = 0, clip = F) +
+  theme_void(ink = "darkgrey") +
+  aes(label = hour_pretty) +
+  geom_label(linewidth = 0) +
+* aes(hjust = 1)
+```
+]
+ 
+.panel2-wheel-auto[
+![](meeting_time_wheel_files/figure-html/wheel_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-wheel-auto[
+
+``` r
+library(tidyverse)
+
+tibble(hour = 1:24,
+       hour_pretty = rep(1:12, 2) |&gt;
+         paste(c(rep("AM", 11), "noon",
+               c(rep("PM", 11), "midnight"))) |&gt;
+         str_remove("12 ")) |&gt;
+  ggplot() +
+  aes(x = hour_pretty |&gt; fct_inorder()) +
+  aes(y = 1.15) +
+  coord_polar(start = 0, clip = F) +
+  theme_void(ink = "darkgrey") +
+  aes(label = hour_pretty) +
+  geom_label(linewidth = 0) +
+  aes(hjust = 1) +
+* aes(yend = 0, xend = hour)
+```
+]
+ 
+.panel2-wheel-auto[
+![](meeting_time_wheel_files/figure-html/wheel_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-wheel-auto[
+
+``` r
+library(tidyverse)
+
+tibble(hour = 1:24,
+       hour_pretty = rep(1:12, 2) |&gt;
+         paste(c(rep("AM", 11), "noon",
+               c(rep("PM", 11), "midnight"))) |&gt;
+         str_remove("12 ")) |&gt;
+  ggplot() +
+  aes(x = hour_pretty |&gt; fct_inorder()) +
+  aes(y = 1.15) +
+  coord_polar(start = 0, clip = F) +
+  theme_void(ink = "darkgrey") +
+  aes(label = hour_pretty) +
+  geom_label(linewidth = 0) +
+  aes(hjust = 1) +
+  aes(yend = 0, xend = hour) +
+* geom_segment(aes(y = 1.2))
+```
+]
+ 
+.panel2-wheel-auto[
+![](meeting_time_wheel_files/figure-html/wheel_auto_12_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-wheel-auto[
+
+``` r
+library(tidyverse)
+
+tibble(hour = 1:24,
+       hour_pretty = rep(1:12, 2) |&gt;
+         paste(c(rep("AM", 11), "noon",
+               c(rep("PM", 11), "midnight"))) |&gt;
+         str_remove("12 ")) |&gt;
+  ggplot() +
+  aes(x = hour_pretty |&gt; fct_inorder()) +
+  aes(y = 1.15) +
+  coord_polar(start = 0, clip = F) +
+  theme_void(ink = "darkgrey") +
+  aes(label = hour_pretty) +
+  geom_label(linewidth = 0) +
+  aes(hjust = 1) +
+  aes(yend = 0, xend = hour) +
+  geom_segment(aes(y = 1.2)) +
+* aes(angle = -((hour-.5)/24)*360+90)
+```
+]
+ 
+.panel2-wheel-auto[
+![](meeting_time_wheel_files/figure-html/wheel_auto_13_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-wheel-auto[
+
+``` r
+library(tidyverse)
+
+tibble(hour = 1:24,
+       hour_pretty = rep(1:12, 2) |&gt;
+         paste(c(rep("AM", 11), "noon",
+               c(rep("PM", 11), "midnight"))) |&gt;
+         str_remove("12 ")) |&gt;
+  ggplot() +
+  aes(x = hour_pretty |&gt; fct_inorder()) +
+  aes(y = 1.15) +
+  coord_polar(start = 0, clip = F) +
+  theme_void(ink = "darkgrey") +
+  aes(label = hour_pretty) +
+  geom_label(linewidth = 0) +
+  aes(hjust = 1) +
+  aes(yend = 0, xend = hour) +
+  geom_segment(aes(y = 1.2)) +
+  aes(angle = -((hour-.5)/24)*360+90) +
+* aes(linetype = hour %% 3 |&gt;
+*       as.logical())
+```
+]
+ 
+.panel2-wheel-auto[
+![](meeting_time_wheel_files/figure-html/wheel_auto_14_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-wheel-auto[
+
+``` r
+library(tidyverse)
+
+tibble(hour = 1:24,
+       hour_pretty = rep(1:12, 2) |&gt;
+         paste(c(rep("AM", 11), "noon",
+               c(rep("PM", 11), "midnight"))) |&gt;
+         str_remove("12 ")) |&gt;
+  ggplot() +
+  aes(x = hour_pretty |&gt; fct_inorder()) +
+  aes(y = 1.15) +
+  coord_polar(start = 0, clip = F) +
+  theme_void(ink = "darkgrey") +
+  aes(label = hour_pretty) +
+  geom_label(linewidth = 0) +
+  aes(hjust = 1) +
+  aes(yend = 0, xend = hour) +
+  geom_segment(aes(y = 1.2)) +
+  aes(angle = -((hour-.5)/24)*360+90) +
+  aes(linetype = hour %% 3 |&gt;
+        as.logical()) +
+* aes(vjust = 1)
+```
+]
+ 
+.panel2-wheel-auto[
+![](meeting_time_wheel_files/figure-html/wheel_auto_15_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-wheel-auto[
+
+``` r
+library(tidyverse)
+
+tibble(hour = 1:24,
+       hour_pretty = rep(1:12, 2) |&gt;
+         paste(c(rep("AM", 11), "noon",
+               c(rep("PM", 11), "midnight"))) |&gt;
+         str_remove("12 ")) |&gt;
+  ggplot() +
+  aes(x = hour_pretty |&gt; fct_inorder()) +
+  aes(y = 1.15) +
+  coord_polar(start = 0, clip = F) +
+  theme_void(ink = "darkgrey") +
+  aes(label = hour_pretty) +
+  geom_label(linewidth = 0) +
+  aes(hjust = 1) +
+  aes(yend = 0, xend = hour) +
+  geom_segment(aes(y = 1.2)) +
+  aes(angle = -((hour-.5)/24)*360+90) +
+  aes(linetype = hour %% 3 |&gt;
+        as.logical()) +
+  aes(vjust = 1) +
+* theme(legend.position = "none")
+```
+]
+ 
+.panel2-wheel-auto[
+![](meeting_time_wheel_files/figure-html/wheel_auto_16_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-wheel-auto[
+
+``` r
+library(tidyverse)
+
+tibble(hour = 1:24,
+       hour_pretty = rep(1:12, 2) |&gt;
+         paste(c(rep("AM", 11), "noon",
+               c(rep("PM", 11), "midnight"))) |&gt;
+         str_remove("12 ")) |&gt;
+  ggplot() +
+  aes(x = hour_pretty |&gt; fct_inorder()) +
+  aes(y = 1.15) +
+  coord_polar(start = 0, clip = F) +
+  theme_void(ink = "darkgrey") +
+  aes(label = hour_pretty) +
+  geom_label(linewidth = 0) +
+  aes(hjust = 1) +
+  aes(yend = 0, xend = hour) +
+  geom_segment(aes(y = 1.2)) +
+  aes(angle = -((hour-.5)/24)*360+90) +
+  aes(linetype = hour %% 3 |&gt;
+        as.logical()) +
+  aes(vjust = 1) +
+  theme(legend.position = "none") +
+* aes(linewidth = I(.3))
+```
+]
+ 
+.panel2-wheel-auto[
+![](meeting_time_wheel_files/figure-html/wheel_auto_17_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-wheel-auto[
+
+``` r
+library(tidyverse)
+
+tibble(hour = 1:24,
+       hour_pretty = rep(1:12, 2) |&gt;
+         paste(c(rep("AM", 11), "noon",
+               c(rep("PM", 11), "midnight"))) |&gt;
+         str_remove("12 ")) |&gt;
+  ggplot() +
+  aes(x = hour_pretty |&gt; fct_inorder()) +
+  aes(y = 1.15) +
+  coord_polar(start = 0, clip = F) +
+  theme_void(ink = "darkgrey") +
+  aes(label = hour_pretty) +
+  geom_label(linewidth = 0) +
+  aes(hjust = 1) +
+  aes(yend = 0, xend = hour) +
+  geom_segment(aes(y = 1.2)) +
+  aes(angle = -((hour-.5)/24)*360+90) +
+  aes(linetype = hour %% 3 |&gt;
+        as.logical()) +
+  aes(vjust = 1) +
+  theme(legend.position = "none") +
+  aes(linewidth = I(.3)) +
+* geom_label(data = places,
+*            fill = "white",
+*            linewidth = 0,
+*           aes(x = hour, y = 1.22,
+*               label = where,
+*               hjust = 0,
+*               vjust = .5,
+*               lineheight = .8,
+*               xend = NULL,
+*               linetype = NULL))
+```
+]
+ 
+.panel2-wheel-auto[
+![](meeting_time_wheel_files/figure-html/wheel_auto_18_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-wheel-auto[
+
+``` r
+library(tidyverse)
+
+tibble(hour = 1:24,
+       hour_pretty = rep(1:12, 2) |&gt;
+         paste(c(rep("AM", 11), "noon",
+               c(rep("PM", 11), "midnight"))) |&gt;
+         str_remove("12 ")) |&gt;
+  ggplot() +
+  aes(x = hour_pretty |&gt; fct_inorder()) +
+  aes(y = 1.15) +
+  coord_polar(start = 0, clip = F) +
+  theme_void(ink = "darkgrey") +
+  aes(label = hour_pretty) +
+  geom_label(linewidth = 0) +
+  aes(hjust = 1) +
+  aes(yend = 0, xend = hour) +
+  geom_segment(aes(y = 1.2)) +
+  aes(angle = -((hour-.5)/24)*360+90) +
+  aes(linetype = hour %% 3 |&gt;
+        as.logical()) +
+  aes(vjust = 1) +
+  theme(legend.position = "none") +
+  aes(linewidth = I(.3)) +
+  geom_label(data = places,
+             fill = "white",
+             linewidth = 0,
+            aes(x = hour, y = 1.22,
+                label = where,
+                hjust = 0,
+                vjust = .5,
+                lineheight = .8,
+                xend = NULL,
+                linetype = NULL)) +
+* geom_hline(yintercept = 1.2)
+```
+]
+ 
+.panel2-wheel-auto[
+![](meeting_time_wheel_files/figure-html/wheel_auto_19_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-wheel-auto[
+
+``` r
+library(tidyverse)
+
+tibble(hour = 1:24,
+       hour_pretty = rep(1:12, 2) |&gt;
+         paste(c(rep("AM", 11), "noon",
+               c(rep("PM", 11), "midnight"))) |&gt;
+         str_remove("12 ")) |&gt;
+  ggplot() +
+  aes(x = hour_pretty |&gt; fct_inorder()) +
+  aes(y = 1.15) +
+  coord_polar(start = 0, clip = F) +
+  theme_void(ink = "darkgrey") +
+  aes(label = hour_pretty) +
+  geom_label(linewidth = 0) +
+  aes(hjust = 1) +
+  aes(yend = 0, xend = hour) +
+  geom_segment(aes(y = 1.2)) +
+  aes(angle = -((hour-.5)/24)*360+90) +
+  aes(linetype = hour %% 3 |&gt;
+        as.logical()) +
+  aes(vjust = 1) +
+  theme(legend.position = "none") +
+  aes(linewidth = I(.3)) +
+  geom_label(data = places,
+             fill = "white",
+             linewidth = 0,
+            aes(x = hour, y = 1.22,
+                label = where,
+                hjust = 0,
+                vjust = .5,
+                lineheight = .8,
+                xend = NULL,
+                linetype = NULL)) +
+  geom_hline(yintercept = 1.2) +
+* labs(title = "Virtual meetup coordinators' wheel, Summer 2026")
+```
+]
+ 
+.panel2-wheel-auto[
+![](meeting_time_wheel_files/figure-html/wheel_auto_20_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-wheel-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-wheel-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-wheel-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+  "ratio": "16:9",
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

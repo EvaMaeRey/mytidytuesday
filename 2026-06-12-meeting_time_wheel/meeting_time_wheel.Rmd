@@ -1,0 +1,86 @@
+---
+title: "legendry"
+subtitle: ""
+author: ""
+output:
+  xaringan::moon_reader:
+    seal: FALSE
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      message = F, 
+                      warning = F, 
+                      dpi = 300,
+                      cache = F, 
+                      dev = "ragg_png")
+```
+
+```{r}
+library(tidyverse)
+places <- tribble(~where, ~hour, 
+        "Melbourne/\nSydney", 6,
+        "Auckland", 8,
+        "San\nFrancisco", 13,
+        "Denver/\nSalt Lake",   14,
+        "Chicago/\nDallas", 15,
+        "New York/\nAtlanta", 16,
+        "Sao Paolo", 17,
+        "London/\nEdinburgh", 21,
+        "Amsterdam/\nBerlin", 22,
+        "Kampala", 23,)
+```
+
+
+---
+
+
+
+`r flipbookr::chunk_reveal("wheel")`
+
+
+```{r wheel, include = F}
+library(tidyverse)
+
+tibble(hour = 1:24, 
+       hour_pretty = rep(1:12, 2) |> 
+         paste(c(rep("AM", 11), "noon",
+               c(rep("PM", 11), "midnight"))) |>
+         str_remove("12 ")) |>
+  ggplot() + 
+  aes(x = hour_pretty |> fct_inorder()) + 
+  aes(y = 1.15) + 
+  coord_polar(start = 0, clip = F) + 
+  theme_void(ink = "darkgrey") + 
+  aes(label = hour_pretty) + 
+  geom_label(linewidth = 0) + 
+  aes(hjust = 1) +
+  aes(yend = 0, xend = hour) +
+  geom_segment(aes(y = 1.2)) + 
+  aes(angle = -((hour-.5)/24)*360+90) + 
+  aes(linetype = hour %% 3 |> 
+        as.logical()) + 
+  aes(vjust = 1) + 
+  theme(legend.position = "none") + 
+  aes(linewidth = I(.3)) +
+  geom_label(data = places,
+             fill = "white", 
+             linewidth = 0,
+            aes(x = hour, y = 1.22,
+                label = where, 
+                hjust = 0,
+                vjust = .5,
+                lineheight = .8,
+                xend = NULL,
+                linetype = NULL)) + 
+  geom_hline(yintercept = 1.2) +
+  labs(title = "Virtual meetup coordinators' wheel, Summer 2026")
+```
+

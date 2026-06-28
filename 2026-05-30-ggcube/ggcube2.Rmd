@@ -1,5 +1,5 @@
 ---
-title: "legendry"
+title: "ML mammoth"
 subtitle: ""
 author: ""
 output:
@@ -61,77 +61,39 @@ ggplot(data = mammoth_df) +
            roll = 10, 
            pitch = 5) +
   geom_point_3d() + 
-  theme_void() +
-  labs(title = "Muse of ML, Max's Mammoth!",
-       subtitle = "Max Noichl popularized a 3D scan of a Smithsonian Mammoth, an example in UMAP explorations like 'Understanding UMAP'\n
-       Visualized with {ggplot2} x {ggcube}",
-       caption = "Data from github.com/PAIR-code/understanding-umap") ->
-ggcubed_mammoth
-
-
-ggcubed_mammoth |> 
-  animate_3d(pitch = c(0, 360))
+  labs(
+    title = "A Muse of ML, Max's Mammoth...",
+    subtitle = "Max Noichl popularized mammoth data, a 3D scan of a Smithsonian \nMammoth.  ML and AI researchers have turned to it in explorations like \n'Understanding UMAP' and beyond.",
+    caption = "Visualized with {ggplot2} and {ggcube} - new on CRAN!\nData as curated by Coenen and Pearce at github.com/PAIR-code/understanding-umap"
+    ) -> 
+  plot; animate_3d(
+    plot + theme_void(), 
+    pitch = c(0, 360)
+    )
 ```
 
 
 
 
 
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 80%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
 
 
-
-```{css, echo = F}
-.column {
-  float: left;
-  width: 50%;
-  padding: 10px;
-  background-color:white;
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
 }
 ```
-
-
-```{css, echo = F, eval = F}
-table {
-  cursor: pointer; 
-  cursor: hand;
-  border: none;
-  margin-left: auto;
-  margin-right: auto;
-  width:"80%";
-  border:"0"; 
-  cellspacing:"0"; 
-  cellpadding:"0";
-  font-family: "Lucida Console";
-}
-
-.hover {
-  background-color: #F1D95A92;
-}
-
-.image-crop {
-  height: 600px;;
-}
-
-tab1 { padding-left: 4em; }
-tab2 { padding-left: 8em; }
-tab3 { padding-left: 12em; }
-tab4 { padding-left: 16em; }
-tab5 { padding-left: 20em; }
-tab6 { padding-left: 24em; }
-tab7 { padding-left: 28em; }
-tab8 { padding-left: 32em; }
-tab9 { padding-left: 36em; }
-tab10 { padding-left: 40em; }
-tab11 { padding-left: 44em; }
-tab12 { padding-left: 48em; }
-tab13 { padding-left: 52em; }
-tab14 { padding-left: 56em; }
-tab15 { padding-left: 60em; }
-tab16 { padding-left: 64em; }
-
-
-
-```
-
-
-

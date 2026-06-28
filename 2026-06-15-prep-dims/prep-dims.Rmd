@@ -1,0 +1,331 @@
+---
+title: "return to dim red after a while"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+2026-06-28 @corybrunson I've mentioned that I wanted to share with you on this, and I've thought about rehashing and emailing or putting on discussions but on my walk today, I felt like @ - ing might be a less resource intense way.  So just doing that. 🤷‍♀️  Can @ be pushed to github?  As I am doing?  Another way?  
+
+Here, exploring a pivot to preprocessing or different in-processing features() instead.  
+
+## Intro Thoughts
+
+ggdims feels a little more engineered than it might be. See https://github.com/EvaMaeRey/ggdims.  So  Let's look at a slightly different approach:
+
+Target:
+
+```{r, eval = F}
+data |> 
+  make_dims_column() |>
+  ggplot() + 
+  aes(dims = .dims_column) + # list column... each row has unique data for the 
+  geom_pca()
+```
+
+
+## Experiment
+
+```{r}
+library(tidyverse)
+declare_features <- function(data, ...){
+
+data$features <- list(NA, length(data))
+
+features_df <- data |> select(...)
+# names(features_df) <- paste0(".f", 1:ncol(features_df))
+
+for (i in 1:nrow(data)){
+  
+  data$features[[i]] <- features_df |> slice(i)
+  
+}             
+
+data |> as_tibble()
+
+}
+
+
+iris |> 
+  declare_features(Sepal.Length:Petal.Length, Petal.Width) 
+
+iris |> 
+  declare_features(Sepal.Length:Petal.Length, Petal.Width) |>
+  ggplot() + 
+  aes(features = features) + ## do features() or do geometry = geometry...
+  geom_blank()
+```
+
+# make it interact with compute via a stat
+
+```{r}
+compute_panel_pca <- function(data, scales){
+  
+  dims <- data |> select(features) |> unnest(cols = features)
+    
+  pca_ed <- dims |>
+    ordr::ordinate(model = ~ prcomp(., scale. = TRUE)) |> 
+    _[[5]] |> 
+    as_tibble()
+  
+  pca_ed |> 
+    bind_cols(data)
+  
+}
+
+iris |> 
+  declare_features(Sepal.Length:Petal.Length, Petal.Width) |> 
+  select(features) |>
+  compute_panel_pca() 
+
+
+library(statexpress)
+iris |> 
+  declare_features(Sepal.Length:Petal.Length, Petal.Width) |> 
+  ggplot() + 
+  aes(features = features) + 
+  qlayer(stat = qstat_panel(compute_panel_pca,
+                      default_aes = aes(x = after_stat(PC1), 
+                                        y = after_stat(PC2)))) + 
+  aes(color = Species)
+
+
+p <- last_plot()
+
+features <- function(){
+  
+  aes(features = features)
+  
+}
+
+
+iris |> 
+  declare_features(Sepal.Length:Petal.Length, Petal.Width) |> 
+  ggplot() + 
+  features() + 
+  qlayer(stat = qstat_panel(compute_panel_pca,
+                      default_aes = aes(x = after_stat(PC1), 
+                                        y = after_stat(PC2)))) + 
+  aes(color = Species)
+
+```
+
+
+# write a proper Stat and user facing function...
+
+```{r}
+StatPCA <- ggproto(`_class` = "StatPCA", `_inherit` = Stat,
+                   compute_panel = compute_panel_pca,
+                   required_aes = "features",
+                   default_aes = aes(x = after_stat(PC1), 
+                                        y = after_stat(PC2)))
+
+
+geom_pca0 <- make_constructor(GeomPoint, stat = StatPCA)
+
+iris |> 
+  declare_features(Sepal.Length:Petal.Length, Petal.Width) |> 
+  ggplot() + 
+  aes(features = features) +
+  geom_pca0()
+
+last_plot() +
+  aes(color = Species)
+```
+
+# automatically look for the column like geom_sf looks for geometry (how does that managed?)
+
+```{r}
+geom_pca <- function(...){
+  
+  list(
+  geom_pca0(...),
+  aes(features = features)
+  )
+  
+}
+
+iris |> 
+  declare_features(Sepal.Length:Petal.Length, Petal.Width) |> 
+  ggplot() + 
+  geom_pca()
+
+last_plot() + 
+  aes(color = Species)
+```
+
+
+## Preferred ... wish list:  add a `features()` function that can be declared within - fails with selections with commas (other tidy select moves?)
+
+```{r, eval = T, error = T}
+#' @export
+features0 <- function(select0) {
+
+  structure(
+    list(
+      select_spec = rlang::enquo(select0)
+    ), 
+    class = "features0"
+    )
+
+}
+
+
+#' @import ggplot2
+#' @importFrom ggplot2 ggplot_add
+#' @export
+ggplot_add.features0 <- function(object, plot, object_name) {
+  
+  plot$data <- plot$data |> 
+    declare_features(!!object$select_spec)
+
+  plot <- plot + aes(features = features)
+
+  plot
+
+}
+
+
+features <- function(select){
+  
+  features0({{select}})
+  
+}
+
+
+library(statexpress)
+iris |> 
+  ggplot() + 
+  features(Sepal.Length:Petal.Length) + 
+  geom_pca0() + 
+  aes(color = Species)
+
+
+
+
+library(statexpress)
+iris |> 
+  ggplot() + 
+  features(Sepal.Length:Petal.Length, Petal.Width) + 
+  geom_pca0() + 
+  aes(color = Species)
+
+
+```
+
+
+
+# not preferred, though I'm having trouble articulating why...
+
+
+
+
+```{r}
+ggdims <- function(data, mapping, ...){
+  
+  
+  
+  
+  
+}
+
+
+
+
+```
+
+
+# a little venn exploration
+
+```{r}
+library(ggVennDiagram)
+y <- list(
+  A = sample(letters, 8),
+  B = sample(letters, 8),
+  C = sample(letters, 8),
+  D = sample(letters, 8)
+) 
+
+as.data.frame(y)
+
+ggVennDiagram(y)
+
+process_region_data(Venn(y))
+
+
+genes <- paste("gene",1:1000,sep="")
+set.seed(20231214)
+x <- list(A=sample(genes,300),
+          B=sample(genes,525),
+          C=sample(genes,440),
+          D=sample(genes,350))
+
+
+ggVennDiagram
+
+
+ggVennDiagram::plot_venn
+
+
+
+compute_venn_list <- function(data){
+  
+  df <- data |>
+    select(features) |> 
+    unnest(features) 
+  
+  venn_list <- list(NA)
+  # names(venn_list) <- names(df)
+    
+  for(i in 1:ncol(df)){
+    
+    venn_list[[i]] <- (1:nrow(df))[df[,i] |> pull() |> as.logical()]
+    
+  }
+  
+  names(venn_list) <-  names(df)
+
+  venn_list
+  
+  }
+
+
+# raw TF data
+recipes_characteristics_logical <- data.frame(
+  tasty = sample(0:1, 100, replace = T), 
+  easy = sample(0:1, 100, replace = T)) |>
+  mutate(id = paste("item", row_number()), .before = 1)
+
+
+recipes_characteristics_logical |> 
+  # declare features and select only features
+  declare_features(tasty, easy) |> 
+  select(features) |>
+  # compute that happens internally in an geom_venn()
+  compute_venn_list() |> 
+  ggVennDiagram() + 
+  labs(title = "Recipe characteristics: What percent are easy and tasty?")
+
+ggVennDiagram:::plot_shapes()
+
+# data |> 
+#   declare_features |> 
+#   ggplot() + 
+#     aes(features = features) + 
+#     geom_venn()
+
+
+```
+
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
