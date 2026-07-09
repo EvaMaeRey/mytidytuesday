@@ -1,5 +1,5 @@
 ---
-title: "Data Science Lab - Introduction"
+title: "ggplot2 extenders community..."
 author: "Evangeline Reynolds"
 date: "`r Sys.Date()`"
 output: 
@@ -11,19 +11,482 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F, dev = "ragg_png", cache = F)
 options(tidyverse.quiet = TRUE)
 ```
 
-Intro to Data Science Lab - practice for Intro to Data Science Lab - JSM talk - Posit Conf talk...
+## ggplot2 undersold in the innovation/design?
 
 
 
-Why am I here?
+## Posit Community Support Application
+
+*Thank you for your interest in applying for community support from
+Posit! Posit is proud to support community-led events and initiatives
+that align with our strategic mission to promote reproducible,
+open-source data science. While we would love to support every event and
+initiative, support is highly competitive and subject to budget
+availability.*
+
+*Detailed submissions allow our committee to make informed decisions. We
+encourage you to present your most compelling case for how this
+partnership is a mutual fit and will drive meaningful impact!*
+
+*Please submit one application for your organization per calendar year.*
+
+*Upcoming submission deadlines*
+
+*We accept applications at any time; however, we review them at
+specified periods throughout the year. The further away your event is,
+the better. Please keep the following in mind:*
+
+*Submissions received by July 3, 2026 (11:59 PM CT) will hear a decision
+by July 17, 2026 (11:59 PM CT)*
+
+# **Initiative type:** Recurring meetup
+
+# **Community initiative name:** ggplot2 extenders club
+
+# **Brief community initiative summary.** Please include any relevant details about your community initiative:
+
+## What it is
+
+It's a community/discussion forum for people who build extensions to the
+R package ggplot2 (custom geoms, stats, themes, etc.). The forum exists
+to facilitate conversations about extension experiences — motivations,
+challenges, design decisions, and extension journeys in general.
+
+```{r, echo = F, fig.height=4, fig.width=6}
+library(tidyverse)
+
+to_sf_routine <- function(data){
+  
+  data |>
+  mutate(y = -y) |>
+  sf::st_as_sf(coords = c("x", "y"), agr = "constant") |>
+  group_by(id, group) |>
+  summarize(do_union = F) |> 
+  ungroup() |> 
+  group_by(id, group) |>
+  summarise() |>
+  mutate(geometry = geometry |> sf::st_cast("POLYGON")) |> 
+  mutate(geometry = geometry |> sf::st_cast("MULTIPOLYGON")) |> 
+  ungroup() 
+  
+}
+
+
+female_sf <- gganatogram::hgFemale_list[c(1:156, 180:195)] |> 
+  bind_rows() |>
+  remove_missing() |>
+  to_sf_routine()
+# Step 1.a Prepare Data
+ref_female <- female_sf |> 
+  select(organ = id, geometry)
+
+'
+library(ggregions)
+
+set_regions(regions = ref_female)
+
+tribble(~ organ, ~ color,   
+        "brain",   "pink3",
+        "heart",   "darkred",
+        "stomach", "cadetblue2") |> 
+  ggplot() + 
+  stamp_region(alpha = .001) +
+  aes(region = organ,
+      fill = organ) +
+  geom_region()' |>
+  ggram::ggram(code = _, width = c(1, .5),
+               title = "ggplot2 extenders club is about hearts and minds...",
+               subtitle = "...and occasionally stomachs. 🍔🥙")
+
+
+
+```
+
+
+
+
+```{r, eval = T, echo = F, fig.width=10, fig.height=4.5}
+library(tidyverse)
+library(ggregions)
+
+# Step 1a: Prepare reference data
+country_ref <- rnaturalearth::countries110 |> 
+  select(country_name = SOVEREIGNT,
+         iso3c = ISO_A3, 
+         geometry)
+
+'set_regions(country_ref)
+
+places_df <- tribble(~place,
+        "France", "Canada", 
+        "New Zealand", 
+        "United States of America", 
+        "Uganda", "Netherlands", 
+        "Brazil", "Australia", 
+        "South Korea", "United Kingdom", 
+        "Germany", "Denmark", 
+        "Sweden", "Austria")
+
+
+ggplot(data = places_df) + 
+  aes(region = place,
+      fill = I("steelblue4")) + 
+  stamp_region() + 
+  geom_region()' |> ggram::ggram(code = _, 
+                                title = "The places we've been:  The ggplot2 extenders meetup is about reach",
+                                subtitle = "And we'd love to reach many more people an places...",
+                                widths = c(.8,1.5))
+```
+
+
+## Notable content/topics
+
+Discussions get fairly technical — e.g., one thread dug into a proposed
+"layer redefaulting" approach using aes(color = I("chalkcolor")), and
+debates over how theme functions like theme_void() should handle "ink"
+and "paper" color arguments, and if "accent" (geom_smooth's blue) should
+be exposed to users.
+
+Another example is a February 2025 session on the {ggtime} package,
+where Mitchell O'Hara-Wild and Cynthia Huang from Monash University
+discussed designing ggplot2 extensions for temporal visualization,
+including handling calendrical complexity in time-based plots.
+
+
+
+## What we seek to accomplish
+
+### 1.  Build community among extension developers
+
+The core mission is to give people who create ggplot2 extensions (custom
+geoms, stats, themes, scales, etc.) a place to talk to each other —
+sharing motivations, challenges, "equivocations," and design decisions
+rather than working in isolation. As one member put it, it's fantastic
+to hear developers speaking directly to other developers, and another
+described it as great to get more involved in the extensions community
+and have a place to congregate.
+
+### 2.  Lower the barrier to becoming an extender
+
+There's a strong "you can do this too" ethos. The club grew out of the
+idea that extending ggplot2 isn't reserved for experts — anyone fluent
+in R and ggplot2 can become an extender. Related resources like the
+"Easy geom recipes" tutorials and the ggplot2 Extension Cookbook exist
+specifically to walk newcomers through creating their first geoms,
+stats, and layers step by step.
+
+### 3.  Work through shared design problems in public
+
+A lot of the value comes from hashing out genuinely hard design
+questions collectively — things like how color/theme arguments should
+behave consistently across theme functions, or how to design a coherent
+API for a new extension package (as with the {ggtime} discussion, where
+the presenters explicitly framed their talk as being more about
+designing ggplot2 extensions than temporal visualization itself). The
+idea is that design decisions made in isolation are often weaker than
+ones stress-tested by other extenders.
+
+### 4.  Create durable, findable knowledge
+
+Meetings and GitHub discussions serve as a growing public archive —
+since 2022 they've covered more than 25 extension projects, and the
+threads (which stay searchable on GitHub) become a reference for future
+extenders wrestling with similar problems.
+
+So in short:  grassroots peer-support and mentorship network — aimed at
+demystifying ggplot2 extension development, sharing hard-won design
+knowledge, and making new extenders feel like part of a community rather
+than lone contributors.
+
+> I enjoyed the questions and discussion afterwards.  It was good to put some faces to some names that I have known of for quite a while.  - Paul Murrell
+
+
+
+Home to the first open source project "release party" (for ggplot2 )
+
+# **Community initiative website**
+
+Website: ggplot2-extenders.github.io/ggplot-extension-club/
+
+GitHub org: github.com/ggplot2-extenders/ggplot-extension-club Talks:
+
+# **Community initiative location:** Virtual
+
+# **Current number of members:**
+
+250 expressing interest.. Average attendance per meeting *15-40 people in attendance 
+
+# **Frequency of meetings** 
+
+
+
+# **Support request**
+
+Support type request \*Select the items you need to make your initiative
+successful. Please note that physical swag support outside of North
+America may be limited due to shipping constraints.
+
+-   Monetary support
+-   Materials and/or swag
+-   Social media promotion
+-   Volunteers
+
+Other: Monetary support request If you are requesting monetary support,
+please provide an amount in USD.
+
+Feel free to specify a range. ??
+
+# Benefits of sponsorship
+
+List the specific ways you can recognize Posit's contribution. Examples
+include logo placement on your website, social media shout-outs,
+post-event photos, or mentions in promotional emails. 
+
+I'd love to do all of this!  
+
+# Posit employee contact
+
+If you have been coordinating with someone at Posit, let us know so we
+can sync with them internally. 
+
+Hadley
+
+# Has Posit previously sponsored your event or initiative?
+
+Knowing your history with Posit helps us understand the long-term
+impact of our community partnerships.
+
+
+## Will there be a recording?
+
+Alignment Does your event/community initiative focus on R and/or Python?
+
+*Does your event or initiative involve Posit software?* 
+
+## **How is your group’s knowledge shared?** Successful applications often contribute back to the community.
+
+
+
+
+**Detail how you will share resources, such as hosting code on public GitHub repositories or sharing recorded sessions.**
+
+The club shares knowledge through several channels:
+
+1. Recurring virtual meetings
+
+Every few months, the club holds a virtual meeting where a "ggextender" presents on an extension project they've built — walking through motivation, design choices, and challenges. Since 2022, they've covered more than 25 extension projects this way, with speakers like Mitchell O'Hara-Wild and Cynthia Huang presenting on their {ggtime} package's design in February 2025, or Gina Reynolds organizing sessions and running related tutorial efforts.
+
+2. GitHub Discussions (the persistent, asynchronous layer)
+
+The club's discussion happens on GitHub, in the ggplot2-extenders/ggplot-extension-club repo's Discussions tab. This is where the deeper, ongoing technical conversations live — for example, a thread digging into how theme functions like theme_grey() and theme_void() should handle "ink" and "paper" color arguments, with multiple contributors iterating over weeks with code examples and counterexamples. Presenters often seed a discussion thread tied to their talk (e.g., the {ggtime} talk pointed people to discussions#79) so the conversation continues after the meeting ends.
+
+3. Slide decks and talk materials
+
+Speakers publish their own slides externally (e.g., slides.mitchelloharawild.com/ggextenders-ggtime) and link them from the discussion threads, so the content of a talk remains accessible even to people who couldn't attend live.
+
+4. A central club website
+
+ggplot2-extenders.github.io/ggplot-extension-club/ acts as the hub — it lists meeting info, a comprehensive set of extension-building resources, and links out to talks and discussions. It also has a sign-up form for people to register interest and get notified of upcoming meetings.
+
+5. Companion tutorials and reference material built by members
+
+Rather than being purely conversational, knowledge from the club has been distilled into standalone teaching resources — most notably the "Easy geom recipes" tutorial series and the ggplot2 Extension Cookbook (by Gina respectively), which turn patterns discussed informally in the club into structured, example-driven walk-throughs for building geoms and stats from scratch.
+
+6. Individual write-ups and blog posts
+
+Members and observers write up their experience engaging with the club — for instance, the R Works / R-bloggers post "An Introduction to Writing Your own ggplot2 geoms" describes attending club meetings and working through the geom recipes, then republishes that learning as a public tutorial, effectively re-broadcasting club knowledge to a wider audience.
+
+7. Example repos tied to specific discussions
+
+Sometimes knowledge is shared as working code in linked repositories — e.g., the ggcirclepack package was explicitly built and documented as a "write-up for [a] ggplot2 extenders meet up," with its README referencing the specific discussion thread that motivated it.
+
+So the pattern is: live talk -> linked GitHub discussion thread -> (sometimes) a slide deck or example repo -> occasionally distilled into a tutorial or blog post — a mix of synchronous presentation and asynchronous, searchable, public archiving.
+
+
+
+# **We know a form can't capture everything. If there is anything else you'd like us to know, please share it here.**
+
+```{r}
+#knitr::knit_exit()
+```
+
+## Intro Thoughts
+
+ggplot2 is noted for its ability to create stunning visualizations with
+relative ease given its intuitive syntax that allows plotting decisions
+to be independently and incrementally declared. Maintainer Thomas Lin
+Pedersen has compared the ggplot charting experience as akin to
+'speaking your plots into existence' and practitioners often celebrate
+that they arrive a final polished plots via incremental adjustments,
+i.e. combining snapshots of unfinished plots to help others appreciate
+the evolution. *Not* generally discussed is the fact that ggplot2's
+incrementalism might assist in taking people through complex
+trains-of-thought, again, in a way that is relatively effortless, given
+that code can be extraordinarily concise and easy to read and reason
+about. The exercise (a replication of a recent visual media article)
+below explores this powerful, conversational character of ggplot2 with
+the experimental ggplyr package, designed to allow for more fluid
+movement between plots. It also uses the ggcirclepack and ggbeeswarm
+extensions.
+
+```{r}
+# this data getting block from an ellmer `okgemini()` query 
+
+library(tidyquant)
+library(dplyr)
+library(lubridate) # For today()
+
+# --- 1. Define Parameters ---
+symbol <- "^GSPC" # S&P 500 Yahoo Finance symbol
+start_date <- "2015-01-01" # Corrected from 20215
+end_date <- "2025-11-21" 
+
+# --- 2. Load Data ---
+# tq_get fetches financial data
+sp500_data <- tq_get(symbol,
+                     get = "stock.prices", # Specify we want stock prices
+                     from = start_date,
+                     to = end_date)
+```
+
+```{r}
+library(tidyverse)
+library(ggraph)
+
+ggraph_to_threejs <- function(edgelist = package_author_edgelist, 
+                              plot = last_plot()){
+    
+  g <-  edgelist |> select(1:2) |> as.matrix() |> 
+    graph_from_edgelist()
+  
+  node_data <- layer_data(i = 2, plot = plot)
+  
+  graph_attr(g, "layout") <- NULL    
+    
+  node_id <- V(g) |> names()
+  
+  joined <- tibble(node_id) |> 
+    left_join(node_data, by = "node_id")
+  
+  from_list <- edgelist |> pull(1)
+  
+  V(g)$size <- joined$size/3.66
+  V(g)$shape <- joined$label
+  V(g)$color <- joined$colour
+   
+  graphjs(g = g, bg = "gray10",  
+          showLabels = T,  
+          layout = list(  
+            layout_with_fr(g, dim = 3)),  
+                    main = "")
+
+}
+
+vct_packages <- c("dplyr", "ggplot2", "ellmer",
+                        "tidyr", "tidymodels", "recipes",
+                        "readr", "tibble", "stringr", "forcats",
+                        "purrr", "lubridate")
+
+# data cleaning
+as_tibble(tools::CRAN_package_db()) |>
+  filter(Package %in% vct_packages) |>
+  mutate(Author = str_replace_all(Author, ' \\[|\\]', "*" )) |>
+  select(Package, Author) |>
+  mutate(Author = map(Author, ~ str_split_1(.x,"\n"))) |>
+  unnest() |> 
+  mutate(Author = Author |> str_remove('\\*.+' )) |>
+  mutate(Author = Author |> str_trim()) |>
+  filter_out(Author |> str_detect("orcid.org")) |>
+  filter_out(Author == "Posit Software, PBC") |>
+  filter_out(Author == "Posit, PBC") ->
+package_author_edgelist
+
+# network visualization
+package_author_edgelist |> 
+  tidygraph::as_tbl_graph() |>
+  mutate(is_package = name %in% vct_packages) |> 
+  ggraph(layout = "kk") +
+  geom_edge_link() +
+  geom_node_label(aes(label = name, 
+                      node_id = name, # for conversion to threejs
+                      color = is_package)) + 
+  labs(title = "The Tidyverse and Authors")
+
+
+
+
+library(threejs)
+library(igraph)
+
+
+
+ggraph_to_threejs(package_author_edgelist)
+
+
+ggplyr::last_plot_wipe_last() + 
+  geom_node_text(aes(
+    node_id = name, # just for threejs
+    label = is_package |> ifelse("📦", "🧠"), 
+    color = is_package |> ifelse("tan", "pink") |> I()))
+  
+
+ggraph_to_threejs(package_author_edgelist)
+
+ggplyr::last_plot_wipe_last() + 
+  geom_node_text(aes(
+    size = !is_package,
+    node_id = name, # just for threejs
+    label = is_package |> ifelse("📦", "👦🏻"), 
+    color = is_package |> ifelse("tan", "tan") |> I())) + 
+  scale_size(range = c(3,8))
+
+ggraph_to_threejs(package_author_edgelist)
+
+
+ggplyr::last_plot_wipe_last() + 
+  geom_node_text(aes(
+    size = !is_package,
+    node_id = name, # just for threejs
+    label = is_package |> ifelse("📦", "🏃🏽"), 
+    color = is_package |> ifelse("tan", "tan") |> I())) + 
+  scale_size(range = c(3,8))
+
+ggraph_to_threejs(package_author_edgelist)
+
+
+```
+
+```{r}
+tribble(~to, ~from,
+        "Gina", "June",
+        "June", "Teun",
+        "Teun", "Allan",
+        "Gina", "David S",
+        "Gina", "Daniel",
+        "Gina", "Joyce",
+        "Joyce", "Cory",
+        "Cory", "James",
+        "Cory", "David K") |> 
+  igraph::graph_from_data_frame() ->
+g
+
+```
+
+Intro to Data Science Lab - practice for Intro to Data Science Lab - JSM
+talk - Posit Conf talk...
+
+<https://evamaerey.github.io/mytidytuesday/2025-11-24-s-and-p-since-2015/s-and-p-since-2015.html>
+
+# Why am I here?
 
 ------------------------------------------------------------------------
 
-2020: Stats instructor teaching "Introduction to Statistical Investigations"
+2020: Stats instructor teaching "Introduction to Statistical
+Investigations"
 
 ![](images/clipboard-1158971453.png)
 
@@ -31,9 +494,11 @@ loved,
 
 --
 
-but... missed coded workflow (there was some, but less that I'd have liked)
+but... missed coded workflow (there was some, but less that I'd have
+liked)
 
-There's something really grounding (and powerful?) about going back to a code narrative, being able to review the steps of what you did.
+There's something really grounding (and powerful?) about going back to a
+code narrative, being able to review the steps of what you did.
 
 (quotes from Winston, Paul)
 
@@ -45,23 +510,29 @@ There's something really grounding (and powerful?) about going back to a code na
 
 ------------------------------------------------------------------------
 
-Could we have the best of both worlds? 
+Could we have the best of both worlds?
 
 ------------------------------------------------------------------------
 
-Could we do what we were doing on *chalkboards* (love a chalk board!! analogue gold standard), but also do that w/ code, consistent w/ the touch of ggplot2 students were learning anyway, and code that would serve the concepts being learned instead of shoehorning functions around the statistical narrative.
+Could we do what we were doing on *chalkboards* (love a chalk board!!
+analogue gold standard), but also do that w/ code, consistent w/ the
+touch of ggplot2 students were learning anyway, and code that would
+serve the concepts being learned instead of shoehorning functions around
+the statistical narrative.
 
----
+------------------------------------------------------------------------
 
-Chalkboard (applet) version went like this... 
+Chalkboard (applet) version went like this...
 
 ```{r}
 library(tidyverse)
 library(ggprop.test)
+library(codehover)
 
-donor_data |> 
-  ggplot() + 
-  labs(title = "Do Donor decision ")
+codehover::ch_hover(
+{ggplot(donor_data) + 
+  ggchalkboard::theme_chalkboard() +
+  labs(title = "Do Donor decision ") +
   aes(x = decision) + 
   geom_stack() + 
   geom_stack_label() +
@@ -70,15 +541,16 @@ donor_data |>
   geom_prop_label() + 
   stamp_prop(.5) + 
   geom_binomial_null() + 
-  geom_normal_prop_null(fill = "blue") + 
+  geom_normal_prop_null() + 
   geom_normal_prop_null_sds() +
   stamp_eq_norm_prop()
+}
+)
 
 ```
 
 Coded version might go like this...
 
-
 ```{r}
 donor_data |> 
   ggplot() + 
@@ -95,50 +567,56 @@ donor_data |>
   stamp_eq_norm_prop()
 ```
 
+------------------------------------------------------------------------
 
-
----
-
-And you guessed it, code now exists for you to write this narrative down!!
+And you guessed it, code now exists for you to write this narrative
+down!!
 
 {ggprop.test}
 
----
+------------------------------------------------------------------------
 
-So the motivation today, is to show you some ggplot2 extension moves - but also to think about how we can create new vocabulary to *write down* the statistical narratives that we are telling all the time - be it in the classroom or elsewhere - with greater precision and using new bespoke vocabulary (functions) if needed. 
+So the motivation today, is to show you some ggplot2 extension moves -
+but also to think about how we can create new vocabulary to *write down*
+the statistical narratives that we are telling all the time - be it in
+the classroom or elsewhere - with greater precision and using new
+bespoke vocabulary (functions) if needed.
 
+------------------------------------------------------------------------
 
----
+Isn't this like a lot of effort to be able to 'write down a statistical
+poem' something down?
 
-Isn't this like a lot of effort to be able to 'write down a statistical poem' something down? 
-
-Why don't we just have students use base ggplot2, and do the wrangling/calculations by hand?  
+Why don't we just have students use base ggplot2, and do the
+wrangling/calculations by hand?
 
 > Some instructors may train students in using a specific software
 > package, but mastery of advanced programming skills should not be
 > allowed to crowd out data analysis skills or statistical thinking.
 
----
+------------------------------------------------------------------------
 
-> Mastry of the minutia of ggplot2 and data manipulation and should not be allowed to crowd out statistical thinking.  
+> Mastry of the minutia of ggplot2 and data manipulation and should not
+> be allowed to crowd out statistical thinking.
 
----
-
+------------------------------------------------------------------------
 
 Leland McInnes' (UMAP dimentionality reduction technique) red star...
 
-> necessarily particular details of how any given technique works so that means I'm going to introduce a little bit of
-extra notation which is gonna be really useful repeatedly and that's the red star. So sometimes technical details
+> necessarily particular details of how any given technique works so
+> that means I'm going to introduce a little bit of extra notation which
+> is gonna be really useful repeatedly and that's the red star. So
+> sometimes technical details
 
-really really matter but they're not worth getting into because by the time you've explained all the technical
-details you have lost the point of what you are trying to explain in the first place so if I just want the big picture idea
-1:22
-and there are some technical details that make that statement not technically true but morally it's the right thing
+really really matter but they're not worth getting into because by the
+time you've explained all the technical details you have lost the point
+of what you are trying to explain in the first place so if I just want
+the big picture idea 1:22 and there are some technical details that make
+that statement not technically true but morally it's the right thing
 
+------------------------------------------------------------------------
 
----
-
-Huge audiences: 
+Huge audiences:
 
 1000 cadets every year...
 
@@ -148,89 +626,114 @@ EAPOST
 
 --
 
-deserve bespoke vocab that allows us to write down statistical narrative elegantly!  
+deserve bespoke vocab that allows us to write down statistical narrative
+elegantly!
 
----
-
+------------------------------------------------------------------------
 
 Easy geom recipes
 
-
----
-
-
-
-
-
----
-
-
-
-
-
-
-
-
-
 ------------------------------------------------------------------------
-
-# 6 years later..
-
-------------------------------------------------------------------------
-
-Initiative type \* Select the option that best describes your
-organizational structure. "Recurring meetup" refers to groups that meet
-consistently throughout the year, whereas "One-time event" is for
-conferences or workshops.
-
-Community initiative name *ggplot2 extenders meetup Brief community
-initiative summary* Please include any relevant details about your
-community initiative. supporting grammar of graphics open source
-developers Community initiative website
-<https://ggplot2-extenders.github.io/ggplot-extension-club/>
-<https://github.com/ggplot2-extenders/ggplot-extension-club/discussions>
-Community initiative location *City, State/Country. If the event is
-virtual, please enter "Virtual". Virtual Current number of members* 250
-Average attendance per meeting *15-30 Frequency of meetings* Once or
-twice a month
-
-Support request Support type request *Select the items you need to make
-your initiative successful. Please note that physical swag support
-outside of North America may be limited due to shipping constraints.
-Monetary support Materials and/or swag Social media promotion Volunteers
-Other: Monetary support request If you are requesting monetary support,
-please provide an amount in USD. Feel free to specify a range. ??
-Benefits of sponsorship* List the specific ways you can recognize
-Posit's contribution. Examples include logo placement on your website,
-social media shout-outs, post-event photos, or mentions in promotional
-emails. Happy to do all of this Posit employee contact If you have been
-coordinating with someone at Posit, let us know so we can sync with them
-internally. Hadley Has Posit previously sponsored your event or
-initiative? *Knowing your history with Posit helps us understand the
-long-term impact of our community partnerships. Yes No I don't know Will
-there be a recording?* Yes No I don't know
-
-Alignment Does your event/community initiative focus on R and/or Python?
-*Does your event or initiative involve Posit software?* How is your
-group’s knowledge shared? \* Successful applications often contribute
-back to the community. Detail how you will share resources, such as
-hosting code on public GitHub repositories or sharing recorded sessions.
-We know a form can't capture everything. If there is anything else you'd
-like us to know, please share it here.
-
-## Intro Thoughts
-
-## Status Quo
-
-```{r}
-library(tidyverse)
-
-```
 
 ## Experiment
 
+<https://sherwood.news/markets/visualizing-why-yesterdays-stock-market-reversal-was-so-weird-and-unnerving/>
+
 ```{r}
+# remotes::install_github("https://github.com/EvaMaeRey/ggplyr")
+# remotes::install_github("https://github.com/EvaMaeRey/ggcirclepack")
+
+# this block from an ellmerXgemini
+
+library(tidyquant)
+library(dplyr)
+library(lubridate) # For today()
+
+# --- 1. Define Parameters ---
+symbol <- "^GSPC" # S&P 500 Yahoo Finance symbol
+start_date <- "2015-01-01" # Corrected from 20215
+end_date <- "2025-11-21" 
+
+# --- 2. Load Data ---
+# tq_get fetches financial data
+sp500_data <- tq_get(symbol,
+                     get = "stock.prices", # Specify we want stock prices
+                     from = start_date,
+                     to = end_date)
+
+# this block from an ellmerXgemini
+
+library(tidyverse)
+library(ggplyr)
+library(ggcirclepack)
+
+# tq_get fetches financial data
+sp500_data <- tq_get(symbol,
+                     get = "stock.prices", # Specify we want stock prices
+                     from = start_date,
+                     to = end_date)
+
+sp_500_data_calcs <- 
+  sp500_data  |>
+  mutate(
+    year = year(date), 
+    return = (close - lag(close))/lag(close)*100,
+    open_pct = (open - lag(close))/lag(close)*100,
+    intraday_pct = 100*(close-open)/open,
+    ind_yesterday = date == "2025-11-20"
+         )
+```
+
+> Viz move: *Every dot here represents one day of the S&P 500 Index’s
+> return.* `aes(id = date) +  geom_circlepack()`
+
+```{r}
+library(RColorBrewer)
+library(tidyverse)
+library(ggplyr) # hey
+library(ggcirclepack)
+library(RColorBrewer)
+
+library(tidyverse)
+library(ggcirclepack)
+(theme_gray() + 
+    theme(palette.fill.discrete = brewer.pal(8, "Dark2")[c(1:8, 1:3)],
+          palette.color.discrete = c("transparent", "magenta"),
+          palette.fill.continuous = "viridis")
+  ) |>
+  theme_set()
+sp_500_data_calcs |> head()
+
+library(RColorBrewer)
+
+
+codehover::ch_hover(
+{
+sp_500_data_calcs |>
+  ggplot() + 
+  aes(id = date) +
+  ggcirclepack::geom_circlepack() +
+  aes(color = ind_yesterday) + 
+  aes(fill = year |> as_factor()) + 
+  coord_equal() + 
+  aes(fill = return) + scale_fill_gradient2(mid = "lightgrey", low = "#410000", high = "darkblue") +
+  facet_wrap(~ year) + 
+  facet_null() +
+  ggplyr::data_filter(open_pct > 1) +
+  ggplyr::layers_wipe() + aes(y = "All", x = open_pct) +
+  ggbeeswarm::geom_beeswarm(shape = 21) +
+  coord_cartesian() +
+  aes(size = I(5)) +
+  scale_color_manual(values = c("whitesmoke",
+                                "magenta")) +
+  aes(x = return) +
+  aes(y = "") + facet_grid(rows = vars(year)) +
+  facet_null() + aes(y = intraday_pct, x = open_pct)
+  }
+)
+
+
 
 ```
 
-## Closing remarks, Other Relevant Work, Caveats
+

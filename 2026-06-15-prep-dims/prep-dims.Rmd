@@ -19,7 +19,7 @@ Here, exploring a pivot to preprocessing or different in-processing features() i
 
 ## Intro Thoughts
 
-ggdims feels a little more engineered than it might be. See https://github.com/EvaMaeRey/ggdims.  So  Let's look at a slightly different approach:
+ggdims feels a little more engineered than it might be. See https://github.com/EvaMaeRey/ggdims  So  Let's look at a slightly different approach:
 
 Target:
 
@@ -56,6 +56,16 @@ data |> as_tibble()
 
 iris |> 
   declare_features(Sepal.Length:Petal.Length, Petal.Width) 
+
+
+iris |> object.size()
+
+
+w_declared <- iris |> 
+  declare_features(Sepal.Length:Petal.Length, Petal.Width)
+
+w_declared |> 
+  object.size()
 
 iris |> 
   declare_features(Sepal.Length:Petal.Length, Petal.Width) |>
