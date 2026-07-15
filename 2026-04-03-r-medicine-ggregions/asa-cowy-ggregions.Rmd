@@ -39,7 +39,7 @@ Title slide
 ```{r, include = F}
 # This is the recommended set up for flipbooks
 # you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
-knitr::opts_chunk$set(fig.width = 6, fig.height = 4.5, message = FALSE, warning = FALSE, comment = "", cache = T)
+knitr::opts_chunk$set(fig.width = 6, fig.height = 4.5, message = FALSE, warning = FALSE, comment = "", cache = F)
 library(flipbookr)
 library(ggplot2)
 library(ggregions)
@@ -558,7 +558,7 @@ teethr::dental_arcade_mapping |>
   select(tooth_id = tooth, fdi = FDI, standard = standards, geometry) ->
 teeth_ref_data
 
-options(ggregions.ref.regions = teeth_ref_data)
+set_regions(teeth_ref_data)
 ```
 
 

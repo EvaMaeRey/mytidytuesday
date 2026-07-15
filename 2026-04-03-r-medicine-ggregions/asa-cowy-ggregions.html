@@ -23,7 +23,7 @@ background-size: cover
 
 ## .large[ASA COWY: General deterministic semantic positional encoding]
 ## .small[Reprising and Reflecting on R Medicine talk :-)]
-#### .tiny[Dr. Evangeline Reynolds | 2026-05-08 | DU, Image credit: Ross Sneddon, Upsplash]
+#### .tiny[Dr. Evangeline Reynolds | 2026-07-15 | DU, Image credit: Ross Sneddon, Upsplash]
 
 
 ???
@@ -1063,12 +1063,13 @@ geom_state
 ```
 function (mapping = aes(), data = NULL, stat = StatRegion, position = "identity", 
     na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ref_data = us_states_ref, 
-    ...) 
+    aes_name = "region", ...) 
 {
     c(layer_sf(geom = GeomSf, data = data, mapping = mapping, 
         stat = stat, position = position, show.legend = show.legend, 
         inherit.aes = inherit.aes, params = rlang::list2(na.rm = na.rm, 
-            ref_data = ref_data, ...)), coord_sf(crs = st_crs_mod(ref_data)))
+            ref_data = ref_data, aes_name = aes_name, ...)), 
+        coord_sf(crs = st_crs_mod(ref_data)))
 }
 &lt;environment: namespace:ggregions&gt;
 ```
@@ -1090,23 +1091,25 @@ ggregions:::StatRegion$compute_panel
 compute_panel(...)
 
   &lt;Inner function (f)&gt;
-    function (data, scales, ref_data, keep = NULL, drop = NULL, stamp = F) 
+    function (data, scales, ref_data, keep = NULL, drop = NULL, stamp = F, 
+    aes_name = "region") 
 {
     ref_data$id &lt;- ref_data[1][[1]]
     if (!is.null(keep)) {
-        ref_data &lt;- dplyr::filter(ref_data, id %in% keep)
+        ref_data &lt;- dplyr::filter(ref_data, .data$id %in% keep)
     }
     if (!is.null(drop)) {
-        ref_data &lt;- dplyr::filter(ref_data, !(id %in% drop))
+        ref_data &lt;- dplyr::filter(ref_data, !(.data$id %in% drop))
     }
     if (!stamp) {
         ref_data_long &lt;- pivot_longer(mutate(ref_data, across(-geometry, 
             as.character)), cols = -c(geometry, id), names_to = ".id_type", 
-            values_to = "region")
-        length(ref_data_long$region) == length(unique(ref_data_long$region))
+            values_to = aes_name)
+        length(ref_data_long[, aes_name]) == length(unique(ref_data_long[, 
+            aes_name]))
         ref_data_long &lt;- ggplot2::StatSfCoordinates$compute_group(ggplot2::StatSf$compute_panel(ref_data_long, 
             coord = ggplot2::CoordSf), coord = ggplot2::CoordSf)
-        out &lt;- dplyr::inner_join(ref_data_long, data, by = join_by(region))
+        out &lt;- dplyr::inner_join(ref_data_long, data, by = aes_name)
         inner_join(sf::st_drop_geometry(ref_data), out, by = join_by(id))
     }
     else {
@@ -1127,13 +1130,14 @@ ggregions::write_geom_region
 ```
 
 ```
-function (ref_data) 
+function (ref_data, aes_name = "region") 
 {
-    modified_fun &lt;- geom_region
-    formals(modified_fun)$ref_data &lt;- substitute(ref_data)
-    return(modified_fun)
+    modified_function &lt;- geom_region
+    formals(modified_function)$ref_data &lt;- substitute(ref_data)
+    formals(modified_function)$aes_name &lt;- substitute(aes_name)
+    return(modified_function)
 }
-&lt;bytecode: 0x117758710&gt;
+&lt;bytecode: 0x12869f358&gt;
 &lt;environment: namespace:ggregions&gt;
 ```
 
@@ -1146,15 +1150,16 @@ ggregions:::geom_region
 
 ```
 function (mapping = aes(), data = NULL, stat = StatRegion, position = "identity", 
-    na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ref_data = getOption("ggregions.ref.regions", 
-        ref_data_us), ...) 
+    na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ref_data = getOption("ggregions.regions", 
+        ref_data_us), aes_name = "region", ...) 
 {
     c(layer_sf(geom = GeomSf, data = data, mapping = mapping, 
         stat = stat, position = position, show.legend = show.legend, 
         inherit.aes = inherit.aes, params = rlang::list2(na.rm = na.rm, 
-            ref_data = ref_data, ...)), coord_sf(crs = st_crs_mod(ref_data)))
+            ref_data = ref_data, aes_name = aes_name, ...)), 
+        coord_sf(crs = st_crs_mod(ref_data)))
 }
-&lt;bytecode: 0x117757440&gt;
+&lt;bytecode: 0x12869cbe8&gt;
 &lt;environment: namespace:ggregions&gt;
 ```
 

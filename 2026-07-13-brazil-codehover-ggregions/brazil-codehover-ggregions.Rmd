@@ -1,0 +1,114 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+Here is Artur's codehover map example...
+
+https://arthurwelle.github.io/codehover/articles/codehover_map_example.html
+
+```r
+ggplot2::ggplot() +
+geom_sf(data = south_america_sf,
+size = .3,
+colour = 'gray30',
+fill = 'gray80') +
+geom_sf(data = br_sf,
+aes(fill = (Diff)),
+size = .3,
+colour = 'black') +
+coord_sf(xlim = c(-73, -35),
+ylim = c(-33, 5)) +
+scale_fill_steps(low = '#feebe2',
+high = '#7a0177',
+name = 'Difference (white - black) (pp.%)') +
+labs(title = 'Difference in escolarization rate betweeen black and white young adults in Brazilian States',
+subtitle = 'In young adults (18 to 24 years old) what is the difference in the rate of formal education enrollment between black and white people?',
+caption = 'Source: PNADCA 2019 - IBGE',
+x = '', y = '') +
+ggspatial::annotation_scale(location = 'br') +
+ggspatial::annotation_north_arrow(location = 'br',
+pad_y = unit(0.3, 'in'),
+style = ggspatial::north_arrow_nautical()) +
+annotate(geom = 'curve', x = -55, y = -20, xend = -60, yend = -20,
+curvature = .3,
+arrow = arrow(length = unit(2, 'mm'))) +
+annotate(geom = 'text', x = -60, y = -20,
+label = 'In Mato Grosso do Sul State 39 of white adults and 25 of young black adults are enrolled in formal education',
+size = 3,hjust = 'right') +
+theme_bw() +
+theme(plot.title.position = 'plot',
+plot.title = element_text(face = 'bold',
+size = 18),
+plot.subtitle = element_text(size = 9),
+panel.background = element_rect(fill = 'lightblue'))
+```
+
+# ggregions target
+
+```{r}
+library(tidyverse)
+
+brazil_states <- geobr::read_state(year = 2020) |>
+  select(state_name = name_state, 
+         state_abbr = abbrev_state, 
+         state_code = code_state,
+         geometry = geom)
+
+# geobr::read_amazon()
+
+
+library(ggregions)
+set_regions(regions = brazil_states)
+
+ggplot() + 
+  # stamp_supra_region() + 
+  stamp_region() + 
+  aes(fill = Diff) + 
+  aes(color = I(black)) + 
+  aes(linewidth = I(.3)) + 
+  coord_sf(xlim = c(-73, -35), 
+           ylim = c(-33, 5)) + 
+  scale_fill_steps(low = '#feebe2', high = '#7a0177') +
+  labs(fill = 'Difference (white - black) (pp.%)') + 
+  labs(title = 'Difference in escolarization rate betweeen black\nand white young adults in Brazilian States',
+       subtitle = 'In young adults (18 to 24 years old) what is the difference in\nthe rate of formal education enrollment between black and white people?',
+       caption = 'Source: PNADCA 2019 - IBGE')
+
+```
+
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+
+
+
+```
+
+## Experiment
+
+```{r}
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
