@@ -1,5 +1,5 @@
 ---
-title: "Rehearsal plus monologue... ggplot2 extenders"
+title: "Future of ggplot2 extenders"
 author: "Evangeline Reynolds"
 date: "`r Sys.Date()`"
 output: 
@@ -19,57 +19,58 @@ options(tidyverse.quiet = TRUE)
 
 ### Goals
 
-1.  Articulate value of extension (Why am I even here? Why are *you*
+1.  Gentler introduction to layer extension: Easy Geom Recipes, and Easy
+    Geom Recipes Python adaptation...
+
+2.  Articulate value of extension (Why am I even here? Why are *you*
     here?): conversational data viz - being able to write down
     (transcribe!) visual narratives
-
-2.  Gentler introduction to layer extension: Easy Geom Recipes, and Easy
-    Geom Recipes Python adaptation...
 
 3.  Extensions targetted at new audiences:
 
     a.  High School Stats Students
     b.  Kids
-    c.  Dimention Reduction, ML Crowd...
+    c.  Dimension Reduction and ML Crowd...
 
 ### What do you want this to help you prepare for?
 
-1.  Tomorrow, Posit Data Science Lab: 'Easy geom recipes', July 21
-2.  EAPOST Workshop, July 31-Aug 1
-    <https://sites.google.com/view/eaapost/project-overview>
-3.  Prepare to Teach, Aug 2nd <https://preparingtoteach.org/>
-4.  JSM Boston 2026, 'Past Present and Future of ggplot2 extension'
-    <https://ww3.aievolution.com/JSMAnnual2026/index.cfm?do=ev.viewEv&ev=5265>
-5.  Posit Conf: Epic graphical poems and conversations
-6.  plotnine's Easy Geom Recipes...
-7.  Future of the ggplot2 extenders meetup.
+1.  Tomorrow, Posit Data Science Lab: 'Easy geom recipes', July 21 👩‍🏫
+2.  Debue plotnine's Easy Geom Recipes... 🤸🚀✈️
+3.  JSM activities:
+    1.  EAPOST Workshop, July 31-Aug 1
+        <https://sites.google.com/view/eaapost/project-overview>
+        <https://www.nsf.gov/awardsearch/show-award?AWD_ID=2235355>
+    2.  Prepare to Teach, Aug 2nd <https://preparingtoteach.org/>
+    3.  'Past Present and Future of ggplot2 extensions' with Cory,
+        Cynthia, Joyce, James, Heike, Naomi, JSM Boston 2026,
+        <https://ww3.aievolution.com/JSMAnnual2026/index.cfm?do=ev.viewEv&ev=5265>
+4.  Posit Conf: 'Epic graphical poems and conversations'
+5.  Future of the ggplot2 extenders club...
 
 ------------------------------------------------------------------------
 
-So tomorrow, I'm gonna do Data Science Lab 'easy geom recipes' thing.
-We'll talk about types of extensions, and go through a basic Stat
-extension.
+# Tomorrow - Posit's Data Science Lab...
 
-And in preparing for that (we met up a few weeks ago), I said, 'well
-could I just present a few slides talking about why I think ggplot2
+So tomorrow, Data Science Lab 'easy geom recipes' thing. We'll talk
+about types of extensions, and go through a basic Stat extension.
+
+And in preparing for that Isabella, Libby and I met up, and I asked,
+'could I present a few slides talking about why I think ggplot2
 extension is important'.
 
-And I was met, reasonably, with a 'No'. Because, 'Eyes glaze
-over, people stop listening'. "We don't do monologues at the Data
-science Lab. We do conversation." Solid.
-
-
+But we settled on 'No'. Because, that's not the DS Lab vibe. "DS Lab
+isn't monologues, it's conversation."
 
 And I think, this is like really a very good practice. And that's
 exactly what we are going to do tomorrow. 💯🙌🚀
 
-<details> 
+<details>
 
 So let's write `geom_means` together
 
 ![](images/clipboard-4107416480.png)
 
-### A little bit of background...
+-   A little bit of background...
 
 The anatomy of 'geom_point'...
 
@@ -79,15 +80,21 @@ library(ggplot2)
 geom_point
 ```
 
-Actually has three main 'characters' that specify the layer...
+Actually has **three main 'characters'** that specify the layer...
 
 -   Geom
 -   Stat
 -   Position
 
-geom_point: GeomPoint, StatIdentity, position_identity()
+![](images/clipboard-2706483280.png){width="363"}
 
-#### another example:
+![](images/clipboard-2827748058.png){width="364"}
+
+![](images/clipboard-1590828862.png){width="367"}
+
+geom_point: 1) GeomPoint, 2) StatIdentity, 3) position_identity()
+
+-   another example:
 
 ```{r}
 geom_jitter
@@ -95,10 +102,16 @@ geom_jitter
 
 geom_jitter: GeomPoint, StatIdentity, position_jitter()
 
-## Agenda build geom_means - which will draw a point at the means x and y for of observations (and do this group- and facet- wise - automatically)
+-   Agenda build geom_means - which will draw a point at the means x and
+    y for of observations (and do this group- and facet- wise -
+    automatically)
 
-## Step 0: Get the job done with base ggplot2!
+-   Step 0: Get the job done with base ggplot2!
 
+```{r}
+geom_histogram
+
+```
 
 ```{r}
 penguins |>
@@ -127,7 +140,7 @@ penguins |>
              size = 8)
 ```
 
-# Step 1: Define Compute. Test
+-   Step 1: Define Compute. Test
 
 ```{r}
 compute_group_means <- function(data, scales){
@@ -145,8 +158,7 @@ penguins |>
 
 ```
 
-
-# Step 2: Define StatMeans. Test.
+-   Step 2: Define StatMeans. Test.
 
 ```{r}
 # we'll inherit from `Stat` - let's look at all the stuff in there!
@@ -163,8 +175,8 @@ ggplot(penguins) +
   aes(color = species)
 ```
 
-# Step 3: Define user-facing functions (geom_means(), stat_means()). Test (Enjoy!)
-
+-   Step 3: Define user-facing functions (geom_means(), stat_means()).
+    Test (Enjoy!)
 
 ```{r}
 # old way - use stat_identity to help w/ scaffolding code... 
@@ -193,8 +205,6 @@ geom_means <- make_constructor(GeomPoint, stat = "means")
 
 ```
 
-
-
 ```{r}
 # Test (and enjoy!!)
 ggplot(penguins) + 
@@ -210,13 +220,15 @@ last_plot() +
   facet_wrap(~island)
 ```
 
+<https://evamaerey.github.io/evamaerey/report2_easy_geom_recipes.pdf>
+<https://evamaerey.github.io/easy-geom-recipes/>
+<https://has2k1.github.io/easy-geom-recipes/recipe1means.html>
 
 </details>
 
----
+------------------------------------------------------------------------
 
-But, I do love a monologue.
-
+## But, I do love a monologue.
 
 <!-- 'Make something from nothing...' -->
 
@@ -224,9 +236,7 @@ But, I do love a monologue.
 
 <!-- Stone soup. Monologue... zhenzhong liu -->
 
-
-And monologues sometimes compress
-conversations, right?
+And monologues sometimes compress conversations, right?
 
 > Many of [my New York Times] columns were the products of long
 > telephone conversations with my friends - Anna Quindlen
@@ -253,26 +263,29 @@ interactions.
 
 > 'spontaneous language for conversation'
 
-> The Human Data Interaction Lab investigates visualization tools,
-> methods, and systems at the intersection of human-centered design and
-> data-driven analysis. - <https://www.hdilab.org/> Technical University
-> of Applied Sciences Mannheim
+<!-- > The Human Data Interaction Lab investigates visualization tools, -->
+
+<!-- > methods, and systems at the intersection of human-centered design and -->
+
+<!-- > data-driven analysis. - <https://www.hdilab.org/> Technical University -->
+
+<!-- > of Applied Sciences Mannheim -->
 
 And I think many of us are thinking more and more about the power of
-language and conversation... Like with because of LLMS, you may have
-been thinking, "like at what point did Natural Language emerge in the
-history of the universe, and why does it even work? How did we go from
-grunts to meaning" If I utter 'belly button' does that conjure up in the
-mind the 'belly button'?
+language and conversation... Like because of LLMS, you may have been
+thinking, "like at what point did Natural Language emerge in the history
+of the universe, and why does it even work? How did we go from grunts to
+meaning" If I utter 'potato' does that conjure up in the mind the
+'potato'?
 
 > "I could literally write anything and you'd read it ...Think about
 > your belly button. Boom, now you'r thinking about your belly button...
 > That's the power of writing. I love the power. I'm drunk on the
 > stuff." - Sarah Cooper, 'Foolish' 2023
 
-Language is insanely, mindbogglingly powerful.
+Language is mindbogglingly powerful.
 
-Conversation is insanely, mindbogglingly powerful.
+Conversation is mindbogglingly powerful.
 
 Grammar is mindbogglingly powerful.
 
@@ -284,8 +297,10 @@ I *am* crazy about the conversations with data.
 
 <!-- Grammar is insanely, mindbogglingly powerful.  (And a lot of the times we just take it for granted - a luxury that I think we've moved beyond with AI age). -->
 
-I love that ggplot2 syntax can be concise, but I am a fan of the fact that 'inconcision' is allowed in that it allows us too record ideas practically verbatim. (Like the Data Science Lab conversations transcripts!) But not quite as
-inconcisely as natural language...
+I love that ggplot2 syntax can be concise, but I am a fan of the fact
+that 'inconcision' is allowed in that it allows us too record ideas
+practically verbatim. (Like the Data Science Lab conversations
+transcripts!)
 
 > More thinking about inconcision as functional: 'Ums' and 'Uhs' tend to
 > occur when we are doing really hard cognative lifting ... to kind of
@@ -310,12 +325,28 @@ gapminder::gapminder |>
              size = pop)) + 
   geom_point()
 
+library(ggstamp) 
+
 
 ```
 
+```{r echo = F}
+hans_png_path_canvas = "../2023-11-14-flipbooks-lawrence-livermore/images/hans_argument.png"
+hans_png_path_y_axis = "../2023-11-14-flipbooks-lawrence-livermore/images/hans_y_axis.png"
+hans_png_path_x_axis = "../2023-11-14-flipbooks-lawrence-livermore/images/hans_x_axis.png"
+hans_png_path_color = "../2023-11-14-flipbooks-lawrence-livermore/images/hans_colors.png"
+hans_png_path_size = "../2023-11-14-flipbooks-lawrence-livermore/images/hans_size.png"
+lab <- "Rosling gives full voice\nto aesthetic mappings"
 
 
-![](images/clipboard-3692050783.png)
+{ggplot() + 
+  stamp_png(png = hans_png_path_y_axis) +
+  stamp_png(png = hans_png_path_x_axis) + 
+  stamp_png(png = hans_png_path_color) + 
+  stamp_png(png = hans_png_path_size) + 
+  stamp_label(label = lab, size = 10)} |> 
+  codehover::ch_hover()
+```
 
 <https://www.youtube.com/watch?v=jbkSRLYSojo&t=37s>
 
@@ -323,8 +354,9 @@ gapminder::gapminder |>
 {gapminder::gapminder |> 
   filter(year == 2002) |> 
   ggplot() + 
-  aes(x = gdpPercap) + 
+  ggchalkboard:::theme_rosling() +
   aes(y = lifeExp) + 
+  aes(x = gdpPercap) + 
   geom_point() + 
   aes(color = continent) + 
   aes(size = pop)} |> 
@@ -333,9 +365,17 @@ gapminder::gapminder |>
 
 ![](images/clipboard-3450567393.png)
 
+---
+
 > Data visualization is right at the heart of my work. - Hans Rosling
 
-> And aesthetic mapping is right at the hear to data visualization - is it so wrong to want those decisions to get full voice?  - me riffing on Hans
+> And aesthetic mapping is right at the heart to data visualization - is
+> it so wrong to want those decisions to get full voice? - me riffing on
+> Hans
+
+![](images/clipboard-1715986762.png){width="298"}
+
+![](images/clipboard-2829397408.png)
 
 # Lightly wrapped inconcision: ggkids (maybe this is okay for kids)
 
@@ -368,9 +408,13 @@ repair_data <-
   codehover::ch_hover()
 ```
 
-# Beyond 'base' ggplot2... let's you keep the conversation going where train of thought is just one grammar move away...
+# But allowing aesthetic mappings to be expressed independently, and given some extension, *greater* consision may actually possible.  Via a conversational approach... Beyond 'base' ggplot2... let's you keep the conversation going where train of thought is just one grammar move away...
 
-![](images/clipboard-914984770.png)
+![](images/clipboard-816719924.png)
+
+Longform poems...
+
+![](images/clipboard-914984770.png){width="347"}
 
 <https://sherwood.news/markets/visualizing-why-yesterdays-stock-market-reversal-was-so-weird-and-unnerving/>
 
@@ -468,14 +512,13 @@ library(RColorBrewer)
   } |> 
   codehover::ch_hover()
 ```
+
 <https://evamaerey.github.io/mytidytuesday/2025-11-24-s-and-p-since-2015/s-and-p-since-2015.html>
 
-
-Do we even have the tools for nearly verbatim recording data analysis? Trains-of-thought.
+Do we even have the tools for nearly verbatim recording data analysis?
+Trains-of-thought.
 
 ![](images/clipboard-149333879.png)
-
-
 
 # Extension and statistical narratives ...
 
@@ -650,6 +693,10 @@ as_tibble(tools::CRAN_package_db()) |>
   filter_out(Author == "Posit, PBC") ->
 package_author_edgelist
 
+
+
+theme_set(theme_gray())
+
 # network visualization
 package_author_edgelist |> 
   tidygraph::as_tbl_graph() |>
@@ -658,10 +705,11 @@ package_author_edgelist |>
   geom_edge_link() +
   geom_node_label(aes(label = name, 
                       node_id = name, # for conversion to threejs
-                      color = is_package)) + 
-  labs(title = "The Tidyverse and Authors")
+                      color = is_package))
 
-
+package_author_edgelist |> 
+  distinct(Author) |> 
+  mutate(package = "Claude")
 
 
 library(threejs)
@@ -681,16 +729,6 @@ ggplyr::last_plot_wipe_last() +
 
 ggraph_to_threejs(package_author_edgelist)
 
-ggplyr::last_plot_wipe_last() + 
-  geom_node_text(aes(
-    size = !is_package,
-    node_id = name, # just for threejs
-    label = is_package |> ifelse("📦", "👦🏻"), 
-    color = is_package |> ifelse("tan", "tan") |> I())) + 
-  scale_size(range = c(3,8))
-
-ggraph_to_threejs(package_author_edgelist)
-
 
 ggplyr::last_plot_wipe_last() + 
   geom_node_text(aes(
@@ -702,7 +740,15 @@ ggplyr::last_plot_wipe_last() +
 
 ggraph_to_threejs(package_author_edgelist)
 
+layer_data() |> head()
 
+last_plot() + 
+  geom_point(data = layer_data(), aes(x = x, y = y), shape = "|")
+
+```
+
+```{r}
+knitr::knit_exit()
 ```
 
 ```{r}
@@ -721,8 +767,11 @@ g
 
 ```
 
+```{r}
 
+knitr::knit_exit()
 
+```
 
 ## Posit Community Support Application
 
@@ -1039,10 +1088,8 @@ So the pattern is: live talk -\> linked GitHub discussion thread -\>
 a tutorial or blog post — a mix of synchronous presentation and
 asynchronous, searchable, public archiving.
 
-# **We know a form can't capture everything. If there is anything else you'd like us to know, please share it here.**
-
 ```{r}
-#knitr::knit_exit()
+knitr::knit_exit()
 ```
 
 ## Intro Thoughts
@@ -1066,7 +1113,5 @@ extensions.
 
 Intro to Data Science Lab - practice for Intro to Data Science Lab - JSM
 talk - Posit Conf talk...
-
-
 
 ------------------------------------------------------------------------

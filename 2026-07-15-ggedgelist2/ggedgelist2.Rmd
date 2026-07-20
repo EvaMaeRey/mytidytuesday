@@ -1,0 +1,177 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r, eval = F}
+
+compute_panel_nodes_net <- function(data, scales){
+  
+  data |> 
+    select(from, to) |> 
+    ggraph::create_layout(layout = data$layout[1])
+    
+}
+
+tibble(from = sample(letters, replace = T),
+       to = sample(letters, replace = T),
+       layout = "fr") |>
+  compute_panel_nodes_net() |> 
+  ggplot() + 
+  aes(x = x, y = y) + 
+  geom_point() 
+
+
+library(igraph)
+
+an_edgelist <- tibble(from = sample(letters, replace = T),
+       to = sample(letters, replace = T))
+
+
+tibble(from = sample(letters, replace = T),
+       to = sample(letters, replace = T),
+       layout = "fr") |>
+  graph_from_data_frame() |>
+  layout_with_kk() |>
+  as_tibble() |> 
+  select(x = V1, y = V2)
+
+
+an_edgelist |>
+  graph_from_data_frame() |>
+  layout_with_kk() |>
+  as_tibble() |> 
+  select(x = V1, y = V2) |> 
+  mutate(node_id = row_number()) ->
+node_placement
+
+an_edgelist |> 
+  mutate(edge_id = row_number()) |>
+  pivot_longer(cols = 1:2, values_to = "node_id") |> 
+  left_join(node_placement) |> 
+  pivot_wider(names_from = name, 
+              values_from = c(x,y, node_id)) |>
+  select(x = x_from, xend = x_to, y = y_from, yend = y_to, from = node_id_from, to = node_id_to) ->
+node_connections
+```
+
+
+```{r}
+library(tidyverse)
+library(igraph)
+# ggplot() + 
+#   geom_segment(data = node_connections,
+#                aes(x = x, xend = xend, y = y , yend = yend)) + 
+#   geom_point(data = node_placement,
+#             aes(x = x, y = y))
+
+
+compute_panel_nodes <- function(data, scales){
+  
+  edgelist <- data |>
+    select(from, to) 
+  
+  node_list <- edgelist |> 
+    pivot_longer(cols = from:to) |> 
+    distinct(node_name = value)
+  
+  # node_list
+  
+  data |>
+    select(from, to) |>
+    graph_from_data_frame() |>
+    layout_with_kk() |> ##   layout
+    as_tibble() |>
+    select(x = V1, y = V2) |>
+    mutate(node_id = row_number()) |>
+    bind_cols(node_list)
+  
+}
+
+tidytitanic::passengers |>
+  select(from = last_name, to = first_name) |>
+  remove_missing() |> 
+  compute_panel_nodes()
+```
+
+
+```{r}
+library(tidyverse)
+
+
+compute_panel_edges <- function(data, scales){
+  
+   edgelist <- data |>
+    select(from, to) |>
+    remove_missing()
+   
+   node_placement <- data |> 
+     compute_panel_nodes()
+  
+  edgelist |>
+    mutate(edge_id = row_number()) |>
+    pivot_longer(cols = 1:2, values_to = "node_id") |> 
+    mutate(node_id = node_id |> as.character() |> as.numeric()) |>
+    left_join(node_placement, by = "node_id") |> 
+    arrange(node_id) |>
+    pivot_wider(names_from = name,
+                values_from = c(x, y, node_id)) |>
+    select(x = x_from, xend = x_to, y = y_from, yend = y_to, from = node_id_from, to = node_id_to, edge_id)
+
+  
+}
+
+
+tidytitanic::passengers |>
+  select(from = last_name, to = first_name) |>
+  remove_missing() |> 
+  slice(1:100) |>
+  compute_panel_edges()
+```
+
+
+```{r}
+
+library(statexpress)
+
+tidytitanic::passengers |>
+  select(last_name, first_name) |>
+  remove_missing() |>
+  ggplot() + 
+  aes(from = last_name, to = first_name) + 
+  geom_text(stat = qstat_panel(compute_panel_nodes, 
+                               default_aes = aes(label = after_stat(node_id)))) + 
+  geom_segment(stat = qstat_panel(compute_panel_edges))
+  
+
+
+
+
+```
+
+## Experiment
+
+```{r}
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
