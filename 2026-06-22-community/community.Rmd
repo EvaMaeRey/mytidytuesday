@@ -1,6 +1,6 @@
 ---
 title: "Future of ggplot2 extenders"
-author: "Evangeline Reynolds"
+author: "Gina Reynolds (@EvaMaeRey)"
 date: "`r Sys.Date()`"
 output: 
   html_document:
@@ -22,20 +22,21 @@ options(tidyverse.quiet = TRUE)
 1.  Gentler introduction to layer extension: Easy Geom Recipes, and Easy
     Geom Recipes Python adaptation...
 
-2.  Articulate value of extension (Why am I even here? Why are *you*
-    here?): conversational data viz - being able to write down
-    (transcribe!) visual narratives
+2.  Articulate value of extension, and by extension ... 'Why am I even
+    here? Why do other extenders show up? Motivated by conversational
+    data viz - being able to write down (transcribe! 📝🤯) visual
+    narratives
 
-3.  Extensions targetted at new audiences:
+3.  Extensions targeted at new audiences 🤷‍♀️
 
-    a.  High School Stats Students
-    b.  Kids
+    a.  AP High School Stats, Intro College Stats
+    b.  Kids data viz
     c.  Dimension Reduction and ML Crowd...
 
-### What do you want this to help you prepare for?
+### All the things to prepare for:
 
 1.  Tomorrow, Posit Data Science Lab: 'Easy geom recipes', July 21 👩‍🏫
-2.  Debue plotnine's Easy Geom Recipes... 🤸🚀✈️
+2.  Debut plotnine's Easy Geom Recipes... 🤸🚀✈️
 3.  JSM activities:
     1.  EAPOST Workshop, July 31-Aug 1
         <https://sites.google.com/view/eaapost/project-overview>
@@ -44,8 +45,8 @@ options(tidyverse.quiet = TRUE)
     3.  'Past Present and Future of ggplot2 extensions' with Cory,
         Cynthia, Joyce, James, Heike, Naomi, JSM Boston 2026,
         <https://ww3.aievolution.com/JSMAnnual2026/index.cfm?do=ev.viewEv&ev=5265>
-4.  Posit Conf: 'Epic graphical poems and conversations'
-5.  Future of the ggplot2 extenders club...
+4.  Posit Conf: 'Epic Graphical Poems and Conversations'
+5.  Future of the ggplot2 extenders club... 🤷‍♀️
 
 ------------------------------------------------------------------------
 
@@ -54,14 +55,14 @@ options(tidyverse.quiet = TRUE)
 So tomorrow, Data Science Lab 'easy geom recipes' thing. We'll talk
 about types of extensions, and go through a basic Stat extension.
 
-And in preparing for that Isabella, Libby and I met up, and I asked,
+And in preparing for that Isabella, Libby and I met up a few weeks ago, and I asked,
 'could I present a few slides talking about why I think ggplot2
 extension is important'.
 
-But we settled on 'No'. Because, that's not the DS Lab vibe. "DS Lab
+But we settled on 'No'. That's not the DS Lab vibe. "DS Lab
 isn't monologues, it's conversation."
 
-And I think, this is like really a very good practice. And that's
+And I think, this is, like, really a very good practice. And that's
 exactly what we are going to do tomorrow. 💯🙌🚀
 
 <details>
@@ -82,9 +83,12 @@ geom_point
 
 Actually has **three main 'characters'** that specify the layer...
 
--   Geom
--   Stat
--   Position
+-   Stat - precompute done prior to drawing (count, bin)
+-   Geom - a 'mark', the drawn thing... (point, bar, segment)
+-   Position - actually a *minor* character - cherry on top!! 'Makes the
+    marks dance' - Hassan
+
+
 
 ![](images/clipboard-2706483280.png){width="363"}
 
@@ -92,7 +96,7 @@ Actually has **three main 'characters'** that specify the layer...
 
 ![](images/clipboard-1590828862.png){width="367"}
 
-geom_point: 1) GeomPoint, 2) StatIdentity, 3) position_identity()
+geom_point: 1) StatIdentity, 2) GeomPoint, 3) position_identity()
 
 -   another example:
 
@@ -100,7 +104,7 @@ geom_point: 1) GeomPoint, 2) StatIdentity, 3) position_identity()
 geom_jitter
 ```
 
-geom_jitter: GeomPoint, StatIdentity, position_jitter()
+geom_jitter: 1) StatIdentity, 2) GeomPoint, 3) position_jitter()
 
 -   Agenda build geom_means - which will draw a point at the means x and
     y for of observations (and do this group- and facet- wise -
@@ -113,6 +117,10 @@ geom_histogram
 
 ```
 
+geom_histogram: 1) StatBin, 2) GeomBar, 3) position_stack()
+
+**Step 0:** Get the job done with base ggplot2 for reference...
+
 ```{r}
 penguins |>
   ggplot() + 
@@ -121,87 +129,165 @@ penguins |>
   geom_point()
 ```
 
-```{r, message = F, warning=F}
+```{r, message = F, warning=F, echo = F}
 library(tidyverse)
 
-penguins_means <- penguins |> 
-  summarise(mean_bill_len = mean(bill_len, na.rm = T),
-            mean_bill_dep = mean(bill_dep, na.rm = T))
+'penguins_means <- penguins |> 
+  summarise(
+      mean_bill_len = mean(bill_len, na.rm = T),
+      mean_bill_dep = mean(bill_dep, na.rm = T)
+      )
   
 penguins |>
   ggplot() + 
   aes(x = bill_len,
       y = bill_dep) + 
   geom_point() + 
-  geom_point(data = penguins_means,
-             mapping = aes(x = mean_bill_len, 
-                           y = mean_bill_dep),
-             color = "red", 
-             size = 8)
+  geom_point(
+    data = penguins_means,
+    mapping = aes(
+        x = mean_bill_len, 
+        y = mean_bill_dep
+        ),
+   color = "red", 
+   size = 8)' |> 
+  ggram::ggram(code = _, subtitle = "Step 0. Get the job done with 'base' ggplot2.", title = "📓🧪🥽🔬 Posit DS Lab Notebook: 2026 JUL 21 - Extending ggplot2")
+
+ggram::ggram_save(file = "step0.png", bg = "white")
+
 ```
 
--   Step 1: Define Compute. Test
+**Step 1:** Define Compute. Test
 
-```{r}
-compute_group_means <- function(data, scales){
+```{r, echo = F}
+compute_group_means <- 
+     function(data, scales){
   
   data |> 
-    summarise(x = mean(x, na.rm = T),
-              y = mean(y, na.rm = T))
+    summarise(
+      x = mean(x, na.rm = T),
+      y = mean(y, na.rm = T)
+      )
+  
+}
+
+'compute_group_means <- 
+     function(data, scales){
+  
+  data |> 
+    summarise(
+      x = mean(x, na.rm = T),
+      y = mean(y, na.rm = T)
+      )
   
 }
 
 penguins |> 
   select(x = bill_len,
          y = bill_dep) |> 
-  compute_group_means()
+  compute_group_means()' |>
+  ggram:::ggram_df_output(code = _, subtitle = "Step 1. Define Compute. Test.", title = "📓🧪🥽🔬 Posit DS Lab Notebook: 2026 JUL 21 - Extending ggplot2")
+
+ggram::ggram_save(file = "step1.png", bg = "white")
+
 
 ```
 
--   Step 2: Define StatMeans. Test.
+**Step 2:** Define StatMeans. Test.
 
-```{r}
+```{r, echo = F}
+StatMeans <-  #<<
+  ggproto( #<<
+     `_class` = "StatMeans",  #<<
+     `_inherit` = Stat,  #<<
+     compute_group =  #<<
+          compute_group_means, #<<
+     required_aes = c("x", "y") #<<
+     ) #<<
+
+
 # we'll inherit from `Stat` - let's look at all the stuff in there!
+'StatMeans <-  #<<
+  ggproto( #<<
+     `_class` = "StatMeans",  #<<
+     `_inherit` = Stat,  #<<
+     compute_group =  #<<
+          compute_group_means, #<<
+     required_aes = c("x", "y") #<<
+     ) #<<
 
-StatMeans <- ggproto(`_class` = "StatMeans", 
-                     `_inherit` = Stat, 
-                     compute_group = compute_group_means,
-                     required_aes = c("x", "y"))
 
 ggplot(penguins) + 
-  aes(x = bill_len, y = bill_dep) + 
+  aes(x = bill_len, 
+      y = bill_dep) + 
   geom_point() + 
-  geom_point(stat = StatMeans, size = 8) + 
-  aes(color = species)
+  geom_point(
+      stat = StatMeans, #<<
+      size = 8
+      )' |>
+  ggram:::ggram(code = _, subtitle = "Step 2. Define StatMeans. Test.", 
+                title = "📓🧪🥽🔬 Posit DS Lab Notebook: 2026 JUL 21 - Extending ggplot2")
+
+ggram::ggram_save(file = "step2.png", bg = "white")
+
 ```
 
--   Step 3: Define user-facing functions (geom_means(), stat_means()).
-    Test (Enjoy!)
+**Step 3:** Define user-facing functions (geom_means(), stat_means()).
+Test (Enjoy!)
 
-```{r}
-# old way - use stat_identity to help w/ scaffolding code... 
-stat_means <- function (mapping = NULL, data = NULL, geom = "point", position = "identity", 
-    ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) 
-{
-    layer(mapping = mapping, data = data, geom = geom, stat = StatMeans, 
-        position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
-        params = list2(na.rm = na.rm, ...))
-}
-
+```{r, echo = F}
 # new way
 stat_means <- make_constructor(StatMeans, geom = "point")
-
-# old way - use geom_point to model scaffolding
-geom_means <- function (mapping = NULL, data = NULL, stat = "means", position = "identity", 
-    ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) 
-{
-    layer(mapping = mapping, data = data, geom = "point", stat = stat, 
-        position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
-        params = list2(na.rm = na.rm, ...))
-}
-
-# new way
 geom_means <- make_constructor(GeomPoint, stat = "means")
+
+'geom_means <- #<<
+  make_constructor( # >v4.0 ggplot2 #<<
+    x = GeomPoint, #<<
+    stat = "means" #<<
+    ) #<<
+
+
+ggplot(penguins) + 
+  aes(bill_len, bill_dep) + 
+  geom_point() + 
+  geom_means(size = 8) #<<' |>
+  ggram:::ggram(code = _, subtitle = "Step 4. Define user-facing function. Enjoy!", title = "📓🧪🥽🔬 Posit DS Lab Notebook: Extending ggplot2", caption = "2026 JUL 21, Reynolds, Kibirige")
+
+ggram::ggram_save(file = "step4.png", bg = "white")
+
+'ggplot(penguins) + 
+  aes(bill_len, bill_dep) + 
+  geom_point() + 
+  geom_means(size = 8, col = "red") #<<' |>
+  ggram:::ggram(code = _, #subtitle = "", 
+                title = "📓🧪🥽🔬 Posit DS Lab Notebook: 2026 JUL 21 - Extending ggplot2 \n\n Where we're heading:  Write and use new function, `geom_means()`")
+
+ggram::ggram_save(file = "a_where_to.png", bg = "white")
+
+
+'ggplot(penguins) + 
+  aes(bill_len, bill_dep) + 
+  geom_point() + 
+  geom_means(size = 8) + 
+  aes(color = species) #<<' |>
+  ggram:::ggram(code = _, 
+                subtitle = "Step 4.b Test out group-wise compute (for free!)", 
+                title = "📓🧪🥽🔬 Posit DS Lab Notebook: 2026 JUL 21 - Extending ggplot2")
+
+ggram::ggram_save(file = "step4b.png", bg = "white")
+
+
+
+ 
+
+
+
+# library(magick)
+# 
+# list.files(pattern = ".png") |> 
+#   image_read() |> 
+#   image_convert("pdf") |> 
+#   image_write("dslabnotes.pdf")
 
 ```
 
@@ -226,6 +312,9 @@ last_plot() +
 
 </details>
 
+
+
+
 ------------------------------------------------------------------------
 
 ## But, I do love a monologue.
@@ -239,15 +328,15 @@ last_plot() +
 And monologues sometimes compress conversations, right?
 
 > Many of [my New York Times] columns were the products of long
-> telephone conversations with my friends - Anna Quindlen
+> telephone conversations with my friends - Anna Quindlen in 'Living Out
+> Loud'
 
-We do monologues at ggplot2 extenders (but like they are often pretty
-'hero's journey' stories - speaker talks about motivation and
+We do monologues at ggplot2 extenders club (but like they are often
+pretty 'hero's journey' stories - speaker talks about motivation and
 challenges... My eyes never glaze over during a hero's journey story.)
 
-And anyway, what I'd been thinking about for slides (though it be a
-monologue) was a celebration of **visual conversation**, and that as
-motivation for ggplot2 extension.
+And anyway, what I'd been thinking about for slides was a celebration of
+**visual conversation**, and that as motivation for ggplot2 extension.
 
 So people like Thomas Lin Pedersen have talked about ggplot2 as enabling
 you to 'Speak you plots into existence.' And this sounds right, and
@@ -258,8 +347,8 @@ is *conversing* with your data and recording that conversation -
 verbatim. *transcribing conversations you have with data* and
 transcribing the trains-of-thought you have with data.
 
-Is ggplot2 is kind of the transcriber of spontaneous human-data
-interactions.
+Is ggplot2 can be kind-of a **transcriber** of human-data
+interactions... (if we let loose, and if we extend)
 
 > 'spontaneous language for conversation'
 
@@ -289,32 +378,34 @@ Conversation is mindbogglingly powerful.
 
 Grammar is mindbogglingly powerful.
 
-I'm personally not too interested in a final, gorgeous plot, or the
-pretty, reorganized syntax that you get after having arriving at a final
-viz product.
+I'm personally not so interested in a final, gorgeous plot, (though I'm
+often dazzled by them) or the pretty, reorganized ggplot2 syntax that you get
+after having arriving at a final viz product.
 
-I *am* crazy about the conversations with data.
+I *am* crazy about the conversations with data that ggplot2 allows!
 
 <!-- Grammar is insanely, mindbogglingly powerful.  (And a lot of the times we just take it for granted - a luxury that I think we've moved beyond with AI age). -->
 
-I love that ggplot2 syntax can be concise, but I am a fan of the fact
-that 'inconcision' is allowed in that it allows us too record ideas
-practically verbatim. (Like the Data Science Lab conversations
+It's great that ggplot2 syntax can be concise, but I am a bigger fan of
+the fact that 'inconcision' is permitted, that lets us record ideas
+*practically verbatim*. (Like the Data Science Lab conversations
 transcripts!)
 
-> More thinking about inconcision as functional: 'Ums' and 'Uhs' tend to
-> occur when we are doing really hard cognative lifting ... to kind of
-> give us a processing moment ... with Valerie Fridland, author of
-> 'Like, Literally, Dude.'
+> 'Ums' and 'Uhs' tend to occur when we are doing really hard cognative
+> lifting ... to kind of give us a processing moment ... with Valerie
+> Fridland, author of 'Like, Literally, Dude.' thinking about
+> inconcision as functional.
 
 So... that was a huge monologue for someone who says they are crazy
-about conversation.
+about conversation. 😂
 
 # Native inconsicion in ggplot2
 
 ```{r, message=F, warning=F}
 library(tidyverse)
 ```
+
+Here's the sanctioned way of doing things...
 
 ```{r}
 gapminder::gapminder |> 
@@ -324,20 +415,17 @@ gapminder::gapminder |>
              color = continent,
              size = pop)) + 
   geom_point()
-
-library(ggstamp) 
-
-
 ```
 
 ```{r echo = F}
+library(ggstamp) 
+
 hans_png_path_canvas = "../2023-11-14-flipbooks-lawrence-livermore/images/hans_argument.png"
 hans_png_path_y_axis = "../2023-11-14-flipbooks-lawrence-livermore/images/hans_y_axis.png"
 hans_png_path_x_axis = "../2023-11-14-flipbooks-lawrence-livermore/images/hans_x_axis.png"
 hans_png_path_color = "../2023-11-14-flipbooks-lawrence-livermore/images/hans_colors.png"
 hans_png_path_size = "../2023-11-14-flipbooks-lawrence-livermore/images/hans_size.png"
 lab <- "Rosling gives full voice\nto aesthetic mappings"
-
 
 {ggplot() + 
   stamp_png(png = hans_png_path_y_axis) +
@@ -363,19 +451,30 @@ lab <- "Rosling gives full voice\nto aesthetic mappings"
   codehover::ch_hover()
 ```
 
+![](images/clipboard-1395142094.png)
+
 ![](images/clipboard-3450567393.png)
+
+![](images/clipboard-2265011233.png "Simon Cowell"){width="336"}
+
+![](images/clipboard-3835922538.png){width="363"}
+
+
+
+------------------------------------------------------------------------
+
+> # 'Data visualization is right at the heart of my work.' - Hans Rosling's introduction to '200 Countries, 200 Years, 4 Minutes - The Joy of Stats - BBC'
+
 
 ---
 
-> Data visualization is right at the heart of my work. - Hans Rosling
-
-> And aesthetic mapping is right at the heart to data visualization - is
-> it so wrong to want those decisions to get full voice? - me riffing on
-> Hans
-
-![](images/clipboard-1715986762.png){width="298"}
+> # And aesthetic mapping is right at the heart to data visualization - is
+>
+> it so wrong to want those decisions to get **full voice**? 
 
 ![](images/clipboard-2829397408.png)
+
+<!-- ![](images/clipboard-1715986762.png){width="298"} -->
 
 # Lightly wrapped inconcision: ggkids (maybe this is okay for kids)
 
@@ -408,13 +507,24 @@ repair_data <-
   codehover::ch_hover()
 ```
 
-# But allowing aesthetic mappings to be expressed independently, and given some extension, *greater* consision may actually possible.  Via a conversational approach... Beyond 'base' ggplot2... let's you keep the conversation going where train of thought is just one grammar move away...
+
+
+
+# Epic poems... + aes() + geom\_?() + ggplyr::layers_wipe()
+
+But allowing aesthetic mappings to be expressed independently, and given
+some extension, *greater* concision may actually possible. Via a
+conversational approach... Beyond 'base' ggplot2... let's you keep the
+conversation going where train of thought is just one grammar move
+away...
+
+No logical leaps!
 
 ![](images/clipboard-816719924.png)
 
-Longform poems...
-
 ![](images/clipboard-914984770.png){width="347"}
+
+Let's have a look at "Visualizing Why Yesterdays Stock Market Reversal Was So Weird and Unnerving" by David Crowther. This is an 'epic graphical poem'.  And yet, the fact that it's not making logical leaps means that we are often just a grammar of graphics 'move' away from the next plot that he builds.
 
 <https://sherwood.news/markets/visualizing-why-yesterdays-stock-market-reversal-was-so-weird-and-unnerving/>
 
@@ -485,9 +595,6 @@ library(RColorBrewer)
 
 </details>
 
-> Viz move: *Every dot here represents one day of the S&P 500 Index’s
-> return.* `aes(id = date) +  geom_circlepack()`
-
 ```{r, echo = F}
 {sp_500_data_calcs |>
   ggplot() + 
@@ -515,12 +622,14 @@ library(RColorBrewer)
 
 <https://evamaerey.github.io/mytidytuesday/2025-11-24-s-and-p-since-2015/s-and-p-since-2015.html>
 
-Do we even have the tools for nearly verbatim recording data analysis?
-Trains-of-thought.
+Do we even have the tools for nearly verbatim recording of data
+analysis? Concise, *in-sequence*, trains-of-thought. *Transcription...*
 
-![](images/clipboard-149333879.png)
+![](images/clipboard-3789389711.png)
 
-# Extension and statistical narratives ...
+# Long form poems... Transcribing statistical narratives...
+
+Extension and statistical narratives ...
 
 2020: Stats instructor teaching "Introduction to Statistical
 Investigations"
@@ -534,10 +643,17 @@ loved,
 but... missed coded workflow (there was some, but less that I'd have
 liked)
 
-There's something really grounding (and powerful?) about going back to a
-code narrative, being able to review the steps of what you did.
+There's something really grounding (and powerful? 3400 to 3100 BCE)
+about going back to a code narrative, being able to review the steps of
+what you did.
 
 (quotes from Winston, Paul)
+
+> You know people were doing their statistics most of the people in my
+> department were using SPSS um and I found that very confusing SPSS you
+> know quote syntax um where they it provides some code to do your
+> analysis, you'd um you know you'd bring in your data and you'd um you
+> click some buttons and you'd check some boxes for turning
 
 ------------------------------------------------------------------------
 
@@ -549,6 +665,12 @@ code narrative, being able to review the steps of what you did.
 
 Could we have the best of both worlds?
 
+> 'Schreiben ist wichtig'... Writing is important - Herr Heineke
+
+So writing things down in code, with a set of functions crafted for the
+task, with just give you just the right amount of friction. Slow you
+down just enough to
+
 ------------------------------------------------------------------------
 
 Could we do what we were doing on *chalkboards* (love a chalk board!!
@@ -559,17 +681,18 @@ the statistical narrative.
 
 ------------------------------------------------------------------------
 
-Chalkboard (applet) version went like this...
+Chalkboard version went like this...
 
 ```{r, echo = F}
 library(tidyverse)
 library(ggprop.test)
 library(codehover)
 
+ggchalkboard::theme_chalkboard() |> theme_set()
+
 
 {ggplot(donor_data) + 
-  ggchalkboard::theme_chalkboard() +
-  labs(title = "Are donor decisions consistent with 50/50 ") +
+  labs(title = "🫀🫁Donor decisions consistent with 50/50?") +
   aes(x = decision) + 
   geom_stack() + 
   geom_stack_label() +
@@ -583,6 +706,90 @@ library(codehover)
   stamp_eq_norm_prop()
 } |>
   codehover::ch_hover()
+
+
+{ggplot(dolphin_data) + 
+  labs(title = "Can 🐬Doris & 🐬Buzz communicate? 🐟🪣") +
+  aes(x = observed) + 
+  geom_stack() + 
+  geom_stack_label() +
+  geom_support() + 
+  geom_prop() + 
+  geom_prop_label() + 
+  stamp_prop(.5) + 
+  geom_binomial_null()
+} |>
+  codehover::ch_hover()
+
+
+{ggplot(scissors_data) + 
+  labs(title = "🪨📃✂️ Preference away from Scissors?") +
+  aes(x = thrown) + 
+  geom_stack() + 
+  geom_stack_label() +
+  geom_support() + 
+  geom_prop() + 
+  geom_prop_label() + 
+  stamp_prop(.333) + 
+  geom_binomial_null(prob = .333)
+} |>
+  codehover::ch_hover()
+
+library(ggt.test)
+
+
+{ggplot(data_grit_undergrad) + 
+  labs(title = "🪖😬💪🧗🏽‍♂️ Gritty as West Point Cadets?") +
+  aes(x = score) + 
+  geom_stacks() + 
+  geom_support() + 
+  geom_mean() + 
+  geom_mean_label() + 
+  stamp_mean(3.75) + # Class of 2010 mean
+  stamp_mean_label(3.75) +
+  geom_tdist_null(value = 3.75)
+} |>
+  codehover::ch_hover()
+
+library(ggxmean)
+
+{ggplot(cars) + 
+  labs(title = "🚙 Cars data lm") +
+  aes(x = speed, y = dist) + 
+  geom_point() +
+  geom_lm() +
+  geom_lm(y ~ 1) + # Null model
+  geom_lm_fitted() +
+  geom_lm_residuals() + 
+  geom_lm_conf_int() +
+  geom_lm_pred_int() + 
+  geom_lm_intercept() + 
+  geom_lm_intercept_label() +
+  geom_lm_formula()
+} |>
+  codehover::ch_hover()
+
+
+# {ggplot(data_haircuts) + 
+#   ggchalkboard::theme_chalkboard() +
+#   labs(title = "Haircuts 🪙 differ by sex 💇💇🏽‍♀️") +
+#   aes(x = price) + 
+#   geom_rug() +
+#   geom_stacks() + 
+#   geom_support() + 
+#   geom_mean() + 
+#   geom_mean_label() +
+#   facet_align(sex) + 
+#   geom_mean_diff() + 
+#   geom_mean_diff_label()
+#   
+#   ggplot(data_haircuts) + 
+#     ggchalkboard::theme_chalkboard() +
+#     labs(title = "Haircuts 🪙 differ by sex 💇💇🏽‍♀️")+
+#     aes(outcome = price, sample = sex) + 
+#     geom_tdist_null_two_sample()
+# } |>
+#   codehover::ch_hover()
 
 ```
 
@@ -603,8 +810,8 @@ Why don't we just have students use base ggplot2, and do the
 wrangling/calculations by hand?
 
 > Some instructors may train students in using a specific software
-> package, but mastery of advanced programming skills should not be
-> allowed to crowd out data analysis skills or statistical thinking.
+> package, but *mastery of advanced programming skills should not be
+allowed to crowd out data analysis skills or statistical thinking.*
 
 ------------------------------------------------------------------------
 
@@ -626,13 +833,16 @@ of what you are trying to explain in the first place so if I just want
 the big picture idea 1:22 and there are some technical details that make
 that statement not technically true but morally it's the right thing
 
+> the goldilocks situation: Write it, and don't loose the train of
+> thought by bespoke packages like ggprop.test, ggt.test. ggols...
+
 ------------------------------------------------------------------------
 
 Huge audiences:
 
 1000 cadets every year...
 
-EAPOST
+EAPOST - network of 600 instructors...
 
 100000 AP stats high school students per year
 
@@ -747,6 +957,93 @@ last_plot() +
 
 ```
 
+
+```{r, echo = F, fig.height=4, fig.width=6}
+library(tidyverse)
+
+to_sf_routine <- function(data){
+  
+  data |>
+  mutate(y = -y) |>
+  sf::st_as_sf(coords = c("x", "y"), agr = "constant") |>
+  group_by(id, group) |>
+  summarize(do_union = F) |> 
+  ungroup() |> 
+  group_by(id, group) |>
+  summarise() |>
+  mutate(geometry = geometry |> sf::st_cast("POLYGON")) |> 
+  mutate(geometry = geometry |> sf::st_cast("MULTIPOLYGON")) |> 
+  ungroup() 
+  
+}
+
+
+female_sf <- gganatogram::hgFemale_list[c(1:156, 180:195)] |> 
+  bind_rows() |>
+  remove_missing() |>
+  to_sf_routine()
+# Step 1.a Prepare Data
+ref_female <- female_sf |> 
+  select(organ = id, geometry)
+
+'
+library(ggregions)
+
+set_regions(regions = ref_female)
+
+tribble(~ organ, ~ color,   
+        "brain",   "pink3",
+        "heart",   "darkred",
+        "stomach", "cadetblue2") |> 
+  ggplot() + 
+  stamp_region(alpha = .001) +
+  aes(region = organ,
+      fill = organ) +
+  geom_region()' |>
+  ggram::ggram(code = _, width = c(1, .5),
+               title = "ggplot2 extenders club is about hearts and minds...",
+               subtitle = "...and occasionally stomachs. 🍔🥙")
+```
+
+
+
+
+
+
+```{r, eval = T, echo = F, fig.width=10, fig.height=4.5}
+library(tidyverse)
+library(ggregions)
+
+# Step 1a: Prepare reference data
+country_ref <- rnaturalearth::countries110 |> 
+  select(country_name = SOVEREIGNT,
+         iso3c = ISO_A3, 
+         geometry)
+
+'set_regions(country_ref)
+
+places_df <- tribble(~place,
+        "France", "Canada", 
+        "New Zealand", 
+        "United States of America", 
+        "Uganda", "Netherlands", 
+        "Brazil", "Australia", 
+        "South Korea", "United Kingdom", 
+        "Germany", "Denmark", 
+        "Sweden", "Austria")
+
+
+ggplot(data = places_df) + 
+  aes(region = place,
+      fill = I("steelblue4")) + 
+  stamp_region() + 
+  geom_region()' |> ggram::ggram(code = _, 
+                                title = "The places we've been:  The ggplot2 extenders meetup is about reach",
+                                subtitle = "And we'd love to reach many more people an places...",
+                                widths = c(.8,1.5))
+```
+
+
 ```{r}
 knitr::knit_exit()
 ```
@@ -810,88 +1107,7 @@ R package ggplot2 (custom geoms, stats, themes, etc.). The forum exists
 to facilitate conversations about extension experiences — motivations,
 challenges, design decisions, and extension journeys in general.
 
-```{r, echo = F, fig.height=4, fig.width=6}
-library(tidyverse)
 
-to_sf_routine <- function(data){
-  
-  data |>
-  mutate(y = -y) |>
-  sf::st_as_sf(coords = c("x", "y"), agr = "constant") |>
-  group_by(id, group) |>
-  summarize(do_union = F) |> 
-  ungroup() |> 
-  group_by(id, group) |>
-  summarise() |>
-  mutate(geometry = geometry |> sf::st_cast("POLYGON")) |> 
-  mutate(geometry = geometry |> sf::st_cast("MULTIPOLYGON")) |> 
-  ungroup() 
-  
-}
-
-
-female_sf <- gganatogram::hgFemale_list[c(1:156, 180:195)] |> 
-  bind_rows() |>
-  remove_missing() |>
-  to_sf_routine()
-# Step 1.a Prepare Data
-ref_female <- female_sf |> 
-  select(organ = id, geometry)
-
-'
-library(ggregions)
-
-set_regions(regions = ref_female)
-
-tribble(~ organ, ~ color,   
-        "brain",   "pink3",
-        "heart",   "darkred",
-        "stomach", "cadetblue2") |> 
-  ggplot() + 
-  stamp_region(alpha = .001) +
-  aes(region = organ,
-      fill = organ) +
-  geom_region()' |>
-  ggram::ggram(code = _, width = c(1, .5),
-               title = "ggplot2 extenders club is about hearts and minds...",
-               subtitle = "...and occasionally stomachs. 🍔🥙")
-
-
-
-```
-
-```{r, eval = T, echo = F, fig.width=10, fig.height=4.5}
-library(tidyverse)
-library(ggregions)
-
-# Step 1a: Prepare reference data
-country_ref <- rnaturalearth::countries110 |> 
-  select(country_name = SOVEREIGNT,
-         iso3c = ISO_A3, 
-         geometry)
-
-'set_regions(country_ref)
-
-places_df <- tribble(~place,
-        "France", "Canada", 
-        "New Zealand", 
-        "United States of America", 
-        "Uganda", "Netherlands", 
-        "Brazil", "Australia", 
-        "South Korea", "United Kingdom", 
-        "Germany", "Denmark", 
-        "Sweden", "Austria")
-
-
-ggplot(data = places_df) + 
-  aes(region = place,
-      fill = I("steelblue4")) + 
-  stamp_region() + 
-  geom_region()' |> ggram::ggram(code = _, 
-                                title = "The places we've been:  The ggplot2 extenders meetup is about reach",
-                                subtitle = "And we'd love to reach many more people an places...",
-                                widths = c(.8,1.5))
-```
 
 ## Notable content/topics
 
