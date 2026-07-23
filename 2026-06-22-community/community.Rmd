@@ -372,11 +372,11 @@ meaning" If I utter 'potato' does that conjure up in the mind the
 > That's the power of writing. I love the power. I'm drunk on the
 > stuff." - Sarah Cooper, 'Foolish' 2023
 
-Language is mindbogglingly powerful.
+Language is profoundly powerful.
 
-Conversation is mindbogglingly powerful.
+Grammar is profoundly powerful.
 
-Grammar is mindbogglingly powerful.
+Conversation is profoundly powerful.
 
 I'm personally not so interested in a final, gorgeous plot, (though I'm
 often dazzled by them) or the pretty, reorganized ggplot2 syntax that you get
@@ -453,11 +453,11 @@ lab <- "Rosling gives full voice\nto aesthetic mappings"
 
 ![](images/clipboard-1395142094.png)
 
-![](images/clipboard-3450567393.png)
+![Ick...](images/clipboard-3450567393.png)
 
-![](images/clipboard-2265011233.png "Simon Cowell"){width="336"}
+![Yuck...](images/clipboard-2265011233.png "Simon Cowell"){width="336"}
 
-![](images/clipboard-3835922538.png){width="363"}
+<!-- ![](images/clipboard-3835922538.png){width="363"} -->
 
 
 
@@ -472,7 +472,7 @@ lab <- "Rosling gives full voice\nto aesthetic mappings"
 >
 > it so wrong to want those decisions to get **full voice**? 
 
-![](images/clipboard-2829397408.png)
+![Bear of very little brain...](images/clipboard-2829397408.png)
 
 <!-- ![](images/clipboard-1715986762.png){width="298"} -->
 
@@ -510,6 +510,234 @@ repair_data <-
 
 
 
+
+# Long form poems... Transcribing statistical narratives...
+
+Extension and statistical narratives ...
+
+2020: Stats instructor teaching "Introduction to Statistical
+Investigations"
+
+![](images/clipboard-1158971453.png)
+
+loved,
+
+--
+
+but... missed coded workflow (there was some, but less that I'd have
+liked)
+
+There's something really grounding (and powerful? 3400 to 3100 BCE)
+about going back to a code narrative, being able to review the steps of
+what you did.
+
+(quotes from Winston, Paul)
+
+> You know people were doing their statistics most of the people in my
+> department were using SPSS um and I found that very confusing SPSS you
+> know quote syntax um where they it provides some code to do your
+> analysis, you'd um you know you'd bring in your data and you'd um you
+> click some buttons and you'd check some boxes for turning
+
+------------------------------------------------------------------------
+
+> Some instructors may train students in using a specific software
+> package, but mastery of advanced programming skills should not be
+> allowed to crowd out data analysis skills or statistical thinking.
+
+------------------------------------------------------------------------
+
+Could we have the best of both worlds?
+
+> 'Schreiben ist wichtig'... Writing is important - Herr Heineke
+
+So writing things down in code, with a set of functions crafted for the
+task, with just give you just the right amount of friction. Slow you
+down just enough to
+
+------------------------------------------------------------------------
+
+Could we do what we were doing on *chalkboards* (love a chalk board!!
+analogue gold standard), but also do that w/ code, consistent w/ the
+touch of ggplot2 students were learning anyway, and code that would
+serve the concepts being learned instead of shoehorning functions around
+the statistical narrative.
+
+------------------------------------------------------------------------
+
+Chalkboard version went like this...
+
+```{r, echo = F}
+library(tidyverse)
+library(ggprop.test)
+library(codehover)
+
+ggchalkboard::theme_chalkboard() |> theme_set()
+
+
+{ggplot(donor_data) + 
+  labs(title = "🫀🫁Donor Y/N response 50/50?") +
+  aes(x = decision) + 
+  geom_stack() + 
+  geom_stack_label() +
+  geom_support() + 
+  geom_prop() + 
+  geom_prop_label() + 
+  stamp_prop(.5) + 
+  geom_binomial_null() + 
+  geom_normal_prop_null() + 
+  geom_normal_prop_null_sds() +
+  stamp_eq_norm_prop() + 
+  labs(caption = "isi-stats.com")
+} |>
+  codehover::ch_hover()
+
+
+{ggplot(dolphin_data) + 
+  labs(title = "Can 🐬Doris & 🐬Buzz communicate? 🐟🪣") +
+  aes(x = observed) + 
+  geom_stack() + 
+  geom_stack_label() +
+  geom_support() + 
+  geom_prop() + 
+  geom_prop_label() + 
+  stamp_prop(.5) + 
+  geom_binomial_null() + 
+  labs(caption = "isi-stats.com")
+} |>
+  codehover::ch_hover()
+
+
+{ggplot(scissors_data) + 
+  labs(title = "🪨📃✂️ Preference away from Scissors?") +
+  aes(x = thrown) + 
+  geom_stack() + 
+  geom_stack_label() +
+  geom_support() + 
+  geom_prop() + 
+  geom_prop_label() + 
+  stamp_prop(.333) + 
+  geom_binomial_null(prob = .333) + 
+  labs(caption = "isi-stats.com")
+} |>
+  codehover::ch_hover()
+
+library(ggt.test)
+
+
+{ggplot(data_grit_undergrad) + 
+  labs(title = "🪖😬💪🧗🏽‍♂️ Gritty as West Point Cadets?") +
+  aes(x = score) + 
+  geom_stacks() + 
+  geom_support() + 
+  geom_mean() + 
+  geom_mean_label() + 
+  stamp_mean(3.75) + # Class of 2010 mean
+  stamp_mean_label(3.75) +
+  geom_tdist_null(value = 3.75) + 
+  labs(caption = "Duckworth et al. 2007, Grit...")
+} |>
+  codehover::ch_hover()
+
+library(ggxmean)
+
+{ggplot(cars) + 
+  labs(title = "🚙 Cars data - stopping distance") +
+  aes(x = speed, y = dist) + 
+  geom_point() +
+  geom_lm() +
+  geom_lm(y ~ 1) + # Null model
+  geom_lm_fitted() +
+  geom_lm_residuals() + 
+  geom_lm_conf_int() +
+  geom_lm_pred_int() + 
+  geom_lm_intercept() + 
+  geom_lm_intercept_label() +
+  geom_lm_formula() + 
+  labs(caption = "R Core Team (2025) datasets")
+} |>
+  codehover::ch_hover()
+
+
+# {ggplot(data_haircuts) + 
+#   ggchalkboard::theme_chalkboard() +
+#   labs(title = "Haircuts 🪙 differ by sex 💇💇🏽‍♀️") +
+#   aes(x = price) + 
+#   geom_rug() +
+#   geom_stacks() + 
+#   geom_support() + 
+#   geom_mean() + 
+#   geom_mean_label() +
+#   facet_align(sex) + 
+#   geom_mean_diff() + 
+#   geom_mean_diff_label()
+#   
+#   ggplot(data_haircuts) + 
+#     ggchalkboard::theme_chalkboard() +
+#     labs(title = "Haircuts 🪙 differ by sex 💇💇🏽‍♀️")+
+#     aes(outcome = price, sample = sex) + 
+#     geom_tdist_null_two_sample()
+# } |>
+#   codehover::ch_hover()
+
+```
+
+------------------------------------------------------------------------
+
+So the motivation today, is to show you some ggplot2 extension moves -
+but also to think about how we can create new vocabulary to *write down*
+the statistical narratives that we are telling all the time - be it in
+the classroom or elsewhere - with greater precision and using new
+bespoke vocabulary (functions) if needed.
+
+------------------------------------------------------------------------
+
+Isn't this like a lot of effort to be able to 'write down a statistical
+poem' something down?
+
+Why don't we just have students use base ggplot2, and do the
+wrangling/calculations by hand?
+
+> Some instructors may train students in using a specific software
+> package, but *mastery of advanced programming skills should not be
+allowed to crowd out data analysis skills or statistical thinking.*
+
+------------------------------------------------------------------------
+
+> Mastry of the minutia of ggplot2 and data manipulation and should not
+> be allowed to crowd out statistical thinking.
+
+------------------------------------------------------------------------
+
+Leland McInnes' (UMAP dimentionality reduction technique) red star...
+
+> necessarily particular details of how any given technique works so
+> that means I'm going to introduce a little bit of extra notation which
+> is gonna be really useful repeatedly and that's the red star. So
+> sometimes technical details
+
+really really matter but they're not worth getting into because by the
+time you've explained all the technical details you have lost the point
+of what you are trying to explain in the first place so if I just want
+the big picture idea 1:22 and there are some technical details that make
+that statement not technically true but morally it's the right thing
+
+> the goldilocks situation: Write it, and don't loose the train of
+> thought by bespoke packages like ggprop.test, ggt.test. ggols...
+
+------------------------------------------------------------------------
+
+Huge audiences:
+
+1000 cadets every year...
+
+EAPOST - network of 600 instructors...
+
+100000 AP stats high school students per year
+
+--
+
+
 # Epic poems... + aes() + geom\_?() + ggplyr::layers_wipe()
 
 But allowing aesthetic mappings to be expressed independently, and given
@@ -522,7 +750,7 @@ No logical leaps!
 
 ![](images/clipboard-816719924.png)
 
-![](images/clipboard-914984770.png){width="347"}
+![Circlepack, swarm poem](images/clipboard-914984770.png){width="347"}
 
 Let's have a look at "Visualizing Why Yesterdays Stock Market Reversal Was So Weird and Unnerving" by David Crowther. This is an 'epic graphical poem'.  And yet, the fact that it's not making logical leaps means that we are often just a grammar of graphics 'move' away from the next plot that he builds.
 
@@ -627,226 +855,9 @@ analysis? Concise, *in-sequence*, trains-of-thought. *Transcription...*
 
 ![](images/clipboard-3789389711.png)
 
-# Long form poems... Transcribing statistical narratives...
 
-Extension and statistical narratives ...
+# Who are the ggplot2 extenders (in graphical poems?)
 
-2020: Stats instructor teaching "Introduction to Statistical
-Investigations"
-
-![](images/clipboard-1158971453.png)
-
-loved,
-
---
-
-but... missed coded workflow (there was some, but less that I'd have
-liked)
-
-There's something really grounding (and powerful? 3400 to 3100 BCE)
-about going back to a code narrative, being able to review the steps of
-what you did.
-
-(quotes from Winston, Paul)
-
-> You know people were doing their statistics most of the people in my
-> department were using SPSS um and I found that very confusing SPSS you
-> know quote syntax um where they it provides some code to do your
-> analysis, you'd um you know you'd bring in your data and you'd um you
-> click some buttons and you'd check some boxes for turning
-
-------------------------------------------------------------------------
-
-> Some instructors may train students in using a specific software
-> package, but mastery of advanced programming skills should not be
-> allowed to crowd out data analysis skills or statistical thinking.
-
-------------------------------------------------------------------------
-
-Could we have the best of both worlds?
-
-> 'Schreiben ist wichtig'... Writing is important - Herr Heineke
-
-So writing things down in code, with a set of functions crafted for the
-task, with just give you just the right amount of friction. Slow you
-down just enough to
-
-------------------------------------------------------------------------
-
-Could we do what we were doing on *chalkboards* (love a chalk board!!
-analogue gold standard), but also do that w/ code, consistent w/ the
-touch of ggplot2 students were learning anyway, and code that would
-serve the concepts being learned instead of shoehorning functions around
-the statistical narrative.
-
-------------------------------------------------------------------------
-
-Chalkboard version went like this...
-
-```{r, echo = F}
-library(tidyverse)
-library(ggprop.test)
-library(codehover)
-
-ggchalkboard::theme_chalkboard() |> theme_set()
-
-
-{ggplot(donor_data) + 
-  labs(title = "🫀🫁Donor decisions consistent with 50/50?") +
-  aes(x = decision) + 
-  geom_stack() + 
-  geom_stack_label() +
-  geom_support() + 
-  geom_prop() + 
-  geom_prop_label() + 
-  stamp_prop(.5) + 
-  geom_binomial_null() + 
-  geom_normal_prop_null() + 
-  geom_normal_prop_null_sds() +
-  stamp_eq_norm_prop()
-} |>
-  codehover::ch_hover()
-
-
-{ggplot(dolphin_data) + 
-  labs(title = "Can 🐬Doris & 🐬Buzz communicate? 🐟🪣") +
-  aes(x = observed) + 
-  geom_stack() + 
-  geom_stack_label() +
-  geom_support() + 
-  geom_prop() + 
-  geom_prop_label() + 
-  stamp_prop(.5) + 
-  geom_binomial_null()
-} |>
-  codehover::ch_hover()
-
-
-{ggplot(scissors_data) + 
-  labs(title = "🪨📃✂️ Preference away from Scissors?") +
-  aes(x = thrown) + 
-  geom_stack() + 
-  geom_stack_label() +
-  geom_support() + 
-  geom_prop() + 
-  geom_prop_label() + 
-  stamp_prop(.333) + 
-  geom_binomial_null(prob = .333)
-} |>
-  codehover::ch_hover()
-
-library(ggt.test)
-
-
-{ggplot(data_grit_undergrad) + 
-  labs(title = "🪖😬💪🧗🏽‍♂️ Gritty as West Point Cadets?") +
-  aes(x = score) + 
-  geom_stacks() + 
-  geom_support() + 
-  geom_mean() + 
-  geom_mean_label() + 
-  stamp_mean(3.75) + # Class of 2010 mean
-  stamp_mean_label(3.75) +
-  geom_tdist_null(value = 3.75)
-} |>
-  codehover::ch_hover()
-
-library(ggxmean)
-
-{ggplot(cars) + 
-  labs(title = "🚙 Cars data lm") +
-  aes(x = speed, y = dist) + 
-  geom_point() +
-  geom_lm() +
-  geom_lm(y ~ 1) + # Null model
-  geom_lm_fitted() +
-  geom_lm_residuals() + 
-  geom_lm_conf_int() +
-  geom_lm_pred_int() + 
-  geom_lm_intercept() + 
-  geom_lm_intercept_label() +
-  geom_lm_formula()
-} |>
-  codehover::ch_hover()
-
-
-# {ggplot(data_haircuts) + 
-#   ggchalkboard::theme_chalkboard() +
-#   labs(title = "Haircuts 🪙 differ by sex 💇💇🏽‍♀️") +
-#   aes(x = price) + 
-#   geom_rug() +
-#   geom_stacks() + 
-#   geom_support() + 
-#   geom_mean() + 
-#   geom_mean_label() +
-#   facet_align(sex) + 
-#   geom_mean_diff() + 
-#   geom_mean_diff_label()
-#   
-#   ggplot(data_haircuts) + 
-#     ggchalkboard::theme_chalkboard() +
-#     labs(title = "Haircuts 🪙 differ by sex 💇💇🏽‍♀️")+
-#     aes(outcome = price, sample = sex) + 
-#     geom_tdist_null_two_sample()
-# } |>
-#   codehover::ch_hover()
-
-```
-
-------------------------------------------------------------------------
-
-So the motivation today, is to show you some ggplot2 extension moves -
-but also to think about how we can create new vocabulary to *write down*
-the statistical narratives that we are telling all the time - be it in
-the classroom or elsewhere - with greater precision and using new
-bespoke vocabulary (functions) if needed.
-
-------------------------------------------------------------------------
-
-Isn't this like a lot of effort to be able to 'write down a statistical
-poem' something down?
-
-Why don't we just have students use base ggplot2, and do the
-wrangling/calculations by hand?
-
-> Some instructors may train students in using a specific software
-> package, but *mastery of advanced programming skills should not be
-allowed to crowd out data analysis skills or statistical thinking.*
-
-------------------------------------------------------------------------
-
-> Mastry of the minutia of ggplot2 and data manipulation and should not
-> be allowed to crowd out statistical thinking.
-
-------------------------------------------------------------------------
-
-Leland McInnes' (UMAP dimentionality reduction technique) red star...
-
-> necessarily particular details of how any given technique works so
-> that means I'm going to introduce a little bit of extra notation which
-> is gonna be really useful repeatedly and that's the red star. So
-> sometimes technical details
-
-really really matter but they're not worth getting into because by the
-time you've explained all the technical details you have lost the point
-of what you are trying to explain in the first place so if I just want
-the big picture idea 1:22 and there are some technical details that make
-that statement not technically true but morally it's the right thing
-
-> the goldilocks situation: Write it, and don't loose the train of
-> thought by bespoke packages like ggprop.test, ggt.test. ggols...
-
-------------------------------------------------------------------------
-
-Huge audiences:
-
-1000 cadets every year...
-
-EAPOST - network of 600 instructors...
-
-100000 AP stats high school students per year
-
---
 
 deserve bespoke vocab that allows us to write down statistical narrative
 elegantly!
@@ -1030,7 +1041,8 @@ places_df <- tribble(~place,
         "Brazil", "Australia", 
         "South Korea", "United Kingdom", 
         "Germany", "Denmark", 
-        "Sweden", "Austria")
+        "Sweden", "Austria",
+        "Argentina")
 
 
 ggplot(data = places_df) + 
@@ -1039,7 +1051,7 @@ ggplot(data = places_df) +
   stamp_region() + 
   geom_region()' |> ggram::ggram(code = _, 
                                 title = "The places we've been:  The ggplot2 extenders meetup is about reach",
-                                subtitle = "And we'd love to reach many more people an places...",
+                                subtitle = "Are you an extender whose timezone we neet to think more about?...",
                                 widths = c(.8,1.5))
 ```
 
