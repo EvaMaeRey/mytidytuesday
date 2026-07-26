@@ -55,6 +55,10 @@ options(tidyverse.quiet = TRUE)
 So tomorrow, Data Science Lab 'easy geom recipes' thing. We'll talk
 about types of extensions, and go through a basic Stat extension.
 
+![](images/clipboard-2722169575.png)
+
+![](images/clipboard-808879079.png)
+
 And in preparing for that Isabella, Libby and I met up a few weeks ago,
 and I asked, 'could I present a few slides talking about why I think
 ggplot2 extension is important'.
@@ -64,7 +68,6 @@ monologues, it's conversation."
 
 And I think, this is, like, really a very good practice. And that's
 exactly what we are going to do tomorrow. 💯🙌🚀
-
 
 So let's write `geom_means()` together
 
@@ -76,8 +79,6 @@ The anatomy of layers like 'geom_point', 'geom_jitter', 'geom_histogram'
 
 Actually all wrap layer() function - **three underlying 'characters'**
 that specify the user-facing function
-
-
 
 ```{r}
 library(ggstamp)
@@ -105,7 +106,6 @@ three_guys_conclusing <- "We'll be defining a new *Stat* and combine it with exi
 ```
 
 <!-- ![toddlers](images/clipboard-1487881172.png) -->
-
 
 ```{r, eval = F, echo = F}
 geom_point_def <- geom_point |> deparse() |> paste(collapse = "\n")
@@ -333,8 +333,6 @@ ggram::ggram_save(file = "step4b.png", bg = "white")
 
 ```
 
-
-
 <https://evamaerey.github.io/evamaerey/report2_easy_geom_recipes.pdf>
 <https://evamaerey.github.io/easy-geom-recipes/>
 <https://has2k1.github.io/easy-geom-recipes/recipe1means.html>
@@ -375,6 +373,9 @@ Is ggplot2 can be kind-of a **transcriber** of human-data
 interactions... (if we let loose, and if we extend)
 
 > 'spontaneous language for conversation'
+
+If you've learned a foreign language (or watched a kid learn their
+native language...)
 
 <!-- > The Human Data Interaction Lab investigates visualization tools, -->
 
@@ -986,14 +987,48 @@ last_plot() +
 
 ```
 
-
 ```{r}
+library(tibble)
+library(ggregions)
+
+us_states_ref <- usmapdata::us_map() |>
+  select( 
+    state_name = full, # first variable will also be 'id' var, keep and drop
+    state_abbr = abbr, 
+    state_fips = fips,
+    geometry = geom,  # one column 'geometry' is required
+         )  
+
+# Step 2. Declare reference data
+set_regions(regions = us_states_ref)
 
 
+{tribble(~place,           ~conf,
+        "Texas",          TRUE,
+        "North Carolina", FALSE) |>
+  ggplot() + 
+  stamp_region() +
+  aes(region = place, fill = conf) + 
+  geom_region()} |> 
+  codehover::ch_hover()
 
 
 ```
 
+```{r}
+library(ggswitzerland)
+
+{ggswitzerland::muni_income_data |>
+  ggplot() + 
+  theme_map() + 
+  stamp_mountains() + 
+  aes(region = municipality) + 
+  geom_muni() + 
+  aes(fill = mean_quantiles)} |>
+  codehover::ch_hover()
+
+
+```
 
 ```{r, echo = F, fig.height=4, fig.width=6}
 library(tidyverse)
@@ -1075,10 +1110,6 @@ ggplot(data = places_df) +
                                 subtitle = "Are you an extender whose timezone we neet to think more about?...",
                                 widths = c(.8,1.5))
 ```
-
-
-
-
 
 ```{r}
 knitr::knit_exit()
