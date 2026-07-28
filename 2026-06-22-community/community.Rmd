@@ -50,6 +50,14 @@ options(tidyverse.quiet = TRUE)
 
 ------------------------------------------------------------------------
 
+New tech that supports this
+
+![](images/clipboard-3293518779.png)
+
+![](images/clipboard-606274642.png)
+
+![](images/clipboard-317090725.png)
+
 # Tomorrow - Posit's Data Science Lab...
 
 So tomorrow, Data Science Lab 'easy geom recipes' thing. We'll talk
@@ -128,6 +136,8 @@ geom_point_title <- "Can you spot 'Stat', 'Geom', 'position' in geom_point's def
 #     }
 #     g
 # }
+
+
 
 
 {ggdraft() + 
@@ -988,7 +998,7 @@ last_plot() +
 ```
 
 ```{r}
-library(tibble)
+library(tidyverse)
 library(ggregions)
 
 us_states_ref <- usmapdata::us_map() |>
@@ -1008,8 +1018,9 @@ set_regions(regions = us_states_ref)
         "North Carolina", FALSE) |>
   ggplot() + 
   stamp_region() +
-  aes(region = place, fill = conf) + 
-  geom_region()} |> 
+  aes(region = place) + 
+  geom_region() + 
+  aes(fill = conf)} |> 
   codehover::ch_hover()
 
 
@@ -1024,7 +1035,9 @@ library(ggswitzerland)
   stamp_mountains() + 
   aes(region = municipality) + 
   geom_muni() + 
-  aes(fill = mean_quantiles)} |>
+  aes(fill = mean_quantiles) + 
+  stamp_canton_boarders() + 
+  stamp_lake()} |>
   codehover::ch_hover()
 
 
