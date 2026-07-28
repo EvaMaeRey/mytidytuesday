@@ -58,7 +58,7 @@ New tech that supports this
 
 ![](images/clipboard-317090725.png)
 
-# Tomorrow - Posit's Data Science Lab...
+# Tomorrow - Posit's Data Science Lab - keep it conversational
 
 So tomorrow, Data Science Lab 'easy geom recipes' thing. We'll talk
 about types of extensions, and go through a basic Stat extension.
@@ -88,7 +88,7 @@ The anatomy of layers like 'geom_point', 'geom_jitter', 'geom_histogram'
 Actually all wrap layer() function - **three underlying 'characters'**
 that specify the user-facing function
 
-```{r}
+```{r, echo = F}
 library(ggstamp)
 library(ggplot2)
 
@@ -349,7 +349,7 @@ ggram::ggram_save(file = "step4b.png", bg = "white")
 
 ------------------------------------------------------------------------
 
-## But, I do love a monologue.
+# But, monologues have a special place in sense-making: Why even do the Posit DS Lab? Why ggplot2 extension? Why ggplot2 extenders? And in 2026?
 
 <!-- 'Make something from nothing...' -->
 
@@ -434,7 +434,7 @@ transcripts!)
 So... that was a huge monologue for someone who says they are crazy
 about conversation. 😂
 
-# Native inconsicion in ggplot2
+# Toward (more) conversational ggplot2: Native inconsicion in ggplot2
 
 ```{r, message=F, warning=F}
 library(tidyverse)
@@ -486,11 +486,11 @@ lab <- "Rosling gives full voice\nto aesthetic mappings"
   codehover::ch_hover()
 ```
 
-<!-- ![Tompkins](images/clipboard-1395142094.png) -->
+![Tompkins](images/clipboard-1395142094.png)
 
 ![Spears](images/clipboard-3450567393.png)
 
-![Co](images/clipboard-2265011233.png "Simon Cowell"){width="336"}
+![Cowell](images/clipboard-2265011233.png "Simon Cowell"){width="336"}
 
 <!-- ![](images/clipboard-3835922538.png){width="363"} -->
 
@@ -508,7 +508,7 @@ lab <- "Rosling gives full voice\nto aesthetic mappings"
 
 <!-- ![](images/clipboard-1715986762.png){width="298"} -->
 
-# Lightly wrapped inconcision: ggkids (maybe this is okay for kids)
+## Lightly wrapped inconcision: ggkids (maybe this is okay for kids)
 
 ![](images/clipboard-2663306703.png)
 
@@ -1022,9 +1022,26 @@ set_regions(regions = us_states_ref)
   geom_region() + 
   aes(fill = conf)} |> 
   codehover::ch_hover()
+```
 
+
+```{r, eval = F}
+library(snedata) # remotes::install_github("jlmelville/snedata")
+mammoth <- download_mammoth10k()
+
+
+library(ggcube)
+ggplot(mammoth, aes(X, Y, z = Z)) +
+      geom_hull_3d(method = "alpha", radius = 8, 
+                   fill = "darkred", color = "darkred") +
+      light(mode = "hsl", direction = c(-1, 1, 0), anchor = "camera") +
+      coord_3d(roll = -90, scales = "fixed", 
+               panels = "zmin", expand = FALSE) +
+      theme(axis.text = element_blank(),
+            axis.title = element_blank())
 
 ```
+
 
 ```{r}
 library(ggswitzerland)
@@ -1036,7 +1053,7 @@ library(ggswitzerland)
   aes(region = municipality) + 
   geom_muni() + 
   aes(fill = mean_quantiles) + 
-  stamp_canton_boarders() + 
+  stamp_canton_border() + 
   stamp_lake()} |>
   codehover::ch_hover()
 
