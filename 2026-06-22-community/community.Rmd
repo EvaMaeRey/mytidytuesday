@@ -101,10 +101,15 @@ And underlying `layer()` function wraps this - **three underlying
 
 -   **Geom** - a 'mark', the drawn thing... (point, bar, segment)
 
--   **Position** - 'Makes the marks dance' - Hassan Kibirige ... maybe
+-   **Position** - "Makes the marks dance" - Hassan Kibirige ... maybe
     actually a *minor* character... typically helps with overplotting
 
 -   This is also true of stat\_\*() functions!
+
+
+![Toddlers in a trench coat - ChatGPT
+interpretation](images/clipboard-1487881172.png)
+
 
 ```{r, echo = F}
 library(ggstamp)
@@ -204,8 +209,7 @@ geom_histogram
 
 <!-- ![Star Wars](images/clipboard-2827748058.png){width="364"} -->
 
-![Toddlers in a trench coat - ChatGPT
-interpretation](images/clipboard-1487881172.png)
+
 
 ## Okay! Now let's extend!
 
@@ -542,7 +546,7 @@ pooh_png <- "images/clipboard-2829397408.png"
 
 ## Lightly wrapped inconcision: ggkids (maybe this is okay for kids)
 
-![](images/clipboard-2663306703.png)
+<!-- ![](images/clipboard-2663306703.png) -->
 
 Tim Baller's Daugher...
 
@@ -783,9 +787,11 @@ mammoth_df |>
   codehover::ch_hover()
 ```
 
+### ggdims: ggplot2 but where ‘aggregation’ can be as easily handled across features (columns) as it is to aggregate across samples (rows).
 
 
-```{r}
+
+```{r, echo = F}
 {ggdims::two_clusters |>
   ggplot() + 
   aes(dim1, dim2) + 
@@ -796,6 +802,7 @@ mammoth_df |>
 
 {ggdims::two_clusters |>
   ggplot() + 
+  labs(title = "t-SNE on two clusters - vary perplexities") +
   aes(dims = dims(dim1:dim2)) + 
   geom_tsne(perplexity = 2) + 
   aes(fill = type) + 
@@ -882,14 +889,14 @@ poem' something down?
 Why don't we just have students use base ggplot2, and do the
 wrangling/calculations by hand?
 
-> Some instructors may train students in using a specific software
-> package, but *mastery of advanced programming skills should not be
-> allowed to crowd out data analysis skills or statistical thinking.*
+> # Some instructors may train students in using a specific software
+> # package, but *mastery of advanced programming skills should not be
+> # allowed to crowd out data analysis skills or statistical thinking.*
 
 ------------------------------------------------------------------------
 
-> Mastry of the minutia of ggplot2 and data manipulation and should not
-> be allowed to crowd out statistical thinking.
+> # Mastry of the minutia of ggplot2 and data manipulation and should not
+> # be allowed to crowd out statistical thinking.
 
 ------------------------------------------------------------------------
 
@@ -897,17 +904,16 @@ Leland McInnes' (UMAP dimentionality reduction technique) red star...
 
 > necessarily particular details of how any given technique works so
 > that means I'm going to introduce a little bit of extra notation which
-> is gonna be really useful repeatedly and that's the red star. So
-> sometimes technical details
+> is gonna be really useful repeatedly and that's the red star. 
 
-really really matter but they're not worth getting into because by the
-time you've explained all the technical details you have lost the point
-of what you are trying to explain in the first place so if I just want
-the big picture idea 1:22 and there are some technical details that make
-that statement not technically true but morally it's the right thing
+> ## So sometimes technical details
+> ## really really matter but they're not worth getting into because by the
+> ## time you've explained all the technical details you have lost the point
+> ## of what you are trying to explain in the first place so if I just want
+> ## the big picture idea 1:22 and there are some technical details that make
+> ## that statement not technically true but morally it's the right thing
 
-> the goldilocks situation: Write it, and don't loose the train of
-> thought by bespoke packages like ggprop.test, ggt.test. ggols...
+The goldilocks situation: Write it, and don't loose the train of thought by bespoke packages like ggprop.test, ggt.test. ggols...
 
 ------------------------------------------------------------------------
 
@@ -915,9 +921,9 @@ Huge audiences:
 
 1000 cadets every year...
 
-EAPOST - network of 600 instructors...
+EAPOST - network of 600 instructors... x20-200 students
 
-100000 AP stats high school students per year
+> 100000 AP stats high school students per year
 
 --
 
@@ -938,7 +944,7 @@ No logical leaps!
 Let's have a look at "Visualizing Why Yesterdays Stock Market Reversal
 Was So Weird and Unnerving" by David Crowther. This is an 'epic
 graphical poem'. And yet, the fact that it's not making logical leaps
-means that we are often just a grammar of graphics 'move' away from the
+means that we are often just a grammar of graphics 'move' (or a couple) away from the
 next plot that he builds.
 
 <https://sherwood.news/markets/visualizing-why-yesterdays-stock-market-reversal-was-so-weird-and-unnerving/>
@@ -1120,13 +1126,14 @@ theme_set(theme_gray())
 ```
 
 
-```{r, eval = F, echo = F}
+```{r}
 library(threejs)
 library(igraph)
 
 ggraph_to_threejs(package_author_edgelist)
+```
 
-
+```{r, eval = F, echo = F}
 ggplyr::last_plot_wipe_last() + 
   geom_node_text(aes(
     node_id = name, # just for threejs
@@ -1153,6 +1160,8 @@ last_plot() +
   geom_point(data = layer_data(), aes(x = x, y = y), shape = "|")
 
 ```
+
+### ggregions: deteministic semantic positional aesthetic mapping (like ggsql!)
 
 ```{r, echo = F}
 library(tidyverse)
