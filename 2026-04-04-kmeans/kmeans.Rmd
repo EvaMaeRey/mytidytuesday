@@ -7,26 +7,26 @@ output:
     toc: TRUE
 ---
 
-```{r setup, include=FALSE}
+```{r, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 options(tidyverse.quiet = TRUE)
 ```
 
-> The data given by x are clustered by the k-means method, which aims to partition the points into k groups such that the sum of squares from points to the assigned cluster centres is minimized. At the minimum, all cluster centres are at the mean of their Voronoi sets (the set of data points which are nearest to the cluster centre).
+<!-- > The data given by x are clustered by the k-means method, which aims to partition the points into k groups such that the sum of squares from points to the assigned cluster centres is minimized. At the minimum, all cluster centres are at the mean of their Voronoi sets (the set of data points which are nearest to the cluster centre). -->
 
-> The algorithm of Hartigan and Wong (1979) is used by default. Note that some authors use k-means to refer to a specific algorithm rather than the general method: most commonly the algorithm given by MacQueen (1967) but sometimes that given by Lloyd (1957) and Forgy (1965). The Hartigan–Wong algorithm generally does a better job than either of those, but trying several random starts (nstart \> 1) is often recommended. In rare cases, when some of the points (rows of x) are extremely close, the algorithm may not converge in the “Quick-Transfer” stage, signalling a warning (and returning ifault = 4). Slight rounding of the data may be advisable in that case.
+<!-- > The algorithm of Hartigan and Wong (1979) is used by default. Note that some authors use k-means to refer to a specific algorithm rather than the general method: most commonly the algorithm given by MacQueen (1967) but sometimes that given by Lloyd (1957) and Forgy (1965). The Hartigan–Wong algorithm generally does a better job than either of those, but trying several random starts (nstart \> 1) is often recommended. In rare cases, when some of the points (rows of x) are extremely close, the algorithm may not converge in the “Quick-Transfer” stage, signalling a warning (and returning ifault = 4). Slight rounding of the data may be advisable in that case. -->
 
-> For ease of programmatic exploration, k=1 is allowed, notably returning the center and withinss.
+<!-- > For ease of programmatic exploration, k=1 is allowed, notably returning the center and withinss. -->
 
-> Except for the Lloyd–Forgy method, k clusters will always be returned if a number is specified. If an initial matrix of centres is supplied, it is possible that no point will be closest to one or more centres, which is currently an error for the Hartigan–Wong method.
+<!-- > Except for the Lloyd–Forgy method, k clusters will always be returned if a number is specified. If an initial matrix of centres is supplied, it is possible that no point will be closest to one or more centres, which is currently an error for the Hartigan–Wong method. -->
 
 
 
-![](https://www.tidymodels.org/learn/statistics/k-means/kmeans.gif)
+<!-- ![](https://www.tidymodels.org/learn/statistics/k-means/kmeans.gif) -->
 
-## Status Quo, without ggkmeans
+<!-- ## Status Quo, without ggkmeans -->
 
-> <https://www.tidymodels.org/learn/statistics/k-means/index.html#exploratory-clustering>
+<!-- > <https://www.tidymodels.org/learn/statistics/k-means/index.html#exploratory-clustering> -->
 
 ```{r, message=F, warning=F}
 library(tidyverse)
@@ -207,7 +207,7 @@ last_plot() +
   geom_kmeans_lengths()
 ```
 
-# Specifying different numbers of centers
+<!-- # Specifying different numbers of centers -->
 
 
 ```{r}
@@ -302,7 +302,7 @@ penguins |>
 
 ```
 
-## Closing remarks, Other Relevant Work, Caveats
+<!-- ## Closing remarks, Other Relevant Work, Caveats -->
 
 
 ```{r}
@@ -315,6 +315,8 @@ compute_group_means <- function(data, scales){
               y = mean(y, rm.na = T))
   
 }
+
+
 
 
 

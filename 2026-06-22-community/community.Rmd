@@ -10,6 +10,10 @@ editor_options:
     wrap: 72
 ---
 
+> # 'Schreiben ist wichtig'... Writing is important - A german teacher
+
+![](images/clipboard-2653833580.png)
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = F, message = F, dev = "ragg_png", cache = F)
 options(tidyverse.quiet = TRUE)
@@ -58,10 +62,10 @@ New tech that supports this
 
 ![](images/clipboard-317090725.png)
 
-# Tomorrow - Posit's Data Science Lab - keep it conversational
+# 2026-07-21 - Posit's Data Science Lab X ggplot2 extenders - keeping it conversational
 
-So tomorrow, Data Science Lab 'easy geom recipes' thing. We'll talk
-about types of extensions, and go through a basic Stat extension.
+So tomorrow, Data Science Lab we'll go through an 'easy geom recipes'
+thing. And we'll debut a plotnine version!!!!!
 
 ![](images/clipboard-2722169575.png)
 
@@ -77,16 +81,30 @@ monologues, it's conversation."
 And I think, this is, like, really a very good practice. And that's
 exactly what we are going to do tomorrow. 💯🙌🚀
 
-So let's write `geom_means()` together
+## Where we are heading
 
-![](images/clipboard-4107416480.png)
+```{r, echo = F, fig.cap="Where we are heading"}
+knitr::include_graphics("a_where_to.png")
+```
 
--   A little bit of background...
+## First, A little bit of background: Anatomy of geom\_\*()s 🫁🧠🫀
 
-The anatomy of layers like 'geom_point', 'geom_jitter', 'geom_histogram'
+The anatomy of 'geom\_\*()'s like `geom_point`, `geom_jitter`,
+`geom_histogram`
 
-Actually all wrap layer() function - **three underlying 'characters'**
-that specify the user-facing function
+### Every geom\_\*() acutally contains three underlying characters!
+
+And underlying `layer()` function wraps this - **three underlying
+'characters'** to work together.\*
+
+-   **Stat** - precompute done prior to drawing (count, bin)
+
+-   **Geom** - a 'mark', the drawn thing... (point, bar, segment)
+
+-   **Position** - 'Makes the marks dance' - Hassan Kibirige ... maybe
+    actually a *minor* character... typically helps with overplotting
+
+-   This is also true of stat\_\*() functions!
 
 ```{r, echo = F}
 library(ggstamp)
@@ -112,8 +130,6 @@ three_guys_conclusing <- "We'll be defining a new *Stat* and combine it with exi
   stamp_label(label = three_guys_conclusing, size = 10)} |> 
   codehover::ch_hover()
 ```
-
-<!-- ![toddlers](images/clipboard-1487881172.png) -->
 
 ```{r, eval = F, echo = F}
 geom_point_def <- geom_point |> deparse() |> paste(collapse = "\n")
@@ -151,45 +167,47 @@ geom_point_title <- "Can you spot 'Stat', 'Geom', 'position' in geom_point's def
 
 ```
 
--   Stat - precompute done prior to drawing (count, bin)
--   Geom - a 'mark', the drawn thing... (point, bar, segment)
--   Position - actually a *minor* character - cherry on top!! 'Makes the
-    marks dance' - Hassan
+------------------------------------------------------------------------
 
-![](images/clipboard-2706483280.png){width="363"}
+`geom_point`: 1) StatIdentity, 2) GeomPoint, 3) position_identity()
 
-![](images/clipboard-2827748058.png){width="364"}
-
-![](images/clipboard-1590828862.png){width="367"}
-
-geom_point: 1) StatIdentity, 2) GeomPoint, 3) position_identity()
+<details>
 
 ```{r}
 library(ggplot2)
 geom_point
 ```
 
--   another example:
+</details>
 
-geom_jitter: 1) StatIdentity, 2) GeomPoint, 3) position_jitter()
+`geom_jitter`: 1) StatIdentity, 2) GeomPoint, 3) position_jitter()
+
+<details>
 
 ```{r}
 geom_jitter
 ```
 
-geom_histogram: 1) StatBin, 2) GeomBar, 3) position_stack()
+</details>
+
+`geom_histogram`: 1) StatBin, 2) GeomBar, 3) position_stack()
+
+<details>
 
 ```{r}
 geom_histogram
-
 ```
 
-**Step 0:** Get the job done with base ggplot2 for reference...
+</details>
 
-```{r}
-knitr::include_graphics("a_where_to.png")
+<!-- ![three bears](images/clipboard-2706483280.png){width="363"} -->
 
-```
+<!-- ![Star Wars](images/clipboard-2827748058.png){width="364"} -->
+
+![Toddlers in a trench coat - ChatGPT
+interpretation](images/clipboard-1487881172.png)
+
+## Okay! Now let's extend!
 
 ```{r, message = F, warning=F, echo = F}
 library(tidyverse)
@@ -213,13 +231,13 @@ penguins |>
         ), #<<
    color = "red", #<< 
    size = 8) #<<' |> 
-  ggram::ggram(code = _, subtitle = "Step 0. Get the job done with 'base' ggplot2.", title = "📓🧪🥽🔬 Posit DS Lab Notebook: 2026 JUL 21 - Extending ggplot2")
+  ggram::ggram(code = _, subtitle = "Step 0. Get the job done with 'base' ggplot2.", title = "📓🧪🥽🔬 Posit DS Lab Notebook: Extending ggplot2", caption = "2026 JUL 21 Reynolds, Kibirige")
 
 ggram::ggram_save(file = "step0.png", bg = "white")
 
 ```
 
-**Step 1:** Define Compute. Test
+<!-- **Step 1:** Define Compute. Test -->
 
 ```{r, echo = F}
 compute_group_means <- 
@@ -233,29 +251,29 @@ compute_group_means <-
   
 }
 
-'compute_group_means <- 
-     function(data, scales){
+'compute_group_means <-  #<<
+     function(data, scales){#<<
   
-  data |> 
-    summarise(
-      x = mean(x, na.rm = T),
-      y = mean(y, na.rm = T)
-      )
+  data |> #<<
+    summarise(#<<
+      x = mean(x, na.rm = T),#<<
+      y = mean(y, na.rm = T)#<<
+      )#<<
   
-}
+}#<<
 
 penguins |> 
   select(x = bill_len,
          y = bill_dep) |> 
-  compute_group_means()' |>
-  ggram:::ggram_df_output(code = _, subtitle = "Step 1. Define Compute. Test.", title = "📓🧪🥽🔬 Posit DS Lab Notebook: 2026 JUL 21 - Extending ggplot2")
+  compute_group_means() #<<' |>
+  ggram:::ggram_df_output(code = _, subtitle = "Step 1. Define Compute. Test.", title = "📓🧪🥽🔬 Posit DS Lab Notebook: Extending ggplot2", caption = "2026 JUL 21 Reynolds, Kibirige")
 
 ggram::ggram_save(file = "step1.png", bg = "white")
 
 
 ```
 
-**Step 2:** Define StatMeans. Test.
+<!-- **Step 2:** Define StatMeans. Test. -->
 
 ```{r, echo = F}
 StatMeans <-  #<<
@@ -288,7 +306,7 @@ ggplot(penguins) +
       size = 8
       )' |>
   ggram:::ggram(code = _, subtitle = "Step 2. Define StatMeans. Test.", 
-                title = "📓🧪🥽🔬 Posit DS Lab Notebook: 2026 JUL 21 - Extending ggplot2")
+                title = "📓🧪🥽🔬 Posit DS Lab Notebook: Extending ggplot2", caption = "2026 JUL 21 Reynolds, Kibirige")
 
 ggram::ggram_save(file = "step2.png", bg = "white")
 
@@ -307,7 +325,7 @@ ggplot(penguins) +
   aes(bill_len, bill_dep) + 
   geom_point() + 
   geom_means(size = 8) #<<' |>
-  ggram:::ggram(code = _, subtitle = "Step 4. Define user-facing function. Enjoy!", title = "📓🧪🥽🔬 Posit DS Lab Notebook: Extending ggplot2", caption = "2026 JUL 21, Reynolds, Kibirige")
+  ggram:::ggram(code = _, subtitle = "Step 3. Define user-facing function. Enjoy!", title = "📓🧪🥽🔬 Posit DS Lab Notebook: Extending ggplot2", caption = "2026 JUL 21, Reynolds, Kibirige")
 
 ggram::ggram_save(file = "step4.png", bg = "white")
 
@@ -327,8 +345,9 @@ ggram::ggram_save(file = "step4.png", bg = "white")
   geom_means(size = 8) + 
   aes(color = species) #<<' |>
   ggram:::ggram(code = _, 
-                subtitle = "Step 4.b Test out group-wise compute (for free!)", 
-                title = "📓🧪🥽🔬 Posit DS Lab Notebook: 2026 JUL 21 - Extending ggplot2", widths = c(1, .7))
+                subtitle = "Step 3.b Test out group-wise compute (it's for free!)", 
+                title = "📓🧪🥽🔬 Posit DS Lab Notebook: Extending ggplot2", caption = "2026 JUL 21 Reynolds, Kibirige", widths = c(1, .7) + 
+                  stamp_text(label = "🔬"))
 
 ggram::ggram_save(file = "step4b.png", bg = "white")
 
@@ -486,13 +505,28 @@ lab <- "Rosling gives full voice\nto aesthetic mappings"
   codehover::ch_hover()
 ```
 
-![Tompkins](images/clipboard-1395142094.png)
+<!-- ![Tompkins](images/clipboard-1395142094.png) -->
 
-![Spears](images/clipboard-3450567393.png)
+```{r, echo = F}
+spears_png <- "images/clipboard-3450567393.png"
+cowell_png <- "images/clipboard-2265011233.png"
+tompkins_png <- "images/clipboard-1395142094.png"
+pooh_png <- "images/clipboard-2829397408.png"
 
-![Cowell](images/clipboard-2265011233.png "Simon Cowell"){width="336"}
+{ggplot() + 
+  stamp_png(png = spears_png) +
+  stamp_png(png = cowell_png) + 
+  stamp_png(png = tompkins_png) + 
+  stamp_label(label = "🤷‍♀️", size = 20) + 
+  stamp_png(png = pooh_png)} |> 
+  codehover::ch_hover()
+```
 
-<!-- ![](images/clipboard-3835922538.png){width="363"} -->
+<!-- ![Spears](images/clipboard-3450567393.png) -->
+
+<!-- ![Cowell](images/clipboard-2265011233.png "Simon Cowell"){width="336"} -->
+
+<!-- ![Susan](images/clipboard-3835922538.png){width="363"} -->
 
 ------------------------------------------------------------------------
 
@@ -500,11 +534,9 @@ lab <- "Rosling gives full voice\nto aesthetic mappings"
 
 ------------------------------------------------------------------------
 
-> # And aesthetic mapping is right at the heart to data visualization - is
->
-> it so wrong to want those decisions to get **full voice**?
+> # And aesthetic mapping is right at the heart to data visualization - so maybe giving those decisions **full voice** is actually kind of cool?
 
-![Bear of very little brain...](images/clipboard-2829397408.png)
+<!-- ![Bear of very little brain...](images/clipboard-2829397408.png) -->
 
 <!-- ![](images/clipboard-1715986762.png){width="298"} -->
 
@@ -597,13 +629,15 @@ Chalkboard version went like this...
 
 ```{r, echo = F}
 library(tidyverse)
-library(ggprop.test)
+
 library(codehover)
 
 ggchalkboard::theme_chalkboard() |> theme_set()
 
 
-{ggplot(donor_data) + 
+{library(ggprop.test)
+  
+ggplot(donor_data) + 
   labs(title = "🫀🫁Donor Y/N response 50/50?") +
   aes(x = decision) + 
   geom_stack() + 
@@ -621,7 +655,9 @@ ggchalkboard::theme_chalkboard() |> theme_set()
   codehover::ch_hover()
 
 
-{ggplot(dolphin_data) + 
+{library(ggprop.test)
+  
+ggplot(dolphin_data) + 
   labs(title = "Can 🐬Doris & 🐬Buzz communicate? 🐟🪣") +
   aes(x = observed) + 
   geom_stack() + 
@@ -636,8 +672,10 @@ ggchalkboard::theme_chalkboard() |> theme_set()
   codehover::ch_hover()
 
 
-{ggplot(scissors_data) + 
-  labs(title = "🪨📃✂️ Preference away from Scissors?") +
+{library(ggprop.test)
+  
+ggplot(scissors_data) + 
+  labs(title = "🪨📃✂️ Rock Paper Scissors pattern?") +
   aes(x = thrown) + 
   geom_stack() + 
   geom_stack_label() +
@@ -645,15 +683,18 @@ ggchalkboard::theme_chalkboard() |> theme_set()
   geom_prop() + 
   geom_prop_label() + 
   stamp_prop(.333) + 
+  stamp_prop_label(.333) +
   geom_binomial_null(prob = .333) + 
   labs(caption = "isi-stats.com")
 } |>
   codehover::ch_hover()
 
-library(ggt.test)
 
 
-{ggplot(data_grit_undergrad) + 
+
+{library(ggt.test)
+  
+  ggplot(data_grit_undergrad) + 
   labs(title = "🪖😬💪🧗🏽‍♂️ Gritty as West Point Cadets?") +
   aes(x = score) + 
   geom_stacks() + 
@@ -667,9 +708,11 @@ library(ggt.test)
 } |>
   codehover::ch_hover()
 
-library(ggxmean)
 
-{ggplot(cars) + 
+
+{library(ggxmean)
+  
+ggplot(cars) + 
   labs(title = "🚙 Cars data - stopping distance") +
   aes(x = speed, y = dist) + 
   geom_point() +
@@ -707,6 +750,119 @@ library(ggxmean)
 #     geom_tdist_null_two_sample()
 # } |>
 #   codehover::ch_hover()
+
+```
+
+
+```{r, child="../2026-04-04-kmeans/kmeans.Rmd", include=F}
+```
+
+Code and viz first dimensionality reduction...
+
+ggkmeans in draft stages
+
+```{r, echo = F}
+PAIR_code_umap_mammoth_url <- "https://raw.githubusercontent.com/PAIR-code/understanding-umap/refs/heads/master/raw_data/mammoth_3d.json"
+
+library(ggdims)
+
+mammoth_df <- PAIR_code_umap_mammoth_url |>
+  jsonlite::fromJSON() |>
+  as.data.frame() 
+
+{set_num_centers(4)
+  
+mammoth_df |> 
+  ggplot() + 
+  aes(x = V1, y = V2) + 
+  geom_point() +
+  geom_kmeans() +
+  geom_kmeans_lengths(linewidth = .2, 
+                      alpha = .2) + 
+  geom_kmeans_center()} |>
+  codehover::ch_hover()
+```
+
+
+
+```{r}
+{ggdims::two_clusters |>
+  ggplot() + 
+  aes(dim1, dim2) + 
+  geom_point(shape = 21) + 
+  aes(fill = type)} |> 
+  codehover::ch_hover()
+
+
+{ggdims::two_clusters |>
+  ggplot() + 
+  aes(dims = dims(dim1:dim2)) + 
+  geom_tsne(perplexity = 2) + 
+  aes(fill = type) + 
+  ggplyr::layers_wipe() +
+  geom_tsne(perplexity = 5) + 
+  ggplyr::layers_wipe() +
+  geom_tsne(perplexity = 30) + 
+  ggplyr::layers_wipe() +
+  geom_tsne(perplexity = 50)} |> 
+  codehover::ch_hover()
+```
+
+
+
+```{r, echo = F}
+{library(ggdims)
+mammoth_df |> 
+  ggplot() + 
+  aes(dims = dims(V1:V3)) + 
+  geom_pca() + 
+  ggplyr::layers_wipe() + 
+  geom_tsne() +
+  ggplyr::layers_wipe() + 
+  geom_umap()  
+} |> 
+  codehover::ch_hover()
+```
+
+
+---
+
+#  And extendersXggcube (html widgit)
+
+```{r, echo = F}
+confetti <- sample(colors(), 
+                     nrow(mammoth_df),
+                     replace = T) |> alpha(.5)
+mammoth_title <- "A Muse of ML, Max's Mammoth..."
+mammoth_subtitle <- "Max Noichl popularized mammoth data, a 3D scan of a Smithsonian \nMammoth.  ML and AI researchers have turned to it in explorations like \n'Understanding UMAP' and beyond."
+mammoth_caption <- "Visualized with {ggplot2} and {ggcube} - new on CRAN!\nData as curated by Coenen and Pearce at github.com/PAIR-code/understanding-umap"
+
+theme_set(theme_grey(paper = "darkseagreen4", ink = "lightyellow"))
+
+{library(tidyverse)
+library(ggcube)
+ggplot(data = mammoth_df) +
+  aes(x = V1) +
+  aes(y = V2) +
+  geom_point() +
+  aes(shape = I(21)) +
+  aes(fill = I(confetti)) +
+  aes(color = I("white")) +
+  aes(stroke = .2) +
+  aes(z = V3) +
+  coord_3d(ratio = c(2,1.4,1),
+           yaw = 0,
+           roll = 10,
+           pitch = 5) +
+  geom_point_3d() + 
+  labs(title = mammoth_title,
+       subtitle = mammoth_subtitle,
+       caption = mammoth_caption
+       )} |> 
+  codehover::ch_hover()
+
+
+
 
 ```
 
@@ -891,6 +1047,9 @@ analysis? Concise, *in-sequence*, trains-of-thought. *Transcription...*
 deserve bespoke vocab that allows us to write down statistical narrative
 elegantly!
 
+
+<details>
+
 ```{r}
 library(tidyverse)
 library(ggraph)
@@ -942,30 +1101,28 @@ as_tibble(tools::CRAN_package_db()) |>
   filter_out(Author == "Posit Software, PBC") |>
   filter_out(Author == "Posit, PBC") ->
 package_author_edgelist
+```
 
+</details>
 
-
+```{r, echo = F}
 theme_set(theme_gray())
 
-# network visualization
-package_author_edgelist |> 
+{package_author_edgelist |> 
   tidygraph::as_tbl_graph() |>
   mutate(is_package = name %in% vct_packages) |> 
   ggraph(layout = "kk") +
   geom_edge_link() +
   geom_node_label(aes(label = name, 
                       node_id = name, # for conversion to threejs
-                      color = is_package))
-
-package_author_edgelist |> 
-  distinct(Author) |> 
-  mutate(package = "Claude")
+                      color = is_package))} |> 
+  codehover::ch_hover()
+```
 
 
+```{r, eval = F, echo = F}
 library(threejs)
 library(igraph)
-
-
 
 ggraph_to_threejs(package_author_edgelist)
 
@@ -997,7 +1154,7 @@ last_plot() +
 
 ```
 
-```{r}
+```{r, echo = F}
 library(tidyverse)
 library(ggregions)
 
@@ -1024,17 +1181,14 @@ set_regions(regions = us_states_ref)
   codehover::ch_hover()
 ```
 
-
-```{r, eval = F}
+```{r, eval = F, echo = F}
 library(snedata) # remotes::install_github("jlmelville/snedata")
 mammoth <- download_mammoth10k()
 
 
 library(ggcube)
 ggplot(mammoth, aes(X, Y, z = Z)) +
-      geom_hull_3d(method = "alpha", radius = 8, 
-                   fill = "darkred", color = "darkred") +
-      light(mode = "hsl", direction = c(-1, 1, 0), anchor = "camera") +
+      geom_point_3d() +
       coord_3d(roll = -90, scales = "fixed", 
                panels = "zmin", expand = FALSE) +
       theme(axis.text = element_blank(),
@@ -1042,8 +1196,7 @@ ggplot(mammoth, aes(X, Y, z = Z)) +
 
 ```
 
-
-```{r}
+```{r, echo = F}
 library(ggswitzerland)
 
 {ggswitzerland::muni_income_data |>
@@ -1053,11 +1206,9 @@ library(ggswitzerland)
   aes(region = municipality) + 
   geom_muni() + 
   aes(fill = mean_quantiles) + 
-  stamp_canton_border() + 
-  stamp_lake()} |>
+  stamp_canton_border(color = "grey95") + 
+  stamp_lake(fill = "lightblue")} |>
   codehover::ch_hover()
-
-
 ```
 
 ```{r, echo = F, fig.height=4, fig.width=6}
@@ -1093,10 +1244,10 @@ library(ggregions)
 
 set_regions(regions = ref_female)
 
-tribble(~ organ, ~ color,   
-        "brain",   "pink3",
-        "heart",   "darkred",
-        "stomach", "cadetblue2") |> 
+tribble(~ organ,   
+        "brain",  
+        "heart",  
+        "stomach") |> 
   ggplot() + 
   stamp_region(alpha = .001) +
   aes(region = organ,
@@ -1136,7 +1287,7 @@ ggplot(data = places_df) +
       fill = I("steelblue4")) + 
   stamp_region() + 
   geom_region()' |> ggram::ggram(code = _, 
-                                title = "The places we've been:  The ggplot2 extenders meetup is about reach",
+                                title = "The places we've been:  The ggplot2 extenders meetup's people hail from around the world",
                                 subtitle = "Are you an extender whose timezone we neet to think more about?...",
                                 widths = c(.8,1.5))
 ```

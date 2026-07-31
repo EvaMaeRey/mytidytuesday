@@ -1,0 +1,128 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+library(ggplot2)
+library(patchwork)
+
+# =====================================================================
+# BUSINESS CARD SHEET LAYOUT
+# Defaults below match the most common perforated sheet layout
+# (Avery 5371 / 28371 / 8371 and most "10-up" business card stock):
+#   - US Letter page: 8.5 x 11 in
+#   - 10 cards per sheet: 2 columns x 5 rows
+#   - each card: 3.5 x 2 in
+#   - margins: 0.75 in left/right, 0.5 in top/bottom
+# If your brand of card stock differs, just change these numbers —
+# everything else derives from them.
+# =====================================================================
+
+page_width   <- 8.5   # in
+page_height  <- 11    # in
+card_width   <- 3.5   # in
+card_height  <- 2     # in
+ncol_cards   <- 2
+nrow_cards   <- 5
+left_margin  <- 0.75  # in
+top_margin   <- 0.5   # in
+
+# sanity check: grid + margins should equal the page exactly
+stopifnot(abs((ncol_cards * card_width + 2 * left_margin) - page_width)  < 1e-6)
+stopifnot(abs((nrow_cards * card_height + 2 * top_margin) - page_height) < 1e-6)
+
+# =====================================================================
+# YOUR SUBPLOTS — replace make_plot() with your real plotting code.
+# Each plot should be "clean" (theme_void or minimal theme, no titles
+# that will get clipped) since it will be squeezed into a 3.5 x 2 card.
+# =====================================================================
+
+make_plot <- function(i) {
+  set.seed(i)
+  df <- data.frame(x = rnorm(40), y = rnorm(40))
+  ggplot(df, aes(x, y)) +
+    geom_point(size = 1, color = "steelblue") +
+    theme_void() +
+    theme(plot.margin = margin(4, 4, 4, 4)) +
+    labs(title = paste("Card", i)) +
+    theme(plot.title = element_text(size = 8, hjust = 0.5))
+}
+
+n_cards <- ncol_cards * nrow_cards
+plots <- lapply(seq_len(n_cards), make_plot)
+
+# =====================================================================
+# ARRANGE WITH PATCHWORK
+# =====================================================================
+
+grid <- wrap_plots(plots, ncol = ncol_cards, nrow = nrow_cards)
+
+# Push the whole grid into the page at the exact perforation margins.
+# Because ggplot/grid honor absolute units ("in"), this stays pixel-
+# perfect regardless of the output device size, as long as you save
+# at exactly page_width x page_height below.
+grid <- grid + plot_annotation(
+  theme = theme(
+    plot.margin = margin(
+      t = top_margin, r = left_margin,
+      b = top_margin, l = left_margin,
+      unit = "in"
+    )
+  )
+)
+
+# =====================================================================
+# OPTIONAL: draw faint card outlines so you can test alignment on
+# plain paper before committing to real perforated stock. Comment
+# this block out once you've confirmed alignment.
+# =====================================================================
+
+grid <- grid & theme(
+  plot.background = element_rect(colour = "grey80", linewidth = 0.3, fill = NA)
+)
+
+# =====================================================================
+# SAVE — width/height MUST equal page_width/page_height exactly.
+# =====================================================================
+
+ggsave(
+  filename = "business_card_plots.pdf",
+  plot = grid,
+  width = page_width,
+  height = page_height,
+  units = "in",
+  device = cairo_pdf   # keeps vector output crisp; falls back to pdf() if unavailable
+)
+
+# Tip: print this PDF at 100% scale / "actual size" (NOT "fit to page")
+# or the cards will drift off the perforations.
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
