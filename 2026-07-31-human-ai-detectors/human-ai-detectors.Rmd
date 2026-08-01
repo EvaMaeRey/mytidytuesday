@@ -8,6 +8,9 @@ output:
     toc: TRUE
 ---
 
+
+This is adapted from [Buzz and Doris Dolphins eval]( https://evamaerey.github.io/mytidytuesday/2026-05-04-ggttest-ggram/intro-stats-narrative.html)
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, dpi = 300, dev = "ragg_png", fig.width = 8, warning = F, message = F, echo = T)
 options(tidyverse.quiet = TRUE)
@@ -63,7 +66,7 @@ curry_bot_or_not |>
   aes(x = outcome) + 
   geom_stack() + 
   geom_stack_label() + 
-  labs(title = "Wow Katherine!! You sure are a good AI detector")
+  labs(title = "Wow K.!! You sure are a good AI detector")
 ```
 
 
@@ -74,7 +77,7 @@ last_plot() +
   annotate(geom = "text",  # using a text layer, but not looking at the data ...
            x = I(.2),
            y = I(.75),
-           label = "🤖v.🧑",
+           label = "🤖or🧑",
            angle = 25,
            size = 18)
 ```
@@ -98,7 +101,7 @@ last_plot() +
 
 ```{r}
 last_plot() + 
-  labs(title = "We're impressed with Katherine's 6/6 correct \n... but could this have happened by chance?")
+  labs(title = "We're impressed with K.'s 6/6 correct \n... but could this have happened by chance?")
 ```
 
 And by 'chance' we mean guessing, a 50-50 propensity to go to either side, no matter what Buzz and his trainer have going on.  Let's place the asserted proportion of .5 as a contrast in our figure:
