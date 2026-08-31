@@ -1,0 +1,100 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+library(ggtda)
+```
+
+## Experiment
+
+```{r}
+# generate a noisy circle
+n <- 36
+
+set.seed(0)
+t <- stats::runif(n = n, min = 0, max = 2*pi)
+
+d <- data.frame(
+  x = cos(t) + stats::rnorm(n = n, mean = 0, sd = .2),
+  y = sin(t) + stats::rnorm(n = n, mean = 0, sd = .2)
+)
+
+# plot the data
+ggplot(d, aes(x, y)) + geom_point() + coord_equal() + theme_bw()
+
+
+# choose a proximity threshold
+prox <- 2/3
+
+p_d <- ggplot(d, aes(x = x, y = y)) +
+  coord_fixed() +
+  geom_disk(radius = prox/2, fill = "aquamarine3") +
+  geom_point() +
+  theme_bw()
+
+p_sc <- ggplot(d, aes(x = x, y = y)) +
+  coord_fixed() +
+  stat_simplicial_complex(diameter = prox, fill = "darkgoldenrod") +
+  theme_bw() +
+  theme(legend.position = "none")
+
+# combine the plots
+gridExtra::grid.arrange(
+  p_d, p_sc,
+  layout_matrix = matrix(c(1, 2), nrow = 1)
+)
+
+
+set.seed(0)
+n <- 180
+t <- stats::runif(n = n, min = 0, max = 2*pi)
+d <- data.frame(
+  x = cos(t) + stats::rnorm(n = n, mean = 0, sd = .2),
+  y = sin(t) + stats::rnorm(n = n, mean = 0, sd = .2)
+)
+
+# list of cumulative point clouds
+ns <- c(12, 36, 60, 180)
+dl <- lapply(ns, function(n) d[seq(n), ])
+
+
+dg <- do.call(rbind, dl)
+dg$n <- rep(ns, vapply(dl, nrow, 0L))
+# faceted plots of cumulative simplicial complexes
+ggplot(dg, aes(x, y)) +
+  coord_fixed() +
+  facet_wrap(facets = vars(n), labeller = label_both) +
+  stat_simplicial_complex(
+    diameter = prox, dimension_max = 2L,
+    engine = "simplextree",
+    fill = "darkgoldenrod"
+  ) +
+  theme_bw() +
+  theme(legend.position = "none")
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

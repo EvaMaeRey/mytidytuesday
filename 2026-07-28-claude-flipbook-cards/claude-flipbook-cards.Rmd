@@ -79,7 +79,7 @@ plots <- lapply(seq_len(n_cards), make_plot)
 # =====================================================================
 # ARRANGE WITH PATCHWORK
 # =====================================================================
-
+library(patchwork)
 grid <- wrap_plots(plots, ncol = ncol_cards, nrow = nrow_cards)
 
 # Push the whole grid into the page at the exact perforation margins.
@@ -115,8 +115,8 @@ ggsave(
   plot = grid,
   width = page_width,
   height = page_height,
-  units = "in",
-  device = cairo_pdf   # keeps vector output crisp; falls back to pdf() if unavailable
+  units = "in"#,
+  # device = cairo_pdf   # keeps vector output crisp; falls back to pdf() if unavailable
 )
 
 # Tip: print this PDF at 100% scale / "actual size" (NOT "fit to page")

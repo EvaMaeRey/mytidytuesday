@@ -1,0 +1,99 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+# regulat histogram...
+cars |> 
+ggplot() + 
+   aes(x = dist) + 
+   geom_histogram() 
+
+# bricky histogram...
+last_plot() + 
+    aes(group = 1:nrow(cars),
+            color = I("grey"))
+
+
+library(ggplot2)
+
+compute_group_histbricks = function(data, scales, binwidth = NULL, bins = NULL, center = NULL, 
+    boundary = NULL, closed = c("right", "left"), pad = FALSE, 
+    breaks = NULL, flipped_aes = FALSE, drop = "none") {
+
+  data |> 
+    StatBin$compute_group(
+      scales = scales, binwidth = binwidth, bins = bins,
+      center = center, boundary = boundary, closed = closed,
+      pad = pad, breaks = breaks, flipped_aes = flipped_aes, drop = drop
+      ) |>
+    tidyr::uncount(count) |>
+    dplyr::mutate(count  = 1) 
+  
+  }
+
+StatBinBricks <- ggproto("StatBinBricks", 
+                         StatBin,
+                         compute_group = compute_group_histbricks)
+
+
+ggplot(cars) + 
+  aes(x = dist) + 
+  geom_histogram()
+
+
+ggplot(cars) + 
+  aes(x = dist) + 
+  statexpress::qlayer(geom = GeomBar, 
+                      stat = StatBinBricks, 
+                      position = "stack", 
+                      color = "lightgrey")
+
+ggplot(cars) + 
+  aes(x = dist) + 
+  statexpress::qlayer(geom = GeomBar, 
+                      stat = StatBinBricks, 
+                      position = "stack", 
+                      color = "lightgrey", drop = FALSE)
+
+last_plot() + 
+  aes(fill = speed > 15)
+
+last_plot() + 
+  facet_wrap(facets = vars(dist > 50),
+             ncol = 1)
+
+
+
+
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

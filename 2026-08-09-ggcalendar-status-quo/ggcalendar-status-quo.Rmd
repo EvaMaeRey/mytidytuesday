@@ -1,0 +1,43 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+library(ggcalendar)
+
+{tribble(~event,     ~date,
+        "ggcube",    "2026-08-19",
+        "ggdibbler", "2026-09-02") |> 
+  ggcalendar() + 
+  aes(date = date) +
+  geom_calendar_complete() +
+  geom_calendar_tile(alpha = .3) + 
+  aes(fill = event) +
+  geom_calendar_today() +
+  geom_calendar_strikeoff()} |>
+codehover::ch_hover()
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

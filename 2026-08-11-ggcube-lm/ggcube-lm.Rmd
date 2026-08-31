@@ -1,0 +1,137 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+library(ggcube)
+
+ggcube:::StatSmooth3D$compute_group
+
+penguins_male_adelie <- penguins |> filter(sex == "male", species == "Adelie")
+
+# penguins_male_adelie |> lm()
+
+{penguins |> 
+  ggplot() + 
+  aes(bill_len, flipper_len, z = body_mass) + 
+  coord_3d() + 
+  geom_point_3d() +
+  geom_smooth_3d(fill = NA, light = "none", method = "lm", points = T) + 
+  aes(color = species) +
+  light(direction = c(.5,0, 1))} |>
+codehover::ch_hover()
+
+
+{mountain |> 
+  ggplot() + 
+  aes(x, y, z) + 
+  coord_3d() + 
+  ggcube::geom_surface_3d() +
+  scale_fill_viridis_c() +
+  light(direction = c(-.5, 0, .8)) +
+  light(direction = c(-.5, 0, .6)) + 
+  light(direction = c(-.5, 0, .4)) + 
+  light(direction = c(-.5, 0, .2)) + 
+  light(direction = c(-.5, 0, 0)) + 
+  light(direction = c(-.5, 0, -.2)) + 
+  light(direction = c(-.5, 0, -.4)) +  
+  light(direction = c(-.5, 0, -.6)) + 
+  light(direction = c(-.5, 0, -.8)) +  
+  light(direction = c(-.5, 0, -1)) 
+  } |> 
+  codehover::ch_hover()
+
+
+```
+
+## Experiment
+
+
+```{r}
+library(tidyverse)
+
+
+to_sf_routine <- function(data){
+  
+  data |>
+  mutate(y = -y) |>
+  sf::st_as_sf(coords = c("x", "y"), agr = "constant") |>
+  group_by(id, group) |>
+  summarize(do_union = F) |> 
+  ungroup() |> 
+  group_by(id, group) |>
+  summarise() |>
+  mutate(geometry = geometry |> sf::st_cast("POLYGON")) |> 
+  mutate(geometry = geometry |> sf::st_cast("MULTIPOLYGON")) |> 
+  ungroup() 
+  
+}
+
+
+female_sf <- gganatogram::hgFemale_list[c(1:156, 180:195)] |> 
+  bind_rows() |>
+  remove_missing() |>
+  to_sf_routine() |> 
+  mutate(poly_id = row_number())
+
+# Step 1.a Prepare Data
+ref_female_sf <- female_sf |> 
+  select(organ = id, geometry)
+
+library(ggregions)
+
+# Step 1.b Declare reference data
+set_regions(regions = ref_female_sf)
+
+library(ggcube)
+
+# Step 2. plot
+tribble(~ organ, ~ color,   
+        "stomach", "cadetblue",
+        "brain",   "pink3",
+        "colon",   "darkseagreen4",
+        "lung",    "plum") |> 
+ggplot() + 
+  stamp_region(alpha = .2) +
+  aes(region = organ) +
+  geom_polygon_3d(stat = ggregion) +
+  aes(fill = I(color)) + 
+  geom_region_text() + 
+  aes(z = layer_id) +
+  coord_3d()
+
+
+relief <- raster("https://raw.githubusercontent.com/EvaMaeRey/ggswitzerland/refs/heads/main/input/02-relief-ascii.asc") %>%
+  # hide relief outside of Switzerland by masking with country borders
+  mask(country_geo) %>%
+  as("SpatialPixelsDataFrame") %>%
+  as.data.frame() %>%
+  dplyr::rename(value = `X02.relief.ascii`) |> 
+  mutate(value_01 = (value - min(value))) |>
+  mutate(value_01 = value_01/max(value_01)) |>
+  mutate(value_point6_0 = value_01 * .6) |>
+  mutate(value_point6_0 = 1 - value_point6_0 - .4)
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
