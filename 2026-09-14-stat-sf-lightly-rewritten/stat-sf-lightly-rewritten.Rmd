@@ -1,0 +1,164 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+Gonna mix and match from base ggplot2 sf world and ggregions... definitions returned here for reference.
+
+<details>
+
+```{r}
+ggplot2::geom_sf
+ggplot2::stat_sf
+ggplot2::StatSf
+ggregions::StatRegion$compute_panel
+library(ggregions)
+geom_region
+```
+
+</details>
+
+
+```{r}
+library(rlang)
+
+
+st_crs_mod <- function(ref_data){
+
+  crs <- sf::st_crs(ref_data)
+  
+  if(is.na(crs)){NULL}else{crs}
+
+}
+
+compute_panel_regions <- function (data, scales, ref_data, 
+                                   keep = NULL, drop = NULL) {
+  
+    ref_data$id <- ref_data[1][[1]]
+    
+    if (!is.null(keep)) {
+        ref_data <- dplyr::filter(ref_data, .data$id %in% keep)
+    }
+    
+    if (!is.null(drop)) {
+        ref_data <- dplyr::filter(ref_data, !(.data$id %in% drop))
+    }
+    
+    if (!is.null(ref_data)) {
+      
+      data <- data |> rename(region = geometry)
+    
+          ref_data_long <- ref_data |> 
+            mutate(across(-geometry, as.character)) |>
+            pivot_longer(cols = -c(geometry, id), 
+                         names_to = ".id_type", 
+                         values_to = "region")
+
+          # check unique in the future
+          length(ref_data_long$region) ==
+            length(unique(ref_data_long$region))
+    
+          ref_data_long <- ref_data_long |> 
+            ggplot2::StatSf$compute_panel(
+              coord = ggplot2::CoordSf) |>
+            ggplot2::StatSfCoordinates$compute_group(
+              coord = ggplot2::CoordSf)
+        
+          out <- dplyr::inner_join(ref_data_long, 
+                                   data, 
+                                   by = join_by(region)) 
+          
+          ref_data |> sf::st_drop_geometry() |>
+            inner_join(out, by = join_by(id))
+          
+    }
+    
+    else {
+      
+      ref_data <- data
+      
+        ref_data |> 
+            ggplot2::StatSf$compute_panel(coord = ggplot2::CoordSf) |>
+            ggplot2::StatSfCoordinates$compute_group(coord = ggplot2::CoordSf)
+      
+    }
+    
+}
+
+
+StatSfMod <- ggplot2::ggproto("StatSfMod", 
+                               ggplot2::Stat,
+                      compute_panel = compute_panel_regions,
+                      # required_aes = "region",
+                      default_aes = ggplot2::aes(label = ggplot2::after_stat(id),
+                                                 geometry = geometry))
+
+
+geom_sfnew <- function (mapping = aes(), data = NULL, stat = StatSfMod, position = "identity", 
+    na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ref_data = getOption("ggregions.regions", 
+        ref_data_us), ...) 
+{
+    c(layer_sf(geom = GeomSf, data = data, mapping = mapping, 
+        stat = stat, position = position, show.legend = show.legend, 
+        inherit.aes = inherit.aes, params = rlang::list2(na.rm = na.rm, 
+            ref_data = ref_data, ...)), 
+      if(!is.null(ref_data)){
+        coord_sf(crs = st_crs_mod(ref_data))
+              } else {
+                coord_sf(default = TRUE)})
+}
+
+# Step 1. Prepare reference data
+us_states_ref <- usmapdata::us_map() |>
+  select( 
+    state_name = full, # first variable will also be 'id' var, keep and drop
+    state_abbr = abbr, 
+    state_fips = fips,
+    geometry = geom # one column 'geometry' is required
+         )  
+
+
+tribble(~state, ~info,
+        "Texas", TRUE,
+        "NC",    FALSE) |>
+  ggplot() + 
+  aes(geometry = state,
+      fill = info) + 
+  geom_sfnew(ref_data = us_states_ref)
+
+
+# This not working yet and of course it should, friends 😛
+# usmapdata::us_map() |> 
+#   rename(geometry = geom) |> 
+#   ggplot() +  
+#   aes(fill = fips |> as.numeric()) + 
+#  geom_sfnew(ref_data = us_states_ref)
+
+```
+
+
+

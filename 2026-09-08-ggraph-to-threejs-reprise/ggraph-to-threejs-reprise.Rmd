@@ -1,0 +1,178 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F, dev = "ragg_png")
+options(tidyverse.quiet = TRUE)
+```
+
+This is for 2026-06-22
+
+```{r}
+library(tidyverse)
+```
+
+# tidyverse author - package edgelist from
+
+```{r}
+vct_packages <- c("dplyr", "ggplot2", "ellmer",
+                        "tidyr", "tidymodels", "recipes",
+                        "readr", "tibble", "stringr", "forcats",
+                        "purrr", "lubridate")
+
+# data cleaning
+package_author_edgelist <- 
+  as_tibble(tools::CRAN_package_db()) |>
+  filter(Package %in% vct_packages) |>
+  mutate(Author = str_replace_all(Author, ' \\[|\\]', "*" )) |>
+  select(Package, Author) |>
+  mutate(Author = map(Author, ~ str_split_1(.x,"\n"))) |>
+  unnest() |> 
+  mutate(Author = Author |> str_remove('\\*.+' )) |>
+  mutate(Author = Author |> str_trim()) |>
+  filter_out(Author |> str_detect("orcid.org")) |>
+  filter_out(Author == "Posit Software, PBC") |>
+  filter_out(Author == "Posit, PBC")
+
+head(package_author_edgelist)
+```
+
+
+#  `ggraph_to_threejs` first cut
+
+
+Notes: Some reasons why the function isn't totally robust or satisfying...
+
+- it is not easy to extract the edgelist from the ggplot object made by ggraph, therefore both the ggplot2 object and the edgelist are required.
+- the node layer is assumed to be the 2nd layer, and the visual attributes are extracted via `layer_data(i = 2, plot = plot)`
+- an additional aes node_id should be used if the label is not the same as the node name - this helps join the input edgelist to the visual attributes of the ggplot2 nodes for use in 3JS.
+
+
+
+
+
+```{r}
+library(tidyverse)
+library(ggraph)
+library(igraph)
+library(threejs)
+library(tidygraph)
+
+ggraph_to_threejs <- function(edgelist = package_author_edgelist, 
+                              plot = last_plot()){
+    
+  g <-  edgelist |> select(1:2) |> as.matrix() |> 
+    graph_from_edgelist()
+  
+  node_data <- layer_data(i = 2, plot = plot)
+  
+  graph_attr(g, "layout") <- NULL    
+    
+  node_id <- V(g) |> names()
+  
+  joined <- tibble(node_id) |> 
+    left_join(node_data, by = "node_id")
+  
+  from_list <- edgelist |> pull(1)
+  
+  V(g)$size <- joined$size/3.66
+  V(g)$shape <- joined$label
+  V(g)$color <- joined$colour
+   
+  graphjs(g = g, bg = "gray10",  
+          showLabels = T,  
+          layout = list(  
+            layout_with_fr(g, dim = 3)),  
+                    main = "")
+
+}
+
+my_edgelist <- tribble(~v1,~v2,
+        "A","B",
+        "A","C",
+        "A","D",
+        "B","C")
+
+my_edgelist |>
+  ggraph(layout = "kk") +
+  geom_edge_link() + 
+  geom_node_label(aes(
+    node_id = name, # just for threejs
+    label = name, 
+    color = name == "A"))
+  
+
+my_edgelist |>
+  ggraph_to_threejs(plot = last_plot()) #< the three js versions..
+```
+
+
+
+
+
+```{r, echo = T}
+theme_set(theme_gray())
+
+tv_tidygraph <- package_author_edgelist |> 
+  tidygraph::as_tbl_graph() |>
+  mutate(is_package = name %in% vct_packages)
+
+tv_tidygraph |> 
+  ggraph(layout = "kk") +
+  geom_edge_link() +
+  geom_node_label(aes(label = name, 
+                      node_id = name, # for conversion to threejs
+                      color = is_package))
+```
+
+
+```{r}
+library(threejs)
+library(igraph)
+
+package_author_edgelist |> 
+  ggraph_to_threejs(plot = last_plot())
+```
+
+```{r, eval = T, echo = T}
+tv_tidygraph |> 
+  ggraph(layout = "kk") +
+  geom_edge_link() + 
+  geom_node_text(aes(
+    node_id = name, # just for threejs
+    label = is_package |> ifelse("📦", "🧠"), 
+    color = is_package |> ifelse("tan", "pink") |> I()))
+  
+
+ggraph_to_threejs(package_author_edgelist)
+
+
+tv_tidygraph |> 
+  ggraph(layout = "kk") +
+  geom_edge_link() + 
+  geom_node_text(aes(
+    size = !is_package,
+    node_id = name, # just for threejs
+    label = is_package |> ifelse("📦", "🏃🏽"), 
+    color = is_package |> ifelse("tan", "tan") |> I())) + 
+  scale_size(range = c(3,8))
+
+ggraph_to_threejs(package_author_edgelist)
+```
+
+
+# reasons not to pursue extracting the edgelist??
+
+```{r}
+layer_data() |> head()
+
+last_plot() + 
+  geom_point(data = layer_data(), aes(x = x, y = y), shape = "|")
+
+```

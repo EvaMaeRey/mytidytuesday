@@ -22,36 +22,100 @@ options(tidyverse.quiet = TRUE)
 
 ```{r}
 library(tidyverse)
+knitr::opts_chunk$set(error = T)
 
 ```
 
 ## Experiment
 
 ```{r}
+library(tidyverse)
 library(ggbrat)
 library(ggplot2)
+library(ggregions)
+
 
 yeo <- load_atlas("Yeo2011_7Networks_N1000")
 
+net_names <- data.frame(names = c('Vis', 'SomMot', 'DorsAttn','SalVentAttn','Limbic', 'Cont', 'Default'),
+                    region = c("7Networks_1", "7Networks_2", "7Networks_3", "7Networks_4", "7Networks_5",
+                               "7Networks_6", "FreeSurfer_Defined_Medial_Wall" ))
+
+
+yeo$atlas |> #<<
+  left_join(net_names) 
 
 'yeo$atlas |> #<<
   mutate(row = row_number()) |>
+  left_join(net_names) |> 
   ggplot() +
   geom_sf(layout = "fixed") + #<<
-  facet_wrap(~region) + #<<
+  facet_wrap(~names) + #<<
   geom_sf(fill = "red") + #<<
   theme_void()' |> 
   ggram::ggram(code = _, title = "Exploring the Yeo brain atlas via ggbrat", 
-               subtitle = "Use `layout = 'fixed'` for reference layer")
+               subtitle = "Use `layout = 'fixed'` for reference/'ghost' layer")
 
 
-library(ggregions)
 
-set_regions(yeo$atlas)
+yeo$atlas |> #<<
+  left_join(net_names) |>
+  select(names, geometry) |> 
+  set_regions()
+
+
+tribble(~region,
+        "Vis") |>
+  ggplot() + 
+  aes(region = region) + 
+  stamp_region() + 
+  geom_region(fill = "violet")
+
 
 
 ```
 
+
+```{r}
+
+library(ggbrat)
+lobes <- load_atlas("lobes")
+ 
+lobes$atlas |> 
+  mutate(region = region |> 
+           str_remove("LOBE.") |> 
+           str_to_sentence() |> 
+           str_replace("\\.", " ")) |> 
+  select(region, geometry) |>
+  set_regions()
+  
+library(ggbrat)
+lobes <- load_atlas("lobes")
+
+lobes$atlas |> 
+  mutate(region = region |> 
+           str_remove("LOBE.") |> 
+           str_to_sentence()) |> 
+  select(region, geometry) ->
+lobes_ref
+
+  
+'
+library(ggregions)
+set_regions(lobes_ref)
+
+tribble(~region,
+        "Temporal",
+        "Limbic",
+        "Occipital")  |> 
+  ggplot() +
+  stamp_region() + 
+  aes(region = region, 
+       fill = region) + 
+  geom_region()' |> 
+  ggram::ggram(code = _, widths = c(2,1))
+
+```
 
 
 ## Closing remarks, Other Relevant Work, Caveats
