@@ -55,21 +55,22 @@ st_crs_mod <- function(ref_data){
 
 }
 
-compute_panel_regions <- function (data, scales, ref_data, 
+compute_panel_regions <- function (data, scales, ref_data = NULL, 
                                    keep = NULL, drop = NULL) {
   
-    ref_data$id <- ref_data[1][[1]]
+
+    if (!is.null(ref_data)) {
+    
+          ref_data$id <- ref_data[1][[1]]
     
     if (!is.null(keep)) {
         ref_data <- dplyr::filter(ref_data, .data$id %in% keep)
     }
-    
+
     if (!is.null(drop)) {
         ref_data <- dplyr::filter(ref_data, !(.data$id %in% drop))
     }
     
-    if (!is.null(ref_data)) {
-      
       data <- data |> rename(region = geometry)
     
           ref_data_long <- ref_data |> 
@@ -99,9 +100,7 @@ compute_panel_regions <- function (data, scales, ref_data,
     
     else {
       
-      ref_data <- data
-      
-        ref_data |> 
+        data |> 
             ggplot2::StatSf$compute_panel(coord = ggplot2::CoordSf) |>
             ggplot2::StatSfCoordinates$compute_group(coord = ggplot2::CoordSf)
       
@@ -114,13 +113,12 @@ StatSfMod <- ggplot2::ggproto("StatSfMod",
                                ggplot2::Stat,
                       compute_panel = compute_panel_regions,
                       # required_aes = "region",
-                      default_aes = ggplot2::aes(label = ggplot2::after_stat(id),
+                      default_aes = ggplot2::aes(#label = ggplot2::after_stat(id),
                                                  geometry = geometry))
 
 
 geom_sfnew <- function (mapping = aes(), data = NULL, stat = StatSfMod, position = "identity", 
-    na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ref_data = getOption("ggregions.regions", 
-        ref_data_us), ...) 
+    na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ref_data = NULL, ...) 
 {
     c(layer_sf(geom = GeomSf, data = data, mapping = mapping, 
         stat = stat, position = position, show.legend = show.legend, 
@@ -152,13 +150,23 @@ tribble(~state, ~info,
 
 
 # This not working yet and of course it should, friends 😛
-# usmapdata::us_map() |> 
-#   rename(geometry = geom) |> 
-#   ggplot() +  
-#   aes(fill = fips |> as.numeric()) + 
-#  geom_sfnew(ref_data = us_states_ref)
+usmapdata::us_map() |>
+  rename(geometry = geom) |>
+  ggplot() +
+  aes(fill = fips |> as.numeric()) +
+  geom_sfnew()
 
+usmapdata::us_map() |>
+  rename(geometry = geom) |>
+  ggplot() +
+  aes(fill = fips |> as.numeric(),
+      geometry = geometry) +
+  geom_sfnew()
+
+usmapdata::us_map() |>
+  ggplot() +
+  aes(fill = fips |> as.numeric(), 
+      geometry = geom) +
+  geom_sfnew()
 ```
-
-
 
