@@ -1,0 +1,102 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+thresshold 
+
+```{r}
+library(tidyverse)
+
+
+compute_group_high_cooks <- function (data, scales, quantile = .95, drop = NULL, add = NULL) {
+  
+    model.lm <- lm(formula = data$y ~ data$x)
+    cooks = cooks.distance(model = model.lm)
+    data[cooks > quantile(cooks, 
+        quantile), ] |> 
+      filter(!(label %in% drop)) |> 
+      bind_rows(data |> filter(label %in% add))
+}
+
+StatHighCooks <- ggproto(`_class` = "StatHighCooks", 
+                         `_inherit` = Stat,
+                         compute_group = compute_group_high_cooks)
+
+gapminder::gapminder |>
+  filter(year == 2002) |> 
+  ggplot() + 
+  aes(x = gdpPercap, 
+      y = lifeExp,
+      label = country) + 
+  geom_point() +
+  geom_text(stat = StatHighCooks,
+            hjust = "outward", vjust = "outward",
+            check_overlap = T
+            )
+
+geom_text_notable <- make_constructor(GeomText, stat = StatHighCooks, hjust = "outward", vjust = "outward", checkoverlap = T)
+
+gapminder::gapminder |>
+  filter(year == 2002) |> 
+  ggplot() + 
+  aes(x = gdpPercap, 
+      y = lifeExp,
+      label = country) + 
+  geom_point() +
+  geom_text_notable()
+
+geom_label_notable <- make_constructor(GeomLabel, stat = StatHighCooks, hjust = "outward", vjust = "outward", linewidth = 0, fill = alpha("white", .7))
+
+gapminder::gapminder |>
+  filter(year == 2002) |> 
+  ggplot() + 
+  aes(x = gdpPercap, 
+      y = lifeExp,
+      label = country) + 
+  geom_point() +
+  geom_label_notable(quantile = .93) + # current default is .95
+  scale_x_log10()
+
+gapminder::gapminder |>
+  filter(year == 2002) |> 
+  ggplot() + 
+  aes(x = gdpPercap, 
+      y = lifeExp,
+      label = country) + 
+  geom_point() +
+  geom_label_notable(quantile = .93, drop = "Zimbabwe") +
+  scale_x_log10()
+
+
+gapminder::gapminder |>
+  filter(year == 2002) |> 
+  ggplot() + 
+  aes(x = gdpPercap, 
+      y = lifeExp,
+      label = country) + 
+  geom_point() +
+  geom_label_notable(quantile = .93, drop = "Zimbabwe", add = "Argentina") +
+  scale_x_log10()
+
+
+```
+
+## Experiment
+
+```{r}
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

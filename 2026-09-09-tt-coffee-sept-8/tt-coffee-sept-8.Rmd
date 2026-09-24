@@ -35,7 +35,7 @@ country_ref_data <- rnaturalearth::countries110 |>
 
 set_regions(regions = country_ref_data)
 
-tt_object$cappuccino_index |>
+{tt_object$cappuccino_index |>
   ggplot() + 
   labs(title = "The cappuccino index: the time in minutes a barista needs to work to afford a small cappuccino in their country." |> 
          str_wrap(80)) +
@@ -44,7 +44,8 @@ tt_object$cappuccino_index |>
   geom_region() + 
   aes(fill = index) + 
   scale_fill_viridis_c(transform = "log10") + 
-  theme(panel.background = element_rect("lightblue"))
+  theme(panel.background = element_rect("lightblue"))} |> 
+  codehover::ch_hover()
 ```
 
 ## Experiment

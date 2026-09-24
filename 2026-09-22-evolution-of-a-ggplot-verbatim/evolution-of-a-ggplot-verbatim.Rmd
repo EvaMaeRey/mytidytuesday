@@ -1,0 +1,112 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+
+https://www.cedricscherer.com/2019/05/17/the-evolution-of-a-ggplot/
+
+Data cleaning... 
+
+<details>
+
+```{r}
+library(tidyverse)
+
+library(tidyverse)
+
+df_students <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-05-07/student_teacher_ratio.csv")
+
+df_world_tile <- readr::read_csv("https://gist.githubusercontent.com/maartenzam/787498bbc07ae06b637447dbd430ea0a/raw/9a9dafafb44d8990f85243a9c7ca349acd3a0d07/worldtilegrid.csv") %>% 
+  mutate(
+    ## Namibias two-digit country code is handled as `NA` - let us fix that
+    alpha.2 = if_else(name == "Namibia", "NA", alpha.2),
+    ## We are going to split "Americas" into "North America" and "Sout America"
+    region = if_else(region == "Americas", sub.region, region),
+    region = if_else(region %in% c("Northern America", "Central America", "Caribbean"), 
+                     "North America", region),
+    region = if_else(region == "Southern America", "South America", region),
+    ## to join both data sets, we need a id column
+    country_code = alpha.3
+  )
+
+df_ratios <- df_students %>% 
+  ## Let's keep only the most recent data per country
+  group_by(country, indicator) %>% 
+  filter(year == max(year)) %>% 
+  ungroup() %>% 
+  # Create `NA`s for countries which do not have any data 2012-2018
+  complete(indicator, nesting(country, country_code)) %>% 
+  ## Let's focus on primary education and keep only countries (coded by letters)
+  filter(
+    indicator == "Primary Education",
+    str_detect(country_code, "[A-Z]")
+  ) %>% 
+  ## merge with world tile map data
+  full_join(df_world_tile) %>%
+  filter(
+    !is.na(region),
+    !is.na(indicator)
+  ) %>% 
+  group_by(region) %>% 
+  mutate(student_ratio_region = median(student_ratio, na.rm = T)) %>% 
+  ungroup()
+```
+
+</details>
+
+
+```{r}
+
+{ggplot(df_ratios) +
+  aes(x = "All") + 
+  aes(y = student_ratio) +
+  geom_boxplot() +
+  aes(x = region) + 
+  aes(x = fct_reorder(region, -student_ratio_region)) +
+  coord_flip() +
+  scale_y_continuous(limits = c(0, 90)) +
+  scale_y_continuous(limits = c(0, 90), expand = c(0.02, 0.02)) +
+  labs(x = NULL) + 
+  labs(y = "Student to teacher ratio") +
+  theme(legend.position = "none") + 
+  theme(axis.title = element_text(size = 16)) + 
+  theme(axis.text.x = element_text(family = "Roboto Mono", size = 12)) + 
+  theme(panel.grid = element_blank()) +
+  ggplyr::layers_wipe() +
+  geom_point(size = 3, alpha = 0.15) +
+  geom_boxplot(color = "gray60", outlier.alpha = 0) +
+  ggplyr::layers_wipe(i = 1) +
+  geom_jitter(size = 2, alpha = 0.25, width = 0.2) + 
+  aes(color = region) + 
+  ggsci::scale_color_uchicago()} |>
+codehover::ch_hover()
+    
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
