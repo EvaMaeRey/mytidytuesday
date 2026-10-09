@@ -1,0 +1,45 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+library(ggplot2)
+p <- ggplot() + theme(plot.background = element_rect(color = "red"))
+
+library(patchwork)
+(p + p) / (p + p) / (p + p) / (p + p) / (p + p)
+
+ggsave("physical.png", width = 7, height = 10)
+
+# pretty close!
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

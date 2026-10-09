@@ -28,7 +28,34 @@ library(tidyverse)
 ## Experiment
 
 ```{r}
+library(ggregions)
 
+# Step 1 Prepare reference data set
+nc_ref <- sf::st_read(system.file("shape/nc.shp", package="sf")) |> 
+  select(county_name = NAME, 
+         county_fips = FIPS, 
+         geometry)
+
+nc_cities_ref <- maps::us.cities |> 
+  filter(country.etc == "NC") |> 
+  mutate(name = str_remove(name, " NC")) |> 
+  sf::st_as_sf(coords = c("long", "lat"), agr = "constant") |> 
+  select(name, geometry)
+
+sf::st_crs(nc_cities_ref) <-  "NAD27"
+# Step 1 Declare reference data
+set_regions(regions = nc_ref, 
+            locales = nc_cities_ref)
+
+
+nc_ref |> 
+  bind_rows(nc_cities_ref) |> 
+  tail()
+
+
+ggplot() + 
+  stamp_region() +
+  ggregions:::stamp_locale_label()
 ```
 
 

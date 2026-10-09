@@ -91,10 +91,33 @@ gapminder::gapminder |>
 
 ```
 
-## Experiment
+## Teun's pointdensity... 
 
 ```{r}
+library(ggplot2)
 
+ggplot2::stat_pointdensity
+
+gapminder::gapminder |>
+  dplyr::filter(year == 2002) |>
+  ggplot(aes(gdpPercap, lifeExp, label = country)) +
+  geom_point() +
+  stat_pointdensity(
+    geom = "text_repel",
+    method = "kde2d",
+    aes(colour = after_stat(density))
+  ) 
+
+
+
+set.seed(2022)  
+tibble(my_x = rnorm(2000),  
+       my_y = my_x + rnorm(2000)) %>%  
+  ggplot() +  
+  aes(x = my_x) +  
+  aes(y = my_y) +  
+  ggpointdensity::geom_pointdensity() +  
+  scale_color_viridis_c()
 ```
 
 

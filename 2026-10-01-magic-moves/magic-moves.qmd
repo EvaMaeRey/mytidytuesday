@@ -1,0 +1,74 @@
+---
+title: Slide-Based Magic Move Demo — Other R Plotting Packages
+format: revealjs
+revealjs-plugins:
+  - magic-move
+---
+
+## Base R Histogram - Normal {.magic-move}
+
+```{r}
+#| label: "base-hist-normal"
+#| dev: svg
+set.seed(42)
+hist(
+  rnorm(1000, mean = 0, sd = 1),
+  breaks = 20,
+  col = "steelblue",
+  border = "white",
+  main = "",
+  xlab = "x",
+  xlim = c(-5, 5),
+  ylim = c(0, 200)
+)
+```
+
+## Base R Histogram - Shifted {.magic-move}
+
+```{r}
+#| label: "base-hist-shifted"
+#| dev: svg
+set.seed(42)
+hist(
+  rnorm(1000, mean = 2, sd = 1),
+  breaks = 20,
+  col = "steelblue",
+  border = "white",
+  main = "",
+  xlab = "x",
+  xlim = c(-5, 5),
+  ylim = c(0, 200)
+)
+```
+
+## Break
+
+## Base R Scatter + Line - Slope 20 {.magic-move}
+
+```{r}
+#| label: "base-slope-20"
+#| dev: svg
+plot(
+  mtcars$mpg, mtcars$disp,
+  pch = 19, cex = 2,
+  xlim = c(10, 35), ylim = c(100, 500),
+  xlab = "mpg", ylab = "disp"
+)
+abline(a = 0, b = 20, col = "pink", lwd = 5)
+```
+
+## Base R Scatter + Line - Slope 10 {.magic-move}
+
+```{r}
+#| label: "base-slope-10"
+#| dev: svg
+plot(
+  mtcars$mpg, mtcars$disp,
+  pch = 19, cex = 2,
+  xlim = c(10, 35), ylim = c(100, 500),
+  xlab = "mpg", ylab = "disp"
+)
+abline(a = 0, b = 10, col = "pink", lwd = 5)
+```
+
+## Break

@@ -1,0 +1,221 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Some really naive chem X ggraph experiments
+
+```{r}
+library(tidyverse)
+#CH₃COCH₃
+
+# edgelist_el
+acetone_el <- tribble(~from, ~to, ~num_bonds,
+                      "C1",  "H1", 1,
+                      "C1",  "H2", 1,
+                      "C1",  "H3", 1,
+                      "C1",  "C2", 1,
+                      "C2",  "O1", 2,
+                      "C2",  "C3", 1,
+                      "C3",  "H4", 1,
+                      "C3",  "H5", 1,
+                      "C3",  "H6", 1) 
+
+library(ggraph)
+
+acetone_el |> 
+  ggraph(layout = "kk") + 
+  geom_edge_link() + 
+  geom_node_label(aes(label = name |> str_remove("\\d")))
+
+
+acetone_el |> 
+  filter(to |> str_detect("H", negate = T)) |> 
+  ggraph(layout = "kk") + 
+  geom_edge_link() + 
+  geom_node_point(size = 8) +
+  geom_node_label(aes(label = name  |> str_remove("\\d")))
+
+acetone_el |> 
+  filter(to |> str_detect("H", negate = T)) |> 
+  tidygraph::as_tbl_graph() |>
+  mutate(deg = tidygraph::centrality_degree()) |>
+  ggraph(layout = "kk") + 
+  geom_edge_link(aes(edge_width = num_bonds)) + 
+  geom_node_point(size = 9, color = "grey92", aes(alpha = deg!=2)) +
+  geom_node_text(aes(label = name |> str_remove("\\d") |> str_remove("C")))
+
+```
+
+## Looking at ggchemplot
+
+```{r}
+# Install ggchemplot from GitHub
+# remotes::install_github("JPFQueiroz/ggchemplot")
+
+library(ggchemplot)
+
+# Path to the example file
+sdf_s_adenosyl_methionine <- system.file("extdata", "SAM.sdf", 
+                         package = "ggchemplot")
+
+
+
+# Parse SDF file and generate the initial data object
+p1 <- ggchemplot1(sdf_file = sdf_s_adenosyl_methionine, 
+                  collapse_hydrogens = TRUE,
+                  paint_it_black = TRUE, 
+                  atom_size = 6, 
+                  label_size = 14,
+                  normalize = TRUE,
+                  target_bond_length = 1.5
+                  )
+
+
+
+# readLines(file_path, warn = FALSE)
+
+```
+
+
+# layer by layer (with codehover :-))
+
+```{r}
+# Plot the structure
+p2 <- p1 %>% 
+  ggchemplot2() + 
+  labs(title = expression(italic(S)*"-adenosyl-"*scriptstyle(L)*"-methionine"))
+
+p2
+
+{ggplot() + 
+  p2@layers[[1]] +
+  p2@layers[[2]] + 
+  p2@layers[[3]] + 
+  p2@layers[[4]] + 
+  p2@layers[[5]] + 
+  p2@layers[[6]] + 
+  p2@layers[[7]] + 
+  p2@layers[[8]]} |>
+  codehover::ch_hover()
+
+p2@layers
+
+
+
+```
+
+
+
+# exploratory experiments... 🙃🤷‍♀️
+
+```{r}
+library(tidyverse)
+
+# first bit of ggchemplot1
+sdf_file_to_atoms_df <- function (sdf_file, use_sdf_stereo = TRUE, title = NULL, collapse_hydrogens = FALSE, 
+    rotation = 0, flip_horizontal = FALSE, flip_vertical = FALSE, 
+    label_padding = NULL, show_atom_circles = TRUE, hide_carbon_circles = TRUE, 
+    circle_stroke = 0, show_atom_labels = TRUE, hide_carbon_labels = TRUE, 
+    bond_width = NULL, atom_size = NULL, label_size = NULL, double_bond_offset = NULL, 
+    custom_atom_colors = NULL, paint_it_black = FALSE, bond_color = "black", 
+    atom_circle_color = "transparent", H_offset = NULL, label_fontface = "plain", 
+    normalize = TRUE, target_bond_length = 1) 
+{
+    ggchemplot1(sdf_file, 
+                  collapse_hydrogens = TRUE,
+                  paint_it_black = TRUE, 
+                  atom_size = 6, 
+                  label_size = 14,
+                  normalize = TRUE,
+                  target_bond_length = 1.5
+                  )$atoms
+  
+}
+
+sdf_s_adenosyl_methionine |> 
+  sdf_file_to_atoms_df() |> 
+  ggplot() + 
+  aes(x = x, y = y, label = symbol, color = I(color)) + 
+  geom_text()
+
+sdf_file_to_bonds_df <- function(sdf_file, use_sdf_stereo = TRUE, title = NULL, collapse_hydrogens = FALSE, 
+    rotation = 0, flip_horizontal = FALSE, flip_vertical = FALSE, 
+    label_padding = NULL, show_atom_circles = TRUE, hide_carbon_circles = TRUE, 
+    circle_stroke = 0, show_atom_labels = TRUE, hide_carbon_labels = TRUE, 
+    bond_width = NULL, atom_size = NULL, label_size = NULL, double_bond_offset = NULL, 
+    custom_atom_colors = NULL, paint_it_black = FALSE, bond_color = "black", 
+    atom_circle_color = "transparent", H_offset = NULL, label_fontface = "plain", 
+    normalize = TRUE, target_bond_length = 1){
+
+   ggchemplot1(sdf_file, 
+                  collapse_hydrogens = TRUE,
+                  paint_it_black = TRUE, 
+                  atom_size = 6, 
+                  label_size = 14,
+                  normalize = TRUE,
+                  target_bond_length = 1.5
+                  )$bond_coords
+}
+
+
+sdf_s_adenosyl_methionine |> 
+  sdf_file_to_bonds_df() |> 
+  ggplot() + 
+  aes(x = x1, y = y1, xend = x2, yend = y2) + 
+  geom_segment()
+
+
+ggchem <- function(file_path){
+
+file_path |> 
+  sdf_file_to_atoms_df() |> 
+  mutate(.file_path = file_path) |> # sneak in the file path name
+  ggplot()
+  
+}
+
+geom_bonds <- function(){
+
+  geom_segment(data = . %>% .[1,".file_path"] %>% sdf_file_to_bonds_df(), 
+               mapping = aes(x = x1, y = y1, xend = x2, yend = y2),
+               inherit.aes = FALSE
+               )
+  
+}
+
+geom_atoms <- function(){
+
+  geom_text(mapping = aes(x = x, y = y, label = symbol, color = I(color)))
+  
+}
+
+
+
+
+{sdf_s_adenosyl_methionine |> 
+  ggchem() + 
+  geom_bonds() + # maybe inherit.aes false here, and then
+  geom_atoms() + 
+  theme_void()} |> 
+  codehover::ch_hover()
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
