@@ -1,0 +1,126 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+
+
+```{r}
+scale_fill_semantic <- function(data = NULL, id = NULL, fill_guide = "none", ...) {
+  rlang::check_installed("sf")
+  transform <- new_fill_transform(data, id)
+  scale <- discrete_scale(
+    aesthetics = "fill",
+    ...,
+    palette = scales::pal_identity(),
+    guide = fill_guide,
+    super = ScaleDiscreteSemantic
+  )
+  ggproto(NULL, scale, trans = transform)
+}
+
+ScaleDiscreteSemantic <- ggproto(
+  "ScaleDiscreteSemantic", ScaleDiscreteIdentity,
+  transform = function(self, x) {
+    self$trans(x)
+  }
+)
+
+new_fill_transform <- function(data, id, call = rlang::caller_call()) {
+  force(call)
+  # check_inherits(data, "sf")
+  ggplot2:::check_string(id)
+  columns <- colnames(data)
+  if (!id %in% columns) {
+    cli::cli_abort("{.arg id} must be a column in {.arg data}.", call = call)
+  }
+  geom_col <- which(names(data) == ".color")
+  if (is.integer(geom_col)) {
+    geom_col <- columns[geom_col]
+  }
+  if (!geom_col %in% columns) {
+    cli::cli_abort(
+      "{.arg data} must have a geometry column of type {.cls sfc}.",
+      call = call
+    )
+  }
+  if (identical(id, geom_col)) {
+    cli::cli_abort(
+      "{.arg id} cannot be the geometry column in {.arg data}.",
+      call = call
+    )
+  }
+  function(x) {
+    if (inherits(x, "sfc")) {
+      return(x)
+    }
+    matches <- vctrs::vec_locate_matches(x, data[[id]])
+    if (nrow(matches) < 1 || all(is.na(matches$haystack))) {
+      cli::cli_abort(
+        "No values match the {.var {id}} column in the spatial data.",
+        call = call
+      )
+    }
+    if (vctrs::vec_duplicate_any(matches$needles)) {
+      groups <- vctrs::vec_split(data[[geom_col]][matches$haystack], matches$needles)
+      vctrs::vec_c(!!!lapply(groups$val, sf::st_combine))
+    } else {
+      data[[geom_col]][matches$haystack]
+    }
+  }
+}
+
+
+# this is a placeholder, demo.  But, what would happen instead would be the translation on x to colors via an LLM tool like MALL.  
+semantic_df <- tribble(~animal, ~.color,
+                       "cat",     "goldenrod",
+                       "piglet",  "pink",
+                       "dolphin", "grey",
+                       "peacock", "blue",
+                       "dog",     "brown")
+
+tribble(~animal, ~count,
+        "cat",        1,
+        "peacock",    2,
+        "piglet",    3) |> 
+ggplot() + 
+  aes(fill = animal,
+      x = animal,
+      y = count) + 
+  geom_col()
+
+last_plot() + 
+  scale_fill_semantic(data = semantic_df, id = "animal")  #neither argument would be required...
+
+layer_data()
+
+
+last_plot() + 
+  scale_fill_semantic(data = semantic_df, id = "animal", fill_guide = "legend")
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
