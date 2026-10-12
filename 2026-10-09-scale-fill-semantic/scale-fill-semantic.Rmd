@@ -8,7 +8,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, error = T)
 options(tidyverse.quiet = TRUE)
 ```
 
@@ -25,6 +25,10 @@ library(tidyverse)
 
 ```
 
+
+# adapting the semantic positional aesthetic approach of scale_geometry() to non deterministic color translation
+
+<details>
 
 
 ```{r}
@@ -91,15 +95,19 @@ new_fill_transform <- function(data, id, call = rlang::caller_call()) {
     }
   }
 }
+```
 
 
+</details>
+
+```{r}
 # this is a placeholder, demo.  But, what would happen instead would be the translation on x to colors via an LLM tool like MALL.  
 semantic_df <- tribble(~animal, ~.color,
                        "cat",     "goldenrod",
                        "piglet",  "pink",
                        "dolphin", "grey",
                        "peacock", "blue",
-                       "dog",     "brown")
+                       "dog",     "brown")  
 
 tribble(~animal, ~count,
         "cat",        1,
@@ -116,11 +124,177 @@ last_plot() +
 
 layer_data()
 
+p <- last_plot()
+
+p <- last_plot() 
 
 last_plot() + 
   scale_fill_semantic(data = semantic_df, id = "animal", fill_guide = "legend")
+
+tribble(~animal, 
+        "cat",       
+        "peacock",   
+        "piglet",
+        "cat") |> 
+ggplot() + 
+  aes(fill = animal,
+      x = animal) + 
+  geom_bar()
+
+last_plot() + 
+  scale_fill_semantic(data = semantic_df, id = "animal") 
 ```
 
+
+
+
+For reference the code verbatim https://github.com/tidyverse/ggplot2/blob/poc_geometry_scale/R/scale-geometry.R
+
+<details>
+
+```{r}
+scale_geometry_discrete <- function(data = NULL, id = NULL, ...) {
+  check_installed("sf")
+  transform <- new_geometry_transform(data, id)
+  scale <- discrete_scale(
+    aesthetics = "geometry",
+    ...,
+    palette = pal_identity(),
+    guide = "none",
+    super = ScaleDiscreteGeometry
+  )
+  ggproto(NULL, scale, trans = transform)
+}
+
+ScaleDiscreteGeometry <- ggproto(
+  "ScaleGeometry", ScaleDiscreteIdentity,
+  transform = function(self, x) {
+    self$trans(x)
+  }
+)
+
+new_geometry_transform <- function(data, id, call = caller_call()) {
+  force(call)
+  check_inherits(data, "sf")
+  check_string(id)
+  columns <- colnames(data)
+  if (!id %in% columns) {
+    cli::cli_abort("{.arg id} must be a column in {.arg data}.", call = call)
+  }
+  geom_col <- geom_column(data)
+  if (is.integer(geom_col)) {
+    geom_col <- columns[geom_col]
+  }
+  if (!geom_col %in% columns) {
+    cli::cli_abort(
+      "{.arg data} must have a geometry column of type {.cls sfc}.",
+      call = call
+    )
+  }
+  if (identical(id, geom_col)) {
+    cli::cli_abort(
+      "{.arg id} cannot be the geometry column in {.arg data}.",
+      call = call
+    )
+  }
+  function(x) {
+    if (inherits(x, "sfc")) {
+      return(x)
+    }
+    matches <- vec_locate_matches(x, data[[id]])
+    if (nrow(matches) < 1 || all(is.na(matches$haystack))) {
+      cli::cli_abort(
+        "No values match the {.var {id}} column in the spatial data.",
+        call = call
+      )
+    }
+    if (vec_duplicate_any(matches$needles)) {
+      groups <- vec_split(data[[geom_col]][matches$haystack], matches$needles)
+      vec_c(!!!lapply(groups$val, sf::st_combine))
+    } else {
+      data[[geom_col]][matches$haystack]
+    }
+  }
+}
+```
+
+</details>
+
+
+## scale manual experiment: it feels like scale_manual() should almost handle this...? 
+
+
+
+```{r, eval = F}
+tribble(~animal, ~count,
+        "cat",        1,
+        "peacock",    2,
+        "piglet",    3) |> 
+ggplot() + 
+  aes(fill = animal,
+      x = animal,
+      y = count) + 
+  geom_col() + 
+  scale_fill_semantic(full_palette = c("green", "orange", "blue", "red", "pink"))
+
+
+
+```
+
+
+
+pseudo code - if manual would do this translation
+
+```{r}
+tribble(~animal, ~count,
+        "cat",        1,
+        "peacock",    2,
+        "piglet",    3) |> 
+ggplot() + 
+  aes(fill = animal,
+      x = animal,
+      y = count) + 
+  geom_col() + 
+  scale_fill_manual(values = function(x){x |> }) # where x is discrete value to be represented by scale
+```
+
+
+```{r}
+data <- tribble(~animal, ~count,
+        "cat",        1,
+        "peacock",    2,
+        "piglet",    3) 
+
+ggplot(data) + 
+  aes(fill = animal,
+      x = animal,
+      y = count) + 
+  geom_col() + 
+  scale_fill_manual(values = ifelse(data$animal == "piglet", "pink", 
+                                                ifelse(data$animal == "peacock", "blue",
+                                                       ifelse(data$animal == "cat", "yellow", NA))))
+
+
+tribble(~animal, ~count,
+        "cat",        1,
+        "peacock",    2,
+        "piglet",    3) |> 
+ggplot() + 
+  aes(fill = animal,
+      x = animal,
+      y = count) + 
+  geom_col() + 
+  scale_fill_manual(values = function(x){ifelse(x == "piglet", "pink", 
+                                                ifelse(x == "peacock", "blue",
+                                                       ifelse(x = "cat", "yellow", NA)))})
+
+
+
+
+
+
+
+```
 
 
 ## Closing remarks, Other Relevant Work, Caveats
