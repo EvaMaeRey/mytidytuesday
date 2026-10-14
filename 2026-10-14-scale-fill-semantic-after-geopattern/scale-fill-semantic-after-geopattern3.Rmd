@@ -1,0 +1,122 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+library(deeptime)
+
+scale_fill_geopattern <- function(na.value = "grey50", ...) {
+  discrete_scale(
+    "fill", palette = NULL, ..., na.value = na.value,
+    super = ScaleDiscreteGeoPattern
+  )
+}
+# TODO: is there a way to support colors and scaling?
+
+bigpal <- c("plum", "coral", "darkgreen", 
+     "orange", "turquoise", "black", 
+     "dimgrey", "sienna", "maroon", 
+     "beige", "chartreuse", "slateblue", "pink") 
+
+library(mall)
+options(.mall_chat = ellmer::chat_google_gemini())
+
+
+
+#' @importFrom ggplot2 ggproto ScaleDiscrete
+#' @keywords internal
+ScaleDiscreteGeoPattern <- ggproto("ScaleDiscreteGeoPattern", ScaleDiscrete,
+  map = function(self, x, limits = self$get_limits()) {
+    na_value <- if (self$na.translate) self$na.value else NA
+    # clean limits
+    limits <- limits[!is.na(limits)]
+    # if no limits, just return a bunch of NA values
+    if (length(limits) < 1) {
+      return(rep(list(na_value), length(x)))
+    }
+
+    # convert to character
+    if (is.factor(x)) {
+      x <- as.character(x)
+    }
+
+    # filter to limits
+    x[is.na(match(x, limits))] <- NA
+
+    # get patterns
+    sapply(x, function(code) {
+      if (is.na(code)) {
+        na_value
+      } else {
+        code |> 
+         llm_vec_classify(bigpal)
+        # deeptime:::geo_pattern(code)   #<<< this is the only change
+      }
+    },
+    simplify = FALSE)
+  }
+)
+
+
+tribble(~animal, ~count,
+        "cat",        1,
+        "peacock",    2,
+        "piglet",    3) |> 
+ggplot() + 
+  aes(fill = animal,
+      x = animal,
+      y = count) + 
+  geom_col() + 
+  scale_fill_geopattern()
+
+layer_data()
+
+tribble(~animal, ~count,
+        "cat",        10,
+        "peacock",    20,
+        "piglet",    30) |> 
+  uncount(count) |>
+  ggplot() + 
+  aes(fill = animal,
+      x = animal) + 
+  geom_bar() + 
+  scale_fill_geopattern()
+
+layer_data()
+
+# library(ggplot2)
+# vals <- c("101", "313", "603", "733")
+# ggplot(mpg, aes(factor(cyl), fill = vals[factor(cyl)])) +
+#   geom_bar() +
+#   scale_fill_geopattern(name = NULL)
+
+```
+
+## Experiment
+
+```{r}
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats
