@@ -1,0 +1,62 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+library(deeptime)
+library(divDyn)
+data(corals)
+
+# this is not a proper diversity curve but it gets the point across
+coral_div <- corals |> filter(stage != "") |>
+  group_by(stage) |>
+  summarise(n = n()) |>
+  mutate(stage_age = (stages$max_age[match(stage, stages$name)] +
+                        stages$min_age[match(stage, stages$name)])/2)
+
+{coral_div |> 
+ggplot() +
+  labs(title = "Number of distinct coral genus-family within stages corals from the Paleobiology Database*",
+       subtitle = "deeptime::coord_geo situates data in Triassic, Jurassic, Cretaceous, Paleogene, and Neogene") +
+  aes(x = stage_age) + 
+  aes(y = n) +
+  geom_line() + 
+  scale_x_reverse() +
+  labs(x = "Age (Ma)") +
+  labs(y = "Coral Genera") +
+  coord_geo(xlim = c(250, 0)) +
+  coord_geo(dat =  list("periods", "eras")) +
+  theme_classic(base_size = 16, 
+                paper = "grey95") + 
+  labs(caption = "*not a proper diversity curve -- for illustration purposes")} |> 
+  codehover::ch_hover()
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

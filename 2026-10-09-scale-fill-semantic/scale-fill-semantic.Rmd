@@ -33,8 +33,9 @@ library(tidyverse)
 
 ```{r}
 scale_fill_semantic <- function(data = NULL, id = NULL, fill_guide = "none", ...) {
-  rlang::check_installed("sf")
+  
   transform <- new_fill_transform(data, id)
+  
   scale <- discrete_scale(
     aesthetics = "fill",
     ...,
@@ -42,6 +43,7 @@ scale_fill_semantic <- function(data = NULL, id = NULL, fill_guide = "none", ...
     guide = fill_guide,
     super = ScaleDiscreteSemantic
   )
+  
   ggproto(NULL, scale, trans = transform)
 }
 
@@ -91,7 +93,7 @@ new_fill_transform <- function(data, id, call = rlang::caller_call()) {
       groups <- vctrs::vec_split(data[[geom_col]][matches$haystack], matches$needles)
       vctrs::vec_c(!!!lapply(groups$val, sf::st_combine))
     } else {
-      data[[geom_col]][matches$haystack]
+      data[[geom_col]][matches$haystack] |> unique()
     }
   }
 }
@@ -245,7 +247,7 @@ ggplot() +
 
 pseudo code - if manual would do this translation
 
-```{r}
+```{r, eval = F}
 tribble(~animal, ~count,
         "cat",        1,
         "peacock",    2,
@@ -294,6 +296,147 @@ ggplot() +
 
 
 
+```
+
+
+```{r}
+library(ggplot2)
+scale_discrete_translate <- function(..., aesthetics = "fill", broad_palette = colors()) {
+
+    transform <- new_fill_transform(broad_palette)
+    
+  scale <- discrete_scale(
+    aesthetics = aesthetics,
+    ...,
+    palette = pal_identity(),
+    guide = "none",
+    super = ScaleDiscreteTranslate
+  )
+  
+  ggproto(NULL, scale, trans = transform)
+  
+}
+
+ScaleDiscreteTranslate <- ggproto(
+  "ScaleDiscreteTranslate", ScaleDiscreteIdentity,
+  transform = function(self, x) {
+    self$trans(x)
+  }
+)
+
+new_geometry_transform <- function(broad_palette = colors(), call = rlang::caller_call()) {
+  force(call)
+
+
+  function(x) {
+    if (inherits(x, "sfc")) {
+      return(x)
+    }
+    
+    data <- semantic_df
+    
+    
+    matches <- vec_locate_matches(x, d)
+    if (nrow(matches) < 1 || all(is.na(matches$haystack))) {
+      cli::cli_abort(
+        "No values match the {.var {id}} column in the spatial data.",
+        call = call
+      )
+    }
+    if (vec_duplicate_any(matches$needles)) {
+      groups <- vec_split(data[[geom_col]][matches$haystack], matches$needles)
+      vec_c(!!!lapply(groups$val, sf::st_combine))
+    } else {
+      data[[geom_col]][matches$haystack]
+    }
+  }
+}
+```
+
+
+```{r}
+ggplot2:::manual_scale
+
+scale_fill_cool <- function (aesthetic = "fill", values = NULL, breaks = waiver(), name = waiver(), 
+    ..., limits = NULL, call = rlang::caller_call()) 
+{
+    call <- call %||% rlang::current_call()
+    if (rlang:::is_missing(values)) {
+        values <- ifelse(breaks == "cat", "red", "blue")
+    }
+    else {
+        force(values)
+    }
+    if (is.null(limits) && !is.null(names(values))) {
+        force(aesthetic)
+        limits <- function(x) {
+            x <- intersect(x, c(names(values), NA)) %||% character()
+            if (length(x) < 1) {
+                cli::cli_warn(paste0("No shared levels found between {.code names(values)} of the manual ", 
+                  "scale and the data's {.field {aesthetic}} values."))
+            }
+            x
+        }
+    }
+    if (is.vector(values) && is.null(names(values)) && !is_waiver(breaks) && 
+        !is.null(breaks) && !is.function(breaks)) {
+        if (length(breaks) <= length(values)) {
+            names(values) <- breaks
+        }
+        else {
+            names(values) <- breaks[seq_along(values)]
+        }
+    }
+    pal <- function(n) {
+        if (n > length(values)) {
+            cli::cli_abort("Insufficient values in manual scale. {n} needed but only {length(values)} provided.")
+        }
+        values
+    }
+    discrete_scale(aesthetic, name = name, palette = pal, breaks = breaks, 
+        limits = limits, call = call, ...)
+}
+
+
+
+tribble(~animal, ~count,
+        "cat",        1,
+        "peacock",    2,
+        "piglet",    3) |> 
+ggplot() + 
+  aes(fill = animal,
+      x = animal,
+      y = count) + 
+  geom_col() #+ 
+  # scale_fill_cool()
+
+p <- last_plot()
+
+p@scales
+
+
+tribble(~animal, ~count,
+        "cat",        1,
+        "peacock",    2,
+        "piglet",    3) |> 
+ggplot() + 
+  aes(fill = animal,
+      x = animal,
+      y = count) + 
+  geom_col() + 
+  discrete_scale(aesthetics = "fill", palette = function(x){c("red", "green","blue")})
+
+
+tribble(~animal, ~count,
+        "cat",        1,
+        "peacock",    2,
+        "piglet",    3) |> 
+ggplot() + 
+  aes(fill = animal,
+      x = animal,
+      y = count) + 
+  geom_col() + 
+  discrete_scale(aesthetics = "fill", palette = function(x){breaks; c("red", "green","blue")})
 ```
 
 
