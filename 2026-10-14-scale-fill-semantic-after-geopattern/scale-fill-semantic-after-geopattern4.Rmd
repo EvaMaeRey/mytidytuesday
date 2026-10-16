@@ -34,10 +34,10 @@ library(deeptime)
 
 geo_pattern
 
-scale_fill_geopattern <- function(na.value = "grey50", ...) {
+scale_fill_translate <- function(na.value = "grey50", ...) {
   discrete_scale(
     "fill", palette = NULL, ..., na.value = na.value,
-    super = ScaleDiscreteGeoPattern
+    super = ScaleDiscreteTranslate
   )
 }
 ```
@@ -48,7 +48,7 @@ scale_fill_geopattern <- function(na.value = "grey50", ...) {
 ```{r}
 #' @importFrom ggplot2 ggproto ScaleDiscrete
 #' @keywords internal
-ScaleDiscreteGeoPattern <- ggproto("ScaleDiscreteGeoPattern", ScaleDiscrete,
+ScaleDiscreteTranslate <- ggproto("ScaleDiscreteTranslate", ScaleDiscrete,
   map = function(self, x, limits = self$get_limits()) {
     na_value <- if (self$na.translate) self$na.value else NA
     # clean limits
@@ -92,7 +92,7 @@ ggplot() +
       x = animal,
       y = count) + 
   geom_col() + 
-  scale_fill_geopattern()
+  scale_fill_translate()
 
 layer_data()
 
@@ -105,7 +105,7 @@ tribble(~animal, ~count,
   aes(fill = animal,
       x = animal) + 
   geom_bar() + 
-  scale_fill_geopattern()
+  scale_fill_translate()
 
 layer_data()
 
