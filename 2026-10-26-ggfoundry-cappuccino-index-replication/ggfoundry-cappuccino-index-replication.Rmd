@@ -1,0 +1,114 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+library(ggfoundry)
+library(readr)
+library(dplyr)
+library(forcats)
+
+
+coffee <-
+  read_csv(
+    "https://raw.githubusercontent.com/cgoo4/ggfoundry/refs/heads/main/data-raw/cappuccino/cappuccino_index.csv",
+    show_col_types = FALSE
+  ) |>
+  arrange(desc(n)) |>
+  slice_head(n = 10) |>
+  mutate(country = fct_reorder(country, desc(index)))
+
+
+
+{coffee |>
+  ggplot() +
+  labs(title = "How much work buys a cappuccino?") +
+  theme_minimal(base_size = 12) +
+  aes(x = index, xend = 0) + 
+  labs(x = "Minutes of a barista's wages") +
+  labs(subtitle = "The ten countries with the largest café samples") +
+  aes(y = country, yend = country) + 
+  theme(panel.grid.major.y = element_blank()) +
+  labs(y = NULL) +
+  geom_segment(colour = "grey85", linewidth = 0.6) +
+  theme(panel.grid.minor = element_blank()) +
+  geom_casting(shape = "cup", size = 0.135) +
+  aes(fill = index) +
+  aes(label = index) + 
+  geom_text(nudge_x = 2.5, hjust = 0, size = 3.5) +
+  aes(color = I("#493A30")) +
+  aes(label = sprintf("%.1f", index)) +
+  scale_fill_gradient(low = "#EED8B9", high = "#A86135", guide = "none") +
+  scale_x_continuous(expand = expansion(mult = c(0.01, 0.16))) +
+  labs(caption = "Source: James Hoffmann / TidyTuesday, 8 September 2026\nSample-based country index; tips excluded.") +
+  theme(plot.title = element_text(face = "bold")) +
+  theme(plot.caption = element_text(hjust = 0)) + 
+  theme(plot.title.position = "plot",
+        plot.caption.position = "plot")
+  } |>
+  codehover::ch_hover()
+
+
+geom_casting
+
+GeomCasting
+
+
+
+df <- shapes_cast() |>
+  mutate(x = row_number(),
+         .by = set)
+
+df |> head()
+df$shape
+
+{df |>
+  ggplot() +
+  aes(x = x) + 
+  aes(y =  set) +
+  geom_text(aes(label = shape), nudge_y = -0.5, colour = "grey40", size = 3) +
+  geom_casting(size = 0.11, fill = "skyblue") +
+  aes(shape = "bowl0" |> I()) +
+  aes(shape = shape |> I()) +
+  scale_x_continuous(expand = expansion(add = 0.5)) +
+  scale_y_discrete(expand = expansion(add = c(0.7, 1.6))) +
+  labs(caption = "The quill anchors its ink contact to the plotting coordinate") +
+  theme_minimal() +
+  theme(
+    text = element_text(colour = "grey70"),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    legend.position = "none"
+  )} |>
+  codehover::ch_hover()
+```
+
+## Experiment
+
+```{r}
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

@@ -42,6 +42,8 @@ scale_fill_translate <- function(na.value = "grey50", ...) {
     super = ScaleDiscreteTranslate
   )
 }
+
+
 ```
 
 <details>
@@ -50,12 +52,16 @@ scale_fill_translate <- function(na.value = "grey50", ...) {
 ```{r}
 vec_to_vec <- function(x, to = NULL){ifelse(x == "cat", "black", "white")}
 
-translator <- function(mapped, to = NULL, table = NULL) {
-      if (is.na(mapped)) {
+vec_to_self <- function(x, to  = NULL){x}
+
+
+
+translator <- function(mapped_var, to = NULL, table = NULL, how = vec_to_self) {
+      if (is.na(mapped_var)) {
         na_value
       } else {
         if(is.null(table)){
-          mapped |> vec_to_vec(to)
+          mapped_var |> how(to)
         } else {
             # lookup routine
           }
@@ -94,12 +100,12 @@ ScaleDiscreteTranslate <- ggproto("ScaleDiscreteTranslate", ScaleDiscrete,
 </details>
 
 ```{r}
-tribble(~animal, ~count,
-        "cat",        1,
-        "peacock",    2,
-        "piglet",    3) |> 
+tribble(~animal, ~count,~color, 
+        "cat",        1, "red",
+        "peacock",    2, "green",
+        "piglet",     3, "blue") |> 
 ggplot() + 
-  aes(fill = animal,
+  aes(fill = color,
       x = animal,
       y = count) + 
   geom_col() + 
@@ -107,19 +113,48 @@ ggplot() +
 
 layer_data()
 
-tribble(~animal, ~count,
-        "cat",        10,
-        "peacock",    20,
-        "piglet",    30) |> 
+tribble(~animal, ~count, ~color, 
+        "cat",        10, "red",
+        "peacock",    20, "green",
+        "piglet",    30, "blue") |> 
   uncount(count) |>
   ggplot() + 
-  aes(fill = animal,
+  aes(fill = color,
       x = animal) + 
   geom_bar() + 
   scale_fill_translate()
 
 layer_data()
+```
 
+
+Hearing about @willgearty's scale_fill_geopattern 🙌🚀🤩🙏🙏, I wondered if this is in neighboring space. I guess all scales for me look a little bit alike, because I haven't done a ton of scale specification (I'm not color confident, which seems like a prerequisite for a lot of extension scale work).
+
+Anyway, it seems like there's a lookup table that scale_fill_geopattern uses which helps translate from numeric id (maybe name too) to pattern, and scale_geometry() translates from id to to boundaries (or other geometry like coordinates, paths)... Could we say that scale_fill_geopattern is a semantic encoder? (Can we say that of scale_geometry?)
+
+And the more non-deterministic translations discussed in #151 translators from category -> color, assisted by LLMs (maybe MALL) would have a slightly different configuration, where you'd have a vector of items (menu) from which to select from instead of a lookup table.
+
+I guess I think a scale_translate_deteministic(aesthetics = "fill, lookup_table = id_geopattern_df, etc, etc  )... would deliver the appropriate translation (as scale_fill_geopattern already does).
+
+And scale_translate_stochastic(aesthetics = "color" , to_menu =  c("olivedrab", "bisque", "saddlebrown", "plum3"), translation_method = mall::llm_vec_classify,  etc, etc   )... would 🤞 translate aes(color = c("frog", "horse")) to rendered "olivedrab" and "saddlebrown"
+
+Maybe these scales sit between scale_identity and scale_discrete, cause that their identity is informative, and the 'vanilla' discrete scale ignores pretty much strips away identity?
+
+
+
+```{r}
+# ?ggincerta
+
+
+
+```
+
+
+
+
+
+
+```
 # library(ggplot2)
 # vals <- c("101", "313", "603", "733")
 # ggplot(mpg, aes(factor(cyl), fill = vals[factor(cyl)])) +

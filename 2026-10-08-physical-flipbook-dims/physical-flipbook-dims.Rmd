@@ -29,14 +29,65 @@ library(tidyverse)
 
 ```{r}
 library(ggplot2)
-p <- ggplot() + theme(plot.background = element_rect(color = "red"))
+p <- ggplot() + theme(plot.background = element_rect(linetype = "dotted", color = "black", linewidth = .2))
 
 library(patchwork)
-(p + p) / (p + p) / (p + p) / (p + p) / (p + p)
+(p + p) / (p + p) / (p + p) / (p + p) / (p + p) 
+
+last_plot() &
+  plot_annotation(theme = theme(plot.margin = unit(c(0,0,0,0), units = "cm")))
 
 ggsave("physical.png", width = 7, height = 10)
 
+ggsave("physical1.png",plot = p, width = 7, height = 10)
+
+
 # pretty close!
+
+gapminder <- WDI::WDI(indicator = c("NY.GDP.PCAP.CD", "SP.DYN.LE00.IN", "SP.POP.TOTL"))
+
+options(scipen = 10)
+
+library(gapminder)
+library(tidyverse)
+
+gm <- gapminder::gapminder
+
+{gm |>
+  ggplot() + 
+  aes(y = lifeExp) + 
+  aes(x = gdpPercap) +
+  scale_x_log10() +
+  geom_blank(data = gm) + 
+  (gm |> filter(year == 1952)) + 
+  geom_point(alpha = .5) + 
+  aes(size = pop) +
+  scale_size(limits = c(0, 8000000000), range = c(1,20)) +
+  aes(color = country) + guides(color = "none") +
+  scale_color_manual(values = country_colors) +
+  filter(gm, year == 1957) + 
+  filter(gm, year == 1962) + 
+  filter(gm, year == 1967) + 
+  filter(gm, year == 1972) + 
+  filter(gm, year == 1977) + 
+  filter(gm, year == 1982) + 
+  filter(gm, year == 1987) + 
+  filter(gm, year == 1992) + 
+  filter(gm, year == 1997) } |> 
+  codehover::ch_hover()
+
+
+hi <- theme_gray()
+
+library(ggkids)
+
+{pets_table |> 
+  ggplot() + 
+  chart_pie()  +
+  use_color(pets) +
+  use_area(number_of_pets)} |> 
+  codehover::ch_hover()
+
 
 ```
 

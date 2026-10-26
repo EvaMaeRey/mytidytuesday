@@ -8,7 +8,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, dev = "png")
 options(tidyverse.quiet = TRUE)
 ```
 
@@ -28,7 +28,9 @@ library(tidyverse)
 ## Experiment
 
 ```{r}
-
+gapminder::gapminder |> 
+  ggplot() + 
+  aes(x = gdpPercap)
 ```
 
 

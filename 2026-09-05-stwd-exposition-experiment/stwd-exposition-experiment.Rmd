@@ -23,8 +23,28 @@ https://www.youtube.com/watch?v=uCpYUrJVZUA&t=5s via 'Effective data communicati
 ## Status Quo
 
 ```{r}
+StatCount$compute_group
+
+geom_bar
+
+
 {library(tidyverse)
-tribble(~date, ~score, ~group,
+tribble(~date, ~score,
+        "2021-09-01" |> as_date(),            rnorm(30),
+        "2021-09-01" |> as_date() + month(1), rnorm(30-5),
+        "2021-09-01" |> as_date() + month(2), rnorm(30-10),
+        "2021-09-01" |> as_date() + month(3), rnorm(30-20),
+        "2021-09-01" |> as_date() + month(4), rnorm(30-5)) |> 
+  unnest() |> 
+  ggplot() + 
+  aes(x = date, 
+      weight = ) + 
+
+```        
+   
+   
+```{r}        
+tribble(~date, ~score,        ~group,
         "2021-09-01", 30, "min",
         "2021-09-01", 50, "mean",
         "2021-09-01", 70, "max",
