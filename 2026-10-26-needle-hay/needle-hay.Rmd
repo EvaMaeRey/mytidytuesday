@@ -1,0 +1,117 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+library(tidyverse)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Experiment
+
+```{r}
+translate_unique <- function(from = c("peacock", "dolphin", "dolphin", "bat", "bat", "dog"), 
+                             lookup = data.frame(id1 = c("peacock", "dolphin", "bat"),
+                                                 id_esp = c("pavo real", "delfín", "murciélago"),
+                                                 id3 = c(   NA,    NA, "bunny"),
+                                                 .to = c("blue", "turquoise", "black")), 
+                             to_column = .to, 
+                             missing_value = "grey" |> alpha(.5)){
+  
+  from_unique <- unique(from)
+  
+  lookup_long <- lookup |> 
+    pivot_longer(cols = -{{to_column}})
+  
+  data.frame(value = from) |>
+    left_join(lookup_long, by = "value") |> 
+    pull({{to_column}}) |> 
+    replace_na(missing_value)
+  
+}
+
+translate_unique()
+
+
+tribble(~animal,
+        "dolphin",
+        "peacock",
+        "peacock",
+        "bat",
+        "dog",
+        "dog") |> 
+  ggplot() + 
+  aes(x = animal,
+      fill = animal |> translate_unique() |> I()) + 
+  geom_bar()
+
+
+us_map_ref <- usmapdata::us_map() |> rename(.to = geom)
+
+head(us_map_ref)
+
+to_state_geometry <- function(from = c("Texas"), lookup = us_map_ref, to_column = .to, missing_value = NA){
+  
+  translate_unique(from, lookup, {{to_column}}, missing_value)
+  
+}
+
+to_state_geometry()
+
+tribble(~state,
+        "Texas",
+        "Texas",
+        "North Carolina",
+        "Illinois",
+        "California",
+        "Argentina") |> 
+  count(state) |>
+  ggplot() + 
+  aes(geometry = state |> to_state_geometry()) + # no I() required...
+  geom_sf() + 
+  aes(fill = n) 
+
+```
+
+
+```{r, error = T}
+library(ggfoundry)
+
+tribble(~stuff,
+        "cup", 
+        "pumpkin",
+        "bowl0") |> 
+  ggplot() + 
+  aes(x = stuff, y = stuff) + 
+  geom_casting(fill = "steelblue1") + 
+  aes(shape = I(stuff))
+
+
+tribble(~stuff,
+        "cup", 
+        "pumpkin",
+        "bowl0") |> 
+  ggplot() + 
+  aes(x = stuff, 
+      y = stuff,
+      shape = stuff) + 
+  geom_casting(fill = "steelblue1") + 
+  scale_discrete_identity(aesthetic = "shape", guide = "legend")
+
+last_plot() + 
+  scale_shape_identity(guide = "legend")  # this error felt weird to me
+
+
+```

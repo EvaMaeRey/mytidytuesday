@@ -101,6 +101,20 @@ df$shape
     legend.position = "none"
   )} |>
   codehover::ch_hover()
+
+library(ggplot2)
+library(ggfoundry)
+
+{diamonds |>
+  ggplot() +
+  aes(x = cut) + 
+  geom_bar() +
+  geom_casting(stat = "count", 
+               fill = "skyblue") +
+  aes(shape = cut) +
+  scale_shape_manual(values = c("bowl0", "cup", "adelie", "gentoo", "takeaway"))} |>
+  codehover::ch_hover()
+ 
 ```
 
 ## Experiment
