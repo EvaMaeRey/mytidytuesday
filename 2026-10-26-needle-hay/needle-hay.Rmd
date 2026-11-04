@@ -8,7 +8,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, dev = "ragg_png")
 options(tidyverse.quiet = TRUE)
 library(tidyverse)
 ```
@@ -22,9 +22,11 @@ library(tidyverse)
 ## Experiment
 
 ```{r}
+library(tidyverse)
+
 translate_unique <- function(from = c("peacock", "dolphin", "dolphin", "bat", "bat", "dog"), 
                              lookup = data.frame(id1 = c("peacock", "dolphin", "bat"),
-                                                 id_esp = c("pavo real", "delfín", "murciélago"),
+                                                 id_sp = c("pavo real", "delfín", "murciélago"),
                                                  id3 = c(   NA,    NA, "bunny"),
                                                  .to = c("blue", "turquoise", "black")), 
                              to_column = .to, 
@@ -82,6 +84,72 @@ tribble(~state,
   aes(geometry = state |> to_state_geometry()) + # no I() required...
   geom_sf() + 
   aes(fill = n) 
+
+
+animals_emoji_lookup <- 
+  tribble(~en_animal, ~sp_animal, ~.to,
+          "peacock",  "pavo real",  "🦚", 
+          "dolphin",  "delfín",     "🐬", 
+          "bat",      "murciélago", "🦇")
+                                          
+
+to_animal_emoji <- function(from, 
+                            lookup = animals_emoji_lookup, 
+                            to_column = .to, 
+                            missing_value = "🤷‍♀️"){
+  
+  translate_unique(from, lookup, {{to_column}}, missing_value)
+  
+}
+
+
+tribble(~animal,
+        "dolphin",
+        "peacock",
+        "peacock",
+        "bat",
+        "dog",
+        "dog") |> 
+  ggplot() + 
+  aes(x = animal, y = animal,
+      shape = animal |> to_animal_emoji() |> I()) + 
+  geom_point(size = 15)
+
+
+library(tidyverse)
+library(deeptime)
+
+df_geopattern <- tibble( 
+  id_numerical = c("601", "603", "605"),
+  id_name = c("gravel1", "crossbedded gravel", "breccia1"),
+  id_name2 = c("gravel", NA, "breccia")) |> 
+  mutate(.to = purrr::map(id_numerical, deeptime::geo_pattern))
+
+
+to_geopattern <- function(from){
+  
+    translate_unique(from, lookup = df_geopattern, .to, missing_value = NA)
+
+}
+
+tribble(~material,
+        "gravel",
+        "gravel",
+        "breccia") |> 
+  ggplot() + 
+  aes(x = material) + 
+  geom_bar(color = "green") + 
+  aes(fill = material |> to_geopattern()) 
+                         
+                         
+                         
+library(ggplot2)
+library(deeptime)
+vals <- c("101", "313", "603", "733")
+ggplot(mpg, aes(factor(cyl), fill = vals[factor(cyl)])) +
+  geom_bar() +
+  scale_fill_geopattern(name = NULL)
+                         
 
 ```
 

@@ -34,7 +34,7 @@ p <- ggplot() + theme(plot.background = element_rect(linetype = "dotted", color 
 library(patchwork)
 (p + p) / (p + p) / (p + p) / (p + p) / (p + p) 
 
-last_plot() &
+last_plot() +
   plot_annotation(theme = theme(plot.margin = unit(c(0,0,0,0), units = "cm")))
 
 ggsave("physical.png", width = 7, height = 10)
@@ -62,7 +62,7 @@ gm <- gapminder::gapminder
   (gm |> filter(year == 1952)) + 
   geom_point(alpha = .5) + 
   aes(size = pop) +
-  scale_size(limits = c(0, 8000000000), range = c(1,20)) +
+  scale_size(limits = c(0, 800000000), range = c(1,20)) +
   aes(color = country) + guides(color = "none") +
   scale_color_manual(values = country_colors) +
   filter(gm, year == 1957) + 
