@@ -1,0 +1,168 @@
+---
+title: "EAPOST Invited talk: Viz- and code  introductory statistical curricula"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+EAPOST:
+
+'We are aiming for substantial impact on instruction in the art and practice of statistical thinking, aligned with the American Statistical Association's Guidelines for Assessment and Instruction in Statistics Education (GAISE) and current research on teaching and learning in statistics. '
+
+https://sites.google.com/view/eaapost/project-overview
+
+
+---
+
+> 'Some instructors may train students in using a specific software
+package, but mastery of advanced programming skills should not be allowed to crowd out
+data analysis skills or statistical thinking.' 
+
+
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+Thank you.
+
+---
+
+A little about me and teaching, viz, and programming background:
+
+- 2018-2020 - University of Denver
+- 2020-2023 - Institutional analytics and Math Intro to Statistics and Probability Instructor
+- 2022-Present - Community Organizer, founder: ggplot2 extenders meetup 
+
+---
+
+Start at the end:
+
+
+- ggprop.test
+- ggt.test
+- ggxmeans
+
+
+https://evamaerey.github.io/mytidytuesday/2026-05-04-ggttest-ggram/intro-stats-narrative.html
+
+
+```{r, warning=F, message=F}
+library(tidyverse)
+
+# remotes::install_github("EvaMaeRey/ggprop.test")
+library(ggprop.test)
+library(ggchalkboard)
+
+
+{dolphin_data |> 
+  ggplot() + 
+  labs(title = "Do Doris and Buzz Communicate 🐬🐬🐟🪣?") +
+  aes(x = observed) + 
+  geom_stack() + 
+  geom_stack_label() + 
+  geom_support() +
+  geom_prop() + 
+  geom_prop_label() + 
+  stamp_prop(.5) + 
+  stamp_prop_label(.5) + 
+  geom_binomial_null(.5) } |> 
+codehover::ch_hover()
+
+p <- dolphin_data |> 
+  ggplot() + 
+  labs(title = "Do Doris and Buzz Communicate 🐬🐬🐟🪣?") +
+  aes(x = observed) + 
+  geom_stack() + 
+  geom_stack_label() + 
+  geom_support() +
+  geom_prop() + 
+  geom_prop_label() 
+
+{ p + 
+  dolphin_data |> mutate(observed = to_synthetic(observed)) +
+  dolphin_data |> mutate(observed = to_synthetic(observed)) +
+  dolphin_data |> mutate(observed = to_synthetic(observed)) 
+} |>
+  codehover::ch_hover()
+
+
+
+{donor_data |> 
+  ggplot() + 
+  labs(title = "")
+  aes(x = decision) + 
+  geom_stack() + 
+  geom_stack_label() + 
+  geom_support() +
+  geom_prop() + 
+  geom_prop_label() + 
+  stamp_prop(.5) + 
+  stamp_prop_label(.5) + 
+  geom_binomial_null(.5) } |> 
+codehover::ch_hover()
+
+
+# remotes::install_github("EvaMaeRey/ggt.test")
+library(ggt.test)
+
+{data_grit_undergrad |>
+  ggplot() + 
+  labs(title = "As Gritty on average as West Point Cadets? 💪🪖🧗") +  
+  aes(score) + 
+  geom_rug() + 
+  geom_stacks() + 
+  geom_support() +
+  geom_mean() + 
+  geom_mean_label() + 
+  stamp_mean(3.75)  + 
+  geom_tdist_null(3.75)
+}
+
+data_haircuts |>
+  ggplot() + 
+  aes(x = price) + 
+  geom_support() + 
+  geom_rug() + 
+  geom_stacks()+
+  geom_mean() + 
+  geom_mean_label() + 
+  facet_align(sex) + 
+  geom_mean_diff() + 
+  geom_mean_diff_label()
+
+library(tidyverse)
+library(ggstats)
+Titanic |> 
+  data.frame() |> 
+  uncount(Freq) |> 
+  ggplot() + 
+  aes(y = Class,
+      alpha = Survived) + 
+  ggstats::geom_diverging(position = ggstats:::position_diverging())
+
+Titanic |> 
+  data.frame() |> 
+  uncount(Freq) |> 
+  ggplot() + 
+  aes(y = Class,
+      alpha = Survived) + 
+  ggstats::geom_diverging(position = ggstats::position_diverging())
+
+Titanic |> 
+  data.frame() |> 
+  uncount(Freq) |> 
+  ggplot() + 
+  aes(y = Class,
+      alpha = Survived) + 
+  ggstats::geom_diverging()
+
+```
+
+
+
