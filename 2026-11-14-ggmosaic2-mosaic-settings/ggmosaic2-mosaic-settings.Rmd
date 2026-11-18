@@ -1,0 +1,114 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+```{r}
+library(tidyverse)
+
+```
+
+## Experiment
+
+```{r}
+library(ggmosaic2)
+
+hair_freq <- as.data.frame(HairEyeColor)
+
+{hair_freq |>
+  ggplot() +
+  geom_mosaic(aes(weight = Freq, 
+                  x = product(Hair, Eye))) +
+  scale_fill_residual() +
+  mosaic_settings(expected = "independence") +
+  geom_mosaic_text(display_values = "residual",
+                   format_digits = 1,
+                   size = 3.5,
+                   colour = "black") +
+  labs(title = "Hair × Eye Independence Model with Residual Values",
+       subtitle = "Numbers show Pearson residuals")} |> 
+  codehover::ch_hover()
+
+
+data(titanic)
+
+ggplot(titanic, aes(x = product(Class, Sex))) +
+  mosaic_settings(
+    expected = "conditional",
+    offset = 0.005
+  ) +
+  geom_mosaic() +
+  geom_mosaic_text(display_values = "residual") +
+  scale_fill_residual() +
+  theme_mosaic()
+
+
+ggplot(data = titanic, aes(x = product(Class))) +
+  geom_mosaic() +
+  aes(fill = Survived) +
+  scale_fill_residual() 
+
+# ggplot(data = titanic, aes(x = product(Survived, Class))) +
+#   geom_mosaic() +
+#   # aes(fill = Survived) +
+#   # aes(fill = NULL) +
+#   scale_fill_residuals() 
+# 
+# ggplot(data = titanic, aes(x = product(Class, Sex))) +
+#   geom_mosaic(expected = "independence") +
+#   scale_fill_residual()
+
+
+library(ggmosaic2)
+
+
+```
+
+```{r, eval = F}
+
+library(ggplot2)
+data.frame(my_x = rnorm(2000),  
+           my_y = rnorm(2000)) |> 
+  ggplot() +  
+  aes(x = my_x) +  
+  aes(y = my_y) +  
+  ggpointdensity::geom_pointdensity() 
+
+ggpointdensity::geom_pointdensity
+
+data.frame(my_x = rnorm(2000),  
+           my_y = rnorm(2000)) |> 
+  ggplot() +  
+  aes(x = my_x) +  
+  ggforce::geom_autohistogram()
+
+
+ # Diagonal histograms
+
+library(ggplot2)
+ggplot(mpg) +
+  ggforce::geom_autopoint() + 
+  ggforce::facet_matrix(vars(drv:fl), layer.diag = 2, grid.y.diag = FALSE) +
+  ggforce::geom_autohistogram()
+
+
+ggforce::geom_autohistogram
+
+```
+
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

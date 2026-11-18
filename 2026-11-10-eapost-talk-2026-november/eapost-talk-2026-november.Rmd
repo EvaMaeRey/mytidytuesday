@@ -1,56 +1,304 @@
 ---
-title: "EAPOST Invited talk: Viz- and code  introductory statistical curricula"
-author: "Evangeline Reynolds"
-date: "`r Sys.Date()`"
+title: "EAPOST Invited talk: Verbal- and viz-first introductory statistical curricula"
+author: "Gina Reynolds"
+date: "2026-11-20"
 output: 
   html_document:
     toc: TRUE
 ---
 
+Now... Adjuncting 🤞 at DU...
+
+A little about me and teaching, viz, and programming background:
+
+-   2018-2020 - University of Denver
+-   2020-2023 - West Point
+-   2023 - present back in Denver...
+
+---
+
+-   2018-2020 - University of Denver, Visiting Teaching Assistant Professor
+
+'Can you teach a data viz graduate level class?'  George F. DeMartino, Ilene Grabel
+
+--
+
+'A ggplot2 grammar guide':
+
+![](images/clipboard-795892238.png)
+
+![](images/clipboard-3370603988.png)
+
+![](images/clipboard-2468652653.png)
+
+---
+
+-   2020-2023 - Institutional Analytics and Math Intro to Statistics and Probability Instructor, Institutional Research Data Scientist...
+
+> The text differs from traditional texts in both content and pedagogy. Statistical inference is introduced using simulation-based methods in Chapter 1. This allows students to intuitively understand the process of inference from the very beginning of their course.
+
+![](images/clipboard-2945416049.png)
+
+> 'Statistics Curricula should reveal the beautiful cathedral of Statistics.' paraphrase ... George Cobb (paraphrase)
+
+---
+
+Grounded in ...
+
+![](images/clipboard-2905805456.png)
+
+---
+
+> 'Some instructors may train students in using a specific software package, but mastery of advanced programming skills should not be allowed to crowd out data analysis skills or statistical thinking.'
+
+![](images/clipboard-2959256180.png)
+
+---
+
+*"**I just don't see how a world that makes such wonderful things could be bad."***
+
+![](images/clipboard-2506441341.png)
+
+---
+
+Can we have it all? Vis + Code + 'not crowd out statistical thinking'...
+
+---
+
+Because writing things down, feels very grounding. Having verbal expression and visual expression side by side feels like a superpower.
+
+![](images/clipboard-680630620.png)
+
+And ggplot2 has extraordinary 'write-down-narrative' capabilities
+
+Hans...
+
+Descriptive statistics...
+
+```{r echo = F, warning=F, message=F}
+library(tidyverse)
+library(ggstamp) 
+
+hans_png_path_canvas = "../2023-11-14-flipbooks-lawrence-livermore/images/hans_argument.png"
+hans_png_path_y_axis = "../2023-11-14-flipbooks-lawrence-livermore/images/hans_y_axis.png"
+hans_png_path_x_axis = "../2023-11-14-flipbooks-lawrence-livermore/images/hans_x_axis.png"
+hans_png_path_color = "../2023-11-14-flipbooks-lawrence-livermore/images/hans_colors.png"
+hans_png_path_size = "../2023-11-14-flipbooks-lawrence-livermore/images/hans_size.png"
+lab <- "Rosling gives full voice\nto aesthetic mappings"
+
+{ggplot() + 
+  stamp_png(png = hans_png_path_y_axis) +
+  stamp_png(png = hans_png_path_x_axis) + 
+  stamp_png(png = hans_png_path_color) + 
+  stamp_png(png = hans_png_path_size) + 
+  stamp_label(label = lab, size = 10)} |> 
+  codehover::ch_hover()
+```
+
+
+<https://www.youtube.com/watch?v=jbkSRLYSojo&t=37s>
+
+```{r gapminder, echo = F}
+{gapminder::gapminder |> 
+  filter(year == 2002) |> 
+  ggplot() + 
+  ggchalkboard:::theme_rosling() +
+  aes(y = lifeExp) + 
+  aes(x = gdpPercap) + 
+  geom_point() + 
+  aes(color = continent) + 
+  aes(size = pop)} |> 
+  codehover::ch_hover()
+```
+
+---
+
+ggplot2 lets us *transcribe* statistical narratives, 
+--
+visual logic, 
+--
+our trains of thought 
+
+
+---
+
+Reorg as a haiku?
+
+```{r}
+gapminder::gapminder |> 
+  filter(year == 2002) |> 
+  ggplot(aes(y = lifeExp, 
+             x = gdpPercap, 
+             color = continent, 
+             size = pop) ) + 
+  geom_point() +
+  ggchalkboard:::theme_rosling() 
+```
+
+So much is lost...
+
+
+> Temporal fidelity
+
+process preserving... 
+
+
+---
+
+A question that I'd wanted to ask ... was about this syntax...
+
+```{r}
+ggplot(cars) + 
+   aes(x = dist) + 
+   geom_histogram()
+```
+
+
+Does it still make you cringe?  Or don't care anymore?  To me, ggplot2's overlooked superpower (but I find myself still self conscious about using it).  
+
+---
+
+I still don't like it :)
+
+
+---
+
+limbic bliss
+
+```{r}
+
+library(ggregions)
+library(ggbrat)
+
+lobes <- load_atlas("lobes")
+
+lobes$atlas |> 
+  mutate(region = region |> 
+           str_remove("LOBE.") |> 
+           str_to_sentence()) |> 
+  select(region, geometry) ->
+brain_lobes_ref
+
+set_regions(brain_lobes_ref)
+
+tribble(~region,
+        "Temporal",
+        "Limbic",
+        "Occipital")  |> 
+  ggplot() +
+  stamp_region() + 
+  aes(region = region, 
+      fill = region) + 
+  geom_region() + 
+  stamp_region(keep = "Limbic",
+               fill = "gold") + 
+  labs(title = "Limbic bliss")
+
+```
+
+
+'write-down-\*statistical\*-narrative' capabilities
+
+And also some statistical tools....
+
+---
+
+But *not* as low of a level that you might need in a statistics class room....
+
+![](images/clipboard-28910671.png)
+
+Linguist S.I. Hayakawa in 1939: "Language in Action." New York: Harcourt, Brace.
+
+Where you have to connect all the ideas, and go from raw data to abstract ideas and inferential assertions. Base ggplot2 and extension I'd run across hadn't made these linkages, as *is* done by ISI book & applets —
+
+Cobb: 'For most students, their noses stay too close to the canvas, they only see *disconnected* details. '
+
+ggplot2 & extensions 2020 ladders with missing rungs for stats educators.
+
+---
+
+But: 'not crowd out statistical thinking'...
+
+---
+
+![](images/clipboard-4014439221.png)
+
+---
+
+-   2022-Present - Community Organizer, co-founder: ggplot2 extenders meetup
+
+![](images/clipboard-2441019922.png)
+
+---
+
+> 'Extending `ggplot2` [using ggproto extension points] is not for the faint-hearted.'
+
+-   Easy Geom Recipes...
+
 EAPOST:
 
 'We are aiming for substantial impact on instruction in the art and practice of statistical thinking, aligned with the American Statistical Association's Guidelines for Assessment and Instruction in Statistics Education (GAISE) and current research on teaching and learning in statistics. '
 
-https://sites.google.com/view/eaapost/project-overview
+<https://sites.google.com/view/eaapost/project-overview>
 
+------------------------------------------------------------------------
 
----
+> 'Some instructors may train students in using a specific software package, but mastery of advanced programming skills should not be allowed to crowd out data analysis skills or statistical thinking.'
 
-> 'Some instructors may train students in using a specific software
-package, but mastery of advanced programming skills should not be allowed to crowd out
-data analysis skills or statistical thinking.' 
-
-
----
-
+------------------------------------------------------------------------
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, dev = "ragg_png")
 options(tidyverse.quiet = TRUE)
 ```
 
 Thank you.
 
----
+------------------------------------------------------------------------
 
 A little about me and teaching, viz, and programming background:
 
-- 2018-2020 - University of Denver
-- 2020-2023 - Institutional analytics and Math Intro to Statistics and Probability Instructor
-- 2022-Present - Community Organizer, founder: ggplot2 extenders meetup 
+-   2018-2020 - University of Denver
+-   2020-2023 - Institutional analytics and Math Intro to Statistics and Probability Instructor
+-   2022-Present - Community Organizer, founder: ggplot2 extenders meetup
 
----
+------------------------------------------------------------------------
 
 Start at the end:
 
+-   ggprop.test
+-   ggt.test
+-   ggxmeans
 
-- ggprop.test
-- ggt.test
-- ggxmeans
+```{r, eval = F, echo = F}
+library(tidyverse)
+flows_df <- tibble::tribble(~outflows, ~inflows, ~amount,
+                    "USA",  "USA", 40,
+                    "USA",  "China", 50,
+                    "USA", "Germany", 30,
+                    "China",  "USA", 60,
+                    "China", "Germany", 25,
+                    "Germany",  "USA", 35)
+
+{flows_df |>
+ggplot() +
+aes(source = outflows, target = inflows, freq = 1) +
+ggchord2::geom_chord_diagram() +
+aes(fill = outflows) +
+aes(freq = amount) +
+aes(fill = outflows == "China") +
+ggt.test::scale_fill_logical() +
+labs(title = "Flows *from* China are a big part of the picture") +
+aes(fill = outflows == "USA") +
+labs(title = "Flows *from* and within the USA are greater than the US's inflows") +
+aes(fill = to == "Germany") +
+labs(title = "Flows *to* Germany are greater than the flows from Germany")} |>
+  codehover::ch_hover()
 
 
-https://evamaerey.github.io/mytidytuesday/2026-05-04-ggttest-ggram/intro-stats-narrative.html
+```
 
+<https://evamaerey.github.io/mytidytuesday/2026-05-04-ggttest-ggram/intro-stats-narrative.html>
 
 ```{r, warning=F, message=F}
 library(tidyverse)
@@ -85,6 +333,13 @@ p <- dolphin_data |>
   geom_prop_label() 
 
 { p + 
+  labs(title = "What's consistent with 16 coin flips? \n🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙") +
+  dolphin_data |> mutate(observed = to_synthetic(observed)) +
+  dolphin_data |> mutate(observed = to_synthetic(observed)) +
+  dolphin_data |> mutate(observed = to_synthetic(observed)) + 
+  dolphin_data |> mutate(observed = to_synthetic(observed)) +
+  dolphin_data |> mutate(observed = to_synthetic(observed)) +
+  dolphin_data |> mutate(observed = to_synthetic(observed)) + 
   dolphin_data |> mutate(observed = to_synthetic(observed)) +
   dolphin_data |> mutate(observed = to_synthetic(observed)) +
   dolphin_data |> mutate(observed = to_synthetic(observed)) 
@@ -93,9 +348,12 @@ p <- dolphin_data |>
 
 
 
+
+
+
 {donor_data |> 
   ggplot() + 
-  labs(title = "")
+  labs(title = "Organ donation🫀🫁responses like coin flips?") +
   aes(x = decision) + 
   geom_stack() + 
   geom_stack_label() + 
@@ -126,6 +384,7 @@ library(ggt.test)
 
 data_haircuts |>
   ggplot() + 
+  labs(title = "Are haircut price averages different for men v. women") +
   aes(x = price) + 
   geom_support() + 
   geom_rug() + 
@@ -136,33 +395,6 @@ data_haircuts |>
   geom_mean_diff() + 
   geom_mean_diff_label()
 
-library(tidyverse)
-library(ggstats)
-Titanic |> 
-  data.frame() |> 
-  uncount(Freq) |> 
-  ggplot() + 
-  aes(y = Class,
-      alpha = Survived) + 
-  ggstats::geom_diverging(position = ggstats:::position_diverging())
 
-Titanic |> 
-  data.frame() |> 
-  uncount(Freq) |> 
-  ggplot() + 
-  aes(y = Class,
-      alpha = Survived) + 
-  ggstats::geom_diverging(position = ggstats::position_diverging())
-
-Titanic |> 
-  data.frame() |> 
-  uncount(Freq) |> 
-  ggplot() + 
-  aes(y = Class,
-      alpha = Survived) + 
-  ggstats::geom_diverging()
 
 ```
-
-
-

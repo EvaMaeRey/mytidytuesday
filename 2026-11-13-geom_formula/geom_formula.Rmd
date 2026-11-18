@@ -1,0 +1,81 @@
+---
+title: "another experiment"
+author: "Evangeline Reynolds"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+
+
+## Intro Thoughts
+
+
+## Status Quo
+
+```{r}
+library(tidyverse)
+
+compute_group_post <- function(data, scales){
+  
+  data |>
+    mutate(xend = x, yend = 0)
+  
+}
+
+StatPost <- ggproto("StatPost", Stat, 
+                    compute_group = compute_group_post,
+                    required_aes = c("x", "y"))
+
+geom_post <- make_constructor(GeomSegment, stat = StatPost)
+
+
+library(ggplot2)
+
+shot_fun <- function(x, v0 = 15, angle_deg = 30, g = 9.81, y0 = 1.7) {
+  
+  radians <- angle_deg * pi / 180
+  
+  y <- y0 + 
+    x * tan(radians) - 
+    (g * x ^ 2) / (2 * v0 ^ 2 * cos(radians) ^ 2)
+  
+  ifelse(y >= 0, y, 0)
+  
+}
+
+{ggplot() +
+  geom_post(aes(x = 0, y = 1.7)) + 
+  geom_post(aes(x = 10, y = 3.5)) + 
+  geom_spoke(aes(x = 0, y = 1.7, 
+                 angle = pi*30/180, radius = 2), 
+             arrow = arrow(type = "closed")) + 
+  coord_equal() + 
+  geom_function(fun = shot_fun, aes(color = "30°"))  + 
+  geom_function(fun = shot_fun, aes(color = "20°"),
+    args = list(v0 = 15, angle_deg = 20))  + 
+  geom_function(fun = shot_fun, aes(color = "7°"),
+    args = list(v0 = 7, angle_deg = 20)) } |>
+  codehover::ch_hover()
+
+
+
+
+```
+
+## Experiment
+
+```{r}
+
+```
+
+
+
+## Closing remarks, Other Relevant Work, Caveats

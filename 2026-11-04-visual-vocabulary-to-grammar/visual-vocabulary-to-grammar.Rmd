@@ -68,7 +68,8 @@ tibble(profit_losses = runif(100, -1, 1),
   plot_spacer()  /
   plot_spacer()/
   plot_spacer()/
-  plot_spacer() ->
+  plot_spacer() / 
+  plot_spacer() /plot_spacer() /plot_spacer() /plot_spacer()  ->
 deviation
 
 
@@ -128,7 +129,8 @@ library(tidyverse)
   plot_spacer()  /
   plot_spacer()/
   plot_spacer()/
-  plot_spacer() ->
+  plot_spacer() / 
+  plot_spacer() /plot_spacer() /plot_spacer() /plot_spacer()  ->
 
 correlation
 
@@ -194,7 +196,8 @@ correlation
   ggplot() /
   plot_spacer()/
   plot_spacer()/
-  plot_spacer() ->
+  plot_spacer() / 
+  plot_spacer() /plot_spacer() /plot_spacer() /plot_spacer()  ->
   
 ranking
 
@@ -284,7 +287,8 @@ ranking
   aes(y = lifeExp,
       x = continent,
       size = pop) + 
-  ggbeeswarm::geom_beeswarm()} ->
+  ggbeeswarm::geom_beeswarm()} / 
+  plot_spacer() /plot_spacer() /plot_spacer() /plot_spacer()  ->
 distribution
 
 ```
@@ -292,8 +296,25 @@ distribution
 
 
 ```{r}
-ggplot() / ggplot() /ggplot() /ggplot() /ggplot()
+ggplot() / ggplot() /ggplot() /ggplot() /ggplot() /
+ggplot() / ggplot() /ggplot() /ggplot() /ggplot() / 
+  ggplot() /ggplot() /ggplot() /ggplot() -> change_over_time
 
+ggplot() / ggplot() /ggplot() /ggplot() /ggplot() /
+ggplot() / ggplot() /ggplot() /ggplot() /ggplot() / 
+  ggplot() /ggplot() /plot_spacer() /plot_spacer()  -> magnitude
+
+ggplot() / ggplot() /ggplot() /ggplot() /ggplot() /
+ggplot() / ggplot() /ggplot() /ggplot() /ggplot()  / 
+  plot_spacer() /plot_spacer() /plot_spacer() /plot_spacer() -> part_to_whole
+
+ggplot() / ggplot() /ggplot() /ggplot() /ggplot() /
+ggplot() / ggplot() /ggplot() /plot_spacer() /plot_spacer() / 
+  plot_spacer() /plot_spacer() /plot_spacer() /plot_spacer() -> spatial
+
+ggplot() / ggplot() /ggplot() /ggplot() /plot_spacer() /
+plot_spacer() / plot_spacer() /plot_spacer() /plot_spacer() /plot_spacer() / 
+  plot_spacer() /plot_spacer() /plot_spacer() /plot_spacer() -> flow
 
 
 
@@ -301,8 +322,8 @@ ggplot() / ggplot() /ggplot() /ggplot() /ggplot()
 
 
 
-```{r, fig.width=20, fig.height=30}
-{deviation | correlation | ranking | distribution} +
+```{r, fig.width=80, fig.height=50}
+{deviation | ranking | distribution | change_over_time | magnitude | part_to_whole | spatial | flow} +
   plot_annotation("Visual Vocabulary X ggplot2 ecosystem", 
                   theme = theme_gray(base_size = 50)) & 
   theme(legend.position = "none")
