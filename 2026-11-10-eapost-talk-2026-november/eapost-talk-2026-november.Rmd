@@ -398,3 +398,191 @@ data_haircuts |>
 
 
 ```
+
+
+
+```{r}
+library(tidyverse)
+
+paste_collapse <- function(x){
+
+  paste(x, collapse = "\n")  
+  
+}
+
+code_ggram <- function(x, ...){
+  
+  ggram::ggram(code = x, code_style_args = ggram:::specify_code_plot_style(size = 1.5))
+  
+}
+
+theme_set(theme_gray(base_size = 5))
+
+library(ggt.test)
+
+
+{ggrams_build <- 'ggplot(data_grit_undergrad) + 
+  labs(title = "As Gritty on average as West Point Cadets? 💪🪖🧗") +  
+  aes(score) + 
+  geom_rug() + 
+  geom_stacks() + 
+  geom_support() +
+  geom_mean() + 
+  geom_mean_label() + 
+  stamp_mean(3.75)  + 
+  geom_tdist_null(3.75)'  |> 
+  flipbookr:::code_parse() |> 
+  flipbookr:::parsed_return_partial_code_sequence() |> 
+  tibble(partials = _) |>
+  mutate(partials_collapsed = purrr::map_chr(partials, paste_collapse)) |> 
+  mutate(ggrams = purrr::map(partials_collapsed, code_ggram))}
+  
+# ggrams_build$ggrams[[1]] + 
+#   ggrams_build$ggrams[[2]] + 
+#   ggrams_build$ggrams[[3]] + 
+#   ggrams_build$ggrams[[4]] + 
+#   ggrams_build$ggrams[[5]] + 
+#   plot_spacer() + 
+#   plot_spacer() + 
+#   plot_spacer() + 
+#   plot_spacer() + 
+#   plot_spacer() + 
+#   plot_spacer()
+
+
+cowplot::plot_grid(plotlist = ggrams_build$ggrams, ncol = 2)
+
+
+
+ggsave("out.png", width = 7, height = 13)
+
+library(tidyverse)
+library(ggt.test)
+theme_set(theme_gray(6))
+
+
+'ggplot(data_grit_undergrad) + 
+  labs(title = "As Gritty on average as West Point Cadets? 💪🪖🧗") +  
+  aes(score) + 
+  geom_rug() + 
+  geom_stacks() + 
+  geom_support() +
+  geom_mean() + 
+  geom_mean_label() + 
+  stamp_mean(3.75)' |>
+  ggram:::ggstoryboard()
+
+ggsave("out.png", width = 7, height = 10)
+
+
+'ggplot(tribble(~region,
+        "Temporal",
+        "Limbic",
+        "Occipital") ) +
+  stamp_region(fill = "white") + 
+  aes(region = region, 
+      fill = region) + 
+  geom_region() + 
+  stamp_region(keep = "Limbic",
+               fill = "gold") + 
+  labs(title = "Limbic bliss")' |>
+  ggram:::ggstoryboard()
+
+ggsave("out.png", width = 7, height = 10)
+
+
+
+'ggplot(tribble(~region,
+        "Temporal",
+        "Limbic",
+        "Occipital") ) +
+  stamp_region(fill = "white") + 
+  aes(region = region, 
+      fill = region) + 
+  geom_region() + 
+  stamp_region(keep = "Limbic",
+               fill = "gold") + 
+  labs(title = "Limbic bliss")' |>
+  ggram:::ggram()
+
+
+
+library(ggcube)
+
+"ggplot(mountain) + 
+  aes(x = x) + 
+  aes(y = y) + 
+  coord_3d() + 
+  aes(z = z) + 
+  geom_surface_3d() + 
+  ggplyr::layers_wipe() + 
+  geom_contour_3d(fill = 'white', color = 'black')" |> 
+  ggram:::ggstoryboard()
+
+
+ggsave("out.png", width = 7, height = 10)
+
+
+library(ggcube)
+mammoth <- data.frame(do.call(rbind, rjson::fromJSON(
+      file = paste0("https://raw.githubusercontent.com/PAIR-code/",
+                    "understanding-umap/master/raw_data/mammoth_3d_50k.json")
+)))
+colnames(mammoth) <- c("Y", "X", "Z")
+
+ggplot(mammoth, 
+       aes(X, Y, Z)) +
+      geom_hull_3d(method = "alpha", radius = 8, fill = "red") +
+      light(direction = c(-1, 1, 0),
+             shadow = 1, highlight = 1
+             ) +
+      coord_3d(roll = -90, scales = "fixed", 
+               panels = "zmin", expand = FALSE) +
+      theme(axis.text = element_blank(),
+            axis.ticks = element_blank(),
+            axis.title = element_blank())
+
+library(ggcube)
+
+sphere <- function(x0 = 0, ...) {
+      ggcube:::geom_isofunction_3d(fun = function(x, y, z) (x - x0)^2 + y^2 + z^2 - 1,
+                          xlim = x0 + c(-1.1, 1.1), ylim = c(-1.1, 1.1), zlim = c(-1.1, 1.1),
+                          n = 40, ...)
+}
+
+ggplot() +
+      coord_3d(scales = "fixed") +
+      scale_fill_viridis_c() +
+      theme_dark() +
+      theme(legend.position = "none") +
+      
+      # apply shading to solid fill, with a specular highlight for shininess
+      sphere(fill = "#8a2900",
+             light = light("hard", specular = 1, specular_size = 10)) +
+      
+      # apply shading to aesthetic fill
+      sphere(x0 = 2.5, mapping = aes(fill = after_stat(x)),
+             light = light(direction = c(0, -1, 0), anchor = "scene")) +
+      
+      # map surface orientation to 3D RGB color channels
+      sphere(x0 = 5, light = light(tone = "normals", direction = c(1, 0, -1), anchor = "scene"))
+
+
+library(ggcube)
+library(tidyverse)
+
+gyroid <- function(x, y, z) sin(x) * cos(y) + sin(y) * cos(z) + sin(z) * cos(x)
+'ggplot() +
+   coord_3d() + 
+   geom_isofunction_3d(
+            fun = gyroid, cap = TRUE, fill = "grey", n = 60,
+            xlim = c(0, 4 * pi), ylim = c(0, 4 * pi), zlim = c(0, 4 * pi)) +
+  theme_void() +
+  light(highlight = .8, shadow = 1) + 
+  coord_3d(yaw = -40) + 
+  coord_3d(yaw = -50) + 
+  coord_3d(yaw = -60) + 
+  coord_3d(yaw = -70)' |>
+  ggram:::ggstoryboard()
+
+```
