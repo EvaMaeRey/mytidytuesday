@@ -35,7 +35,6 @@ background-size: cover
 
 ---
 
-Title slide
 ```{r, include = F}
 # This is the recommended set up for flipbooks
 # you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
@@ -45,7 +44,7 @@ library(flipbookr)
 
 ![](images/clipboard-661140228.png)
 
-Dr. Jennifer McNally
+Dr. Jennifer McNally, Inclusive Statistics this summer...
 
 ---
 
@@ -124,7 +123,7 @@ EAPOST:
 
 ---
 
-# But, missing gg code 😢
+# But, missing gg code and grammar of graphics 😢
 
 *"**I just don't see how a world that makes such wonderful things could be bad."***
 
@@ -320,7 +319,7 @@ ggplot2 excels in:
 ---
 
 
-## The magic is in the conversation... 🗣️🗣️
+## There's magic is in the conversation... 🗣️🗣️
 
 ---
 
@@ -356,24 +355,30 @@ Not GAISE compliant ... 'software should not crowd out statistical thinking'...
 And *not* as low of a level that you might need in a statistics class room....
 
 
-<img src="images/clipboard-28910671.png" width="50%" />
+<img src="images/clipboard-28910671.png" width="40%" />
 
 
 
 Linguist S.I. Hayakawa in 1939: "Language in Action." New York: Harcourt, Brace.
 
-Where you have to connect all the ideas, and go from raw data to abstract ideas and inferential assertions. Base ggplot2 and extension I'd run across hadn't made these linkages, as *is* done by ISI book & applets —
+<!-- Where you have to connect all the ideas, and go from raw data to abstract ideas and inferential assertions. Base ggplot2 and extension I'd run across hadn't made these linkages, as *is* done by ISI book & applets — -->
+
+--
 
 Cobb: 'For most students, their noses stay too close to the canvas, they only see *disconnected* details. '
 
-ggplot2 & extensions 2020 ladders with missing rungs for stats educators.
+<!-- ggplot2 & extensions 2020 ladders with missing rungs for stats educators. -->
 
 
 ---
 
 # No.
 
+--
+
 # Logical.
+
+--
 
 # Leaps.
 
@@ -382,7 +387,11 @@ ggplot2 & extensions 2020 ladders with missing rungs for stats educators.
 
 # No.
 
+--
+
 # Missing. 
+
+--
 
 # Rungs.
 
@@ -428,9 +437,9 @@ options(tidyverse.quiet = TRUE)
 
 ---
 
-`r chunk_reveal("dolphin", eval = F)`
+`r chunk_reveal("dolphin")`
 
-```{r dolphin, warning=F, message=F}
+```{r dolphin, warning=F, message=F, include = F}
 library(tidyverse)
 library(ggprop.test)
 
@@ -451,7 +460,7 @@ dolphin_data |>
 
 ---
 
-`r chunk_reveal("organs", eval = F)`
+`r chunk_reveal("organs")`
 
 
 ```{r organs, include=F}
@@ -472,10 +481,7 @@ donor_data |>
 
 ---
 
-r chunk_reveal("dolphin_simulation")`
-
-
-```{r dolphin_simulation, include = F}
+```{r}
 p <- dolphin_data |> 
   ggplot() + 
   labs(title = "Do Doris and Buzz Communicate 🐬🐬🐟🪣?") +
@@ -485,10 +491,19 @@ p <- dolphin_data |>
   geom_support() +
   geom_prop() + 
   geom_prop_label() 
+```
 
+
+---
+
+`r chunk_reveal("dolphin_simulation", title = "simulation based inference", font_size_code = "80%")`
+
+
+```{r dolphin_simulation, include = F}
 p + 
   labs(title = "What's consistent with 16 coin flips? \n🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙") +
-  dolphin_data |> mutate(observed = to_synthetic(observed)) +
+  dolphin_data |> mutate(observed = 
+                           to_synthetic(observed)) +
   dolphin_data |> mutate(observed = to_synthetic(observed)) +
   dolphin_data |> mutate(observed = to_synthetic(observed)) + 
   dolphin_data |> mutate(observed = to_synthetic(observed)) +
@@ -500,15 +515,71 @@ p +
 ```
 
 
+---
 
+
+```{r}
+library(ggprop.test)
+tidy_dbinom(num_trials = 1, single_trial_prob = .5)
+```
+
+---
+
+
+```{r}
+library(ggprop.test)
+tidy_dbinom(num_trials = 2, single_trial_prob = .5)
+```
 
 
 ---
 
-`r chunk_reveal("ttest", include = F, title = "## t test")`
 
-```{r ttest}
-# remotes::install_github("EvaMaeRey/ggt.test")
+```{r}
+library(ggprop.test)
+tidy_dbinom(num_trials = 3, single_trial_prob = .5)
+```
+
+
+---
+
+
+```{r}
+library(ggprop.test)
+tidy_dbinom(num_trials = 4, single_trial_prob = .5)
+```
+
+---
+
+
+```{r}
+library(ggprop.test)
+tidy_dbinom(num_trials = 5, single_trial_prob = .5)
+```
+
+---
+
+
+```{r}
+library(ggprop.test)
+tidy_dbinom(num_trials = 6, single_trial_prob = .5)
+```
+
+
+---
+
+
+```{r}
+library(ggprop.test)
+tidy_dbinom(num_trials = 16, single_trial_prob = .5)
+```
+
+
+---
+
+`r chunk_reveal("ttest", title = "## t test")`
+
+```{r ttest,include = F}
 library(ggt.test)
 
 data_grit_undergrad |>
@@ -527,7 +598,7 @@ data_grit_undergrad |>
 
 ---
 
-`r chunk_reveal("haircuts", include = F, title = "## Difference in means")`
+`r chunk_reveal("haircuts",  title = "## Difference in means")`
 
 
 ```{r haircuts, include = F}
@@ -535,7 +606,6 @@ data_haircuts |>
   ggplot() + 
   labs(title = "Are haircut price averages different for men v. women") +
   aes(x = price) + 
-  geom_support() + 
   geom_rug() + 
   geom_stacks() +
   geom_mean() + 
@@ -549,7 +619,7 @@ data_haircuts |>
 
 ---
 
-`r chunk_reveal("linearmodel", include = F, title = "## linear model")`
+`r chunk_reveal("linearmodel", title = "## linear model")`
 
 
 ```{r linearmodel, include = F}
@@ -557,7 +627,7 @@ library(ggxmean)
 
 mtcars |>
   ggplot() + 
-  labs(title = "Does weigt predict milage? 🚙🚕🏎️") +
+  labs(title = "Does weight predict milage? 🚙🚕🏎️") +
   aes(x = wt) +
   geom_rug() +
   aes(y = mpg) +
@@ -620,7 +690,7 @@ class: inverse, center, middle
 
 
 
-```{r}
+```{r, echo = F}
 knitr::knit_exit()
 
 ```
