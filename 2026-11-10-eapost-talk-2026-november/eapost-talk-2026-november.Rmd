@@ -63,21 +63,28 @@ A little about me and teaching, viz, and programming background:
 
 -   2018-2020 - University of Denver, Visiting Teaching Assistant Professor
 
-Spring 2020 'Can you teach a data viz graduate level class?' George F. DeMartino, Ilene Grabel
-
---
-
-# 'A ggplot2 grammar guide':
-
-![](images/clipboard-795892238.png)
-
-![](images/clipboard-3370603988.png)
-
 ![](images/clipboard-2468652653.png)
+
+
+Spring 2020 'Can you teach a data viz graduate level class?' George F. DeMartino, Ilene Grabel
 
 ---
 
-# West Point 2020-2023
+# 'A ggplot2 grammar guide':
+
+
+<img src="images/clipboard-795892238.png" width="50%" />
+
+---
+
+<img src="images/clipboard-3370603988.png" width="50%" />
+
+
+
+
+---
+
+# West Point Fall 2020-2023
 
 -   2020-2023 - Institutional Analytics and Math Intro to Statistics and Probability Instructor, Institutional Research Data Scientist...
 
@@ -87,7 +94,9 @@ Spring 2020 'Can you teach a data viz graduate level class?' George F. DeMartino
 
 # A 'Cathedral of Statistics'
 
-![](images/clipboard-2945416049.png)
+
+<img src="images/clipboard-2945416049.png" width="50%" />
+
 
 > 'Statistics Curricula should reveal the beautiful cathedral of Statistics.' paraphrase ... George Cobb (paraphrase)
 
@@ -117,7 +126,9 @@ EAPOST:
 
 *"**I just don't see how a world that makes such wonderful things could be bad."***
 
-![](images/clipboard-2506441341.png)
+
+<img src="images/clipboard-2506441341.png" width="50%" />
+
 
 ---
 
@@ -129,19 +140,28 @@ Can we have it all? Vis + Code + 'not crowd out statistical thinking'...
 
 Because writing things down, feels very grounding. Having verbal expression and visual expression side by side, coordinated feels like a superpower.
 
-![](images/clipboard-1045303388.png){width=150px}
+
+<img src="images/clipboard-1045303388.png" width="50%" />
+
+
 
 ---
 
-![](images/clipboard-676654223.png){width=150px}
+
+<img src="images/clipboard-676654223.png" width="50%" />
+
 
 ---
 
-![](images/clipboard-680630620.png){width=150px}
+
+<img src="images/clipboard-680630620.png" width="50%" />
+
 
 ---
 
-And ggplot2 has extraordinary 'write-down-narrative' capabilities
+And ggplot2 has extraordinary 'write down your narrative' capabilities
+
+---
 
 ```{r echo = F, warning=F, message=F}
 library(tidyverse)
@@ -153,22 +173,26 @@ hans_png_path_x_axis = "../2023-11-14-flipbooks-lawrence-livermore/images/hans_x
 hans_png_path_color = "../2023-11-14-flipbooks-lawrence-livermore/images/hans_colors.png"
 hans_png_path_size = "../2023-11-14-flipbooks-lawrence-livermore/images/hans_size.png"
 lab <- "Rosling builds up his\ngraph bit by bit with lanugage"
+```
 
-{ggplot() + 
+`r chunk_reveal("hans", display_type = "output", title = "## BBC, Hans Rosling 200 years in 4 minutes")`
+
+```{r hans, include = F}
+ggplot() + 
   stamp_png(png = hans_png_path_y_axis) +
   stamp_png(png = hans_png_path_x_axis) + 
   stamp_png(png = hans_png_path_color) + 
   stamp_png(png = hans_png_path_size) + 
-  stamp_label(label = lab, size = 10)} |> 
-  codehover::ch_hover()
+  stamp_label(label = lab, size = 10)
 ```
 
 ---
 
-<https://www.youtube.com/watch?v=jbkSRLYSojo&t=37s>
 
-```{r gapminder, echo = F}
-{gapminder::gapminder |> 
+`r chunk_reveal("gapminder")`
+
+```{r gapminder, echo = F, include=F}
+gapminder::gapminder |> 
   filter(year == 2002) |> 
   ggplot() + 
   ggchalkboard:::theme_rosling() +
@@ -176,8 +200,7 @@ lab <- "Rosling builds up his\ngraph bit by bit with lanugage"
   aes(x = gdpPercap) + 
   geom_point() + 
   aes(color = continent) + 
-  aes(size = pop)} |> 
-  codehover::ch_hover()
+  aes(size = pop)
 ```
 
 ---
@@ -198,40 +221,44 @@ lobes$atlas |>
 brain_lobes_ref
 ```
 
-```{r, message=F, warning=F}
+`r chunk_reveal("limbic_bliss", title = "# coordinated visual and verbal -> limbic?")`
+
+```{r limbic_bliss, message=F, warning=F, echo = F}
+library(ggregions)
 set_regions(brain_lobes_ref)
 
-{tribble(~region,
-        "Temporal",
-        "Limbic",
-        "Occipital")  |> 
-  ggplot() +
+ggplot() +
   stamp_region() + 
   stamp_region(keep = "Occipital",
                fill = "cornflowerblue") + 
   stamp_region(keep = "Temporal",
                fill = "coral3") +
   stamp_region(keep = "Limbic",
-               fill = "goldenrod")} |>
-  codehover::ch_hover()
+               fill = "goldenrod")
 ```
 
 ---
 
 ## ggplot2 lets us *transcribe* statistical narratives,
 
+--
+
 ## record logic of visually conveyed ideas...
+
+--
 
 ## our trains of thought
 
 ---
 
-# 'Graphical Poems?' Should we reorganize our conversations into a haiku?
+### Should we reorganize our conversations into a haiku?
+
+> 'Graphical Poems?' Hadley Wickham 2002
 
 ```{r}
 gapminder::gapminder |> 
   filter(year == 2002) |> 
-  ggplot(aes(y = lifeExp, 
+  ggplot(mapping = aes(y = lifeExp, 
              x = gdpPercap, 
              color = continent, 
              size = pop)) + 
@@ -256,7 +283,7 @@ Or don't care anymore? To me, ggplot2's overlooked superpower (but I find myself
 
 ---
 
-'I still don't like it :)' - Hadley Wickham, creator of ggplot2
+'I still don't like it :)' - Hadley Wickham, creator of ggplot2 (July 2026)
 
 ---
 
