@@ -53,7 +53,11 @@ A little about me and teaching, viz, and programming background:
 
 # GAISE grounding
 
-Grounded in ...
+EAPOST:
+
+'We are aiming for substantial impact on instruction in the art and practice of statistical thinking, aligned with the American Statistical Association's Guidelines for Assessment and Instruction in Statistics Education (GAISE) and current research on teaching and learning in statistics. '
+
+<https://sites.google.com/view/eaapost/project-overview>
 
 ![](images/clipboard-2905805456.png)
 
@@ -101,7 +105,7 @@ hans_png_path_y_axis = "../2023-11-14-flipbooks-lawrence-livermore/images/hans_y
 hans_png_path_x_axis = "../2023-11-14-flipbooks-lawrence-livermore/images/hans_x_axis.png"
 hans_png_path_color = "../2023-11-14-flipbooks-lawrence-livermore/images/hans_colors.png"
 hans_png_path_size = "../2023-11-14-flipbooks-lawrence-livermore/images/hans_size.png"
-lab <- "Rosling gives full voice\nto aesthetic mappings"
+lab <- "Rosling builds up his\ngraph bit by bit with lanugage"
 
 {ggplot() + 
   stamp_png(png = hans_png_path_y_axis) +
@@ -170,14 +174,14 @@ set_regions(brain_lobes_ref)
 
 ggplot2 lets us *transcribe* statistical narratives, 
 --
-visual logic, 
+record logic of visually conveigned ideas , 
 --
 our trains of thought 
 
 
 ---
 
-Reorg as a haiku?
+# 'Graphical Poems?' Reorg as a haiku? 
 
 ```{r}
 gapminder::gapminder |> 
@@ -185,24 +189,14 @@ gapminder::gapminder |>
   ggplot(aes(y = lifeExp, 
              x = gdpPercap, 
              color = continent, 
-             size = pop) ) + 
+             size = pop)) + 
   geom_point() +
   ggchalkboard:::theme_rosling() 
 ```
 
-So much is lost...
-
-
-# Temporal 
-
-# fidelity
-
-process preserving... 
-
-
 ---
 
-A question that I'd wanted to ask ... was about this syntax...
+'A question that I'd wanted to ask ... was about this syntax...'
 
 ```{r}
 ggplot(cars) + 
@@ -211,11 +205,32 @@ ggplot(cars) +
 ```
 
 
-'Does it still make you cringe?  Or don't care anymore?  To me, ggplot2's overlooked superpower (but I find myself still self conscious about using it).  '
+--
+
+'Does it still make you cringe?  
+Or don't care anymore?  To me, ggplot2's overlooked superpower (but I find myself still self conscious about using it).  '
 
 ---
 
-'I still don't like it :)'
+'I still don't like it :)' - Hadley Wickham, creator of ggplot2
+
+
+---
+
+# Temporal. 
+
+# Fidelity.
+
+process preserving... 
+
+--
+
+conversation recording
+
+--
+
+idea tracing
+
 
 
 ---
@@ -233,6 +248,20 @@ ggplot(mtcars) +
   geom_smooth(method = lm)
 ```
 
+
+```{r}
+{ggplot(mtcars) + 
+  aes(wt, mpg) + 
+  geom_point() + 
+  geom_smooth(method = lm) + 
+  stat_smooth(method = lm, 
+              geom = "point", 
+              xseq = mtcars$wt,
+              color = "blue") + 
+  geom_smooth(method = lm, 
+              formula = y ~ 1)} |>
+  codehover::ch_hover()
+```
 
 ---
 
@@ -274,11 +303,7 @@ But: 'not crowd out statistical thinking'...
 
 -   Easy Geom Recipes...
 
-EAPOST:
 
-'We are aiming for substantial impact on instruction in the art and practice of statistical thinking, aligned with the American Statistical Association's Guidelines for Assessment and Instruction in Statistics Education (GAISE) and current research on teaching and learning in statistics. '
-
-<https://sites.google.com/view/eaapost/project-overview>
 
 ------------------------------------------------------------------------
 
@@ -309,33 +334,6 @@ Start at the end:
 -   ggt.test
 -   ggxmeans
 
-```{r, eval = F, echo = F}
-library(tidyverse)
-flows_df <- tibble::tribble(~outflows, ~inflows, ~amount,
-                    "USA",  "USA", 40,
-                    "USA",  "China", 50,
-                    "USA", "Germany", 30,
-                    "China",  "USA", 60,
-                    "China", "Germany", 25,
-                    "Germany",  "USA", 35)
-
-{flows_df |>
-ggplot() +
-aes(source = outflows, target = inflows, freq = 1) +
-ggchord2::geom_chord_diagram() +
-aes(fill = outflows) +
-aes(freq = amount) +
-aes(fill = outflows == "China") +
-ggt.test::scale_fill_logical() +
-labs(title = "Flows *from* China are a big part of the picture") +
-aes(fill = outflows == "USA") +
-labs(title = "Flows *from* and within the USA are greater than the US's inflows") +
-aes(fill = to == "Germany") +
-labs(title = "Flows *to* Germany are greater than the flows from Germany")} |>
-  codehover::ch_hover()
-
-
-```
 
 <https://evamaerey.github.io/mytidytuesday/2026-05-04-ggttest-ggram/intro-stats-narrative.html>
 
