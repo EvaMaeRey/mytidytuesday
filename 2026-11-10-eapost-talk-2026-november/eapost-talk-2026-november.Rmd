@@ -17,13 +17,15 @@ A little about me and teaching, viz, and programming background:
 
 ---
 
--   2018-2020 - University of Denver, Visiting Teaching Assistant Professor
+# DU 2018-2020
+
+- 2018-2020 - University of Denver, Visiting Teaching Assistant Professor
 
 'Can you teach a data viz graduate level class?'  George F. DeMartino, Ilene Grabel
 
 --
 
-'A ggplot2 grammar guide':
+# 'A ggplot2 grammar guide':
 
 ![](images/clipboard-795892238.png)
 
@@ -33,15 +35,23 @@ A little about me and teaching, viz, and programming background:
 
 ---
 
+# West Point 2020-2023
+
 -   2020-2023 - Institutional Analytics and Math Intro to Statistics and Probability Instructor, Institutional Research Data Scientist...
 
 > The text differs from traditional texts in both content and pedagogy. Statistical inference is introduced using simulation-based methods in Chapter 1. This allows students to intuitively understand the process of inference from the very beginning of their course.
+
+---
+
+# A 'Cathedral of Statistics'
 
 ![](images/clipboard-2945416049.png)
 
 > 'Statistics Curricula should reveal the beautiful cathedral of Statistics.' paraphrase ... George Cobb (paraphrase)
 
 ---
+
+# GAISE grounding
 
 Grounded in ...
 
@@ -51,9 +61,14 @@ Grounded in ...
 
 > 'Some instructors may train students in using a specific software package, but mastery of advanced programming skills should not be allowed to crowd out data analysis skills or statistical thinking.'
 
+
+---
+
 ![](images/clipboard-2959256180.png)
 
 ---
+
+# But, missing gg code 😢
 
 *"**I just don't see how a world that makes such wonderful things could be bad."***
 
@@ -64,6 +79,8 @@ Grounded in ...
 Can we have it all? Vis + Code + 'not crowd out statistical thinking'...
 
 ---
+
+# Code + viz? | grammar + viz? | language + viz?
 
 Because writing things down, feels very grounding. Having verbal expression and visual expression side by side feels like a superpower.
 
@@ -111,6 +128,44 @@ lab <- "Rosling gives full voice\nto aesthetic mappings"
   codehover::ch_hover()
 ```
 
+
+---
+
+# *Limbic* bliss
+
+```{r, echo = F}
+library(ggregions)
+library(ggbrat)
+
+lobes <- load_atlas("lobes")
+
+lobes$atlas |> 
+  mutate(region = region |> 
+           str_remove("LOBE.") |> 
+           str_to_sentence()) |> 
+  select(region, geometry) ->
+brain_lobes_ref
+```
+
+```{r, message=F, warning=F}
+set_regions(brain_lobes_ref)
+
+{tribble(~region,
+        "Temporal",
+        "Limbic",
+        "Occipital")  |> 
+  ggplot() +
+  stamp_region() + 
+  stamp_region(keep = "Occipital",
+               fill = "cornflowerblue") + 
+  stamp_region(keep = "Temporal",
+               fill = "coral3") +
+  stamp_region(keep = "Limbic",
+               fill = "goldenrod")} |>
+  codehover::ch_hover()
+```
+
+
 ---
 
 ggplot2 lets us *transcribe* statistical narratives, 
@@ -138,7 +193,9 @@ gapminder::gapminder |>
 So much is lost...
 
 
-> Temporal fidelity
+# Temporal 
+
+# fidelity
 
 process preserving... 
 
@@ -149,57 +206,33 @@ A question that I'd wanted to ask ... was about this syntax...
 
 ```{r}
 ggplot(cars) + 
-   aes(x = dist) + 
+   aes(x = dist) + #<<
    geom_histogram()
 ```
 
 
-Does it still make you cringe?  Or don't care anymore?  To me, ggplot2's overlooked superpower (but I find myself still self conscious about using it).  
+'Does it still make you cringe?  Or don't care anymore?  To me, ggplot2's overlooked superpower (but I find myself still self conscious about using it).  '
 
 ---
 
-I still don't like it :)
+'I still don't like it :)'
 
 
 ---
 
-limbic bliss
-
-```{r}
-
-library(ggregions)
-library(ggbrat)
-
-lobes <- load_atlas("lobes")
-
-lobes$atlas |> 
-  mutate(region = region |> 
-           str_remove("LOBE.") |> 
-           str_to_sentence()) |> 
-  select(region, geometry) ->
-brain_lobes_ref
-
-set_regions(brain_lobes_ref)
-
-tribble(~region,
-        "Temporal",
-        "Limbic",
-        "Occipital")  |> 
-  ggplot() +
-  stamp_region() + 
-  aes(region = region, 
-      fill = region) + 
-  geom_region() + 
-  stamp_region(keep = "Limbic",
-               fill = "gold") + 
-  labs(title = "Limbic bliss")
-
-```
 
 
 'write-down-\*statistical\*-narrative' capabilities
 
 And also some statistical tools....
+
+```{r}
+ggplot(mtcars) + 
+  aes(wt, mpg) + 
+  geom_point() + 
+  geom_smooth(method = lm)
+```
+
 
 ---
 
@@ -214,6 +247,12 @@ Where you have to connect all the ideas, and go from raw data to abstract ideas 
 Cobb: 'For most students, their noses stay too close to the canvas, they only see *disconnected* details. '
 
 ggplot2 & extensions 2020 ladders with missing rungs for stats educators.
+
+> No. 
+
+> Logical.
+
+> Leaps.
 
 ---
 
@@ -394,14 +433,11 @@ data_haircuts |>
   facet_align(sex) + 
   geom_mean_diff() + 
   geom_mean_diff_label()
-
-
-
 ```
 
 
 
-```{r}
+```{r, eval = F}
 library(tidyverse)
 
 paste_collapse <- function(x){
