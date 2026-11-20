@@ -66,7 +66,9 @@ A little about me and teaching, viz, and programming background:
 ![](images/clipboard-2468652653.png)
 
 
-Spring 2020 'Can you teach a data viz graduate level class?' George F. DeMartino, Ilene Grabel
+--
+
+## Spring 2020 'Can you teach a data viz graduate level class?' George F. DeMartino, Ilene Grabel
 
 ---
 
@@ -205,8 +207,6 @@ gapminder::gapminder |>
 
 ---
 
-# *Limbic* bliss
-
 ```{r, echo = F}
 library(ggregions)
 library(ggbrat)
@@ -223,7 +223,7 @@ brain_lobes_ref
 
 `r chunk_reveal("limbic_bliss", title = "# coordinated visual and verbal -> limbic?")`
 
-```{r limbic_bliss, message=F, warning=F, echo = F}
+```{r limbic_bliss, message=F, warning=F, echo = F, include = F}
 library(ggregions)
 set_regions(brain_lobes_ref)
 
@@ -249,19 +249,27 @@ ggplot() +
 
 ## our trains of thought
 
+--
+
+# 🤯🤯🤯🤯🤯🤯
+
 ---
 
 ### Should we reorganize our conversations into a haiku?
 
-> 'Graphical Poems?' Hadley Wickham 2002
+--
+
+> 'Graphical Poems?' Hadley Wickham 2010 "A layered grammar of graphics'
+
+--
 
 ```{r}
 gapminder::gapminder |> 
   filter(year == 2002) |> 
-  ggplot(mapping = aes(y = lifeExp, 
-             x = gdpPercap, 
-             color = continent, 
-             size = pop)) + 
+  ggplot(mapping = aes(y = lifeExp, #<<
+             x = gdpPercap, #<<
+             color = continent, #<<
+             size = pop)) + #<<
   geom_point() +
   ggchalkboard:::theme_rosling() 
 ```
@@ -278,61 +286,79 @@ ggplot(cars) +
 
 --
 
-'Does it still make you cringe?\
-Or don't care anymore? To me, ggplot2's overlooked superpower (but I find myself still self conscious about using it). '
+> 'Does it still make you cringe?  Or don't care anymore? To me, ggplot2's overlooked superpower (but I find myself still self conscious about using it). '
 
 ---
 
-'I still don't like it :)' - Hadley Wickham, creator of ggplot2 (July 2026)
+> 'I still don't like it :)' - Hadley Wickham, creator of ggplot2, July 2026
 
 ---
 
-# Temporal.
-
-# Fidelity.
-
-process preserving...
+ggplot2 excels in:
 
 --
 
-conversation recording
+# Temporal
 
 --
 
-idea tracing
+# Fidelity
+
+--
+
+## process preserving... 
+
+--
+
+## conversation recording
+
+--
+
+## idea tracing
+
 
 ---
 
-'write-down-\*statistical\*-narrative' capabilities
 
-And also some statistical tools....
+## The magic is in the conversation... 🗣️🗣️
 
-```{r}
+---
+
+But... ISI - a *cathedral of statistics*...
+
+--
+
+*base* ggplot2, while conversational, is not enough...
+
+---
+
+`r chunk_reveal("linear_modeling", title = "Linear model w/ base ggplot")`
+
+```{r linear_modeling, include = F}
 ggplot(mtcars) + 
   aes(wt, mpg) + 
   geom_point() + 
-  geom_smooth(method = lm)
-```
-
-```{r}
-{ggplot(mtcars) + 
-  aes(wt, mpg) + 
-  geom_point() + 
-  geom_smooth(method = lm) + 
+  geom_smooth(method = lm) +
   stat_smooth(method = lm, 
               geom = "point", 
               xseq = mtcars$wt,
               color = "blue") + 
   geom_smooth(method = lm, 
-              formula = y ~ 1)} |>
-  codehover::ch_hover()
+              formula = y ~ 1)
 ```
 
 ---
 
-But *not* as low of a level that you might need in a statistics class room....
+Not GAISE compliant ... 'software should not crowd out statistical thinking'...
 
-![](images/clipboard-28910671.png)
+---
+
+And *not* as low of a level that you might need in a statistics class room....
+
+
+<img src="images/clipboard-28910671.png" width="50%" />
+
+
 
 Linguist S.I. Hayakawa in 1939: "Language in Action." New York: Harcourt, Brace.
 
@@ -342,15 +368,24 @@ Cobb: 'For most students, their noses stay too close to the canvas, they only se
 
 ggplot2 & extensions 2020 ladders with missing rungs for stats educators.
 
-> No.
-
-> Logical.
-
-> Leaps.
 
 ---
 
-But: 'not crowd out statistical thinking'...
+# No.
+
+# Logical.
+
+# Leaps.
+
+
+---
+
+# No.
+
+# Missing. 
+
+# Rungs.
+
 
 ---
 
@@ -358,19 +393,18 @@ But: 'not crowd out statistical thinking'...
 
 ---
 
--   2022-Present - Community Organizer, co-founder: ggplot2 extenders meetup
+> 'Extending `ggplot2` [using ggproto extension points] is not for the faint-hearted.'
+
+---
+
+
+- 2022-Present - Community Organizer, co-founder: ggplot2 extenders meetup
 
 ![](images/clipboard-2441019922.png)
 
 ---
 
-> 'Extending `ggplot2` [using ggproto extension points] is not for the faint-hearted.'
-
--   Easy Geom Recipes...
-
----
-
-> 'Some instructors may train students in using a specific software package, but mastery of advanced programming skills should not be allowed to crowd out data analysis skills or statistical thinking.'
+Education... Easy geom recipes...
 
 ---
 
@@ -379,20 +413,169 @@ knitr::opts_chunk$set(echo = TRUE, dev = "ragg_png")
 options(tidyverse.quiet = TRUE)
 ```
 
+
+# Finally, main topic... gg extension X ISI X EAPOST?
+
 -   ggprop.test <https://github.com/EvaMaeRey/ggprop.test>
 -   ggt.test <https://evamaerey.github.io/ggt.test/>
 -   ggxmeans <https://github.com/EvaMaeRey/ggxmean>
 
+--
+
+
 <https://evamaerey.github.io/mytidytuesday/2026-05-04-ggttest-ggram/intro-stats-narrative.html>
 
-```{r, warning=F, message=F}
+
+---
+
+`r chunk_reveal("dolphin", eval = F)`
+
+```{r dolphin, warning=F, message=F}
 library(tidyverse)
-
-# remotes::install_github("EvaMaeRey/ggprop.test")
 library(ggprop.test)
-library(ggchalkboard)
+
+dolphin_data |> 
+  ggplot() + 
+  labs(title = "Do Doris and Buzz Communicate 🐬🐬🐟🪣?") +
+  aes(x = observed) + 
+  geom_stack() + 
+  geom_stack_label() + 
+  geom_support() +
+  geom_prop() + 
+  geom_prop_label() + 
+  stamp_prop(.5) + 
+  stamp_prop_label(.5) + 
+  geom_binomial_null(.5)
+```
 
 
+---
+
+`r chunk_reveal("organs", eval = F)`
+
+
+```{r organs, include=F}
+donor_data |> 
+  ggplot() + 
+  labs(title = "Organ donation🫀🫁responses like coin flips?") +
+  aes(x = decision) + 
+  geom_stack() + 
+  geom_stack_label() + 
+  geom_support() +
+  geom_prop() + 
+  geom_prop_label() + 
+  stamp_prop(.5) + 
+  stamp_prop_label(.5) + 
+  geom_binomial_null(.5) 
+```
+
+
+---
+
+r chunk_reveal("dolphin_simulation")`
+
+
+```{r dolphin_simulation, include = F}
+p <- dolphin_data |> 
+  ggplot() + 
+  labs(title = "Do Doris and Buzz Communicate 🐬🐬🐟🪣?") +
+  aes(x = observed) + 
+  geom_stack() + 
+  geom_stack_label() + 
+  geom_support() +
+  geom_prop() + 
+  geom_prop_label() 
+
+p + 
+  labs(title = "What's consistent with 16 coin flips? \n🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙") +
+  dolphin_data |> mutate(observed = to_synthetic(observed)) +
+  dolphin_data |> mutate(observed = to_synthetic(observed)) +
+  dolphin_data |> mutate(observed = to_synthetic(observed)) + 
+  dolphin_data |> mutate(observed = to_synthetic(observed)) +
+  dolphin_data |> mutate(observed = to_synthetic(observed)) +
+  dolphin_data |> mutate(observed = to_synthetic(observed)) + 
+  dolphin_data |> mutate(observed = to_synthetic(observed)) +
+  dolphin_data |> mutate(observed = to_synthetic(observed)) +
+  dolphin_data |> mutate(observed = to_synthetic(observed)) 
+```
+
+
+
+
+
+---
+
+`r chunk_reveal("ttest", include = F, title = "## t test")`
+
+```{r ttest}
+# remotes::install_github("EvaMaeRey/ggt.test")
+library(ggt.test)
+
+data_grit_undergrad |>
+  ggplot() + 
+  labs(title = "As Gritty on average as West Point Cadets? 💪🪖🧗") +  
+  aes(score) + 
+  geom_rug() + 
+  geom_stacks() + 
+  geom_support() +
+  geom_mean() + 
+  geom_mean_label() + 
+  stamp_mean(3.75)  + 
+  geom_tdist_null(3.75)
+```
+
+
+---
+
+`r chunk_reveal("haircuts", include = F, title = "## Difference in means")`
+
+
+```{r haircuts, include = F}
+data_haircuts |>
+  ggplot() + 
+  labs(title = "Are haircut price averages different for men v. women") +
+  aes(x = price) + 
+  geom_support() + 
+  geom_rug() + 
+  geom_stacks() +
+  geom_mean() + 
+  geom_mean_label() + 
+  facet_align(sex) + 
+  geom_mean_diff() + 
+  geom_mean_diff_label()
+```
+
+
+
+---
+
+`r chunk_reveal("linearmodel", include = F, title = "## linear model")`
+
+
+```{r linearmodel, include = F}
+library(ggxmean)
+
+mtcars |>
+  ggplot() + 
+  labs(title = "Does weigt predict milage? 🚙🚕🏎️") +
+  aes(x = wt) +
+  geom_rug() +
+  aes(y = mpg) +
+  geom_point() +
+  geom_lm() + 
+  geom_lm_fitted() + 
+  geom_lm_residuals() + 
+  geom_lm_conf_int() + 
+  geom_lm_formula() + 
+  geom_lm_intercept() + 
+  geom_lm_intercept_label(hjust = 0)
+```
+
+---
+
+https://github.com/arthurwelle/codehover/
+
+```{r, eval = F}
 {dolphin_data |> 
   ggplot() + 
   labs(title = "Do Doris and Buzz Communicate 🐬🐬🐟🪣?") +
@@ -404,10 +587,15 @@ library(ggchalkboard)
   geom_prop_label() + 
   stamp_prop(.5) + 
   stamp_prop_label(.5) + 
-  geom_binomial_null(.5) } |> 
-codehover::ch_hover()
+  geom_binomial_null(.5)} |>
+  codehover::ch_hover()  #<<  in-script reveal - student - usable?
+```
 
-p <- dolphin_data |> 
+
+---
+
+```{r, echo = F}
+{dolphin_data |> 
   ggplot() + 
   labs(title = "Do Doris and Buzz Communicate 🐬🐬🐟🪣?") +
   aes(x = observed) + 
@@ -415,70 +603,26 @@ p <- dolphin_data |>
   geom_stack_label() + 
   geom_support() +
   geom_prop() + 
-  geom_prop_label() 
-
-{ p + 
-  labs(title = "What's consistent with 16 coin flips? \n🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙🪙") +
-  dolphin_data |> mutate(observed = to_synthetic(observed)) +
-  dolphin_data |> mutate(observed = to_synthetic(observed)) +
-  dolphin_data |> mutate(observed = to_synthetic(observed)) + 
-  dolphin_data |> mutate(observed = to_synthetic(observed)) +
-  dolphin_data |> mutate(observed = to_synthetic(observed)) +
-  dolphin_data |> mutate(observed = to_synthetic(observed)) + 
-  dolphin_data |> mutate(observed = to_synthetic(observed)) +
-  dolphin_data |> mutate(observed = to_synthetic(observed)) +
-  dolphin_data |> mutate(observed = to_synthetic(observed)) 
-} |>
-  codehover::ch_hover()
-
-
-
-
-
-
-{donor_data |> 
-  ggplot() + 
-  labs(title = "Organ donation🫀🫁responses like coin flips?") +
-  aes(x = decision) + 
-  geom_stack() + 
-  geom_stack_label() + 
-  geom_support() +
-  geom_prop() + 
   geom_prop_label() + 
   stamp_prop(.5) + 
   stamp_prop_label(.5) + 
-  geom_binomial_null(.5) } |> 
-codehover::ch_hover()
+  geom_binomial_null(.5)} |>
+  codehover::ch_hover()
+```
 
 
-# remotes::install_github("EvaMaeRey/ggt.test")
-library(ggt.test)
 
-{data_grit_undergrad |>
-  ggplot() + 
-  labs(title = "As Gritty on average as West Point Cadets? 💪🪖🧗") +  
-  aes(score) + 
-  geom_rug() + 
-  geom_stacks() + 
-  geom_support() +
-  geom_mean() + 
-  geom_mean_label() + 
-  stamp_mean(3.75)  + 
-  geom_tdist_null(3.75)
-}
+---
+class: inverse, center, middle
 
-data_haircuts |>
-  ggplot() + 
-  labs(title = "Are haircut price averages different for men v. women") +
-  aes(x = price) + 
-  geom_support() + 
-  geom_rug() + 
-  geom_stacks()+
-  geom_mean() + 
-  geom_mean_label() + 
-  facet_align(sex) + 
-  geom_mean_diff() + 
-  geom_mean_diff_label()
+
+# Thank you!
+
+
+
+```{r}
+knitr::knit_exit()
+
 ```
 
 ```{r, eval = F}
