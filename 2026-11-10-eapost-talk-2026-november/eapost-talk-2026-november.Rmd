@@ -1,10 +1,52 @@
 ---
-title: "EAPOST Invited talk: Verbal- and viz-first introductory statistical curricula"
+title: "EAPOST Invited talk: Code- and viz-first introductory statistical curricula"
 author: "Gina Reynolds"
 date: "2026-11-20"
-output: 
-  html_document:
-    toc: TRUE
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    seal: false
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tidyverse.quiet = TRUE)
+```
+
+
+class: inverse, bottom
+background-image: url(https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80)
+background-size: cover
+
+# .Large[viz- and vocab-first intro to stats curricula: leveraging ggplot2 extension]
+## .small[gg x ISI x EAPOST]
+## .small[bit.ly/gg-eapost]
+#### .tiny[Dr. Evangeline Reynolds | 2026-11-20 | EAPOST webinar, Image credit: Silas Baisch, Upsplash]
+
+
+???
+
+---
+
+Title slide
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, fig.height = 4.5, message = FALSE, warning = FALSE, comment = "", cache = F)
+library(flipbookr)
+```
+
+![](images/clipboard-661140228.png)
+
+Dr. Jennifer McNally
+
 ---
 
 Now... Adjuncting 🤞 at DU...
@@ -15,7 +57,7 @@ A little about me and teaching, viz, and programming background:
 -   2020-2023 - West Point
 -   2023 - present back in Denver...
 
-------------------------------------------------------------------------
+---
 
 # DU 2018-2020: quantitative methodology
 
@@ -33,7 +75,7 @@ Spring 2020 'Can you teach a data viz graduate level class?' George F. DeMartino
 
 ![](images/clipboard-2468652653.png)
 
-------------------------------------------------------------------------
+---
 
 # West Point 2020-2023
 
@@ -41,7 +83,7 @@ Spring 2020 'Can you teach a data viz graduate level class?' George F. DeMartino
 
 > The text differs from traditional texts in both content and pedagogy. Statistical inference is introduced using simulation-based methods in Chapter 1. This allows students to intuitively understand the process of inference from the very beginning of their course.
 
-------------------------------------------------------------------------
+---
 
 # A 'Cathedral of Statistics'
 
@@ -49,9 +91,9 @@ Spring 2020 'Can you teach a data viz graduate level class?' George F. DeMartino
 
 > 'Statistics Curricula should reveal the beautiful cathedral of Statistics.' paraphrase ... George Cobb (paraphrase)
 
-------------------------------------------------------------------------
+---
 
-# GAISE grounding
+# GAISE grounded
 
 EAPOST:
 
@@ -61,15 +103,15 @@ EAPOST:
 
 ![](images/clipboard-2905805456.png)
 
-------------------------------------------------------------------------
+---
 
 > 'Some instructors may train students in using a specific software package, but mastery of advanced programming skills should not be allowed to crowd out data analysis skills or statistical thinking.'
 
-------------------------------------------------------------------------
+---
 
 ![](images/clipboard-2959256180.png)
 
-------------------------------------------------------------------------
+---
 
 # But, missing gg code 😢
 
@@ -77,25 +119,27 @@ EAPOST:
 
 ![](images/clipboard-2506441341.png)
 
-------------------------------------------------------------------------
+---
 
 Can we have it all? Vis + Code + 'not crowd out statistical thinking'...
 
-------------------------------------------------------------------------
+---
 
-# Code + viz? \| grammar + viz? \| language + viz?
+## Code + viz? \| grammar + viz? \| language + viz?
 
-Because writing things down, feels very grounding. Having verbal expression and visual expression side by side feels like a superpower.
+Because writing things down, feels very grounding. Having verbal expression and visual expression side by side, coordinated feels like a superpower.
 
-![](images/clipboard-1045303388.png)
+![](images/clipboard-1045303388.png){width=150px}
 
 ---
 
-![](images/clipboard-676654223.png)
+![](images/clipboard-676654223.png){width=150px}
 
 ---
 
-![](images/clipboard-680630620.png)
+![](images/clipboard-680630620.png){width=150px}
+
+---
 
 And ggplot2 has extraordinary 'write-down-narrative' capabilities
 
@@ -119,6 +163,8 @@ lab <- "Rosling builds up his\ngraph bit by bit with lanugage"
   codehover::ch_hover()
 ```
 
+---
+
 <https://www.youtube.com/watch?v=jbkSRLYSojo&t=37s>
 
 ```{r gapminder, echo = F}
@@ -134,7 +180,7 @@ lab <- "Rosling builds up his\ngraph bit by bit with lanugage"
   codehover::ch_hover()
 ```
 
-------------------------------------------------------------------------
+---
 
 # *Limbic* bliss
 
@@ -170,17 +216,17 @@ set_regions(brain_lobes_ref)
   codehover::ch_hover()
 ```
 
-------------------------------------------------------------------------
+---
 
 ## ggplot2 lets us *transcribe* statistical narratives,
 
-## record logic of visually conveigned ideas ,
+## record logic of visually conveyed ideas...
 
-our trains of thought
+## our trains of thought
 
-------------------------------------------------------------------------
+---
 
-# 'Graphical Poems?' Reorg as a haiku?
+# 'Graphical Poems?' Should we reorganize our conversations into a haiku?
 
 ```{r}
 gapminder::gapminder |> 
@@ -193,7 +239,7 @@ gapminder::gapminder |>
   ggchalkboard:::theme_rosling() 
 ```
 
-------------------------------------------------------------------------
+---
 
 'A question that I'd wanted to ask ... was about this syntax...'
 
@@ -208,11 +254,11 @@ ggplot(cars) +
 'Does it still make you cringe?\
 Or don't care anymore? To me, ggplot2's overlooked superpower (but I find myself still self conscious about using it). '
 
-------------------------------------------------------------------------
+---
 
 'I still don't like it :)' - Hadley Wickham, creator of ggplot2
 
-------------------------------------------------------------------------
+---
 
 # Temporal.
 
@@ -228,7 +274,7 @@ conversation recording
 
 idea tracing
 
-------------------------------------------------------------------------
+---
 
 'write-down-\*statistical\*-narrative' capabilities
 
@@ -255,7 +301,7 @@ ggplot(mtcars) +
   codehover::ch_hover()
 ```
 
-------------------------------------------------------------------------
+---
 
 But *not* as low of a level that you might need in a statistics class room....
 
@@ -275,31 +321,31 @@ ggplot2 & extensions 2020 ladders with missing rungs for stats educators.
 
 > Leaps.
 
-------------------------------------------------------------------------
+---
 
 But: 'not crowd out statistical thinking'...
 
-------------------------------------------------------------------------
+---
 
 ![](images/clipboard-4014439221.png)
 
-------------------------------------------------------------------------
+---
 
 -   2022-Present - Community Organizer, co-founder: ggplot2 extenders meetup
 
 ![](images/clipboard-2441019922.png)
 
-------------------------------------------------------------------------
+---
 
 > 'Extending `ggplot2` [using ggproto extension points] is not for the faint-hearted.'
 
 -   Easy Geom Recipes...
 
-------------------------------------------------------------------------
+---
 
 > 'Some instructors may train students in using a specific software package, but mastery of advanced programming skills should not be allowed to crowd out data analysis skills or statistical thinking.'
 
-------------------------------------------------------------------------
+---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, dev = "ragg_png")
